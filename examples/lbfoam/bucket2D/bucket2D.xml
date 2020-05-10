@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+
+<!-- Parameters set by the user. -->
+
+<geometry>
+    <!-- Size of the simulation domain. This domain is [0,lx] x [0,ly] x [0,lz].
+         The gravity is in the direction of the -z axis. -->
+    <simulationDomain>
+        <nx> 400 </nx>
+        <ny> 500 </ny>
+    </simulationDomain>
+    <!-- Initial height of the pool of fluid.
+         The fluid pool is the domain [0,lx] x [0.ly] x [0, fluidPoolHeight]. -->
+    <fluidPoolHeight_LB> 150 </fluidPoolHeight_LB>
+    <bucketHeight_LB> 0 </bucketHeight_LB>
+    <bucketOffset_LB> 0 </bucketOffset_LB>
+    <bucketThickness_LB> 0 </bucketThickness_LB>
+
+
+</geometry>
+
+<Nucleation>
+    <numNuclei> 10 </numNuclei>
+    <numRows> 10 </numRows>
+    <shift> 30 </shift>
+    <radius> 4 </radius>
+    <distribution> organized </distribution>
+    <packingOffset> 1 </packingOffset>
+    <numberOfBubbles>  80  </numberOfBubbles>
+
+</Nucleation>
+
+<fluid>
+    <!-- Fluid density. -->
+    <rho_LB> 1.0 </rho_LB>
+
+    <densityRatio> 0.01 </densityRatio>
+
+    <R_s> 1 </R_s>
+
+    <p_ini> 0.33 </p_ini>
+
+    <temperature> 1. </temperature>
+
+    <tau_LB> 0.9 </tau_LB>
+
+    <sigma_LB> 5.0e-3 </sigma_LB>
+
+    <contactAngle> -1.0 </contactAngle>
+
+    <tauD_LB> 0.6 </tauD_LB>
+
+    <gasIni_LB> 0.0 </gasIni_LB>
+
+    <kh_LB> 1.e-5 </kh_LB>
+
+    <pi_LB> 8.0e-3 </pi_LB>
+
+    <source_LB> 5.0e-5 </source_LB>
+
+    <surfaceDiffusion> true </surfaceDiffusion>
+
+</fluid>
+
+<numerics>
+    <gravity> false </gravity>
+
+    <entrapBubbles> true </entrapBubbles>
+
+    <g_LB> 5.0e-5 </g_LB>
+    <!-- Total number of lattice nodes in the unit length. -->
+
+    <maxIter> 6000000 </maxIter>
+    <!-- Smagorinsky LES model parameter. -->
+    <cSmago> 0.0 </cSmago>
+    <!-- Freeze the ambient space or not. If set to true, be careful so that
+         the ambient space volume is bigger than the initial bubble volume. -->
+    <freezeLargestBubble> true </freezeLargestBubble>
+    <!-- Parameter of the bubble pressure model. The bubbleVolumeRatio must be >= 1.0. -->
+    <bubbleVolumeRatio> 1.0 </bubbleVolumeRatio>
+    <!-- Parameters of the bubble pressure model:
+         If alpha or beta < 0 then: bubble_pressure = reference_pressure * reference_volume / current_volume.
+         Else: bubble_pressure = reference_pressure * [1 + alpha * (1 - current_volume/reference_volume)^beta].
+    -->
+    <alpha> -1.0 </alpha>
+    <beta> -1.0 </beta>
+</numerics>
+
+<output>
+    <!-- Number of iterations for terminal output. -->
+    <statIter> 200 </statIter>
+    <!-- Number of iterations for disk output. -->
+    <outIter> 400 </outIter>
+    <outDir> ./tmp/ </outDir>
+</output>
+
+
+

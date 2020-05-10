@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,99 +33,104 @@
 #include "core/serializer.h"
 #include "core/util.h"
 
-namespace plb {
+namespace plb
+{
 
-class MultiBlockSerializer2D : public DataSerializer {
+class MultiBlockSerializer2D : public DataSerializer
+{
 public:
-    MultiBlockSerializer2D(MultiBlock2D const& multiBlock_,
-                           IndexOrdering::OrderingT ordering_);
-    MultiBlockSerializer2D(MultiBlock2D const& multiBlock_,
-                           Box2D domain_,
-                           IndexOrdering::OrderingT ordering_);
-    virtual MultiBlockSerializer2D* clone() const;
-    virtual pluint getSize() const;
-    virtual const char* getNextDataBuffer(pluint& bufferSize) const;
-    virtual bool isEmpty() const;
+	MultiBlockSerializer2D(MultiBlock2D const& multiBlock_,
+	                       IndexOrdering::OrderingT ordering_);
+	MultiBlockSerializer2D(MultiBlock2D const& multiBlock_,
+	                       Box2D domain_,
+	                       IndexOrdering::OrderingT ordering_);
+	virtual MultiBlockSerializer2D* clone() const;
+	virtual pluint getSize() const;
+	virtual const char* getNextDataBuffer(pluint& bufferSize) const;
+	virtual bool isEmpty() const;
 private:
-    SparseBlockStructure2D const& getSparseBlockStructure() const;
-    bool isLocal(plint blockId) const;
-    void computeBufferAlongX(plint nextBlockId, plint nextChunkSize) const;
-    void computeBufferAlongY(plint nextBlockId, plint nextChunkSize) const;
-    void communicateBuffer(plint bufferSize, plint fromBlockId, bool isAllocated) const;
-    void fillBufferWithZeros(plint nextChunkSize) const;
+	SparseBlockStructure2D const& getSparseBlockStructure() const;
+	bool isLocal(plint blockId) const;
+	void computeBufferAlongX(plint nextBlockId, plint nextChunkSize) const;
+	void computeBufferAlongY(plint nextBlockId, plint nextChunkSize) const;
+	void communicateBuffer(plint bufferSize, plint fromBlockId, bool isAllocated) const;
+	void fillBufferWithZeros(plint nextChunkSize) const;
 private:
-    MultiBlock2D const& multiBlock;
-    IndexOrdering::OrderingT ordering;
-    Box2D domain;
-    mutable plint iX, iY;
-    mutable std::vector<char> buffer;
+	MultiBlock2D const& multiBlock;
+	IndexOrdering::OrderingT ordering;
+	Box2D domain;
+	mutable plint iX, iY;
+	mutable std::vector<char> buffer;
 };
 
-class MultiBlockUnSerializer2D : public DataUnSerializer {
+class MultiBlockUnSerializer2D : public DataUnSerializer
+{
 public:
-    MultiBlockUnSerializer2D(MultiBlock2D& multiBlock_,
-                             IndexOrdering::OrderingT ordering_);
-    MultiBlockUnSerializer2D(MultiBlock2D& multiBlock_,
-                             Box2D domain_,
-                             IndexOrdering::OrderingT ordering_);
-    virtual MultiBlockUnSerializer2D* clone() const;
-    virtual pluint getSize() const;
-    virtual char* getNextDataBuffer(pluint& bufferSize);
-    virtual void commitData();
-    virtual bool isFull() const;
+	MultiBlockUnSerializer2D(MultiBlock2D& multiBlock_,
+	                         IndexOrdering::OrderingT ordering_);
+	MultiBlockUnSerializer2D(MultiBlock2D& multiBlock_,
+	                         Box2D domain_,
+	                         IndexOrdering::OrderingT ordering_);
+	virtual MultiBlockUnSerializer2D* clone() const;
+	virtual pluint getSize() const;
+	virtual char* getNextDataBuffer(pluint& bufferSize);
+	virtual void commitData();
+	virtual bool isFull() const;
 private:
-    SparseBlockStructure2D const& getSparseBlockStructure() const;
-    bool isLocal(plint blockId) const;
-    void fillBufferAlongX(plint nextBlockId, plint nextChunkSize);
-    void fillBufferAlongY(plint nextBlockId, plint nextChunkSize);
-    void communicateBuffer(plint bufferSize, plint toBlockId, bool isAllocated) const;
+	SparseBlockStructure2D const& getSparseBlockStructure() const;
+	bool isLocal(plint blockId) const;
+	void fillBufferAlongX(plint nextBlockId, plint nextChunkSize);
+	void fillBufferAlongY(plint nextBlockId, plint nextChunkSize);
+	void communicateBuffer(plint bufferSize, plint toBlockId, bool isAllocated) const;
 private:
-    MultiBlock2D& multiBlock;
-    IndexOrdering::OrderingT ordering;
-    Box2D domain;
-    mutable plint iX, iY;
-    mutable std::vector<char> buffer;
+	MultiBlock2D& multiBlock;
+	IndexOrdering::OrderingT ordering;
+	Box2D domain;
+	mutable plint iX, iY;
+	mutable std::vector<char> buffer;
 };
 
-class MultiBlockFastSerializer2D : public DataSerializer {
+class MultiBlockFastSerializer2D : public DataSerializer
+{
 public:
-    MultiBlockFastSerializer2D(MultiBlock2D const& multiBlock_,
-                               IndexOrdering::OrderingT ordering_);
-    MultiBlockFastSerializer2D(MultiBlock2D const& multiBlock_,
-                               Box2D domain_,
-                               IndexOrdering::OrderingT ordering_);
-    virtual MultiBlockFastSerializer2D* clone() const;
-    virtual pluint getSize() const;
-    virtual const char* getNextDataBuffer(pluint& bufferSize) const;
-    virtual bool isEmpty() const;
+	MultiBlockFastSerializer2D(MultiBlock2D const& multiBlock_,
+	                           IndexOrdering::OrderingT ordering_);
+	MultiBlockFastSerializer2D(MultiBlock2D const& multiBlock_,
+	                           Box2D domain_,
+	                           IndexOrdering::OrderingT ordering_);
+	virtual MultiBlockFastSerializer2D* clone() const;
+	virtual pluint getSize() const;
+	virtual const char* getNextDataBuffer(pluint& bufferSize) const;
+	virtual bool isEmpty() const;
 private:
-    pluint computeSlice() const;
+	pluint computeSlice() const;
 private:
-    MultiBlock2D const& multiBlock;
-    IndexOrdering::OrderingT ordering;
-    Box2D domain;
-    mutable plint pos;
-    mutable std::vector<char> buffer;
+	MultiBlock2D const& multiBlock;
+	IndexOrdering::OrderingT ordering;
+	Box2D domain;
+	mutable plint pos;
+	mutable std::vector<char> buffer;
 };
 
-class MultiBlockFastUnSerializer2D : public DataUnSerializer {
+class MultiBlockFastUnSerializer2D : public DataUnSerializer
+{
 public:
-    MultiBlockFastUnSerializer2D(MultiBlock2D& multiBlock_,
-                                 IndexOrdering::OrderingT ordering_);
-    MultiBlockFastUnSerializer2D(MultiBlock2D& multiBlock_,
-                                 Box2D domain_,
-                                 IndexOrdering::OrderingT ordering_);
-    virtual MultiBlockFastUnSerializer2D* clone() const;
-    virtual pluint getSize() const;
-    virtual char* getNextDataBuffer(pluint& bufferSize);
-    virtual void commitData();
-    virtual bool isFull() const;
+	MultiBlockFastUnSerializer2D(MultiBlock2D& multiBlock_,
+	                             IndexOrdering::OrderingT ordering_);
+	MultiBlockFastUnSerializer2D(MultiBlock2D& multiBlock_,
+	                             Box2D domain_,
+	                             IndexOrdering::OrderingT ordering_);
+	virtual MultiBlockFastUnSerializer2D* clone() const;
+	virtual pluint getSize() const;
+	virtual char* getNextDataBuffer(pluint& bufferSize);
+	virtual void commitData();
+	virtual bool isFull() const;
 private:
-    MultiBlock2D& multiBlock;
-    IndexOrdering::OrderingT ordering;
-    Box2D domain;
-    mutable plint pos;
-    mutable std::vector<char> buffer;
+	MultiBlock2D& multiBlock;
+	IndexOrdering::OrderingT ordering;
+	Box2D domain;
+	mutable plint pos;
+	mutable std::vector<char> buffer;
 };
 }  //  namespace plb
 

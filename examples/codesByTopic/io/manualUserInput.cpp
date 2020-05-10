@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -69,27 +69,33 @@ void writeGifs(BlockLatticeT& lattice, plint iter)
 }
 
 
-void getParametersFromCommandLine(int argc, char* argv[], T& Re, plint& N) {
+void getParametersFromCommandLine(int argc, char* argv[], T& Re, plint& N)
+{
     // Make sure the command line has two paramters.
-    if (argc != 3) {
+    if (argc != 3)
+    {
         pcout << "Error; Correct syntax is \" " << argv[0] << " Re N\"" << endl;
         exit(-1);
-    } 
+    }
 
     // Read Reynolds number and resolution from command line.
     stringstream ReStr, NStr;
-    ReStr << argv[1]; ReStr >> Re;
-    NStr  << argv[2]; NStr >> N;
+    ReStr << argv[1];
+    ReStr >> Re;
+    NStr  << argv[2];
+    NStr >> N;
 }
 
-void getParametersFromParamFile(T& Re, plint& N) {
+void getParametersFromParamFile(T& Re, plint& N)
+{
     plb_ifstream ifile("parameters.dat");
     ifile >> Re >> N;
     global::mpi().bCast(&Re, 1);
     global::mpi().bCast(&N, 1);
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
@@ -101,11 +107,11 @@ int main(int argc, char* argv[]) {
     getParametersFromParamFile(Re, N);
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 100.,  // Re
-            128,        // N
-            1.,        // lx
-            1.         // ly 
+        (T) 1e-2,  // uMax
+        (T) 100.,  // Re
+        128,        // N
+        1.,        // lx
+        1.         // ly
     );
     const T logT     = (T)0.1;
     const T imSave   = (T)0.2;
@@ -114,32 +120,36 @@ int main(int argc, char* argv[]) {
     writeLogFile(parameters, "2D cavity");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-              parameters.getNx(), parameters.getNy(),
-              new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        //boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
-        boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    //boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     cavitySetup(lattice, parameters, *boundaryCondition);
 
     // Main loop over time iterations.
-    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT) {
-        if ((iT+1)%parameters.nStep(logT)==0) {
+    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT)
+    {
+        if ((iT+1)%parameters.nStep(logT)==0)
+        {
             pcout << computeAverageDensity(lattice) << endl;
             pcout << computeAverageEnergy(lattice) << endl;
         }
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "step " << iT
                   << "; lattice time=" << lattice.getTimeCounter().getTime()
                   << "; t=" << iT*parameters.getDeltaT()
                   << "; av energy="
                   << setprecision(10) << getStoredAverageEnergy<T>(lattice)
-                   << "; av rho="
-                 << getStoredAverageDensity<T>(lattice) << endl;
+                  << "; av rho="
+                  << getStoredAverageDensity<T>(lattice) << endl;
         }
 
-        if (iT%parameters.nStep(imSave)==0 && iT>0) {
+        if (iT%parameters.nStep(imSave)==0 && iT>0)
+        {
             pcout << "Saving Gif ..." << endl;
             writeGifs(lattice, iT);
             pcout << endl;

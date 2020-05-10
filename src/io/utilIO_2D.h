@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,22 +34,22 @@
 #include "multiBlock/multiBlock2D.h"
 #include "io/plbFiles.h"
 
-namespace plb {
+namespace plb
+{
 
 /* Save the current state of the simulation for restarting. */
 void saveState(std::vector<MultiBlock2D*> blocks, plint iteration, bool saveDynamicContent,
-        FileName xmlFileName, FileName baseFileName, plint fileNamePadding = 8);
+               FileName xmlFileName, FileName baseFileName, plint fileNamePadding = 8);
 
 /* Load the state of the simulation from checkpoint files for restarting. */
 void loadState(std::vector<MultiBlock2D*> blocks, plint& iteration, bool saveDynamicContent,
-        FileName xmlFileName);
+               FileName xmlFileName);
 
 /* Check for user-driven execution abortion, and save the state of the simulation. */
 bool abortExecution(FileName abortFileName, std::vector<MultiBlock2D*> blocks, plint iteration,
-        bool saveDynamicContent, FileName xmlFileName, FileName baseFileName,
-        plint fileNamePadding = 8);
+                    bool saveDynamicContent, FileName xmlFileName, FileName baseFileName,
+                    plint fileNamePadding = 8);
 
 }  // namespace plb
 
 #endif  // UTIL_IO_2D_H
-

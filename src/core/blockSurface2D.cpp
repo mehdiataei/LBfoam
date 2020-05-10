@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,55 +28,65 @@
 
 #include "core/blockSurface2D.h"
 
-namespace plb {
+namespace plb
+{
 
 BlockSurface2D::BlockSurface2D(Box2D const& domain_, plint boundaryWidth)
     : domain(domain_),
       bw(boundaryWidth)
 { }
 
-Box2D BlockSurface2D::bulk() const {
+Box2D BlockSurface2D::bulk() const
+{
     return Box2D( domain.x0+bw,   domain.x1-bw,
                   domain.y0+bw,   domain.y1-bw    );
 }
 
-Box2D BlockSurface2D::edge0N() const {
+Box2D BlockSurface2D::edge0N() const
+{
     return Box2D( domain.x0,      domain.x0+bw-1,
                   domain.y0+bw,   domain.y1-bw    );
 }
 
-Box2D BlockSurface2D::edge0P() const {
+Box2D BlockSurface2D::edge0P() const
+{
     return Box2D( domain.x1-bw+1, domain.x1,
                   domain.y0+bw,   domain.y1-bw    );
 }
 
-Box2D BlockSurface2D::edge1N() const {
+Box2D BlockSurface2D::edge1N() const
+{
     return Box2D( domain.x0+bw,   domain.x1-bw,
                   domain.y0,      domain.y0+bw-1  );
 }
 
-Box2D BlockSurface2D::edge1P() const {
+Box2D BlockSurface2D::edge1P() const
+{
     return Box2D( domain.x0+bw,   domain.x1-bw,
                   domain.y1-bw+1, domain.y1       );
 }
 
 
-Box2D BlockSurface2D::cornerNN() const {
+Box2D BlockSurface2D::cornerNN() const
+{
     return Box2D( domain.x0,      domain.x0+bw-1,
                   domain.y0,      domain.y0+bw-1  );
 }
 
-Box2D BlockSurface2D::cornerPN() const {
+Box2D BlockSurface2D::cornerPN() const
+{
     return Box2D( domain.x1-bw+1, domain.x1,
                   domain.y0,      domain.y0+bw-1  );
 }
 
-Box2D BlockSurface2D::cornerNP() const {
+Box2D BlockSurface2D::cornerNP() const
+{
     return Box2D( domain.x0,      domain.x0+bw-1,
                   domain.y1-bw+1, domain.y1       );
 }
 
-Box2D BlockSurface2D::cornerPP() const {
+Box2D BlockSurface2D::cornerPP() const
+{
     return Box2D( domain.x1-bw+1, domain.x1,
                   domain.y1-bw+1, domain.y1       );
 }

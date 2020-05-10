@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,27 +36,29 @@
 #include "io/vtkDataOutput.h"
 #include "multiBlock/group3D.h"
 
-namespace plb {
+namespace plb
+{
 
-class SparseVtkImageOutput3D {
+class SparseVtkImageOutput3D
+{
 public:
-    SparseVtkImageOutput3D(FileName fName_);
-    ~SparseVtkImageOutput3D();
-    void writeVtkBlock( Group3D& group, double deltaX, Array<double,3> const& offset,
-                        plint vtkBlockId=0, bool pointData=true );
-    void writeVtkBlock( Group3D& group, double deltaX, plint vtkBlockId=0, bool pointData=true );
+	SparseVtkImageOutput3D(FileName fName_);
+	~SparseVtkImageOutput3D();
+	void writeVtkBlock( Group3D& group, double deltaX, Array<double,3> const& offset,
+	                    plint vtkBlockId=0, bool pointData=true );
+	void writeVtkBlock( Group3D& group, double deltaX, plint vtkBlockId=0, bool pointData=true );
 private:
-    std::string writeAtomicBlock (
-            Group3D& group, plint partId, plint vtkBlockId, plint atomicBlockId,
-            Box3D bulk, bool pointData, bool isLocal, double deltaX, Array<double,3> offset );
-    void writeField (
-            MultiBlock3D const& multiBlock, plint atomicBlockId, Box3D bulk,
-            std::string fieldName, VtkDataWriter3D& vtkOut );
+	std::string writeAtomicBlock (
+	    Group3D& group, plint partId, plint vtkBlockId, plint atomicBlockId,
+	    Box3D bulk, bool pointData, bool isLocal, double deltaX, Array<double,3> offset );
+	void writeField (
+	    MultiBlock3D const& multiBlock, plint atomicBlockId, Box3D bulk,
+	    std::string fieldName, VtkDataWriter3D& vtkOut );
 private:
-    FileName fName;
-    std::string dName, rdName;
-    plb_ofstream vtmFile;
-    Array<double,3> offset;
+	FileName fName;
+	std::string dName, rdName;
+	plb_ofstream vtmFile;
+	Array<double,3> offset;
 };
 
 

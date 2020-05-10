@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,7 +31,8 @@
 #include "core/globalDefs.h"
 #include "core/dynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 /// A dynamics for space-dependent relaxation parameter, generic with respect to base dynamics.
 /** Important: The philosophy here is that the actual relaxation parameter
@@ -41,12 +42,13 @@ namespace plb {
  *  "o.getBaseDynamics().getOmega()" is omega0+deltaOmega.
  **/
 template<typename T, template<typename U> class Descriptor>
-class VariableOmegaDynamics : public CompositeDynamics<T,Descriptor> {
+class VariableOmegaDynamics : public CompositeDynamics<T,Descriptor>
+{
 public:
-    VariableOmegaDynamics(Dynamics<T,Descriptor>* baseDynamics_,
-                          bool automaticPrepareCollision_=true);
-    virtual void prepareCollision(Cell<T,Descriptor>& cell);
-    virtual T getOmegaFromCell(Cell<T,Descriptor> const& cell) const =0;
+	VariableOmegaDynamics(Dynamics<T,Descriptor>* baseDynamics_,
+	                      bool automaticPrepareCollision_=true);
+	virtual void prepareCollision(Cell<T,Descriptor>& cell);
+	virtual T getOmegaFromCell(Cell<T,Descriptor> const& cell) const =0;
 };
 
 /// A dynamics for relaxation parameter dependent on off-equilibrium stress, generic with respect to base dynamics.
@@ -54,15 +56,15 @@ public:
  *  in setOmega and getOmega.
  **/
 template<typename T, template<typename U> class Descriptor>
-class OmegaFromPiDynamics : public VariableOmegaDynamics<T,Descriptor> {
+class OmegaFromPiDynamics : public VariableOmegaDynamics<T,Descriptor>
+{
 public:
-    OmegaFromPiDynamics(Dynamics<T,Descriptor>* baseDynamics_,
-                        bool automaticPrepareCollision_=true);
-    virtual T getOmegaFromCell(Cell<T,Descriptor> const& cell) const;
-    virtual T getOmegaFromPiAndRhoBar(Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T rhoBar) const =0;
+	OmegaFromPiDynamics(Dynamics<T,Descriptor>* baseDynamics_,
+	                    bool automaticPrepareCollision_=true);
+	virtual T getOmegaFromCell(Cell<T,Descriptor> const& cell) const;
+	virtual T getOmegaFromPiAndRhoBar(Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T rhoBar) const =0;
 };
 
 } // namespace plb
 
 #endif  // VARIABLE_OMEGA_DYNAMICS_H
-

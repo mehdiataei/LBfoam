@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,25 +32,27 @@
 #include "multiBlock/multiBlockLattice3D.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-class SerialCellAccess3D : public MultiCellAccess3D<T,Descriptor> {
+class SerialCellAccess3D : public MultiCellAccess3D<T,Descriptor>
+{
 public:
-    SerialCellAccess3D();
-    virtual void broadCastCell(Cell<T,Descriptor>& cell, plint fromBlock,
-                               MultiBlockManagement3D const& multiBlockManagement) const;
-    Cell<T,Descriptor>& getDistributedCell (
-            plint iX, plint iY, plint iZ,
-            MultiBlockManagement3D const& multiBlockManagement,
-            std::map<plint,BlockLattice3D<T,Descriptor>*>& lattices );
-    Cell<T,Descriptor> const& getDistributedCell (
-            plint iX, plint iY, plint iZ,
-            MultiBlockManagement3D const& multiBlockManagement,
-            std::map<plint,BlockLattice3D<T,Descriptor>*> const& lattices ) const;
-    virtual SerialCellAccess3D<T,Descriptor>* clone() const;
+	SerialCellAccess3D();
+	virtual void broadCastCell(Cell<T,Descriptor>& cell, plint fromBlock,
+	                           MultiBlockManagement3D const& multiBlockManagement) const;
+	Cell<T,Descriptor>& getDistributedCell (
+	    plint iX, plint iY, plint iZ,
+	    MultiBlockManagement3D const& multiBlockManagement,
+	    std::map<plint,BlockLattice3D<T,Descriptor>*>& lattices );
+	Cell<T,Descriptor> const& getDistributedCell (
+	    plint iX, plint iY, plint iZ,
+	    MultiBlockManagement3D const& multiBlockManagement,
+	    std::map<plint,BlockLattice3D<T,Descriptor>*> const& lattices ) const;
+	virtual SerialCellAccess3D<T,Descriptor>* clone() const;
 private:
-    mutable plint locatedBlock;
+	mutable plint locatedBlock;
 };
 
 }  // namespace plb

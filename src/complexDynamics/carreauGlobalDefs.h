@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,32 +33,35 @@
 
 #include "core/globalDefs.h"
 
-namespace plb {
+namespace plb
+{
 
-namespace global {
+namespace global
+{
 
 class CarreauParametersClass
 {
 public:
-    void setNu0(double nu0_);
+	void setNu0(double nu0_);
 	void setNuInf(double nuInf_);
-    void setLambda(double lambda_);
-    void setExponent(double n_);
-    
-    double getNu0() const;
+	void setLambda(double lambda_);
+	void setExponent(double n_);
+
+	double getNu0() const;
 	double getNuInf() const;
-    double getLambda() const;
-    double getExponent() const;
+	double getLambda() const;
+	double getExponent() const;
 private:
-    CarreauParametersClass() {   };
+	CarreauParametersClass() {   };
 private:
-    double nu0, nuInf, lambda, n;
-    friend CarreauParametersClass& CarreauParameters();
+	double nu0, nuInf, lambda, n;
+	friend CarreauParametersClass& CarreauParameters();
 };
-    
-inline CarreauParametersClass& CarreauParameters() {
-    static CarreauParametersClass singleton;
-    return singleton;
+
+inline CarreauParametersClass& CarreauParameters()
+{
+	static CarreauParametersClass singleton;
+	return singleton;
 }
 
 }  // namespace global

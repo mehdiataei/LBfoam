@@ -1,26 +1,26 @@
- /* This file is part of the Palabos library.
- *
- * Copyright (C) 2011-2017 FlowKit Sarl
- * Route d'Oron 2
- * 1010 Lausanne, Switzerland
- * E-mail contact: contact@flowkit.com
- *
- * The most recent release of Palabos can be downloaded at 
- * <http://www.palabos.org/>
- *
- * The library Palabos is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * The library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+/* This file is part of the Palabos library.
+*
+* Copyright (C) 2011-2017 FlowKit Sarl
+* Route d'Oron 2
+* 1010 Lausanne, Switzerland
+* E-mail contact: contact@flowkit.com
+*
+* The most recent release of Palabos can be downloaded at
+* <http://www.palabos.org/>
+*
+* The library Palabos is free software: you can redistribute it and/or
+* modify it under the terms of the GNU Affero General Public License as
+* published by the Free Software Foundation, either version 3 of the
+* License, or (at your option) any later version.
+*
+* The library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Affero General Public License for more details.
+*
+* You should have received a copy of the GNU Affero General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 
 #include "palabos3D.h"
@@ -43,7 +43,8 @@ typedef Array<T,3> Velocity;
 #define RESCALER ConvectiveNoForceRescaler
 #define DESCRIPTOR descriptors::D3Q19Descriptor
 
-struct SimulationParameters {
+struct SimulationParameters
+{
     /*
      * Parameters set by the user.
      */
@@ -62,12 +63,12 @@ struct SimulationParameters {
     T inletVelocity;                                // Inlet velocity x-component in physical units.
 
     int outflowBcType;                              // Type of the outflow boundary condition.
-                                                    // If 0, then a constant velocity is imposed at the outlet.
-                                                    // If 1, then a constant pressure is imposed at the outlet.
-                                                    // If 2, then a velocity Neumann condition is imposed at the outlet.
+    // If 0, then a constant velocity is imposed at the outlet.
+    // If 1, then a constant pressure is imposed at the outlet.
+    // If 2, then a velocity Neumann condition is imposed at the outlet.
 
     Array<T,6> spongeWidths;                        // Sponge zone widths (0.0 for no sponge zone for the corresponding
-                                                    // lattice boundary).
+    // lattice boundary).
     // Numerics.
     Precision precision;                    // Precision for geometric operations.
     T L_Ref;                                // Length to define the Reynolds number.
@@ -178,7 +179,8 @@ void readUserDefinedSimulationParameters(std::string xmlInputFileName, Simulatio
     PLB_ASSERT(numLevels >= 1);
     plint maxOctreeLevel = 0;
     document["grid"]["maxOctreeLevel"].read(maxOctreeLevel);
-    if (maxOctreeLevel - numLevels + 1 < 0) {
+    if (maxOctreeLevel - numLevels + 1 < 0)
+    {
         maxOctreeLevel = numLevels - 1;
     }
     param.maxLeafLevel = maxOctreeLevel;
@@ -211,13 +213,20 @@ void readUserDefinedSimulationParameters(std::string xmlInputFileName, Simulatio
     std::string precision;
     document["numerics"]["precision"].read(precision);
     PLB_ASSERT(precision == "FLT" || precision == "DBL" || precision == "LDBL" || precision == "INF");
-    if (precision == "FLT") {
+    if (precision == "FLT")
+    {
         param.precision = FLT;
-    } else if (precision == "DBL") {
+    }
+    else if (precision == "DBL")
+    {
         param.precision = DBL;
-    } else if (precision == "LDBL") {
+    }
+    else if (precision == "LDBL")
+    {
         param.precision = LDBL;
-    } else {
+    }
+    else
+    {
         param.precision = INF;
     }
     document["numerics"]["characteristicLength"].read(param.L_Ref);
@@ -235,7 +244,8 @@ void readUserDefinedSimulationParameters(std::string xmlInputFileName, Simulatio
 
     std::string outDir;
     document["output"]["outDir"].read(outDir);
-    if (outDir[outDir.size() - 1] != '/') {
+    if (outDir[outDir.size() - 1] != '/')
+    {
         outDir += '/';
     }
     param.outDir = outDir;
@@ -246,11 +256,14 @@ void readUserDefinedSimulationParameters(std::string xmlInputFileName, Simulatio
     document["output"]["outIter"].read(param.outIter);
     PLB_ASSERT(param.outIter > 0);
     document["output"]["computeAverages"].read(param.computeAverages);
-    
-    if (param.computeAverages) {
+
+    if (param.computeAverages)
+    {
         document["output"]["avgIter"].read(param.avgIter);
         PLB_ASSERT(param.avgIter >= 0);
-    } else {
+    }
+    else
+    {
         param.avgIter = 0;
     }
 
@@ -259,7 +272,8 @@ void readUserDefinedSimulationParameters(std::string xmlInputFileName, Simulatio
     PLB_ASSERT(param.minOutputLevel <= param.maxOutputLevel);
 
     document["output"]["outputInDomain"].read(param.outputInDomain);
-    if (param.outputInDomain) {
+    if (param.outputInDomain)
+    {
         std::vector<T> x, y, z;
         document["output"]["outputDomain"]["x"].read(x);
         PLB_ASSERT(x.size() == 2 && x[1] > x[0]);
@@ -276,7 +290,8 @@ void readUserDefinedSimulationParameters(std::string xmlInputFileName, Simulatio
     }
 
     document["output"]["outputOnSlices"].read(param.outputOnSlices);
-    if (param.outputOnSlices) {
+    if (param.outputOnSlices)
+    {
         document["output"]["outputSlices"]["xSlices"]["xPositions"].read(param.xPositions);
         document["output"]["outputSlices"]["xSlices"]["yRange"].read(param.xyRange);
         PLB_ASSERT(param.xyRange.size() == 2 && param.xyRange[1] > param.xyRange[0]);
@@ -324,34 +339,28 @@ void createOctreeGridStructure(SimulationParameters &param)
     bool verbose = true;
     bool stlOutput = true;
     std::string stlBaseName = "octree";
-    bool xPeriodic = false;
-    bool yPeriodic = false;
-    bool zPeriodic = false;
     T gridDensityScaleFactor = (T)1;
 
     OctreeGridGenerator<T> octreeGridGenerator(
-            param.fullDomain,
-            param.gridDensityFunctionFile,
-            param.minLeafLevel,
-            param.maxLeafLevel,
-            param.nBlock,
-            global::mpi().getSize(),
-            xPeriodic,
-            yPeriodic,
-            zPeriodic,
-            gridDensityScaleFactor,
-            useSamples,
-            numSamples,
-            maxIter,
-            removeBlocks,
-            fineToCoarse,
-            numLevelsToGroupBlocks,
-            numLevelsToGroupOverlaps,
-            strongGrouping,
-            param.outDir,
-            verbose,
-            stlOutput,
-            stlBaseName);
+        param.fullDomain,
+        param.gridDensityFunctionFile,
+        param.minLeafLevel,
+        param.maxLeafLevel,
+        param.nBlock,
+        global::mpi().getSize(),
+        gridDensityScaleFactor,
+        useSamples,
+        numSamples,
+        maxIter,
+        removeBlocks,
+        fineToCoarse,
+        numLevelsToGroupBlocks,
+        numLevelsToGroupOverlaps,
+        strongGrouping,
+        param.outDir,
+        verbose,
+        stlOutput,
+        stlBaseName);
 
     param.ogs = octreeGridGenerator.generateOctreeGridStructure();
     param.fullDomain = octreeGridGenerator.getFullDomain();
@@ -386,14 +395,17 @@ Box3D computeOutputDomain(SimulationParameters const& param, Cuboid<T> const& ou
 void computeAllOutputDomains(SimulationParameters& param)
 {
     std::vector<Cuboid<T> > outputCuboids;
-    if (param.outputInDomain) {
+    if (param.outputInDomain)
+    {
         outputCuboids.push_back(param.outputCuboid);
         param.outputDomainNames.push_back("domain");
     }
 
-    if (param.outputOnSlices) {
+    if (param.outputOnSlices)
+    {
         plint numXdigits = util::val2str(param.xPositions.size()).length();
-        for (plint i = 0; i < (plint) param.xPositions.size(); i++) {
+        for (plint i = 0; i < (plint) param.xPositions.size(); i++)
+        {
             Array<T,3> llc(param.xPositions[i], param.xyRange[0], param.xzRange[0]);
             Array<T,3> urc(param.xPositions[i], param.xyRange[1], param.xzRange[1]);
             outputCuboids.push_back(Cuboid<T>(llc, urc));
@@ -401,7 +413,8 @@ void computeAllOutputDomains(SimulationParameters& param)
         }
 
         plint numYdigits = util::val2str(param.yPositions.size()).length();
-        for (plint i = 0; i < (plint) param.yPositions.size(); i++) {
+        for (plint i = 0; i < (plint) param.yPositions.size(); i++)
+        {
             Array<T,3> llc(param.yxRange[0], param.yPositions[i], param.yzRange[0]);
             Array<T,3> urc(param.yxRange[1], param.yPositions[i], param.yzRange[1]);
             outputCuboids.push_back(Cuboid<T>(llc, urc));
@@ -409,7 +422,8 @@ void computeAllOutputDomains(SimulationParameters& param)
         }
 
         plint numZdigits = util::val2str(param.zPositions.size()).length();
-        for (plint i = 0; i < (plint) param.zPositions.size(); i++) {
+        for (plint i = 0; i < (plint) param.zPositions.size(); i++)
+        {
             Array<T,3> llc(param.zxRange[0], param.zyRange[0], param.zPositions[i]);
             Array<T,3> urc(param.zxRange[1], param.zyRange[1], param.zPositions[i]);
             outputCuboids.push_back(Cuboid<T>(llc, urc));
@@ -418,19 +432,25 @@ void computeAllOutputDomains(SimulationParameters& param)
     }
 
     std::vector<plint> domainExistsInNumLevels(outputCuboids.size(), 0);
-    for (plint iLevel = param.minOutputLevel; iLevel <= param.maxOutputLevel; iLevel++) {
+    for (plint iLevel = param.minOutputLevel; iLevel <= param.maxOutputLevel; iLevel++)
+    {
         std::vector<Box3D> outputDomainsAtLevel;
-        for (plint iCuboid = 0; iCuboid < (plint) outputCuboids.size(); iCuboid++) {
+        for (plint iCuboid = 0; iCuboid < (plint) outputCuboids.size(); iCuboid++)
+        {
             Box3D outputDomain = computeOutputDomain(param, outputCuboids[iCuboid], param.minOutputLevel);
-            if (iLevel != param.minOutputLevel) {
+            if (iLevel != param.minOutputLevel)
+            {
                 outputDomain = outputDomain.multiply(util::intTwoToThePower(iLevel - param.minOutputLevel));
                 //outputDomain.x1--;
                 //outputDomain.y1--;
                 //outputDomain.z1--;
             }
-            if (outputDomain.getNx() <= 0 || outputDomain.getNy() <= 0 || outputDomain.getNz() <= 0) {
+            if (outputDomain.getNx() <= 0 || outputDomain.getNy() <= 0 || outputDomain.getNz() <= 0)
+            {
                 outputDomain = Box3D(-1, -1, -1, -1, -1, -1);
-            } else {
+            }
+            else
+            {
                 domainExistsInNumLevels[iCuboid] += 1;
             }
             outputDomainsAtLevel.push_back(outputDomain);
@@ -438,7 +458,8 @@ void computeAllOutputDomains(SimulationParameters& param)
         PLB_ASSERT(param.outputDomainNames.size() == outputDomainsAtLevel.size());
         param.outputDomains[iLevel] = outputDomainsAtLevel;
     }
-    for (plint iCuboid = 0; iCuboid < (plint) outputCuboids.size(); iCuboid++) {
+    for (plint iCuboid = 0; iCuboid < (plint) outputCuboids.size(); iCuboid++)
+    {
         PLB_ASSERT(domainExistsInNumLevels[iCuboid] != 0);
     }
 }
@@ -456,10 +477,12 @@ void calculateDerivedSimulationParameters(SimulationParameters& param)
     plint numLevels = param.ogs.getNumLevels();
     PLB_ASSERT(numLevels >= 1);
     param.finestLevel = numLevels - 1;
-    if (param.minOutputLevel < 0) {
+    if (param.minOutputLevel < 0)
+    {
         param.minOutputLevel = 0;
     }
-    if (param.maxOutputLevel > param.finestLevel) {
+    if (param.maxOutputLevel > param.finestLevel)
+    {
         param.maxOutputLevel = param.finestLevel;
     }
 
@@ -473,7 +496,8 @@ void calculateDerivedSimulationParameters(SimulationParameters& param)
     param.inletVelocity_LB = Array<T,3>(param.inletVelocity * param.dtFinest / param.dxFinest, (T) 0, (T) 0);
 
     param.omega.resize(numLevels);
-    for (plint iLevel = 0; iLevel < numLevels; iLevel++) {
+    for (plint iLevel = 0; iLevel < numLevels; iLevel++)
+    {
         T dx = param.dxFinest * (T) util::intTwoToThePower(param.finestLevel - iLevel);
         T dt = param.dtFinest * (T) util::intTwoToThePower(param.finestLevel - iLevel);
         T nu_LB = param.nu * dt / (dx * dx);
@@ -491,14 +515,15 @@ void printSimulationParameters(SimulationParameters const& param)
     pcout << "inletVelocity = " << param.inletVelocity << std::endl;
     pcout << "outflowBcType = " << param.outflowBcType << std::endl;
 
-    for (int iZone = 0; iZone < 6; iZone++) {
+    for (int iZone = 0; iZone < 6; iZone++)
+    {
         pcout << "spongeWidths[" << iZone << "] = " << param.spongeWidths[iZone] << std::endl;
     }
 
     pcout << "precision = " << (param.precision == FLT ? "FLT" :
-            (param.precision == DBL ? "DBL" :
-             (param.precision == LDBL ? "LDBL" :
-              "INF"))) << std::endl;
+                                (param.precision == DBL ? "DBL" :
+                                 (param.precision == LDBL ? "LDBL" :
+                                  "INF"))) << std::endl;
     pcout << "L_Ref = " << param.L_Ref << std::endl;
     pcout << "u_Ref = " << param.u_Ref << std::endl;
     pcout << "u_LB = " << param.u_LB << std::endl;
@@ -513,7 +538,8 @@ void printSimulationParameters(SimulationParameters const& param)
     pcout << "outIter = " << param.outIter << std::endl;
 
     pcout << "computeAverages = " << (param.computeAverages ? "true" : "false") << std::endl;
-    if (param.computeAverages) {
+    if (param.computeAverages)
+    {
         pcout << "avgIter = " << param.avgIter << std::endl;
     }
 
@@ -527,8 +553,8 @@ void printSimulationParameters(SimulationParameters const& param)
     pcout << "finestLevel = " << param.finestLevel << std::endl;
 
     pcout << "inletVelocity_LB = [" << param.inletVelocity_LB[0] << ", "
-                                    << param.inletVelocity_LB[1] << ", "
-                                    << param.inletVelocity_LB[2] << "]" << std::endl;
+          << param.inletVelocity_LB[1] << ", "
+          << param.inletVelocity_LB[2] << "]" << std::endl;
     pcout << "Re = " << param.u_Ref * param.L_Ref / param.nu << std::endl;
     pcout << "omegaFinest = " << param.omega[param.finestLevel] << std::endl;
     pcout << "tauFinest = " << (T) 1 / param.omega[param.finestLevel] << std::endl;
@@ -549,39 +575,42 @@ void createZones(SimulationParameters const& param, MultiBlockLattice3D<T,DESCRI
 
     Array<plint,6> numSpongeCells;
     plint totalNumSpongeCells = 0;
-    for (plint iZone = 0; iZone < 6; iZone++) {
+    for (plint iZone = 0; iZone < 6; iZone++)
+    {
         numSpongeCells[iZone] = util::roundToInt(param.spongeWidths[iZone] / dx);
         totalNumSpongeCells += numSpongeCells[iZone];
     }
-    plint nx = util::roundToInt(toLB(param.fullDomain.x1(), 0, dx, param.physicalLocation)) + 1; 
-    plint ny = util::roundToInt(toLB(param.fullDomain.y1(), 1, dx, param.physicalLocation)) + 1; 
-    plint nz = util::roundToInt(toLB(param.fullDomain.z1(), 2, dx, param.physicalLocation)) + 1; 
+    plint nx = util::roundToInt(toLB(param.fullDomain.x1(), 0, dx, param.physicalLocation)) + 1;
+    plint ny = util::roundToInt(toLB(param.fullDomain.y1(), 1, dx, param.physicalLocation)) + 1;
+    plint nz = util::roundToInt(toLB(param.fullDomain.z1(), 2, dx, param.physicalLocation)) + 1;
     Box3D fullBox(0, nx-1, 0, ny-1, 0, nz-1);
 
-    if (totalNumSpongeCells > 0) {
+    if (totalNumSpongeCells > 0)
+    {
         pcout << "Generating viscosity sponge zone at level: " << level << std::endl;
         T bulkValue = param.omega[level];
 
         std::vector<MultiBlock3D*> args;
         args.push_back(&lattice);
         applyProcessingFunctional(new ViscositySpongeZone3D<T,DESCRIPTOR>(nx, ny, nz, bulkValue, numSpongeCells),
-                lattice.getBoundingBox(), args);
+                                  lattice.getBoundingBox(), args);
     }
 }
 
-void applyOuterBoundaryConditions(SimulationParameters const& param, 
-    MultiLevelCoupling3D<T,DESCRIPTOR,RESCALER>& lattices,
-    OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* bc)
+void applyOuterBoundaryConditions(SimulationParameters const& param,
+                                  MultiLevelCoupling3D<T,DESCRIPTOR,RESCALER>& lattices,
+                                  OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* bc)
 {
     Box3D coarsestBoundingBox = lattices.getOgs().getClosedCover(0);
-    for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++) {
+    for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++)
+    {
         pcout << "Generating outer domain boundary conditions at level: " << iLevel << std::endl;
         MultiBlockLattice3D<T,DESCRIPTOR>& lattice = lattices.getLevel(iLevel);
 
         lattice.periodicity().toggleAll(false);
 
         Box3D boundingBox = coarsestBoundingBox.multiply(util::intTwoToThePower(iLevel));
-        Box3D box = boundingBox; 
+        Box3D box = boundingBox;
 
         Box3D inlet   (box.x0,   box.x0, box.y0,   box.y1,   box.z0,   box.z1);
         Box3D outlet  (box.x1,   box.x1, box.y0+1, box.y1-1, box.z0+1, box.z1-1);
@@ -602,25 +631,30 @@ void applyOuterBoundaryConditions(SimulationParameters const& param,
         // Lateral boundary conditions.
         bc->setVelocityConditionOnBlockBoundaries(lattice, boundingBox, yBottom, boundary::dirichlet);
         setBoundaryVelocity(lattice, yBottom, velocity);
-        
+
         bc->setVelocityConditionOnBlockBoundaries(lattice, boundingBox, yTop, boundary::dirichlet);
         setBoundaryVelocity(lattice, yTop, velocity);
-        
+
         bc->setVelocityConditionOnBlockBoundaries(lattice, boundingBox, zBottom, boundary::dirichlet);
         setBoundaryVelocity(lattice, zBottom, velocity);
-        
+
         bc->setVelocityConditionOnBlockBoundaries(lattice, boundingBox, zTop, boundary::dirichlet);
         setBoundaryVelocity(lattice, zTop, velocity);
-    
+
         // Outlet boundary condition.
 
-        if (param.outflowBcType == 0) {
+        if (param.outflowBcType == 0)
+        {
             bc->setVelocityConditionOnBlockBoundaries(lattice, boundingBox, outlet, boundary::dirichlet);
             setBoundaryVelocity(lattice, outlet, velocity);
-        } else if (param.outflowBcType == 1) {
+        }
+        else if (param.outflowBcType == 1)
+        {
             bc->setPressureConditionOnBlockBoundaries(lattice, boundingBox, outlet, boundary::dirichlet);
             setBoundaryVelocity(lattice, outlet, velocity);
-        } else if (param.outflowBcType == 2) {
+        }
+        else if (param.outflowBcType == 2)
+        {
             bc->setVelocityConditionOnBlockBoundaries(lattice, boundingBox, outlet, boundary::neumann);
             setBoundaryVelocity(lattice, outlet, velocity);
         }
@@ -630,11 +664,13 @@ void applyOuterBoundaryConditions(SimulationParameters const& param,
 }
 
 void initializeSimulation(SimulationParameters const& param, bool continueSimulation, plint& iniIter,
-        MultiLevelCoupling3D<T,DESCRIPTOR,RESCALER>& lattices,
-        std::vector<MultiBlock3D*>& checkpointBlocks)
+                          MultiLevelCoupling3D<T,DESCRIPTOR,RESCALER>& lattices,
+                          std::vector<MultiBlock3D*>& checkpointBlocks)
 {
-    if (!continueSimulation) {
-        for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++) {
+    if (!continueSimulation)
+    {
+        for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++)
+        {
 
             Array<T,3> velocity(param.inletVelocity_LB);
 
@@ -645,11 +681,14 @@ void initializeSimulation(SimulationParameters const& param, bool continueSimula
         // We do NOT want to call internal data processors here...
         lattices.initialize();
         lattices.initializeTensorFields();
-    } else {
+    }
+    else
+    {
         pcout << std::endl;
         pcout << "Reading state of the simulation from file: " << param.xmlContinueFileName << std::endl;
         loadState(checkpointBlocks, iniIter, param.saveDynamicContent, param.xmlContinueFileName);
-        for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++) {
+        for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++)
+        {
             MultiBlockLattice3D<T,DESCRIPTOR>& lattice = lattices.getLevel(iLevel);
             plint iniIterAtLevel = iniIter * util::intTwoToThePower(iLevel);
             lattice.resetTime(iniIterAtLevel);
@@ -662,48 +701,52 @@ void initializeSimulation(SimulationParameters const& param, bool continueSimula
     pcout << std::endl;
 }
 
-void writeResults(SimulationParameters const& param, 
-    MultiLevelCoupling3D<T,DESCRIPTOR,RESCALER>& lattices,
-    std::unique_ptr<MultiLevelTensorField3D<T,3> > &avgVel, 
-    plint iter)
+void writeResults(SimulationParameters const& param,
+                  MultiLevelCoupling3D<T,DESCRIPTOR,RESCALER>& lattices,
+                  std::auto_ptr<MultiLevelTensorField3D<T,3> > &avgVel,
+                  plint iter)
 {
     bool crop = true;
-    for (plint iDomain = 0; iDomain < (plint) param.outputDomainNames.size(); iDomain++) {
+    for (plint iDomain = 0; iDomain < (plint) param.outputDomainNames.size(); iDomain++)
+    {
         std::string fname = createFileName(param.outputDomainNames[iDomain] + "_", iter, param.fileNamePadding);
         SparseVtkImageOutput3D sparseOut(fname);
 
-        std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,3> > velocity =
+        std::auto_ptr<MultiLevelTensorFieldForOutput3D<T,3> > velocity =
             computeVelocity(lattices, param.outputDomains.find(param.maxOutputLevel)->second[iDomain],
-                    param.maxOutputLevel, crop);
+                            param.maxOutputLevel, crop);
 
-        std::unique_ptr<MultiLevelScalarFieldForOutput3D<T> > density = 
-            computeDensity(lattices, param.outputDomains.find(param.maxOutputLevel)->second[iDomain], 
-                param.maxOutputLevel, crop);
+        std::auto_ptr<MultiLevelScalarFieldForOutput3D<T> > density =
+            computeDensity(lattices, param.outputDomains.find(param.maxOutputLevel)->second[iDomain],
+                           param.maxOutputLevel, crop);
 
-        std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,3> > outAvgVel;
+        std::auto_ptr<MultiLevelTensorFieldForOutput3D<T,3> > outAvgVel;
 
-        if (param.computeAverages) {
+        if (param.computeAverages)
+        {
             outAvgVel = exportForOutput(
-                    *extractSubDomain(*avgVel, param.outputDomains.find(param.maxOutputLevel)->second[iDomain],
-                        param.maxOutputLevel), 
-                    param.outputDomains.find(param.maxOutputLevel)->second[iDomain],
-                    param.maxOutputLevel, crop);
+                            *extractSubDomain(*avgVel, param.outputDomains.find(param.maxOutputLevel)->second[iDomain],
+                                              param.maxOutputLevel),
+                            param.outputDomains.find(param.maxOutputLevel)->second[iDomain],
+                            param.maxOutputLevel, crop);
 
         }
 
-        for (plint iLevel = param.minOutputLevel; iLevel <= param.maxOutputLevel; iLevel++) {
+        for (plint iLevel = param.minOutputLevel; iLevel <= param.maxOutputLevel; iLevel++)
+        {
             T dx = param.dxFinest * util::intTwoToThePower(param.finestLevel - iLevel);
             T dt = param.dtFinest * util::intTwoToThePower(param.finestLevel - iLevel);
 
             T pressureScale = param.rho * (dx * dx) / (dt * dt) * DESCRIPTOR<T>::cs2;
             T pressureOffset = param.ambientPressure - param.rho_LB * pressureScale;
-            
+
             Group3D vtkGroup;
             // You can add scalar- and tensor-fields to the group with the usual "group.add()". The advantage of addTransform
             // is that is also converts the type to float and multiplies by a scale factor (and adds an offset).
             addTransform<T,float,3>(vtkGroup, velocity->getLevel(iLevel), "velocity", dx / dt);
             addTransform<T,float>(vtkGroup, density->getLevel(iLevel), "pressure", pressureScale, pressureOffset);
-            if (param.computeAverages) {
+            if (param.computeAverages)
+            {
                 addTransform<T,float,3>(vtkGroup, outAvgVel->getLevel(iLevel), "avgVel", dx / dt);
             }
 
@@ -725,7 +768,8 @@ int main(int argc, char* argv[])
 
     // Command-line arguments
 
-    if (argc != 2 && argc != 3) {
+    if (argc != 2 && argc != 3)
+    {
         pcerr << "Usage: " << argv[0] << " xml-input-file-name [restart]" << std::endl;
         exit(1);
     }
@@ -735,9 +779,11 @@ int main(int argc, char* argv[])
     abortIfCannotOpenFileForReading(xmlInputFileName);
 
     bool continueSimulation = false;
-    if (argc == 3) {
+    if (argc == 3)
+    {
         std::string cmd(argv[2]);
-        if (cmd == "restart") {
+        if (cmd == "restart")
+        {
             continueSimulation = true;
         }
     }
@@ -753,7 +799,8 @@ int main(int argc, char* argv[])
 
     readUserDefinedSimulationParameters(xmlInputFileName, param);
 
-    if (continueSimulation) {
+    if (continueSimulation)
+    {
         abortIfCannotOpenFileForReading(param.xmlContinueFileName);
     }
 
@@ -763,7 +810,8 @@ int main(int argc, char* argv[])
     global::directories().setOutputDir(param.outDir);
     global::IOpolicy().activateParallelIO(param.useParallelIO);
 
-    if (nproc != param.ogs.getNumProcesses()) {
+    if (nproc != param.ogs.getNumProcesses())
+    {
         pcerr << "The number of processes used is not the same as the one provided in the grid-structure files." << std::endl;
         exit(1);
     }
@@ -779,13 +827,14 @@ int main(int argc, char* argv[])
 
     order = 1;
     MultiLevelCoupling3D<T,DESCRIPTOR,RESCALER> lattices(
-            param.ogs, new ConsistentSmagorinskyCompleteRegularizedBGKdynamics<T,DESCRIPTOR>(
-                    param.omega[0], 0.14 ),
-            order);   
+        param.ogs, new ConsistentSmagorinskyCompleteRegularizedBGKdynamics<T,DESCRIPTOR>(
+            param.omega[0], 0.14 ),
+        order);
     pcout << "CompleteRegularizedBGKdynamics" << std::endl;
     param.incompressibleModel = false;
 
-    for (plint iLevel = 0; iLevel < lattices.getNumLevels(); iLevel++) {
+    for (plint iLevel = 0; iLevel < lattices.getNumLevels(); iLevel++)
+    {
         pcout << "Info for lattice at level: " << iLevel << std::endl;
         pcout << getMultiBlockInfo(lattices.getLevel(iLevel)) << std::endl;
     }
@@ -804,12 +853,12 @@ int main(int argc, char* argv[])
     // is executed.
     plint numScalars = 4;
     plint extendedTensorEnvelopeWidth = 2;  // Extrapolated BCs. guo = 2, generalized = 3
-    MultiNTensorField3D<T> *rhoBarJfield = 
+    MultiNTensorField3D<T> *rhoBarJfield =
         generateMultiNTensorField3D<T>(lattices.getLevel(param.finestLevel), extendedTensorEnvelopeWidth, numScalars);
     rhoBarJfield->toggleInternalStatistics(false);
     rhoBarJarg.push_back(rhoBarJfield);
     integrateProcessingFunctional(new PackedRhoBarJfunctional3D<T,DESCRIPTOR>(),
-            lattices.getLevel(param.finestLevel).getBoundingBox(), lattices.getLevel(param.finestLevel), *rhoBarJfield, 0);
+                                  lattices.getLevel(param.finestLevel).getBoundingBox(), lattices.getLevel(param.finestLevel), *rhoBarJfield, 0);
 
     pcout << "Implementing the geometry at level." << std::endl;
 
@@ -819,7 +868,7 @@ int main(int argc, char* argv[])
     //   proper boundary conditions.
     TriangleSet<T> triangleSet(param.staticSurfaceFileName, DBL);
     triangleSet.translate(-param.physicalLocation);
-    triangleSet.scale((T)1/param.dxFinest);  
+    triangleSet.scale((T)1/param.dxFinest);
 
     DEFscaledMesh<T> defMesh(triangleSet, 0, 0, 1, Dot3D(0,0,0));
     defMesh.setDx(param.dxFinest);
@@ -837,14 +886,14 @@ int main(int argc, char* argv[])
     const int extendedEnvelopeWidth = 2;
     const int blockSize = 0;
     VoxelizedDomain3D<T> voxelizedDomain (
-            boundary, flowType, lattices.getLevel(param.finestLevel).getBoundingBox(), borderWidth, extendedEnvelopeWidth, blockSize );
+        boundary, flowType, lattices.getLevel(param.finestLevel).getBoundingBox(), borderWidth, extendedEnvelopeWidth, blockSize );
     voxelizedDomain.reparallelize(param.ogs.getMultiBlockManagement(
-                param.finestLevel, lattices.getLevel(param.finestLevel).getBoundingBox(),extendedEnvelopeWidth));
+                                      param.finestLevel, lattices.getLevel(param.finestLevel).getBoundingBox(),extendedEnvelopeWidth));
 
-    defineDynamics(lattices.getLevel(param.finestLevel), 
-               voxelizedDomain.getVoxelMatrix(), 
-               lattices.getLevel(param.finestLevel).getBoundingBox(),
-               new NoDynamics<T,DESCRIPTOR>((T) 1), voxelFlag::inside); 
+    defineDynamics(lattices.getLevel(param.finestLevel),
+                   voxelizedDomain.getVoxelMatrix(),
+                   lattices.getLevel(param.finestLevel).getBoundingBox(),
+                   new NoDynamics<T,DESCRIPTOR>((T) 1), voxelFlag::inside);
 
     boundary.getMesh().writeAsciiSTL(param.outDir+"flowMesh.stl");
 
@@ -854,46 +903,50 @@ int main(int argc, char* argv[])
     profiles.setWallProfile(new NoSlipProfile3D<T>());
 
     // Filipova BC needs no dynamics inside the voxel object
-    defineDynamics(lattices.getLevel(param.finestLevel), 
-           voxelizedDomain.getVoxelMatrix(), 
-           lattices.getLevel(param.finestLevel).getBoundingBox(),
-           new NoDynamics<T,DESCRIPTOR>((T) 1), voxelFlag::innerBorder);     
+    defineDynamics(lattices.getLevel(param.finestLevel),
+                   voxelizedDomain.getVoxelMatrix(),
+                   lattices.getLevel(param.finestLevel).getBoundingBox(),
+                   new NoDynamics<T,DESCRIPTOR>((T) 1), voxelFlag::innerBorder);
 
     // Filippova boundary condition
     FilippovaHaenelModel3D<T,DESCRIPTOR>* model = new FilippovaHaenelModel3D<T,DESCRIPTOR>(
-            new TriangleFlowShape3D<T,Array<T,3> >(voxelizedDomain.getBoundary(), profiles),
-            flowType);
+        new TriangleFlowShape3D<T,Array<T,3> >(voxelizedDomain.getBoundary(), profiles),
+        flowType);
 
-    OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>* boundaryCondition = 
+    OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>* boundaryCondition =
         new OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>(
-            model->clone(), voxelizedDomain, lattices.getLevel(param.finestLevel));
+        model->clone(), voxelizedDomain, lattices.getLevel(param.finestLevel));
     boundaryCondition->insert(rhoBarJarg);
     PLB_ASSERT(boundaryCondition != 0);
 
 
-    if (!continueSimulation) {
+    if (!continueSimulation)
+    {
         pcout << "Generating outer domain zones." << std::endl;
-        for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++) {
+        for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++)
+        {
             createZones(param, lattices.getLevel(iLevel), iLevel);
         }
     }
 
     pcout << "Generating outer domain boundary conditions." << std::endl;
 
-    OnLatticeBoundaryCondition3D<T,DESCRIPTOR> *bc = 
+    OnLatticeBoundaryCondition3D<T,DESCRIPTOR> *bc =
         createInterpBoundaryCondition3D<T,DESCRIPTOR>();
     applyOuterBoundaryConditions(param, lattices, bc);
-    delete bc; bc = 0;
+    delete bc;
+    bc = 0;
 
     // Generation of statistics MultiLevel fields.
 
-    std::unique_ptr<MultiLevelTensorField3D<T,3> > vel        ;
-    std::unique_ptr<MultiLevelTensorField3D<T,3> > avgVelocity;
+    std::auto_ptr<MultiLevelTensorField3D<T,3> > vel        ;
+    std::auto_ptr<MultiLevelTensorField3D<T,3> > avgVelocity;
 
-    std::vector<MultiLevel3D *> avgVelocityArgs; 
+    std::vector<MultiLevel3D *> avgVelocityArgs;
 
     Box3D coarsestBoundingBox = lattices.getOgs().getClosedCover(0);
-    if (param.computeAverages) {
+    if (param.computeAverages)
+    {
         vel         = generateMultiLevelTensorField3D<T,3>(lattices.getOgs(), coarsestBoundingBox, 0, Array<T,3>(0.0,0.0,0.0));
         avgVelocity = generateMultiLevelTensorField3D<T,3>(lattices.getOgs(), coarsestBoundingBox, 0, Array<T,3>(0.0,0.0,0.0));
 
@@ -905,25 +958,29 @@ int main(int argc, char* argv[])
 
     std::vector<MultiBlock3D*> checkpointBlocks;
 
-    for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++) {
+    for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++)
+    {
         checkpointBlocks.push_back(&lattices.getLevel(iLevel));
     }
 
-    if (param.computeAverages) {
-        for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++) {
+    if (param.computeAverages)
+    {
+        for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++)
+        {
             checkpointBlocks.push_back(&avgVelocity->getLevel(iLevel));
         }
     }
 
     plint iniIter = 0;
 
-    initializeSimulation(param, continueSimulation, iniIter, 
-            lattices, checkpointBlocks);
+    initializeSimulation(param, continueSimulation, iniIter,
+                         lattices, checkpointBlocks);
 
-    // Use "collideAndStream" at all levels except the finest one, at 
+    // Use "collideAndStream" at all levels except the finest one, at
     // which "executeInternalProcessors" is used instead.
     std::map<plint, bool> useExecuteInternalProcessors;
-    for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++) {
+    for (plint iLevel = 0; iLevel <= param.finestLevel; iLevel++)
+    {
         useExecuteInternalProcessors[iLevel] = false;
     }
 
@@ -937,9 +994,9 @@ int main(int argc, char* argv[])
     std::vector<std::vector<std::vector<T> > > results(param.finestLevel+1);
     const plint statsId = -200;
 
-    bool computeStats = false; 
+    bool computeStats = false;
 
-    
+
     fileName = param.outDir + param.surfaceName + "_total_force.dat";
     plb_ofstream forces(fileName.c_str(), continueSimulation ? std::ofstream::app : std::ofstream::out);
 
@@ -957,11 +1014,13 @@ int main(int argc, char* argv[])
     plint iter = iniIter;
     bool avgProcIntegrated = false;
     std::vector<plint> extProcFunIds;
-    for (; iter < param.maxIter && !stopExecution; iter++) {
-        if (iter % param.statIter == 0 && iter != 0) {
+    for (; iter < param.maxIter && !stopExecution; iter++)
+    {
+        if (iter % param.statIter == 0 && iter != 0)
+        {
             pcout << "At coarsest level iteration: " << iter << ", t = " << iter * param.dtCoarsest << std::endl;
             T energy = boundaryCondition->computeAverageEnergy() *
-                param.rho * (param.dxFinest * param.dxFinest) / (param.dtFinest * param.dtFinest);
+                       param.rho * (param.dxFinest * param.dxFinest) / (param.dtFinest * param.dtFinest);
 
             pcout << "Average kinetic energy at the finest level: " << energy << std::endl;
             energyFile << (double) (iter * param.dtCoarsest) << " " << (double) energy << std::endl;
@@ -969,17 +1028,18 @@ int main(int argc, char* argv[])
             // Forces on immersed surfaces.
 
             T forceConversion = param.rho * (param.dxFinest * param.dxFinest * param.dxFinest * param.dxFinest) /
-                (param.dtFinest * param.dtFinest);
+                                (param.dtFinest * param.dtFinest);
             Array<T,3> force = forceConversion*boundaryCondition->getForceOnObject();
             forces << (double) (iter * param.dtCoarsest) << " " << force[0] << " " << force[1] << " " << force[2] << " " << empirical_sphere_drag(param.Re) << std::endl;
-            
-            if (iter > 0) {
+
+            if (iter > 0)
+            {
                 T totTime = global::timer("lb-iter").getTime();
                 pcout << "Total coarsest level iteration: " << totTime / (T) iter << std::endl;
             }
 
             pcout << std::endl;
-        }   
+        }
 
         // With grid-refinement, the order of the integration of data processors is different.
         // ExternalRhoJcollideAndStream3D is integrated at the end, and not at the beginning
@@ -987,25 +1047,30 @@ int main(int argc, char* argv[])
         // that in these cases the boundary conditions are imposed "before" collide-and-stream
         // in the cycle. So, the results are exported before the BCs are enforced, and this
         // might cause visualization problems.
-        if (iter % param.outIter == 0) {
+        if (iter % param.outIter == 0)
+        {
             pcout << "Output to disk at coarsest level iteration: " << iter << ", t = " << iter * param.dtCoarsest << std::endl;
 
             writeResults(param, lattices, avgVelocity, iter);
+
         }
 
-        if ((param.cpIter > 0 && iter % param.cpIter == 0 && iter != iniIter) || iter == param.maxIter - 1) {
+        if ((param.cpIter > 0 && iter % param.cpIter == 0 && iter != iniIter) || iter == param.maxIter - 1)
+        {
             pcout << "Saving the state of the simulation at coarsest level iteration: " << iter << std::endl;
             saveState(checkpointBlocks, iter, param.saveDynamicContent, param.xmlContinueFileName,
-                    param.baseFileName, param.fileNamePadding);
+                      param.baseFileName, param.fileNamePadding);
             pcout << std::endl;
         }
 
-        if (iter % param.abIter == 0) {
+        if (iter % param.abIter == 0)
+        {
             stopExecution = abortExecution(param.abortFileName, checkpointBlocks, iter,
-                    param.saveDynamicContent, param.xmlContinueFileName,
-                    param.baseFileName, param.fileNamePadding);
+                                           param.saveDynamicContent, param.xmlContinueFileName,
+                                           param.baseFileName, param.fileNamePadding);
 
-            if (stopExecution) {
+            if (stopExecution)
+            {
                 pcout << "Aborting execution at iteration: " << iter << std::endl;
                 pcout << std::endl;
             }
@@ -1013,16 +1078,18 @@ int main(int argc, char* argv[])
 
         global::timer("lb-iter").start();
         global::timer("solver").start();
-        lattices.collideAndStream(0, useExecuteInternalProcessors, extProcFunIds, computeStats, statsId, ids, results);  
+        lattices.collideAndStream(0, useExecuteInternalProcessors, extProcFunIds, computeStats, statsId, ids, results);
         global::timer("solver").stop();
         global::timer("lb-iter").stop();
 
-        if (checkForErrors) {
+        if (checkForErrors)
+        {
             abortIfErrorsOccurred();
             checkForErrors = false;
         }
 
-        if (param.computeAverages && (iter == param.avgIter || (iter > param.avgIter && continueSimulation && !avgProcIntegrated))) {
+        if (param.computeAverages && (iter == param.avgIter || (iter > param.avgIter && continueSimulation && !avgProcIntegrated)))
+        {
             avgProcIntegrated = true;
             plint compFields = -100;
             plint compAvgs = compFields - 1;
@@ -1037,7 +1104,7 @@ int main(int argc, char* argv[])
     }
 
     pcout << "The " << iter - iniIter << " iterations at the coarsest level, took " << global::timer("solver").getTime()
-        << " seconds on " << nproc << " processes." << std::endl;
+          << " seconds on " << nproc << " processes." << std::endl;
 
     plb_ofstream summary("execution_summary.txt");
     summary << "Summary of execution of the solver: " << argv[0] << std::endl;

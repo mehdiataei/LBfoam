@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,25 +32,27 @@
 #include "core/plbDebug.h"
 #include "core/geometry3D.h"
 
-namespace plb {
+namespace plb
+{
 
 /// Fragmentation of the surface of a block into bulk, edges, and corners.
-class SurfaceDivision3D {
+class SurfaceDivision3D
+{
 public:
-    SurfaceDivision3D(Box3D const& domain_, plint boundaryWidth, plint direction_);
-    Box3D bulk() const;
-    Box3D edge0N() const;
-    Box3D edge0P() const;
-    Box3D edge1N() const;
-    Box3D edge1P() const;
-    Box3D cornerNN() const;
-    Box3D cornerPN() const;
-    Box3D cornerNP() const;
-    Box3D cornerPP() const;
+	SurfaceDivision3D(Box3D const& domain_, plint boundaryWidth, plint direction_);
+	Box3D bulk() const;
+	Box3D edge0N() const;
+	Box3D edge0P() const;
+	Box3D edge1N() const;
+	Box3D edge1P() const;
+	Box3D cornerNN() const;
+	Box3D cornerPN() const;
+	Box3D cornerNP() const;
+	Box3D cornerPP() const;
 private:
-    Box3D domain;
-    plint bw;
-    plint direction;
+	Box3D domain;
+	plint bw;
+	plint direction;
 };
 
 }  // namespace plb

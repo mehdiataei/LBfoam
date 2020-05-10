@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -40,23 +40,25 @@
 #include "multiGrid/gridRefinementDynamics.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 /// Processor to be added to coarse lattice: copies t1 values to t0 after each numTimeSteps iteration
 template<typename T, template<typename U> class Descriptor>
 class Copy_t1_to_t0_3D: public BoxProcessingFunctional3D_L<T,Descriptor>
 {
 public:
-    Copy_t1_to_t0_3D(plint numTimeSteps_, plint executionTime_);
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& fineLattice);
-    virtual Copy_t1_to_t0_3D<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::dataStructure;
-    }
+	Copy_t1_to_t0_3D(plint numTimeSteps_, plint executionTime_);
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& fineLattice);
+	virtual Copy_t1_to_t0_3D<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::dataStructure;
+	}
 private:
-    plint numTimeSteps;
-    plint executionTime;
+	plint numTimeSteps;
+	plint executionTime;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -68,27 +70,29 @@ template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationYZ : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationYZ(RescaleEngine<T,Descriptor>* rescaleEngine_)
-        : rescaleEngine(rescaleEngine_)
-    {}
-    
-    virtual ~ScalarCubicInterpolationYZ(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice );
+	ScalarCubicInterpolationYZ(RescaleEngine<T,Descriptor>* rescaleEngine_)
+		: rescaleEngine(rescaleEngine_)
+	{}
 
-    virtual ScalarCubicInterpolationYZ<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationYZ()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice );
+
+	virtual ScalarCubicInterpolationYZ<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    RescaleEngine<T,Descriptor>* rescaleEngine;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
 };
 
 /// The edges
@@ -96,55 +100,59 @@ template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationYZLineY3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationYZLineY3D( plint delta_,RescaleEngine<T,Descriptor>* rescaleEngine_ );
-    
-    virtual ~ScalarCubicInterpolationYZLineY3D(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice );
+	ScalarCubicInterpolationYZLineY3D( plint delta_,RescaleEngine<T,Descriptor>* rescaleEngine_ );
 
-    virtual ScalarCubicInterpolationYZLineY3D<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationYZLineY3D()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice );
+
+	virtual ScalarCubicInterpolationYZLineY3D<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    plint delta;
-    RescaleEngine<T,Descriptor>* rescaleEngine;
+	plint delta;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
 };
 
 template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationYZLineZ3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationYZLineZ3D( plint delta_, RescaleEngine<T,Descriptor>* rescaleEngine_ );
-    
-    virtual ~ScalarCubicInterpolationYZLineZ3D(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice );
+	ScalarCubicInterpolationYZLineZ3D( plint delta_, RescaleEngine<T,Descriptor>* rescaleEngine_ );
 
-    virtual ScalarCubicInterpolationYZLineZ3D<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationYZLineZ3D()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice );
+
+	virtual ScalarCubicInterpolationYZLineZ3D<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    
-    
+
+
 private:
-    plint delta;
-    RescaleEngine<T,Descriptor>* rescaleEngine;
+	plint delta;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
 };
 
 
@@ -154,28 +162,30 @@ template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationYZCorner3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationYZCorner3D(plint deltaY_, plint deltaZ_, RescaleEngine<T,Descriptor>* rescaleEngine_);
-    
-    virtual ~ScalarCubicInterpolationYZCorner3D(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice
-                          );
+	ScalarCubicInterpolationYZCorner3D(plint deltaY_, plint deltaZ_, RescaleEngine<T,Descriptor>* rescaleEngine_);
 
-    virtual ScalarCubicInterpolationYZCorner3D<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationYZCorner3D()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice
+	                    );
+
+	virtual ScalarCubicInterpolationYZCorner3D<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    plint deltaY;
-    plint deltaZ;
-    RescaleEngine<T,Descriptor>* rescaleEngine;
+	plint deltaY;
+	plint deltaZ;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -187,27 +197,29 @@ template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationXY : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationXY(RescaleEngine<T,Descriptor>* rescaleEngine_)
-        : rescaleEngine(rescaleEngine_)
-    {}
-    
-    virtual ~ScalarCubicInterpolationXY(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice );
+	ScalarCubicInterpolationXY(RescaleEngine<T,Descriptor>* rescaleEngine_)
+		: rescaleEngine(rescaleEngine_)
+	{}
 
-    virtual ScalarCubicInterpolationXY<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationXY()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice );
+
+	virtual ScalarCubicInterpolationXY<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    RescaleEngine<T,Descriptor>* rescaleEngine;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
 };
 
 /// The edges
@@ -215,55 +227,59 @@ template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationXYLineX3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationXYLineX3D( plint delta_,RescaleEngine<T,Descriptor>* rescaleEngine_ );
-    
-    virtual ~ScalarCubicInterpolationXYLineX3D(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice );
+	ScalarCubicInterpolationXYLineX3D( plint delta_,RescaleEngine<T,Descriptor>* rescaleEngine_ );
 
-    virtual ScalarCubicInterpolationXYLineX3D<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationXYLineX3D()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice );
+
+	virtual ScalarCubicInterpolationXYLineX3D<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    plint delta;
-    RescaleEngine<T,Descriptor>* rescaleEngine;
+	plint delta;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
 };
 
 template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationXYLineY3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationXYLineY3D( plint delta_, RescaleEngine<T,Descriptor>* rescaleEngine_ );
-    
-    virtual ~ScalarCubicInterpolationXYLineY3D(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice );
+	ScalarCubicInterpolationXYLineY3D( plint delta_, RescaleEngine<T,Descriptor>* rescaleEngine_ );
 
-    virtual ScalarCubicInterpolationXYLineY3D<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationXYLineY3D()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice );
+
+	virtual ScalarCubicInterpolationXYLineY3D<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    
-    
+
+
 private:
-    plint delta;
-    RescaleEngine<T,Descriptor>* rescaleEngine;
+	plint delta;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
 };
 
 
@@ -273,28 +289,30 @@ template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationXYCorner3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationXYCorner3D(plint deltaX_, plint deltaY_, RescaleEngine<T,Descriptor>* rescaleEngine_);
-    
-    virtual ~ScalarCubicInterpolationXYCorner3D(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice
-                          );
+	ScalarCubicInterpolationXYCorner3D(plint deltaX_, plint deltaY_, RescaleEngine<T,Descriptor>* rescaleEngine_);
 
-    virtual ScalarCubicInterpolationXYCorner3D<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationXYCorner3D()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice
+	                    );
+
+	virtual ScalarCubicInterpolationXYCorner3D<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    plint deltaX;
-    plint deltaY;
-    RescaleEngine<T,Descriptor>* rescaleEngine;
+	plint deltaX;
+	plint deltaY;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
 };
 
 
@@ -307,27 +325,29 @@ template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationXZ : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationXZ(RescaleEngine<T,Descriptor>* rescaleEngine_)
-        : rescaleEngine(rescaleEngine_)
-    {}
-    
-    virtual ~ScalarCubicInterpolationXZ(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice );
+	ScalarCubicInterpolationXZ(RescaleEngine<T,Descriptor>* rescaleEngine_)
+		: rescaleEngine(rescaleEngine_)
+	{}
 
-    virtual ScalarCubicInterpolationXZ<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationXZ()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice );
+
+	virtual ScalarCubicInterpolationXZ<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    RescaleEngine<T,Descriptor>* rescaleEngine;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
 };
 
 /// The edges
@@ -335,57 +355,61 @@ template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationXZLineX3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationXZLineX3D( plint delta_,RescaleEngine<T,Descriptor>* rescaleEngine_ );
-    
-    virtual ~ScalarCubicInterpolationXZLineX3D(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice );
+	ScalarCubicInterpolationXZLineX3D( plint delta_,RescaleEngine<T,Descriptor>* rescaleEngine_ );
 
-    virtual ScalarCubicInterpolationXZLineX3D<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationXZLineX3D()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice );
+
+	virtual ScalarCubicInterpolationXZLineX3D<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    plint delta;
-    RescaleEngine<T,Descriptor>* rescaleEngine;
-    
-    Array<Array<T,2>,4> points; // where the interpolated values will be located
+	plint delta;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
+
+	Array<Array<T,2>,4> points; // where the interpolated values will be located
 };
 
 template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationXZLineZ3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationXZLineZ3D( plint delta_, RescaleEngine<T,Descriptor>* rescaleEngine_ );
-    
-    virtual ~ScalarCubicInterpolationXZLineZ3D(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice );
+	ScalarCubicInterpolationXZLineZ3D( plint delta_, RescaleEngine<T,Descriptor>* rescaleEngine_ );
 
-    virtual ScalarCubicInterpolationXZLineZ3D<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationXZLineZ3D()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice );
+
+	virtual ScalarCubicInterpolationXZLineZ3D<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    
-    
+
+
 private:
-    plint delta;
-    RescaleEngine<T,Descriptor>* rescaleEngine;
+	plint delta;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
 };
 
 
@@ -395,28 +419,30 @@ template<typename T, template<typename U> class Descriptor>
 class ScalarCubicInterpolationXZCorner3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    ScalarCubicInterpolationXZCorner3D(plint deltaX_, plint deltaZ_, RescaleEngine<T,Descriptor>* rescaleEngine_);
-    
-    virtual ~ScalarCubicInterpolationXZCorner3D(){
-        delete rescaleEngine;
-    }
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice
-                          );
+	ScalarCubicInterpolationXZCorner3D(plint deltaX_, plint deltaZ_, RescaleEngine<T,Descriptor>* rescaleEngine_);
 
-    virtual ScalarCubicInterpolationXZCorner3D<T,Descriptor>* clone() const;
-    
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::dataStructure;
-    }
-    
+	virtual ~ScalarCubicInterpolationXZCorner3D()
+	{
+		delete rescaleEngine;
+	}
+
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice
+	                    );
+
+	virtual ScalarCubicInterpolationXZCorner3D<T,Descriptor>* clone() const;
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::dataStructure;
+	}
+
 private:
-    plint deltaX;
-    plint deltaZ;
-    RescaleEngine<T,Descriptor>* rescaleEngine;
+	plint deltaX;
+	plint deltaZ;
+	RescaleEngine<T,Descriptor>* rescaleEngine;
 };
 
 

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,7 +35,8 @@
 #include "io/serializerIO.h"
 #include "io/parallelIO.h"
 
-namespace plb {
+namespace plb
+{
 
 /// Save the content of a Block3D into a Base64 encoded binary file.
 /** The content includes external scalars in the case of a BlockLattice3D. Only raw
@@ -73,44 +74,52 @@ template<typename T>
 std::ostream& block2ostream(std::ostream& ostr, Block3D const& block);
 
 template<typename T>
-std::ostream& operator<<(std::ostream& ostr, MultiScalarField3D<T> const& block) {
-    return block2ostream<T>(ostr, block);
+std::ostream& operator<<(std::ostream& ostr, MultiScalarField3D<T> const& block)
+{
+	return block2ostream<T>(ostr, block);
 }
 
 template<typename T>
-std::ostream& operator<<(std::ostream& ostr, MultiNTensorField3D<T> const& block) {
-    return block2ostream<T>(ostr, block);
+std::ostream& operator<<(std::ostream& ostr, MultiNTensorField3D<T> const& block)
+{
+	return block2ostream<T>(ostr, block);
 }
 
 template<typename T, int nDim>
-std::ostream& operator<<(std::ostream& ostr, MultiTensorField3D<T,nDim> const& block) {
-    return block2ostream<T>(ostr, block);
+std::ostream& operator<<(std::ostream& ostr, MultiTensorField3D<T,nDim> const& block)
+{
+	return block2ostream<T>(ostr, block);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::ostream& operator<<(std::ostream& ostr, MultiBlockLattice3D<T,Descriptor> const& block) {
-    return block2ostream<T>(ostr, block);
+std::ostream& operator<<(std::ostream& ostr, MultiBlockLattice3D<T,Descriptor> const& block)
+{
+	return block2ostream<T>(ostr, block);
 }
 
 
 template<typename T>
-std::ostream& operator<<(std::ostream& ostr, ScalarField3D<T> const& block) {
-    return block2ostream<T>(ostr, block);
+std::ostream& operator<<(std::ostream& ostr, ScalarField3D<T> const& block)
+{
+	return block2ostream<T>(ostr, block);
 }
 
 template<typename T>
-std::ostream& operator<<(std::ostream& ostr, NTensorField3D<T> const& block) {
-    return block2ostream<T>(ostr, block);
+std::ostream& operator<<(std::ostream& ostr, NTensorField3D<T> const& block)
+{
+	return block2ostream<T>(ostr, block);
 }
 
 template<typename T, int nDim>
-std::ostream& operator<<(std::ostream& ostr, TensorField3D<T,nDim> const& block) {
-    return block2ostream<T>(ostr, block);
+std::ostream& operator<<(std::ostream& ostr, TensorField3D<T,nDim> const& block)
+{
+	return block2ostream<T>(ostr, block);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::ostream& operator<<(std::ostream& ostr, BlockLattice3D<T,Descriptor> const& block) {
-    return block2ostream<T>(ostr, block);
+std::ostream& operator<<(std::ostream& ostr, BlockLattice3D<T,Descriptor> const& block)
+{
+	return block2ostream<T>(ostr, block);
 }
 
 /// Flush the content of a generic C++ stream with ASCII content into a Block3D.
@@ -126,44 +135,52 @@ template<typename T>
 std::istream& istream2block(std::istream& istr, Block3D& block);
 
 template<typename T>
-std::istream& operator>>(std::istream& istr, MultiScalarField3D<T>& block) {
-    return istream2block<T>(istr, block);
+std::istream& operator>>(std::istream& istr, MultiScalarField3D<T>& block)
+{
+	return istream2block<T>(istr, block);
 }
 
 template<typename T>
-std::istream& operator>>(std::istream& istr, MultiNTensorField3D<T>& block) {
-    return istream2block<T>(istr, block);
+std::istream& operator>>(std::istream& istr, MultiNTensorField3D<T>& block)
+{
+	return istream2block<T>(istr, block);
 }
 
 template<typename T,int nDim>
-std::istream& operator>>(std::istream& istr, MultiTensorField3D<T,nDim>& block) {
-    return istream2block<T>(istr, block);
+std::istream& operator>>(std::istream& istr, MultiTensorField3D<T,nDim>& block)
+{
+	return istream2block<T>(istr, block);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::istream& operator>>(std::istream& istr, MultiBlockLattice3D<T,Descriptor>& block) {
-    return istream2block<T>(istr, block);
+std::istream& operator>>(std::istream& istr, MultiBlockLattice3D<T,Descriptor>& block)
+{
+	return istream2block<T>(istr, block);
 }
 
 
 template<typename T>
-std::istream& operator>>(std::istream& istr, ScalarField3D<T>& block) {
-    return istream2block<T>(istr, block);
+std::istream& operator>>(std::istream& istr, ScalarField3D<T>& block)
+{
+	return istream2block<T>(istr, block);
 }
 
 template<typename T>
-std::istream& operator>>(std::istream& istr, NTensorField3D<T>& block) {
-    return istream2block<T>(istr, block);
+std::istream& operator>>(std::istream& istr, NTensorField3D<T>& block)
+{
+	return istream2block<T>(istr, block);
 }
 
 template<typename T,int nDim>
-std::istream& operator>>(std::istream& istr, TensorField3D<T,nDim>& block) {
-    return istream2block<T>(istr, block);
+std::istream& operator>>(std::istream& istr, TensorField3D<T,nDim>& block)
+{
+	return istream2block<T>(istr, block);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::istream& operator>>(std::istream& istr, BlockLattice3D<T,Descriptor>& block) {
-    return istream2block<T>(istr, block);
+std::istream& operator>>(std::istream& istr, BlockLattice3D<T,Descriptor>& block)
+{
+	return istream2block<T>(istr, block);
 }
 
 } // namespace plb

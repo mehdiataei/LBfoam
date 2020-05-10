@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,41 +34,42 @@
 #include "atomicBlock/dataField3D.h"
 #include "multiBlock/sparseBlockStructure3D.h"
 
-namespace plb {
+namespace plb
+{
 
 /// A 3D field of scalar values used to indicate the type of the cells.
-/// Any positive value indicates an active (bulk, boundary) cell, 
+/// Any positive value indicates an active (bulk, boundary) cell,
 /// while zero indicates a non-active (no-dynamics) cell
 typedef ScalarField3D<unsigned char> CellTypeField3D;
 
 /// Create a regular data distribution confined by domain.
 SparseBlockStructure3D createRegularDistribution3D (
-        plint nx, plint ny, plint nz, plint numBlocksX, plint numBlocksY, plint numBlocksZ );
+    plint nx, plint ny, plint nz, plint numBlocksX, plint numBlocksY, plint numBlocksZ );
 
 /// Create a nx-by-ny-by-nz data distribution
 SparseBlockStructure3D createRegularDistribution3D (
-        Box3D const& domain, plint numBlocksX, plint numBlocksY, plint numBlocksZ );
+    Box3D const& domain, plint numBlocksX, plint numBlocksY, plint numBlocksZ );
 
 /// Create a data distribution with regular blocks, as evenly distributed as possible
 SparseBlockStructure3D
-    createRegularDistribution3D(plint nx, plint ny, plint nz,
-                                int numProc = global::mpi().getSize());
+createRegularDistribution3D(plint nx, plint ny, plint nz,
+                            int numProc = global::mpi().getSize());
 
 /// Create a data distribution with regular blocks, as evenly distributed as possible
 SparseBlockStructure3D createRegularDistribution3D(Box3D const& domain,
-                                                   int numProc = global::mpi().getSize());
+        int numProc = global::mpi().getSize());
 
 /// Create a data distribution with regular blocks only at the y and z directions, as evenly distributed as possible
 SparseBlockStructure3D createRegularDistributionYZ3D (
-        plint nx, plint ny, plint nz, int numProc = global::mpi().getSize() );
+    plint nx, plint ny, plint nz, int numProc = global::mpi().getSize() );
 
 /// Create a data distribution with regular blocks only at the x and z directions, as evenly distributed as possible
 SparseBlockStructure3D createRegularDistributionXZ3D (
-        plint nx, plint ny, plint nz, int numProc = global::mpi().getSize() );
+    plint nx, plint ny, plint nz, int numProc = global::mpi().getSize() );
 
 /// Create a data distribution with regular blocks only at the x and y directions, as evenly distributed as possible
 SparseBlockStructure3D createRegularDistributionXY3D (
-        plint nx, plint ny, plint nz, int numProc = global::mpi().getSize() );
+    plint nx, plint ny, plint nz, int numProc = global::mpi().getSize() );
 
 /// Re-create a distribution by covering it with regular blocks.
 SparseBlockStructure3D reparallelize(SparseBlockStructure3D const& originalStructure,
@@ -78,35 +79,35 @@ SparseBlockStructure3D reparallelize(SparseBlockStructure3D const& originalStruc
 SparseBlockStructure3D reparallelize(SparseBlockStructure3D const& originalStructure);
 
 /// Create a data distribution by slicing the domain (a block of nX*nY*nZ cells
-/// as defined by cellTypeField) into numBlocks blocks along the x-direction. 
-/// The x-extent of the blocks is chosen such as to obtain an approximately 
+/// as defined by cellTypeField) into numBlocks blocks along the x-direction.
+/// The x-extent of the blocks is chosen such as to obtain an approximately
 /// equal number of active cells in each block.
 SparseBlockStructure3D createXSlicedDistribution3D (
-        CellTypeField3D const& cellTypeField,
-        plint numBlocks );
+    CellTypeField3D const& cellTypeField,
+    plint numBlocks );
 
 /// cf above.
 SparseBlockStructure3D createYSlicedDistribution3D (
-        CellTypeField3D const& cellTypeField,
-        plint numBlocks );
-        
+    CellTypeField3D const& cellTypeField,
+    plint numBlocks );
+
 /// cf above.
 SparseBlockStructure3D createZSlicedDistribution3D (
-        CellTypeField3D const& cellTypeField,
-        plint numBlocks );
+    CellTypeField3D const& cellTypeField,
+    plint numBlocks );
 
 /// Create x-sliced data distribution, balancing the number of active cells between blocks,
 /// implicitly setting numBlocks = #processors
 SparseBlockStructure3D createXSlicedDistribution3D (
-        CellTypeField3D const& cellTypeField );
+    CellTypeField3D const& cellTypeField );
 
 /// cf above
 SparseBlockStructure3D createYSlicedDistribution3D (
-        CellTypeField3D const& cellTypeField );
+    CellTypeField3D const& cellTypeField );
 
 /// cf above
 SparseBlockStructure3D createZSlicedDistribution3D (
-        CellTypeField3D const& cellTypeField );
+    CellTypeField3D const& cellTypeField );
 
 }  // namespace plb
 

@@ -25,7 +25,7 @@
 #ifndef EIGEN_MINOR_H
 #define EIGEN_MINOR_H
 
-/** \nonstableyet 
+/** \nonstableyet
   * \class Minor
   *
   * \brief Expression of a minor
@@ -39,61 +39,66 @@
   * \sa MatrixBase::minor()
   */
 template<typename MatrixType>
-struct ei_traits<Minor<MatrixType> >
-{
-  typedef typename MatrixType::Scalar Scalar;
-  typedef typename ei_nested<MatrixType>::type MatrixTypeNested;
-  typedef typename ei_unref<MatrixTypeNested>::type _MatrixTypeNested;
-  enum {
-    RowsAtCompileTime = (MatrixType::RowsAtCompileTime != Dynamic) ?
-                          int(MatrixType::RowsAtCompileTime) - 1 : Dynamic,
-    ColsAtCompileTime = (MatrixType::ColsAtCompileTime != Dynamic) ?
-                          int(MatrixType::ColsAtCompileTime) - 1 : Dynamic,
-    MaxRowsAtCompileTime = (MatrixType::MaxRowsAtCompileTime != Dynamic) ?
-                             int(MatrixType::MaxRowsAtCompileTime) - 1 : Dynamic,
-    MaxColsAtCompileTime = (MatrixType::MaxColsAtCompileTime != Dynamic) ?
-                             int(MatrixType::MaxColsAtCompileTime) - 1 : Dynamic,
-    Flags = _MatrixTypeNested::Flags & HereditaryBits,
-    CoeffReadCost = _MatrixTypeNested::CoeffReadCost
-  };
+struct ei_traits<Minor<MatrixType> > {
+	typedef typename MatrixType::Scalar Scalar;
+	typedef typename ei_nested<MatrixType>::type MatrixTypeNested;
+	typedef typename ei_unref<MatrixTypeNested>::type _MatrixTypeNested;
+	enum {
+		RowsAtCompileTime = (MatrixType::RowsAtCompileTime != Dynamic) ?
+		                    int(MatrixType::RowsAtCompileTime) - 1 : Dynamic,
+		ColsAtCompileTime = (MatrixType::ColsAtCompileTime != Dynamic) ?
+		                    int(MatrixType::ColsAtCompileTime) - 1 : Dynamic,
+		MaxRowsAtCompileTime = (MatrixType::MaxRowsAtCompileTime != Dynamic) ?
+		                       int(MatrixType::MaxRowsAtCompileTime) - 1 : Dynamic,
+		MaxColsAtCompileTime = (MatrixType::MaxColsAtCompileTime != Dynamic) ?
+		                       int(MatrixType::MaxColsAtCompileTime) - 1 : Dynamic,
+		Flags = _MatrixTypeNested::Flags & HereditaryBits,
+		CoeffReadCost = _MatrixTypeNested::CoeffReadCost
+	};
 };
 
 template<typename MatrixType> class Minor
-  : public MatrixBase<Minor<MatrixType> >
+	: public MatrixBase<Minor<MatrixType> >
 {
-  public:
+public:
 
-    EIGEN_GENERIC_PUBLIC_INTERFACE(Minor)
+	EIGEN_GENERIC_PUBLIC_INTERFACE(Minor)
 
-    inline Minor(const MatrixType& matrix,
-                       int row, int col)
-      : m_matrix(matrix), m_row(row), m_col(col)
-    {
-      ei_assert(row >= 0 && row < matrix.rows()
-          && col >= 0 && col < matrix.cols());
-    }
+	inline Minor(const MatrixType& matrix,
+	             int row, int col)
+		: m_matrix(matrix), m_row(row), m_col(col)
+	{
+		ei_assert(row >= 0 && row < matrix.rows()
+		          && col >= 0 && col < matrix.cols());
+	}
 
-    EIGEN_INHERIT_ASSIGNMENT_OPERATORS(Minor)
+	EIGEN_INHERIT_ASSIGNMENT_OPERATORS(Minor)
 
-    inline int rows() const { return m_matrix.rows() - 1; }
-    inline int cols() const { return m_matrix.cols() - 1; }
+	inline int rows() const
+	{
+		return m_matrix.rows() - 1;
+	}
+	inline int cols() const
+	{
+		return m_matrix.cols() - 1;
+	}
 
-    inline Scalar& coeffRef(int row, int col)
-    {
-      return m_matrix.const_cast_derived().coeffRef(row + (row >= m_row), col + (col >= m_col));
-    }
+	inline Scalar& coeffRef(int row, int col)
+	{
+		return m_matrix.const_cast_derived().coeffRef(row + (row >= m_row), col + (col >= m_col));
+	}
 
-    inline const Scalar coeff(int row, int col) const
-    {
-      return m_matrix.coeff(row + (row >= m_row), col + (col >= m_col));
-    }
+	inline const Scalar coeff(int row, int col) const
+	{
+		return m_matrix.coeff(row + (row >= m_row), col + (col >= m_col));
+	}
 
-  protected:
-    const typename MatrixType::Nested m_matrix;
-    const int m_row, m_col;
+protected:
+	const typename MatrixType::Nested m_matrix;
+	const int m_row, m_col;
 };
 
-/** \nonstableyet 
+/** \nonstableyet
   * \return an expression of the (\a row, \a col)-minor of *this,
   * i.e. an expression constructed from *this by removing the specified
   * row and column.
@@ -107,16 +112,16 @@ template<typename Derived>
 inline Minor<Derived>
 MatrixBase<Derived>::minor(int row, int col)
 {
-  return Minor<Derived>(derived(), row, col);
+	return Minor<Derived>(derived(), row, col);
 }
 
-/** \nonstableyet 
+/** \nonstableyet
   * This is the const version of minor(). */
 template<typename Derived>
 inline const Minor<Derived>
 MatrixBase<Derived>::minor(int row, int col) const
 {
-  return Minor<Derived>(derived(), row, col);
+	return Minor<Derived>(derived(), row, col);
 }
 
 #endif // EIGEN_MINOR_H

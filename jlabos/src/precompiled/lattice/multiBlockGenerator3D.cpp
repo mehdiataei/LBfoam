@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,66 +33,67 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.hh"
 
-namespace plb {
+namespace plb
+{
 
-template std::unique_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > 
- defaultGenerateMultiBlockLattice3D< FLOAT_T,descriptors::DESCRIPTOR_3D > (
-        MultiBlockManagement3D const& management, plint unnamedDummyArg );
-
-template
-std::unique_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > clone<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& originalLattice,
-        Box3D const& subDomain, bool crop );
+template std::auto_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> >
+defaultGenerateMultiBlockLattice3D< FLOAT_T,descriptors::DESCRIPTOR_3D > (
+    MultiBlockManagement3D const& management, plint unnamedDummyArg );
 
 template
-std::unique_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > generateMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlock3D const& originalBlock, Box3D const& intersection,
-        bool crop );
+std::auto_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > clone<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& originalLattice,
+    Box3D const& subDomain, bool crop );
 
 template
-std::unique_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > generateIntersectMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlock3D const& originalBlock1,
-        MultiBlock3D const& originalBlock2, bool crop );
+std::auto_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > generateMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    MultiBlock3D const& originalBlock, Box3D const& intersection,
+    bool crop );
 
 template
-std::unique_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > generateIntersectMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlock3D const& originalBlock1,
-        MultiBlock3D const& originalBlock2,
-        Box3D const& intersection, bool crop );
+std::auto_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > generateIntersectMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    MultiBlock3D const& originalBlock1,
+    MultiBlock3D const& originalBlock2, bool crop );
 
 template
-std::unique_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > generateJoinMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlock3D const& originalBlock1,
-        MultiBlock3D const& originalBlock2 );
+std::auto_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > generateIntersectMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    MultiBlock3D const& originalBlock1,
+    MultiBlock3D const& originalBlock2,
+    Box3D const& intersection, bool crop );
 
 template
-std::unique_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > extend<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& originalBlock, Box3D const& addedBlock );
+std::auto_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > generateJoinMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    MultiBlock3D const& originalBlock1,
+    MultiBlock3D const& originalBlock2 );
 
 template
-std::unique_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > except<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& originalBlock,
-        Box3D const& exceptedBlock );
+std::auto_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > extend<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& originalBlock, Box3D const& addedBlock );
 
 template
-std::unique_ptr<MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> > redistribute<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> const& originalBlock,
-        SparseBlockStructure3D const& newBlockStructure );
+std::auto_ptr<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> > except<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& originalBlock,
+    Box3D const& exceptedBlock );
 
 template
-std::unique_ptr<MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> > redistribute<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> const& originalBlock,
-        SparseBlockStructure3D const& newBlockStructure,
-        Box3D const& intersection, bool crop );
+std::auto_ptr<MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> > redistribute<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> const& originalBlock,
+    SparseBlockStructure3D const& newBlockStructure );
 
 template
-std::unique_ptr<MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> > align<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> const& originalBlock,
-        MultiBlock3D const& partnerBlock );
+std::auto_ptr<MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> > redistribute<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> const& originalBlock,
+    SparseBlockStructure3D const& newBlockStructure,
+    Box3D const& intersection, bool crop );
 
 template
-std::unique_ptr<MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> > reparallelize<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> const& originalBlock );
+std::auto_ptr<MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> > align<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> const& originalBlock,
+    MultiBlock3D const& partnerBlock );
+
+template
+std::auto_ptr<MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> > reparallelize<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D> const& originalBlock );
 
 }
 

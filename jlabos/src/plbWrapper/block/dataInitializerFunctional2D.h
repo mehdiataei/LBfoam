@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,151 +32,183 @@
 #include "atomicBlock/dataProcessingFunctional2D.h"
 #include "core/dynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
 class IniConstNTensorFunctional2D : public BoxProcessingFunctional2D_N<T>
 {
 public:
-    IniConstNTensorFunctional2D(std::vector<T> const& value_);
-    virtual void process(Box2D domain, NTensorField2D<T>& field);
-    virtual IniConstNTensorFunctional2D<T>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual void rescale(double dxScale, double dtScale);
+	IniConstNTensorFunctional2D(std::vector<T> const& value_);
+	virtual void process(Box2D domain, NTensorField2D<T>& field);
+	virtual IniConstNTensorFunctional2D<T>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void rescale(double dxScale, double dtScale);
 private:
-    std::vector<T> value;
+	std::vector<T> value;
 };
 
 template<typename T>
 class MaskedIniConstNTensorFunctional2D : public MaskedBoxProcessingFunctional2D_N<T>
 {
 public:
-    MaskedIniConstNTensorFunctional2D(std::vector<T> const& value_);
-    virtual void process(Box2D domain,
-                         NTensorField2D<T>& field,
-                         NTensorField2D<int>& mask );
-    virtual MaskedIniConstNTensorFunctional2D<T>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual void rescale(double dxScale, double dtScale);
+	MaskedIniConstNTensorFunctional2D(std::vector<T> const& value_);
+	virtual void process(Box2D domain,
+	                     NTensorField2D<T>& field,
+	                     NTensorField2D<int>& mask );
+	virtual MaskedIniConstNTensorFunctional2D<T>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void rescale(double dxScale, double dtScale);
 private:
-    std::vector<T> value;
+	std::vector<T> value;
 };
 
 template<typename T>
 class SetToNCoordinateFunctional2D : public BoxProcessingFunctional2D_N<T>
 {
 public:
-    SetToNCoordinateFunctional2D(plint index_);
-    virtual void process(Box2D domain, NTensorField2D<T>& field);
-    virtual SetToNCoordinateFunctional2D<T>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual void rescale(double dxScale, double dtScale);
+	SetToNCoordinateFunctional2D(plint index_);
+	virtual void process(Box2D domain, NTensorField2D<T>& field);
+	virtual SetToNCoordinateFunctional2D<T>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void rescale(double dxScale, double dtScale);
 private:
-    plint index;
+	plint index;
 };
 
 template<typename T>
 class MaskedSetToNCoordinateFunctional2D : public MaskedBoxProcessingFunctional2D_N<T>
 {
 public:
-    MaskedSetToNCoordinateFunctional2D(plint index_);
-    virtual void process(Box2D domain,
-                         NTensorField2D<T>& field,
-                         NTensorField2D<int>& mask );
-    virtual MaskedSetToNCoordinateFunctional2D<T>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual void rescale(double dxScale, double dtScale);
+	MaskedSetToNCoordinateFunctional2D(plint index_);
+	virtual void process(Box2D domain,
+	                     NTensorField2D<T>& field,
+	                     NTensorField2D<int>& mask );
+	virtual MaskedSetToNCoordinateFunctional2D<T>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void rescale(double dxScale, double dtScale);
 private:
-    plint index;
+	plint index;
 };
 
 template<typename T>
 class SetToNCoordinatesFunctional2D : public BoxProcessingFunctional2D_N<T>
 {
 public:
-    SetToNCoordinatesFunctional2D();
-    virtual void process(Box2D domain, NTensorField2D<T>& field);
-    virtual SetToNCoordinatesFunctional2D<T>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual void rescale(double dxScale, double dtScale);
+	SetToNCoordinatesFunctional2D();
+	virtual void process(Box2D domain, NTensorField2D<T>& field);
+	virtual SetToNCoordinatesFunctional2D<T>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void rescale(double dxScale, double dtScale);
 };
 
 template<typename T>
 class MaskedSetToNCoordinatesFunctional2D : public MaskedBoxProcessingFunctional2D_N<T>
 {
 public:
-    MaskedSetToNCoordinatesFunctional2D();
-    virtual void process(Box2D domain,
-                         NTensorField2D<T>& field,
-                         NTensorField2D<int>& mask);
-    virtual MaskedSetToNCoordinatesFunctional2D<T>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual void rescale(double dxScale, double dtScale);
+	MaskedSetToNCoordinatesFunctional2D();
+	virtual void process(Box2D domain,
+	                     NTensorField2D<T>& field,
+	                     NTensorField2D<int>& mask);
+	virtual MaskedSetToNCoordinatesFunctional2D<T>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void rescale(double dxScale, double dtScale);
 };
 
 template<typename T>
 class SetNTensorComponentFunctional2D : public BoxProcessingFunctional2D_NN<T,T>
 {
 public:
-    SetNTensorComponentFunctional2D(int whichDim_);
-    virtual void process(Box2D domain, NTensorField2D<T>& scalarField,
-                                       NTensorField2D<T>& tensorField);
-    virtual SetNTensorComponentFunctional2D<T>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual void rescale(double dxScale, double dtScale);
+	SetNTensorComponentFunctional2D(int whichDim_);
+	virtual void process(Box2D domain, NTensorField2D<T>& scalarField,
+	                     NTensorField2D<T>& tensorField);
+	virtual SetNTensorComponentFunctional2D<T>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void rescale(double dxScale, double dtScale);
 private:
-    int whichDim;
+	int whichDim;
 };
 
 template<typename T>
 class MaskedSetNTensorComponentFunctional2D : public MaskedBoxProcessingFunctional2D_NN<T,T>
 {
 public:
-    MaskedSetNTensorComponentFunctional2D(int whichDim_);
-    virtual void process(Box2D domain, NTensorField2D<T>& scalarField,
-                                       NTensorField2D<T>& tensorField,
-                                       NTensorField2D<int>& mask);
-    virtual MaskedSetNTensorComponentFunctional2D<T>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual void rescale(double dxScale, double dtScale);
+	MaskedSetNTensorComponentFunctional2D(int whichDim_);
+	virtual void process(Box2D domain, NTensorField2D<T>& scalarField,
+	                     NTensorField2D<T>& tensorField,
+	                     NTensorField2D<int>& mask);
+	virtual MaskedSetNTensorComponentFunctional2D<T>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void rescale(double dxScale, double dtScale);
 private:
-    int whichDim;
+	int whichDim;
 };
 
 template<typename T>
 class AssignNTensorFunctional2D : public BoxProcessingFunctional2D_NN<T,T>
 {
 public:
-    AssignNTensorFunctional2D();
-    virtual void process(Box2D domain, NTensorField2D<T>& A,
-                                       NTensorField2D<T>& B);
-    virtual AssignNTensorFunctional2D<T>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual void rescale(double dxScale, double dtScale);
+	AssignNTensorFunctional2D();
+	virtual void process(Box2D domain, NTensorField2D<T>& A,
+	                     NTensorField2D<T>& B);
+	virtual AssignNTensorFunctional2D<T>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void rescale(double dxScale, double dtScale);
 };
 
 template<typename T>
 class MaskedAssignNTensorFunctional2D : public MaskedBoxProcessingFunctional2D_NN<T,T>
 {
 public:
-    MaskedAssignNTensorFunctional2D();
-    virtual void process(Box2D domain, NTensorField2D<T>& A,
-                                       NTensorField2D<T>& B,
-                                       NTensorField2D<int>& mask);
-    virtual MaskedAssignNTensorFunctional2D<T>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual void rescale(double dxScale, double dtScale);
+	MaskedAssignNTensorFunctional2D();
+	virtual void process(Box2D domain, NTensorField2D<T>& A,
+	                     NTensorField2D<T>& B,
+	                     NTensorField2D<int>& mask);
+	virtual MaskedAssignNTensorFunctional2D<T>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void rescale(double dxScale, double dtScale);
 };
+
+
+// Added by Mehdi Ataei as part of LBfoam project
+
+template<typename T, template<typename U> class Descriptor>
+class LBMsmoothen : public BoxProcessingFunctional2D_SS<T,T>
+{
+public:
+	virtual void process(Box2D domain, ScalarField2D<T>& data, ScalarField2D<T>& result);
+	virtual LBMsmoothen<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+};
+
+template<typename T, template<typename U> class Descriptor>
+class LBMsmoothenInPlace2D : public BoxProcessingFunctional2D_S<T>
+{
+public:
+	virtual void process(Box2D domain, ScalarField2D<T>& data);
+	virtual LBMsmoothenInPlace2D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+};
+
+template<typename T>
+class Smoothen2D : public BoxProcessingFunctional2D_SS<T,T>
+{
+public:
+	virtual void process(Box2D domain, ScalarField2D<T>& data, ScalarField2D<T>& result);
+	virtual Smoothen2D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+};
+
 
 }  // namespace plb
 

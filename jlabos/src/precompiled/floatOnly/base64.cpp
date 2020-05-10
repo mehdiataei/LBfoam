@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,7 +29,8 @@
 #include "io/serializerIO_3D.h"
 #include "io/serializerIO_3D.hh"
 
-namespace plb {
+namespace plb
+{
 
 // All of the following is a workaround to the following problem: on a
 // 32-bit machine where pluint plint is the same as pluint, Base64Encoder
@@ -48,14 +49,14 @@ template<bool areEqual> struct DistinctUint;
 
 template<>
 struct DistinctUint<true> {
-    typedef unsigned char T1;
-    typedef pluint T2;
+	typedef unsigned char T1;
+	typedef pluint T2;
 };
 
 template<>
 struct DistinctUint<false> {
-    typedef unsigned int T1;
-    typedef pluint T2;
+	typedef unsigned int T1;
+	typedef pluint T2;
 };
 
 typedef DistinctUint<sizeof(unsigned int)==sizeof(pluint)>::T1 T1;

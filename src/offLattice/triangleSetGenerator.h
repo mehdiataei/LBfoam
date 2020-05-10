@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,7 +33,8 @@
 
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 /// Create and return an ellipsoid as a set of triangles. The center and the half-axes (a, b, c)
 ///   of the ellipsoid must be given as arguments. A minimum number of triangles for the triangulation
@@ -72,15 +73,15 @@ TriangleSet<T> constructDisk(Array<T,3> const& center, T radius, plint minNumOfT
 ///   and circumferential directions, respectively.
 template<typename T>
 TriangleSet<T> constructCylinder(Array<T,3> const& inletCenter, T inletRadius, T outletRadius, T length,
-        plint nAxial, plint nCirc, T eps = getEpsilon<T>());
+                                 plint nAxial, plint nCirc, T eps = getEpsilon<T>());
 
 template<typename T>
 TriangleSet<T> constructCylinder(Array<T,3> const& inletCenter, T inletRadius, T outletRadius, T length,
-        plint nAxial, plint nCirc, std::vector<Array<T,3> >& inletPoints, T eps = getEpsilon<T>());
+                                 plint nAxial, plint nCirc, std::vector<Array<T,3> >& inletPoints, T eps = getEpsilon<T>());
 
 template<typename T>
 TriangleSet<T> constructCylinder(Array<T,3> const& inletCenter, Array<T,3> const& axis, T inletRadius, T outletRadius,
-        T length, plint nAxial, plint nCirc, std::vector<Array<T,3> >& inletPoints, T eps = getEpsilon<T>());
+                                 T length, plint nAxial, plint nCirc, std::vector<Array<T,3> >& inletPoints, T eps = getEpsilon<T>());
 
 template<typename T>
 TriangleSet<T> constructCuboidWithInletOutlet(Array<T,3> const& lowerCorner, Array<T,3> const& upperCorner,
@@ -92,7 +93,7 @@ TriangleSet<T> constructCuboidWithInletOutlet(Cuboid<T> const& cuboid, Array<pli
 
 template<typename T>
 TriangleSet<T> constructCuboid(Array<T,3> const& lowerCorner, Array<T,3> const& upperCorner,
-        Array<plint,3> const& nSegments, T eps = getEpsilon<T>());
+                               Array<plint,3> const& nSegments, T eps = getEpsilon<T>());
 
 template<typename T>
 TriangleSet<T> constructCuboid(Cuboid<T> const& cuboid, Array<plint,3> const& nSegments, T eps = getEpsilon<T>());
@@ -126,7 +127,7 @@ TriangleSet<T> constructStrip(std::vector<Array<T,3> > const& from, std::vector<
 ///   and outer radii of the object. "nCirc" is the number of points in the circumferential
 ///   direction. Remember that if the annulus is constructed to fit a cylinder, then the "nCirc"
 ///   parameter given to this function must be twice the corresponding one given to the
-///   constructCylinder function. If innerRadius = 0, then a disk is constructed.
+///   constructCylinder function.
 template<typename T>
 TriangleSet<T> constructAnnulus(Array<T,3> const& center, T innerRadius, T outerRadius, plint nCirc, T eps = getEpsilon<T>());
 
@@ -139,4 +140,3 @@ TriangleSet<T> sparseBlockStructureToTriangleSet(MultiBlock3D const& block, bool
 } // namespace plb
 
 #endif  // TRIANGLE_SET_GENERATOR_H
-

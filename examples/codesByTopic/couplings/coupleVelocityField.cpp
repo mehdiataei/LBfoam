@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -40,7 +40,8 @@ typedef double T;
 #define DESCRIPTOR descriptors::D2Q9Descriptor
 
 template<typename T>
-class SetToPoiseuilleVelocityFunctional : public BoxProcessingFunctional2D_T<T,2> {
+class SetToPoiseuilleVelocityFunctional : public BoxProcessingFunctional2D_T<T,2>
+{
 public:
     SetToPoiseuilleVelocityFunctional(IncomprFlowParam<T> parameters_)
         : parameters(parameters_)
@@ -48,21 +49,26 @@ public:
     virtual void process(Box2D domain, TensorField2D<T,2>& velocity)
     {
         Dot2D offset = velocity.getLocation();
-        for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-            for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+        for (plint iX=domain.x0; iX<=domain.x1; ++iX)
+        {
+            for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+            {
                 plint absoluteY = iY + offset.y;
                 T ux = poiseuilleVelocity(absoluteY,parameters);
                 velocity.get(iX,iY) = Array<T,2>(ux, T());
             }
         }
     }
-    virtual SetToPoiseuilleVelocityFunctional<T>* clone() const {
+    virtual SetToPoiseuilleVelocityFunctional<T>* clone() const
+    {
         return new SetToPoiseuilleVelocityFunctional(*this);
     }
-    void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+    void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+    {
         modified[0] = modif::staticVariables;
     }
-    virtual BlockDomain::DomainT appliesTo() const {
+    virtual BlockDomain::DomainT appliesTo() const
+    {
         return BlockDomain::bulkAndEnvelope;
     }
 private:
@@ -77,26 +83,32 @@ void setToPoiseuilleProfile(MultiTensorField2D<T,2>& velocity,
 }
 
 template<typename T, template<typename U> class Descriptor>
-class BoundaryFromVelocityFunctional2D : public BoxProcessingFunctional2D_LT<T,Descriptor,T,2> {
+class BoundaryFromVelocityFunctional2D : public BoxProcessingFunctional2D_LT<T,Descriptor,T,2>
+{
 public:
     virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
                          TensorField2D<T,2>& velocity)
     {
         Dot2D displacement = computeRelativeDisplacement(lattice, velocity);
-        for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-            for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+        for (plint iX=domain.x0; iX<=domain.x1; ++iX)
+        {
+            for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+            {
                 lattice.get(iX,iY).defineVelocity(velocity.get(iX+displacement.x,iY+displacement.y));
             }
         }
     }
-    virtual BoundaryFromVelocityFunctional2D<T,Descriptor>* clone() const {
+    virtual BoundaryFromVelocityFunctional2D<T,Descriptor>* clone() const
+    {
         return new BoundaryFromVelocityFunctional2D(*this);
     }
-    void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+    void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+    {
         modified[0] = modif::dataStructure;
         modified[1] = modif::nothing;
     }
-    virtual BlockDomain::DomainT appliesTo() const {
+    virtual BlockDomain::DomainT appliesTo() const
+    {
         return BlockDomain::bulkAndEnvelope;
     }
 };
@@ -109,7 +121,8 @@ void createBoundariesFromVelocityField(MultiBlockLattice2D<T,DESCRIPTOR>& lattic
                                lattice, velocity );
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
 
@@ -118,7 +131,7 @@ int main(int argc, char* argv[]) {
         (T) 10.,   // Re
         30,        // N
         2.,        // lx
-        1.         // ly 
+        1.         // ly
     );
 
     plint nx = parameters.getNx();
@@ -127,15 +140,15 @@ int main(int argc, char* argv[]) {
     writeLogFile(parameters, "Poiseuille flow");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-              nx, ny,
-              new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        nx, ny,
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     MultiTensorField2D<T,2> velocity(nx,ny);
 
     setToPoiseuilleProfile(velocity, parameters);
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
     boundaryCondition -> setVelocityConditionOnBlockBoundaries(lattice);
     pcout << "start" << endl;
     createBoundariesFromVelocityField(lattice, velocity);
@@ -150,8 +163,10 @@ int main(int argc, char* argv[]) {
     plb_ofstream successiveProfiles("velocityProfiles.dat");
 
     // Main loop over time steps.
-    for (plint iT=0; iT<10000; ++iT) {
-        if (iT%1000==0) {
+    for (plint iT=0; iT<10000; ++iT)
+    {
+        if (iT%1000==0)
+        {
 
             ImageWriter<T> imageWriter("leeloo");
             imageWriter.writeScaledGif(createFileName("uSqr", iT, 6),
@@ -165,13 +180,13 @@ int main(int argc, char* argv[]) {
 
             Box2D profileSection(nx/2, nx/2, 0, ny-1);
             successiveProfiles
-                << setprecision(4)
-                  // (2) Convert from lattice to physical units.
-                << *multiply (
-                       parameters.getDeltaX() / parameters.getDeltaT(),
-                  // (1) Compute velocity norm along the chosen section.
-                       *computeVelocityNorm (lattice, profileSection) )
-                << endl;
+                    << setprecision(4)
+                    // (2) Convert from lattice to physical units.
+                    << *multiply (
+                        parameters.getDeltaX() / parameters.getDeltaT(),
+                        // (1) Compute velocity norm along the chosen section.
+                        *computeVelocityNorm (lattice, profileSection) )
+                    << endl;
 
         }
 

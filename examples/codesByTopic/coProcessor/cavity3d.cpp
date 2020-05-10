@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -85,7 +85,7 @@ void writeGifs(BlockLatticeT& lattice,
                                 imSize, imSize );
     imageWriter.writeScaledGif( createFileName("omega", iter, 6),
                                 *computeNorm(*computeVorticity (
-                                        *computeVelocity(lattice) ), slice ),
+                                            *computeVelocity(lattice) ), slice ),
                                 imSize, imSize );
 }
 
@@ -103,16 +103,19 @@ void writeVTK(BlockLatticeT& lattice,
 
 
 SparseBlockStructure3D createRegularDistribution3D (
-        std::vector<plint> const& xVal, std::vector<plint> const& yVal, std::vector<plint> const& zVal )
+    std::vector<plint> const& xVal, std::vector<plint> const& yVal, std::vector<plint> const& zVal )
 {
     PLB_ASSERT(xVal.size()>=2);
     PLB_ASSERT(yVal.size()>=2);
     PLB_ASSERT(zVal.size()>=2);
     SparseBlockStructure3D dataGeometry (
-            Box3D(xVal[0], xVal.back()-1, yVal[0], yVal.back()-1, zVal[0], zVal.back()-1) );
-    for (plint iX=0; iX<(plint)xVal.size()-1; ++iX) {
-        for (plint iY=0; iY<(plint)yVal.size()-1; ++iY) {
-            for (plint iZ=0; iZ<(plint)zVal.size()-1; ++iZ) {
+        Box3D(xVal[0], xVal.back()-1, yVal[0], yVal.back()-1, zVal[0], zVal.back()-1) );
+    for (plint iX=0; iX<(plint)xVal.size()-1; ++iX)
+    {
+        for (plint iY=0; iY<(plint)yVal.size()-1; ++iY)
+        {
+            for (plint iZ=0; iZ<(plint)zVal.size()-1; ++iZ)
+            {
                 plint nextID = dataGeometry.nextIncrementalId();
                 Box3D domain( xVal[iX], xVal[iX+1]-1, yVal[iY],
                               yVal[iY+1]-1, zVal[iZ], zVal[iZ+1]-1 );
@@ -140,24 +143,26 @@ SparseBlockStructure3D createCavityDistribution3D(plint nx, plint ny, plint nz)
 }
 
 
-void saveAtomicBlock(MultiBlockLattice3D<T,DESCRIPTOR>& lattice, plint blockId) {
+void saveAtomicBlock(MultiBlockLattice3D<T,DESCRIPTOR>& lattice, plint blockId)
+{
     BlockLattice3D<T,DESCRIPTOR>& atomicBlock = lattice.getComponent(blockId);
     plb_ofstream ofile("block13.dat");
     ofile << atomicBlock;
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-4,  // uMax
-            (T) 10.,   // Re
-            30,        // N
-            1.,        // lx
-            1.,        // ly
-            1.         // lz
+        (T) 1e-4,  // uMax
+        (T) 10.,   // Re
+        30,        // N
+        1.,        // lx
+        1.,        // ly
+        1.         // lz
     );
     const T logT     = (T)1/(T)1000;
     const T imSave   = (T)1/(T)40;
@@ -173,7 +178,7 @@ int main(int argc, char* argv[]) {
     // is covered by 5x5x5 sub-domains. Each of these 125 sub-domains, if it
     // contains no boundary area (i.e. only pure BGK), will then be off-loaded to
     // the co-processor.
-    
+
     // Here the 5x5x5 cover-up is instantiated.
     plint numBlocksX = 3;
     plint numBlocksY = 3;
@@ -181,8 +186,8 @@ int main(int argc, char* argv[]) {
     plint numBlocks = numBlocksX*numBlocksY*numBlocksZ;
     plint envelopeWidth = 1;
     SparseBlockStructure3D blockStructure (
-            createCavityDistribution3D (
-                parameters.getNx(), parameters.getNy(), parameters.getNz() ) );
+        createCavityDistribution3D (
+            parameters.getNx(), parameters.getNy(), parameters.getNz() ) );
 
     // In case of MPI parallelism, the blocks are explicitly assigned to processors,
     // with equal load.
@@ -190,8 +195,10 @@ int main(int argc, char* argv[]) {
     std::vector<std::pair<plint,plint> > ranges;
     plint numRanges = std::min(numBlocks, (plint)global::mpi().getSize());
     util::linearRepartition(0, numBlocks-1, numRanges, ranges);
-    for (pluint iProc=0; iProc<ranges.size(); ++iProc) {
-        for (plint blockId=ranges[iProc].first; blockId<=ranges[iProc].second; ++blockId) {
+    for (pluint iProc=0; iProc<ranges.size(); ++iProc)
+    {
+        for (plint blockId=ranges[iProc].first; blockId<=ranges[iProc].second; ++blockId)
+        {
             threadAttribution -> addBlock(blockId, iProc);
         }
     }
@@ -200,11 +207,11 @@ int main(int argc, char* argv[]) {
     // Create a lattice with the above specified internal structure.
     MultiBlockLattice3D<T, DESCRIPTOR> lattice (
         MultiBlockManagement3D (
-                        blockStructure, threadAttribution, envelopeWidth ),
+            blockStructure, threadAttribution, envelopeWidth ),
         defaultMultiBlockPolicy3D().getBlockCommunicator(),
-                    defaultMultiBlockPolicy3D().getCombinedStatistics(),
-                    defaultMultiBlockPolicy3D().getMultiCellAccess<T,DESCRIPTOR>(),
-                    new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        defaultMultiBlockPolicy3D().getCombinedStatistics(),
+        defaultMultiBlockPolicy3D().getMultiCellAccess<T,DESCRIPTOR>(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     saveAtomicBlock(lattice, 13);
 
@@ -219,20 +226,24 @@ int main(int argc, char* argv[]) {
 
     T previousIterationTime = T();
     // Loop over main time iteration.
-    for (plint iT=0; iT<parameters.nStep(maxT); ++iT) {
+    for (plint iT=0; iT<parameters.nStep(maxT); ++iT)
+    {
         global::timer("mainLoop").restart();
 
-        if (iT%parameters.nStep(imSave)==0) {
+        if (iT%parameters.nStep(imSave)==0)
+        {
             pcout << "Writing Gif ..." << endl;
             writeGifs(lattice, parameters, iT);
         }
 
-        if (iT%parameters.nStep(vtkSave)==0 && iT>0) {
+        if (iT%parameters.nStep(vtkSave)==0 && iT>0)
+        {
             pcout << "Saving VTK file ..." << endl;
             writeVTK(lattice, parameters, iT);
         }
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "step " << iT
                   << "; t=" << iT*parameters.getDeltaT();
         }
@@ -255,7 +266,8 @@ int main(int argc, char* argv[]) {
 
         // Access averages from internal statistics ( their value is defined
         //   only after the call to lattice.collideAndStream() )
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "; av energy="
                   << setprecision(10) << computeAverageEnergy<T>(lattice)
                   << "; av rho="

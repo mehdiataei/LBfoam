@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,29 +29,36 @@
 #include "multiBlock/domainManipulation3D.h"
 #include "core/plbDebug.h"
 
-namespace plb {
+namespace plb
+{
 
-std::vector<DomainAndId3D> getNonOverlapingBlocks(std::vector<DomainAndId3D> const& domainsWithId) {
+std::vector<DomainAndId3D> getNonOverlapingBlocks(std::vector<DomainAndId3D> const& domainsWithId)
+{
     std::vector<DomainAndId3D> nonOverlapingBlocks;
     // Start with the first domain, which is taken without modification.
-    if (!domainsWithId.empty()) {
+    if (!domainsWithId.empty())
+    {
         nonOverlapingBlocks.push_back(domainsWithId[0]);
     }
     // All subsequent domains get special treatment, as their overlap
     //   with previously adopted domains are cut out.
-    for (pluint iDomain=1; iDomain<domainsWithId.size(); ++iDomain) {
+    for (pluint iDomain=1; iDomain<domainsWithId.size(); ++iDomain)
+    {
         std::vector<Box3D> newDomains;
         newDomains.push_back(domainsWithId[iDomain].domain);
-        for (pluint iPrevious=0; iPrevious<iDomain; ++iPrevious) {
+        for (pluint iPrevious=0; iPrevious<iDomain; ++iPrevious)
+        {
             std::vector<Box3D> exceptedDomains;
-            for (pluint iNewPart=0; iNewPart<newDomains.size(); ++iNewPart) {
+            for (pluint iNewPart=0; iNewPart<newDomains.size(); ++iNewPart)
+            {
                 except(newDomains[iNewPart], domainsWithId[iPrevious].domain, exceptedDomains);
             }
             newDomains.swap(exceptedDomains);
         }
-        for (pluint iNew=0; iNew<newDomains.size(); ++iNew) {
+        for (pluint iNew=0; iNew<newDomains.size(); ++iNew)
+        {
             nonOverlapingBlocks.push_back(DomainAndId3D( newDomains[iNew],
-                                                         domainsWithId[iDomain].id) );
+                                          domainsWithId[iDomain].id) );
         }
     }
     return nonOverlapingBlocks;
@@ -61,29 +68,35 @@ void intersectDomainsAndIds(std::vector<std::vector<DomainAndId3D> > const& doma
                             std::vector<Box3D>& finalDomains,
                             std::vector<std::vector<plint> >& finalIds)
 {
-    if (domainsWithId.empty()) {
+    if (domainsWithId.empty())
+    {
         return;
     }
 
     // Copy the first collection without modification, as a starting
     //   point for future intersections.
-    for (pluint iDomain=0; iDomain<domainsWithId[0].size(); ++iDomain) {
+    for (pluint iDomain=0; iDomain<domainsWithId[0].size(); ++iDomain)
+    {
         finalDomains.push_back(domainsWithId[0][iDomain].domain);
         finalIds.resize(finalDomains.size());
         finalIds.back().push_back(domainsWithId[0][iDomain].id);
     }
 
     // Then, intersect with all following collections.
-    for (pluint iCollection=1; iCollection<domainsWithId.size(); ++iCollection) {
+    for (pluint iCollection=1; iCollection<domainsWithId.size(); ++iCollection)
+    {
         std::vector<Box3D> nextDomains;
         std::vector<std::vector<plint> > nextIds;
         // For each domain of the next collection ...
-        for (pluint iNewDomain=0; iNewDomain<domainsWithId[iCollection].size(); ++iNewDomain) {
+        for (pluint iNewDomain=0; iNewDomain<domainsWithId[iCollection].size(); ++iNewDomain)
+        {
             // ... and for each domain found so far ...
-            for (pluint iOldDomain=0; iOldDomain<finalDomains.size(); ++iOldDomain) {
+            for (pluint iOldDomain=0; iOldDomain<finalDomains.size(); ++iOldDomain)
+            {
                 Box3D intersection;
                 // ... compute the common intersections ...
-                if (intersect(domainsWithId[iCollection][iNewDomain].domain, finalDomains[iOldDomain], intersection)) {
+                if (intersect(domainsWithId[iCollection][iNewDomain].domain, finalDomains[iOldDomain], intersection))
+                {
                     // ... and store them.
                     nextDomains.push_back(intersection);
                     // As for the IDs, we need not only the ID of the newest block, but those of all

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,29 +34,31 @@
 
 #ifdef PLB_MPI_PARALLEL
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-class ParallelCellAccess2D : public MultiCellAccess2D<T,Descriptor> {
+class ParallelCellAccess2D : public MultiCellAccess2D<T,Descriptor>
+{
 public:
-    ParallelCellAccess2D();
-    virtual ~ParallelCellAccess2D();
-    virtual Cell<T,Descriptor>& getDistributedCell (
-            plint iX, plint iY,
-            MultiBlockManagement2D const& multiBlockManagement,
-            std::map<plint,BlockLattice2D<T,Descriptor>*>& lattices );
-    virtual Cell<T,Descriptor> const& getDistributedCell (
-            plint iX, plint iY,
-            MultiBlockManagement2D const& multiBlockManagement,
-            std::map<plint,BlockLattice2D<T,Descriptor>*> const& lattices ) const;
-    virtual void broadCastCell(Cell<T,Descriptor>& cell, plint fromBlock,
-                               MultiBlockManagement2D const& multiBlockManagement) const;
-    ParallelCellAccess2D<T,Descriptor>* clone() const;
+	ParallelCellAccess2D();
+	virtual ~ParallelCellAccess2D();
+	virtual Cell<T,Descriptor>& getDistributedCell (
+	    plint iX, plint iY,
+	    MultiBlockManagement2D const& multiBlockManagement,
+	    std::map<plint,BlockLattice2D<T,Descriptor>*>& lattices );
+	virtual Cell<T,Descriptor> const& getDistributedCell (
+	    plint iX, plint iY,
+	    MultiBlockManagement2D const& multiBlockManagement,
+	    std::map<plint,BlockLattice2D<T,Descriptor>*> const& lattices ) const;
+	virtual void broadCastCell(Cell<T,Descriptor>& cell, plint fromBlock,
+	                           MultiBlockManagement2D const& multiBlockManagement) const;
+	ParallelCellAccess2D<T,Descriptor>* clone() const;
 private:
-    mutable Cell<T,Descriptor> distributedCell;
-    mutable std::vector<Cell<T,Descriptor>*> baseCells;
-    mutable std::vector<Cell<T,Descriptor> const*> constBaseCells;
-    mutable Dynamics<T,Descriptor>* parallelDynamics;
+	mutable Cell<T,Descriptor> distributedCell;
+	mutable std::vector<Cell<T,Descriptor>*> baseCells;
+	mutable std::vector<Cell<T,Descriptor> const*> constBaseCells;
+	mutable Dynamics<T,Descriptor>* parallelDynamics;
 };
 
 }  // namespace plb

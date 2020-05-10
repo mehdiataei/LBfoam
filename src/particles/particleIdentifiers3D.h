@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,58 +32,62 @@
 #include <string>
 #include <map>
 
-namespace plb {
+namespace plb
+{
 
-namespace meta {
+namespace meta
+{
 
 template<typename T, template<typename U> class Descriptor>
 struct ParticleGenerator3D {
-    virtual ~ParticleGenerator3D() { }
-    virtual Particle3D<T,Descriptor>*
-        generate(HierarchicUnserializer& unserializer) const =0;
+	virtual ~ParticleGenerator3D() { }
+	virtual Particle3D<T,Descriptor>*
+	generate(HierarchicUnserializer& unserializer) const =0;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class ParticleRegistration3D {
+class ParticleRegistration3D
+{
 public:
-    struct Entry {
-        Entry(std::string name_, ParticleGenerator3D<T,Descriptor>* generator_)
-            : name(name_),
-              generator(generator_)
-        { }
-        std::string name;
-        ParticleGenerator3D<T,Descriptor>* generator;
-    };
-    struct EntryLessThan {
-        bool operator()(Entry const& entry1, Entry const& entry2) const {
-            return entry1.name < entry2.name;
-        }
-    };
-    typedef std::map<Entry,int,EntryLessThan> EntryMap;
+	struct Entry {
+		Entry(std::string name_, ParticleGenerator3D<T,Descriptor>* generator_)
+			: name(name_),
+			  generator(generator_)
+		{ }
+		std::string name;
+		ParticleGenerator3D<T,Descriptor>* generator;
+	};
+	struct EntryLessThan {
+		bool operator()(Entry const& entry1, Entry const& entry2) const
+		{
+			return entry1.name < entry2.name;
+		}
+	};
+	typedef std::map<Entry,int,EntryLessThan> EntryMap;
 public:
-    ~ParticleRegistration3D();
-    int announce(std::string nameOfParticle,
-                 ParticleGenerator3D<T,Descriptor>* generator_=0);
-    int getId(std::string name) const;
-    int getNumId() const;
-    std::string getName(int id) const;
-    Particle3D<T,Descriptor>* generate(HierarchicUnserializer& unserializer);
-    typename EntryMap::const_iterator begin() const;
-    typename EntryMap::const_iterator end() const;
+	~ParticleRegistration3D();
+	int announce(std::string nameOfParticle,
+	             ParticleGenerator3D<T,Descriptor>* generator_=0);
+	int getId(std::string name) const;
+	int getNumId() const;
+	std::string getName(int id) const;
+	Particle3D<T,Descriptor>* generate(HierarchicUnserializer& unserializer);
+	typename EntryMap::const_iterator begin() const;
+	typename EntryMap::const_iterator end() const;
 public:
-    /// This default constructor should actually be private, but it is public
-    ///  for now to fix a parse error in older GCCs.
-    ParticleRegistration3D() { }
+	/// This default constructor should actually be private, but it is public
+	///  for now to fix a parse error in older GCCs.
+	ParticleRegistration3D() { }
 private:
-    ParticleRegistration3D(ParticleRegistration3D<T,Descriptor> const& rhs) { }
-    ParticleRegistration3D<T,Descriptor>& operator= (
-            ParticleRegistration3D<T,Descriptor> const& rhs )
-    {
-        return *this;
-    }
+	ParticleRegistration3D(ParticleRegistration3D<T,Descriptor> const& rhs) { }
+	ParticleRegistration3D<T,Descriptor>& operator= (
+	    ParticleRegistration3D<T,Descriptor> const& rhs )
+	{
+		return *this;
+	}
 private:
-    EntryMap particleByName;
-    std::vector<Entry> particleByNumber;
+	EntryMap particleByName;
+	std::vector<Entry> particleByNumber;
 
 // TODO: This friend declaration is not properly parsed in older (but not-so-old) GCC
 //   compilers. Therefore, it is commented for now, and the default constructor of
@@ -103,13 +107,13 @@ template< typename T,
           class ParticleT >
 class GenericParticleGenerator3D : public ParticleGenerator3D<T,Descriptor>
 {
-    virtual Particle3D<T,Descriptor>* generate (
-            HierarchicUnserializer& unserializer ) const
-    {
-        Particle3D<T,Descriptor>* particle = new ParticleT();
-        particle->unserialize(unserializer);
-        return particle;
-    }
+	virtual Particle3D<T,Descriptor>* generate (
+	    HierarchicUnserializer& unserializer ) const
+	{
+		Particle3D<T,Descriptor>* particle = new ParticleT();
+		particle->unserialize(unserializer);
+		return particle;
+	}
 };
 
 template< typename T,
@@ -117,34 +121,36 @@ template< typename T,
           class PointParticle >
 class PointParticleGenerator3D : public ParticleGenerator3D<T,Descriptor>
 {
-    virtual Particle3D<T,Descriptor>* generate (
-            HierarchicUnserializer& unserializer ) const
-    {
-        plint tag;
-        unserializer.readValue(tag);
-        Array<T,3> position;
-        unserializer.readValues<T,3>(position);
-        Array<T,3> velocity;
-        unserializer.readValues<T,3>(velocity);
-        return new PointParticle(tag, position, velocity);
-    }
+	virtual Particle3D<T,Descriptor>* generate (
+	    HierarchicUnserializer& unserializer ) const
+	{
+		plint tag;
+		unserializer.readValue(tag);
+		Array<T,3> position;
+		unserializer.readValues<T,3>(position);
+		Array<T,3> velocity;
+		unserializer.readValues<T,3>(velocity);
+		return new PointParticle(tag, position, velocity);
+	}
 };
 
 
 template< typename T,
           template<typename U> class Descriptor,
           class ParticleT >
-int registerGenericParticle3D(std::string name) {
-    return particleRegistration3D<T,Descriptor>().announce (
-               name, new GenericParticleGenerator3D<T,Descriptor,ParticleT> );
+int registerGenericParticle3D(std::string name)
+{
+	return particleRegistration3D<T,Descriptor>().announce (
+	           name, new GenericParticleGenerator3D<T,Descriptor,ParticleT> );
 }
 
 template< typename T,
           template<typename U> class Descriptor,
           class PointParticle >
-int registerPointParticle3D(std::string name) {
-    return particleRegistration3D<T,Descriptor>().announce (
-               name, new PointParticleGenerator3D<T,Descriptor,PointParticle> );
+int registerPointParticle3D(std::string name)
+{
+	return particleRegistration3D<T,Descriptor>().announce (
+	           name, new PointParticleGenerator3D<T,Descriptor,PointParticle> );
 }
 
 }  // namespace meta

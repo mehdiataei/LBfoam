@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,52 +35,53 @@
 #include "latticeBoltzmann/mrtLattices.h"
 #include "latticeBoltzmann/mrtLattices.hh"
 
-namespace plb {
+namespace plb
+{
 
-    template class Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
-    template class BasicBulkDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
-    template class CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
-    template class PreparePopulationsDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
-    template class BulkCompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
-    template class BounceBack<FLOAT_T, descriptors::DESCRIPTOR_2D>;
-    template class NoDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
+template class Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
+template class BasicBulkDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
+template class CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
+template class PreparePopulationsDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
+template class BulkCompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
+template class BounceBack<FLOAT_T, descriptors::DESCRIPTOR_2D>;
+template class NoDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>;
 
 #if NUMBIT_2D == 9
-    template class BasicBulkDynamics<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
+template class BasicBulkDynamics<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
 #endif
 
-    template void constructIdChain<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-            Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const& dynamics, std::vector<int>& chain );
+template void constructIdChain<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const& dynamics, std::vector<int>& chain );
 
-    template Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const&
-        getBottomMostDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const& dynamics );
+template Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const&
+getBottomMostDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const& dynamics );
 
-    template Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>*
-        cloneAndReplaceBottomDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const& dynamics,
-                Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>* newBottom );
+template Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>*
+cloneAndReplaceBottomDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const& dynamics,
+    Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>* newBottom );
 
-    template Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>*
-        cloneAndInsertAtTopDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const& dynamics,
-                CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>* newTop );
+template Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>*
+cloneAndInsertAtTopDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const& dynamics,
+    CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>* newTop );
 
-    template void serialize<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-            Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const& dynamics,
-            std::vector<char>& data );
+template void serialize<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> const& dynamics,
+    std::vector<char>& data );
 
-    template void serialize<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-            std::vector<Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>*> const& dynamics,
-            std::vector<char>& data );
+template void serialize<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    std::vector<Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>*> const& dynamics,
+    std::vector<char>& data );
 
-    template pluint unserialize<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-            Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>& dynamics,
-            std::vector<char> const& data, pluint serializerPos );
+template pluint unserialize<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>& dynamics,
+    std::vector<char> const& data, pluint serializerPos );
 
-    template void generateAndUnserializeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-            std::vector<char> const& data,
-            std::vector<Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>*>& dynamics );
+template void generateAndUnserializeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    std::vector<char> const& data,
+    std::vector<Dynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>*>& dynamics );
 
 }
 

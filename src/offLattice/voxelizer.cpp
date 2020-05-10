@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -39,30 +39,39 @@
 #include "dataProcessors/dataAnalysisFunctional3D.hh"
 #include "dataProcessors/metaStuffWrapper3D.h"
 
-namespace plb {
+namespace plb
+{
 
-void convertUndeterminedToFlag(MultiScalarField3D<int>& voxels, int flag) {
+void convertUndeterminedToFlag(MultiScalarField3D<int>& voxels, int flag)
+{
     applyProcessingFunctional(
-            new UndeterminedToFlagFunctional3D(flag), voxels.getBoundingBox(), voxels);
+        new UndeterminedToFlagFunctional3D(flag), voxels.getBoundingBox(), voxels);
 }
 
 UndeterminedToFlagFunctional3D::UndeterminedToFlagFunctional3D(int flag_)
     : flag(flag_)
 { }
 
-UndeterminedToFlagFunctional3D* UndeterminedToFlagFunctional3D::clone() const {
+UndeterminedToFlagFunctional3D* UndeterminedToFlagFunctional3D::clone() const
+{
     return new UndeterminedToFlagFunctional3D(*this);
 }
 
-void UndeterminedToFlagFunctional3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void UndeterminedToFlagFunctional3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
     modified[0] = modif::staticVariables;
 }
 
-void UndeterminedToFlagFunctional3D::process(Box3D domain, ScalarField3D<int>& voxels) {
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
-                if (voxels.get(iX,iY,iZ)==voxelFlag::undetermined) {
+void UndeterminedToFlagFunctional3D::process(Box3D domain, ScalarField3D<int>& voxels)
+{
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX)
+    {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+        {
+            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ)
+            {
+                if (voxels.get(iX,iY,iZ)==voxelFlag::undetermined)
+                {
                     voxels.get(iX,iY,iZ) = flag;
                 }
             }
@@ -71,4 +80,3 @@ void UndeterminedToFlagFunctional3D::process(Box3D domain, ScalarField3D<int>& v
 }
 
 } // namespace plb
-

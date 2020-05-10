@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,28 +30,28 @@
 #include "multiBlock/multiContainerBlock3D.h"
 #include "multiBlock/multiDataField3D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
 class ComputeSparsityFunctional3D :
-          public PlainReductiveBoxProcessingFunctional3D
+	public PlainReductiveBoxProcessingFunctional3D
 {
 public:
-    ComputeSparsityFunctional3D();
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
-    virtual ComputeSparsityFunctional3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    pluint getNumBlocks() const;
+	ComputeSparsityFunctional3D();
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
+	virtual ComputeSparsityFunctional3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	pluint getNumBlocks() const;
 private:
-    plint numBlocksId;
+	plint numBlocksId;
 };
-    
+
 template<typename T>
 MultiBlockManagement3D computeSparseManagement (
-        MultiScalarField3D<T>& field, plint newEnvelopeWidth );
+    MultiScalarField3D<T>& field, plint newEnvelopeWidth );
 
 }  // namespace plb
 
 #endif  // MAKE_SPARSE_3D_H
-

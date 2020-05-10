@@ -438,143 +438,11 @@ MultiNTensorField3D<int>* maskedCountBBNeighbors( MultiBlockLattice3D<T,Descript
     return neighbors;
 }
 
-
-template<typename T, template<typename U> class Descriptor> 
-void SetAverageWallDensityOnVelocityBounceBack3D<T,Descriptor>::process (
-        Box3D domain, BlockLattice3D<T,Descriptor>& lattice )
-{
-    static const int velocityBounceBackId = VelocityBounceBack<T,Descriptor>().getId();
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
-                Dynamics<T,Descriptor>& dynamics = lattice.get(iX, iY, iZ).getDynamics();
-                if (dynamics.getId() == velocityBounceBackId) {
-                    VelocityBounceBack<T,Descriptor>* vbbDynamics = dynamic_cast<VelocityBounceBack<T,Descriptor>*>(&dynamics);
-                    PLB_ASSERT(vbbDynamics);
-                    T sum = (T) 0;
-                    T sumWeights = (T) 0;
-                    plint numValidNeighbours = 0;
-                    for (plint iPop=1; iPop<Descriptor<T>::q; ++iPop) {
-                        plint nextX = iX + Descriptor<T>::c[iPop][0];
-                        plint nextY = iY + Descriptor<T>::c[iPop][1];
-                        plint nextZ = iZ + Descriptor<T>::c[iPop][2];
-                        Cell<T,Descriptor>& nextCell = lattice.get(nextX, nextY, nextZ);
-                        if (nextCell.getDynamics().hasMoments()) {
-                            T weight = Descriptor<T>::t[iPop];
-                            sum += weight * nextCell.computeDensity();
-                            sumWeights += weight;
-                            numValidNeighbours++;
-                        }
-                    }
-                    if (numValidNeighbours != 0) {
-                        T rhoWall = sum / sumWeights;
-                        vbbDynamics->setRhoWall(rhoWall);
-                    }
-                }
-            }
-        }
-    }
-}
-
-template<typename T, template<typename U> class Descriptor> 
-SetAverageWallDensityOnVelocityBounceBack3D<T,Descriptor>*
-SetAverageWallDensityOnVelocityBounceBack3D<T,Descriptor>::clone() const
-{
-    return new SetAverageWallDensityOnVelocityBounceBack3D<T,Descriptor>(*this);
-}
-
-template<typename T, template<typename U> class Descriptor> 
-void SetAverageWallDensityOnVelocityBounceBack3D<T,Descriptor>::getTypeOfModification(
-        std::vector<modif::ModifT>& modified) const
-{
-    modified[0] = modif::dynamicVariables;
-}
-
-template<typename T, template<typename U> class Descriptor> 
-BlockDomain::DomainT SetAverageWallDensityOnVelocityBounceBack3D<T,Descriptor>::appliesTo() const
-{
-    return BlockDomain::bulk;
-}
-
-
-template<typename T, template<typename U> class Descriptor>
-SetWallVelocityOnVelocityBounceBack3D<T,Descriptor>::SetWallVelocityOnVelocityBounceBack3D(
-        VectorFunction3D<T> const& velocityFunction_)
-    : velocityFunction(velocityFunction_)
-{ }
-
-template<typename T, template<typename U> class Descriptor> 
-void SetWallVelocityOnVelocityBounceBack3D<T,Descriptor>::process (
-        Box3D domain, BlockLattice3D<T,Descriptor>& lattice )
-{
-    static const int velocityBounceBackId = VelocityBounceBack<T,Descriptor>().getId();
-    Dot3D location = lattice.getLocation();
-
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        T x = (T) (iX + location.x);
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            T y = (T) (iY + location.y);
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
-                T z = (T) (iZ + location.z);
-
-                Dynamics<T,Descriptor>& dynamics = lattice.get(iX, iY, iZ).getDynamics();
-                if (dynamics.getId() == velocityBounceBackId) {
-                    VelocityBounceBack<T,Descriptor>* vbbDynamics = dynamic_cast<VelocityBounceBack<T,Descriptor>*>(&dynamics);
-                    PLB_ASSERT(vbbDynamics);
-                    Array<T,3> position(x, y, z);
-                    vbbDynamics->setUwall(velocityFunction(position));
-                }
-            }
-        }
-    }
-}
-
-template<typename T, template<typename U> class Descriptor> 
-SetWallVelocityOnVelocityBounceBack3D<T,Descriptor>*
-SetWallVelocityOnVelocityBounceBack3D<T,Descriptor>::clone() const
-{
-    return new SetWallVelocityOnVelocityBounceBack3D<T,Descriptor>(*this);
-}
-
-template<typename T, template<typename U> class Descriptor> 
-void SetWallVelocityOnVelocityBounceBack3D<T,Descriptor>::getTypeOfModification(
-        std::vector<modif::ModifT>& modified) const
-{
-    modified[0] = modif::dynamicVariables;
-}
-
-template<typename T, template<typename U> class Descriptor> 
-BlockDomain::DomainT SetWallVelocityOnVelocityBounceBack3D<T,Descriptor>::appliesTo() const
-{
-    return BlockDomain::bulk;
-}
-
-
 /* *************** Class ComputeMomentumExchangeFunctional3D ************* */
 
 template<typename T, template<typename U> class Descriptor>
 ComputeMomentumExchangeFunctional3D<T,Descriptor>::ComputeMomentumExchangeFunctional3D()
-    : computeTorque(false),
-      center(Array<T,3>::zero()),
-      forceIds (
-            this->getStatistics().subscribeSum(),
-            this->getStatistics().subscribeSum(),
-            this->getStatistics().subscribeSum() ),
-      torqueIds (
-            -1,
-            -1,
-            -1 )
-{ }
-
-template<typename T, template<typename U> class Descriptor>
-ComputeMomentumExchangeFunctional3D<T,Descriptor>::ComputeMomentumExchangeFunctional3D(Array<T,3> const& center_)
-    : computeTorque(true),
-      center(center_),
-      forceIds (
-            this->getStatistics().subscribeSum(),
-            this->getStatistics().subscribeSum(),
-            this->getStatistics().subscribeSum() ),
-      torqueIds (
+    : forceIds (
             this->getStatistics().subscribeSum(),
             this->getStatistics().subscribeSum(),
             this->getStatistics().subscribeSum() )
@@ -585,16 +453,14 @@ void ComputeMomentumExchangeFunctional3D<T,Descriptor>::process (
         Box3D domain, BlockLattice3D<T,Descriptor>& lattice )
 {
     static const int bounceBackId = BounceBack<T,Descriptor>().getId();
-    static const int velocityBounceBackId = VelocityBounceBack<T,Descriptor>().getId();
-
-    Dot3D location = lattice.getLocation();
 
     for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
         for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
             for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
                 Cell<T,Descriptor>& cell = lattice.get(iX,iY,iZ);
                 Dynamics<T,Descriptor>& dynamics = cell.getDynamics();
-                if (dynamics.getId() == bounceBackId || dynamics.getId() == velocityBounceBackId) {
+                if (dynamics.getId() == bounceBackId) {
+                    std::vector<plint> fluidDirections;
                     Array<T,3> momentum = Array<T,3>::zero();
                     for (plint iPop=1; iPop<Descriptor<T>::q; ++iPop) {
                         plint nextX = iX + Descriptor<T>::c[iPop][0];
@@ -611,39 +477,11 @@ void ComputeMomentumExchangeFunctional3D<T,Descriptor>::process (
                             momentum[0] += (T)2*Descriptor<T>::c[iPop][0]*cell[iOpp];
                             momentum[1] += (T)2*Descriptor<T>::c[iPop][1]*cell[iOpp];
                             momentum[2] += (T)2*Descriptor<T>::c[iPop][2]*cell[iOpp];
-
-                            if (dynamics.getId() == velocityBounceBackId) {
-                                VelocityBounceBack<T,Descriptor>* vbbDynamics =
-                                    dynamic_cast<VelocityBounceBack<T,Descriptor>*>(&dynamics);
-                                PLB_ASSERT(vbbDynamics);
-                                T rhoWall = vbbDynamics->getRhoWall();
-                                Array<T,3> uWall = vbbDynamics->getUwall();
-
-                                T dotProduct = (T) 0;
-                                for (int iD=0; iD<3; ++iD) {
-                                    dotProduct += (T) Descriptor<T>::c[iPop][iD] * uWall[iD];
-                                }
-                                T correction = (T) 2 * rhoWall * Descriptor<T>::t[iPop] * Descriptor<T>::invCs2 * dotProduct;
-
-                                momentum[0] += Descriptor<T>::c[iPop][0]*correction;
-                                momentum[1] += Descriptor<T>::c[iPop][1]*correction;
-                                momentum[2] += Descriptor<T>::c[iPop][2]*correction;
-                            }
                         }
                     }
                     this->getStatistics().gatherSum(forceIds[0], -momentum[0]);
                     this->getStatistics().gatherSum(forceIds[1], -momentum[1]);
                     this->getStatistics().gatherSum(forceIds[2], -momentum[2]);
-
-                    if (computeTorque) {
-                        Array<T,3> r((T) (iX + location.x) - center[0],
-                                     (T) (iY + location.y) - center[1],
-                                     (T) (iZ + location.z) - center[2]);
-                        Array<T,3> torque = crossProduct(r, -momentum);
-                        this->getStatistics().gatherSum(torqueIds[0], torque[0]);
-                        this->getStatistics().gatherSum(torqueIds[1], torque[1]);
-                        this->getStatistics().gatherSum(torqueIds[2], torque[2]);
-                    }
                 }
             }
         }
@@ -656,16 +494,6 @@ Array<T,3> ComputeMomentumExchangeFunctional3D<T,Descriptor>::getForce() const {
             this->getStatistics().getSum(forceIds[0]),
             this->getStatistics().getSum(forceIds[1]),
             this->getStatistics().getSum(forceIds[2]) );
-}
-
-template<typename T, template<typename U> class Descriptor>
-Array<T,3> ComputeMomentumExchangeFunctional3D<T,Descriptor>::getTorque() const {
-    return computeTorque ?
-        Array<T,3> (
-                this->getStatistics().getSum(torqueIds[0]),
-                this->getStatistics().getSum(torqueIds[1]),
-                this->getStatistics().getSum(torqueIds[2]) ) :
-        Array<T,3>::zero();
 }
 
 template<typename T, template<typename U> class Descriptor>
@@ -682,27 +510,7 @@ ComputeMomentumExchangeFunctional3D<T,Descriptor>* ComputeMomentumExchangeFuncti
 
 template<typename T, template<typename U> class Descriptor>
 MaskedComputeMomentumExchangeFunctional3D<T,Descriptor>::MaskedComputeMomentumExchangeFunctional3D()
-    : computeTorque(false),
-      center(Array<T,3>::zero()),
-      forceIds (
-            this->getStatistics().subscribeSum(),
-            this->getStatistics().subscribeSum(),
-            this->getStatistics().subscribeSum() ),
-      torqueIds (
-            -1,
-            -1,
-            -1 )
-{ }
-
-template<typename T, template<typename U> class Descriptor>
-MaskedComputeMomentumExchangeFunctional3D<T,Descriptor>::MaskedComputeMomentumExchangeFunctional3D(Array<T,3> const& center_)
-    : computeTorque(true),
-      center(center_),
-      forceIds (
-            this->getStatistics().subscribeSum(),
-            this->getStatistics().subscribeSum(),
-            this->getStatistics().subscribeSum() ),
-      torqueIds (
+    : forceIds (
             this->getStatistics().subscribeSum(),
             this->getStatistics().subscribeSum(),
             this->getStatistics().subscribeSum() )
@@ -714,10 +522,8 @@ void MaskedComputeMomentumExchangeFunctional3D<T,Descriptor>::process (
         Box3D domain, BlockLattice3D<T,Descriptor>& lattice, ScalarField3D<int>& mask )
 {
     static const int bounceBackId = BounceBack<T,Descriptor>().getId();
-    static const int velocityBounceBackId = VelocityBounceBack<T,Descriptor>().getId();
 
     Dot3D offset = computeRelativeDisplacement(lattice, mask);
-    Dot3D location = lattice.getLocation();
 
     for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
         for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
@@ -725,7 +531,8 @@ void MaskedComputeMomentumExchangeFunctional3D<T,Descriptor>::process (
                 if (mask.get(iX+offset.x, iY+offset.y, iZ+offset.z)) {
                     Cell<T,Descriptor>& cell = lattice.get(iX,iY,iZ);
                     Dynamics<T,Descriptor>& dynamics = cell.getDynamics();
-                    if (dynamics.getId() == bounceBackId || dynamics.getId() == velocityBounceBackId) {
+                    if (dynamics.getId() == bounceBackId) {
+                        std::vector<plint> fluidDirections;
                         Array<T,3> momentum = Array<T,3>::zero();
                         for (plint iPop=1; iPop<Descriptor<T>::q; ++iPop) {
                             plint nextX = iX + Descriptor<T>::c[iPop][0];
@@ -742,39 +549,11 @@ void MaskedComputeMomentumExchangeFunctional3D<T,Descriptor>::process (
                                 momentum[0] += (T)2*Descriptor<T>::c[iPop][0]*cell[iOpp];
                                 momentum[1] += (T)2*Descriptor<T>::c[iPop][1]*cell[iOpp];
                                 momentum[2] += (T)2*Descriptor<T>::c[iPop][2]*cell[iOpp];
-
-                                if (dynamics.getId() == velocityBounceBackId) {
-                                    VelocityBounceBack<T,Descriptor>* vbbDynamics =
-                                        dynamic_cast<VelocityBounceBack<T,Descriptor>*>(&dynamics);
-                                    PLB_ASSERT(vbbDynamics);
-                                    T rhoWall = vbbDynamics->getRhoWall();
-                                    Array<T,3> uWall = vbbDynamics->getUwall();
-
-                                    T dotProduct = (T) 0;
-                                    for (int iD=0; iD<3; ++iD) {
-                                        dotProduct += (T) Descriptor<T>::c[iPop][iD] * uWall[iD];
-                                    }
-                                    T correction = (T) 2 * rhoWall * Descriptor<T>::t[iPop] * Descriptor<T>::invCs2 * dotProduct;
-
-                                    momentum[0] += Descriptor<T>::c[iPop][0]*correction;
-                                    momentum[1] += Descriptor<T>::c[iPop][1]*correction;
-                                    momentum[2] += Descriptor<T>::c[iPop][2]*correction;
-                                }
                             }
                         }
                         this->getStatistics().gatherSum(forceIds[0], -momentum[0]);
                         this->getStatistics().gatherSum(forceIds[1], -momentum[1]);
                         this->getStatistics().gatherSum(forceIds[2], -momentum[2]);
-
-                        if (computeTorque) {
-                            Array<T,3> r((T) (iX + location.x) - center[0],
-                                         (T) (iY + location.y) - center[1],
-                                         (T) (iZ + location.z) - center[2]);
-                            Array<T,3> torque = crossProduct(r, -momentum);
-                            this->getStatistics().gatherSum(torqueIds[0], torque[0]);
-                            this->getStatistics().gatherSum(torqueIds[1], torque[1]);
-                            this->getStatistics().gatherSum(torqueIds[2], torque[2]);
-                        }
                     }
                 }
             }
@@ -788,16 +567,6 @@ Array<T,3> MaskedComputeMomentumExchangeFunctional3D<T,Descriptor>::getForce() c
             this->getStatistics().getSum(forceIds[0]),
             this->getStatistics().getSum(forceIds[1]),
             this->getStatistics().getSum(forceIds[2]) );
-}
-
-template<typename T, template<typename U> class Descriptor>
-Array<T,3> MaskedComputeMomentumExchangeFunctional3D<T,Descriptor>::getTorque() const {
-    return computeTorque ?
-        Array<T,3> (
-            this->getStatistics().getSum(torqueIds[0]),
-            this->getStatistics().getSum(torqueIds[1]),
-            this->getStatistics().getSum(torqueIds[2]) ) :
-        Array<T,3>::zero();
 }
 
 template<typename T, template<typename U> class Descriptor>

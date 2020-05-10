@@ -805,7 +805,7 @@ TriangleSet<T> constructStrip(std::vector<Array<T,3> > const& from, std::vector<
 template<typename T>
 TriangleSet<T> constructAnnulus(Array<T,3> const& center, T innerRadius, T outerRadius, plint nCirc, T eps)
 {
-    PLB_ASSERT(util::greaterEqual(innerRadius, (T) 0) &&
+    PLB_ASSERT(util::greaterThan(innerRadius, (T) 0) &&
                util::greaterThan(outerRadius, (T) 0) &&
               !util::fpequal(innerRadius, outerRadius) && nCirc >= 3);
 
@@ -817,52 +817,25 @@ TriangleSet<T> constructAnnulus(Array<T,3> const& center, T innerRadius, T outer
     T y0 = center[1];
     T z0 = center[2];
 
-    if (!util::isZero(innerRadius)) {
-        std::vector<Array<T,3> > from(nCirc + 1), to(nCirc + 1);
-        for (plint i = 0; i < nCirc; i++) {
-            T theta = -i * dtheta;  // The minus is to have +x orientation.
+    std::vector<Array<T,3> > from(nCirc + 1), to(nCirc + 1);
+    for (plint i = 0; i < nCirc; i++) {
+        T theta = -i * dtheta;  // The minus is to have +x orientation.
 
-            T cosTheta = std::cos(theta);
-            T sinTheta = std::sin(theta);
+        T cosTheta = std::cos(theta);
+        T sinTheta = std::sin(theta);
 
-            from[i][0] = x0;
-            from[i][1] = y0 + innerRadius * cosTheta;
-            from[i][2] = z0 + innerRadius * sinTheta;
+        from[i][0] = x0;
+        from[i][1] = y0 + innerRadius * cosTheta;
+        from[i][2] = z0 + innerRadius * sinTheta;
 
-            to[i][0] = x0;
-            to[i][1] = y0 + outerRadius * cosTheta;
-            to[i][2] = z0 + outerRadius * sinTheta;
-        }
-        from[nCirc] = from[0];
-        to[nCirc] = to[0];
-
-        return constructStrip<T>(from, to, eps);
-    } else {
-        std::vector<Array<T,3> > to(nCirc + 1);
-        for (plint i = 0; i < nCirc; i++) {
-            T theta = i * dtheta;
-
-            T cosTheta = std::cos(theta);
-            T sinTheta = std::sin(theta);
-
-            to[i][0] = x0;
-            to[i][1] = y0 + outerRadius * cosTheta;
-            to[i][2] = z0 + outerRadius * sinTheta;
-        }
-        to[nCirc] = to[0];
-
-        typedef typename TriangleSet<T>::Triangle Triangle;
-        std::vector<Triangle> triangles;
-        for (plint i = 0; i < nCirc; i++) {
-            Triangle triangle;
-            triangle[0] = center;
-            triangle[1] = to[i];
-            triangle[2] = to[i + 1];
-            triangles.push_back(triangle);
-        }
-
-        return TriangleSet<T>(triangles, eps);
+        to[i][0] = x0;
+        to[i][1] = y0 + outerRadius * cosTheta;
+        to[i][2] = z0 + outerRadius * sinTheta;
     }
+    from[nCirc] = from[0];
+    to[nCirc] = to[0];
+
+    return constructStrip<T>(from, to, eps);
 }
 
 template<typename T>

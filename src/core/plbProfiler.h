@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,9 +32,11 @@
 #include <string>
 #include <set>
 
-namespace plb {
+namespace plb
+{
 
-namespace global {
+namespace global
+{
 
 /**
  * Counters:
@@ -54,72 +56,82 @@ namespace global {
  * "io":                             Time spent for I/O operations.
  * "totalTime":                      Total time.
 **/
-class Profiler {
+class Profiler
+{
 public:
-    void turnOn();
-    void turnOff();
-    void automaticCycling();
-    void manualCycling();
-    void cycle();
-    bool cyclingIsAutomatic() const {
-        return !manualCycleFlag;
-    }
-    bool doProfiling() const {
-        return profilingFlag;
-    }
-    void start(char const* timer) {
-        if (doProfiling()) {
-            verifyTimer(timer);
-            plbTimer(timer).start();
-        }
-    }
-    void stop(char const* timer) {
-        if (doProfiling()) {
-            verifyTimer(timer);
-            plbTimer(timer).stop();
-        }
-    }
-    void increment(char const* counter) {
-        if (doProfiling()) {
-            verifyCounter(counter);
-            plbCounter(counter).increment();
-        }
-    }
-    void increment(char const* counter, plint value) {
-        if (doProfiling()) {
-            verifyCounter(counter);
-            plbCounter(counter).increment(value);
-        }
-    }
-    plint getCounter(char const* counter) {
-        verifyCounter(counter);
-        return plbCounter(counter).getCount();
-    }
-    double getTimer(char const* timer) {
-        verifyTimer(timer);
-        return plbTimer(timer).getTime();
-    }
-    void setReportFile(FileName const& reportFile_);
-    void writeReport();
+	void turnOn();
+	void turnOff();
+	void automaticCycling();
+	void manualCycling();
+	void cycle();
+	bool cyclingIsAutomatic() const
+	{
+		return !manualCycleFlag;
+	}
+	bool doProfiling() const
+	{
+		return profilingFlag;
+	}
+	void start(char const* timer)
+	{
+		if (doProfiling()) {
+			verifyTimer(timer);
+			plbTimer(timer).start();
+		}
+	}
+	void stop(char const* timer)
+	{
+		if (doProfiling()) {
+			verifyTimer(timer);
+			plbTimer(timer).stop();
+		}
+	}
+	void increment(char const* counter)
+	{
+		if (doProfiling()) {
+			verifyCounter(counter);
+			plbCounter(counter).increment();
+		}
+	}
+	void increment(char const* counter, plint value)
+	{
+		if (doProfiling()) {
+			verifyCounter(counter);
+			plbCounter(counter).increment(value);
+		}
+	}
+	plint getCounter(char const* counter)
+	{
+		verifyCounter(counter);
+		return plbCounter(counter).getCount();
+	}
+	double getTimer(char const* timer)
+	{
+		verifyTimer(timer);
+		return plbTimer(timer).getTime();
+	}
+	void setReportFile(FileName const& reportFile_);
+	void writeReport();
 private:
-    void verifyTimer(std::string const& timer);
-    void verifyCounter(std::string const& counter);
-    void addStatisticalValue(XMLwriter& writer, std::string name, double value);
-    void addMainProcValue(XMLwriter& writer, std::string name, plint value);
+	void verifyTimer(std::string const& timer);
+	void verifyCounter(std::string const& counter);
+	void addStatisticalValue(XMLwriter& writer, std::string name, double value);
+	void addMainProcValue(XMLwriter& writer, std::string name, plint value);
 
-    Profiler();
+	Profiler();
 private:
-    bool profilingFlag;
-    bool manualCycleFlag;
-    FileName reportFile;
-    std::set<std::string> validTimers;
-    std::set<std::string> validCounters;
-friend Profiler& profiler();
+	bool profilingFlag;
+	bool manualCycleFlag;
+	FileName reportFile;
+	std::set<std::string> validTimers;
+	std::set<std::string> validCounters;
+	friend Profiler& profiler();
 };
 
-inline Profiler& profiler() {
-    static Profiler instance;
-    return instance;
+inline Profiler& profiler()
+{
+	static Profiler instance;
+	return instance;
 }
 
 }  // namespace global

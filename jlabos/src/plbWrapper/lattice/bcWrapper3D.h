@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,22 +30,24 @@
 
 #include "boundaryCondition/boundaryCondition3D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-class OuterBoxBC {
+class OuterBoxBC
+{
 public:
-    OuterBoxBC(OnLatticeBoundaryCondition3D<T,Descriptor>* bc_);
-    OuterBoxBC(OuterBoxBC<T,Descriptor> const& rhs);
-    ~OuterBoxBC();
-    OuterBoxBC<T,Descriptor>& operator=(OuterBoxBC<T,Descriptor> const& rhs);
-    OuterBoxBC<T,Descriptor>* clone() const;
-    void setVelocityCondition( MultiBlockLattice3D<T,Descriptor>& lattice,
-                               Box3D domain );
-    void setPressureCondition( MultiBlockLattice3D<T,Descriptor>& lattice,
-                               Box3D domain );
+	OuterBoxBC(OnLatticeBoundaryCondition3D<T,Descriptor>* bc_);
+	OuterBoxBC(OuterBoxBC<T,Descriptor> const& rhs);
+	~OuterBoxBC();
+	OuterBoxBC<T,Descriptor>& operator=(OuterBoxBC<T,Descriptor> const& rhs);
+	OuterBoxBC<T,Descriptor>* clone() const;
+	void setVelocityCondition( MultiBlockLattice3D<T,Descriptor>& lattice,
+	                           Box3D domain );
+	void setPressureCondition( MultiBlockLattice3D<T,Descriptor>& lattice,
+	                           Box3D domain );
 private:
-    OnLatticeBoundaryCondition3D<T,Descriptor>* bc;
+	OnLatticeBoundaryCondition3D<T,Descriptor>* bc;
 };
 
 template<typename T, template<typename U> class Descriptor>

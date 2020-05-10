@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,26 +29,27 @@
 #include "latticeBoltzmann/nearestNeighborLattices2D.h"
 #include "latticeBoltzmann/nearestNeighborLattices2D.hh"
 
-namespace plb {
+namespace plb
+{
 
 template void defineDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice, Box2D domain,
-        Dynamics<FLOAT_T,descriptors::DESCRIPTOR_2D>* dynamics);
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice, Box2D domain,
+    Dynamics<FLOAT_T,descriptors::DESCRIPTOR_2D>* dynamics);
 
 template void setCompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain,
-        CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>* compositeDynamics );
+    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain,
+    CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>* compositeDynamics );
 
 template void setCompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain,
-        CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>* compositeDynamics );
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain,
+    CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_2D>* compositeDynamics );
 
 template void setBoundaryDensity<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain, FLOAT_T rho );
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain, FLOAT_T rho );
 
 template void setExternalScalar<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain,
-        int whichScalar, FLOAT_T externalScalar );
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain,
+    int whichScalar, FLOAT_T externalScalar );
 
 
 }  // namespace plb

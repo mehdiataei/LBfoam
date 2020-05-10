@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -44,9 +44,11 @@
 #include <algorithm>
 #include <memory>
 
-namespace plb {
+namespace plb
+{
 
-namespace parallelIO {
+namespace parallelIO
+{
 
 /***** 1. Multi-Block Writer **************************************************/
 
@@ -65,7 +67,8 @@ void writeXmlSpec( MultiBlock3D& multiBlock, FileName fName,
     XMLwriter& xmlMultiBlock = xml["Block3D"];
     xmlMultiBlock["General"]["Family"].setString(blockName);
     xmlMultiBlock["General"]["Datatype"].setString(typeInfo[0]);
-    if (typeInfo.size()>1) {
+    if (typeInfo.size()>1)
+    {
         xmlMultiBlock["General"]["Descriptor"].setString(typeInfo[1]);
     }
     xmlMultiBlock["General"]["cellDim"].set(multiBlock.getCellDim());
@@ -83,12 +86,14 @@ void writeXmlSpec( MultiBlock3D& multiBlock, FileName fName,
     XMLwriter& xmlBulks = xmlMultiBlock["Data"]["Component"];
     std::map<plint,Box3D>::const_iterator it = bulks.begin();
     plint iComp=0;
-    for(; it != bulks.end(); ++it) {
+    for(; it != bulks.end(); ++it)
+    {
         Box3D bulk = it->second;
         xmlBulks[iComp].set<plint,6>(bulk.to_plbArray());
         ++iComp;
     }
-    if (!offset.empty()) {
+    if (!offset.empty())
+    {
         xmlMultiBlock["Data"]["Offsets"].set(offset);
     }
 
@@ -101,10 +106,11 @@ void writeXmlSpec( MultiBlock3D& multiBlock, FileName fName,
     //   name (which is not the case of the data processors below).
     std::map<std::string,int> dynamicsDict;
     multiBlock.getDynamicsDict(multiBlock.getBoundingBox(), dynamicsDict);
-    if (!dynamicsDict.empty()) {
+    if (!dynamicsDict.empty())
+    {
         XMLwriter& xmlDynamicsDict = xmlMultiBlock["Data"]["DynamicsDict"];
         for( std::map<std::string,int>::const_iterator it = dynamicsDict.begin();
-             it != dynamicsDict.end(); ++it )
+                it != dynamicsDict.end(); ++it )
         {
             xmlDynamicsDict[it->first].set(it->second);
         }
@@ -120,9 +126,11 @@ void writeXmlSpec( MultiBlock3D& multiBlock, FileName fName,
     //   id ("id") because several instances of the same class may occur.
     XMLwriter& xmlProcessors = xmlMultiBlock["Data"]["Processor"];
     std::vector<MultiBlock3D::ProcessorStorage3D> const& processors = multiBlock.getStoredProcessors();
-    for (plint iProcessor=0; iProcessor<(plint)processors.size(); ++iProcessor) {
+    for (plint iProcessor=0; iProcessor<(plint)processors.size(); ++iProcessor)
+    {
         int id = processors[iProcessor].getGenerator().getStaticId();
-        if (id>=0) {
+        if (id>=0)
+        {
             Box3D domain;
             std::string data;
             processors[iProcessor].getGenerator().serialize(domain, data);
@@ -149,7 +157,8 @@ void writeOneBlockXmlSpec( MultiBlock3D const& multiBlock, FileName fName, plint
     XMLwriter& xmlMultiBlock = xml["Block3D"];
     xmlMultiBlock["General"]["Family"].setString(blockName);
     xmlMultiBlock["General"]["Datatype"].setString(typeInfo[0]);
-    if (typeInfo.size()>1) {
+    if (typeInfo.size()>1)
+    {
         xmlMultiBlock["General"]["Descriptor"].setString(typeInfo[1]);
     }
     xmlMultiBlock["General"]["cellDim"].set(multiBlock.getCellDim());
@@ -162,10 +171,12 @@ void writeOneBlockXmlSpec( MultiBlock3D const& multiBlock, FileName fName, plint
     xmlMultiBlock["Structure"]["NumComponents"].set(1);
 
     xmlMultiBlock["Data"]["File"].setString(FileName(fName).setExt("dat"));
-    if (ordering == IndexOrdering::forward) {
+    if (ordering == IndexOrdering::forward)
+    {
         xmlMultiBlock["Data"]["IndexOrdering"].setString("zIsFastest");
     }
-    else {
+    else
+    {
         xmlMultiBlock["Data"]["IndexOrdering"].setString("xIsFastest");
     }
 
@@ -178,18 +189,23 @@ void writeOneBlockXmlSpec( MultiBlock3D const& multiBlock, FileName fName, plint
     xml.print(FileName(fName).defaultPath(global::directories().getOutputDir()));
 }
 
-void transposeToBackward(plint sizeOfCell, Box3D const& domain, std::vector<char>& data) {
+void transposeToBackward(plint sizeOfCell, Box3D const& domain, std::vector<char>& data)
+{
     plint nx = domain.getNx();
     plint ny = domain.getNy();
     plint nz = domain.getNz();
     std::vector<char> transp(data.size());
 
-    for (plint iX=0; iX<nx; ++iX) {
-        for (plint iY=0; iY<ny; ++iY) {
-            for (plint iZ=0; iZ<nz; ++iZ) {
+    for (plint iX=0; iX<nx; ++iX)
+    {
+        for (plint iY=0; iY<ny; ++iY)
+        {
+            for (plint iZ=0; iZ<nz; ++iZ)
+            {
                 plint iForward = sizeOfCell*(iZ + nz*(iY + ny*iX));
                 plint iBackward = sizeOfCell*(iX + nx*(iY + ny*iZ));
-                for (plint iByte=0; iByte<sizeOfCell; ++iByte) {
+                for (plint iByte=0; iByte<sizeOfCell; ++iByte)
+                {
                     transp[iBackward+iByte] = data[iForward+iByte];
                 }
             }
@@ -217,44 +233,50 @@ void saveFull( MultiBlock3D& multiBlock, FileName fName, IndexOrdering::Ordering
     global::profiler().start("io");
     SparseBlockStructure3D blockStructure(multiBlock.getBoundingBox());
     Box3D bbox = multiBlock.getBoundingBox();
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         plint nBlocks = std::min(bbox.getNx(), (plint)global::mpi().getSize());
         std::vector<std::pair<plint,plint> > ranges;
         util::linearRepartition(bbox.x0, bbox.x1, nBlocks, ranges);
-        for (pluint iRange=0; iRange<ranges.size(); ++iRange) {
+        for (pluint iRange=0; iRange<ranges.size(); ++iRange)
+        {
             blockStructure.addBlock (
-                    Box3D( ranges[iRange].first, ranges[iRange].second,
-                           bbox.y0, bbox.y1, bbox.z0, bbox.z1 ),
-                    iRange );
+                Box3D( ranges[iRange].first, ranges[iRange].second,
+                       bbox.y0, bbox.y1, bbox.z0, bbox.z1 ),
+                iRange );
         }
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         plint nBlocks = std::min(bbox.getNz(), (plint)global::mpi().getSize());
         std::vector<std::pair<plint,plint> > ranges;
         util::linearRepartition(bbox.z0, bbox.z1, nBlocks, ranges);
-        for (pluint iRange=0; iRange<ranges.size(); ++iRange) {
+        for (pluint iRange=0; iRange<ranges.size(); ++iRange)
+        {
             blockStructure.addBlock (
-                    Box3D( bbox.x0, bbox.x1, bbox.y0, bbox.y1,
-                    ranges[iRange].first, ranges[iRange].second ),
-                    iRange );
+                Box3D( bbox.x0, bbox.x1, bbox.y0, bbox.y1,
+                       ranges[iRange].first, ranges[iRange].second ),
+                iRange );
         }
     }
-    else {
+    else
+    {
         // Sparse ordering not defined.
         PLB_ASSERT( false );
     }
     plint envelopeWidth=1;
     MultiBlockManagement3D adjacentMultiBlockManagement (
-            blockStructure, new OneToOneThreadAttribution, envelopeWidth );
+        blockStructure, new OneToOneThreadAttribution, envelopeWidth );
     MultiBlock3D* multiAdjacentBlock = multiBlock.clone(adjacentMultiBlockManagement);
-    
+
     std::vector<plint> offset;
     std::vector<plint> myBlockIds;
     std::vector<std::vector<char> > data;
 
     bool dynamicContent = false;
     dumpData(*multiAdjacentBlock, dynamicContent, offset, myBlockIds, data);
-    if (ordering==IndexOrdering::backward && myBlockIds.size()==1) {
+    if (ordering==IndexOrdering::backward && myBlockIds.size()==1)
+    {
         PLB_ASSERT( data.size()==1 );
         Box3D domain;
         blockStructure.getBulk(myBlockIds[0], domain);
@@ -264,7 +286,8 @@ void saveFull( MultiBlock3D& multiBlock, FileName fName, IndexOrdering::Ordering
     }
 
     plint totalSize = offset[offset.size()-1];
-    if (!appendMode) {
+    if (!appendMode)
+    {
         writeOneBlockXmlSpec(*multiAdjacentBlock, fName, totalSize, ordering);
     }
     writeRawData(fName, myBlockIds, offset, data, appendMode);
@@ -283,7 +306,8 @@ void dumpData( MultiBlock3D& multiBlock, bool dynamicContent,
     std::map<plint,plint> toContiguousId;
     std::map<plint,Box3D>::const_iterator it = bulks.begin();
     plint pos = 0;
-    for (; it != bulks.end(); ++it) {
+    for (; it != bulks.end(); ++it)
+    {
         toContiguousId[it->first] = pos;
         ++pos;
     }
@@ -293,7 +317,8 @@ void dumpData( MultiBlock3D& multiBlock, bool dynamicContent,
     data.resize(myBlocks.size());
     std::vector<plint> blockSize(numBlocks);
     std::fill(blockSize.begin(), blockSize.end(), 0);
-    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock)
+    {
         plint blockId = myBlocks[iBlock];
         SmartBulk3D bulk(management, blockId);
         Box3D localBulk(bulk.toLocal(bulk.getBulk()));

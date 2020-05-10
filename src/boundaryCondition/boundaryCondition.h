@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -27,18 +27,20 @@
 #ifndef BOUNDARY_CONDITION_H
 #define BOUNDARY_CONDITION_H
 
-namespace plb {
-   
-    namespace boundary {
-        /** dirichlet:     impose a velocity (* obsolete ...or a density *).
-         *  neumann:       zero-gradient for all velocity components or for the density.
-         *  freeslip:      zero-gradient for tangential velocity components, and zero for normal ones.
-         *  density:       fixed density, Neumann for tangential velocity components.
-         *  (*obsolete*) outflow:       zero-gradient for all velocity components.
-         *  (*obsolete*) normalOutflow: zero-gradient for normal velocity components, and zero for tangential ones.
-         **/
-        typedef enum {dirichlet, neumann, freeslip, density, outflow, normalOutflow} BcType;
-    }
+namespace plb
+{
+
+namespace boundary
+{
+/** dirichlet:     impose a velocity (* obsolete ...or a density *).
+ *  neumann:       zero-gradient for all velocity components or for the density.
+ *  freeslip:      zero-gradient for tangential velocity components, and zero for normal ones.
+ *  density:       fixed density, Neumann for tangential velocity components.
+ *  (*obsolete*) outflow:       zero-gradient for all velocity components.
+ *  (*obsolete*) normalOutflow: zero-gradient for normal velocity components, and zero for tangential ones.
+ **/
+typedef enum {dirichlet, neumann, freeslip, density, outflow, normalOutflow} BcType;
+}
 
 }  // namespace plb
 

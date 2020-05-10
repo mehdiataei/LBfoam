@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,26 +32,31 @@
 #include "algorithm/basicAlgorithms.h"
 #include <algorithm>
 
-namespace plb {
+namespace plb
+{
 
 ////////////////////// function createRegularDistribution2D /////////////////////
 
 SparseBlockStructure2D createRegularDistribution2D (
-        Box2D const& domain, plint numBlocksX, plint numBlocksY )
+    Box2D const& domain, plint numBlocksX, plint numBlocksY )
 {
     SparseBlockStructure2D dataGeometry(domain);
     plint posX = domain.x0;
-    for (plint iBlockX=0; iBlockX<numBlocksX; ++iBlockX) {
+    for (plint iBlockX=0; iBlockX<numBlocksX; ++iBlockX)
+    {
         plint lx = domain.getNx() / numBlocksX;
-        if (iBlockX < domain.getNx()%numBlocksX) ++lx;
+        if (iBlockX < domain.getNx()%numBlocksX)
+            ++lx;
         plint posY = domain.y0;
-        for (plint iBlockY=0; iBlockY<numBlocksY; ++iBlockY) {
-             plint ly = domain.getNy() / numBlocksY;
-             if (iBlockY < domain.getNy()%numBlocksY) ++ly;
-             dataGeometry.addBlock (
-                     Box2D(posX, posX+lx-1, posY, posY+ly-1),
-                     dataGeometry.nextIncrementalId() );
-             posY += ly;
+        for (plint iBlockY=0; iBlockY<numBlocksY; ++iBlockY)
+        {
+            plint ly = domain.getNy() / numBlocksY;
+            if (iBlockY < domain.getNy()%numBlocksY)
+                ++ly;
+            dataGeometry.addBlock (
+                Box2D(posX, posX+lx-1, posY, posY+ly-1),
+                dataGeometry.nextIncrementalId() );
+            posY += ly;
         }
         posX += lx;
     }
@@ -59,47 +64,54 @@ SparseBlockStructure2D createRegularDistribution2D (
 }
 
 SparseBlockStructure2D createRegularDistribution2D (
-        plint nx, plint ny, plint numBlocksX, plint numBlocksY )
+    plint nx, plint ny, plint numBlocksX, plint numBlocksY )
 {
     return createRegularDistribution2D (
-            Box2D(0, nx-1, 0, ny-1), numBlocksX, numBlocksY );
+               Box2D(0, nx-1, 0, ny-1), numBlocksX, numBlocksY );
 }
 
 SparseBlockStructure2D createRegularDistribution2D (
-        Box2D const& domain, int numProc)
+    Box2D const& domain, int numProc)
 {
     std::vector<plint> repartition = algorithm::evenRepartition(numProc, 2);
     return createRegularDistribution2D(domain, repartition[0], repartition[1] );
 }
 
 SparseBlockStructure2D createRegularDistribution2D (
-        plint nx, plint ny, int numProc)
+    plint nx, plint ny, int numProc)
 {
     return createRegularDistribution2D (
-            Box2D(0, nx-1, 0, ny-1), numProc );
+               Box2D(0, nx-1, 0, ny-1), numProc );
 }
 
-void mergeIntersections(std::vector<Box2D>& intersections) {
+void mergeIntersections(std::vector<Box2D>& intersections)
+{
     std::vector<Box2D> merged;
-    for (pluint iInters=0; iInters<intersections.size(); ++iInters) {
+    for (pluint iInters=0; iInters<intersections.size(); ++iInters)
+    {
         Box2D intersection = intersections[iInters];
         bool hasMerged=false;
-        for (pluint iMerged=0; iMerged<merged.size(); ++iMerged) {
-            if (merge(merged[iMerged], intersection)) {
+        for (pluint iMerged=0; iMerged<merged.size(); ++iMerged)
+        {
+            if (merge(merged[iMerged], intersection))
+            {
                 hasMerged=true;
                 break;
             }
         }
-        if (!hasMerged) {
+        if (!hasMerged)
+        {
             merged.push_back(intersection);
         }
     }
     intersections.swap(merged);
 }
 
-plint cumNcells(std::vector<Box2D> const& domains) {
+plint cumNcells(std::vector<Box2D> const& domains)
+{
     plint sum = 0;
-    for (pluint iDomain=0; iDomain<domains.size(); ++iDomain) {
+    for (pluint iDomain=0; iDomain<domains.size(); ++iDomain)
+    {
         sum += domains[iDomain].nCells();
     }
     return sum;
@@ -115,8 +127,10 @@ SparseBlockStructure2D reparallelize(SparseBlockStructure2D const& originalStruc
     SparseBlockStructure2D newStructure(boundingBox);
     std::vector<plint> ids;
     std::vector<Box2D> intersections;
-    for (pluint blockX=0; blockX<rangesX.size(); ++blockX) {
-        for (pluint blockY=0; blockY<rangesY.size(); ++blockY) {
+    for (pluint blockX=0; blockX<rangesX.size(); ++blockX)
+    {
+        for (pluint blockY=0; blockY<rangesY.size(); ++blockY)
+        {
             Box2D currentBlock(rangesX[blockX].first, rangesX[blockX].second,
                                rangesY[blockY].first, rangesY[blockY].second);
             ids.clear();
@@ -127,14 +141,17 @@ SparseBlockStructure2D reparallelize(SparseBlockStructure2D const& originalStruc
             // fragmentation. Note that this explicit test is really necessary, because
             // the function mergeIntersection, which is called below, is not always able
             // to reconstruct a full block from its fragments.
-            if (currentBlock.nCells() == cumNcells(intersections)) {
+            if (currentBlock.nCells() == cumNcells(intersections))
+            {
                 plint nextId = newStructure.nextIncrementalId();
                 newStructure.addBlock(currentBlock, nextId);
             }
-            else {
+            else
+            {
                 // Construct bigger blocks if possible, in order to avoid fragmentation.
                 mergeIntersections(intersections);
-                for(pluint iInters=0; iInters<intersections.size(); ++iInters) {
+                for(pluint iInters=0; iInters<intersections.size(); ++iInters)
+                {
                     plint nextId = newStructure.nextIncrementalId();
                     newStructure.addBlock(intersections[iInters], nextId);
                 }
@@ -153,85 +170,95 @@ SparseBlockStructure2D reparallelize(SparseBlockStructure2D const& originalStruc
 }
 
 SparseBlockStructure2D createXSlicedMultiBlockDistribution2D (
-        CellTypeField2D const& cellTypeField,
-        plint numBlocks )
+    CellTypeField2D const& cellTypeField,
+    plint numBlocks )
 {
     plint nX = cellTypeField.getNx();
     plint nY = cellTypeField.getNy();
-    
+
     std::vector<plint> numActivePerSlice;
     plint numActiveTotal = 0;
-    for(plint iX=0; iX<nX; iX++) {
+    for(plint iX=0; iX<nX; iX++)
+    {
         plint numActiveCurrentSlice = 0;
-        for (plint iY=0; iY<nY; iY++) {
-            if (cellTypeField.get(iX,iY) > 0) numActiveCurrentSlice++;
+        for (plint iY=0; iY<nY; iY++)
+        {
+            if (cellTypeField.get(iX,iY) > 0)
+                numActiveCurrentSlice++;
         }
         numActivePerSlice.push_back(numActiveCurrentSlice);
         numActiveTotal += numActiveCurrentSlice;
     }
     plint numActivePerBlock = numActiveTotal / numBlocks;
-    
+
     SparseBlockStructure2D dataGeometry(nX, nY);
-    
+
     plint iX=0;
-    for (plint iBlock=0; iBlock<numBlocks; ++iBlock) {
+    for (plint iBlock=0; iBlock<numBlocks; ++iBlock)
+    {
         plint posX = iX;
         plint numActiveCurrentBlock = 0;
-        while (numActiveCurrentBlock<numActivePerBlock && iX<nX) {
+        while (numActiveCurrentBlock<numActivePerBlock && iX<nX)
+        {
             numActiveCurrentBlock += numActivePerSlice[iX];
             iX++;
         }
         dataGeometry.addBlock (
-                Box2D(posX, iX-1, 0, nY-1),
-                dataGeometry.nextIncrementalId() );
+            Box2D(posX, iX-1, 0, nY-1),
+            dataGeometry.nextIncrementalId() );
     }
     return dataGeometry;
 }
 
 SparseBlockStructure2D createYSlicedMultiBlockDistribution2D (
-        CellTypeField2D const& cellTypeField,
-        plint numBlocks )
+    CellTypeField2D const& cellTypeField,
+    plint numBlocks )
 {
     plint nX = cellTypeField.getNx();
     plint nY = cellTypeField.getNy();
-    
+
     std::vector<plint> numActivePerSlice;
     plint numActiveTotal = 0;
-    for (plint iY=0; iY<nY; iY++) {
+    for (plint iY=0; iY<nY; iY++)
+    {
         plint numActiveCurrentSlice = 0;
-        for(plint iX=0; iX<nX; iX++) {
-            if (cellTypeField.get(iX,iY) > 0) numActiveCurrentSlice++;
+        for(plint iX=0; iX<nX; iX++)
+        {
+            if (cellTypeField.get(iX,iY) > 0)
+                numActiveCurrentSlice++;
         }
         numActivePerSlice.push_back(numActiveCurrentSlice);
         numActiveTotal += numActiveCurrentSlice;
     }
     plint numActivePerBlock = numActiveTotal / numBlocks;
-    
+
     SparseBlockStructure2D dataGeometry(nX, nY);
-    
+
     plint iY=0;
-    for (plint iBlock=0; iBlock<numBlocks; ++iBlock) {
+    for (plint iBlock=0; iBlock<numBlocks; ++iBlock)
+    {
         plint posY = iY;
         plint numActiveCurrentBlock = 0;
-        while (numActiveCurrentBlock<numActivePerBlock && iY<nY) {
+        while (numActiveCurrentBlock<numActivePerBlock && iY<nY)
+        {
             numActiveCurrentBlock += numActivePerSlice[iY];
             iY++;
         }
         dataGeometry.addBlock (
-                Box2D(0, nX-1, posY, iY-1),
-                dataGeometry.nextIncrementalId() );
+            Box2D(0, nX-1, posY, iY-1),
+            dataGeometry.nextIncrementalId() );
     }
     return dataGeometry;
 }
 
 SparseBlockStructure2D createXSlicedMultiBlockDistribution2D (
-        CellTypeField2D const& cellTypeField )
+    CellTypeField2D const& cellTypeField )
 {
     return createXSlicedMultiBlockDistribution2D(cellTypeField, global::mpi().getSize());
 }
 
 SparseBlockStructure2D createYSlicedMultiBlockDistribution2D (
-        CellTypeField2D const& cellTypeField )
+    CellTypeField2D const& cellTypeField )
 {
     return createYSlicedMultiBlockDistribution2D(cellTypeField, global::mpi().getSize());
 }

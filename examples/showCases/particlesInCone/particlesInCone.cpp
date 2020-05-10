@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -52,7 +52,7 @@ plint extendedEnvelopeWidth = 2;
 int flowType = voxelFlag::inside;  // This is an inner-flow problem.
 bool useAllDirections = true;      // Extrapolation scheme for the off lattice boundary condition.
 bool useRegularized = true;        // Use an off lattice boundary condition which is closer in spirit to
-                                   //   regularized boundary conditions.
+//   regularized boundary conditions.
 
 plint coneFactor  = 3;  // Ratio between cone outlet and inlet.
 plint lengthRatio = 3;  // Ratio between cone length and inlet diameter.
@@ -78,9 +78,9 @@ T fluidCompliance = 6.e-5;            // The fluid->particle force is equal to t
 Array<T,3> gravity(-3.0e-7, 0., 0.);  // A body force acting on each particle.
 T forceAmplitude = 1.e-4;             // Amplitude for the pairwise particle interaction force.
 T cutOffLength = 3.5;                 // Cutoff length for particle interaction in lattice units (make sure the interaction force
-                                      // is negligible at this distance).
+// is negligible at this distance).
 plint commEnvelope = (plint)cutOffLength +1;  // Width of communication envelope needed to cope with neighborhoods within the cutoff length.
-                                              // Must be bigger than blockSize/2.
+// Must be bigger than blockSize/2.
 
 // The containers for the fluid and the particles, and the data structures for the
 // boundary-condition.
@@ -122,9 +122,11 @@ public:
         std::vector<Particle3D<T,Descriptor>*> neighbors;
         particleField.findParticles(domain, particles);
         // Loop over all particles assigned to this data processor.
-        for (pluint iParticle=0; iParticle<particles.size(); ++iParticle) {
+        for (pluint iParticle=0; iParticle<particles.size(); ++iParticle)
+        {
             Particle3D<T,Descriptor>* nonTypeParticle = particles[iParticle];
-            if (nonTypeParticle->getTag()!=0) {  // Exclude the wall particles.
+            if (nonTypeParticle->getTag()!=0)    // Exclude the wall particles.
+            {
                 VerletParticle3D<T,Descriptor>* particle =
                     dynamic_cast<VerletParticle3D<T,Descriptor>*>(nonTypeParticle);
                 // Compute a neighborhood, in integer coordinates, which contains at least
@@ -143,19 +145,23 @@ public:
                 // Use the particle hash to find neighboring particles efficiently.
                 particleField.findParticles(neighborhood, neighbors);
                 Array<T,3> force((T)0.,(T)0.,(T)0.);
-                for (pluint iNeighbor=0; iNeighbor<neighbors.size(); ++iNeighbor) {
+                for (pluint iNeighbor=0; iNeighbor<neighbors.size(); ++iNeighbor)
+                {
                     Array<T,3> r = particle->getPosition() - neighbors[iNeighbor]->getPosition();
                     T rSqr = normSqr(r);
-                    if (rSqr<util::sqr(cutOffLength) && rSqr>1.e-6) {
+                    if (rSqr<util::sqr(cutOffLength) && rSqr>1.e-6)
+                    {
                         // The potential is amplitude*r^{-6} for r>rCritical, and r*amplitude for r<=rCritical.
                         // This is to aovid numerical instability due to huge forces when two
                         // particles come too close (for example in a badly designed initial condition).
-                        if (rSqr>rCriticalSqr) {
+                        if (rSqr>rCriticalSqr)
+                        {
                             // The potential is r^{-6}, so the force is r^{-7}. An additional r^{-1}
                             // is needed to normalize the vector r.
                             force += r/(rSqr*rSqr*rSqr*rSqr) * forceAmplitude;
                         }
-                        else {
+                        else
+                        {
                             // Inside a radius of rCritical (in lattice units), the force is constant.
                             T rNorm = std::sqrt(rSqr);
                             force += r/(rNorm*rCritical*rCriticalSqr*rCriticalSqr*rCriticalSqr) * forceAmplitude;
@@ -164,7 +170,7 @@ public:
                 }
                 // Particle acceleration according to Newton's law.
                 particle->set_a (
-                        particle->get_a() + (gravity+force) * particle->get_invRho() );
+                    particle->get_a() + (gravity+force) * particle->get_invRho() );
             }
         }
     }
@@ -172,7 +178,8 @@ public:
     {
         return new ParticleInteractionForce<T,Descriptor>(*this);
     }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+    {
         modified[0] = modif::dynamicVariables;
     }
 private:
@@ -182,13 +189,15 @@ private:
 
 
 // This function object defines the area (here a circle) in which the particles are injected.
-class CircularInjection {
+class CircularInjection
+{
 public:
     CircularInjection ( T radius_, Array<T,3> center_ )
         : radius(radius_),
           center(center_)
     { }
-    bool operator()(Array<T,3> const& pos) const {
+    bool operator()(Array<T,3> const& pos) const
+    {
         return (util::sqr(pos[1]-center[1]) + util::sqr(pos[2]-center[2]))
                < util::sqr(radius);
     }
@@ -200,7 +209,8 @@ private:
 // In this part of the code, the triangular surface mesh of the cone is constructed, and the
 // domain is voxelized: a flag matrix is created which tags cells that are inside resp. outside
 // the cone.
-void buildConeGeometry() {
+void buildConeGeometry()
+{
     // Create the cone surface as a set of triangles.
     TriangleSet<T> triangleSet;
 
@@ -228,7 +238,7 @@ void buildConeGeometry() {
     //   handled by the following voxelization process.
     pcout << std::endl << "Voxelizing the domain." << std::endl;
     voxelizedDomain = new VoxelizedDomain3D<T> (
-            *triangleBd, flowType, extraLayer, borderWidth, extendedEnvelopeWidth, blockSize);
+        *triangleBd, flowType, extraLayer, borderWidth, extendedEnvelopeWidth, blockSize);
     pcout << getMultiBlockInfo(voxelizedDomain->getVoxelMatrix()) << std::endl;
     // At this point, the MultiScalarField voxelizedDomain->getVoxelMatrix() contains the cell tags.
 }
@@ -250,11 +260,12 @@ void computePhysicalParameters()
 
 // Instantiate the multi-block lattices for the fluid and the particles, and create
 // the fluid boundary condition on the cone.
-void createLattices() {
+void createLattices()
+{
     // Allocate the data for the fluid.
     fluidLattice = generateMultiBlockLattice<T,DESCRIPTOR> (
-                  voxelizedDomain->getVoxelMatrix(), extendedEnvelopeWidth,
-                  new BGKdynamics<T,DESCRIPTOR>(omega) ).release();
+                       voxelizedDomain->getVoxelMatrix(), extendedEnvelopeWidth,
+                       new BGKdynamics<T,DESCRIPTOR>(omega) ).release();
 
     // Set up the Guo off-lattice boundary condition on the walls of the cone.
     pcout << "Creating boundary condition." << std::endl;
@@ -266,18 +277,18 @@ void createLattices() {
     // and the second opening (the outlet), a Neumann velocity profile with fixed
     // density.
     profiles.setInletOutlet (
-            new VelocityPlugProfile3D<T>(uInject),
-            new DensityNeumannBoundaryProfile3D<T>() );
+        new VelocityPlugProfile3D<T>(uInject),
+        new DensityNeumannBoundaryProfile3D<T>() );
     // The algorithm for the off-lattice boundary condition is the Guo one.
     GuoOffLatticeModel3D<T,DESCRIPTOR>* model =
-            new GuoOffLatticeModel3D<T,DESCRIPTOR> (
-                new TriangleFlowShape3D<T,Array<T,3> > (
-                    voxelizedDomain->getBoundary(), profiles),
-                flowType, useAllDirections );
+        new GuoOffLatticeModel3D<T,DESCRIPTOR> (
+        new TriangleFlowShape3D<T,Array<T,3> > (
+            voxelizedDomain->getBoundary(), profiles),
+        flowType, useAllDirections );
     model->selectUseRegularizedModel(useRegularized);
     boundaryCondition =
         new OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity> (
-                model, *voxelizedDomain, *fluidLattice );
+        model, *voxelizedDomain, *fluidLattice );
     // Insert the boundary condition into the lattice (by means of a data processor)
     // so it is executed at the end of every collision-streaming cycle.
     boundaryCondition->insert();
@@ -298,9 +309,9 @@ void createLattices() {
     // implemented.
     MultiBlockManagement3D const& latticeManagement(fluidLattice->getMultiBlockManagement());
     MultiBlockManagement3D particleManagement (
-            latticeManagement.getSparseBlockStructure(),
-            latticeManagement.getThreadAttribution().clone(),
-            commEnvelope, latticeManagement.getRefinementLevel() );
+        latticeManagement.getSparseBlockStructure(),
+        latticeManagement.getThreadAttribution().clone(),
+        commEnvelope, latticeManagement.getRefinementLevel() );
 
     // Allocation of the data for the particles. This only allocates the particle-hash
     // (a grid on which the particles are stored). The particles themselves are injected
@@ -335,21 +346,21 @@ void setupCouplings()
     // Calls the function advance() on each particle which, for Verlet particles,
     // updates the position according to v(t+0.5)
     integrateProcessingFunctional (
-            new AdvanceParticlesEveryWhereFunctional3D<T,DESCRIPTOR>(-1.0),
-            fluidLattice->getBoundingBox(), particleArg, 0);
+        new AdvanceParticlesEveryWhereFunctional3D<T,DESCRIPTOR>(-1.0),
+        fluidLattice->getBoundingBox(), particleArg, 0);
     // Compute fluid->particle force (which includes friction).
     integrateProcessingFunctional (
-            new FluidToParticleCoupling3D<T,DESCRIPTOR>(1.),
-            fluidLattice->getBoundingBox(), particleFluidArg, 1 );
+        new FluidToParticleCoupling3D<T,DESCRIPTOR>(1.),
+        fluidLattice->getBoundingBox(), particleFluidArg, 1 );
     // Compute particle->particle and gravity forces, with help of the data processor
     // ParticleInteractionForce defined above.
     integrateProcessingFunctional (
-            new ParticleInteractionForce<T,DESCRIPTOR>(forceAmplitude, gravity),
-            fluidLattice->getBoundingBox(), particleArg, 1 );
+        new ParticleInteractionForce<T,DESCRIPTOR>(forceAmplitude, gravity),
+        fluidLattice->getBoundingBox(), particleArg, 1 );
     // Integrate the velocity according to the Verlet algorithm.
     integrateProcessingFunctional (
-            new VerletUpdateVelocitySelective3D<T,DESCRIPTOR>(new util::SelectLargerEqualInt(1)),
-            fluidLattice->getBoundingBox(), particleArg, 1 );
+        new VerletUpdateVelocitySelective3D<T,DESCRIPTOR>(new util::SelectLargerEqualInt(1)),
+        fluidLattice->getBoundingBox(), particleArg, 1 );
 
     // Definition of a domain from which particles will be injected in the flow field.
     //   The specific domain is close to the inlet of the tube.
@@ -368,11 +379,11 @@ void setupCouplings()
     // Functional which absorbs the particles in the specified domains, to avoid that they leave the
     // computational domain.
     integrateProcessingFunctional (
-            new AbsorbParticlesFunctionalSelective3D<T,DESCRIPTOR>(new util::SelectLargerEqualInt(1)),
-            absorbtionDomain1, particleArg, 0 );
+        new AbsorbParticlesFunctionalSelective3D<T,DESCRIPTOR>(new util::SelectLargerEqualInt(1)),
+        absorbtionDomain1, particleArg, 0 );
     integrateProcessingFunctional (
-            new AbsorbParticlesFunctionalSelective3D<T,DESCRIPTOR>(new util::SelectLargerEqualInt(1)),
-            absorbtionDomain2, particleArg, 0 );
+        new AbsorbParticlesFunctionalSelective3D<T,DESCRIPTOR>(new util::SelectLargerEqualInt(1)),
+        absorbtionDomain2, particleArg, 0 );
 
     // Execute all data processors once to start the simulation off with well-defined initial values.
     particles->executeInternalProcessors();
@@ -398,10 +409,12 @@ int main(int argc, char* argv[])
 
     pcout << std::endl << "Starting simulation." << std::endl;
     bool checkForErrors = true;
-    for (plint i=0; i<maxIter; ++i) {
+    for (plint i=0; i<maxIter; ++i)
+    {
         // Start injecting particles, and iterating them, once the fluid is stationary (it
         // would also be OK to start injecting particles earlier, if you prefer).
-        if (i>=startParticleIter) {
+        if (i>=startParticleIter)
+        {
             std::vector<MultiBlock3D*> particleArg;
             particleArg.push_back(particles);
             // Progressively increase the injection rate.
@@ -410,48 +423,54 @@ int main(int argc, char* argv[])
             Particle3D<T,DESCRIPTOR>* particle = particleTemplate->clone();
             // Attribute a color to the first particles by changing their tags (the tags
             // are written in the VTK file).
-            if (i<=startParticleIter+20000) {
+            if (i<=startParticleIter+20000)
+            {
                 particle->setTag(i-startParticleIter);
             }
             applyProcessingFunctional (
-                    new AnalyticalInjectRandomParticlesFunctional3D<T,DESCRIPTOR,CircularInjection> (
-                        particle, probability, CircularInjection(radius/2.0, inletCenter) ),
-                    injectionDomain, particleArg );
+                new AnalyticalInjectRandomParticlesFunctional3D<T,DESCRIPTOR,CircularInjection> (
+                    particle, probability, CircularInjection(radius/2.0, inletCenter) ),
+                injectionDomain, particleArg );
         }
         // For efficiency reasons, stop iterating the fluid once it is assumed to have reached a stationary state.
-        if (i<maxFluidIter) {
+        if (i<maxFluidIter)
+        {
             // Iterate the fluid.
             fluidLattice->collideAndStream();
         }
-        if (i>=startParticleIter) {
+        if (i>=startParticleIter)
+        {
             // Iterate the particles..
             particles->executeInternalProcessors();
         }
 
-        if (checkForErrors) {
+        if (checkForErrors)
+        {
             abortIfErrorsOccurred();
             checkForErrors = false;
         }
 
-        if (i%outIter==0) {
+        if (i%outIter==0)
+        {
             pcout << "Iteration= " << i << "; "
                   << "Average energy: "
                   << boundaryCondition->computeAverageEnergy() << std::endl;
             pcout << "Number of particles in the tube: "
                   << countParticles(*particles, particles->getBoundingBox()) << std::endl;
         }
-        if (i == maxFluidIter) {
+        if (i == maxFluidIter)
+        {
             pcout << "Writing fluid data.." << std::endl;
-            VtkImageOutput3D<T> vtkOut("volume", 1.); 
+            VtkImageOutput3D<T> vtkOut("volume", 1.);
             vtkOut.writeData<float>(*boundaryCondition->computePressure(), "p", 1.);
             vtkOut.writeData<float>(*boundaryCondition->computeVelocityNorm(), "u", 1.);
         }
 
-        if (i%saveIter==0 && i > startParticleIter) {
+        if (i%saveIter==0 && i > startParticleIter)
+        {
             pcout << "Writing particle data.." << std::endl;
             std::string fName = createFileName("particles_",i,8)+".vtk";
             writeSelectedParticleVtk<T,DESCRIPTOR>(*particles, fName, particles->getBoundingBox(), util::SelectLargerEqualInt(1));
         }
     }
 }
-

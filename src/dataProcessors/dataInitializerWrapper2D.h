@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,7 +35,8 @@
 #include "dataProcessors/dataInitializerFunctional2D.h"
 #include "sitmo/prng_engine.hpp"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** PART I ******************************************** */
 /* *************** Initialization of the block-lattice: atomic-blocks  */
@@ -98,10 +99,11 @@ void setBoundaryVelocity(BlockLattice2D<T,Descriptor>& lattice, Box2D domain, Ar
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class VelocityFunction>
-void setBoundaryVelocity(BlockLattice2D<T,Descriptor>& lattice, Box2D domain, VelocityFunction f) {
-    applyIndexed (
-            lattice, domain,
-            new SetCustomBoundaryVelocityFunctional2D<T,Descriptor,VelocityFunction> (f) );
+void setBoundaryVelocity(BlockLattice2D<T,Descriptor>& lattice, Box2D domain, VelocityFunction f)
+{
+	applyIndexed (
+	    lattice, domain,
+	    new SetCustomBoundaryVelocityFunctional2D<T,Descriptor,VelocityFunction> (f) );
 }
 
 template<typename T, template<class U> class Descriptor>
@@ -109,10 +111,11 @@ void setBoundaryDensity(BlockLattice2D<T,Descriptor>& lattice, Box2D domain, T r
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class DensityFunction>
-void setBoundaryDensity(BlockLattice2D<T,Descriptor>& lattice, Box2D domain, DensityFunction f) {
-    applyIndexed (
-            lattice, domain,
-            new SetCustomBoundaryDensityFunctional2D<T,Descriptor,DensityFunction> (f) );
+void setBoundaryDensity(BlockLattice2D<T,Descriptor>& lattice, Box2D domain, DensityFunction f)
+{
+	applyIndexed (
+	    lattice, domain,
+	    new SetCustomBoundaryDensityFunctional2D<T,Descriptor,DensityFunction> (f) );
 }
 
 template<typename T, template<class U> class Descriptor>
@@ -120,10 +123,11 @@ void setBoundaryTemperature(BlockLattice2D<T,Descriptor>& lattice, Box2D domain,
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class TemperatureFunction>
-void setBoundaryTemperature(BlockLattice2D<T,Descriptor>& lattice, Box2D domain, TemperatureFunction f) {
-    applyIndexed (
-            lattice, domain,
-            new SetCustomBoundaryTemperatureFunctional2D<T,Descriptor,TemperatureFunction> (f) );
+void setBoundaryTemperature(BlockLattice2D<T,Descriptor>& lattice, Box2D domain, TemperatureFunction f)
+{
+	applyIndexed (
+	    lattice, domain,
+	    new SetCustomBoundaryTemperatureFunctional2D<T,Descriptor,TemperatureFunction> (f) );
 }
 
 
@@ -135,18 +139,18 @@ void initializeAtEquilibrium(BlockLattice2D<T,Descriptor>& lattice, Box2D domain
 template<typename T, template<class U> class Descriptor, class RhoUFunction>
 void initializeAtEquilibrium(BlockLattice2D<T,Descriptor>& lattice, Box2D domain, RhoUFunction f)
 {
-    applyIndexed (
-            lattice, domain,
-            new IniCustomEquilibriumFunctional2D<T,Descriptor,RhoUFunction> (f) );
+	applyIndexed (
+	    lattice, domain,
+	    new IniCustomEquilibriumFunctional2D<T,Descriptor,RhoUFunction> (f) );
 }
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class RhoVelTempFunction>
 void initializeAtThermalEquilibrium(BlockLattice2D<T,Descriptor>& lattice, Box2D domain, RhoVelTempFunction f)
 {
-    applyIndexed (
-            lattice, domain,
-            new IniCustomThermalEquilibriumFunctional2D<T,Descriptor,RhoVelTempFunction> (f) );
+	applyIndexed (
+	    lattice, domain,
+	    new IniCustomThermalEquilibriumFunctional2D<T,Descriptor,RhoVelTempFunction> (f) );
 }
 
 template<typename T, template<class U> class Descriptor>
@@ -238,10 +242,11 @@ void setBoundaryVelocity(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domai
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class VelocityFunction>
-void setBoundaryVelocity(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain, VelocityFunction f) {
-    applyIndexed (
-            lattice, domain,
-            new SetCustomBoundaryVelocityFunctional2D<T,Descriptor,VelocityFunction> (f) );
+void setBoundaryVelocity(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain, VelocityFunction f)
+{
+	applyIndexed (
+	    lattice, domain,
+	    new SetCustomBoundaryVelocityFunctional2D<T,Descriptor,VelocityFunction> (f) );
 }
 
 template<typename T, template<class U> class Descriptor>
@@ -249,10 +254,11 @@ void setBoundaryDensity(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class DensityFunction>
-void setBoundaryDensity(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain, DensityFunction f) {
-    applyIndexed (
-            lattice, domain,
-            new SetCustomBoundaryDensityFunctional2D<T,Descriptor,DensityFunction> (f) );
+void setBoundaryDensity(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain, DensityFunction f)
+{
+	applyIndexed (
+	    lattice, domain,
+	    new SetCustomBoundaryDensityFunctional2D<T,Descriptor,DensityFunction> (f) );
 }
 
 template<typename T, template<class U> class Descriptor>
@@ -260,10 +266,11 @@ void setBoundaryTemperature(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D do
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class TemperatureFunction>
-void setBoundaryTemperature(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain, TemperatureFunction f) {
-    applyIndexed (
-            lattice, domain,
-            new SetCustomBoundaryTemperatureFunctional2D<T,Descriptor,TemperatureFunction> (f) );
+void setBoundaryTemperature(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain, TemperatureFunction f)
+{
+	applyIndexed (
+	    lattice, domain,
+	    new SetCustomBoundaryTemperatureFunctional2D<T,Descriptor,TemperatureFunction> (f) );
 }
 
 
@@ -275,18 +282,18 @@ void initializeAtEquilibrium(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D d
 template<typename T, template<class U> class Descriptor, class RhoUFunction>
 void initializeAtEquilibrium(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain, RhoUFunction f)
 {
-    applyIndexed (
-            lattice, domain,
-            new IniCustomEquilibriumFunctional2D<T,Descriptor,RhoUFunction> (f) );
+	applyIndexed (
+	    lattice, domain,
+	    new IniCustomEquilibriumFunctional2D<T,Descriptor,RhoUFunction> (f) );
 }
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class RhoVelTempFunction>
 void initializeAtThermalEquilibrium(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain, RhoVelTempFunction f)
 {
-    applyIndexed (
-            lattice, domain,
-            new IniCustomThermalEquilibriumFunctional2D<T,Descriptor,RhoVelTempFunction> (f) );
+	applyIndexed (
+	    lattice, domain,
+	    new IniCustomThermalEquilibriumFunctional2D<T,Descriptor,RhoVelTempFunction> (f) );
 }
 
 template<typename T, template<class U> class Descriptor>
@@ -339,7 +346,7 @@ void setToConstant(ScalarField2D<T>& field, ScalarField2D<int>& mask, int flag,
 
 /// Initialize tensor-field with the same constant tensor/vector on each cell.
 template<typename T, int nDim>
-void setToConstant( TensorField2D<T,nDim>& field, Box2D domain, 
+void setToConstant( TensorField2D<T,nDim>& field, Box2D domain,
                     Array<T,nDim> const& value );
 
 /// Initialize tensor-field with the same constant tensor/vector on each cell on which
@@ -351,17 +358,19 @@ void setToConstant( TensorField2D<T,nDim>& field, ScalarField2D<int>& mask, int 
 /// Initialize scalar-field with the a value from a function.
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, class Function>
-void setToFunction(ScalarField2D<T>& field, Box2D domain, Function f) {
-    applyProcessingFunctional (
-            new SetToScalarFunctionFunctional2D<T,Function>(f), domain, field );
+void setToFunction(ScalarField2D<T>& field, Box2D domain, Function f)
+{
+	applyProcessingFunctional (
+	    new SetToScalarFunctionFunctional2D<T,Function>(f), domain, field );
 }
 
 /// Initialize tensor-field with a vector/tensor value from a function.
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, int nDim, class Function>
-void setToFunction(TensorField2D<T,nDim>& field, Box2D domain, Function f) {
-    applyProcessingFunctional (
-            new SetToTensorFunctionFunctional2D<T,nDim,Function>(f), domain, field );
+void setToFunction(TensorField2D<T,nDim>& field, Box2D domain, Function f)
+{
+	applyProcessingFunctional (
+	    new SetToTensorFunctionFunctional2D<T,nDim,Function>(f), domain, field );
 }
 
 /// Assign the component "index" of its space coordinate to each cell.
@@ -395,7 +404,7 @@ void setToConstant(MultiScalarField2D<T>& field, MultiScalarField2D<int>& mask, 
 
 /// Initialize tensor-field with the same constant tensor/vector on each cell.
 template<typename T, int nDim>
-void setToConstant( MultiTensorField2D<T,nDim>& field, Box2D domain, 
+void setToConstant( MultiTensorField2D<T,nDim>& field, Box2D domain,
                     Array<T,nDim> const& value );
 
 /// Initialize tensor-field with the same constant tensor/vector on each cell on which
@@ -407,17 +416,19 @@ void setToConstant( MultiTensorField2D<T,nDim>& field, MultiScalarField2D<int>& 
 /// Initialize scalar-field with the a value from a function.
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, class Function>
-void setToFunction(MultiScalarField2D<T>& field, Box2D domain, Function f) {
-    applyProcessingFunctional (
-            new SetToScalarFunctionFunctional2D<T,Function>(f), domain, field );
+void setToFunction(MultiScalarField2D<T>& field, Box2D domain, Function f)
+{
+	applyProcessingFunctional (
+	    new SetToScalarFunctionFunctional2D<T,Function>(f), domain, field );
 }
 
 /// Initialize tensor-field with a vector/tensor value from a function.
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, int nDim, class Function>
-void setToFunction(MultiTensorField2D<T,nDim>& field, Box2D domain, Function f) {
-    applyProcessingFunctional (
-            new SetToTensorFunctionFunctional2D<T,nDim,Function>(f), domain, field );
+void setToFunction(MultiTensorField2D<T,nDim>& field, Box2D domain, Function f)
+{
+	applyProcessingFunctional (
+	    new SetToTensorFunctionFunctional2D<T,nDim,Function>(f), domain, field );
 }
 
 /// Assign the component "index" of its space coordinate to each cell.
@@ -449,4 +460,3 @@ void growDomain(MultiScalarField2D<T>& field, T flag, int nCells);
 }  // namespace plb
 
 #endif  // DATA_INITIALIZER_WRAPPER_2D_H
-

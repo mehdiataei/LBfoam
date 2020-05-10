@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,17 +29,20 @@
 
 #include "core/indexUtil.h"
 
-namespace plb {
+namespace plb
+{
 
 IndexCollection::IndexCollection(std::vector<plint> const& indexes_)
     : indexes(indexes_)
 { }
 
-std::vector<plint> const& IndexCollection::get() const {
+std::vector<plint> const& IndexCollection::get() const
+{
     return indexes;
 }
 
-IndexCollection operator&&(IndexCollection const& coll1, IndexCollection const& coll2) {
+IndexCollection operator&&(IndexCollection const& coll1, IndexCollection const& coll2)
+{
     std::vector<plint> result;
     std::vector<plint> const& ind1 = coll1.get();
     std::vector<plint> const& ind2 = coll2.get();
@@ -47,17 +50,22 @@ IndexCollection operator&&(IndexCollection const& coll1, IndexCollection const& 
     std::vector<plint>::const_iterator iter_ind1 = ind1.begin();
     std::vector<plint>::const_iterator iter_ind2 = ind2.begin();
 
-    while(!(iter_ind1==ind1.end() || iter_ind2==ind2.end())) {
-        if (*iter_ind1 == *iter_ind2) {
+    while(!(iter_ind1==ind1.end() || iter_ind2==ind2.end()))
+    {
+        if (*iter_ind1 == *iter_ind2)
+        {
             result.push_back(*iter_ind1);
             ++iter_ind1;
             ++iter_ind2;
         }
-        else {
-            if (*iter_ind1 < *iter_ind2) {
+        else
+        {
+            if (*iter_ind1 < *iter_ind2)
+            {
                 ++iter_ind1;
             }
-            else {
+            else
+            {
                 ++iter_ind2;
             }
         }
@@ -74,27 +82,35 @@ IndexCollection operator||(IndexCollection const& coll1, IndexCollection const& 
     std::vector<plint>::const_iterator iter_ind1 = ind1.begin();
     std::vector<plint>::const_iterator iter_ind2 = ind2.begin();
 
-    while(!(iter_ind1==ind1.end() && iter_ind2==ind2.end())) {
-        if (iter_ind1==ind1.end()) {
+    while(!(iter_ind1==ind1.end() && iter_ind2==ind2.end()))
+    {
+        if (iter_ind1==ind1.end())
+        {
             result.push_back(*iter_ind2);
             ++iter_ind2;
         }
-        else if (iter_ind2==ind2.end()) {
+        else if (iter_ind2==ind2.end())
+        {
             result.push_back(*iter_ind1);
             ++iter_ind1;
         }
-        else {
-            if (*iter_ind1==*iter_ind2) {
+        else
+        {
+            if (*iter_ind1==*iter_ind2)
+            {
                 result.push_back(*iter_ind1);
                 ++iter_ind1;
                 ++iter_ind2;
             }
-            else {
-                if (*iter_ind1<*iter_ind2) {
+            else
+            {
+                if (*iter_ind1<*iter_ind2)
+                {
                     result.push_back(*iter_ind1);
                     ++iter_ind1;
                 }
-                else {
+                else
+                {
                     result.push_back(*iter_ind2);
                     ++iter_ind2;
                 }
@@ -104,24 +120,27 @@ IndexCollection operator||(IndexCollection const& coll1, IndexCollection const& 
     return IndexCollection(result);
 }
 
-IndexCollection operator!(IndexCollection const& coll) {
+IndexCollection operator!(IndexCollection const& coll)
+{
     std::vector<plint> result;
     std::vector<plint> const& ind = coll.get();
 
     std::vector<plint>::const_iterator iter_ind = ind.begin();
 
     plint negative_ind = 0;
-    for (; iter_ind != ind.end(); ++iter_ind) {
-        while (negative_ind < *iter_ind) {
+    for (; iter_ind != ind.end(); ++iter_ind)
+    {
+        while (negative_ind < *iter_ind)
+        {
             result.push_back(negative_ind++);
         }
         ++negative_ind;
     }
     return IndexCollection(result);
 }
-std::vector<plint> findIndexes(IndexCollection const& collection) {
+std::vector<plint> findIndexes(IndexCollection const& collection)
+{
     return collection.get();
 }
 
 }  // namespace plb
-

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -59,26 +59,31 @@ static std::string outDir("./tmp/");
  *  always be preferred over explicit space loops in end-user codes.
  */
 template<typename T, template<typename U> class Descriptor>
-class TwoLayerInitializer : public OneCellIndexedWithRandFunctional3D<T,Descriptor> {
+class TwoLayerInitializer : public OneCellIndexedWithRandFunctional3D<T,Descriptor>
+{
 public:
     TwoLayerInitializer(plint h_, bool topLayer_)
         : h(h_),
           topLayer(topLayer_)
     { }
-    TwoLayerInitializer<T,Descriptor>* clone() const {
+    TwoLayerInitializer<T,Descriptor>* clone() const
+    {
         return new TwoLayerInitializer<T,Descriptor>(*this);
     }
-    virtual void execute(plint iX, plint iY, plint iZ, T rand_val, Cell<T,Descriptor>& cell) const {
+    virtual void execute(plint iX, plint iY, plint iZ, T rand_val, Cell<T,Descriptor>& cell) const
+    {
         T densityFluctuations = 0.0; //1.e-2;
         T almostNoFluid       = 1.e-4;
         Array<T,3> zeroVelocity ((T) 0., (T) 0., (T) 0.);
 
         T rho = (T)1;
         // Add a random perturbation to the initial condition (not always necessary).
-        if ( (topLayer && iY>h) || (!topLayer && iY <= h) ) {
+        if ( (topLayer && iY>h) || (!topLayer && iY <= h) )
+        {
             rho += rand_val * densityFluctuations;
         }
-        else {
+        else
+        {
             rho = almostNoFluid;
         }
 
@@ -91,7 +96,8 @@ private:
 
 // Geometry of the mixer domain (not the impeller).
 template<typename T>
-class MixerShapeDomain3D : public DomainFunctional3D {
+class MixerShapeDomain3D : public DomainFunctional3D
+{
 public:
     MixerShapeDomain3D(plint cx_, plint cy_, plint radius)
         : cx(cx_),
@@ -102,7 +108,8 @@ public:
     {
         return iX <= cx && util::sqr(iX-cx) + util::sqr(iY-cy) > radiusSqr;
     }
-    virtual MixerShapeDomain3D<T>* clone() const {
+    virtual MixerShapeDomain3D<T>* clone() const
+    {
         return new MixerShapeDomain3D<T>(*this);
     }
 private:
@@ -118,7 +125,7 @@ void mixerSetup( MultiBlockLattice3D<T, DESCRIPTOR>& fluid1,
     plint nx = fluid1.getNx();
     plint ny = fluid1.getNy();
     plint nz = fluid1.getNz();
-   
+
     // Initialize top layer.
     applyIndexed(fluid1, Box3D(0, nx-1, 0, ny-1, 0, nz-1),
                  new TwoLayerInitializer<T,DESCRIPTOR>(3*ny/4, true) );
@@ -155,13 +162,14 @@ T getAngularVelocity(T t)
 }
 
 // This class computes the velocity of the immersed surface at every
-// time step. The immersed surface has a defined position given by 
+// time step. The immersed surface has a defined position given by
 // an angle of the form:
 //   phi = angularVelocity * t
-// So its velocity is given by the cross product between its 
+// So its velocity is given by the cross product between its
 // angular velocity (time derivative of the angle) and its position.
 // The axis of rotation is the z-axis.
-class SurfaceVelocity {
+class SurfaceVelocity
+{
 public:
     SurfaceVelocity(T t_)
         : t(t_)
@@ -211,30 +219,30 @@ void writeVTK(MultiBlockLattice3D<T, DESCRIPTOR>& fluid1,
 
     {
         VtkImageOutput3D<T> vtkOut(createFileName("slice_x_", iT, 6), 1.0);
-        std::unique_ptr<MultiScalarField3D<T> > rho1 = computeDensity(fluid1, box_x);
-        std::unique_ptr<MultiScalarField3D<T> > rho2 = computeDensity(fluid2, box_x);
+        std::auto_ptr<MultiScalarField3D<T> > rho1 = computeDensity(fluid1, box_x);
+        std::auto_ptr<MultiScalarField3D<T> > rho2 = computeDensity(fluid2, box_x);
         vtkOut.writeData<float>(*rho1, "rho1", 1.0);
         vtkOut.writeData<float>(*rho2, "rho2", 1.0);
     }
     {
         VtkImageOutput3D<T> vtkOut(createFileName("slice_y_", iT, 6), 1.0);
-        std::unique_ptr<MultiScalarField3D<T> > rho1 = computeDensity(fluid1, box_y);
-        std::unique_ptr<MultiScalarField3D<T> > rho2 = computeDensity(fluid2, box_y);
+        std::auto_ptr<MultiScalarField3D<T> > rho1 = computeDensity(fluid1, box_y);
+        std::auto_ptr<MultiScalarField3D<T> > rho2 = computeDensity(fluid2, box_y);
         vtkOut.writeData<float>(*rho1, "rho1", 1.0);
         vtkOut.writeData<float>(*rho2, "rho2", 1.0);
     }
     {
         VtkImageOutput3D<T> vtkOut(createFileName("slice_z_", iT, 6), 1.0);
-        std::unique_ptr<MultiScalarField3D<T> > rho1 = computeDensity(fluid1, box_z);
-        std::unique_ptr<MultiScalarField3D<T> > rho2 = computeDensity(fluid2, box_z);
+        std::auto_ptr<MultiScalarField3D<T> > rho1 = computeDensity(fluid1, box_z);
+        std::auto_ptr<MultiScalarField3D<T> > rho2 = computeDensity(fluid2, box_z);
         vtkOut.writeData<float>(*rho1, "rho1", 1.0);
         vtkOut.writeData<float>(*rho2, "rho2", 1.0);
     }
 
     {
         VtkImageOutput3D<T> vtkOut(createFileName("full_domain_", iT, 6), 1.0);
-        std::unique_ptr<MultiScalarField3D<T> > rho1 = computeDensity(fluid1);
-        std::unique_ptr<MultiScalarField3D<T> > rho2 = computeDensity(fluid2);
+        std::auto_ptr<MultiScalarField3D<T> > rho1 = computeDensity(fluid1);
+        std::auto_ptr<MultiScalarField3D<T> > rho2 = computeDensity(fluid2);
         vtkOut.writeData<float>(*rho1, "rho1", 1.0);
         vtkOut.writeData<float>(*rho2, "rho2", 1.0);
     }
@@ -259,7 +267,7 @@ int main(int argc, char *argv[])
     plbInit(&argc, &argv);
     global::directories().setOutputDir(outDir);
     srand(global::mpi().getRank());
-    
+
     const T omega1 = 1.0;
     const T omega2 = 1.0;
     const plint nx   = 75;
@@ -312,7 +320,7 @@ int main(int argc, char *argv[])
     blocksFluid2.push_back(rhoBar2);
     blocksFluid2.push_back(j2);
     integrateProcessingFunctional(new ExternalRhoJcollideAndStream3D<T,DESCRIPTOR>(), fluid2.getBoundingBox(), blocksFluid2, 0);
-    
+
     // Store a pointer to all blocks (six in the present application) in a vector to
     //   create the Shan/Chen coupling term. fluid1 being at the first place
     //   in the vector, the coupling term is going to be executed at the end of the call
@@ -324,7 +332,7 @@ int main(int argc, char *argv[])
     blocks.push_back(&fluid2);
     blocks.push_back(rhoBar2);
     blocks.push_back(j2);
-    
+
     // The argument "constOmegaValues" to the Shan/Chen processor is optional,
     //   and is used for efficiency reasons only. It tells the data processor
     //   that the relaxation times are constant, and that their inverse must be
@@ -334,9 +342,9 @@ int main(int argc, char *argv[])
     constOmegaValues.push_back(omega2);
     plint processorLevel = 1;
     integrateProcessingFunctional (
-            new ShanChenExternalMultiComponentProcessor3D<T,DESCRIPTOR>(G,constOmegaValues),
-            fluid1.getBoundingBox().enlarge(-wallThickness),
-            blocks, processorLevel );
+        new ShanChenExternalMultiComponentProcessor3D<T,DESCRIPTOR>(G,constOmegaValues),
+        fluid1.getBoundingBox().enlarge(-wallThickness),
+        blocks, processorLevel );
 
     mixerSetup(fluid1, fluid2, force);
 
@@ -359,12 +367,13 @@ int main(int argc, char *argv[])
     rectangleCenter = Array<T,3>((T) 0.5 * (T) (nx - 1), (T) 0.5 * (T) (ny - 1), (T) 0.5 * (T) (nz - 1));
     Array<T,3> rectangleNormal((T) 0, (T) 1, (T) 0);
     TriangleSet<T> rectangleTriangleSet = constructGenericRectangle<T>(rectangleLx, rectangleLy,
-            rectangleNx, rectangleNy, rectangleCenter, rectangleNormal);
+                                          rectangleNx, rectangleNy, rectangleCenter, rectangleNormal);
 
     DEFscaledMesh<T> *rectangleDef = new DEFscaledMesh<T>(rectangleTriangleSet, 0, 0, 0, Dot3D(0, 0, 0));
     pcout << "The rectangle has " << rectangleDef->getMesh().getNumVertices() << " vertices and " <<
-        rectangleDef->getMesh().getNumTriangles() << " triangles." << std::endl;
-    for (pluint iVertex = 0; iVertex < (pluint) rectangleDef->getMesh().getNumVertices(); iVertex++) {
+          rectangleDef->getMesh().getNumTriangles() << " triangles." << std::endl;
+    for (pluint iVertex = 0; iVertex < (pluint) rectangleDef->getMesh().getNumVertices(); iVertex++)
+    {
         vertices.push_back(rectangleDef->getMesh().getVertex(iVertex));
         areas.push_back(rectangleDef->getMesh().computeVertexArea(iVertex));
     }
@@ -376,15 +385,17 @@ int main(int argc, char *argv[])
     // Initialization.
 
     applyProcessingFunctional (
-            new ShanChenExternalMultiComponentProcessor3D<T,DESCRIPTOR>(G,constOmegaValues),
-            fluid1.getBoundingBox().enlarge(-wallThickness), blocks );
+        new ShanChenExternalMultiComponentProcessor3D<T,DESCRIPTOR>(G,constOmegaValues),
+        fluid1.getBoundingBox().enlarge(-wallThickness), blocks );
 
     // Start of iterations.
-	
+
     pcout << "Starting simulation" << endl;
     // Main loop over time iterations.
-    for (plint iT=0; iT<maxIter; ++iT) {
-        if (iT%saveIter==0) {
+    for (plint iT=0; iT<maxIter; ++iT)
+    {
+        if (iT%saveIter==0)
+        {
             writePPM(fluid1, fluid2, iT);
             writeVTK(fluid1, fluid2, iT);
             writeSTL(rectangleTriangleSet, iT);
@@ -405,7 +416,8 @@ int main(int argc, char *argv[])
         //   before the start of the main time loop.
         fluid1.executeInternalProcessors();
 
-        if (iT%statIter==0) {
+        if (iT%statIter==0)
+        {
             pcout << "At iteration " << iT << ": Average energy fluid one = "
                   << computeAverageEnergy<T>(fluid1);
             pcout << ", average energy fluid two = "
@@ -421,7 +433,8 @@ int main(int argc, char *argv[])
         // The angle of rotation is given by a function of the form:
         //   phi = angularVelocity * t
         // The rotation axis is the z-axis.
-        for (plint iVertex = 0; iVertex < (plint) vertices.size(); iVertex++) {
+        for (plint iVertex = 0; iVertex < (plint) vertices.size(); iVertex++)
+        {
             T x = vertices[iVertex][0] - rectangleCenter[0];
             T y = vertices[iVertex][1] - rectangleCenter[1];
             T dphi = getAngle(nextTime) - getAngle(currentTime);
@@ -434,13 +447,15 @@ int main(int argc, char *argv[])
         // Instantiate the immersed wall data and performed the immersed boundary iterations.
         instantiateImmersedWallData(vertices, areas, container);
         plint ibIter = 6;
-        for (plint i = 0; i < ibIter; i++) {
+        for (plint i = 0; i < ibIter; i++)
+        {
             inamuroIteration(SurfaceVelocity(nextTime),
-                    *rhoBar1, *j1, container, (T) 1.0 / omega1, incompressibleModel1);
+                             *rhoBar1, *j1, container, (T) 1.0 / omega1, incompressibleModel1);
         }
-        for (plint i = 0; i < ibIter; i++) {
+        for (plint i = 0; i < ibIter; i++)
+        {
             inamuroIteration(SurfaceVelocity(nextTime),
-                    *rhoBar2, *j2, container, (T) 1.0 / omega2, incompressibleModel2);
+                             *rhoBar2, *j2, container, (T) 1.0 / omega2, incompressibleModel2);
         }
     }
 

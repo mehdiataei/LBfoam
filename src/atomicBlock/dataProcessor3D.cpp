@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,7 +29,8 @@
 #include "atomicBlock/dataProcessor3D.h"
 #include "core/util.h"
 
-namespace plb {
+namespace plb
+{
 
 ////////////////////// Class DataProcessor3D /////////////////
 
@@ -48,21 +49,24 @@ namespace plb {
  *  Still, LatticeProcessors are much easier to write when there's only
  *  one method to override, so we'll let it be this way.
  */
-plint DataProcessor3D::extent() const {
+plint DataProcessor3D::extent() const
+{
     return 1;
 }
 
 /** By default, this method assumes a symmetric neighborhood relation
  *  and refers to the non-directed version of extent().
  */
-plint DataProcessor3D::extent(int direction) const {
+plint DataProcessor3D::extent(int direction) const
+{
     return extent();
 }
 
 /** Return -1 as default to help transition period as some
  *  data processors have no ID.
  **/
-int DataProcessor3D::getStaticId() const {
+int DataProcessor3D::getStaticId() const
+{
     return -1;
 }
 
@@ -86,11 +90,13 @@ void DataProcessorGenerator3D::rescale(double dxScale_, double dtScale_)
 void DataProcessorGenerator3D::setscale(int dxScale_, int dtScale_)
 { }
 
-void DataProcessorGenerator3D::getModificationPattern(std::vector<bool>& isWritten) const {
+void DataProcessorGenerator3D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     std::vector<modif::ModifT> modified(isWritten.size());
     getTypeOfModification(modified);
     PLB_ASSERT(modified.size()==isWritten.size());
-    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock)
+    {
         isWritten[iBlock] = modified[iBlock]==modif::nothing ? false:true;
     }
 }
@@ -98,7 +104,8 @@ void DataProcessorGenerator3D::getModificationPattern(std::vector<bool>& isWritt
 /** Return -1 as default to help transition period as some
  *  data processors have no ID.
  **/
-int DataProcessorGenerator3D::getStaticId() const {
+int DataProcessorGenerator3D::getStaticId() const
+{
     return -1;
 }
 
@@ -112,34 +119,42 @@ BoxedDataProcessorGenerator3D::BoxedDataProcessorGenerator3D(Box3D domain_)
     : domain(domain_)
 { }
 
-void BoxedDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ) {
+void BoxedDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ)
+{
     domain = domain.shift(deltaX, deltaY, deltaZ);
 }
 
-void BoxedDataProcessorGenerator3D::multiply(plint scale) {
+void BoxedDataProcessorGenerator3D::multiply(plint scale)
+{
     domain = domain.multiply(scale);
 }
 
-void BoxedDataProcessorGenerator3D::divide(plint scale) {
+void BoxedDataProcessorGenerator3D::divide(plint scale)
+{
     domain = domain.divide(scale);
 }
 
-bool BoxedDataProcessorGenerator3D::extract(Box3D subDomain) {
+bool BoxedDataProcessorGenerator3D::extract(Box3D subDomain)
+{
     Box3D intersection;
-    if (intersect(domain, subDomain, intersection)) {
+    if (intersect(domain, subDomain, intersection))
+    {
         domain = intersection;
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-Box3D BoxedDataProcessorGenerator3D::getDomain() const {
+Box3D BoxedDataProcessorGenerator3D::getDomain() const
+{
     return domain;
 }
 
-void BoxedDataProcessorGenerator3D::serialize(Box3D& domain_, std::string& data) const {
+void BoxedDataProcessorGenerator3D::serialize(Box3D& domain_, std::string& data) const
+{
     domain_ = domain;
 }
 
@@ -149,47 +164,60 @@ MultiBoxedDataProcessorGenerator3D::MultiBoxedDataProcessorGenerator3D(std::vect
     : domains(domains_)
 { }
 
-void MultiBoxedDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ) {
-    for (pluint i=0; i<domains.size(); ++i) {
+void MultiBoxedDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ)
+{
+    for (pluint i=0; i<domains.size(); ++i)
+    {
         domains[i] = domains[i].shift(deltaX, deltaY, deltaZ);
     }
 }
 
-void MultiBoxedDataProcessorGenerator3D::multiply(plint scale) {
-    for (pluint i=0; i<domains.size(); ++i) {
+void MultiBoxedDataProcessorGenerator3D::multiply(plint scale)
+{
+    for (pluint i=0; i<domains.size(); ++i)
+    {
         domains[i] = domains[i].multiply(scale);
     }
 }
 
-void MultiBoxedDataProcessorGenerator3D::divide(plint scale) {
-    for (pluint i=0; i<domains.size(); ++i) {
+void MultiBoxedDataProcessorGenerator3D::divide(plint scale)
+{
+    for (pluint i=0; i<domains.size(); ++i)
+    {
         domains[i] = domains[i].divide(scale);
     }
 }
 
-bool MultiBoxedDataProcessorGenerator3D::extract(Box3D subDomain) {
+bool MultiBoxedDataProcessorGenerator3D::extract(Box3D subDomain)
+{
     std::vector<Box3D> intersections;
-    for (pluint i=0; i<domains.size(); ++i) {
+    for (pluint i=0; i<domains.size(); ++i)
+    {
         Box3D intersection;
-        if (intersect(domains[i], subDomain, intersection)) {
+        if (intersect(domains[i], subDomain, intersection))
+        {
             intersections.push_back(intersection);
         }
     }
-    if (intersections.empty()) {
+    if (intersections.empty())
+    {
         return false;
     }
-    else {
+    else
+    {
         intersections.swap(domains);
         return true;
     }
 
 }
 
-std::vector<Box3D> const& MultiBoxedDataProcessorGenerator3D::getDomains() const {
+std::vector<Box3D> const& MultiBoxedDataProcessorGenerator3D::getDomains() const
+{
     return domains;
 }
 
-void MultiBoxedDataProcessorGenerator3D::serialize(Box3D& domain_, std::string& data) const {
+void MultiBoxedDataProcessorGenerator3D::serialize(Box3D& domain_, std::string& data) const
+{
 }
 
 ////////////////////// Class ReductiveDataProcessorGenerator3D /////////////////
@@ -232,31 +260,37 @@ void ReductiveDataProcessorGenerator3D::setscale(int dxScale_, int dtScale_)
     dtScale = dtScale_;
 }
 
-int ReductiveDataProcessorGenerator3D::getDxScale() const {
+int ReductiveDataProcessorGenerator3D::getDxScale() const
+{
     return dxScale;
 }
 
-int ReductiveDataProcessorGenerator3D::getDtScale() const {
+int ReductiveDataProcessorGenerator3D::getDtScale() const
+{
     return dtScale;
 }
 
 /** Default implementation: constant dimensions.
  **/
-void ReductiveDataProcessorGenerator3D::getDimensionsX(std::vector<int>& dimensions) const {
+void ReductiveDataProcessorGenerator3D::getDimensionsX(std::vector<int>& dimensions) const
+{
     dimensions.clear();
 }
 
 /** Default implementation: constant dimensions.
  **/
-void ReductiveDataProcessorGenerator3D::getDimensionsT(std::vector<int>& dimensions) const {
+void ReductiveDataProcessorGenerator3D::getDimensionsT(std::vector<int>& dimensions) const
+{
     dimensions.clear();
 }
 
-void ReductiveDataProcessorGenerator3D::getModificationPattern(std::vector<bool>& isWritten) const {
+void ReductiveDataProcessorGenerator3D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     std::vector<modif::ModifT> modified(isWritten.size());
     getTypeOfModification(modified);
     PLB_ASSERT(modified.size()==isWritten.size());
-    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock)
+    {
         isWritten[iBlock] = modified[iBlock]==modif::nothing ? false:true;
     }
 }
@@ -270,34 +304,42 @@ BoxedReductiveDataProcessorGenerator3D::BoxedReductiveDataProcessorGenerator3D(B
     : domain(domain_)
 { }
 
-void BoxedReductiveDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ) {
+void BoxedReductiveDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ)
+{
     domain = domain.shift(deltaX, deltaY, deltaZ);
 }
 
-void BoxedReductiveDataProcessorGenerator3D::multiply(plint scale) {
+void BoxedReductiveDataProcessorGenerator3D::multiply(plint scale)
+{
     domain = domain.multiply(scale);
 }
 
-void BoxedReductiveDataProcessorGenerator3D::divide(plint scale) {
+void BoxedReductiveDataProcessorGenerator3D::divide(plint scale)
+{
     domain = domain.divide(scale);
 }
 
-bool BoxedReductiveDataProcessorGenerator3D::extract(Box3D subDomain) {
+bool BoxedReductiveDataProcessorGenerator3D::extract(Box3D subDomain)
+{
     Box3D intersection;
-    if (intersect(domain, subDomain, intersection)) {
+    if (intersect(domain, subDomain, intersection))
+    {
         domain = intersection;
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-Box3D BoxedReductiveDataProcessorGenerator3D::getDomain() const {
+Box3D BoxedReductiveDataProcessorGenerator3D::getDomain() const
+{
     return domain;
 }
 
-void BoxedReductiveDataProcessorGenerator3D::serialize(Box3D& domain_, std::string& data) const {
+void BoxedReductiveDataProcessorGenerator3D::serialize(Box3D& domain_, std::string& data) const
+{
     domain_ = domain;
 }
 
@@ -305,119 +347,145 @@ void BoxedReductiveDataProcessorGenerator3D::serialize(Box3D& domain_, std::stri
 ////////////////////// Class MultiBoxedReductiveDataProcessorGenerator3D /////////////////
 
 MultiBoxedReductiveDataProcessorGenerator3D::MultiBoxedReductiveDataProcessorGenerator3D (
-        std::vector<Box3D> const& domains_)
+    std::vector<Box3D> const& domains_)
     : domains(domains_)
 { }
 
-void MultiBoxedReductiveDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ) {
-    for (pluint i=0; i<domains.size(); ++i) {
+void MultiBoxedReductiveDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ)
+{
+    for (pluint i=0; i<domains.size(); ++i)
+    {
         domains[i] = domains[i].shift(deltaX, deltaY, deltaZ);
     }
 }
 
-void MultiBoxedReductiveDataProcessorGenerator3D::multiply(plint scale) {
-    for (pluint i=0; i<domains.size(); ++i) {
+void MultiBoxedReductiveDataProcessorGenerator3D::multiply(plint scale)
+{
+    for (pluint i=0; i<domains.size(); ++i)
+    {
         domains[i] = domains[i].multiply(scale);
     }
 }
 
-void MultiBoxedReductiveDataProcessorGenerator3D::divide(plint scale) {
-    for (pluint i=0; i<domains.size(); ++i) {
+void MultiBoxedReductiveDataProcessorGenerator3D::divide(plint scale)
+{
+    for (pluint i=0; i<domains.size(); ++i)
+    {
         domains[i] = domains[i].divide(scale);
     }
 }
 
-bool MultiBoxedReductiveDataProcessorGenerator3D::extract(Box3D subDomain) {
+bool MultiBoxedReductiveDataProcessorGenerator3D::extract(Box3D subDomain)
+{
     std::vector<Box3D> intersections;
-    for (pluint i=0; i<domains.size(); ++i) {
+    for (pluint i=0; i<domains.size(); ++i)
+    {
         Box3D intersection;
-        if (intersect(domains[i], subDomain, intersection)) {
+        if (intersect(domains[i], subDomain, intersection))
+        {
             intersections.push_back(intersection);
         }
     }
-    if (intersections.empty()) {
+    if (intersections.empty())
+    {
         return false;
     }
-    else {
+    else
+    {
         intersections.swap(domains);
         return true;
     }
 }
 
-std::vector<Box3D> const& MultiBoxedReductiveDataProcessorGenerator3D::getDomains() const {
+std::vector<Box3D> const& MultiBoxedReductiveDataProcessorGenerator3D::getDomains() const
+{
     return domains;
 }
 
-void MultiBoxedReductiveDataProcessorGenerator3D::serialize(Box3D& domain_, std::string& data) const {
+void MultiBoxedReductiveDataProcessorGenerator3D::serialize(Box3D& domain_, std::string& data) const
+{
 }
 
 ////////////////////// Class DottedDataProcessorGenerator3D /////////////////
 
 DottedDataProcessorGenerator3D::DottedDataProcessorGenerator3D (
-        DotList3D const& dots_)
+    DotList3D const& dots_)
     : dots(dots_)
 { }
 
-void DottedDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ) {
+void DottedDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ)
+{
     dots = dots.shift(deltaX,deltaY,deltaZ);
 }
 
-void DottedDataProcessorGenerator3D::multiply(plint scale) {
+void DottedDataProcessorGenerator3D::multiply(plint scale)
+{
     dots = dots.multiply(scale);
 }
 
-void DottedDataProcessorGenerator3D::divide(plint scale) {
+void DottedDataProcessorGenerator3D::divide(plint scale)
+{
     dots = dots.divide(scale);
 }
 
-bool DottedDataProcessorGenerator3D::extract(Box3D subDomain) {
+bool DottedDataProcessorGenerator3D::extract(Box3D subDomain)
+{
     DotList3D intersection;
-    if (intersect(subDomain, dots, intersection)) {
+    if (intersect(subDomain, dots, intersection))
+    {
         dots = intersection;
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-DotList3D const& DottedDataProcessorGenerator3D::getDotList() const {
+DotList3D const& DottedDataProcessorGenerator3D::getDotList() const
+{
     return dots;
 }
 
 ////////////////////// Class DottedReductiveDataProcessorGenerator3D /////////////////
 
 DottedReductiveDataProcessorGenerator3D::DottedReductiveDataProcessorGenerator3D (
-        DotList3D const& dots_)
+    DotList3D const& dots_)
     : dots(dots_)
 { }
 
-void DottedReductiveDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ) {
+void DottedReductiveDataProcessorGenerator3D::shift(plint deltaX, plint deltaY, plint deltaZ)
+{
     dots = dots.shift(deltaX,deltaY,deltaZ);
 }
 
-void DottedReductiveDataProcessorGenerator3D::multiply(plint scale) {
+void DottedReductiveDataProcessorGenerator3D::multiply(plint scale)
+{
     dots = dots.multiply(scale);
 }
 
-void DottedReductiveDataProcessorGenerator3D::divide(plint scale) {
+void DottedReductiveDataProcessorGenerator3D::divide(plint scale)
+{
     dots = dots.divide(scale);
 }
 
-bool DottedReductiveDataProcessorGenerator3D::extract(Box3D subDomain) {
+bool DottedReductiveDataProcessorGenerator3D::extract(Box3D subDomain)
+{
     DotList3D intersection;
-    if (intersect(subDomain, dots, intersection)) {
+    if (intersect(subDomain, dots, intersection))
+    {
         dots = intersection;
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-DotList3D const& DottedReductiveDataProcessorGenerator3D::getDotList() const {
+DotList3D const& DottedReductiveDataProcessorGenerator3D::getDotList() const
+{
     return dots;
 }
 
 }  // namespace plb
-

@@ -51,7 +51,7 @@ namespace plb {
 
 template<typename T, template <typename U> class Descriptor,
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > exportLatticeToSingleGridLevel(
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > exportLatticeToSingleGridLevel(
         MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, plint exportLevel,
         Box3D const& referenceDomain, plint levelOfReferenceDomain) 
 {
@@ -90,7 +90,7 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > exportLatticeToSingleGridLev
     }
     */
 
-    std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > singleGridLattice = generateMultiBlockLattice(
+    std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > singleGridLattice = generateMultiBlockLattice(
             domainAtExportLevel, lattices.getLevel(exportLevel).getBackgroundDynamics().clone(),
             lattices.getLevel(exportLevel).getMultiBlockManagement().getEnvelopeWidth());
         
@@ -117,7 +117,7 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > exportLatticeToSingleGridLev
         plint dxScale = level - exportLevel;
         plint dtScale = level - exportLevel;
 
-        std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > subLattice;
+        std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > subLattice;
         if (dxScale != 0) {
             subLattice = generateMultiBlockLattice(bbTmp, lattices.getLevel(level).getBackgroundDynamics().clone(),
                     lattices.getLevel(level).getMultiBlockManagement().getEnvelopeWidth());
@@ -128,7 +128,7 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > exportLatticeToSingleGridLev
             // If dxScale > 0 (<=> level > exportLevel, the export level is lower than the current level)
             // then one needs to coarsen the lattice by a factor 2^(level-exportLevel).
 
-            std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > gridLevel = 
+            std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > gridLevel = 
                 coarsen(*subLattice, dxScale, dtScale, lattices.getLevel(level).getBackgroundDynamics().clone());
             
             // The values of the coarsened lattice are copied in the single grid but only in the
@@ -139,7 +139,7 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > exportLatticeToSingleGridLev
         } else if (dxScale < 0) {
             // If dxScale < 0 (<=>  level < exportLevel, the export level is lower than the current level)
             // then one needs to refine the lattice by a factor 2^(exportLevel-level).
-            std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > gridLevel =
+            std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > gridLevel =
                 linearRefine(*subLattice, dxScale, dtScale, lattices.getLevel(level).getBackgroundDynamics().clone());
                 
             // The values of the refined lattice are copied in the single grid but only in the

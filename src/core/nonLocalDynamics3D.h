@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,16 +29,18 @@
 #include "core/dynamics.h"
 #include "atomicBlock/blockLattice3D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-class NonLocalDynamics3D : public CompositeDynamics<T,Descriptor> {
+class NonLocalDynamics3D : public CompositeDynamics<T,Descriptor>
+{
 public:
-    NonLocalDynamics3D(Dynamics<T,Descriptor>* baseDynamics_);
-    virtual bool isNonLocal() const;
-    virtual void prepareCollision(Cell<T,Descriptor>& cell);
+	NonLocalDynamics3D(Dynamics<T,Descriptor>* baseDynamics_);
+	virtual bool isNonLocal() const;
+	virtual void prepareCollision(Cell<T,Descriptor>& cell);
 
-    virtual void nonLocalAction(plint iX, plint iY, plint iZ, BlockLattice3D<T,Descriptor>& lattice) =0;
+	virtual void nonLocalAction(plint iX, plint iY, plint iZ, BlockLattice3D<T,Descriptor>& lattice) =0;
 };
 
 /*
@@ -56,4 +58,3 @@ public:
 }  // namespace plb
 
 #endif  // NON_LOCAL_DYNAMICS_3D_H
-

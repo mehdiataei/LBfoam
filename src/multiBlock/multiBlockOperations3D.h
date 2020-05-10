@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,7 +33,8 @@
 #include "core/geometry3D.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 class MultiBlock3D;
 struct DataProcessorGenerator3D;
@@ -75,32 +76,33 @@ void addInternalProcessor( DataProcessorGenerator3D const& generator,
 
 
 template<class OriginalGenerator, class MutableGenerator>
-class MultiProcessing3D {
+class MultiProcessing3D
+{
 public:
-    MultiProcessing3D( OriginalGenerator& generator_,
-                       std::vector<MultiBlock3D*> multiBlocks_ );
-    ~MultiProcessing3D();
-    void extractProcessorsOnFirstBlock(BlockDomain::DomainT appliesTo);
-    void intersectWithRemainingBlocks(BlockDomain::DomainT appliesTo);
-    void subdivideGenerator();
-    void adjustCoordinates();
-    std::vector<MutableGenerator*> const& getRetainedGenerators() const;
-    std::vector<std::vector<plint> > const& getAtomicBlockNumbers() const;
-    void multiBlocksWhichRequireUpdate (
-            std::vector<MultiBlock3D*>& multiBlocksModifiedByProcessor,
-            std::vector<modif::ModifT>& typesOfModification ) const;
-    void updateEnvelopesWhereRequired();
-    std::vector<MutableGenerator*> releaseRetainedGenerators();
+	MultiProcessing3D( OriginalGenerator& generator_,
+	                   std::vector<MultiBlock3D*> multiBlocks_ );
+	~MultiProcessing3D();
+	void extractProcessorsOnFirstBlock(BlockDomain::DomainT appliesTo);
+	void intersectWithRemainingBlocks(BlockDomain::DomainT appliesTo);
+	void subdivideGenerator();
+	void adjustCoordinates();
+	std::vector<MutableGenerator*> const& getRetainedGenerators() const;
+	std::vector<std::vector<plint> > const& getAtomicBlockNumbers() const;
+	void multiBlocksWhichRequireUpdate (
+	    std::vector<MultiBlock3D*>& multiBlocksModifiedByProcessor,
+	    std::vector<modif::ModifT>& typesOfModification ) const;
+	void updateEnvelopesWhereRequired();
+	std::vector<MutableGenerator*> releaseRetainedGenerators();
 private:
-    void extractGeneratorOnBlocks(std::vector<Box3D> const& finalDomains,
-                                  std::vector<std::vector<plint> > const& finalIds,
-                                  plint shiftX=0, plint shiftY=0, plint shiftZ=0);
+	void extractGeneratorOnBlocks(std::vector<Box3D> const& finalDomains,
+	                              std::vector<std::vector<plint> > const& finalIds,
+	                              plint shiftX=0, plint shiftY=0, plint shiftZ=0);
 private:
-    OriginalGenerator&               generator;
-    std::vector<MultiBlock3D*>       multiBlocks;
-    MultiBlock3D*                    firstMultiBlock;
-    std::vector<MutableGenerator*>   retainedGenerators;
-    std::vector<std::vector<plint> > atomicBlockNumbers;
+	OriginalGenerator&               generator;
+	std::vector<MultiBlock3D*>       multiBlocks;
+	MultiBlock3D*                    firstMultiBlock;
+	std::vector<MutableGenerator*>   retainedGenerators;
+	std::vector<std::vector<plint> > atomicBlockNumbers;
 };
 
 

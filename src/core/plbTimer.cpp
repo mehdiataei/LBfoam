@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,9 +32,11 @@
 #include <unistd.h>
 #endif
 
-namespace plb {
+namespace plb
+{
 
-namespace global {
+namespace global
+{
 
 /* ************** Timer ***************************************** */
 
@@ -43,7 +45,8 @@ PlbTimer::PlbTimer()
       isOn(false)
 { }
 
-void PlbTimer::start() {
+void PlbTimer::start()
+{
 #ifdef PLB_MPI_PARALLEL
     startTime = mpi().getTime();
 #else
@@ -58,23 +61,28 @@ void PlbTimer::start() {
     isOn = true;
 }
 
-void PlbTimer::restart() {
+void PlbTimer::restart()
+{
     reset();
     start();
 }
 
-double PlbTimer::stop() {
+double PlbTimer::stop()
+{
     cumulativeTime = getTime();
     isOn = false;
     return cumulativeTime;
 }
 
-void PlbTimer::reset() {
+void PlbTimer::reset()
+{
     cumulativeTime = 0.;
 }
 
-double PlbTimer::getTime() const {
-    if (isOn) {
+double PlbTimer::getTime() const
+{
+    if (isOn)
+    {
 #ifdef PLB_MPI_PARALLEL
         return cumulativeTime + mpi().getTime()-startTime;
 #else
@@ -85,21 +93,24 @@ double PlbTimer::getTime() const {
         return cumulativeTime + endTime-startTime;
 #else
         return cumulativeTime + (double)(clock()-startClock)
-                              / (double)CLOCKS_PER_SEC;
+               / (double)CLOCKS_PER_SEC;
 #endif
 #endif
     }
-    else {
+    else
+    {
         return cumulativeTime;
     }
 }
 
-PlbTimer& timer(std::string nameOfTimer) {
+PlbTimer& timer(std::string nameOfTimer)
+{
     static std::map<std::string, PlbTimer> timerCollection;
     return timerCollection[nameOfTimer];
 }
 
-PlbTimer& plbTimer(std::string nameOfTimer) {
+PlbTimer& plbTimer(std::string nameOfTimer)
+{
     static std::map<std::string, PlbTimer> timerCollection;
     PlbTimer& answer=timerCollection[nameOfTimer];
     return answer;
@@ -111,25 +122,30 @@ PlbCounter::PlbCounter()
     : count(0)
 { }
 
-plint PlbCounter::increment(plint value) {
+plint PlbCounter::increment(plint value)
+{
     count += value;
     return count;
 }
 
-void PlbCounter::reset() {
+void PlbCounter::reset()
+{
     count = 0;
 }
 
-plint PlbCounter::getCount() const {
+plint PlbCounter::getCount() const
+{
     return count;
 }
 
-PlbCounter& counter(std::string nameOfCounter) {
+PlbCounter& counter(std::string nameOfCounter)
+{
     static std::map<std::string, PlbCounter> counterCollection;
     return counterCollection[nameOfCounter];
 }
 
-PlbCounter& plbCounter(std::string nameOfCounter) {
+PlbCounter& plbCounter(std::string nameOfCounter)
+{
     static std::map<std::string, PlbCounter> counterCollection;
     return counterCollection[nameOfCounter];
 }

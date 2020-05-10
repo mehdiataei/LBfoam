@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,18 +35,21 @@
 #include "core/array.h"
 #include "core/util.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-T from_reference(T value, int dimDx, int dimDt, int dxScale, int dtScale) {
-    int exponent = dxScale*dimDx + dtScale*dimDt;
-    return value * util::twoToThePower(exponent);
+T from_reference(T value, int dimDx, int dimDt, int dxScale, int dtScale)
+{
+	int exponent = dxScale*dimDx + dtScale*dimDt;
+	return value * util::twoToThePower(exponent);
 }
 
 template<typename T>
-T to_reference(T value, int dimDx, int dimDt, int dxScale, int dtScale) {
-    int exponent = - dxScale*dimDx - dtScale*dimDt;
-    return value * util::twoToThePower(exponent);
+T to_reference(T value, int dimDx, int dimDt, int dxScale, int dtScale)
+{
+	int exponent = - dxScale*dimDx - dtScale*dimDt;
+	return value * util::twoToThePower(exponent);
 }
 
 class MultiBlockManagement2D;
@@ -57,68 +60,72 @@ struct Box3D;
 
 
 struct MultiScaleManager {
-    virtual ~MultiScaleManager() { }
-    virtual MultiScaleManager* clone() const =0;
+	virtual ~MultiScaleManager() { }
+	virtual MultiScaleManager* clone() const =0;
 
-    virtual Box2D scaleBox(Box2D box, plint nLevel) const =0;
-    virtual Box3D scaleBox(Box3D box, plint nLevel) const =0;
+	virtual Box2D scaleBox(Box2D box, plint nLevel) const =0;
+	virtual Box3D scaleBox(Box3D box, plint nLevel) const =0;
 
-    virtual MultiBlockManagement2D scaleMultiBlockManagement (
-            MultiBlockManagement2D const& multiBlockManagement, plint nLevel ) const =0;
-    virtual MultiBlockManagement3D scaleMultiBlockManagement (
-            MultiBlockManagement3D const& multiBlockManagement, plint nLevel ) const =0;
+	virtual MultiBlockManagement2D scaleMultiBlockManagement (
+	    MultiBlockManagement2D const& multiBlockManagement, plint nLevel ) const =0;
+	virtual MultiBlockManagement3D scaleMultiBlockManagement (
+	    MultiBlockManagement3D const& multiBlockManagement, plint nLevel ) const =0;
 
-    virtual void scaleVelocity(Array<double,2>& u, plint nLevel) const =0;
-    virtual void scaleVelocity(Array<double,3>& u, plint nLevel) const =0;
+	virtual void scaleVelocity(Array<double,2>& u, plint nLevel) const =0;
+	virtual void scaleVelocity(Array<double,3>& u, plint nLevel) const =0;
 
-    virtual double scaleDeltaX(plint nLevel) const =0;
-    virtual double scaleDeltaT(plint nLevel) const =0;
+	virtual double scaleDeltaX(plint nLevel) const =0;
+	virtual double scaleDeltaT(plint nLevel) const =0;
 };
 
-class PowerTwoMultiScaleManager : public MultiScaleManager {
+class PowerTwoMultiScaleManager : public MultiScaleManager
+{
 public:
-    virtual Box2D scaleBox(Box2D box, plint nLevel) const;
-    virtual Box3D scaleBox(Box3D box, plint nLevel) const;
+	virtual Box2D scaleBox(Box2D box, plint nLevel) const;
+	virtual Box3D scaleBox(Box3D box, plint nLevel) const;
 
-    virtual MultiBlockManagement2D scaleMultiBlockManagement (
-            MultiBlockManagement2D const& multiBlockManagement, plint nLevel ) const;
-    virtual MultiBlockManagement3D scaleMultiBlockManagement (
-            MultiBlockManagement3D const& multiBlockManagement, plint nLevel ) const;
+	virtual MultiBlockManagement2D scaleMultiBlockManagement (
+	    MultiBlockManagement2D const& multiBlockManagement, plint nLevel ) const;
+	virtual MultiBlockManagement3D scaleMultiBlockManagement (
+	    MultiBlockManagement3D const& multiBlockManagement, plint nLevel ) const;
 public:
-    static plint twoToTheLevel(plint nLevel);
+	static plint twoToTheLevel(plint nLevel);
 };
 
-class ConvectiveMultiScaleManager : public PowerTwoMultiScaleManager {
+class ConvectiveMultiScaleManager : public PowerTwoMultiScaleManager
+{
 public:
-    virtual ConvectiveMultiScaleManager* clone() const;
-    virtual void scaleVelocity(Array<double,2>& u, plint nLevel) const;
-    virtual void scaleVelocity(Array<double,3>& u, plint nLevel) const;
-    virtual double scaleDeltaX(plint nLevel) const;
-    virtual double scaleDeltaT(plint nLevel) const;
+	virtual ConvectiveMultiScaleManager* clone() const;
+	virtual void scaleVelocity(Array<double,2>& u, plint nLevel) const;
+	virtual void scaleVelocity(Array<double,3>& u, plint nLevel) const;
+	virtual double scaleDeltaX(plint nLevel) const;
+	virtual double scaleDeltaT(plint nLevel) const;
 };
-                                                   
-namespace global {
 
-    class DefaultMultiScaleManager {
-    private:
-        DefaultMultiScaleManager();
-        ~DefaultMultiScaleManager();
-        void set(MultiScaleManager* newManager);
-        MultiScaleManager const& get() const;
-    private:
-        MultiScaleManager* defaultManager;
+namespace global
+{
 
-    friend DefaultMultiScaleManager& accessDefaultMultiScaleManager();
-    friend MultiScaleManager const& getDefaultMultiScaleManager();
-    friend void setDefaultMultiScaleManager(MultiScaleManager* newMultiScaleManager);
+class DefaultMultiScaleManager
+{
+private:
+	DefaultMultiScaleManager();
+	~DefaultMultiScaleManager();
+	void set(MultiScaleManager* newManager);
+	MultiScaleManager const& get() const;
+private:
+	MultiScaleManager* defaultManager;
 
-    };
+	friend DefaultMultiScaleManager& accessDefaultMultiScaleManager();
+	friend MultiScaleManager const& getDefaultMultiScaleManager();
+	friend void setDefaultMultiScaleManager(MultiScaleManager* newMultiScaleManager);
 
-    DefaultMultiScaleManager& accessDefaultMultiScaleManager();
+};
 
-    MultiScaleManager const& getDefaultMultiScaleManager();
+DefaultMultiScaleManager& accessDefaultMultiScaleManager();
 
-    void setDefaultMultiScaleManager(MultiScaleManager* newMultiScaleManager);
+MultiScaleManager const& getDefaultMultiScaleManager();
+
+void setDefaultMultiScaleManager(MultiScaleManager* newMultiScaleManager);
 
 }  // namespace global
 

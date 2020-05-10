@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -23,7 +23,7 @@
 */
 
 /* The breaking dam free surface problem. This code demonstrates the basic usage of the
- * free surface module in Palabos. Surface tension and contact angles are optional. 
+ * free surface module in Palabos. Surface tension and contact angles are optional.
  */
 
 #include "palabos3D.h"
@@ -45,7 +45,7 @@ const T ly = 1.0;
 const T lz = 1.0;
 
 const T rhoEmpty = T(1);
-    
+
 plint writeImagesIter   = 100;
 plint getStatisticsIter = 20;
 
@@ -60,7 +60,8 @@ std::string outDir;
 plint obstacleCenterXYplane, obstacleLength, obstacleWidth, obstacleHeight, beginWaterReservoir, waterReservoirHeight;
 plint waterLevelOne, waterLevelTwo, waterLevelThree, waterLevelFour;
 
-void setupParameters() {
+void setupParameters()
+{
     delta_x = lz / N;
     nx = util::roundToInt(lx / delta_x);
     ny = util::roundToInt(ly / delta_x);
@@ -70,9 +71,9 @@ void setupParameters() {
     T gLB = 9.8 * delta_t * delta_t/delta_x;
     externalForce = Array<T,3>(0., 0., -gLB);
     tau            = (nuPhys*DESCRIPTOR<T>::invCs2*delta_t)/(delta_x*delta_x) + 0.5;
-    omega          = 1./tau;    
+    omega          = 1./tau;
     nuLB           = (tau-0.5)*DESCRIPTOR<T>::cs2; // Viscosity in lattice units.
-    
+
     surfaceTensionLB = rhoEmpty * gLB * N * N / Bo;
 
     obstacleCenterXYplane = util::roundToInt(0.744*N);
@@ -81,7 +82,7 @@ void setupParameters() {
     obstacleHeight        = util::roundToInt(0.161*N);
     beginWaterReservoir   = util::roundToInt((0.744+1.248)*N);
     waterReservoirHeight  = util::roundToInt(0.55*N);
-    
+
     waterLevelOne   = util::roundToInt(0.496*N);
     waterLevelTwo   = util::roundToInt(2.*0.496*N);
     waterLevelThree = util::roundToInt(3.*0.496*N);
@@ -90,7 +91,8 @@ void setupParameters() {
 
 // Specifies the initial condition for the fluid (each cell is assigned the
 // flag "fluid", "empty", or "wall").
-int initialFluidFlags(plint iX, plint iY, plint iZ) {
+int initialFluidFlags(plint iX, plint iY, plint iZ)
+{
     // Place an obstacle on the left end, which is hit by the fluid.
     bool insideObstacle =
         iX >= obstacleCenterXYplane-obstacleWidth/2 &&
@@ -98,15 +100,18 @@ int initialFluidFlags(plint iX, plint iY, plint iZ) {
         iY >= ny/2-obstacleLength/2 &&
         iY <= ny/2+obstacleLength/2 &&
         iZ <= obstacleHeight+1;
-    
-    if (insideObstacle) {
-        return freeSurfaceFlag::wall;
+
+    if (insideObstacle)
+    {
+        return freeSurfaceFlag3D::wall;
     }
-    else if (iX >= beginWaterReservoir && iZ <= waterReservoirHeight) {
-        return freeSurfaceFlag::fluid;
+    else if (iX >= beginWaterReservoir && iZ <= waterReservoirHeight)
+    {
+        return freeSurfaceFlag3D::fluid;
     }
-    else {
-        return freeSurfaceFlag::empty;
+    else
+    {
+        return freeSurfaceFlag3D::empty;
     }
 }
 
@@ -118,11 +123,11 @@ void writeResults(MultiBlockLattice3D<T,DESCRIPTOR>& lattice, MultiScalarField3D
     Box3D slice(0, nx-1, ny/2, ny/2, 0, nz-1);
     ImageWriter<T> imageWriter("leeloo");
     imageWriter.writeScaledPpm(createFileName("u", iT, 6),
-                               *computeVelocityNorm(lattice, slice)); 
+                               *computeVelocityNorm(lattice, slice));
 
     imageWriter.writeScaledPpm(createFileName("rho", iT, 6),
                                *computeDensity(lattice, slice));
-                   
+
     imageWriter.writeScaledPpm(createFileName("volumeFraction", iT, 6), *extractSubDomain(volumeFraction, slice));
 
     // Use a marching-cube algorithm to reconstruct the free surface and write an STL file.
@@ -137,7 +142,8 @@ void writeResults(MultiBlockLattice3D<T,DESCRIPTOR>& lattice, MultiScalarField3D
     vtkOut.writeData<float>(volumeFraction, "vf", 1.);
 }
 
-void writeStatistics(FreeSurfaceFields3D<T,DESCRIPTOR>& fields) {
+void writeStatistics(FreeSurfaceFields3D<T,DESCRIPTOR>& fields)
+{
     pcout << " -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*- " << std::endl;
     T averageMass = freeSurfaceAverageMass<T,DESCRIPTOR>(fields.freeSurfaceArgs, fields.lattice.getBoundingBox());
     pcout << "Average Mass: " << averageMass  << std::endl;
@@ -155,12 +161,14 @@ int main(int argc, char **argv)
 {
     plbInit(&argc, &argv);
     global::directories().setInputDir("./");
-        
-    if (global::argc() != 8) {
+
+    if (global::argc() != 8)
+    {
         pcout << "Error missing some input parameter\n";
     }
 
-    try {
+    try
+    {
         global::argv(1).read(outDir);
         global::directories().setOutputDir(outDir+"/");
 
@@ -171,7 +179,8 @@ int main(int argc, char **argv)
         global::argv(6).read(delta_t);
         global::argv(7).read(maxIter);
     }
-    catch(PlbIOException& except) {
+    catch(PlbIOException& except)
+    {
         pcout << except.what() << std::endl;
         pcout << "The parameters for this program are :\n";
         pcout << "1. Output directory name.\n";
@@ -179,15 +188,15 @@ int main(int argc, char **argv)
         pcout << "3. Bond number (Bo = rho * g * L^2 / gamma).\n";
         pcout << "4. Contact angle (in degrees).\n";
         pcout << "5. number of lattice nodes for lz .\n";
-        pcout << "6. delta_t .\n"; 
+        pcout << "6. delta_t .\n";
         pcout << "7. maxIter .\n";
         pcout << "Reasonable parameters on a desktop computer are: " << (std::string)global::argv(0) << " tmp 1.e-5 100 80.0 40 1.e-3 80000\n";
         pcout << "Reasonable parameters on a parallel machine are: " << (std::string)global::argv(0) << " tmp 1.e-6 100 80.0 100 1.e-4 80000\n";
         exit (EXIT_FAILURE);
     }
-    
+
     setupParameters();
-    
+
     pcout << "delta_t= " << delta_t << std::endl;
     pcout << "delta_x= " << delta_x << std::endl;
     pcout << "delta_t*delta_t/delta_x= " << delta_t*delta_t/delta_x << std::endl;
@@ -196,9 +205,9 @@ int main(int argc, char **argv)
     pcout << "omega= " << omega << std::endl;
     pcout << "kinematic viscosity physical units = " << nuPhys << std::endl;
     pcout << "kinematic viscosity lattice units= " << nuLB << std::endl;
-    
+
     global::timer("initialization").start();
-    
+
 
     SparseBlockStructure3D blockStructure(createRegularDistribution3D(nx, ny, nz));
 
@@ -208,28 +217,30 @@ int main(int argc, char **argv)
     // If surfaceTensionLB is 0, then the surface tension algorithm is deactivated.
     // If contactAngle is less than 0, then the contact angle algorithm is deactivated.
     FreeSurfaceFields3D<T,DESCRIPTOR> fields( blockStructure, dynamics->clone(), rhoEmpty,
-                                              surfaceTensionLB, contactAngle, externalForce );
+            surfaceTensionLB, contactAngle, externalForce );
     //integrateProcessingFunctional(new ShortenBounceBack3D<T,DESCRIPTOR>, fields.lattice.getBoundingBox(), fields.freeSurfaceArgs, 0);
 
     // Set all outer-wall cells to "wall" (here, bulk-cells are also set to "wall", but it
     // doesn't matter, because they are overwritten on the next line).
-    setToConstant(fields.flag, fields.flag.getBoundingBox(), (int)freeSurfaceFlag::wall);
+    setToConstant(fields.flag, fields.flag.getBoundingBox(), (int)freeSurfaceFlag3D::wall);
     // In the bulk (all except outer wall layer), initialize the flags as specified by
     // the function "initialFluidFlags".
     setToFunction(fields.flag, fields.flag.getBoundingBox().enlarge(-1), initialFluidFlags);
-    
+
     fields.defaultInitialize();
 
     pcout << "Time spent for setting up lattices: "
           << global::timer("initialization").stop() << std::endl;
     T lastIterationTime = T();
 
-    for (plint iT = 0; iT <= maxIter; ++iT) {
+    for (plint iT = 0; iT <= maxIter; ++iT)
+    {
         global::timer("iteration").restart();
-        
+
         T sum_of_mass_matrix = T();
         T lost_mass = T();
-        if (iT % getStatisticsIter==0) {
+        if (iT % getStatisticsIter==0)
+        {
             pcout << std::endl;
             pcout << "ITERATION = " << iT << std::endl;
             pcout << "Time of last iteration is " << lastIterationTime << " seconds" << std::endl;
@@ -242,12 +253,13 @@ int main(int argc, char **argv)
             pcout << "Interface cells: " << fields.lattice.getInternalStatistics().getIntSum(0) << std::endl;
         }
 
-        if (iT % writeImagesIter == 0) {
+        if (iT % writeImagesIter == 0)
+        {
             global::timer("images").start();
             writeResults(fields.lattice, fields.volumeFraction, iT);
             pcout << "Total time spent for writing images: "
-                << global::timer("images").stop() << std::endl;
-        }                           
+                  << global::timer("images").stop() << std::endl;
+        }
 
         // This includes the collision-streaming cycle, plus all free-surface operations.
         fields.lattice.executeInternalProcessors();
@@ -257,4 +269,3 @@ int main(int argc, char **argv)
         lastIterationTime = global::timer("iteration").stop();
     }
 }
-

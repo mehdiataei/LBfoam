@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,66 +33,73 @@
 
 #ifdef PLB_MPI_PARALLEL
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class ParallelScalarAccess3D : public MultiScalarAccess3D<T> {
+class ParallelScalarAccess3D : public MultiScalarAccess3D<T>
+{
 public:
-    ParallelScalarAccess3D();
-    virtual T& getDistributedScalar (
-            plint iX, plint iY, plint iZ,
-            MultiBlockManagement3D const& multiBlockManagement,
-            std::map<plint,ScalarField3D<T>*>& fields );
-    virtual T const& getDistributedScalar (
-            plint iX, plint iY, plint iZ,
-            MultiBlockManagement3D const& multiBlockManagement,
-            std::map<plint,ScalarField3D<T>*> const& fields ) const;
-    virtual ParallelScalarAccess3D<T>* clone() const;
+	ParallelScalarAccess3D();
+	virtual T& getDistributedScalar (
+	    plint iX, plint iY, plint iZ,
+	    MultiBlockManagement3D const& multiBlockManagement,
+	    std::map<plint,ScalarField3D<T>*>& fields );
+	virtual T const& getDistributedScalar (
+	    plint iX, plint iY, plint iZ,
+	    MultiBlockManagement3D const& multiBlockManagement,
+	    std::map<plint,ScalarField3D<T>*> const& fields ) const;
+	virtual ParallelScalarAccess3D<T>* clone() const;
 private:
-    mutable plint locatedBlock;
-    mutable T distributedScalar;
+	mutable plint locatedBlock;
+	mutable T distributedScalar;
 };
 
 
 template<typename T, int nDim>
-class ParallelTensorAccess3D : public MultiTensorAccess3D<T,nDim> {
+class ParallelTensorAccess3D : public MultiTensorAccess3D<T,nDim>
+{
 public:
-    ParallelTensorAccess3D();
-    virtual Array<T,nDim>& getDistributedTensor (
-            plint iX, plint iY, plint iZ,
-            MultiBlockManagement3D const& multiBlockManagement,
-            std::map<plint,TensorField3D<T,nDim>*>& fields );
-    virtual Array<T,nDim> const& getDistributedTensor (
-            plint iX, plint iY, plint iZ,
-            MultiBlockManagement3D const& multiBlockManagement,
-            std::map<plint,TensorField3D<T,nDim>*> const& fields ) const;
-    virtual ParallelTensorAccess3D<T,nDim>* clone() const;
+	ParallelTensorAccess3D();
+	virtual Array<T,nDim>& getDistributedTensor (
+	    plint iX, plint iY, plint iZ,
+	    MultiBlockManagement3D const& multiBlockManagement,
+	    std::map<plint,TensorField3D<T,nDim>*>& fields );
+	virtual Array<T,nDim> const& getDistributedTensor (
+	    plint iX, plint iY, plint iZ,
+	    MultiBlockManagement3D const& multiBlockManagement,
+	    std::map<plint,TensorField3D<T,nDim>*> const& fields ) const;
+	virtual ParallelTensorAccess3D<T,nDim>* clone() const;
 private:
-    mutable plint locatedBlock;
-    mutable Array<T,nDim> distributedTensor;
+	mutable plint locatedBlock;
+	mutable Array<T,nDim> distributedTensor;
 };
 
 
 template<typename T>
-class ParallelNTensorAccess3D : public MultiNTensorAccess3D<T> {
+class ParallelNTensorAccess3D : public MultiNTensorAccess3D<T>
+{
 public:
-    ParallelNTensorAccess3D();
-    virtual ~ParallelNTensorAccess3D();
-    ParallelNTensorAccess3D(ParallelNTensorAccess3D<T> const& rhs);
-    virtual T* getDistributedNTensor (
-            plint iX, plint iY, plint iZ,
-            MultiBlockManagement3D const& multiBlockManagement,
-            std::map<plint,NTensorField3D<T>*>& fields );
-    virtual T const* getDistributedNTensor (
-            plint iX, plint iY, plint iZ,
-            MultiBlockManagement3D const& multiBlockManagement,
-            std::map<plint,NTensorField3D<T>*> const& fields ) const;
-    virtual ParallelNTensorAccess3D<T>* clone() const;
+	ParallelNTensorAccess3D();
+	virtual ~ParallelNTensorAccess3D();
+	ParallelNTensorAccess3D(ParallelNTensorAccess3D<T> const& rhs);
+	virtual T* getDistributedNTensor (
+	    plint iX, plint iY, plint iZ,
+	    MultiBlockManagement3D const& multiBlockManagement,
+	    std::map<plint,NTensorField3D<T>*>& fields );
+	virtual T const* getDistributedNTensor (
+	    plint iX, plint iY, plint iZ,
+	    MultiBlockManagement3D const& multiBlockManagement,
+	    std::map<plint,NTensorField3D<T>*> const& fields ) const;
+	virtual ParallelNTensorAccess3D<T>* clone() const;
 private:
-    ParallelNTensorAccess3D<T>& operator=(ParallelNTensorAccess3D<T> const& rhs) { return *this; }
+	ParallelNTensorAccess3D<T>& operator=(ParallelNTensorAccess3D<T> const& rhs)
+	{
+		return *this;
+	}
 private:
-    mutable T* distributedNTensor;
-    mutable plint locatedBlock;
+	mutable T* distributedNTensor;
+	mutable plint locatedBlock;
 };
 
 }

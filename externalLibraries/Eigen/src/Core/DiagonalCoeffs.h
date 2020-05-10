@@ -40,62 +40,67 @@
   * \sa MatrixBase::diagonal()
   */
 template<typename MatrixType>
-struct ei_traits<DiagonalCoeffs<MatrixType> >
-{
-  typedef typename MatrixType::Scalar Scalar;
-  typedef typename ei_nested<MatrixType>::type MatrixTypeNested;
-  typedef typename ei_unref<MatrixTypeNested>::type _MatrixTypeNested;
-  enum {
-    RowsAtCompileTime = int(MatrixType::SizeAtCompileTime) == Dynamic ? Dynamic
-                      : EIGEN_SIZE_MIN(MatrixType::RowsAtCompileTime,
-                                       MatrixType::ColsAtCompileTime),
-    ColsAtCompileTime = 1,
-    MaxRowsAtCompileTime = int(MatrixType::MaxSizeAtCompileTime) == Dynamic ? Dynamic
-                            : EIGEN_SIZE_MIN(MatrixType::MaxRowsAtCompileTime,
-                                             MatrixType::MaxColsAtCompileTime),
-    MaxColsAtCompileTime = 1,
-    Flags = (unsigned int)_MatrixTypeNested::Flags & (HereditaryBits | LinearAccessBit),
-    CoeffReadCost = _MatrixTypeNested::CoeffReadCost
-  };
+struct ei_traits<DiagonalCoeffs<MatrixType> > {
+	typedef typename MatrixType::Scalar Scalar;
+	typedef typename ei_nested<MatrixType>::type MatrixTypeNested;
+	typedef typename ei_unref<MatrixTypeNested>::type _MatrixTypeNested;
+	enum {
+		RowsAtCompileTime = int(MatrixType::SizeAtCompileTime) == Dynamic ? Dynamic
+		                    : EIGEN_SIZE_MIN(MatrixType::RowsAtCompileTime,
+		                                     MatrixType::ColsAtCompileTime),
+		ColsAtCompileTime = 1,
+		MaxRowsAtCompileTime = int(MatrixType::MaxSizeAtCompileTime) == Dynamic ? Dynamic
+		                       : EIGEN_SIZE_MIN(MatrixType::MaxRowsAtCompileTime,
+		                                        MatrixType::MaxColsAtCompileTime),
+		MaxColsAtCompileTime = 1,
+		Flags = (unsigned int)_MatrixTypeNested::Flags & (HereditaryBits | LinearAccessBit),
+		CoeffReadCost = _MatrixTypeNested::CoeffReadCost
+	};
 };
 
 template<typename MatrixType> class DiagonalCoeffs
-   : public MatrixBase<DiagonalCoeffs<MatrixType> >
+	: public MatrixBase<DiagonalCoeffs<MatrixType> >
 {
-  public:
+public:
 
-    EIGEN_GENERIC_PUBLIC_INTERFACE(DiagonalCoeffs)
+	EIGEN_GENERIC_PUBLIC_INTERFACE(DiagonalCoeffs)
 
-    inline DiagonalCoeffs(const MatrixType& matrix) : m_matrix(matrix) {}
+	inline DiagonalCoeffs(const MatrixType& matrix) : m_matrix(matrix) {}
 
-    EIGEN_INHERIT_ASSIGNMENT_OPERATORS(DiagonalCoeffs)
+	EIGEN_INHERIT_ASSIGNMENT_OPERATORS(DiagonalCoeffs)
 
-    inline int rows() const { return std::min(m_matrix.rows(), m_matrix.cols()); }
-    inline int cols() const { return 1; }
+	inline int rows() const
+	{
+		return std::min(m_matrix.rows(), m_matrix.cols());
+	}
+	inline int cols() const
+	{
+		return 1;
+	}
 
-    inline Scalar& coeffRef(int row, int)
-    {
-      return m_matrix.const_cast_derived().coeffRef(row, row);
-    }
+	inline Scalar& coeffRef(int row, int)
+	{
+		return m_matrix.const_cast_derived().coeffRef(row, row);
+	}
 
-    inline const Scalar coeff(int row, int) const
-    {
-      return m_matrix.coeff(row, row);
-    }
+	inline const Scalar coeff(int row, int) const
+	{
+		return m_matrix.coeff(row, row);
+	}
 
-    inline Scalar& coeffRef(int index)
-    {
-      return m_matrix.const_cast_derived().coeffRef(index, index);
-    }
+	inline Scalar& coeffRef(int index)
+	{
+		return m_matrix.const_cast_derived().coeffRef(index, index);
+	}
 
-    inline const Scalar coeff(int index) const
-    {
-      return m_matrix.coeff(index, index);
-    }
+	inline const Scalar coeff(int index) const
+	{
+		return m_matrix.coeff(index, index);
+	}
 
-  protected:
+protected:
 
-    const typename MatrixType::Nested m_matrix;
+	const typename MatrixType::Nested m_matrix;
 };
 
 /** \returns an expression of the main diagonal of the matrix \c *this
@@ -110,7 +115,7 @@ template<typename Derived>
 inline DiagonalCoeffs<Derived>
 MatrixBase<Derived>::diagonal()
 {
-  return DiagonalCoeffs<Derived>(derived());
+	return DiagonalCoeffs<Derived>(derived());
 }
 
 /** This is the const version of diagonal(). */
@@ -118,7 +123,7 @@ template<typename Derived>
 inline const DiagonalCoeffs<Derived>
 MatrixBase<Derived>::diagonal() const
 {
-  return DiagonalCoeffs<Derived>(derived());
+	return DiagonalCoeffs<Derived>(derived());
 }
 
 #endif // EIGEN_DIAGONALCOEFFS_H

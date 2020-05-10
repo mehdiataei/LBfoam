@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,198 +32,200 @@
 #include "boundaryCondition/finiteDifferenceBoundaryProcessor2D.h"
 #include "core/dynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor> class BlockLattice2D;
 template<typename T, template<typename U> class Descriptor> class MultiBlockLattice2D;
 
 template<typename T, template<typename U> class Descriptor>
-class OnLatticeBoundaryCondition2D {
+class OnLatticeBoundaryCondition2D
+{
 public:
-    virtual ~OnLatticeBoundaryCondition2D() { }
-    virtual OnLatticeBoundaryCondition2D<T,Descriptor>* clone() const =0;
+	virtual ~OnLatticeBoundaryCondition2D() { }
+	virtual OnLatticeBoundaryCondition2D<T,Descriptor>* clone() const =0;
 
-    // PART I: Atomic-block version.
-    
-    virtual void addVelocityBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addVelocityBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addVelocityBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addVelocityBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
+	// PART I: Atomic-block version.
 
-    virtual void addPressureBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addPressureBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addPressureBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addPressureBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addVelocityBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addVelocityBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addVelocityBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addVelocityBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
 
-    virtual void addExternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addExternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addExternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addExternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addPressureBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addPressureBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addPressureBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addPressureBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
 
-    virtual void addInternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addInternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addInternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addInternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addExternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addExternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addExternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addExternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
 
-    /// Set velocity/Neumann condition on outer boundaries of the lattice (atomic-block
-    ///   version).
-    void setVelocityConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
-                                                boundary::BcType bcType=boundary::dirichlet );
+	virtual void addInternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addInternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addInternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addInternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
 
-    /// Set velocity/Neumann condition on a sub-domain, on the outer boundaries of
-    ///   the lattice (atomic-block version).
-    /** Attention: this function only has an effect when it is used on the outer surface
-     *  of the atomic-block. For boundaries inside the domain, use
-     *  the method which takes two Box2D arguments.
-     **/
-    void setVelocityConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
-                                                Box2D applicationDomain,
-                                                boundary::BcType bcType=boundary::dirichlet );
+	/// Set velocity/Neumann condition on outer boundaries of the lattice (atomic-block
+	///   version).
+	void setVelocityConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet );
 
-    /// Set velocity/Neumann condition on the block boundaries, but only on places which
-    ///    intersect with the area of applicationDomain (atomic-block version).
-    void setVelocityConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
-                                                Box2D block, Box2D applicationDomain,
-                                                boundary::BcType bcType=boundary::dirichlet );
+	/// Set velocity/Neumann condition on a sub-domain, on the outer boundaries of
+	///   the lattice (atomic-block version).
+	/** Attention: this function only has an effect when it is used on the outer surface
+	 *  of the atomic-block. For boundaries inside the domain, use
+	 *  the method which takes two Box2D arguments.
+	 **/
+	void setVelocityConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
+	        Box2D applicationDomain,
+	        boundary::BcType bcType=boundary::dirichlet );
 
-    /// Set Pressure condition on outer boundaries of the lattice (atomic-block version).
-    /** Attention: pressure conditions are implemented for edges only. On corners,
-     *  this function has no effect.
-     **/
-    void setPressureConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
-                                                boundary::BcType bcType=boundary::dirichlet );
+	/// Set velocity/Neumann condition on the block boundaries, but only on places which
+	///    intersect with the area of applicationDomain (atomic-block version).
+	void setVelocityConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
+	        Box2D block, Box2D applicationDomain,
+	        boundary::BcType bcType=boundary::dirichlet );
 
-    /// Set Pressure condition on a sub-domain, on the outer boundaries of
-    ///   the lattice (atomic-block version).
-    /** Attention: this function only has an effect when it is used on the outer surface
-     *  of the atomic-block. For boundaries inside the domain, use
-     *  the method which takes two Box2D arguments.
-     *  Attention: pressure conditions are implemented for edges only. On corners,
-     *  this function has no effect.
-     **/
-    void setPressureConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
-                                                Box2D applicationDomain,
-                                                boundary::BcType bcType=boundary::dirichlet );
+	/// Set Pressure condition on outer boundaries of the lattice (atomic-block version).
+	/** Attention: pressure conditions are implemented for edges only. On corners,
+	 *  this function has no effect.
+	 **/
+	void setPressureConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet );
 
-    /// Set Pressure condition on the block boundaries, but only on places which
-    ///    intersect with the area of applicationDomain (atomic-block version).
-    /** Attention: pressure conditions are implemented for edges only. On corners,
-     *  this function has no effect.
-     **/
-    void setPressureConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
-                                                Box2D block, Box2D applicationDomain,
-                                                boundary::BcType bcType=boundary::dirichlet );
+	/// Set Pressure condition on a sub-domain, on the outer boundaries of
+	///   the lattice (atomic-block version).
+	/** Attention: this function only has an effect when it is used on the outer surface
+	 *  of the atomic-block. For boundaries inside the domain, use
+	 *  the method which takes two Box2D arguments.
+	 *  Attention: pressure conditions are implemented for edges only. On corners,
+	 *  this function has no effect.
+	 **/
+	void setPressureConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
+	        Box2D applicationDomain,
+	        boundary::BcType bcType=boundary::dirichlet );
 
-
-    // PART II: Multi-block version.
-
-    virtual void addVelocityBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addVelocityBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addVelocityBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addVelocityBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-
-    virtual void addPressureBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addPressureBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addPressureBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addPressureBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType=boundary::dirichlet ) =0;
-
-    virtual void addExternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addExternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addExternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addExternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-
-    virtual void addInternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addInternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addInternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
-    virtual void addInternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                              boundary::BcType bcType=boundary::dirichlet ) =0;
+	/// Set Pressure condition on the block boundaries, but only on places which
+	///    intersect with the area of applicationDomain (atomic-block version).
+	/** Attention: pressure conditions are implemented for edges only. On corners,
+	 *  this function has no effect.
+	 **/
+	void setPressureConditionOnBlockBoundaries( BlockLattice2D<T,Descriptor>& lattice,
+	        Box2D block, Box2D applicationDomain,
+	        boundary::BcType bcType=boundary::dirichlet );
 
 
-    /// Set velocity/Neumann condition on outer boundaries of the lattice (multi-block
-    ///   version).
-    void setVelocityConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
-                                                boundary::BcType bcType=boundary::dirichlet );
+	// PART II: Multi-block version.
 
-    /// Set velocity/Neumann condition on a sub-domain, on the outer boundaries of
-    ///   the lattice (multi-block version).
-    /** Attention: this function only has an effect when it is used on the outer surface
-     *  of the multi-block. For boundaries inside the domain, use
-     *  the method which takes two Box2D arguments.
-     **/
-    void setVelocityConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
-                                                Box2D applicationDomain,
-                                                boundary::BcType bcType=boundary::dirichlet );
+	virtual void addVelocityBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addVelocityBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addVelocityBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addVelocityBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
 
-    /// Set velocity/Neumann condition on the block boundaries, but only on places which
-    ///    intersect with the area of applicationDomain (multi-block version).
-    void setVelocityConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
-                                                Box2D block, Box2D applicationDomain,
-                                                boundary::BcType bcType=boundary::dirichlet );
+	virtual void addPressureBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addPressureBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addPressureBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addPressureBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                    boundary::BcType bcType=boundary::dirichlet ) =0;
 
-    /// Set Pressure condition on outer boundaries of the lattice (multi-block version).
-    /** Attention: pressure conditions are implemented for edges only. On corners,
-     *  this function has no effect.
-     **/
-    void setPressureConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
-                                                boundary::BcType bcType=boundary::dirichlet );
+	virtual void addExternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addExternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addExternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addExternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
 
-    /// Set Pressure condition on a sub-domain, on the outer boundaries of
-    ///   the lattice (multi-block version).
-    /** Attention: this function only has an effect when it is used on the outer surface
-     *  of the multi-block. For boundaries inside the domain, use
-     *  the method which takes two Box2D arguments.
-     *  Attention: pressure conditions are implemented for edges only. On corners,
-     *  this function has no effect.
-     **/
-    void setPressureConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
-                                                Box2D applicationDomain,
-                                                boundary::BcType bcType=boundary::dirichlet );
-
-    /// Set Pressure condition on the block boundaries, but only on places which
-    ///    intersect with the area of applicationDomain (multi-block version).
-    /** Attention: pressure conditions are implemented for edges only. On corners,
-     *  this function has no effect.
-     **/
-    void setPressureConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
-                                                Box2D block, Box2D applicationDomain,
-                                                boundary::BcType bcType=boundary::dirichlet );
+	virtual void addInternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addInternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addInternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
+	virtual void addInternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet ) =0;
 
 
-    /// Set velocity/Neumann condition on inner boundaries of the lattice (multi-block
-    ///   version).
-    void setVelocityConditionOnInnerBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
-                                                     Box2D block, boundary::BcType bcType=boundary::dirichlet );
+	/// Set velocity/Neumann condition on outer boundaries of the lattice (multi-block
+	///   version).
+	void setVelocityConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet );
+
+	/// Set velocity/Neumann condition on a sub-domain, on the outer boundaries of
+	///   the lattice (multi-block version).
+	/** Attention: this function only has an effect when it is used on the outer surface
+	 *  of the multi-block. For boundaries inside the domain, use
+	 *  the method which takes two Box2D arguments.
+	 **/
+	void setVelocityConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
+	        Box2D applicationDomain,
+	        boundary::BcType bcType=boundary::dirichlet );
+
+	/// Set velocity/Neumann condition on the block boundaries, but only on places which
+	///    intersect with the area of applicationDomain (multi-block version).
+	void setVelocityConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
+	        Box2D block, Box2D applicationDomain,
+	        boundary::BcType bcType=boundary::dirichlet );
+
+	/// Set Pressure condition on outer boundaries of the lattice (multi-block version).
+	/** Attention: pressure conditions are implemented for edges only. On corners,
+	 *  this function has no effect.
+	 **/
+	void setPressureConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
+	        boundary::BcType bcType=boundary::dirichlet );
+
+	/// Set Pressure condition on a sub-domain, on the outer boundaries of
+	///   the lattice (multi-block version).
+	/** Attention: this function only has an effect when it is used on the outer surface
+	 *  of the multi-block. For boundaries inside the domain, use
+	 *  the method which takes two Box2D arguments.
+	 *  Attention: pressure conditions are implemented for edges only. On corners,
+	 *  this function has no effect.
+	 **/
+	void setPressureConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
+	        Box2D applicationDomain,
+	        boundary::BcType bcType=boundary::dirichlet );
+
+	/// Set Pressure condition on the block boundaries, but only on places which
+	///    intersect with the area of applicationDomain (multi-block version).
+	/** Attention: pressure conditions are implemented for edges only. On corners,
+	 *  this function has no effect.
+	 **/
+	void setPressureConditionOnBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
+	        Box2D block, Box2D applicationDomain,
+	        boundary::BcType bcType=boundary::dirichlet );
+
+
+	/// Set velocity/Neumann condition on inner boundaries of the lattice (multi-block
+	///   version).
+	void setVelocityConditionOnInnerBlockBoundaries( MultiBlockLattice2D<T,Descriptor>& lattice,
+	        Box2D block, boundary::BcType bcType=boundary::dirichlet );
 
 };
 

@@ -56,10 +56,10 @@ void computeDensity(
 
 template<typename T, template<typename U> class Descriptor,
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelScalarField3D<T> > computeDensity(
+std::auto_ptr<MultiLevelScalarField3D<T> > computeDensity(
     MultiLevelActions3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelScalarField3D<T> > densities 
+    std::auto_ptr<MultiLevelScalarField3D<T> > densities 
         = generateMultiLevelScalarField3D<T>(lattices.getOgs(), domain, levelOfDomain);
 
     computeDensity(lattices, *densities, domain, levelOfDomain);
@@ -69,7 +69,7 @@ std::unique_ptr<MultiLevelScalarField3D<T> > computeDensity(
 
 template<typename T, template<typename U> class Descriptor,
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelScalarFieldForOutput3D<T> > computeDensity(
+std::auto_ptr<MultiLevelScalarFieldForOutput3D<T> > computeDensity(
     MultiLevelActions3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain, bool crop)
 {
     return exportForOutput(*computeDensity(lattices, domain, levelOfDomain), domain, levelOfDomain, crop);
@@ -91,10 +91,10 @@ void computeVelocity(
 
 template<typename T, template<typename U> class Descriptor,
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelTensorField3D<T,Descriptor<T>::d> > computeVelocity(
+std::auto_ptr<MultiLevelTensorField3D<T,Descriptor<T>::d> > computeVelocity(
     MultiLevelActions3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelTensorField3D<T,Descriptor<T>::d> > velocities = 
+    std::auto_ptr<MultiLevelTensorField3D<T,Descriptor<T>::d> > velocities = 
         generateMultiLevelTensorField3D<T,Descriptor<T>::d>(lattices.getOgs(), domain, levelOfDomain);
 
     computeVelocity(lattices, *velocities, domain, levelOfDomain);
@@ -104,7 +104,7 @@ std::unique_ptr<MultiLevelTensorField3D<T,Descriptor<T>::d> > computeVelocity(
 
 template<typename T, template<typename U> class Descriptor,
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,Descriptor<T>::d> > computeVelocity(
+std::auto_ptr<MultiLevelTensorFieldForOutput3D<T,Descriptor<T>::d> > computeVelocity(
     MultiLevelActions3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain, bool crop)
 {
     return exportForOutput(*computeVelocity(lattices, domain, levelOfDomain), domain, levelOfDomain, crop);
@@ -134,10 +134,10 @@ void computeDensity(
 
 template<typename T, template<typename U> class Descriptor,
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelScalarField3D<T> > computeDensity(
+std::auto_ptr<MultiLevelScalarField3D<T> > computeDensity(
     MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelScalarField3D<T> > densities 
+    std::auto_ptr<MultiLevelScalarField3D<T> > densities 
         = generateMultiLevelScalarField3D<T>(lattices.getOgs(), domain, levelOfDomain);
 
     computeDensity(lattices, *densities, domain, levelOfDomain);
@@ -147,29 +147,10 @@ std::unique_ptr<MultiLevelScalarField3D<T> > computeDensity(
 
 template<typename T, template<typename U> class Descriptor,
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-void computeDensity(
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, 
-    MultiLevelScalarFieldForOutput3D<T>& densities, 
-    Box3D domain, plint levelOfDomain)
-{
-    applyProcessingFunctional (
-            new BoxDensityFunctional3D<T,Descriptor>(), domain, levelOfDomain,
-            lattices, densities );
-}
-
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelScalarFieldForOutput3D<T> > computeDensity(
+std::auto_ptr<MultiLevelScalarFieldForOutput3D<T> > computeDensity(
     MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain, bool crop)
 {
-    std::unique_ptr<MultiLevelScalarFieldForOutput3D<T> > densities 
-        = generateMultiLevelScalarFieldForOutput3D<T>(lattices.getOgs(), domain, levelOfDomain, crop);
-
-    computeDensity(lattices, *densities, domain, levelOfDomain);
-    
-    return densities;
-
-    // return exportForOutput(*computeDensity(lattices, domain, levelOfDomain), domain, levelOfDomain, crop);
+    return exportForOutput(*computeDensity(lattices, domain, levelOfDomain), domain, levelOfDomain, crop);
 }
 
 /* *************** Velocity ****************************************** */
@@ -188,10 +169,10 @@ void computeVelocity(
 
 template<typename T, template<typename U> class Descriptor,
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelTensorField3D<T,Descriptor<T>::d> > computeVelocity(
+std::auto_ptr<MultiLevelTensorField3D<T,Descriptor<T>::d> > computeVelocity(
     MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelTensorField3D<T,Descriptor<T>::d> > velocities = 
+    std::auto_ptr<MultiLevelTensorField3D<T,Descriptor<T>::d> > velocities = 
         generateMultiLevelTensorField3D<T,Descriptor<T>::d>(lattices.getOgs(), domain, levelOfDomain);
 
     computeVelocity(lattices, *velocities, domain, levelOfDomain);
@@ -201,138 +182,13 @@ std::unique_ptr<MultiLevelTensorField3D<T,Descriptor<T>::d> > computeVelocity(
 
 template<typename T, template<typename U> class Descriptor,
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-void computeVelocity(
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, 
-    MultiLevelTensorFieldForOutput3D<T,Descriptor<T>::d> &velocities, 
-    Box3D domain, plint levelOfDomain)
-{
-    applyProcessingFunctional (
-            new BoxVelocityFunctional3D<T,Descriptor>(), domain, levelOfDomain,
-            lattices, velocities );
-}
-
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,Descriptor<T>::d> > computeVelocity(
+std::auto_ptr<MultiLevelTensorFieldForOutput3D<T,Descriptor<T>::d> > computeVelocity(
     MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain, bool crop)
 {
-    std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,Descriptor<T>::d> > velocities = 
-        generateMultiLevelTensorFieldForOutput3D<T,Descriptor<T>::d>(lattices.getOgs(), domain, levelOfDomain, crop);
-
-    computeVelocity(lattices, *velocities, domain, levelOfDomain);
-
-    return velocities;
-    
-    // return exportForOutput(*computeVelocity(lattices, domain, levelOfDomain), domain, levelOfDomain, crop);
+    return exportForOutput(*computeVelocity(lattices, domain, levelOfDomain), domain, levelOfDomain, crop);
 }
 
-/* *************** Kinematic Eddy Viscosity ****************************************** */
 
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
-void computeKinematicEddyViscosity(
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, 
-    MultiLevelScalarField3D<T>& eddyViscosities, 
-    Box3D domain, plint levelOfDomain)
-{
-    applyProcessingFunctional (
-            new BoxKinematicEddyViscosityFunctional3D<T,Descriptor>(), domain, levelOfDomain,
-            lattices, eddyViscosities );
-}
-
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelScalarField3D<T> > computeKinematicEddyViscosity(
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain)
-{
-    std::unique_ptr<MultiLevelScalarField3D<T> > eddyViscosities 
-        = generateMultiLevelScalarField3D<T>(lattices.getOgs(), domain, levelOfDomain);
-
-    computeKinematicEddyViscosity(lattices, *eddyViscosities, domain, levelOfDomain);
-    
-    return eddyViscosities;
-}
-
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
-void computeKinematicEddyViscosity(
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, 
-    MultiLevelScalarFieldForOutput3D<T>& eddyViscosities, 
-    Box3D domain, plint levelOfDomain)
-{
-    applyProcessingFunctional (
-            new BoxKinematicEddyViscosityFunctional3D<T,Descriptor>(), domain, levelOfDomain,
-            lattices, eddyViscosities );
-}
-
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelScalarFieldForOutput3D<T> > computeKinematicEddyViscosity(
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain, bool crop)
-{
-    std::unique_ptr<MultiLevelScalarFieldForOutput3D<T> > eddyViscosities 
-        = generateMultiLevelScalarFieldForOutput3D<T>(lattices.getOgs(), domain, levelOfDomain, crop);
-
-    computeKinematicEddyViscosity(lattices, *eddyViscosities, domain, levelOfDomain);
-    
-    return eddyViscosities;
-
-    // return exportForOutput(*computeKinematicEddyViscosity(lattices, domain, levelOfDomain), domain, levelOfDomain, crop);
-}
-
-/* *************** Strain Rate ****************************************** */
-
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
-void computeStrainRateFromStress(
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, 
-    MultiLevelTensorField3D<T,SymmetricTensor<T,Descriptor>::n> &strainRates, 
-    Box3D domain, plint levelOfDomain)
-{
-    applyProcessingFunctional (
-            new BoxStrainRateFromStressFunctional3D<T,Descriptor>(), domain, levelOfDomain,
-            lattices, strainRates );
-}
-
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelTensorField3D<T,SymmetricTensor<T,Descriptor>::n> > computeStrainRateFromStress(
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain)
-{
-    std::unique_ptr<MultiLevelTensorField3D<T,SymmetricTensor<T,Descriptor>::n> > strainRates = 
-        generateMultiLevelTensorField3D<T,SymmetricTensor<T,Descriptor>::n>(lattices.getOgs(), domain, levelOfDomain);
-
-    computeStrainRateFromStress(lattices, *strainRates, domain, levelOfDomain);
-
-    return strainRates;
-}
-
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
-void computeStrainRateFromStress(
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, 
-    MultiLevelTensorFieldForOutput3D<T,SymmetricTensor<T,Descriptor>::n> &strainRates, 
-    Box3D domain, plint levelOfDomain)
-{
-    applyProcessingFunctional (
-            new BoxStrainRateFromStressFunctional3D<T,Descriptor>(), domain, levelOfDomain,
-            lattices, strainRates );
-}
-
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,SymmetricTensor<T,Descriptor>::n> > computeStrainRateFromStress(
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, Box3D domain, plint levelOfDomain, bool crop)
-{
-    std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,SymmetricTensor<T,Descriptor>::n> > strainRates = 
-        generateMultiLevelTensorFieldForOutput3D<T,SymmetricTensor<T,Descriptor>::n>(lattices.getOgs(), domain, levelOfDomain, crop);
-
-    computeStrainRateFromStress(lattices, *strainRates, domain, levelOfDomain);
-
-    return strainRates;
-    
-    // return exportForOutput(*computeStrainRateFromStress(lattices, domain, levelOfDomain), domain, levelOfDomain, crop);
-}
 
 
 /* ******************************************************************* */
@@ -363,36 +219,17 @@ void copy(MultiLevelScalarField3D<T> &from,
 
 }
 
-/* ========================= copy with same from and to domains ============================ */
-template<typename T>
-void copy(MultiLevelScalarField3D<T> &from, 
-          MultiLevelScalarFieldForOutput3D<T> &to,
-          const Box3D &domain, plint levelOfDomain)
-{
-    PLB_ASSERT(from.getNumLevels() == to.getNumLevels() && 
-        "MultiScalarTensorField3D (from) must have the save number of levels as the MultiLevelScalarFieldForOutput3D (to)");
-
-    for (plint iA = 0; iA < from.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-
-        copy(from.getLevel(iA), to.getLevel(iA), currentDomain);
-    }   
-
-}
-
 /* *************** exportForOutput ****************************************** */
 
 template<typename T>
-std::unique_ptr<MultiLevelScalarFieldForOutput3D<T> > 
+std::auto_ptr<MultiLevelScalarFieldForOutput3D<T> > 
   exportForOutput(MultiLevelScalarField3D<T> &from, 
           const Box3D &domain, plint levelOfDomain, bool crop)
 {
-    std::unique_ptr<MultiLevelScalarFieldForOutput3D<T> > output = 
+    std::auto_ptr<MultiLevelScalarFieldForOutput3D<T> > output = 
         generateMultiLevelScalarFieldForOutput3D<T>(from.getOgs(), domain, levelOfDomain, crop);
 
-    copy(from, *output, domain, levelOfDomain);
+    copy(from, domain, levelOfDomain, *output, domain, levelOfDomain);
 
     return output;
 }
@@ -409,11 +246,11 @@ void extractSubDomain( MultiLevelScalarField3D<T> &field,
 }
 
 template<typename T>
-std::unique_ptr<MultiLevelScalarField3D<T> > extractSubDomain(
+std::auto_ptr<MultiLevelScalarField3D<T> > extractSubDomain(
     MultiLevelScalarField3D<T>& field, 
     const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelScalarField3D<T> > extractedField = 
+    std::auto_ptr<MultiLevelScalarField3D<T> > extractedField = 
         generateMultiLevelScalarField3D<T>(field.getOgs(), domain, levelOfDomain);
 
     extractSubDomain(field, *extractedField, domain, levelOfDomain);
@@ -438,12 +275,12 @@ void add(MultiLevelScalarField3D<T> &A,
 }
 
 template<typename T>
-std::unique_ptr<MultiLevelScalarField3D<T> > 
+std::auto_ptr<MultiLevelScalarField3D<T> > 
     add(MultiLevelScalarField3D<T> &A, 
         MultiLevelScalarField3D<T> &B, 
         const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelScalarField3D<T> > aPlusB = 
+    std::auto_ptr<MultiLevelScalarField3D<T> > aPlusB = 
         generateMultiLevelScalarField3D<T>(A.getOgs(), domain, levelOfDomain);
 
     add(A, B, *aPlusB, domain, levelOfDomain);
@@ -480,12 +317,12 @@ void subtract(MultiLevelScalarField3D<T> &A,
 }
 
 template<typename T>
-std::unique_ptr<MultiLevelScalarField3D<T> >  
+std::auto_ptr<MultiLevelScalarField3D<T> >  
     subtract(MultiLevelScalarField3D<T> &A, 
              MultiLevelScalarField3D<T> &B, 
              const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelScalarField3D<T> > aMinusB = 
+    std::auto_ptr<MultiLevelScalarField3D<T> > aMinusB = 
         generateMultiLevelScalarField3D<T>(A.getOgs(), domain, levelOfDomain);
 
     subtract(A, B, *aMinusB, domain, levelOfDomain);
@@ -522,12 +359,12 @@ void multiply(MultiLevelScalarField3D<T> &A,
 }
 
 template<typename T>
-std::unique_ptr<MultiLevelScalarField3D<T> >   
+std::auto_ptr<MultiLevelScalarField3D<T> >   
     multiply(MultiLevelScalarField3D<T> &A, 
              MultiLevelScalarField3D<T> &B, 
              const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelScalarField3D<T> > aTimesB = 
+    std::auto_ptr<MultiLevelScalarField3D<T> > aTimesB = 
         generateMultiLevelScalarField3D<T>(A.getOgs(), domain, levelOfDomain);
 
     multiply(A, B, *aTimesB, domain, levelOfDomain);
@@ -560,12 +397,12 @@ void multiply(MultiLevelScalarField3D<T> &A,
 }
 
 template<typename T>
-std::unique_ptr<MultiLevelScalarField3D<T> >   
+std::auto_ptr<MultiLevelScalarField3D<T> >   
     multiply(MultiLevelScalarField3D<T> &A, 
              T alpha,
              const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelScalarField3D<T> > aTimesAlpha = 
+    std::auto_ptr<MultiLevelScalarField3D<T> > aTimesAlpha = 
         generateMultiLevelScalarField3D<T>(A.getOgs(), domain, levelOfDomain);
 
     multiply(A, alpha, *aTimesAlpha, domain, levelOfDomain);
@@ -602,12 +439,12 @@ void divide(MultiLevelScalarField3D<T> &A,
 }
 
 template<typename T>
-std::unique_ptr<MultiLevelScalarField3D<T> >  
+std::auto_ptr<MultiLevelScalarField3D<T> >  
     divide(MultiLevelScalarField3D<T> &A, 
            MultiLevelScalarField3D<T> &B, 
            const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelScalarField3D<T> > aDivideB = 
+    std::auto_ptr<MultiLevelScalarField3D<T> > aDivideB = 
         generateMultiLevelScalarField3D<T>(A.getOgs(), domain, levelOfDomain);
 
     divide(A, B, *aDivideB, domain, levelOfDomain);
@@ -656,37 +493,17 @@ void copy(MultiLevelTensorField3D<T,nDim> &from,
 
 }
 
-
-/* ========================= copy with the same from and to domains ============================ */
-template<typename T, int nDim>
-void copy(MultiLevelTensorField3D<T,nDim> &from, 
-          MultiLevelTensorFieldForOutput3D<T,nDim> &to, 
-          const Box3D &domain, plint levelOfDomain)
-{
-    PLB_ASSERT(from.getNumLevels() == to.getNumLevels() && 
-        "MultiLevelTensorField3D (from) must have the save number of levels as the MultiLevelTensorFieldForOutput3D (to)");
-
-    for (plint iA = 0; iA < from.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-
-        copy(from.getLevel(iA), to.getLevel(iA), currentDomain);
-    }   
-
-}
-
 /* *************** exportForOutput ****************************************** */
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,nDim> > 
+std::auto_ptr<MultiLevelTensorFieldForOutput3D<T,nDim> > 
   exportForOutput(MultiLevelTensorField3D<T,nDim> &from, 
           const Box3D &domain, plint levelOfDomain, bool crop)
 {
-    std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,nDim> > output = 
+    std::auto_ptr<MultiLevelTensorFieldForOutput3D<T,nDim> > output = 
         generateMultiLevelTensorFieldForOutput3D<T,nDim>(from.getOgs(), domain, levelOfDomain, crop);
 
-    copy(from, *output, domain, levelOfDomain);
+    copy(from, domain, levelOfDomain, *output, domain, levelOfDomain);
 
     return output;
 }
@@ -703,11 +520,11 @@ void extractSubDomain( MultiLevelTensorField3D<T,nDim> &field,
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T,nDim> > extractSubDomain(
+std::auto_ptr<MultiLevelTensorField3D<T,nDim> > extractSubDomain(
     MultiLevelTensorField3D<T,nDim>& field, 
     const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelTensorField3D<T,nDim> > extractedField = 
+    std::auto_ptr<MultiLevelTensorField3D<T,nDim> > extractedField = 
         generateMultiLevelTensorField3D<T,nDim>(field.getOgs(), domain, levelOfDomain);
 
     extractSubDomain(field, *extractedField, domain, levelOfDomain);
@@ -729,11 +546,11 @@ void extractComponent(
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelScalarField3D<T> > extractComponent(
+std::auto_ptr<MultiLevelScalarField3D<T> > extractComponent(
   MultiLevelTensorField3D<T,nDim>& tensorField, 
   const Box3D &domain, plint levelOfDomain, int iComponent)
 {
-    std::unique_ptr<MultiLevelScalarField3D<T> > component =
+    std::auto_ptr<MultiLevelScalarField3D<T> > component =
         generateMultiLevelScalarField3D<T>(tensorField.getOgs(), domain, levelOfDomain);
     extractComponent(tensorField, *component, domain, levelOfDomain, iComponent);
     return component;
@@ -756,12 +573,12 @@ void add(MultiLevelTensorField3D<T,nDim> &A,
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T,nDim> > 
+std::auto_ptr<MultiLevelTensorField3D<T,nDim> > 
     add(MultiLevelTensorField3D<T,nDim> &A, 
         MultiLevelTensorField3D<T,nDim> &B, 
         const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelTensorField3D<T,nDim> > aPlusB = 
+    std::auto_ptr<MultiLevelTensorField3D<T,nDim> > aPlusB = 
         generateMultiLevelTensorField3D<T,nDim>(A.getOgs(), domain, levelOfDomain);
 
     add(A, B, *aPlusB, domain, levelOfDomain);
@@ -798,12 +615,12 @@ void subtract(MultiLevelTensorField3D<T,nDim> &A,
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T,nDim> >  
+std::auto_ptr<MultiLevelTensorField3D<T,nDim> >  
     subtract(MultiLevelTensorField3D<T,nDim> &A, 
              MultiLevelTensorField3D<T,nDim> &B, 
              const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelTensorField3D<T,nDim> > aMinusB = 
+    std::auto_ptr<MultiLevelTensorField3D<T,nDim> > aMinusB = 
         generateMultiLevelTensorField3D<T,nDim>(A.getOgs(), domain, levelOfDomain);
 
     subtract(A, B, *aMinusB, domain, levelOfDomain);
@@ -840,12 +657,12 @@ void multiply(MultiLevelTensorField3D<T,nDim> &A,
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T,nDim> >   
+std::auto_ptr<MultiLevelTensorField3D<T,nDim> >   
     multiply(MultiLevelTensorField3D<T,nDim> &A, 
              MultiLevelTensorField3D<T,nDim> &B, 
              const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelTensorField3D<T,nDim> > aTimesB = 
+    std::auto_ptr<MultiLevelTensorField3D<T,nDim> > aTimesB = 
         generateMultiLevelTensorField3D<T,nDim>(A.getOgs(), domain, levelOfDomain);
 
     multiply(A, B, *aTimesB, domain, levelOfDomain);
@@ -878,12 +695,12 @@ void multiply(MultiLevelTensorField3D<T,nDim> &A,
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T,nDim> >   
+std::auto_ptr<MultiLevelTensorField3D<T,nDim> >   
     multiply(MultiLevelTensorField3D<T,nDim> &A, 
              T alpha,
              const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelTensorField3D<T,nDim> > aTimesAlpha = 
+    std::auto_ptr<MultiLevelTensorField3D<T,nDim> > aTimesAlpha = 
         generateMultiLevelTensorField3D<T,nDim>(A.getOgs(), domain, levelOfDomain);
 
     multiply(A, alpha, *aTimesAlpha, domain, levelOfDomain);
@@ -920,12 +737,12 @@ void divide(MultiLevelTensorField3D<T,nDim> &A,
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T,nDim> >  
+std::auto_ptr<MultiLevelTensorField3D<T,nDim> >  
     divide(MultiLevelTensorField3D<T,nDim> &A, 
            MultiLevelTensorField3D<T,nDim> &B, 
            const Box3D &domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelTensorField3D<T,nDim> > aDivideB = 
+    std::auto_ptr<MultiLevelTensorField3D<T,nDim> > aDivideB = 
         generateMultiLevelTensorField3D<T,nDim>(A.getOgs(), domain, levelOfDomain);
 
     divide(A, B, *aDivideB, domain, levelOfDomain);
@@ -949,10 +766,10 @@ void divideInPlace(MultiLevelTensorField3D<T,nDim> &A,
 /* *************** Vorticity ****************************************** */
 
 template<typename T>
-std::unique_ptr<MultiLevelTensorField3D<T,3 > > computeVorticity(
+std::auto_ptr<MultiLevelTensorField3D<T,3 > > computeVorticity(
     MultiLevelTensorField3D<T,3>& velocities, Box3D domain, plint levelOfDomain)
 {
-    std::unique_ptr<MultiLevelTensorField3D<T,3> > vorticity = 
+    std::auto_ptr<MultiLevelTensorField3D<T,3> > vorticity = 
         generateMultiLevelTensorField3D<T,3>(velocities.getOgs(), domain, levelOfDomain);
 
     applyProcessingFunctional (
@@ -963,16 +780,16 @@ std::unique_ptr<MultiLevelTensorField3D<T,3 > > computeVorticity(
 }
 
 template<typename T>
-std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,3 > > computeVorticity(
+std::auto_ptr<MultiLevelTensorFieldForOutput3D<T,3 > > computeVorticity(
     MultiLevelTensorField3D<T,3>& velocities, Box3D domain, plint levelOfDomain, bool crop)
 {
-    std::unique_ptr<MultiLevelTensorField3D<T,3> > vorticity = 
+    std::auto_ptr<MultiLevelTensorField3D<T,3> > vorticity = 
         computeVorticity(velocities, domain, levelOfDomain);
 
-    std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,3> > outputVorticity
+    std::auto_ptr<MultiLevelTensorFieldForOutput3D<T,3> > outputVorticity
         = generateMultiLevelTensorFieldForOutput3D<T,3>(velocities.getOgs(), domain, levelOfDomain, crop);
 
-    copy<T,3>(*vorticity, *outputVorticity, domain, levelOfDomain);
+    copy<T,3>(*vorticity, domain, levelOfDomain, *outputVorticity, domain, levelOfDomain);
     
     return outputVorticity;
 }

@@ -241,10 +241,10 @@ Array<T,3> OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::getForceOnO
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiTensorField3D<T,3> >
+std::auto_ptr<MultiTensorField3D<T,3> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeVelocity(Box3D domain)
 {
-    std::unique_ptr<MultiTensorField3D<T,3> > velocity(plb::computeVelocity(lattice,domain));
+    std::auto_ptr<MultiTensorField3D<T,3> > velocity(plb::computeVelocity(lattice,domain));
     int flowType = voxelizedDomain.getFlowType();
     int solidFlag = voxelFlag::invert(flowType);
     int solidBorderFlag = voxelFlag::borderFlag(solidFlag);
@@ -258,7 +258,7 @@ std::unique_ptr<MultiTensorField3D<T,3> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiTensorField3D<T,3> >
+std::auto_ptr<MultiTensorField3D<T,3> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeVelocity()
 {
     return computeVelocity(lattice.getBoundingBox());
@@ -268,10 +268,10 @@ std::unique_ptr<MultiTensorField3D<T,3> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiTensorField3D<T,3> >
+std::auto_ptr<MultiTensorField3D<T,3> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeVorticity(Box3D domain)
 {
-    std::unique_ptr<MultiTensorField3D<T,3> > vorticity (
+    std::auto_ptr<MultiTensorField3D<T,3> > vorticity (
             plb::computeBulkVorticity(*plb::computeVelocity(lattice,domain), domain) );
     int flowType = voxelizedDomain.getFlowType();
     int solidFlag = voxelFlag::invert(flowType);
@@ -286,7 +286,7 @@ std::unique_ptr<MultiTensorField3D<T,3> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiTensorField3D<T,3> >
+std::auto_ptr<MultiTensorField3D<T,3> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeVorticity()
 {
     return computeVorticity(lattice.getBoundingBox());
@@ -295,10 +295,10 @@ std::unique_ptr<MultiTensorField3D<T,3> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeVelocityNorm(Box3D domain)
 {
-    std::unique_ptr<MultiScalarField3D<T> > velocityNorm(plb::computeVelocityNorm(lattice,domain));
+    std::auto_ptr<MultiScalarField3D<T> > velocityNorm(plb::computeVelocityNorm(lattice,domain));
     int flowType = voxelizedDomain.getFlowType();
     int solidFlag = voxelFlag::invert(flowType);
     int solidBorderFlag = voxelFlag::borderFlag(solidFlag);
@@ -312,7 +312,7 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeVelocityNorm()
 {
     return computeVelocityNorm(lattice.getBoundingBox());
@@ -322,10 +322,10 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeVorticityNorm(Box3D domain)
 {
-    std::unique_ptr<MultiScalarField3D<T> > vorticityNorm (
+    std::auto_ptr<MultiScalarField3D<T> > vorticityNorm (
             plb::computeNorm (
                 *plb::computeBulkVorticity(*plb::computeVelocity(lattice,domain), domain), domain ) );
     int flowType = voxelizedDomain.getFlowType();
@@ -339,7 +339,7 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeVorticityNorm()
 {
     return computeVorticityNorm(lattice.getBoundingBox());
@@ -349,11 +349,11 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeVelocityComponent (
             Box3D domain, plint iComp )
 {
-    std::unique_ptr<MultiScalarField3D<T> > velocityComponent (
+    std::auto_ptr<MultiScalarField3D<T> > velocityComponent (
             plb::computeVelocityComponent(lattice,domain, iComp));
     int flowType = voxelizedDomain.getFlowType();
     int solidFlag = voxelFlag::invert(flowType);
@@ -368,7 +368,7 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeVelocityComponent(plint iComp)
 {
     return computeVelocityComponent(lattice.getBoundingBox(), iComp);
@@ -377,10 +377,10 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computePressure(Box3D domain)
 {
-    std::unique_ptr<MultiScalarField3D<T> > pressure(plb::computeDensity(lattice,domain));
+    std::auto_ptr<MultiScalarField3D<T> > pressure(plb::computeDensity(lattice,domain));
     T averageDensity = computeAverageDensity(domain);
     subtractInPlace(*pressure, averageDensity, domain);
     multiplyInPlace(*pressure, Descriptor<T>::cs2, domain);
@@ -397,7 +397,7 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computePressure()
 {
     return computePressure(lattice.getBoundingBox());
@@ -406,10 +406,10 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeDensity(Box3D domain, T solidDensity)
 {
-    std::unique_ptr<MultiScalarField3D<T> > density(plb::computeDensity(lattice,domain));
+    std::auto_ptr<MultiScalarField3D<T> > density(plb::computeDensity(lattice,domain));
     int flowType = voxelizedDomain.getFlowType();
     int solidFlag = voxelFlag::invert(flowType);
     int solidBorderFlag = voxelFlag::borderFlag(solidFlag);
@@ -423,7 +423,7 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeDensity(T solidDensity)
 {
     return computeDensity(lattice.getBoundingBox(), solidDensity);
@@ -433,10 +433,10 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeStrainRateNorm(Box3D domain)
 {
-    std::unique_ptr<MultiScalarField3D<T> >
+    std::auto_ptr<MultiScalarField3D<T> >
          strainRateNorm(computeSymmetricTensorNorm(*plb::computeStrainRateFromStress(lattice,domain)));
     int flowType = voxelizedDomain.getFlowType();
     int solidFlag = voxelFlag::invert(flowType);
@@ -451,7 +451,7 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeStrainRateNorm()
 {
     return computeStrainRateNorm(lattice.getBoundingBox());
@@ -461,10 +461,10 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeStrainRate(Box3D domain)
 {
-    std::unique_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+    std::auto_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
          strainRate(plb::computeStrainRateFromStress(lattice,domain));
     int flowType = voxelizedDomain.getFlowType();
     int solidFlag = voxelFlag::invert(flowType);
@@ -480,7 +480,7 @@ std::unique_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeStrainRate()
 {
     return computeStrainRate(lattice.getBoundingBox());
@@ -490,10 +490,10 @@ std::unique_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeShearStressNorm(Box3D domain)
 {
-    std::unique_ptr<MultiScalarField3D<T> >
+    std::auto_ptr<MultiScalarField3D<T> >
          shearStressNorm(computeSymmetricTensorNorm(*plb::computeShearStress(lattice,domain)));
     int flowType = voxelizedDomain.getFlowType();
     int solidFlag = voxelFlag::invert(flowType);
@@ -508,7 +508,7 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiScalarField3D<T> >
+std::auto_ptr<MultiScalarField3D<T> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeShearStressNorm()
 {
     return computeShearStressNorm(lattice.getBoundingBox());
@@ -518,10 +518,10 @@ std::unique_ptr<MultiScalarField3D<T> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeShearStress(Box3D domain)
 {
-    std::unique_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+    std::auto_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
          shearStress(plb::computeShearStress(lattice,domain));
     int flowType = voxelizedDomain.getFlowType();
     int solidFlag = voxelFlag::invert(flowType);
@@ -537,7 +537,7 @@ std::unique_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
 template< typename T,
           template<typename U> class Descriptor,
           class BoundaryType >
-std::unique_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
     OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeShearStress()
 {
     return computeShearStress(lattice.getBoundingBox());
@@ -549,7 +549,7 @@ template< typename T,
           class BoundaryType >
 T OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeAverageVelocityComponent(Box3D domain, plint iComponent)
 {
-    std::unique_ptr<MultiScalarField3D<T> > density (
+    std::auto_ptr<MultiScalarField3D<T> > density (
             plb::computeVelocityComponent(lattice,domain, iComponent) );
     MultiScalarField3D<int> flagMatrix((MultiBlock3D&)voxelizedDomain.getVoxelMatrix());
     int flowType = voxelizedDomain.getFlowType();
@@ -566,7 +566,7 @@ template< typename T,
           class BoundaryType >
 Array<T,3> OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeAverageVelocity(Box3D domain)
 {
-    std::unique_ptr<MultiTensorField3D<T,3> > velocity (
+    std::auto_ptr<MultiTensorField3D<T,3> > velocity (
             plb::computeVelocity(lattice,domain) );
     MultiScalarField3D<int> flagMatrix((MultiBlock3D&)voxelizedDomain.getVoxelMatrix());
     int flowType = voxelizedDomain.getFlowType();
@@ -591,9 +591,9 @@ template< typename T,
           class BoundaryType >
 T OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeAverageDensity(Box3D domain)
 {
-    std::unique_ptr<MultiScalarField3D<T> > density (
+    std::auto_ptr<MultiScalarField3D<T> > density (
             plb::computeDensity(lattice,domain) );
-    std::unique_ptr<MultiScalarField3D<T> > density2 (
+    std::auto_ptr<MultiScalarField3D<T> > density2 (
             plb::computeDensity(lattice,domain) );
     MultiScalarField3D<int> flagMatrix((MultiBlock3D&)voxelizedDomain.getVoxelMatrix());
     int flowType = voxelizedDomain.getFlowType();
@@ -618,7 +618,7 @@ template< typename T,
           class BoundaryType >
 T OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeAverageEnergy(Box3D domain)
 {
-    std::unique_ptr<MultiScalarField3D<T> > energy (
+    std::auto_ptr<MultiScalarField3D<T> > energy (
             plb::computeKineticEnergy(lattice,domain) );
     MultiScalarField3D<int> flagMatrix((MultiBlock3D&)voxelizedDomain.getVoxelMatrix());
     int flowType = voxelizedDomain.getFlowType();
@@ -643,7 +643,7 @@ template< typename T,
           class BoundaryType >
 T OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeRMSvorticity(Box3D domain)
 {
-    std::unique_ptr<MultiScalarField3D<T> > vorticityNormSqr (
+    std::auto_ptr<MultiScalarField3D<T> > vorticityNormSqr (
             plb::computeNormSqr(*plb::computeBulkVorticity(*plb::computeVelocity(lattice,domain)) ) );
     MultiScalarField3D<int> flagMatrix((MultiBlock3D&)voxelizedDomain.getVoxelMatrix());
     int flowType = voxelizedDomain.getFlowType();
@@ -668,7 +668,7 @@ template< typename T,
           class BoundaryType >
 T OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeAverageShearStressNorm(Box3D domain)
 {
-    std::unique_ptr<MultiScalarField3D<T> > shearStress (
+    std::auto_ptr<MultiScalarField3D<T> > shearStress (
             plb::computeSymmetricTensorNorm(*plb::computeShearStress(lattice,domain)) );
     MultiScalarField3D<int> flagMatrix((MultiBlock3D&)voxelizedDomain.getVoxelMatrix());
     int flowType = voxelizedDomain.getFlowType();
@@ -693,7 +693,7 @@ template< typename T,
           class BoundaryType >
 T OffLatticeBoundaryCondition3D<T,Descriptor,BoundaryType>::computeRMSshearStressNorm(Box3D domain)
 {
-    std::unique_ptr<MultiScalarField3D<T> > shearStressNorm (
+    std::auto_ptr<MultiScalarField3D<T> > shearStressNorm (
             plb::computeSymmetricTensorNorm(*plb::computeShearStress(lattice,domain)) );
     T avgShearStress = computeAverageShearStressNorm(domain);
     

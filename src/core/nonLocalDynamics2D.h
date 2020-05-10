@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,29 +29,31 @@
 #include "core/dynamics.h"
 #include "atomicBlock/blockLattice2D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-class NonLocalDynamics2D : public CompositeDynamics<T,Descriptor> {
+class NonLocalDynamics2D : public CompositeDynamics<T,Descriptor>
+{
 public:
-    NonLocalDynamics2D(Dynamics<T,Descriptor>* baseDynamics_);
-    virtual bool isNonLocal() const;
-    virtual void prepareCollision(Cell<T,Descriptor>& cell);
+	NonLocalDynamics2D(Dynamics<T,Descriptor>* baseDynamics_);
+	virtual bool isNonLocal() const;
+	virtual void prepareCollision(Cell<T,Descriptor>& cell);
 
-    virtual void nonLocalAction(plint iX, plint iY, BlockLattice2D<T,Descriptor>& lattice) =0;
+	virtual void nonLocalAction(plint iX, plint iY, BlockLattice2D<T,Descriptor>& lattice) =0;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class NonLocalBoundaryDynamics2D : public NonLocalDynamics2D<T,Descriptor> {
+class NonLocalBoundaryDynamics2D : public NonLocalDynamics2D<T,Descriptor>
+{
 public:
-    NonLocalBoundaryDynamics2D(Dynamics<T,Descriptor>* baseDynamics_);
-    virtual bool isBoundary() const;
+	NonLocalBoundaryDynamics2D(Dynamics<T,Descriptor>* baseDynamics_);
+	virtual bool isBoundary() const;
 
-    virtual void nonLocalAction(plint iX, plint iY, BlockLattice2D<T,Descriptor>& lattice);
-    virtual void boundaryCompletion(plint iX, plint iY, BlockLattice2D<T,Descriptor>& lattice) =0;
+	virtual void nonLocalAction(plint iX, plint iY, BlockLattice2D<T,Descriptor>& lattice);
+	virtual void boundaryCompletion(plint iX, plint iY, BlockLattice2D<T,Descriptor>& lattice) =0;
 };
 
 }  // namespace plb
 
 #endif  // NON_LOCAL_DYNAMICS_2D_H
-

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,7 +29,8 @@
 #include "atomicBlock/dataProcessor3D.h"
 #include "core/plbDebug.h"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** BoxProcessing3D, general case *************************** */
 
@@ -70,12 +71,14 @@ void applyProcessingFunctional(BoundedReductiveBoxProcessingFunctional3D& functi
     std::vector<ReductiveBoxProcessorGenerator3D*> generators;
     functional.getGenerators(domain, boundaryWidth, generators);
     std::vector<BlockStatistics const*> individualStatistics(generators.size());
-    for (pluint iGen=0; iGen<generators.size(); ++iGen) {
+    for (pluint iGen=0; iGen<generators.size(); ++iGen)
+    {
         executeDataProcessor( *generators[iGen], multiBlocks );
         individualStatistics[iGen] = &(generators[iGen]->getStatistics());
     }
     SerialCombinedStatistics().combine(individualStatistics, functional.getStatistics());
-    for (pluint iGen=0; iGen<generators.size(); ++iGen) {
+    for (pluint iGen=0; iGen<generators.size(); ++iGen)
+    {
         delete generators[iGen];
     }
 }

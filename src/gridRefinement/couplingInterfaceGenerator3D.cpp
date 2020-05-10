@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,7 +35,7 @@
 #include "gridRefinement/gridRefinementFunctional3D.h"
 #include "gridRefinement/gridRefinementFunctional3D.hh"
 #include "gridRefinement/rescaleEngine.h"
-#include "io/imageWriter.h" 
+#include "io/imageWriter.h"
 #include "offLattice/triangleSet.hh"
 #include "offLattice/triangleSetGenerator.hh"
 
@@ -43,7 +43,8 @@
 #include <vector>
 #include <map>
 
-namespace plb {
+namespace plb
+{
 
 CouplingInterfaces3D::CouplingInterfaces3D(OctreeGridStructure const& ogs_, int level_, int overlapWidth) :
     ogs(ogs_), level(level_)
@@ -51,14 +52,15 @@ CouplingInterfaces3D::CouplingInterfaces3D(OctreeGridStructure const& ogs_, int 
     bool includeOverlaps = false;
     std::vector<plint> blockIdsPerLevel = ogs.getBlockIdsAtLevel(level, includeOverlaps);
 
-    Box3D bulk; 
+    Box3D bulk;
     plint levelTmp = 0;
     plint processId = 0;
-    // TriangleSet<double> *triangleSet = 0;    
+    // TriangleSet<double> *triangleSet = 0;
     // Array<plint,3> nSegments = Array<plint,3>(1, 1, 1);
 
-    // triangleSet = new TriangleSet<double>(DBL);    
-    for (plint iA = 0; iA < (plint)blockIdsPerLevel.size(); ++iA) {
+    // triangleSet = new TriangleSet<double>(DBL);
+    for (plint iA = 0; iA < (plint)blockIdsPerLevel.size(); ++iA)
+    {
 
         ogs.getBlock(blockIdsPerLevel[iA], bulk, levelTmp, processId);
 
@@ -69,11 +71,11 @@ CouplingInterfaces3D::CouplingInterfaces3D(OctreeGridStructure const& ogs_, int 
         const Array<bool,26> allocatedNeighbors = boxLogic::getAllocatedNeighbors(ogs, blockIdsPerLevel[iA]);
 
 
-        boxLogic::getInterfaces(bulk, neighbors, bcNeighbors, allocatedNeighbors, overlapWidth, coarseToFinePlanesFineUnits, 
-            coarseToFinePlanesCoarseUnits, coarseToFineEdgesCoarseUnits,
-            coarseToFineCornersCoarseUnits, coarseToFinePlanesCoarseUnitsExtended,
-            fineToCoarsePlanesFineUnits, fineToCoarsePlanesCoarseUnits,
-            coarseToFineBoundaryEdgesCoarseUnits, coarseToFineBoundaryCornersCoarseUnits, fineToCoarseBoundaryEdgesCoarseUnits);
+        boxLogic::getInterfaces(bulk, neighbors, bcNeighbors, allocatedNeighbors, overlapWidth, coarseToFinePlanesFineUnits,
+                                coarseToFinePlanesCoarseUnits, coarseToFineEdgesCoarseUnits,
+                                coarseToFineCornersCoarseUnits, coarseToFinePlanesCoarseUnitsExtended,
+                                fineToCoarsePlanesFineUnits, fineToCoarsePlanesCoarseUnits,
+                                coarseToFineBoundaryEdgesCoarseUnits, coarseToFineBoundaryCornersCoarseUnits, fineToCoarseBoundaryEdgesCoarseUnits);
     }
 
 
@@ -92,18 +94,19 @@ CouplingInterfaces3D::CouplingInterfaces3D(OctreeGridStructure const& ogs_, int 
 
 void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos) const
 {
-    TriangleSet<double> *triangleSet = 0;    
+    TriangleSet<double> *triangleSet = 0;
     Array<plint,3> nSegments = Array<plint,3>(1, 1, 1);
 
-    triangleSet = new TriangleSet<double>(DBL);    
+    triangleSet = new TriangleSet<double>(DBL);
 
-    Box3D bulk; 
+    Box3D bulk;
     plint levelTmp = 0;
     plint processId = 0;
 
     bool includeOverlaps = false;
     std::vector<plint> blockIdsPerLevel = ogs.getBlockIdsAtLevel(level, includeOverlaps);
-    for (plint iA = 0; iA < (plint)blockIdsPerLevel.size(); ++iA) {
+    for (plint iA = 0; iA < (plint)blockIdsPerLevel.size(); ++iA)
+    {
 
         ogs.getBlock(blockIdsPerLevel[iA], bulk, levelTmp, processId);
 
@@ -111,29 +114,32 @@ void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos
         triangleSet->append(cuboidSet);
     }
     std::string fname = createFileName(global::directories().getOutputDir()+"bulk", level, 2) + ".stl";
-    //pcout << fname << std::endl;
+    pcout << fname << std::endl;
     triangleSet->scale(dx);
     triangleSet->translate(pos);
     triangleSet->writeBinarySTL(fname);
     delete triangleSet;
 
-    //pcout << "writing int" << level << std::endl;
+    pcout << "writing int" << level << std::endl;
     triangleSet = new TriangleSet<double>(DBL);
 
-    for (plint iA = 0; iA < (plint)coarseToFinePlanesFineUnits.size(); ++iA) {
+    for (plint iA = 0; iA < (plint)coarseToFinePlanesFineUnits.size(); ++iA)
+    {
         TriangleSet<double> cuboidSet = constructCuboid<double>( Cuboid<double>(coarseToFinePlanesFineUnits[iA].bb.multiply(util::intTwoToThePower(ogs.getNumLevels()-level-1))), nSegments);
         triangleSet->append(cuboidSet);
     }
     fname = createFileName(global::directories().getOutputDir()+"coarseToFinePlanesFineUnits", level, 2) + ".stl";
-    //pcout << fname << std::endl;
+    pcout << fname << std::endl;
     triangleSet->scale(dx);
     triangleSet->translate(pos);
     triangleSet->writeBinarySTL(fname);
     delete triangleSet;
 
     triangleSet = new TriangleSet<double>(DBL);
-    for (plint iA = 0; iA < (plint)coarseToFinePlanesCoarseUnits.size(); ++iA) {
-        Array<plint,2> nCells; nCells.resetToZero();
+    for (plint iA = 0; iA < (plint)coarseToFinePlanesCoarseUnits.size(); ++iA)
+    {
+        Array<plint,2> nCells;
+        nCells.resetToZero();
         nCells[0] = (coarseToFinePlanesCoarseUnits[iA].orientation == -1) ? 1 : 0;
         nCells[1] = (coarseToFinePlanesCoarseUnits[iA].orientation == +1) ? 1 : 0;
         TriangleSet<double> cuboidSet = constructCuboid<double>( Cuboid<double>(coarseToFinePlanesCoarseUnits[iA].bb.multiply(util::intTwoToThePower(ogs.getNumLevels()-level)).enlarge(nCells, coarseToFinePlanesCoarseUnits[iA].direction)), nSegments);
@@ -146,7 +152,8 @@ void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos
     delete triangleSet;
 
     triangleSet = new TriangleSet<double>(DBL);
-    for (plint iA = 0; iA < (plint)coarseToFinePlanesCoarseUnitsExtended.size(); ++iA) {
+    for (plint iA = 0; iA < (plint)coarseToFinePlanesCoarseUnitsExtended.size(); ++iA)
+    {
         TriangleSet<double> cuboidSet = constructCuboid<double>( Cuboid<double>(coarseToFinePlanesCoarseUnitsExtended[iA].bb.multiply(util::intTwoToThePower(ogs.getNumLevels()-level))), nSegments);
         triangleSet->append(cuboidSet);
     }
@@ -157,7 +164,8 @@ void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos
     delete triangleSet;
 
     triangleSet = new TriangleSet<double>(DBL);
-    for (plint iA = 0; iA < (plint)fineToCoarsePlanesFineUnits.size(); ++iA) {
+    for (plint iA = 0; iA < (plint)fineToCoarsePlanesFineUnits.size(); ++iA)
+    {
         TriangleSet<double> cuboidSet = constructCuboid<double>( Cuboid<double>(fineToCoarsePlanesFineUnits[iA].multiply(util::intTwoToThePower(ogs.getNumLevels()-level-1))), nSegments);
         triangleSet->append(cuboidSet);
     }
@@ -168,7 +176,8 @@ void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos
     delete triangleSet;
 
     triangleSet = new TriangleSet<double>(DBL);
-    for (plint iA = 0; iA < (plint)fineToCoarsePlanesCoarseUnits.size(); ++iA) {
+    for (plint iA = 0; iA < (plint)fineToCoarsePlanesCoarseUnits.size(); ++iA)
+    {
         TriangleSet<double> cuboidSet = constructCuboid<double>( Cuboid<double>(fineToCoarsePlanesCoarseUnits[iA].bb.multiply(util::intTwoToThePower(ogs.getNumLevels()-level))), nSegments);
         triangleSet->append(cuboidSet);
     }
@@ -178,49 +187,80 @@ void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos
     triangleSet->writeBinarySTL(fname);
     delete triangleSet;
 
-    //pcout << dx << " " << pos[0] << ", " << pos[1] << ", " << pos[2] << std::endl;
+    pcout << dx << " " << pos[0] << ", " << pos[1] << ", " << pos[2] << std::endl;
 
     triangleSet = new TriangleSet<double>(DBL);
-    for (plint iA = 0; iA < (plint)coarseToFineEdgesCoarseUnits.size(); ++iA) {
-        Array<plint,6> ary; ary.resetToZero();
+    for (plint iA = 0; iA < (plint)coarseToFineEdgesCoarseUnits.size(); ++iA)
+    {
+        Array<plint,6> ary;
+        ary.resetToZero();
         plint planeDir = coarseToFineEdgesCoarseUnits[iA].planeDir;
         plint dir1 = coarseToFineEdgesCoarseUnits[iA].dir1;
         plint dir2 = coarseToFineEdgesCoarseUnits[iA].dir2;
 
-        if (planeDir == 0) {
-            if (dir1 == 0) {
-                if (dir2 == 1) {
+        if (planeDir == 0)
+        {
+            if (dir1 == 0)
+            {
+                if (dir2 == 1)
+                {
                     ary[5] = -1;
-                } else if (dir2 == -1) {
+                }
+                else if (dir2 == -1)
+                {
                     ary[4] = 1;
                 }
-            } else if (dir1 == 1) {
+            }
+            else if (dir1 == 1)
+            {
                 ary[3] = -1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[2] = 1;
             }
-        } else if (planeDir == 1) {
-            if (dir1 == 0) {
-                if (dir2 == 1) {
+        }
+        else if (planeDir == 1)
+        {
+            if (dir1 == 0)
+            {
+                if (dir2 == 1)
+                {
                     ary[1] = -1;
-                } else if (dir2 == -1) {
+                }
+                else if (dir2 == -1)
+                {
                     ary[0] = 1;
                 }
-            } else if (dir1 == 1) {
+            }
+            else if (dir1 == 1)
+            {
                 ary[5] = -1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[4] = 1;
             }
-        } else if (planeDir == 2) {
-            if (dir1 == 0) {
-                if (dir2 == 1) {
+        }
+        else if (planeDir == 2)
+        {
+            if (dir1 == 0)
+            {
+                if (dir2 == 1)
+                {
                     ary[3] = -1;
-                } else if (dir2 == -1) {
+                }
+                else if (dir2 == -1)
+                {
                     ary[2] = 1;
                 }
-            } else if (dir1 == 1) {
+            }
+            else if (dir1 == 1)
+            {
                 ary[1] = -1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[0] = 1;
             }
         }
@@ -235,55 +275,88 @@ void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos
     delete triangleSet;
 
     triangleSet = new TriangleSet<double>(DBL);
-    for (plint iA = 0; iA < (plint)coarseToFineCornersCoarseUnits.size(); ++iA) {
-        Array<plint,6> ary; ary.resetToZero();
+    for (plint iA = 0; iA < (plint)coarseToFineCornersCoarseUnits.size(); ++iA)
+    {
+        Array<plint,6> ary;
+        ary.resetToZero();
         plint planeDir = coarseToFineCornersCoarseUnits[iA].planeDir;
         plint dir1 = coarseToFineCornersCoarseUnits[iA].dir1;
         plint dir2 = coarseToFineCornersCoarseUnits[iA].dir2;
 
-        if (planeDir == 0) {
-            if (dir2 == 1) {
+        if (planeDir == 0)
+        {
+            if (dir2 == 1)
+            {
                 ary[5] = -dir2;
-            } else if (dir2 == -1) {
+            }
+            else if (dir2 == -1)
+            {
                 ary[4] = -dir2;
-            } else {
+            }
+            else
+            {
                 PLB_ASSERT(false && "dir2 must be different from zero");
             }
 
-            if (dir1 == 1) {
+            if (dir1 == 1)
+            {
                 ary[3] = -dir1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[2] = -dir1;
-            } else {
+            }
+            else
+            {
                 PLB_ASSERT(false && "dir1 must be different from zero");
             }
 
-        } else if (planeDir == 1) {
-            if (dir2 == 1) {
+        }
+        else if (planeDir == 1)
+        {
+            if (dir2 == 1)
+            {
                 ary[1] = -dir2;
-            } else if (dir2 == -1) {
+            }
+            else if (dir2 == -1)
+            {
                 ary[0] = -dir2;
-            } else {
+            }
+            else
+            {
                 PLB_ASSERT(false && "dir2 must be different from zero");
             }
 
-            if (dir1 == 1) {
+            if (dir1 == 1)
+            {
                 ary[5] = -dir1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[4] = -dir1;
-            } else {
+            }
+            else
+            {
                 PLB_ASSERT(false && "dir1 must be different from zero");
             }
-        } else if (planeDir == 2) {
-            if (dir2 == 1) {
+        }
+        else if (planeDir == 2)
+        {
+            if (dir2 == 1)
+            {
                 ary[3] = -dir2;
-            } else if (dir2 == -1) {
+            }
+            else if (dir2 == -1)
+            {
                 ary[2] = -dir2;
             }
 
-            if (dir1 == 1) {
+            if (dir1 == 1)
+            {
                 ary[1] = -dir1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[0] =-dir1;
             }
         }
@@ -291,7 +364,7 @@ void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos
         TriangleSet<double> cuboidSet = constructCuboid<double>( Cuboid<double>(coarseToFineCornersCoarseUnits[iA].bb.multiply(util::intTwoToThePower(ogs.getNumLevels()-level)).enlarge(ary)), nSegments);
         triangleSet->append(cuboidSet);
     }
-    
+
     fname = createFileName(global::directories().getOutputDir()+"coarseToFineCornersCoarseUnits", level, 2) + ".stl";
     triangleSet->scale(dx);
     triangleSet->translate(pos);
@@ -299,50 +372,81 @@ void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos
     delete triangleSet;
 
     triangleSet = new TriangleSet<double>(DBL);
-    for (plint iA = 0; iA < (plint)coarseToFineBoundaryEdgesCoarseUnits.size(); ++iA) {
-        Array<plint,6> ary; ary.resetToZero();
+    for (plint iA = 0; iA < (plint)coarseToFineBoundaryEdgesCoarseUnits.size(); ++iA)
+    {
+        Array<plint,6> ary;
+        ary.resetToZero();
         plint planeDir = coarseToFineBoundaryEdgesCoarseUnits[iA].planeDir;
         plint dir1 = coarseToFineBoundaryEdgesCoarseUnits[iA].dir1;
         plint dir2 = coarseToFineBoundaryEdgesCoarseUnits[iA].dir2;
 
-        if (planeDir == 0) {
-            if (dir1 == 0) {
-                if (dir2 == 1) {
+        if (planeDir == 0)
+        {
+            if (dir1 == 0)
+            {
+                if (dir2 == 1)
+                {
                     ary[5] = -1;
-                } else if (dir2 == -1) {
+                }
+                else if (dir2 == -1)
+                {
                     ary[4] = 1;
                 }
-            } else if (dir1 == 1) {
+            }
+            else if (dir1 == 1)
+            {
                 ary[3] = -1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[2] = 1;
             }
-        } else if (planeDir == 1) {
-            if (dir1 == 0) {
-                if (dir2 == 1) {
+        }
+        else if (planeDir == 1)
+        {
+            if (dir1 == 0)
+            {
+                if (dir2 == 1)
+                {
                     ary[1] = -1;
-                } else if (dir2 == -1) {
+                }
+                else if (dir2 == -1)
+                {
                     ary[0] = 1;
                 }
-            } else if (dir1 == 1) {
+            }
+            else if (dir1 == 1)
+            {
                 ary[5] = -1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[4] = 1;
             }
-        } else if (planeDir == 2) {
-            if (dir1 == 0) {
-                if (dir2 == 1) {
+        }
+        else if (planeDir == 2)
+        {
+            if (dir1 == 0)
+            {
+                if (dir2 == 1)
+                {
                     ary[3] = -1;
-                } else if (dir2 == -1) {
+                }
+                else if (dir2 == -1)
+                {
                     ary[2] = 1;
                 }
-            } else if (dir1 == 1) {
+            }
+            else if (dir1 == 1)
+            {
                 ary[1] = -1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[0] = 1;
             }
         }
-        
+
         TriangleSet<double> cuboidSet = constructCuboid<double>( Cuboid<double>(coarseToFineBoundaryEdgesCoarseUnits[iA].bb.multiply(util::intTwoToThePower(ogs.getNumLevels()-level)).enlarge(Array<plint,6>(0,1,0,1,0,1))), nSegments);
         triangleSet->append(cuboidSet);
     }
@@ -354,46 +458,71 @@ void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos
     delete triangleSet;
 
     triangleSet = new TriangleSet<double>(DBL);
-    for (plint iA = 0; iA < (plint)coarseToFineBoundaryCornersCoarseUnits.size(); ++iA) {
-        Array<plint,6> ary; ary.resetToZero();
+    for (plint iA = 0; iA < (plint)coarseToFineBoundaryCornersCoarseUnits.size(); ++iA)
+    {
+        Array<plint,6> ary;
+        ary.resetToZero();
         plint planeDir = coarseToFineBoundaryCornersCoarseUnits[iA].planeDir;
         plint dir1 = coarseToFineBoundaryCornersCoarseUnits[iA].dir1;
         plint dir2 = coarseToFineBoundaryCornersCoarseUnits[iA].dir2;
 
-        if (planeDir == 0) {
-            if (dir2 == 1) {
+        if (planeDir == 0)
+        {
+            if (dir2 == 1)
+            {
                 ary[5] = -dir2;
-            } else if (dir2 == -1) {
+            }
+            else if (dir2 == -1)
+            {
                 ary[4] = -dir2;
             }
 
-            if (dir1 == 1) {
+            if (dir1 == 1)
+            {
                 ary[3] = -dir1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[2] = -dir1;
             }
-        } else if (planeDir == 1) {
-            if (dir2 == 1) {
+        }
+        else if (planeDir == 1)
+        {
+            if (dir2 == 1)
+            {
                 ary[1] = -dir2;
-            } else if (dir2 == -1) {
+            }
+            else if (dir2 == -1)
+            {
                 ary[0] = -dir2;
             }
 
-            if (dir1 == 1) {
+            if (dir1 == 1)
+            {
                 ary[5] = -dir1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[4] = -dir1;
             }
-        } else if (planeDir == 2) {
-            if (dir2 == 1) {
+        }
+        else if (planeDir == 2)
+        {
+            if (dir2 == 1)
+            {
                 ary[3] = -dir2;
-            } else if (dir2 == -1) {
+            }
+            else if (dir2 == -1)
+            {
                 ary[2] = -dir2;
             }
 
-            if (dir1 == 1) {
+            if (dir1 == 1)
+            {
                 ary[1] = -dir1;
-            } else if (dir1 == -1) {
+            }
+            else if (dir1 == -1)
+            {
                 ary[0] = -dir1;
             }
         }
@@ -410,7 +539,8 @@ void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos
     delete triangleSet;
 
     triangleSet = new TriangleSet<double>(DBL);
-    for (plint iA = 0; iA < (plint)fineToCoarseBoundaryEdgesCoarseUnits.size(); ++iA) {
+    for (plint iA = 0; iA < (plint)fineToCoarseBoundaryEdgesCoarseUnits.size(); ++iA)
+    {
         TriangleSet<double> cuboidSet = constructCuboid<double>( Cuboid<double>(fineToCoarseBoundaryEdgesCoarseUnits[iA].bb.multiply(util::intTwoToThePower(ogs.getNumLevels()-level)).enlarge(Array<plint,6>(0,1,0,1,0,1))), nSegments);
         triangleSet->append(cuboidSet);
     }
@@ -419,8 +549,7 @@ void CouplingInterfaces3D::writeInterfaces(double dx, const Array<double,3> &pos
     triangleSet->scale(dx);
     triangleSet->translate(pos);
     triangleSet->writeBinarySTL(fname);
-    delete triangleSet;   
+    delete triangleSet;
 }
 
 }  // namespace plb
-

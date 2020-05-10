@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,11 +33,17 @@ typedef double T;
 int main(int argc, char* argv[])
 {
     plbInit(&argc, &argv);
-    
+
     Array<Array<T,3>,3> M;
-    M[0][0] = 3.; M[0][1] = 0.; M[0][2] = 0.;
-    M[1][0] = 0.; M[1][1] = 7.; M[1][2] = 0.;
-    M[2][0] = 0.; M[2][1] = 0.; M[2][2] = 8.;
+    M[0][0] = 3.;
+    M[0][1] = 0.;
+    M[0][2] = 0.;
+    M[1][0] = 0.;
+    M[1][1] = 7.;
+    M[1][2] = 0.;
+    M[2][0] = 0.;
+    M[2][1] = 0.;
+    M[2][2] = 8.;
     Array<Array<T,3>,3> V;
     Array<T,3> d;
     eigenDecomposition(M, V, d);
@@ -51,4 +57,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-

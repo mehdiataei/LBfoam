@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,117 +33,127 @@
 #include "core/dynamics.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-class MaskedIniDynamicsFunctional2D : public MaskedBoxProcessingFunctional2D_L<T,Descriptor> {
+class MaskedIniDynamicsFunctional2D : public MaskedBoxProcessingFunctional2D_L<T,Descriptor>
+{
 public:
-    MaskedIniDynamicsFunctional2D(Dynamics<T,Descriptor>* dynamics_);
-    MaskedIniDynamicsFunctional2D(MaskedIniDynamicsFunctional2D<T,Descriptor> const& rhs);
-    MaskedIniDynamicsFunctional2D<T,Descriptor>& operator= (
-            MaskedIniDynamicsFunctional2D<T,Descriptor> const& rhs );
-    ~MaskedIniDynamicsFunctional2D();
-    virtual void process (
-            Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                          NTensorField2D<int>& mask );
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual MaskedIniDynamicsFunctional2D<T,Descriptor>* clone() const;
+	MaskedIniDynamicsFunctional2D(Dynamics<T,Descriptor>* dynamics_);
+	MaskedIniDynamicsFunctional2D(MaskedIniDynamicsFunctional2D<T,Descriptor> const& rhs);
+	MaskedIniDynamicsFunctional2D<T,Descriptor>& operator= (
+	    MaskedIniDynamicsFunctional2D<T,Descriptor> const& rhs );
+	~MaskedIniDynamicsFunctional2D();
+	virtual void process (
+	    Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	    NTensorField2D<int>& mask );
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual MaskedIniDynamicsFunctional2D<T,Descriptor>* clone() const;
 private:
-    Dynamics<T,Descriptor>* dynamics;
+	Dynamics<T,Descriptor>* dynamics;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class N_IniBoundaryVelocityFunctional2D : public BoxProcessingFunctional2D_LN<T,Descriptor,T> {
+class N_IniBoundaryVelocityFunctional2D : public BoxProcessingFunctional2D_LN<T,Descriptor,T>
+{
 public:
-    virtual void process (
-            Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                          NTensorField2D<T>& velocity );
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual N_IniBoundaryVelocityFunctional2D<T,Descriptor>* clone() const;
+	virtual void process (
+	    Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	    NTensorField2D<T>& velocity );
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual N_IniBoundaryVelocityFunctional2D<T,Descriptor>* clone() const;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class Masked_N_IniBoundaryVelocityFunctional2D : public MaskedBoxProcessingFunctional2D_LN<T,Descriptor,T> {
+class Masked_N_IniBoundaryVelocityFunctional2D : public MaskedBoxProcessingFunctional2D_LN<T,Descriptor,T>
+{
 public:
-    virtual void process (
-            Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                          NTensorField2D<T>& velocity,
-                          NTensorField2D<int>& mask );
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual Masked_N_IniBoundaryVelocityFunctional2D<T,Descriptor>* clone() const;
+	virtual void process (
+	    Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	    NTensorField2D<T>& velocity,
+	    NTensorField2D<int>& mask );
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual Masked_N_IniBoundaryVelocityFunctional2D<T,Descriptor>* clone() const;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class N_IniEquilibriumFunctional2D : public BoxProcessingFunctional2D {
+class N_IniEquilibriumFunctional2D : public BoxProcessingFunctional2D
+{
 public:
-    virtual void processGenericBlocks (
-            Box2D domain, std::vector<AtomicBlock2D*> blocks);
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual N_IniEquilibriumFunctional2D<T,Descriptor>* clone() const;
+	virtual void processGenericBlocks (
+	    Box2D domain, std::vector<AtomicBlock2D*> blocks);
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual N_IniEquilibriumFunctional2D<T,Descriptor>* clone() const;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class Masked_N_IniEquilibriumFunctional2D : public BoxProcessingFunctional2D {
+class Masked_N_IniEquilibriumFunctional2D : public BoxProcessingFunctional2D
+{
 public:
-    virtual void processGenericBlocks (
-            Box2D domain, std::vector<AtomicBlock2D*> blocks);
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual Masked_N_IniEquilibriumFunctional2D<T,Descriptor>* clone() const;
+	virtual void processGenericBlocks (
+	    Box2D domain, std::vector<AtomicBlock2D*> blocks);
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual Masked_N_IniEquilibriumFunctional2D<T,Descriptor>* clone() const;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class N_IniPopulationsFunctional2D : public BoxProcessingFunctional2D_LN<T,Descriptor,T> {
+class N_IniPopulationsFunctional2D : public BoxProcessingFunctional2D_LN<T,Descriptor,T>
+{
 public:
-    virtual void process (
-            Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                          NTensorField2D<T>& populations );
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual N_IniPopulationsFunctional2D<T,Descriptor>* clone() const;
+	virtual void process (
+	    Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	    NTensorField2D<T>& populations );
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual N_IniPopulationsFunctional2D<T,Descriptor>* clone() const;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class Masked_N_IniPopulationsFunctional2D : public MaskedBoxProcessingFunctional2D_LN<T,Descriptor,T> {
+class Masked_N_IniPopulationsFunctional2D : public MaskedBoxProcessingFunctional2D_LN<T,Descriptor,T>
+{
 public:
-    virtual void process (
-            Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                          NTensorField2D<T>& populations,
-                          NTensorField2D<int>& mask );
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual Masked_N_IniPopulationsFunctional2D<T,Descriptor>* clone() const;
+	virtual void process (
+	    Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	    NTensorField2D<T>& populations,
+	    NTensorField2D<int>& mask );
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual Masked_N_IniPopulationsFunctional2D<T,Descriptor>* clone() const;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class N_IniConstPopulationsFunctional2D : public BoxProcessingFunctional2D_L<T,Descriptor> {
+class N_IniConstPopulationsFunctional2D : public BoxProcessingFunctional2D_L<T,Descriptor>
+{
 public:
-    N_IniConstPopulationsFunctional2D(std::vector<T> const& pop_);
-    virtual void process (
-            Box2D domain, BlockLattice2D<T,Descriptor>& lattice );
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual N_IniConstPopulationsFunctional2D<T,Descriptor>* clone() const;
+	N_IniConstPopulationsFunctional2D(std::vector<T> const& pop_);
+	virtual void process (
+	    Box2D domain, BlockLattice2D<T,Descriptor>& lattice );
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual N_IniConstPopulationsFunctional2D<T,Descriptor>* clone() const;
 private:
-    std::vector<T> pop;
+	std::vector<T> pop;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class Masked_N_IniConstPopulationsFunctional2D : public MaskedBoxProcessingFunctional2D_L<T,Descriptor> {
+class Masked_N_IniConstPopulationsFunctional2D : public MaskedBoxProcessingFunctional2D_L<T,Descriptor>
+{
 public:
-    Masked_N_IniConstPopulationsFunctional2D(std::vector<T> const& pop_);
-    virtual void process (
-            Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-            NTensorField2D<int>& mask );
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual Masked_N_IniConstPopulationsFunctional2D<T,Descriptor>* clone() const;
+	Masked_N_IniConstPopulationsFunctional2D(std::vector<T> const& pop_);
+	virtual void process (
+	    Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	    NTensorField2D<int>& mask );
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual Masked_N_IniConstPopulationsFunctional2D<T,Descriptor>* clone() const;
 private:
-    std::vector<T> pop;
+	std::vector<T> pop;
 };
 
 }  // namespace plb

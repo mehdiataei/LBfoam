@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -52,7 +52,8 @@
 #include <limits>
 
 
-namespace plb {
+namespace plb
+{
 
 
 /* ************** class BubbleMatch3D ********************************** */
@@ -62,12 +63,16 @@ BubbleMatch3D::BubbleMatch3D(MultiBlock3D& templ)
       bubbleAnalysisContainer (createContainerBlock(templ, new BubbleAnalysisData3D())),
       bubbleRemapContainer (createContainerBlock(templ, new BubbleRemapData3D(maxNumBubbles))),
       mpiData(*bubbleContainer),
-      tagMatrix (new MultiScalarField3D<plint>(*bubbleContainer))
+      tagMatrix (new MultiScalarField3D<plint>(*bubbleContainer)),
+      disjoiningPressureField(new MultiScalarField3D<double>(*bubbleContainer))
 {
     setToConstant(*tagMatrix, tagMatrix->getBoundingBox(), (plint)-1);
+    tagMatrix->setMultiBlockManagement().changeEnvelopeWidth((plint) 4);
+
 }
 
-BubbleMatch3D::~BubbleMatch3D() {
+BubbleMatch3D::~BubbleMatch3D()
+{
     delete bubbleContainer;
     delete bubbleAnalysisContainer;
     delete bubbleRemapContainer;
@@ -90,9 +95,12 @@ void BubbleMatch3D::computeBubbleData(pluint numBubbles)
     std::vector<double> bubbleCenterX(numBubbles), bubbleCenterY(numBubbles), bubbleCenterZ(numBubbles);
     bubbleVolume.resize(numBubbles);
     bubbleCenter.resize(numBubbles);
+    bubbleDensity.resize(numBubbles);
+    bubbleDisjoiningPressure.resize(numBubbles);
 
     std::vector<plint> const& localIds = mpiData.getLocalIds();
-    for (pluint i=0; i<localIds.size(); ++i) {
+    for (pluint i=0; i<localIds.size(); ++i)
+    {
         plint id = localIds[i];
         AtomicContainerBlock3D& atomicDataContainer = bubbleAnalysisContainer->getComponent(id);
         BubbleAnalysisData3D* pData = dynamic_cast<BubbleAnalysisData3D*>(atomicDataContainer.getData());
@@ -100,12 +108,19 @@ void BubbleMatch3D::computeBubbleData(pluint numBubbles)
         BubbleAnalysisData3D& data = *pData;
 
         std::vector<double> const& nextVolume = data.bubbleVolume;
+        std::vector<double> const& nextDensity = data.bubbleDensity;
+        std::vector<double> const& nextDisjoiningPressure = data.bubbleDisjoiningPressure;
         std::vector<Array<double,3> > const& nextCenter = data.bubbleCenter;
         PLB_ASSERT(nextVolume.size() == numBubbles);
         PLB_ASSERT(nextCenter.size() == numBubbles);
+        PLB_ASSERT(nextDensity.size() == numBubbles);
 
-        for (pluint i=0; i<numBubbles; ++i) {
+
+        for (pluint i=0; i<numBubbles; ++i)
+        {
             bubbleVolume[i] += nextVolume[i];
+            bubbleDensity[i] += nextDensity[i];
+            bubbleDisjoiningPressure[i] += nextDisjoiningPressure[i];
             bubbleCenterX[i] += nextCenter[i][0];
             bubbleCenterY[i] += nextCenter[i][1];
             bubbleCenterZ[i] += nextCenter[i][2];
@@ -113,6 +128,8 @@ void BubbleMatch3D::computeBubbleData(pluint numBubbles)
     }
 
 #ifdef PLB_MPI_PARALLEL
+    global::mpi().allReduceVect(bubbleDisjoiningPressure, MPI_SUM);
+    global::mpi().allReduceVect(bubbleDensity, MPI_SUM);
     global::mpi().allReduceVect(bubbleVolume, MPI_SUM);
     global::mpi().allReduceVect(bubbleCenterX, MPI_SUM);
     global::mpi().allReduceVect(bubbleCenterY, MPI_SUM);
@@ -120,10 +137,12 @@ void BubbleMatch3D::computeBubbleData(pluint numBubbles)
 #endif
 
     static const double epsilon = std::numeric_limits<double>::epsilon()*1.e4;
-    for (pluint i=0; i<numBubbles; ++i) {
+    for (pluint i=0; i<numBubbles; ++i)
+    {
         bubbleCenter[i] = Array<double,3>(bubbleCenterX[i], bubbleCenterY[i], bubbleCenterZ[i]);
         double volume = bubbleVolume[i];
-        if (volume>epsilon) {
+        if (volume>epsilon)
+        {
             bubbleCenter[i] /= volume;
         }
     }
@@ -133,7 +152,8 @@ plint BubbleMatch3D::globalBubbleIds()
 {
     plint localNumUniqueBubbles = 0;
     std::vector<plint> const& localIds = mpiData.getLocalIds();
-    for (pluint i=0; i<localIds.size(); ++i) {
+    for (pluint i=0; i<localIds.size(); ++i)
+    {
         plint id = localIds[i];
         AtomicContainerBlock3D& atomicDataContainer = bubbleRemapContainer->getComponent(id);
         BubbleRemapData3D* pData = dynamic_cast<BubbleRemapData3D*>(atomicDataContainer.getData());
@@ -151,7 +171,8 @@ plint BubbleMatch3D::globalBubbleIds()
     std::vector<plint> cumNumBubbles(global::mpi().getSize());
     PLB_ASSERT(cumNumBubbles.size()>0);
     cumNumBubbles[0] = allNumBubbles[0];
-    for (pluint i=1; i<cumNumBubbles.size(); ++i) {
+    for (pluint i=1; i<cumNumBubbles.size(); ++i)
+    {
         cumNumBubbles[i] = allNumBubbles[i]+cumNumBubbles[i-1];
     }
     plint totNumBubbles = cumNumBubbles.back();
@@ -159,14 +180,16 @@ plint BubbleMatch3D::globalBubbleIds()
     std::vector<plint> bubbleIds(totNumBubbles);
     pluint offset = global::mpi().getRank()==0 ? 0 : cumNumBubbles[global::mpi().getRank()-1];
 
-    for (pluint i=0; i<localIds.size(); ++i) {
+    for (pluint i=0; i<localIds.size(); ++i)
+    {
         plint id = localIds[i];
         AtomicContainerBlock3D& atomicDataContainer = bubbleRemapContainer->getComponent(id);
         BubbleRemapData3D* pData = dynamic_cast<BubbleRemapData3D*>(atomicDataContainer.getData());
         PLB_ASSERT(pData);
         BubbleRemapData3D& data = *pData;
         std::vector<plint> uniqueTags = data.getUniqueTags();
-        for (pluint i=0; i<uniqueTags.size(); ++i, ++offset) {
+        for (pluint i=0; i<uniqueTags.size(); ++i, ++offset)
+        {
             bubbleIds[offset] = uniqueTags[i];
         }
     }
@@ -174,11 +197,13 @@ plint BubbleMatch3D::globalBubbleIds()
     global::mpi().allReduceVect(bubbleIds, MPI_SUM);
 #endif
     std::map<plint,plint> tagRemap;
-    for (pluint i=0; i<bubbleIds.size(); ++i) {
+    for (pluint i=0; i<bubbleIds.size(); ++i)
+    {
         tagRemap[bubbleIds[i]] = i;
     }
 
-    for (pluint i=0; i<localIds.size(); ++i) {
+    for (pluint i=0; i<localIds.size(); ++i)
+    {
         plint id = localIds[i];
         AtomicContainerBlock3D& atomicDataContainer = bubbleRemapContainer->getComponent(id);
         BubbleRemapData3D* pData = dynamic_cast<BubbleRemapData3D*>(atomicDataContainer.getData());
@@ -190,7 +215,8 @@ plint BubbleMatch3D::globalBubbleIds()
     return totNumBubbles;
 }
 
-void BubbleMatch3D::resetBubbleContainer() {
+void BubbleMatch3D::resetBubbleContainer()
+{
     MultiBlockManagement3D const& management = bubbleContainer->getMultiBlockManagement();
     ThreadAttribution const& threadAttribution = management.getThreadAttribution();
     SparseBlockStructure3D const& sparseBlock = management.getSparseBlockStructure();
@@ -198,9 +224,11 @@ void BubbleMatch3D::resetBubbleContainer() {
 
     std::map<plint,Box3D>::const_iterator it = domains.begin();
     plint pos = 0;
-    for (; it != domains.end(); ++it, ++pos) {
+    for (; it != domains.end(); ++it, ++pos)
+    {
         plint id = it->first;
-        if (threadAttribution.isLocal(id)) {
+        if (threadAttribution.isLocal(id))
+        {
             AtomicContainerBlock3D& atomicDataContainer = bubbleContainer->getComponent(id);
             dynamic_cast<BubbleCounterData3D*>(atomicDataContainer.getData())->reset();
         }
@@ -212,7 +240,8 @@ void BubbleMatch3D::bubbleBucketFill(MultiScalarField3D<int>& flag)
     setToConstant(*tagMatrix, tagMatrix->getBoundingBox(), (plint)-1);
     resetBubbleContainer();
     plint numIter=2;
-    while(numIter>0) {
+    while(numIter>0)
+    {
         CountBubbleIteration3D functional;
         std::vector<MultiBlock3D*> args;
         args.push_back(tagMatrix);
@@ -220,10 +249,12 @@ void BubbleMatch3D::bubbleBucketFill(MultiScalarField3D<int>& flag)
         args.push_back(bubbleContainer);
         applyProcessingFunctional(functional, bubbleContainer->getBoundingBox(), args);
         plint numConflicts = functional.getNumConflicts();
-        if (numConflicts>0) {
+        if (numConflicts>0)
+        {
             numIter=2;
         }
-        else {
+        else
+        {
             --numIter;
         }
     }
@@ -232,16 +263,18 @@ void BubbleMatch3D::bubbleBucketFill(MultiScalarField3D<int>& flag)
 
 /* ************** class BubbleMPIdata ********************************** */
 
-BubbleMPIdata::BubbleMPIdata(MultiBlock3D& block)
+BubbleMPIdata3D::BubbleMPIdata3D(MultiBlock3D& block)
 {
     computeLocalIds(block);
 }
 
-std::vector<plint> const& BubbleMPIdata::getLocalIds() const {
+std::vector<plint> const& BubbleMPIdata3D::getLocalIds() const
+{
     return localIds;
 }
 
-void BubbleMPIdata::computeLocalIds(MultiBlock3D& block) {
+void BubbleMPIdata3D::computeLocalIds(MultiBlock3D& block)
+{
     MultiBlockManagement3D const& management = block.getMultiBlockManagement();
     ThreadAttribution const& threadAttribution = management.getThreadAttribution();
     SparseBlockStructure3D const& sparseBlock = management.getSparseBlockStructure();
@@ -249,9 +282,11 @@ void BubbleMPIdata::computeLocalIds(MultiBlock3D& block) {
 
     std::map<plint,Box3D>::const_iterator it = domains.begin();
     plint pos = 0;
-    for (; it != domains.end(); ++it, ++pos) {
+    for (; it != domains.end(); ++it, ++pos)
+    {
         plint id = it->first;
-        if (threadAttribution.isLocal(id)) {
+        if (threadAttribution.isLocal(id))
+        {
             localIds.push_back(id);
         }
     }
@@ -265,20 +300,21 @@ BubbleCounterData3D::BubbleCounterData3D(plint maxNumBubbles_)
     : maxNumBubbles(maxNumBubbles_)
 { }
 
-BubbleCounterData3D* BubbleCounterData3D::clone() const {
+BubbleCounterData3D* BubbleCounterData3D::clone() const
+{
     return new BubbleCounterData3D(*this);
 }
 
 bool BubbleCounterData3D::convertCell (
-        plint& tag0,
-        plint tag1,  plint tag2,  plint tag3,
-        plint tag4,  plint tag5,  plint tag6,
-        plint tag7,  plint tag8,  plint tag9,
-        plint tag10, plint tag11, plint tag12, plint tag13,
-        plint tag1_,  plint tag2_,  plint tag3_,
-        plint tag4_,  plint tag5_,  plint tag6_,
-        plint tag7_,  plint tag8_,  plint tag9_,
-        plint tag10_, plint tag11_, plint tag12_, plint tag13_ )
+    plint& tag0,
+    plint tag1,  plint tag2,  plint tag3,
+    plint tag4,  plint tag5,  plint tag6,
+    plint tag7,  plint tag8,  plint tag9,
+    plint tag10, plint tag11, plint tag12, plint tag13,
+    plint tag1_,  plint tag2_,  plint tag3_,
+    plint tag4_,  plint tag5_,  plint tag6_,
+    plint tag7_,  plint tag8_,  plint tag9_,
+    plint tag10_, plint tag11_, plint tag12_, plint tag13_ )
 {
     bool hasConflict =
         processNeighbor(tag0, tag1) || processNeighbor(tag0, tag2) || processNeighbor(tag0, tag3) ||
@@ -291,24 +327,30 @@ bool BubbleCounterData3D::convertCell (
         processNeighbor(tag0, tag7_) || processNeighbor(tag0, tag8_) || processNeighbor(tag0, tag9_) ||
         processNeighbor(tag0, tag10_) || processNeighbor(tag0, tag11_) || processNeighbor(tag0, tag12_) ||
         processNeighbor(tag0, tag13_);
-    if (tag0==-1) {
+    if (tag0==-1)
+    {
         tag0 = getNextTag();
     }
     return hasConflict;
 }
 
-bool BubbleCounterData3D::processNeighbor(plint& tag0, plint tag1) {
+bool BubbleCounterData3D::processNeighbor(plint& tag0, plint tag1)
+{
     plint myTag = convertTag(tag0);
     plint otherTag = convertTag(tag1);
     tag0 = myTag; // re-assign tag in case it got re-assigned in "convertTag()".
     bool hasConflict = false;
-    if (otherTag == -1) {
-        if (myTag == -1) {
+    if (otherTag == -1)
+    {
+        if (myTag == -1)
+        {
             tag0 = getNextTag();
         }
     }
-    else {
-        if (myTag<otherTag) {
+    else
+    {
+        if (myTag<otherTag)
+        {
             tag0 = otherTag;
             registerConflict(myTag, otherTag);
             hasConflict = true;
@@ -317,37 +359,46 @@ bool BubbleCounterData3D::processNeighbor(plint& tag0, plint tag1) {
     return hasConflict;
 }
 
-plint BubbleCounterData3D::getNextTag() {
+plint BubbleCounterData3D::getNextTag()
+{
     plint nextTag = getUniqueID()*maxNumBubbles + nextCellId;
     ++nextCellId;
     return nextTag;
 }
 
-void BubbleCounterData3D::reset() {
+void BubbleCounterData3D::reset()
+{
     nextCellId = 0;
     retagging.clear();
     //uniqueTags.clear();
     //tagRemap.clear();
 }
 
-plint BubbleCounterData3D::convertTag(plint tag) const {
-    if (tag==-1) return tag;
+plint BubbleCounterData3D::convertTag(plint tag) const
+{
+    if (tag==-1)
+        return tag;
     std::map<plint,plint>::const_iterator it = retagging.find(tag);
-    if (it==retagging.end()) {
+    if (it==retagging.end())
+    {
         return tag;
     }
-    else {
+    else
+    {
         return it->second;
     }
 }
 
-void BubbleCounterData3D::registerConflict(plint oldTag, plint newTag) {
+void BubbleCounterData3D::registerConflict(plint oldTag, plint newTag)
+{
     retagging.insert(std::pair<plint,plint>(oldTag, newTag));
     std::map<plint,plint>::iterator it = retagging.begin();
     // If some of the map's items are still pointing to the old
     // tag, redirect them to the new one.
-    for (; it!=retagging.end(); ++it) {
-        if (it->second==oldTag) {
+    for (; it!=retagging.end(); ++it)
+    {
+        if (it->second==oldTag)
+        {
             it->second=newTag;
         }
     }
@@ -355,11 +406,13 @@ void BubbleCounterData3D::registerConflict(plint oldTag, plint newTag) {
 
 /* *************** Class BubbleRemapData3D ******************************** */
 
-BubbleRemapData3D* BubbleRemapData3D::clone() const {
+BubbleRemapData3D* BubbleRemapData3D::clone() const
+{
     return new BubbleRemapData3D(*this);
 }
 
-bool BubbleRemapData3D::isMyTag(plint tag) {
+bool BubbleRemapData3D::isMyTag(plint tag)
+{
     return tag/maxNumBubbles == getUniqueID();
 }
 
@@ -370,11 +423,13 @@ CountBubbleIteration3D::CountBubbleIteration3D()
     : numConflictsId(this->getStatistics().subscribeIntSum())
 { }
 
-CountBubbleIteration3D* CountBubbleIteration3D::clone() const {
+CountBubbleIteration3D* CountBubbleIteration3D::clone() const
+{
     return new CountBubbleIteration3D(*this);
 }
 
-plint CountBubbleIteration3D::getNumConflicts() const {
+plint CountBubbleIteration3D::getNumConflicts() const
+{
     return this->getStatistics().getIntSum(numConflictsId);
 }
 
@@ -399,43 +454,47 @@ void CountBubbleIteration3D::processGenericBlocks(Box3D domain,std::vector<Atomi
     Dot3D flagOffset = computeRelativeDisplacement(tagMatrix, flagMatrix);
     BlockStatistics& statistics = this->getStatistics();
 
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {         
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX)
+    {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+        {
+            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ)
+            {
                 int currentFlag = flagMatrix.get(iX+flagOffset.x, iY+flagOffset.y, iZ+flagOffset.z);
-                if ( currentFlag==freeSurfaceFlag::empty ||
-                     currentFlag==freeSurfaceFlag::interface )
+                if ( currentFlag==freeSurfaceFlag3D::empty ||
+                        currentFlag==freeSurfaceFlag3D::interface )
                 {
                     bool isConflicting = data.convertCell (
-                            tagMatrix.get(iX  ,iY  ,iZ  ),
-                            tagMatrix.get(iX-1,iY  ,iZ  ),
-                            tagMatrix.get(iX  ,iY-1,iZ  ),
-                            tagMatrix.get(iX  ,iY  ,iZ-1),
-                            tagMatrix.get(iX-1,iY-1,iZ  ),
-                            tagMatrix.get(iX-1,iY+1,iZ  ),
-                            tagMatrix.get(iX-1,iY  ,iZ-1),
-                            tagMatrix.get(iX-1,iY  ,iZ+1),
-                            tagMatrix.get(iX  ,iY-1,iZ-1),
-                            tagMatrix.get(iX  ,iY-1,iZ+1),
-                            tagMatrix.get(iX-1,iY-1,iZ-1),
-                            tagMatrix.get(iX-1,iY-1,iZ+1),
-                            tagMatrix.get(iX-1,iY+1,iZ-1),
-                            tagMatrix.get(iX-1,iY+1,iZ+1),
+                                             tagMatrix.get(iX,iY,iZ  ),
+                                             tagMatrix.get(iX-1,iY,iZ  ),
+                                             tagMatrix.get(iX,iY-1,iZ  ),
+                                             tagMatrix.get(iX,iY,iZ-1),
+                                             tagMatrix.get(iX-1,iY-1,iZ  ),
+                                             tagMatrix.get(iX-1,iY+1,iZ  ),
+                                             tagMatrix.get(iX-1,iY,iZ-1),
+                                             tagMatrix.get(iX-1,iY,iZ+1),
+                                             tagMatrix.get(iX,iY-1,iZ-1),
+                                             tagMatrix.get(iX,iY-1,iZ+1),
+                                             tagMatrix.get(iX-1,iY-1,iZ-1),
+                                             tagMatrix.get(iX-1,iY-1,iZ+1),
+                                             tagMatrix.get(iX-1,iY+1,iZ-1),
+                                             tagMatrix.get(iX-1,iY+1,iZ+1),
 
-                            tagMatrix.get(iX+1,iY  ,iZ  ),
-                            tagMatrix.get(iX  ,iY+1,iZ  ),
-                            tagMatrix.get(iX  ,iY  ,iZ+1),
-                            tagMatrix.get(iX+1,iY+1,iZ  ),
-                            tagMatrix.get(iX+1,iY-1,iZ  ),
-                            tagMatrix.get(iX+1,iY  ,iZ+1),
-                            tagMatrix.get(iX+1,iY  ,iZ-1),
-                            tagMatrix.get(iX  ,iY+1,iZ+1),
-                            tagMatrix.get(iX  ,iY+1,iZ-1),
-                            tagMatrix.get(iX+1,iY+1,iZ+1),
-                            tagMatrix.get(iX+1,iY+1,iZ-1),
-                            tagMatrix.get(iX+1,iY-1,iZ+1),
-                            tagMatrix.get(iX+1,iY-1,iZ-1) );
-                    if (isConflicting) {
+                                             tagMatrix.get(iX+1,iY,iZ  ),
+                                             tagMatrix.get(iX,iY+1,iZ  ),
+                                             tagMatrix.get(iX,iY,iZ+1),
+                                             tagMatrix.get(iX+1,iY+1,iZ  ),
+                                             tagMatrix.get(iX+1,iY-1,iZ  ),
+                                             tagMatrix.get(iX+1,iY,iZ+1),
+                                             tagMatrix.get(iX+1,iY,iZ-1),
+                                             tagMatrix.get(iX,iY+1,iZ+1),
+                                             tagMatrix.get(iX,iY+1,iZ-1),
+                                             tagMatrix.get(iX+1,iY+1,iZ+1),
+                                             tagMatrix.get(iX+1,iY+1,iZ-1),
+                                             tagMatrix.get(iX+1,iY-1,iZ+1),
+                                             tagMatrix.get(iX+1,iY-1,iZ-1) );
+                    if (isConflicting)
+                    {
                         statistics.gatherIntSum(numConflictsId, 1);
                     }
                 }
@@ -447,7 +506,8 @@ void CountBubbleIteration3D::processGenericBlocks(Box3D domain,std::vector<Atomi
 
 /* *************** Class CollectBubbleTags3D ******************************** */
 
-CollectBubbleTags3D* CollectBubbleTags3D::clone() const {
+CollectBubbleTags3D* CollectBubbleTags3D::clone() const
+{
     return new CollectBubbleTags3D(*this);
 }
 
@@ -466,11 +526,15 @@ void CollectBubbleTags3D::processGenericBlocks(Box3D domain,std::vector<AtomicBl
     BubbleRemapData3D& data = *pData;
 
     std::set<plint> uniqueTags;
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {         
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX)
+    {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+        {
+            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ)
+            {
                 plint tag = tagMatrix.get(iX,iY,iZ);
-                if (tag>=0) {
+                if (tag>=0)
+                {
                     uniqueTags.insert(tag);
                 }
             }
@@ -479,9 +543,11 @@ void CollectBubbleTags3D::processGenericBlocks(Box3D domain,std::vector<AtomicBl
 
     data.getUniqueTags().clear();
     std::set<plint>::const_iterator it = uniqueTags.begin();
-    for (; it!=uniqueTags.end(); ++it) {
+    for (; it!=uniqueTags.end(); ++it)
+    {
         plint tag = *it;
-        if (data.isMyTag(tag)) {
+        if (data.isMyTag(tag))
+        {
             data.getUniqueTags().push_back(tag);
         }
     }
@@ -490,7 +556,8 @@ void CollectBubbleTags3D::processGenericBlocks(Box3D domain,std::vector<AtomicBl
 
 /* *************** Class ApplyTagRemap3D ******************************** */
 
-ApplyTagRemap3D* ApplyTagRemap3D::clone() const {
+ApplyTagRemap3D* ApplyTagRemap3D::clone() const
+{
     return new ApplyTagRemap3D(*this);
 }
 
@@ -509,11 +576,15 @@ void ApplyTagRemap3D::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3
     BubbleRemapData3D& data = *pData;
 
     std::map<plint,plint> const& tagRemap = data.getTagRemap();
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {         
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX)
+    {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+        {
+            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ)
+            {
                 plint tag = tagMatrix.get(iX,iY,iZ);
-                if (tag>=0) {
+                if (tag>=0)
+                {
                     std::map<plint,plint>::const_iterator it = tagRemap.find(tag);
                     PLB_ASSERT( it!=tagRemap.end() );
                     tagMatrix.get(iX,iY,iZ) = it->second;
@@ -524,4 +595,3 @@ void ApplyTagRemap3D::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3
 }
 
 }  // namespace plb
-

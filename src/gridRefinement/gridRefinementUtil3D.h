@@ -1,11 +1,11 @@
 /* This file is part of the Palabos library.
- * 
+ *
  * Copyright (C) 2011-2017 FlowKit Sarl
  * Route d'Oron 2
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -37,15 +37,15 @@
 
 #include <memory>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template <typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > exportLatticeToSingleGridLevel(
-        MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, plint exportLevel,
-        Box3D const& referenceDomain, plint levelOfReferenceDomain);
+         template<typename T2, template<typename U2> class Descriptor2> class Engine>
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > exportLatticeToSingleGridLevel(
+    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices, plint exportLevel,
+    Box3D const& referenceDomain, plint levelOfReferenceDomain);
 
 }  // namespace plb
 
 #endif  // GRID_REFINEMENT_UTIL_3D_H
-

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,37 +33,37 @@
 #include "atomicBlock/reductiveDataProcessingFunctional3D.h"
 #include "atomicBlock/atomicContainerBlock3D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-struct PureDynamics : public ContainerBlockData
-{
-    PureDynamics() : isPure(true), omega() { }
-    PureDynamics(bool isPure_, T omega_) :
-        isPure(isPure_), omega(omega_)
-    { }
-    virtual PureDynamics<T>* clone() const {
-        return new PureDynamics<T>(*this);
-    }
-    bool isPure;
-    T omega;
+struct PureDynamics : public ContainerBlockData {
+	PureDynamics() : isPure(true), omega() { }
+	PureDynamics(bool isPure_, T omega_) :
+		isPure(isPure_), omega(omega_)
+	{ }
+	virtual PureDynamics<T>* clone() const
+	{
+		return new PureDynamics<T>(*this);
+	}
+	bool isPure;
+	T omega;
 };
 
 template<typename T, template<typename U> class Descriptor>
 class IdentifyPureDynamics3D : public BoxProcessingFunctional3D
 {
 public:
-    IdentifyPureDynamics3D(plint dynamicsId_);
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
-    virtual IdentifyPureDynamics3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    pluint getMaxChainLength() const;
+	IdentifyPureDynamics3D(plint dynamicsId_);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
+	virtual IdentifyPureDynamics3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	pluint getMaxChainLength() const;
 private:
-    plint dynamicsId;
+	plint dynamicsId;
 };
 
 }  // namespace plb
 
 #endif  // CO_PROCESSOR_FUNCTIONAL_3D_H
-

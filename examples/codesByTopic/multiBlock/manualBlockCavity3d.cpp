@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -74,17 +74,18 @@ void writeGifs(BlockLatticeT& lattice,
                                 imSize, imSize );
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 100.,  // Re
-            100,       // N
-            1.,        // lx
-            1.,        // ly
-            1.         // lz
+        (T) 1e-2,  // uMax
+        (T) 100.,  // Re
+        100,       // N
+        1.,        // lx
+        1.,        // ly
+        1.         // lz
     );
     const T logT     = (T)1/(T)200;
     const T imSave   = (T)1/(T)200;
@@ -97,8 +98,8 @@ int main(int argc, char* argv[]) {
     plint envelopeWidth = 1;
     MultiBlockLattice3D<T, DESCRIPTOR> lattice (
         MultiBlockManagement3D( createRegularDistribution3D (
-                                  parameters.getNx(),parameters.getNy(),parameters.getNz(), 3, 4, 2),
-                                  defaultMultiBlockPolicy3D().getThreadAttribution(), envelopeWidth ),
+                                    parameters.getNx(),parameters.getNy(),parameters.getNz(), 3, 4, 2),
+                                defaultMultiBlockPolicy3D().getThreadAttribution(), envelopeWidth ),
         defaultMultiBlockPolicy3D().getBlockCommunicator(),
         defaultMultiBlockPolicy3D().getCombinedStatistics(),
         defaultMultiBlockPolicy3D().getMultiCellAccess<T,DESCRIPTOR>(),
@@ -110,7 +111,7 @@ int main(int argc, char* argv[]) {
 
 
     OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* boundaryCondition
-        //= createInterpBoundaryCondition3D<T,DESCRIPTOR>();
+    //= createInterpBoundaryCondition3D<T,DESCRIPTOR>();
         = createLocalBoundaryCondition3D<T,DESCRIPTOR>();
 
     cavitySetup(lattice, parameters, *boundaryCondition);
@@ -118,15 +119,18 @@ int main(int argc, char* argv[]) {
     T previousIterationTime = T();
 
     // Main loop over time iterations.
-    for (plint iT=0; iT<parameters.nStep(maxT); ++iT) {
+    for (plint iT=0; iT<parameters.nStep(maxT); ++iT)
+    {
         global::timer("mainLoop").restart();
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "step " << iT
                   << "; t=" << iT*parameters.getDeltaT();
         }
 
-        if (iT%parameters.nStep(imSave)==0) {
+        if (iT%parameters.nStep(imSave)==0)
+        {
             pcout << "Writing Gif ..." << endl;
             writeGifs(lattice, parameters, iT);
         }
@@ -136,7 +140,8 @@ int main(int argc, char* argv[]) {
         // Lattice Boltzmann iteration step.
         lattice.collideAndStream();
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "; av energy="
                   << setprecision(10) << getStoredAverageEnergy<T>(lattice)
                   << "; av rho="

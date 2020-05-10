@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,7 +33,8 @@
 #include "atomicBlock/dataProcessingFunctional3D.h"
 #include "atomicBlock/dataProcessingFunctional2D.h"
 
-namespace plb {
+namespace plb
+{
 
 /// First part of collision in Asinari's LW-ACM model.
 /** Here, density and momentum are computed from the populations
@@ -43,100 +44,102 @@ namespace plb {
  *  AsinariPostCollide3D, right after the streaming step.
  */
 template<typename T, template<typename U> class Descriptor>
-class AsinariDynamics : public IsoThermalBulkDynamics<T,Descriptor> {
+class AsinariDynamics : public IsoThermalBulkDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    AsinariDynamics(T omega_);
-    AsinariDynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	AsinariDynamics(T omega_);
+	AsinariDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual AsinariDynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual AsinariDynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Set local relaxation parameter of the dynamics.
-    virtual void setOmega(T omega_);
+	/// Set local relaxation parameter of the dynamics.
+	virtual void setOmega(T omega_);
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Implementation of the collision step, with imposed macroscopic variables
-    virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
-                         Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
+	/// Implementation of the collision step, with imposed macroscopic variables
+	virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
+	                             Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
-    /// Get local value of any generic parameter.
-    /** For Asinari-Dynamics parameter with ID 1000 is the prefactor
-     *  2*(omega-1)/omega.
-     **/
-    virtual T getParameter(plint whichParameter) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
+	/// Get local value of any generic parameter.
+	/** For Asinari-Dynamics parameter with ID 1000 is the prefactor
+	 *  2*(omega-1)/omega.
+	 **/
+	virtual T getParameter(plint whichParameter) const;
 private:
-    void computePrefactor();
+	void computePrefactor();
 private:
-    static int id;
-    T prefactor;
+	static int id;
+	T prefactor;
 };
 
 
 /// First part of collision in Asinari's LW-ACM model, with incompressible equilibrium.
 template<typename T, template<typename U> class Descriptor>
-class IncAsinariDynamics : public IsoThermalBulkDynamics<T,Descriptor> {
+class IncAsinariDynamics : public IsoThermalBulkDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    IncAsinariDynamics(T omega_);
-    IncAsinariDynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	IncAsinariDynamics(T omega_);
+	IncAsinariDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual IncAsinariDynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual IncAsinariDynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Set local relaxation parameter of the dynamics.
-    virtual void setOmega(T omega_);
+	/// Set local relaxation parameter of the dynamics.
+	virtual void setOmega(T omega_);
 
-    /// Say if velocity in this dynamics is computed as "j" (the order-1 moment
-    ///   of the populations) or as "j/rho".
-    virtual bool velIsJ() const;
+	/// Say if velocity in this dynamics is computed as "j" (the order-1 moment
+	///   of the populations) or as "j/rho".
+	virtual bool velIsJ() const;
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Velocity is equal to j, not u.
-    virtual void computeVelocity( Cell<T,Descriptor> const& cell,
-                                  Array<T,Descriptor<T>::d>& u ) const;
+	/// Velocity is equal to j, not u.
+	virtual void computeVelocity( Cell<T,Descriptor> const& cell,
+	                              Array<T,Descriptor<T>::d>& u ) const;
 
-    /// For PiNeq, subtract equilibrium term jj instead of invRho*jj.
-    virtual void computeRhoBarJPiNeq( Cell<T,Descriptor> const& cell,
-                                      T& rhoBar, Array<T,Descriptor<T>::d>& j,
-                                      Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq ) const;
+	/// For PiNeq, subtract equilibrium term jj instead of invRho*jj.
+	virtual void computeRhoBarJPiNeq( Cell<T,Descriptor> const& cell,
+	                                  T& rhoBar, Array<T,Descriptor<T>::d>& j,
+	                                  Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq ) const;
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Implementation of the collision step, with imposed macroscopic variables
-    virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
-                         Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
+	/// Implementation of the collision step, with imposed macroscopic variables
+	virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
+	                             Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
-    /// Get local value of any generic parameter.
-    /** For Asinari-Dynamics parameter with ID 1000 is the prefactor
-     *  2*(omega-1)/omega.
-     **/
-    virtual T getParameter(plint whichParameter) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
+	/// Get local value of any generic parameter.
+	/** For Asinari-Dynamics parameter with ID 1000 is the prefactor
+	 *  2*(omega-1)/omega.
+	 **/
+	virtual T getParameter(plint whichParameter) const;
 private:
-    void computePrefactor();
+	void computePrefactor();
 private:
-    static int id;
-    T prefactor;
+	static int id;
+	T prefactor;
 };
 
 
@@ -149,13 +152,15 @@ template<typename T, template<typename U> class Descriptor>
 class AsinariPostCollide3D : public BoxProcessingFunctional3D_L<T,Descriptor>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
-    virtual AsinariPostCollide3D<T,Descriptor>* clone() const {
-        return new AsinariPostCollide3D(*this);
-    }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-    }
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
+	virtual AsinariPostCollide3D<T,Descriptor>* clone() const
+	{
+		return new AsinariPostCollide3D(*this);
+	}
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+	}
 };
 
 /// Second part of collision in Asinari's LW-ACM model, for 2D.
@@ -165,16 +170,17 @@ template<typename T, template<typename U> class Descriptor>
 class AsinariPostCollide2D : public BoxProcessingFunctional2D_L<T,Descriptor>
 {
 public:
-    virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
-    virtual AsinariPostCollide2D<T,Descriptor>* clone() const {
-        return new AsinariPostCollide2D(*this);
-    }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-    }
+	virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
+	virtual AsinariPostCollide2D<T,Descriptor>* clone() const
+	{
+		return new AsinariPostCollide2D(*this);
+	}
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+	}
 };
 
 }  // namespace plb
 
 #endif  // ASINARI_MODEL_H
-

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,16 +32,17 @@
 #include "core/geometry2D.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 struct CommunicationInfo2D {
-    plint fromBlockId;
-    int fromProcessId;
-    Box2D fromDomain;
-    plint toBlockId;
-    int toProcessId;
-    Box2D toDomain;
-    Dot2D absoluteOffset;
+	plint fromBlockId;
+	int fromProcessId;
+	Box2D fromDomain;
+	plint toBlockId;
+	int toProcessId;
+	Box2D toDomain;
+	Dot2D absoluteOffset;
 };
 
 typedef std::vector<CommunicationInfo2D> CommunicationPackage2D;

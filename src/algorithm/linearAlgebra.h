@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,7 +28,8 @@
 #include "core/globalDefs.h"
 #include "core/array.h"
 
-namespace plb {
+namespace plb
+{
 
 // Compute two 3D unit vectors v2Unit and v3Unit that are orthogonal to a given unit
 //   vector v1Unit and to each other.
@@ -52,4 +53,3 @@ void eigenDecomposition(Array<Array<T,3>,3> const& A, Array<Array<T,3>,3>& V, Ar
 } // namespace plb
 
 #endif  // LINEAR_ALGEBRA_H
-

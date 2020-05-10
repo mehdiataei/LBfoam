@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,71 +29,77 @@
 #include <string>
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 struct ScalarFunction {
-    virtual ~ScalarFunction() { }
-    virtual double operator() (double x) const =0;
-    virtual ScalarFunction* clone() const=0;
+	virtual ~ScalarFunction() { }
+	virtual double operator() (double x) const =0;
+	virtual ScalarFunction* clone() const=0;
 };
 
-class LinearFunction : public ScalarFunction {
+class LinearFunction : public ScalarFunction
+{
 public:
-    LinearFunction(double x1_, double x2_, double y1_, double y2_);
-    virtual double operator() (double x) const;
-    virtual LinearFunction* clone() const;
+	LinearFunction(double x1_, double x2_, double y1_, double y2_);
+	virtual double operator() (double x) const;
+	virtual LinearFunction* clone() const;
 private:
-    double x1, x2, y1, y2;
+	double x1, x2, y1, y2;
 };
 
-class PowerLawFunction : public ScalarFunction {
+class PowerLawFunction : public ScalarFunction
+{
 public:
-    PowerLawFunction(double x1_, double x2_, double y1_, double y2_, double b_);
-    virtual double operator() (double x) const;
-    virtual PowerLawFunction* clone() const;
+	PowerLawFunction(double x1_, double x2_, double y1_, double y2_, double b_);
+	virtual double operator() (double x) const;
+	virtual PowerLawFunction* clone() const;
 private:
-    double x1, x2, y1, y2;
-    double b;
+	double x1, x2, y1, y2;
+	double b;
 };
 
 struct Piece {
-    Piece(double closedBegin_, double openEnd_) : closedBegin(closedBegin_), openEnd(openEnd_)
-    { }
-    double closedBegin, openEnd;
+	Piece(double closedBegin_, double openEnd_) : closedBegin(closedBegin_), openEnd(openEnd_)
+	{ }
+	double closedBegin, openEnd;
 };
 
-class PiecewiseFunction : public ScalarFunction {
+class PiecewiseFunction : public ScalarFunction
+{
 public:
-    PiecewiseFunction() { }
-    ~PiecewiseFunction();
-    PiecewiseFunction(PiecewiseFunction const& rhs);
-    PiecewiseFunction& operator=(PiecewiseFunction const& rhs);
-    void swap(PiecewiseFunction& rhs);
-    void addPiece(Piece piece, ScalarFunction* f);
-    virtual double operator() (double x) const;
-    virtual PiecewiseFunction* clone() const;
+	PiecewiseFunction() { }
+	~PiecewiseFunction();
+	PiecewiseFunction(PiecewiseFunction const& rhs);
+	PiecewiseFunction& operator=(PiecewiseFunction const& rhs);
+	void swap(PiecewiseFunction& rhs);
+	void addPiece(Piece piece, ScalarFunction* f);
+	virtual double operator() (double x) const;
+	virtual PiecewiseFunction* clone() const;
 private:
-    std::vector<Piece > pieces;
-    std::vector<ScalarFunction*> functions;
+	std::vector<Piece > pieces;
+	std::vector<ScalarFunction*> functions;
 };
 
 struct rgb {
-    rgb(double r_, double g_, double b_) : r(r_), g(g_), b(b_)
-    { }
-    double r,g,b;
+	rgb(double r_, double g_, double b_) : r(r_), g(g_), b(b_)
+	{ }
+	double r,g,b;
 };
 
-class ColorMap {
+class ColorMap
+{
 public:
-    ColorMap(PiecewiseFunction const& red_,
-             PiecewiseFunction const& green_,
-             PiecewiseFunction const& blue_);
-    rgb get(double x) const;
+	ColorMap(PiecewiseFunction const& red_,
+	         PiecewiseFunction const& green_,
+	         PiecewiseFunction const& blue_);
+	rgb get(double x) const;
 private:
-    PiecewiseFunction red, green, blue;
+	PiecewiseFunction red, green, blue;
 };
 
-namespace mapGenerators {
+namespace mapGenerators
+{
 
 PiecewiseFunction generateEarthRed();
 PiecewiseFunction generateEarthGreen();

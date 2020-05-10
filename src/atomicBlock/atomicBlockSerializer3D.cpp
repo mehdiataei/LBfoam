@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,54 +29,62 @@
 #include "atomicBlock/atomicBlockSerializer3D.h"
 #include "core/plbDebug.h"
 
-namespace plb {
+namespace plb
+{
 
 ////////// class AtomicBlockSerializer3D ////////////////////////////
 
 AtomicBlockSerializer3D::AtomicBlockSerializer3D (
-        AtomicBlock3D const& block_, IndexOrdering::OrderingT ordering_ )
+    AtomicBlock3D const& block_, IndexOrdering::OrderingT ordering_ )
     : block(block_), ordering(ordering_),
       domain(block.getBoundingBox()),
       iX(domain.x0), iY(domain.y0), iZ(domain.z0)
 { }
 
 AtomicBlockSerializer3D::AtomicBlockSerializer3D (
-        AtomicBlock3D const& block_,
-        Box3D domain_,
-        IndexOrdering::OrderingT ordering_ )
+    AtomicBlock3D const& block_,
+    Box3D domain_,
+    IndexOrdering::OrderingT ordering_ )
     : block(block_), ordering(ordering_),
       domain(domain_),
       iX(domain.x0), iY(domain.y0), iZ(domain.z0)
 { }
 
-AtomicBlockSerializer3D* AtomicBlockSerializer3D::clone() const {
+AtomicBlockSerializer3D* AtomicBlockSerializer3D::clone() const
+{
     return new AtomicBlockSerializer3D(*this);
 }
 
-pluint AtomicBlockSerializer3D::getSize() const {
+pluint AtomicBlockSerializer3D::getSize() const
+{
     return domain.nCells() * block.getDataTransfer().staticCellSize();
 }
 
-const char* AtomicBlockSerializer3D::getNextDataBuffer(pluint& bufferSize) const {
+const char* AtomicBlockSerializer3D::getNextDataBuffer(pluint& bufferSize) const
+{
     PLB_PRECONDITION( !isEmpty() );
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         bufferSize = domain.getNz() * block.getDataTransfer().staticCellSize();
         buffer.resize(bufferSize);
         block.getDataTransfer().send(Box3D(iX,iX,iY,iY, domain.z0, domain.z1),
                                      buffer, modif::staticVariables);
         ++iY;
-        if (iY > domain.y1) {
+        if (iY > domain.y1)
+        {
             iY = domain.y0;
             ++iX;
         }
     }
-    else {
+    else
+    {
         bufferSize = domain.getNx() * block.getDataTransfer().staticCellSize();
         buffer.resize(bufferSize);
         block.getDataTransfer().send(Box3D(domain.x0, domain.x1, iY,iY,iZ,iZ),
-                                           buffer, modif::staticVariables);
+                                     buffer, modif::staticVariables);
         ++iY;
-        if (iY > domain.y1) {
+        if (iY > domain.y1)
+        {
             iY = domain.y0;
             ++iZ;
         }
@@ -84,11 +92,14 @@ const char* AtomicBlockSerializer3D::getNextDataBuffer(pluint& bufferSize) const
     return &buffer[0];
 }
 
-bool AtomicBlockSerializer3D::isEmpty() const {
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+bool AtomicBlockSerializer3D::isEmpty() const
+{
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         return iX > domain.x1;
     }
-    else {
+    else
+    {
         return iZ > domain.z1;
     }
 }
@@ -97,71 +108,83 @@ bool AtomicBlockSerializer3D::isEmpty() const {
 ////////// class AtomicBlockUnSerializer3D ////////////////////////////
 
 AtomicBlockUnSerializer3D::AtomicBlockUnSerializer3D (
-        AtomicBlock3D& block_, IndexOrdering::OrderingT ordering_ )
+    AtomicBlock3D& block_, IndexOrdering::OrderingT ordering_ )
     : block(block_), ordering(ordering_),
       domain(block.getBoundingBox()),
       iX(domain.x0), iY(domain.y0), iZ(domain.z0)
 { }
 
 AtomicBlockUnSerializer3D::AtomicBlockUnSerializer3D (
-        AtomicBlock3D& block_,
-        Box3D domain_,
-        IndexOrdering::OrderingT ordering_ )
+    AtomicBlock3D& block_,
+    Box3D domain_,
+    IndexOrdering::OrderingT ordering_ )
     : block(block_), ordering(ordering_),
       domain(domain_),
       iX(domain.x0), iY(domain.y0), iZ(domain.z0)
 { }
 
-AtomicBlockUnSerializer3D* AtomicBlockUnSerializer3D::clone() const {
+AtomicBlockUnSerializer3D* AtomicBlockUnSerializer3D::clone() const
+{
     return new AtomicBlockUnSerializer3D(*this);
 }
 
-pluint AtomicBlockUnSerializer3D::getSize() const {
+pluint AtomicBlockUnSerializer3D::getSize() const
+{
     return domain.nCells() * block.getDataTransfer().staticCellSize();
 }
 
-char* AtomicBlockUnSerializer3D::getNextDataBuffer(pluint& bufferSize) {
+char* AtomicBlockUnSerializer3D::getNextDataBuffer(pluint& bufferSize)
+{
     PLB_PRECONDITION( !isFull() );
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         bufferSize = domain.getNz() * block.getDataTransfer().staticCellSize();
     }
-    else {
+    else
+    {
         bufferSize = domain.getNx() * block.getDataTransfer().staticCellSize();
     }
     buffer.resize(bufferSize);
     return &buffer[0];
 }
 
-void AtomicBlockUnSerializer3D::commitData() {
+void AtomicBlockUnSerializer3D::commitData()
+{
     PLB_PRECONDITION( !isFull() );
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         block.getDataTransfer().receive(Box3D(iX,iX,iY,iY, domain.z0, domain.z1),
                                         buffer, modif::staticVariables);
         ++iY;
-        if (iY > domain.y1) {
+        if (iY > domain.y1)
+        {
             iY = domain.y0;
             ++iX;
         }
     }
-    else {
+    else
+    {
         block.getDataTransfer().receive(Box3D(domain.x0, domain.x1, iY,iY,iZ,iZ),
                                         buffer, modif::staticVariables);
         ++iY;
-        if (iY > domain.y1) {
+        if (iY > domain.y1)
+        {
             iY = domain.y0;
             ++iZ;
         }
     }
 }
 
-bool AtomicBlockUnSerializer3D::isFull() const {
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+bool AtomicBlockUnSerializer3D::isFull() const
+{
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         return iX > domain.x1;
     }
-    else {
+    else
+    {
         return iZ > domain.z1;
     }
 }
 
 }  //  namespace plb
-

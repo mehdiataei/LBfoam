@@ -51,16 +51,16 @@ void extractTopMostDynamics(MultiBlockLattice3D<T,Descriptor>& lattice, MultiSca
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractTopMostDynamics (
+std::auto_ptr< MultiScalarField3D<int> > extractTopMostDynamics (
                                              MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain )
 {
     MultiScalarField3D<int>* dynamicsId = new MultiScalarField3D<int>(lattice, domain);
     extractTopMostDynamics(lattice, *dynamicsId, domain);
-    return std::unique_ptr<MultiScalarField3D<int> >(dynamicsId);
+    return std::auto_ptr<MultiScalarField3D<int> >(dynamicsId);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractTopMostDynamics (
+std::auto_ptr< MultiScalarField3D<int> > extractTopMostDynamics (
                                              MultiBlockLattice3D<T,Descriptor>& lattice )
 {
     return extractTopMostDynamics(lattice, lattice.getBoundingBox());
@@ -77,16 +77,16 @@ void extractBottomMostDynamics(MultiBlockLattice3D<T,Descriptor>& lattice, Multi
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractBottomMostDynamics (
+std::auto_ptr< MultiScalarField3D<int> > extractBottomMostDynamics (
                                              MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain )
 {
     MultiScalarField3D<int>* dynamicsId = new MultiScalarField3D<int>(lattice, domain);
     extractBottomMostDynamics(lattice, *dynamicsId, domain);
-    return std::unique_ptr<MultiScalarField3D<int> >(dynamicsId);
+    return std::auto_ptr<MultiScalarField3D<int> >(dynamicsId);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractBottomMostDynamics (
+std::auto_ptr< MultiScalarField3D<int> > extractBottomMostDynamics (
                                              MultiBlockLattice3D<T,Descriptor>& lattice )
 {
     return extractBottomMostDynamics(lattice, lattice.getBoundingBox());
@@ -199,17 +199,17 @@ void extractDynamicsChain(MultiBlockLattice3D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractDynamicsChain (
+std::auto_ptr< MultiScalarField3D<int> > extractDynamicsChain (
             MultiBlockLattice3D<T,Descriptor>& lattice,
             std::map<int,std::string>& nameOfDynamics, Box3D domain )
 {
     MultiScalarField3D<int>* dynamicsId = new MultiScalarField3D<int>(lattice, domain);
     extractDynamicsChain(lattice, *dynamicsId, nameOfDynamics, domain);
-    return std::unique_ptr<MultiScalarField3D<int> >(dynamicsId);
+    return std::auto_ptr<MultiScalarField3D<int> >(dynamicsId);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractDynamicsChain (
+std::auto_ptr< MultiScalarField3D<int> > extractDynamicsChain (
             MultiBlockLattice3D<T,Descriptor>& lattice,
             std::map<int,std::string>& nameOfDynamics )
 {
@@ -227,19 +227,19 @@ void copyEntireCells( MultiBlockLattice3D<T,Descriptor>& sourceLattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiBlockLattice3D<T,Descriptor> > copyEntireCells (
+std::auto_ptr< MultiBlockLattice3D<T,Descriptor> > copyEntireCells (
             MultiBlockLattice3D<T,Descriptor>& lattice )
 {
     return copyEntireCells(lattice, lattice.getBoundingBox());
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiBlockLattice3D<T,Descriptor> > copyEntireCells (
+std::auto_ptr< MultiBlockLattice3D<T,Descriptor> > copyEntireCells (
             MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain )
 {
     MultiBlockLattice3D<T,Descriptor>* newLattice = new MultiBlockLattice3D<T,Descriptor>(lattice, domain);
     copyEntireCells(lattice, *newLattice, domain);
-    return std::unique_ptr<MultiBlockLattice3D<T,Descriptor> >(newLattice);
+    return std::auto_ptr<MultiBlockLattice3D<T,Descriptor> >(newLattice);
 }
 
 }  // namespace plb

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -37,43 +37,45 @@
 #include <vector>
 
 
-namespace plb {
+namespace plb
+{
 
-class MultiBlockManagement2D {
+class MultiBlockManagement2D
+{
 public:
-    MultiBlockManagement2D( SparseBlockStructure2D const& sparseBlock_,
-                            ThreadAttribution* threadAttribution_,
-                            plint envelopeWidth_,
-                            plint refinementLevel_ =0 );
-    MultiBlockManagement2D(MultiBlockManagement2D const& rhs);
-    MultiBlockManagement2D& operator=(MultiBlockManagement2D const& rhs);
-    void swap(MultiBlockManagement2D& rhs);
-    ~MultiBlockManagement2D();
-    plint getEnvelopeWidth() const;
-    Box2D getBoundingBox() const;
-    Box2D getBulk(plint blockId) const;
-    Box2D getUniqueBulk(plint blockId) const;
-    Box2D getEnvelope(plint blockId) const;
-    SparseBlockStructure2D const& getSparseBlockStructure() const;
-    LocalMultiBlockInfo2D const& getLocalInfo() const;
-    ThreadAttribution const& getThreadAttribution() const;
-    bool findInLocalBulk (
-            plint iX, plint iY, plint& foundId,
-            plint& localX, plint& localY ) const;
-    bool findAllLocalRepresentations (
-            plint iX, plint iY, std::vector<plint>& foundId,
-            std::vector<plint>& foundX, std::vector<plint>& foundY ) const;
-    plint getRefinementLevel() const;
-    void setRefinementLevel(plint newLevel);
-    void changeEnvelopeWidth(plint newEnvelopeWidth);
-    // Same multi-block-management, except for envelope-width
-    bool equivalentTo(MultiBlockManagement2D const& rhs) const;
+	MultiBlockManagement2D( SparseBlockStructure2D const& sparseBlock_,
+	                        ThreadAttribution* threadAttribution_,
+	                        plint envelopeWidth_,
+	                        plint refinementLevel_ =0 );
+	MultiBlockManagement2D(MultiBlockManagement2D const& rhs);
+	MultiBlockManagement2D& operator=(MultiBlockManagement2D const& rhs);
+	void swap(MultiBlockManagement2D& rhs);
+	~MultiBlockManagement2D();
+	plint getEnvelopeWidth() const;
+	Box2D getBoundingBox() const;
+	Box2D getBulk(plint blockId) const;
+	Box2D getUniqueBulk(plint blockId) const;
+	Box2D getEnvelope(plint blockId) const;
+	SparseBlockStructure2D const& getSparseBlockStructure() const;
+	LocalMultiBlockInfo2D const& getLocalInfo() const;
+	ThreadAttribution const& getThreadAttribution() const;
+	bool findInLocalBulk (
+	    plint iX, plint iY, plint& foundId,
+	    plint& localX, plint& localY ) const;
+	bool findAllLocalRepresentations (
+	    plint iX, plint iY, std::vector<plint>& foundId,
+	    std::vector<plint>& foundX, std::vector<plint>& foundY ) const;
+	plint getRefinementLevel() const;
+	void setRefinementLevel(plint newLevel);
+	void changeEnvelopeWidth(plint newEnvelopeWidth);
+	// Same multi-block-management, except for envelope-width
+	bool equivalentTo(MultiBlockManagement2D const& rhs) const;
 private:
-    plint                  envelopeWidth;
-    SparseBlockStructure2D sparseBlock;
-    ThreadAttribution*     threadAttribution;
-    LocalMultiBlockInfo2D  localInfo;
-    plint                  refinementLevel;
+	plint                  envelopeWidth;
+	SparseBlockStructure2D sparseBlock;
+	ThreadAttribution*     threadAttribution;
+	LocalMultiBlockInfo2D  localInfo;
+	plint                  refinementLevel;
 };
 
 /// Create a new block-management, corresponding to a sub-domain of the old one.
@@ -82,13 +84,13 @@ private:
  * the same as the bounding-box of the original block-management.
  */
 MultiBlockManagement2D intersect (
-        MultiBlockManagement2D const& originalManagement,
-        Box2D subDomain, bool crop );
+    MultiBlockManagement2D const& originalManagement,
+    Box2D subDomain, bool crop );
 
 /// Choose yourself the bounding box of the resulting block-management.
 MultiBlockManagement2D intersect (
-        MultiBlockManagement2D const& originalManagement,
-        Box2D subDomain, Box2D newBoundingBox );
+    MultiBlockManagement2D const& originalManagement,
+    Box2D subDomain, Box2D newBoundingBox );
 
 /// Create a new block-management as an intersection of the old ones.
 /** The bounding box of the result is the intersection of the two original bounding
@@ -131,32 +133,33 @@ MultiBlockManagement2D reparallelize(MultiBlockManagement2D const& management,
                                      plint blockLx, plint blockLy);
 
 /// Compute envelope and things alike.
-class SmartBulk2D {
+class SmartBulk2D
+{
 public:
-    /** The bulk has zero coordinates in case the block id does not exist. **/
-    SmartBulk2D( MultiBlockManagement2D const& management,
-                 plint blockId );
-    /** The bulk has zero coordinates in case the block id does not exist. **/
-    SmartBulk2D( SparseBlockStructure2D const& sparseBlock_,
-                 plint envelopeWidth_, plint blockId );
-    SmartBulk2D( SparseBlockStructure2D const& sparseBlock_,
-                 plint envelopeWidth_, Box2D const& bulk_ );
-    /// Access the bulk.
-    Box2D getBulk() const;
-    /// Compute envelope of a given block.
-    Box2D computeEnvelope() const;
-    /// Compute envelope of a given block, exluding margins of the outer domain.
-    Box2D computeNonPeriodicEnvelope() const;
-    /// Convert to local coordinates of a given block.
-    Box2D toLocal(Box2D const& coord) const;
-    /// Convert to local x-coordinate of a given block.
-    plint toLocalX(plint iX) const;
-    /// Convert to local y-coordinate of a given block.
-    plint toLocalY(plint iY) const;
+	/** The bulk has zero coordinates in case the block id does not exist. **/
+	SmartBulk2D( MultiBlockManagement2D const& management,
+	             plint blockId );
+	/** The bulk has zero coordinates in case the block id does not exist. **/
+	SmartBulk2D( SparseBlockStructure2D const& sparseBlock_,
+	             plint envelopeWidth_, plint blockId );
+	SmartBulk2D( SparseBlockStructure2D const& sparseBlock_,
+	             plint envelopeWidth_, Box2D const& bulk_ );
+	/// Access the bulk.
+	Box2D getBulk() const;
+	/// Compute envelope of a given block.
+	Box2D computeEnvelope() const;
+	/// Compute envelope of a given block, exluding margins of the outer domain.
+	Box2D computeNonPeriodicEnvelope() const;
+	/// Convert to local coordinates of a given block.
+	Box2D toLocal(Box2D const& coord) const;
+	/// Convert to local x-coordinate of a given block.
+	plint toLocalX(plint iX) const;
+	/// Convert to local y-coordinate of a given block.
+	plint toLocalY(plint iY) const;
 private:
-    SparseBlockStructure2D const& sparseBlock;
-    plint envelopeWidth;
-    Box2D bulk;
+	SparseBlockStructure2D const& sparseBlock;
+	plint envelopeWidth;
+	Box2D bulk;
 };
 
 }  // namespace plb

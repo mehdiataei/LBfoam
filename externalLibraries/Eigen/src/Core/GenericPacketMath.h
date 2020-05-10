@@ -37,64 +37,102 @@
 /** \internal \returns a + b (coeff-wise) */
 template<typename Packet> inline Packet
 ei_padd(const Packet& a,
-        const Packet& b) { return a+b; }
+        const Packet& b)
+{
+	return a+b;
+}
 
 /** \internal \returns a - b (coeff-wise) */
 template<typename Packet> inline Packet
 ei_psub(const Packet& a,
-        const Packet& b) { return a-b; }
+        const Packet& b)
+{
+	return a-b;
+}
 
 /** \internal \returns a * b (coeff-wise) */
 template<typename Packet> inline Packet
 ei_pmul(const Packet& a,
-        const Packet& b) { return a*b; }
+        const Packet& b)
+{
+	return a*b;
+}
 
 /** \internal \returns a / b (coeff-wise) */
 template<typename Packet> inline Packet
 ei_pdiv(const Packet& a,
-        const Packet& b) { return a/b; }
+        const Packet& b)
+{
+	return a/b;
+}
 
 /** \internal \returns the min of \a a and \a b  (coeff-wise) */
 template<typename Packet> inline Packet
 ei_pmin(const Packet& a,
-        const Packet& b) { return std::min(a, b); }
+        const Packet& b)
+{
+	return std::min(a, b);
+}
 
 /** \internal \returns the max of \a a and \a b  (coeff-wise) */
 template<typename Packet> inline Packet
 ei_pmax(const Packet& a,
-        const Packet& b) { return std::max(a, b); }
+        const Packet& b)
+{
+	return std::max(a, b);
+}
 
 /** \internal \returns a packet version of \a *from, from must be 16 bytes aligned */
 template<typename Scalar> inline typename ei_packet_traits<Scalar>::type
-ei_pload(const Scalar* from) { return *from; }
+ei_pload(const Scalar* from)
+{
+	return *from;
+}
 
 /** \internal \returns a packet version of \a *from, (un-aligned load) */
 template<typename Scalar> inline typename ei_packet_traits<Scalar>::type
-ei_ploadu(const Scalar* from) { return *from; }
+ei_ploadu(const Scalar* from)
+{
+	return *from;
+}
 
 /** \internal \returns a packet with constant coefficients \a a, e.g.: (a,a,a,a) */
 template<typename Scalar> inline typename ei_packet_traits<Scalar>::type
-ei_pset1(const Scalar& a) { return a; }
+ei_pset1(const Scalar& a)
+{
+	return a;
+}
 
 /** \internal copy the packet \a from to \a *to, \a to must be 16 bytes aligned */
 template<typename Scalar, typename Packet> inline void ei_pstore(Scalar* to, const Packet& from)
-{ (*to) = from; }
+{
+	(*to) = from;
+}
 
 /** \internal copy the packet \a from to \a *to, (un-aligned store) */
 template<typename Scalar, typename Packet> inline void ei_pstoreu(Scalar* to, const Packet& from)
-{ (*to) = from; }
+{
+	(*to) = from;
+}
 
 /** \internal \returns the first element of a packet */
 template<typename Packet> inline typename ei_unpacket_traits<Packet>::type ei_pfirst(const Packet& a)
-{ return a; }
+{
+	return a;
+}
 
 /** \internal \returns a packet where the element i contains the sum of the packet of \a vec[i] */
 template<typename Packet> inline Packet
-ei_preduxp(const Packet* vecs) { return vecs[0]; }
+ei_preduxp(const Packet* vecs)
+{
+	return vecs[0];
+}
 
 /** \internal \returns the sum of the elements of \a a*/
 template<typename Packet> inline typename ei_unpacket_traits<Packet>::type ei_predux(const Packet& a)
-{ return a; }
+{
+	return a;
+}
 
 
 /***************************************************************************
@@ -106,17 +144,19 @@ template<typename Packet> inline Packet
 ei_pmadd(const Packet&  a,
          const Packet&  b,
          const Packet&  c)
-{ return ei_padd(ei_pmul(a, b),c); }
+{
+	return ei_padd(ei_pmul(a, b),c);
+}
 
 /** \internal \returns a packet version of \a *from.
   * \If LoadMode equals Aligned, \a from must be 16 bytes aligned */
 template<typename Scalar, int LoadMode>
 inline typename ei_packet_traits<Scalar>::type ei_ploadt(const Scalar* from)
 {
-  if(LoadMode == Aligned)
-    return ei_pload(from);
-  else
-    return ei_ploadu(from);
+	if(LoadMode == Aligned)
+		return ei_pload(from);
+	else
+		return ei_ploadu(from);
 }
 
 /** \internal copy the packet \a from to \a *to.
@@ -124,18 +164,17 @@ inline typename ei_packet_traits<Scalar>::type ei_ploadt(const Scalar* from)
 template<typename Scalar, typename Packet, int LoadMode>
 inline void ei_pstoret(Scalar* to, const Packet& from)
 {
-  if(LoadMode == Aligned)
-    ei_pstore(to, from);
-  else
-    ei_pstoreu(to, from);
+	if(LoadMode == Aligned)
+		ei_pstore(to, from);
+	else
+		ei_pstoreu(to, from);
 }
 
 /** \internal default implementation of ei_palign() allowing partial specialization */
 template<int Offset,typename PacketType>
-struct ei_palign_impl
-{
-  // by default data are aligned, so there is nothing to be done :)
-  inline static void run(PacketType&, const PacketType&) {}
+struct ei_palign_impl {
+	// by default data are aligned, so there is nothing to be done :)
+	inline static void run(PacketType&, const PacketType&) {}
 };
 
 /** \internal update \a first using the concatenation of the \a Offset last elements
@@ -143,8 +182,7 @@ struct ei_palign_impl
 template<int Offset,typename PacketType>
 inline void ei_palign(PacketType& first, const PacketType& second)
 {
-  ei_palign_impl<Offset,PacketType>::run(first,second);
+	ei_palign_impl<Offset,PacketType>::run(first,second);
 }
 
 #endif // EIGEN_GENERIC_PACKET_MATH_H
-

@@ -47,69 +47,74 @@ template< typename MatrixType, typename MemberOp, int Direction>
 class PartialReduxExpr;
 
 template<typename MatrixType, typename MemberOp, int Direction>
-struct ei_traits<PartialReduxExpr<MatrixType, MemberOp, Direction> >
-{
-  typedef typename MemberOp::result_type Scalar;
-  typedef typename MatrixType::Scalar InputScalar;
-  typedef typename ei_nested<MatrixType>::type MatrixTypeNested;
-  typedef typename ei_cleantype<MatrixTypeNested>::type _MatrixTypeNested;
-  enum {
-    RowsAtCompileTime = Direction==Vertical   ? 1 : MatrixType::RowsAtCompileTime,
-    ColsAtCompileTime = Direction==Horizontal ? 1 : MatrixType::ColsAtCompileTime,
-    MaxRowsAtCompileTime = Direction==Vertical   ? 1 : MatrixType::MaxRowsAtCompileTime,
-    MaxColsAtCompileTime = Direction==Horizontal ? 1 : MatrixType::MaxColsAtCompileTime,
-    Flags = (unsigned int)_MatrixTypeNested::Flags & HereditaryBits,
-    TraversalSize = Direction==Vertical ? RowsAtCompileTime : ColsAtCompileTime
-  };
-  #if EIGEN_GNUC_AT_LEAST(3,4)
-  typedef typename MemberOp::template Cost<InputScalar,int(TraversalSize)> CostOpType;
-  #else
-  typedef typename MemberOp::template Cost<InputScalar,TraversalSize> CostOpType;
-  #endif
-  enum {
-    CoeffReadCost = TraversalSize * ei_traits<_MatrixTypeNested>::CoeffReadCost + int(CostOpType::value)
-  };
+struct ei_traits<PartialReduxExpr<MatrixType, MemberOp, Direction> > {
+	typedef typename MemberOp::result_type Scalar;
+	typedef typename MatrixType::Scalar InputScalar;
+	typedef typename ei_nested<MatrixType>::type MatrixTypeNested;
+	typedef typename ei_cleantype<MatrixTypeNested>::type _MatrixTypeNested;
+	enum {
+		RowsAtCompileTime = Direction==Vertical   ? 1 : MatrixType::RowsAtCompileTime,
+		ColsAtCompileTime = Direction==Horizontal ? 1 : MatrixType::ColsAtCompileTime,
+		MaxRowsAtCompileTime = Direction==Vertical   ? 1 : MatrixType::MaxRowsAtCompileTime,
+		MaxColsAtCompileTime = Direction==Horizontal ? 1 : MatrixType::MaxColsAtCompileTime,
+		Flags = (unsigned int)_MatrixTypeNested::Flags & HereditaryBits,
+		TraversalSize = Direction==Vertical ? RowsAtCompileTime : ColsAtCompileTime
+	};
+#if EIGEN_GNUC_AT_LEAST(3,4)
+	typedef typename MemberOp::template Cost<InputScalar,int(TraversalSize)> CostOpType;
+#else
+	typedef typename MemberOp::template Cost<InputScalar,TraversalSize> CostOpType;
+#endif
+	enum {
+		CoeffReadCost = TraversalSize * ei_traits<_MatrixTypeNested>::CoeffReadCost + int(CostOpType::value)
+	};
 };
 
 template< typename MatrixType, typename MemberOp, int Direction>
 class PartialReduxExpr : ei_no_assignment_operator,
-  public MatrixBase<PartialReduxExpr<MatrixType, MemberOp, Direction> >
+	public MatrixBase<PartialReduxExpr<MatrixType, MemberOp, Direction> >
 {
-  public:
+public:
 
-    EIGEN_GENERIC_PUBLIC_INTERFACE(PartialReduxExpr)
-    typedef typename ei_traits<PartialReduxExpr>::MatrixTypeNested MatrixTypeNested;
-    typedef typename ei_traits<PartialReduxExpr>::_MatrixTypeNested _MatrixTypeNested;
+	EIGEN_GENERIC_PUBLIC_INTERFACE(PartialReduxExpr)
+	typedef typename ei_traits<PartialReduxExpr>::MatrixTypeNested MatrixTypeNested;
+	typedef typename ei_traits<PartialReduxExpr>::_MatrixTypeNested _MatrixTypeNested;
 
-    PartialReduxExpr(const MatrixType& mat, const MemberOp& func = MemberOp())
-      : m_matrix(mat), m_functor(func) {}
+	PartialReduxExpr(const MatrixType& mat, const MemberOp& func = MemberOp())
+		: m_matrix(mat), m_functor(func) {}
 
-    int rows() const { return (Direction==Vertical   ? 1 : m_matrix.rows()); }
-    int cols() const { return (Direction==Horizontal ? 1 : m_matrix.cols()); }
+	int rows() const
+	{
+		return (Direction==Vertical   ? 1 : m_matrix.rows());
+	}
+	int cols() const
+	{
+		return (Direction==Horizontal ? 1 : m_matrix.cols());
+	}
 
-    const Scalar coeff(int i, int j) const
-    {
-      if (Direction==Vertical)
-        return m_functor(m_matrix.col(j));
-      else
-        return m_functor(m_matrix.row(i));
-    }
+	const Scalar coeff(int i, int j) const
+	{
+		if (Direction==Vertical)
+			return m_functor(m_matrix.col(j));
+		else
+			return m_functor(m_matrix.row(i));
+	}
 
-  protected:
-    const MatrixTypeNested m_matrix;
-    const MemberOp m_functor;
+protected:
+	const MatrixTypeNested m_matrix;
+	const MemberOp m_functor;
 };
 
 #define EIGEN_MEMBER_FUNCTOR(MEMBER,COST)                           \
-  template <typename ResultType>                                    \
-  struct ei_member_##MEMBER EIGEN_EMPTY_STRUCT {                    \
-    typedef ResultType result_type;                                 \
-    template<typename Scalar, int Size> struct Cost                 \
-    { enum { value = COST }; };                                     \
-    template<typename Derived>                                      \
-    inline ResultType operator()(const MatrixBase<Derived>& mat) const     \
-    { return mat.MEMBER(); } \
-  }
+	template <typename ResultType>                                    \
+	struct ei_member_##MEMBER EIGEN_EMPTY_STRUCT {                    \
+		typedef ResultType result_type;                                 \
+		template<typename Scalar, int Size> struct Cost                 \
+		{ enum { value = COST }; };                                     \
+		template<typename Derived>                                      \
+		inline ResultType operator()(const MatrixBase<Derived>& mat) const     \
+		{ return mat.MEMBER(); } \
+	}
 
 EIGEN_MEMBER_FUNCTOR(squaredNorm, Size * NumTraits<Scalar>::MulCost + (Size-1)*NumTraits<Scalar>::AddCost);
 EIGEN_MEMBER_FUNCTOR(norm, (Size+5) * NumTraits<Scalar>::MulCost + (Size-1)*NumTraits<Scalar>::AddCost);
@@ -123,18 +128,21 @@ EIGEN_MEMBER_FUNCTOR(count, (Size-1)*NumTraits<Scalar>::AddCost);
 /** \internal */
 template <typename BinaryOp, typename Scalar>
 struct ei_member_redux {
-  typedef typename ei_result_of<
-                     BinaryOp(Scalar)
-                   >::type  result_type;
-  template<typename _Scalar, int Size> struct Cost
-  { enum { value = (Size-1) * ei_functor_traits<BinaryOp>::Cost }; };
-  ei_member_redux(const BinaryOp func) : m_functor(func) {}
-  template<typename Derived>
-  inline result_type operator()(const MatrixBase<Derived>& mat) const
-  { return mat.redux(m_functor); }
-  const BinaryOp m_functor;
+	typedef typename ei_result_of<
+	BinaryOp(Scalar)
+	>::type  result_type;
+	template<typename _Scalar, int Size> struct Cost {
+		enum { value = (Size-1) * ei_functor_traits<BinaryOp>::Cost };
+	};
+	ei_member_redux(const BinaryOp func) : m_functor(func) {}
+	template<typename Derived>
+	inline result_type operator()(const MatrixBase<Derived>& mat) const
+	{
+		return mat.redux(m_functor);
+	}
+	const BinaryOp m_functor;
 private:
-  ei_member_redux& operator=(const ei_member_redux&);
+	ei_member_redux& operator=(const ei_member_redux&);
 };
 
 /** \array_module \ingroup Array
@@ -157,144 +165,161 @@ private:
   */
 template<typename ExpressionType, int Direction> class PartialRedux
 {
-  public:
+public:
 
-    typedef typename ei_traits<ExpressionType>::Scalar Scalar;
-    typedef typename ei_meta_if<ei_must_nest_by_value<ExpressionType>::ret,
-        ExpressionType, const ExpressionType&>::ret ExpressionTypeNested;
+	typedef typename ei_traits<ExpressionType>::Scalar Scalar;
+	typedef typename ei_meta_if<ei_must_nest_by_value<ExpressionType>::ret,
+	        ExpressionType, const ExpressionType&>::ret ExpressionTypeNested;
 
-    template<template<typename _Scalar> class Functor> struct ReturnType
-    {
-      typedef PartialReduxExpr<ExpressionType,
-                               Functor<typename ei_traits<ExpressionType>::Scalar>,
-                               Direction
-                              > Type;
-    };
+	template<template<typename _Scalar> class Functor> struct ReturnType {
+		typedef PartialReduxExpr<ExpressionType,
+		        Functor<typename ei_traits<ExpressionType>::Scalar>,
+		        Direction
+		        > Type;
+	};
 
-    template<typename BinaryOp> struct ReduxReturnType
-    {
-      typedef PartialReduxExpr<ExpressionType,
-                               ei_member_redux<BinaryOp,typename ei_traits<ExpressionType>::Scalar>,
-                               Direction
-                              > Type;
-    };
+	template<typename BinaryOp> struct ReduxReturnType {
+		typedef PartialReduxExpr<ExpressionType,
+		        ei_member_redux<BinaryOp,typename ei_traits<ExpressionType>::Scalar>,
+		        Direction
+		        > Type;
+	};
 
-    typedef typename ExpressionType::PlainMatrixType CrossReturnType;
-    
-    inline PartialRedux(const ExpressionType& matrix) : m_matrix(matrix) {}
+	typedef typename ExpressionType::PlainMatrixType CrossReturnType;
 
-    /** \internal */
-    inline const ExpressionType& _expression() const { return m_matrix; }
+	inline PartialRedux(const ExpressionType& matrix) : m_matrix(matrix) {}
 
-    template<typename BinaryOp>
-    const typename ReduxReturnType<BinaryOp>::Type
-    redux(const BinaryOp& func = BinaryOp()) const;
+	/** \internal */
+	inline const ExpressionType& _expression() const
+	{
+		return m_matrix;
+	}
 
-    /** \returns a row (or column) vector expression of the smallest coefficient
-      * of each column (or row) of the referenced expression.
-      *
-      * Example: \include PartialRedux_minCoeff.cpp
-      * Output: \verbinclude PartialRedux_minCoeff.out
-      *
-      * \sa MatrixBase::minCoeff() */
-    const typename ReturnType<ei_member_minCoeff>::Type minCoeff() const
-    { return _expression(); }
+	template<typename BinaryOp>
+	const typename ReduxReturnType<BinaryOp>::Type
+	redux(const BinaryOp& func = BinaryOp()) const;
 
-    /** \returns a row (or column) vector expression of the largest coefficient
-      * of each column (or row) of the referenced expression.
-      *
-      * Example: \include PartialRedux_maxCoeff.cpp
-      * Output: \verbinclude PartialRedux_maxCoeff.out
-      *
-      * \sa MatrixBase::maxCoeff() */
-    const typename ReturnType<ei_member_maxCoeff>::Type maxCoeff() const
-    { return _expression(); }
+	/** \returns a row (or column) vector expression of the smallest coefficient
+	  * of each column (or row) of the referenced expression.
+	  *
+	  * Example: \include PartialRedux_minCoeff.cpp
+	  * Output: \verbinclude PartialRedux_minCoeff.out
+	  *
+	  * \sa MatrixBase::minCoeff() */
+	const typename ReturnType<ei_member_minCoeff>::Type minCoeff() const
+	{
+		return _expression();
+	}
 
-    /** \returns a row (or column) vector expression of the squared norm
-      * of each column (or row) of the referenced expression.
-      *
-      * Example: \include PartialRedux_squaredNorm.cpp
-      * Output: \verbinclude PartialRedux_squaredNorm.out
-      *
-      * \sa MatrixBase::squaredNorm() */
-    const typename ReturnType<ei_member_squaredNorm>::Type squaredNorm() const
-    { return _expression(); }
+	/** \returns a row (or column) vector expression of the largest coefficient
+	  * of each column (or row) of the referenced expression.
+	  *
+	  * Example: \include PartialRedux_maxCoeff.cpp
+	  * Output: \verbinclude PartialRedux_maxCoeff.out
+	  *
+	  * \sa MatrixBase::maxCoeff() */
+	const typename ReturnType<ei_member_maxCoeff>::Type maxCoeff() const
+	{
+		return _expression();
+	}
 
-    /** \returns a row (or column) vector expression of the norm
-      * of each column (or row) of the referenced expression.
-      *
-      * Example: \include PartialRedux_norm.cpp
-      * Output: \verbinclude PartialRedux_norm.out
-      *
-      * \sa MatrixBase::norm() */
-    const typename ReturnType<ei_member_norm>::Type norm() const
-    { return _expression(); }
+	/** \returns a row (or column) vector expression of the squared norm
+	  * of each column (or row) of the referenced expression.
+	  *
+	  * Example: \include PartialRedux_squaredNorm.cpp
+	  * Output: \verbinclude PartialRedux_squaredNorm.out
+	  *
+	  * \sa MatrixBase::squaredNorm() */
+	const typename ReturnType<ei_member_squaredNorm>::Type squaredNorm() const
+	{
+		return _expression();
+	}
 
-    /** \returns a row (or column) vector expression of the sum
-      * of each column (or row) of the referenced expression.
-      *
-      * Example: \include PartialRedux_sum.cpp
-      * Output: \verbinclude PartialRedux_sum.out
-      *
-      * \sa MatrixBase::sum() */
-    const typename ReturnType<ei_member_sum>::Type sum() const
-    { return _expression(); }
+	/** \returns a row (or column) vector expression of the norm
+	  * of each column (or row) of the referenced expression.
+	  *
+	  * Example: \include PartialRedux_norm.cpp
+	  * Output: \verbinclude PartialRedux_norm.out
+	  *
+	  * \sa MatrixBase::norm() */
+	const typename ReturnType<ei_member_norm>::Type norm() const
+	{
+		return _expression();
+	}
 
-    /** \returns a row (or column) vector expression representing
-      * whether \b all coefficients of each respective column (or row) are \c true.
-      *
-      * \sa MatrixBase::all() */
-    const typename ReturnType<ei_member_all>::Type all() const
-    { return _expression(); }
+	/** \returns a row (or column) vector expression of the sum
+	  * of each column (or row) of the referenced expression.
+	  *
+	  * Example: \include PartialRedux_sum.cpp
+	  * Output: \verbinclude PartialRedux_sum.out
+	  *
+	  * \sa MatrixBase::sum() */
+	const typename ReturnType<ei_member_sum>::Type sum() const
+	{
+		return _expression();
+	}
 
-    /** \returns a row (or column) vector expression representing
-      * whether \b at \b least one coefficient of each respective column (or row) is \c true.
-      *
-      * \sa MatrixBase::any() */
-    const typename ReturnType<ei_member_any>::Type any() const
-    { return _expression(); }
-    
-    /** \returns a row (or column) vector expression representing
-      * the number of \c true coefficients of each respective column (or row).
-      *
-      * Example: \include PartialRedux_count.cpp
-      * Output: \verbinclude PartialRedux_count.out
-      *
-      * \sa MatrixBase::count() */
-    const PartialReduxExpr<ExpressionType, ei_member_count<int>, Direction> count() const
-    { return _expression(); }
+	/** \returns a row (or column) vector expression representing
+	  * whether \b all coefficients of each respective column (or row) are \c true.
+	  *
+	  * \sa MatrixBase::all() */
+	const typename ReturnType<ei_member_all>::Type all() const
+	{
+		return _expression();
+	}
 
-    /** \returns a 3x3 matrix expression of the cross product
-      * of each column or row of the referenced expression with the \a other vector.
-      *
-      * \geometry_module
-      *
-      * \sa MatrixBase::cross() */
-    template<typename OtherDerived>
-    const CrossReturnType cross(const MatrixBase<OtherDerived>& other) const
-    {
-      EIGEN_STATIC_ASSERT_MATRIX_SPECIFIC_SIZE(CrossReturnType,3,3)
-      EIGEN_STATIC_ASSERT_VECTOR_SPECIFIC_SIZE(OtherDerived,3)
-      EIGEN_STATIC_ASSERT((ei_is_same_type<Scalar, typename OtherDerived::Scalar>::ret),
-        YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
+	/** \returns a row (or column) vector expression representing
+	  * whether \b at \b least one coefficient of each respective column (or row) is \c true.
+	  *
+	  * \sa MatrixBase::any() */
+	const typename ReturnType<ei_member_any>::Type any() const
+	{
+		return _expression();
+	}
 
-      if(Direction==Vertical)
-        return (CrossReturnType()
-                                 << _expression().col(0).cross(other),
-                                    _expression().col(1).cross(other),
-                                    _expression().col(2).cross(other)).finished();
-      else
-        return (CrossReturnType() 
-                                 << _expression().row(0).cross(other),
-                                    _expression().row(1).cross(other),
-                                    _expression().row(2).cross(other)).finished();
-    }
+	/** \returns a row (or column) vector expression representing
+	  * the number of \c true coefficients of each respective column (or row).
+	  *
+	  * Example: \include PartialRedux_count.cpp
+	  * Output: \verbinclude PartialRedux_count.out
+	  *
+	  * \sa MatrixBase::count() */
+	const PartialReduxExpr<ExpressionType, ei_member_count<int>, Direction> count() const
+	{
+		return _expression();
+	}
 
-  protected:
-    ExpressionTypeNested m_matrix;
+	/** \returns a 3x3 matrix expression of the cross product
+	  * of each column or row of the referenced expression with the \a other vector.
+	  *
+	  * \geometry_module
+	  *
+	  * \sa MatrixBase::cross() */
+	template<typename OtherDerived>
+	const CrossReturnType cross(const MatrixBase<OtherDerived>& other) const
+	{
+		EIGEN_STATIC_ASSERT_MATRIX_SPECIFIC_SIZE(CrossReturnType,3,3)
+		EIGEN_STATIC_ASSERT_VECTOR_SPECIFIC_SIZE(OtherDerived,3)
+		EIGEN_STATIC_ASSERT((ei_is_same_type<Scalar, typename OtherDerived::Scalar>::ret),
+		                    YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
 
-  private:
-    PartialRedux& operator=(const PartialRedux&);
+		if(Direction==Vertical)
+			return (CrossReturnType()
+			        << _expression().col(0).cross(other),
+			        _expression().col(1).cross(other),
+			        _expression().col(2).cross(other)).finished();
+		else
+			return (CrossReturnType()
+			        << _expression().row(0).cross(other),
+			        _expression().row(1).cross(other),
+			        _expression().row(2).cross(other)).finished();
+	}
+
+protected:
+	ExpressionTypeNested m_matrix;
+
+private:
+	PartialRedux& operator=(const PartialRedux&);
 };
 
 /** \array_module
@@ -310,7 +335,7 @@ template<typename Derived>
 inline const PartialRedux<Derived,Vertical>
 MatrixBase<Derived>::colwise() const
 {
-  return derived();
+	return derived();
 }
 
 /** \array_module
@@ -326,7 +351,7 @@ template<typename Derived>
 inline const PartialRedux<Derived,Horizontal>
 MatrixBase<Derived>::rowwise() const
 {
-  return derived();
+	return derived();
 }
 
 /** \returns a row or column vector expression of \c *this reduxed by \a func
@@ -341,7 +366,7 @@ template<typename BinaryOp>
 const typename PartialRedux<ExpressionType,Direction>::template ReduxReturnType<BinaryOp>::Type
 PartialRedux<ExpressionType,Direction>::redux(const BinaryOp& func) const
 {
-  return typename ReduxReturnType<BinaryOp>::Type(_expression(), func);
+	return typename ReduxReturnType<BinaryOp>::Type(_expression(), func);
 }
 
 #endif // EIGEN_PARTIAL_REDUX_H

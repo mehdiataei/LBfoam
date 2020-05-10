@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,39 +36,59 @@
 #include <vector>
 
 
-namespace plb {
+namespace plb
+{
 
 /// Hold extra information on the blocks which are local to the current MPI thread;
 ///  for example, overlaps with adjacent blocks.
-class Overlap2D {
+class Overlap2D
+{
 public:
-    Overlap2D(plint originalId_, plint overlapId_, Box2D const& intersection_)
-        : originalId(originalId_), overlapId(overlapId_),
-          originalRegion(intersection_),
-          overlapRegion(intersection_)
-    { }
-    Overlap2D(plint originalId_, plint overlapId_,
-              Box2D const& originalRegion_,
-              plint shiftX, plint shiftY)
-        : originalId(originalId_), overlapId(overlapId_),
-          originalRegion(originalRegion_),
-          overlapRegion(originalRegion.shift(-shiftX, -shiftY))
-    { }
-    plint getOriginalId() const { return originalId; }
-    plint getOverlapId()  const { return overlapId; }
-    /// Region (in absolute coordinates) on the original block.
-    Box2D const& getOriginalCoordinates() const { return originalRegion; }
-    /// Region (in absolute coordinates) on the overlapping block.
-    /** This is usually identical with the region on the original block. An
-     *  exception are periodic overlaps, in whick regions on opposite ends 
-     *  of the block are brought into relation.
-     **/
-    Box2D const& getOverlapCoordinates() const  { return overlapRegion; }
-    plint getShiftX() const { return originalRegion.x0 - overlapRegion.x0; }
-    plint getShiftY() const { return originalRegion.y0 - overlapRegion.y0; }
-private: 
-    plint originalId, overlapId;
-    Box2D originalRegion, overlapRegion;
+	Overlap2D(plint originalId_, plint overlapId_, Box2D const& intersection_)
+		: originalId(originalId_), overlapId(overlapId_),
+		  originalRegion(intersection_),
+		  overlapRegion(intersection_)
+	{ }
+	Overlap2D(plint originalId_, plint overlapId_,
+	          Box2D const& originalRegion_,
+	          plint shiftX, plint shiftY)
+		: originalId(originalId_), overlapId(overlapId_),
+		  originalRegion(originalRegion_),
+		  overlapRegion(originalRegion.shift(-shiftX, -shiftY))
+	{ }
+	plint getOriginalId() const
+	{
+		return originalId;
+	}
+	plint getOverlapId()  const
+	{
+		return overlapId;
+	}
+	/// Region (in absolute coordinates) on the original block.
+	Box2D const& getOriginalCoordinates() const
+	{
+		return originalRegion;
+	}
+	/// Region (in absolute coordinates) on the overlapping block.
+	/** This is usually identical with the region on the original block. An
+	 *  exception are periodic overlaps, in whick regions on opposite ends
+	 *  of the block are brought into relation.
+	 **/
+	Box2D const& getOverlapCoordinates() const
+	{
+		return overlapRegion;
+	}
+	plint getShiftX() const
+	{
+		return originalRegion.x0 - overlapRegion.x0;
+	}
+	plint getShiftY() const
+	{
+		return originalRegion.y0 - overlapRegion.y0;
+	}
+private:
+	plint originalId, overlapId;
+	Box2D originalRegion, overlapRegion;
 };
 
 /// Define a global ordering for overlaps.
@@ -78,12 +98,12 @@ private:
  * */
 inline bool operator<(Overlap2D const& overlap1, Overlap2D const& overlap2)
 {
-    return
-        (overlap1.getOriginalId() < overlap2.getOriginalId()) || (
-            (overlap1.getOriginalId() == overlap2.getOriginalId()) && (
-                (overlap1.getOverlapId() < overlap2.getOverlapId()) || (
-                    (overlap1.getOverlapId() == overlap2.getOverlapId()) &&
-                    (overlap1.getOriginalCoordinates() < overlap2.getOriginalCoordinates()) ) ) );
+	return
+	    (overlap1.getOriginalId() < overlap2.getOriginalId()) || (
+	        (overlap1.getOriginalId() == overlap2.getOriginalId()) && (
+	            (overlap1.getOverlapId() < overlap2.getOverlapId()) || (
+	                (overlap1.getOverlapId() == overlap2.getOverlapId()) &&
+	                (overlap1.getOriginalCoordinates() < overlap2.getOriginalCoordinates()) ) ) );
 }
 
 /// This structure holds both overlap information and orientation of the boundary.
@@ -94,10 +114,10 @@ inline bool operator<(Overlap2D const& overlap1, Overlap2D const& overlap2)
  *  must be able to decide which periodic overlaps to communicate and which not.
  */
 struct PeriodicOverlap2D {
-    PeriodicOverlap2D(Overlap2D const& overlap_, plint normalX_, plint normalY_);
-    Overlap2D overlap;
-    plint      normalX;
-    plint      normalY;
+	PeriodicOverlap2D(Overlap2D const& overlap_, plint normalX_, plint normalY_);
+	Overlap2D overlap;
+	plint      normalX;
+	plint      normalY;
 };
 
 
@@ -105,54 +125,55 @@ struct PeriodicOverlap2D {
 inline bool operator<( PeriodicOverlap2D const& overlap1,
                        PeriodicOverlap2D const& overlap2 )
 {
-    return overlap1.overlap < overlap2.overlap;
+	return overlap1.overlap < overlap2.overlap;
 }
 
 /// Determine pairs of domains associated to a data transfer between two blocks.
 std::vector<Overlap2D> copyAllDataTransfer (
-                           SparseBlockStructure2D const& block1,
-                           SparseBlockStructure2D const& block2 );
+    SparseBlockStructure2D const& block1,
+    SparseBlockStructure2D const& block2 );
 
 /// Determine pairs of domains associated to a data transfer between domains on two blocks.
 /** It is assumed that the two domains have the same extent.
  **/
 std::vector<Overlap2D> copyDomainDataTransfer (
-                           SparseBlockStructure2D const& block1, Box2D block1Domain,
-                           SparseBlockStructure2D const& block2, Box2D block2Domain );
+    SparseBlockStructure2D const& block1, Box2D block1Domain,
+    SparseBlockStructure2D const& block2, Box2D block2Domain );
 
-class LocalMultiBlockInfo2D {
+class LocalMultiBlockInfo2D
+{
 public:
-    LocalMultiBlockInfo2D( SparseBlockStructure2D const& sparseBlock,
-                           ThreadAttribution const& attribution,
-                           plint envelopeWidth_ );
-    /// Index of all blocks local to current processor
-    std::vector<plint> const& getBlocks() const;
-    /// Index of all overlaps for which original or overlap data are on current processor
-    std::vector<Overlap2D> const& getNormalOverlaps() const;
-    /// Index of all periodic overlaps for which original or overlap data are
-    ///   on current processor.
-    std::vector<PeriodicOverlap2D> const& getPeriodicOverlaps() const;
-    /// Index of all periodic overlaps for which overlap data are on current processor
-    std::vector<PeriodicOverlap2D> const& getPeriodicOverlapWithRemoteData() const;
-    void swap(LocalMultiBlockInfo2D& rhs);
+	LocalMultiBlockInfo2D( SparseBlockStructure2D const& sparseBlock,
+	                       ThreadAttribution const& attribution,
+	                       plint envelopeWidth_ );
+	/// Index of all blocks local to current processor
+	std::vector<plint> const& getBlocks() const;
+	/// Index of all overlaps for which original or overlap data are on current processor
+	std::vector<Overlap2D> const& getNormalOverlaps() const;
+	/// Index of all periodic overlaps for which original or overlap data are
+	///   on current processor.
+	std::vector<PeriodicOverlap2D> const& getPeriodicOverlaps() const;
+	/// Index of all periodic overlaps for which overlap data are on current processor
+	std::vector<PeriodicOverlap2D> const& getPeriodicOverlapWithRemoteData() const;
+	void swap(LocalMultiBlockInfo2D& rhs);
 private:
-    /// Determine all blocks which are associated to the current MPI thread.
-    void computeMyBlocks(SparseBlockStructure2D const& sparseBlock,
-                         ThreadAttribution const& attribution);
-    /// Compute normal overlaps for all local blocks.
-    void computeAllNormalOverlaps(SparseBlockStructure2D const& sparseBlock);
-    /// Compute normal overlaps for one local block.
-    void computeNormalOverlaps(SparseBlockStructure2D const& sparseBlock, plint blockId);
-    /// Compute periodic overlaps for all local blocks.
-    void computeAllPeriodicOverlaps(SparseBlockStructure2D const& sparseBlock);
-    /// Compute periodic overlaps for one local block.
-    void computePeriodicOverlaps(SparseBlockStructure2D const& sparseBlock, plint blockId);
+	/// Determine all blocks which are associated to the current MPI thread.
+	void computeMyBlocks(SparseBlockStructure2D const& sparseBlock,
+	                     ThreadAttribution const& attribution);
+	/// Compute normal overlaps for all local blocks.
+	void computeAllNormalOverlaps(SparseBlockStructure2D const& sparseBlock);
+	/// Compute normal overlaps for one local block.
+	void computeNormalOverlaps(SparseBlockStructure2D const& sparseBlock, plint blockId);
+	/// Compute periodic overlaps for all local blocks.
+	void computeAllPeriodicOverlaps(SparseBlockStructure2D const& sparseBlock);
+	/// Compute periodic overlaps for one local block.
+	void computePeriodicOverlaps(SparseBlockStructure2D const& sparseBlock, plint blockId);
 private:
-    plint                          envelopeWidth;
-    std::vector<plint>             myBlocks;
-    std::vector<Overlap2D>         normalOverlaps;
-    std::vector<PeriodicOverlap2D> periodicOverlaps;
-    std::vector<PeriodicOverlap2D> periodicOverlapWithRemoteData;
+	plint                          envelopeWidth;
+	std::vector<plint>             myBlocks;
+	std::vector<Overlap2D>         normalOverlaps;
+	std::vector<PeriodicOverlap2D> periodicOverlaps;
+	std::vector<PeriodicOverlap2D> periodicOverlapWithRemoteData;
 };
 
 } // namespace plb

@@ -32,44 +32,36 @@
 #include "boundaryCondition/bounceBackModels.h"
 #include "dataProcessors/dataInitializerFunctional2D.h"
 
-namespace plb {
+namespace plb
+{
 
 
 template<typename T, template<class U> class Descriptor>
 void initializeMomentumExchange (
-        BlockLattice2D<T,Descriptor>& lattice, Box2D domain );
+    BlockLattice2D<T,Descriptor>& lattice, Box2D domain );
 
 template<typename T, template<class U> class Descriptor>
 void initializeMomentumExchange (
-        BlockLattice2D<T,Descriptor>& lattice, Box2D boundingBox,
-        DomainFunctional2D* domain );
+    BlockLattice2D<T,Descriptor>& lattice, Box2D boundingBox,
+    DomainFunctional2D* domain );
 
 template<typename T, template<class U> class Descriptor>
 void initializeMomentumExchange (
-        BlockLattice2D<T,Descriptor>& lattice, DotList2D const& dotList );
+    BlockLattice2D<T,Descriptor>& lattice, DotList2D const& dotList );
 
 
 template<typename T, template<class U> class Descriptor>
 void initializeMomentumExchange (
-        MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain );
 
 template<typename T, template<class U> class Descriptor>
 void initializeMomentumExchange (
-        MultiBlockLattice2D<T,Descriptor>& lattice, Box2D boundingBox,
-        DomainFunctional2D* domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice, Box2D boundingBox,
+    DomainFunctional2D* domain );
 
 template<typename T, template<class U> class Descriptor>
 void initializeMomentumExchange (
-        MultiBlockLattice2D<T,Descriptor>& lattice, DotList2D const& dotList );
-
-template<typename T, template<typename U> class Descriptor> 
-class SetAverageWallDensityOnVelocityBounceBack2D : public BoxProcessingFunctional2D_L<T,Descriptor> {
-public:
-    virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
-    virtual SetAverageWallDensityOnVelocityBounceBack2D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
-};
+    MultiBlockLattice2D<T,Descriptor>& lattice, DotList2D const& dotList );
 
 }  // namespace plb
 

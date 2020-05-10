@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,29 +36,34 @@
 #include "io/base64.h"
 #include "io/base64.hh"
 
-namespace plb {
+namespace plb
+{
 
 ////////// class VtkStructuredWriter3D ////////////////////////////////////////
 
 VtkStructuredWriter3D::VtkStructuredWriter3D(std::string const& fileName_)
     : fileName(fileName_), ostr(0)
 {
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         ostr = new std::ofstream(fileName.c_str());
-        if (!(*ostr)) {
+        if (!(*ostr))
+        {
             std::cerr << "could not open file " <<  fileName << "\n";
             return;
         }
     }
 }
 
-VtkStructuredWriter3D::~VtkStructuredWriter3D() {
+VtkStructuredWriter3D::~VtkStructuredWriter3D()
+{
     delete ostr;
 }
 
 void VtkStructuredWriter3D::writeHeader(Box3D domain)
 {
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         (*ostr) << "<?xml version=\"1.0\"?>\n";
 #ifdef PLB_BIG_ENDIAN
         (*ostr) << "<VTKFile type=\"StructuredGrid\" version=\"0.1\" byte_order=\"BigEndian\">\n";
@@ -66,43 +71,52 @@ void VtkStructuredWriter3D::writeHeader(Box3D domain)
         (*ostr) << "<VTKFile type=\"StructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
 #endif
         (*ostr) << "<StructuredGrid WholeExtent=\""
-        << domain.x0 << " " << domain.x1 << " "
-        << domain.y0 << " " << domain.y1 << " "
-        << domain.z0 << " " << domain.z1 << "\">\n";
+                << domain.x0 << " " << domain.x1 << " "
+                << domain.y0 << " " << domain.y1 << " "
+                << domain.z0 << " " << domain.z1 << "\">\n";
     }
 }
 
-void VtkStructuredWriter3D::startPiece(Box3D domain, const Array<double,3> &origin, double deltaX) {
-    if (global::mpi().isMainProcessor()) {
+void VtkStructuredWriter3D::startPiece(Box3D domain, const Array<double,3> &origin, double deltaX)
+{
+    if (global::mpi().isMainProcessor())
+    {
         (*ostr) << "<Piece Extent=\""
-        << domain.x0 << " " << domain.x1 << " "
-        << domain.y0 << " " << domain.y1 << " "
-        << domain.z0 << " " << domain.z1 << "\">\n";
+                << domain.x0 << " " << domain.x1 << " "
+                << domain.y0 << " " << domain.y1 << " "
+                << domain.z0 << " " << domain.z1 << "\">\n";
         (*ostr) << "<Points>\n";
         (*ostr) << "<DataArray  NumberOfComponents=\"3\" type=\"Float32\" format=\"ascii\">\n";
 // point loop
         plb::plint i, j, k;
-        for (i=domain.z0; i<=domain.z1; i++) {
-            for ( j=domain.y0; j<=domain.y1; j++) {
-                for ( k=domain.x0; k<=domain.x1; k++) {
+        for (i=domain.z0; i<=domain.z1; i++)
+        {
+            for ( j=domain.y0; j<=domain.y1; j++)
+            {
+                for ( k=domain.x0; k<=domain.x1; k++)
+                {
                     (*ostr) << k*deltaX-origin[2] << " " << j*deltaX-origin[1] << " "<< i*deltaX-origin[0] <<" \n";
                 }
             }
-        }			
+        }
         (*ostr) << "</DataArray>\n</Points>\n";
         (*ostr) << "<PointData>\n";
     }
 }
 
-void VtkStructuredWriter3D::endPiece() {
-    if (global::mpi().isMainProcessor()) {
+void VtkStructuredWriter3D::endPiece()
+{
+    if (global::mpi().isMainProcessor())
+    {
         (*ostr) << "</PointData>\n";
         (*ostr) << "</Piece>\n";
     }
 }
 
-void VtkStructuredWriter3D::writeFooter() {
-    if (global::mpi().isMainProcessor()) {
+void VtkStructuredWriter3D::writeFooter()
+{
+    if (global::mpi().isMainProcessor())
+    {
         (*ostr) << "</StructuredGrid>\n";
         (*ostr) << "</VTKFile>\n";
     }

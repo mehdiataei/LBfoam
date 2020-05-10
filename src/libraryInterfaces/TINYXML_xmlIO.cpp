@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -37,16 +37,19 @@
 #include <algorithm>
 #include <cctype>
 
-namespace plb {
+namespace plb
+{
 
 XMLreader XMLreader::notFound;
 
 XMLreader::XMLreader( std::vector<TiXmlNode*> pParentVect )
 {
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         mainProcessorIni(pParentVect);
     }
-    else {
+    else
+    {
         slaveProcessorIni();
     }
 }
@@ -56,10 +59,12 @@ XMLreader::XMLreader( std::string fName )
     TiXmlDocument* doc = 0;
     bool loadOK = false;
     std::string errorMessage;
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         doc = new TiXmlDocument(fName.c_str());
         loadOK = doc->LoadFile();
-        if (!loadOK) {
+        if (!loadOK)
+        {
             errorMessage = "Problem processing input XML file " + fName + ": " + doc->ErrorDesc();
         }
     }
@@ -67,16 +72,19 @@ XMLreader::XMLreader( std::string fName )
     global::mpi().bCast(errorMessage);
     plbMainProcIOError(!loadOK, errorMessage);
 
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         mainProcessorIni(doc);
         delete doc;
     }
-    else {
+    else
+    {
         slaveProcessorIni();
     }
 }
 
-void XMLreader::mainProcessorIni( TiXmlNode* pParent ) {
+void XMLreader::mainProcessorIni( TiXmlNode* pParent )
+{
     std::vector<TiXmlNode*> pParentVect;
     pParentVect.push_back(pParent);
     mainProcessorIni(pParentVect);
@@ -85,15 +93,18 @@ void XMLreader::mainProcessorIni( TiXmlNode* pParent ) {
 void XMLreader::mainProcessorIni( std::vector<TiXmlNode*> pParentVect )
 {
     std::map<plint, TiXmlNode*> parents;
-    for (pluint iParent=0; iParent<pParentVect.size(); ++iParent) {
+    for (pluint iParent=0; iParent<pParentVect.size(); ++iParent)
+    {
         PLB_PRECONDITION( pParentVect[iParent]->Type()==TiXmlNode::DOCUMENT ||
                           pParentVect[iParent]->Type()==TiXmlNode::ELEMENT );
 
         TiXmlElement* pParentElement = pParentVect[iParent]->ToElement();
         plint id=0;
-        if (pParentElement) {
+        if (pParentElement)
+        {
             const char* attribute = pParentElement->Attribute("id");
-            if (attribute) {
+            if (attribute)
+            {
                 std::stringstream attributestr(attribute);
                 attributestr >> id;
             }
@@ -108,7 +119,8 @@ void XMLreader::mainProcessorIni( std::vector<TiXmlNode*> pParentVect )
     name = it->second->ValueStr();
     global::mpi().bCast(name);
 
-    for (; it != parents.end(); ++it) {
+    for (; it != parents.end(); ++it)
+    {
         plint id = it->first;
         global::mpi().bCast(&id, 1);
 
@@ -119,14 +131,16 @@ void XMLreader::mainProcessorIni( std::vector<TiXmlNode*> pParentVect )
         typedef std::map<std::string, std::vector<TiXmlNode*> > ChildMap;
         ChildMap childMap;
         TiXmlNode* pChild;
-        for ( pChild = pParent->FirstChild(); pChild != 0; pChild = pChild->NextSibling()) 
+        for ( pChild = pParent->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
         {
             int type = pChild->Type();
-            if ( type==TiXmlNode::ELEMENT ) {
+            if ( type==TiXmlNode::ELEMENT )
+            {
                 std::string name(pChild->Value());
                 childMap[name].push_back(pChild);
             }
-            else if ( type==TiXmlNode::TEXT ) {
+            else if ( type==TiXmlNode::TEXT )
+            {
                 data.text = pChild->ToText()->ValueStr();
             }
         }
@@ -134,7 +148,8 @@ void XMLreader::mainProcessorIni( std::vector<TiXmlNode*> pParentVect )
         plint numChildren = (plint) childMap.size();
         global::mpi().bCast(&numChildren, 1);
 
-        for (ChildMap::iterator it = childMap.begin(); it != childMap.end(); ++it) {
+        for (ChildMap::iterator it = childMap.begin(); it != childMap.end(); ++it)
+        {
             std::vector<TiXmlNode*> pChildVect = it->second;
             data.children.push_back( new XMLreader( pChildVect ) );
         }
@@ -147,7 +162,8 @@ void XMLreader::slaveProcessorIni()
     global::mpi().bCast(&numId, 1);
     global::mpi().bCast(name);
 
-    for (plint iId=0; iId<numId; ++iId) {
+    for (plint iId=0; iId<numId; ++iId)
+    {
         plint id=0;
         global::mpi().bCast(&id, 1);
         Data& data = data_map[id];
@@ -155,36 +171,44 @@ void XMLreader::slaveProcessorIni()
         plint numChildren=0;
         global::mpi().bCast(&numChildren, 1);
 
-        for(plint iChild=0; iChild<numChildren; ++iChild) {
+        for(plint iChild=0; iChild<numChildren; ++iChild)
+        {
             std::vector<TiXmlNode*> noParam;
             data.children.push_back( new XMLreader(noParam) );
         }
     }
 }
 
-XMLreader::XMLreader() {
+XMLreader::XMLreader()
+{
     name = "XML node not found";
 }
 
-XMLreader::~XMLreader() {
+XMLreader::~XMLreader()
+{
     std::map<plint,Data>::iterator it = data_map.begin();
-    for (; it != data_map.end(); ++it) {
+    for (; it != data_map.end(); ++it)
+    {
         std::vector<XMLreader*>& children = it->second.children;
-        for (pluint iNode=0; iNode<children.size(); ++iNode) {
+        for (pluint iNode=0; iNode<children.size(); ++iNode)
+        {
             delete children[iNode];
         }
     }
 }
 
-void XMLreader::print(int indent) const {
+void XMLreader::print(int indent) const
+{
     std::string indentStr(indent, ' ');
     pcout << indentStr << "[" << name << "]" << std::endl;
     std::string text = getFirstText();
-    if (!text.empty()) {
+    if (!text.empty())
+    {
         pcout << indentStr << "  " << text << std::endl;
     }
     std::vector<XMLreader*> const& children = data_map.begin()->second.children;
-    for (pluint iNode=0; iNode<children.size(); ++iNode) {
+    for (pluint iNode=0; iNode<children.size(); ++iNode)
+    {
         children[iNode]->print(indent+2);
     }
 }
@@ -192,8 +216,10 @@ void XMLreader::print(int indent) const {
 XMLreaderProxy XMLreader::operator[] (std::string name) const
 {
     Data const& data = data_map.begin()->second;
-    for (pluint iNode=0; iNode<data.children.size(); ++iNode) {
-        if (data.children[iNode]->name == name) {
+    for (pluint iNode=0; iNode<data.children.size(); ++iNode)
+    {
+        if (data.children[iNode]->name == name)
+        {
             return XMLreaderProxy(data.children[iNode]);
         }
     }
@@ -201,18 +227,22 @@ XMLreaderProxy XMLreader::operator[] (std::string name) const
     return XMLreaderProxy(0);
 }
 
-XMLreaderProxy XMLreader::getElement(std::string name, plint id) const {
+XMLreaderProxy XMLreader::getElement(std::string name, plint id) const
+{
     std::map<plint,Data>::const_iterator it = data_map.find(id);
-    if (it==data_map.end()) {
+    if (it==data_map.end())
+    {
         std::stringstream idStr;
         idStr << id;
         plbIOError (
-                std::string("Element with id ") +
-                idStr.str() + std::string(" does not exist") );
+            std::string("Element with id ") +
+            idStr.str() + std::string(" does not exist") );
     }
     std::vector<XMLreader*> const& children = it->second.children;
-    for (pluint iNode=0; iNode<children.size(); ++iNode) {
-        if (children[iNode]->name == name) {
+    for (pluint iNode=0; iNode<children.size(); ++iNode)
+    {
+        if (children[iNode]->name == name)
+        {
             return XMLreaderProxy(children[iNode]);
         }
     }
@@ -220,47 +250,60 @@ XMLreaderProxy XMLreader::getElement(std::string name, plint id) const {
     return XMLreaderProxy(0);
 }
 
-std::string XMLreader::getName() const {
+std::string XMLreader::getName() const
+{
     return name;
 }
 
-std::string XMLreader::getText() const {
+std::string XMLreader::getText() const
+{
     return data_map.begin()->second.text;
 }
 
-std::string XMLreader::getText(plint id) const {
+std::string XMLreader::getText(plint id) const
+{
     std::map<plint,Data>::const_iterator it = data_map.find(id);
-    if (it != data_map.end()) {
+    if (it != data_map.end())
+    {
         return it->second.text;
     }
-    else {
+    else
+    {
         return "";
     }
 }
 
-plint XMLreader::getFirstId() const {
+plint XMLreader::getFirstId() const
+{
     return data_map.begin()->first;
 }
 
-std::string XMLreader::getFirstText() const {
+std::string XMLreader::getFirstText() const
+{
     return data_map.begin()->second.text;
 }
 
-bool XMLreader::idExists(plint id) const {
+bool XMLreader::idExists(plint id) const
+{
     std::map<plint,Data>::const_iterator it = data_map.find(id);
-    if (it != data_map.end()) {
+    if (it != data_map.end())
+    {
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-bool XMLreader::getNextId(plint& id) const {
+bool XMLreader::getNextId(plint& id) const
+{
     std::map<plint,Data>::const_iterator it = data_map.find(id);
-    if (it != data_map.end()) {
+    if (it != data_map.end())
+    {
         ++it;
-        if (it != data_map.end()) {
+        if (it != data_map.end())
+        {
             id = it->first;
             return true;
         }
@@ -271,7 +314,8 @@ bool XMLreader::getNextId(plint& id) const {
 std::vector<XMLreader*> const& XMLreader::getChildren(plint id) const
 {
     std::map<plint,Data>::const_iterator it = data_map.find(id);
-    if (it==data_map.end()) {
+    if (it==data_map.end())
+    {
         plbIOError(std::string("Cannot access id ")+util::val2str(id)+" in XML element " + name);
     }
     return it->second.children;
@@ -280,10 +324,12 @@ std::vector<XMLreader*> const& XMLreader::getChildren(plint id) const
 XMLreaderProxy::XMLreaderProxy(XMLreader const* reader_)
     : reader(reader_)
 {
-    if (reader) {
+    if (reader)
+    {
         id = reader->getFirstId();
     }
-    else {
+    else
+    {
         id = 0;
     }
 }
@@ -295,56 +341,70 @@ XMLreaderProxy::XMLreaderProxy(XMLreader const* reader_, plint id_)
 
 XMLreaderProxy XMLreaderProxy::operator[] (std::string name) const
 {
-    if (!reader) {
+    if (!reader)
+    {
         plbIOError(std::string("Cannot read value from XML element ") + name);
     }
     return reader->getElement(name, id);
 }
 
-XMLreaderProxy XMLreaderProxy::operator[] (plint newId) const {
-    if (!reader) {
+XMLreaderProxy XMLreaderProxy::operator[] (plint newId) const
+{
+    if (!reader)
+    {
         plbIOError(std::string("Cannot read value from XML element"));
     }
-    if (!reader->idExists(newId)) {
+    if (!reader->idExists(newId))
+    {
         std::stringstream newIdStr;
         newIdStr << newId;
         plbIOError (
-                std::string("Id ") + newIdStr.str() +
-                std::string(" does not exist in XML element") );
+            std::string("Id ") + newIdStr.str() +
+            std::string(" does not exist in XML element") );
     }
     return XMLreaderProxy(reader, newId);
 }
 
-bool XMLreaderProxy::isValid() const {
+bool XMLreaderProxy::isValid() const
+{
     return reader;
 }
 
-plint XMLreaderProxy::getId() const {
+plint XMLreaderProxy::getId() const
+{
     return id;
 }
 
-XMLreaderProxy XMLreaderProxy::iterId() const {
-    if (!reader) {
+XMLreaderProxy XMLreaderProxy::iterId() const
+{
+    if (!reader)
+    {
         plbIOError(std::string("Use of invalid XML element"));
     }
     plint newId = id;
-    if (reader->getNextId(newId)) {
+    if (reader->getNextId(newId))
+    {
         return XMLreaderProxy(reader, newId);
     }
-    else {
+    else
+    {
         return XMLreaderProxy(0);
     }
 }
 
-std::string XMLreaderProxy::getName() const {
-    if (!reader) {
+std::string XMLreaderProxy::getName() const
+{
+    if (!reader)
+    {
         plbIOError(std::string("Cannot read value from XML element "));
     }
     return reader->getName();
 }
 
-std::vector<XMLreader*> const& XMLreaderProxy::getChildren() const {
-    if (!reader) {
+std::vector<XMLreader*> const& XMLreaderProxy::getChildren() const
+{
+    if (!reader)
+    {
         plbIOError(std::string("Cannot read value from XML element "));
     }
     return reader->getChildren(id);
@@ -356,11 +416,14 @@ XMLwriter::XMLwriter()
       currentId(0)
 { }
 
-XMLwriter::~XMLwriter() {
+XMLwriter::~XMLwriter()
+{
     std::map<plint,Data>::iterator it = data_map.begin();
-    for (; it != data_map.end(); ++it) {
+    for (; it != data_map.end(); ++it)
+    {
         std::vector<XMLwriter*>& children = it->second.children;
-        for (pluint iNode=0; iNode<children.size(); ++iNode) {
+        for (pluint iNode=0; iNode<children.size(); ++iNode)
+        {
             delete children[iNode];
         }
     }
@@ -378,11 +441,14 @@ void XMLwriter::setString(std::string const& value)
 }
 
 
-XMLwriter& XMLwriter::operator[] (std::string name) {
+XMLwriter& XMLwriter::operator[] (std::string name)
+{
     std::vector<XMLwriter*>& children = data_map[currentId].children;
     // If node already exists, simply return it.
-    for (pluint iNode=0; iNode<data_map[currentId].children.size(); ++iNode) {
-        if (data_map[currentId].children[iNode]->name == name) {
+    for (pluint iNode=0; iNode<data_map[currentId].children.size(); ++iNode)
+    {
+        if (data_map[currentId].children[iNode]->name == name)
+        {
             return *children[iNode];
         }
     }
@@ -391,15 +457,17 @@ XMLwriter& XMLwriter::operator[] (std::string name) {
     return *children.back();
 }
 
-XMLwriter& XMLwriter::operator[] (plint id) {
+XMLwriter& XMLwriter::operator[] (plint id)
+{
     currentId = id;
     return *this;
 }
 
-void XMLwriter::print(std::string fName) const {
+void XMLwriter::print(std::string fName) const
+{
     plb_ofstream ofile(fName.c_str());
     plbIOError( !ofile.is_open(), std::string("Could not open file ") + fName
-                                  + std::string(" for write access") );
+                + std::string(" for write access") );
     toOutputStream(ofile);
 }
 

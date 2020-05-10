@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,20 +30,23 @@
 #include "multiBlock/multiBlockOperations3D.hh"
 #include "core/plbDebug.h"
 
-namespace plb {
+namespace plb
+{
 
 
 void executeDataProcessor( DataProcessorGenerator3D const& generator,
                            std::vector<MultiBlock3D*> multiBlocks )
 {
     MultiProcessing3D<DataProcessorGenerator3D const, DataProcessorGenerator3D >
-        multiProcessing(generator, multiBlocks);
+    multiProcessing(generator, multiBlocks);
     std::vector<DataProcessorGenerator3D*> const& retainedGenerators = multiProcessing.getRetainedGenerators();
     std::vector<std::vector<plint> > const& atomicBlockNumbers = multiProcessing.getAtomicBlockNumbers();
 
-    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator) {
+    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator)
+    {
         std::vector<AtomicBlock3D*> extractedAtomicBlocks(multiBlocks.size());
-        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock) {
+        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock)
+        {
             extractedAtomicBlocks[iBlock]
                 = &multiBlocks[iBlock]->getComponent(atomicBlockNumbers[iGenerator][iBlock]);
         }
@@ -77,14 +80,16 @@ void executeDataProcessor( ReductiveDataProcessorGenerator3D& generator,
                            std::vector<MultiBlock3D*> multiBlocks )
 {
     MultiProcessing3D<ReductiveDataProcessorGenerator3D, ReductiveDataProcessorGenerator3D >
-        multiProcessing(generator, multiBlocks);
+    multiProcessing(generator, multiBlocks);
     std::vector<ReductiveDataProcessorGenerator3D*> const& retainedGenerators = multiProcessing.getRetainedGenerators();
     std::vector<std::vector<plint> > const& atomicBlockNumbers = multiProcessing.getAtomicBlockNumbers();
 
     std::vector<BlockStatistics const*> individualStatistics(retainedGenerators.size());
-    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator) {
+    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator)
+    {
         std::vector<AtomicBlock3D*> extractedAtomicBlocks(multiBlocks.size());
-        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock) {
+        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock)
+        {
             extractedAtomicBlocks[iBlock] = &multiBlocks[iBlock]->getComponent(atomicBlockNumbers[iGenerator][iBlock]);
         }
         // Delegate to the "AtomicBlock Reductive version" of executeDataProcessor.
@@ -120,13 +125,15 @@ void addInternalProcessor( DataProcessorGenerator3D const& generator, MultiBlock
                            std::vector<MultiBlock3D*> multiBlockArgs, plint level )
 {
     MultiProcessing3D<DataProcessorGenerator3D const, DataProcessorGenerator3D >
-        multiProcessing(generator, multiBlockArgs);
+    multiProcessing(generator, multiBlockArgs);
     std::vector<DataProcessorGenerator3D*> const& retainedGenerators = multiProcessing.getRetainedGenerators();
     std::vector<std::vector<plint> > const& atomicBlockNumbers = multiProcessing.getAtomicBlockNumbers();
 
-    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator) {
+    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator)
+    {
         std::vector<AtomicBlock3D*> extractedAtomicBlocks(multiBlockArgs.size());
-        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock) {
+        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock)
+        {
             extractedAtomicBlocks[iBlock] =
                 &multiBlockArgs[iBlock]->getComponent(atomicBlockNumbers[iGenerator][iBlock]);
         }
@@ -143,16 +150,17 @@ void addInternalProcessor( DataProcessorGenerator3D const& generator, MultiBlock
     std::vector<modif::ModifT> typeOfModification;
     multiProcessing.multiBlocksWhichRequireUpdate(updatedMultiBlocks, typeOfModification);
     actor.subscribeProcessor (
-            level,
-            updatedMultiBlocks, typeOfModification,
-            BlockDomain::usesEnvelope(generator.appliesTo()) );
+        level,
+        updatedMultiBlocks, typeOfModification,
+        BlockDomain::usesEnvelope(generator.appliesTo()) );
     actor.storeProcessor(generator, multiBlockArgs, level);
 }
 
 void addInternalProcessor( DataProcessorGenerator3D const& generator,
                            std::vector<MultiBlock3D*> multiBlocks, plint level )
 {
-    if (multiBlocks.size()>0) {
+    if (multiBlocks.size()>0)
+    {
         addInternalProcessor(generator, *multiBlocks[0], multiBlocks, level);
     }
 }
@@ -176,4 +184,3 @@ void addInternalProcessor( DataProcessorGenerator3D const& generator,
 }
 
 }  // namespace plb
-

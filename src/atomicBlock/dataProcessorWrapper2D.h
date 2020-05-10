@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -41,7 +41,8 @@
 
 #include "atomicBlock/dataProcessingFunctional2D.h"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Generic wrappers, boxed functionals ********************** */
 
@@ -63,54 +64,54 @@ void integrateProcessingFunctional(BoxProcessingFunctional2D* functional,
 /// of the functional.
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        LatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
-        Box2D domain,
-        std::vector<BlockLattice2D<T,Descriptor>*> lattices );
+    LatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
+    Box2D domain,
+    std::vector<BlockLattice2D<T,Descriptor>*> lattices );
 
 /// Integrate a functional into a sequence of block-lattices. If the
 /// number of lattices is 1 or 2, you should prefer the _L and _LL version
 /// of the functional.
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        LatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
-        Box2D domain,
-        std::vector<BlockLattice2D<T,Descriptor>*> lattices, plint level=0 );
+    LatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
+    Box2D domain,
+    std::vector<BlockLattice2D<T,Descriptor>*> lattices, plint level=0 );
 
 /// Apply a functional on a sequence of scalar-fields. If the number
 /// of lattices is 1 or 2, you should prefer the _S and _SS version
 /// of the functional.
 template<typename T>
 void applyProcessingFunctional (
-        ScalarFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain,
-        std::vector<ScalarField2D<T>*> fields );
+    ScalarFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain,
+    std::vector<ScalarField2D<T>*> fields );
 
 /// Integrate a functional into a sequence of scalar-fields. If the
 /// number of lattices is 1 or 2, you should prefer the _S and _SS version
 /// of the functional.
 template<typename T>
 void integrateProcessingFunctional (
-        ScalarFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain,
-        std::vector<ScalarField2D<T>*> fields, plint level=0 );
+    ScalarFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain,
+    std::vector<ScalarField2D<T>*> fields, plint level=0 );
 
 /// Apply a functional on a sequence of tensor-fields. If the number
 /// of lattices is 1 or 2, you should prefer the _T and _TT version
 /// of the functional.
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        TensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
-        Box2D domain,
-        std::vector<TensorField2D<T,nDim>*> fields );
+    TensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
+    Box2D domain,
+    std::vector<TensorField2D<T,nDim>*> fields );
 
 /// Integrate a functional into a sequence of tensor-fields. If the
 /// number of lattices is 1 or 2, you should prefer the _T and _TT version
 /// of the functional.
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        TensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
-        Box2D domain,
-        std::vector<TensorField2D<T,nDim>*> fields, plint level=0 );
+    TensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
+    Box2D domain,
+    std::vector<TensorField2D<T,nDim>*> fields, plint level=0 );
 
 
 /// Apply a functional on a sequence of n-tensor-fields. If the number
@@ -118,18 +119,18 @@ void integrateProcessingFunctional (
 /// of the functional.
 template<typename T>
 void applyProcessingFunctional (
-        NTensorFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain,
-        std::vector<NTensorField2D<T>*> fields );
+    NTensorFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain,
+    std::vector<NTensorField2D<T>*> fields );
 
 /// Integrate a functional into a sequence of n-tensor-fields. If the
 /// number of lattices is 1 or 2, you should prefer the _T and _TT version
 /// of the functional.
 template<typename T>
 void integrateProcessingFunctional (
-        NTensorFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain,
-        std::vector<NTensorField2D<T>*> fields, plint level=0 );
+    NTensorFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain,
+    std::vector<NTensorField2D<T>*> fields, plint level=0 );
 
 
 /* *************** Typed wrappers with a single argument, boxed functionals * */
@@ -172,18 +173,18 @@ void integrateProcessingFunctional(BoxProcessingFunctional2D_N<T>* functional,
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor1>& lattice1,
-        BlockLattice2D<T2,Descriptor2>& lattice2 );
+    BoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor1>& lattice1,
+    BlockLattice2D<T2,Descriptor2>& lattice2 );
 
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor1>& lattice1,
-        BlockLattice2D<T2,Descriptor2>& lattice2, plint level=0 );
+    BoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor1>& lattice1,
+    BlockLattice2D<T2,Descriptor2>& lattice2, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional(BoxProcessingFunctional2D_SS<T1,T2>* functional,
@@ -199,29 +200,29 @@ void integrateProcessingFunctional(BoxProcessingFunctional2D_SS<T1,T2>* function
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
-        Box2D domain,
-        TensorField2D<T1,nDim1>& field1,
-        TensorField2D<T2,nDim2>& field2 );
+    BoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
+    Box2D domain,
+    TensorField2D<T1,nDim1>& field1,
+    TensorField2D<T2,nDim2>& field2 );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional, Box2D domain,
-        TensorField2D<T1,nDim1>& field1,
-        TensorField2D<T2,nDim2>& field2, plint level=0 );
+    BoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional, Box2D domain,
+    TensorField2D<T1,nDim1>& field1,
+    TensorField2D<T2,nDim2>& field2, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional2D_NN<T1,T2>* functional,
-        Box2D domain,
-        NTensorField2D<T1>& field1,
-        NTensorField2D<T2>& field2 );
+    BoxProcessingFunctional2D_NN<T1,T2>* functional,
+    Box2D domain,
+    NTensorField2D<T1>& field1,
+    NTensorField2D<T2>& field2 );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional2D_NN<T1,T2>* functional, Box2D domain,
-        NTensorField2D<T1>& field1,
-        NTensorField2D<T2>& field2, plint level=0 );
+    BoxProcessingFunctional2D_NN<T1,T2>* functional, Box2D domain,
+    NTensorField2D<T1>& field1,
+    NTensorField2D<T2>& field2, plint level=0 );
 
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional(BoxProcessingFunctional2D_ST<T1,T2,nDim>* functional,
@@ -249,45 +250,45 @@ void integrateProcessingFunctional(BoxProcessingFunctional2D_SN<T1,T2>* function
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        ScalarField2D<T2>& field );
+    BoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    ScalarField2D<T2>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        ScalarField2D<T2>& field, plint level=0 );
+    BoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    ScalarField2D<T2>& field, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        BoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        TensorField2D<T2,nDim>& field );
+    BoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    TensorField2D<T2,nDim>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        TensorField2D<T2,nDim>& field, plint level=0 );
+    BoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    TensorField2D<T2,nDim>& field, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        NTensorField2D<T2>& field );
+    BoxProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    NTensorField2D<T2>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        NTensorField2D<T2>& field, plint level=0 );
+    BoxProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    NTensorField2D<T2>& field, plint level=0 );
 
 
 /* *************** Generic wrappers, dotted functionals ********************* */
@@ -303,66 +304,66 @@ void integrateProcessingFunctional(DotProcessingFunctional2D* functional,
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        LatticeDotProcessingFunctional2D<T,Descriptor>* functional,
-        DotList2D const& dotList,
-        std::vector<BlockLattice2D<T,Descriptor>*> lattices );
+    LatticeDotProcessingFunctional2D<T,Descriptor>* functional,
+    DotList2D const& dotList,
+    std::vector<BlockLattice2D<T,Descriptor>*> lattices );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        LatticeDotProcessingFunctional2D<T,Descriptor>* functional,
-        DotList2D const& dotList,
-        std::vector<BlockLattice2D<T,Descriptor>*> lattices, plint level=0 );
+    LatticeDotProcessingFunctional2D<T,Descriptor>* functional,
+    DotList2D const& dotList,
+    std::vector<BlockLattice2D<T,Descriptor>*> lattices, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional (
-        ScalarFieldDotProcessingFunctional2D<T>* functional,
-        DotList2D const& dotList,
-        std::vector<ScalarField2D<T>*> fields );
+    ScalarFieldDotProcessingFunctional2D<T>* functional,
+    DotList2D const& dotList,
+    std::vector<ScalarField2D<T>*> fields );
 
 template<typename T>
 void integrateProcessingFunctional (
-        ScalarFieldDotProcessingFunctional2D<T>* functional,
-        DotList2D const& dotList,
-        std::vector<ScalarField2D<T>*> fields, plint level=0 );
+    ScalarFieldDotProcessingFunctional2D<T>* functional,
+    DotList2D const& dotList,
+    std::vector<ScalarField2D<T>*> fields, plint level=0 );
 
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        TensorFieldDotProcessingFunctional2D<T,nDim>* functional,
-        DotList2D const& dotList,
-        std::vector<TensorField2D<T,nDim>*> fields );
+    TensorFieldDotProcessingFunctional2D<T,nDim>* functional,
+    DotList2D const& dotList,
+    std::vector<TensorField2D<T,nDim>*> fields );
 
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        TensorFieldDotProcessingFunctional2D<T,nDim>* functional,
-        DotList2D const& dotList,
-        std::vector<TensorField2D<T,nDim>*> fields, plint level=0 );
+    TensorFieldDotProcessingFunctional2D<T,nDim>* functional,
+    DotList2D const& dotList,
+    std::vector<TensorField2D<T,nDim>*> fields, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional (
-        NTensorFieldDotProcessingFunctional2D<T>* functional,
-        DotList2D const& dotList,
-        std::vector<NTensorField2D<T>*> fields );
+    NTensorFieldDotProcessingFunctional2D<T>* functional,
+    DotList2D const& dotList,
+    std::vector<NTensorField2D<T>*> fields );
 
 template<typename T>
 void integrateProcessingFunctional (
-        NTensorFieldDotProcessingFunctional2D<T>* functional,
-        DotList2D const& dotList,
-        std::vector<NTensorField2D<T>*> fields, plint level=0 );
+    NTensorFieldDotProcessingFunctional2D<T>* functional,
+    DotList2D const& dotList,
+    std::vector<NTensorField2D<T>*> fields, plint level=0 );
 
 
 /* *************** Typed wrappers with a single argument, dotted functionals* */
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_L<T,Descriptor>* functional,
-        DotList2D const& dotList,
-        BlockLattice2D<T,Descriptor>& lattice );
+    DotProcessingFunctional2D_L<T,Descriptor>* functional,
+    DotList2D const& dotList,
+    BlockLattice2D<T,Descriptor>& lattice );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_L<T,Descriptor>* functional,
-        DotList2D const& dotList,
-        BlockLattice2D<T,Descriptor>& lattice, plint level=0 );
+    DotProcessingFunctional2D_L<T,Descriptor>* functional,
+    DotList2D const& dotList,
+    BlockLattice2D<T,Descriptor>& lattice, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional(DotProcessingFunctional2D_S<T>* functional,
@@ -400,18 +401,18 @@ void integrateProcessingFunctional(DotProcessingFunctional2D_N<T>* functional,
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        DotList2D const& dotList,
-        BlockLattice2D<T1,Descriptor1>& lattice1,
-        BlockLattice2D<T2,Descriptor2>& lattice2 );
+    DotProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    DotList2D const& dotList,
+    BlockLattice2D<T1,Descriptor1>& lattice1,
+    BlockLattice2D<T2,Descriptor2>& lattice2 );
 
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        DotList2D const& dotList,
-        BlockLattice2D<T1,Descriptor1>& lattice1,
-        BlockLattice2D<T2,Descriptor2>& lattice2, plint level=0 );
+    DotProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    DotList2D const& dotList,
+    BlockLattice2D<T1,Descriptor1>& lattice1,
+    BlockLattice2D<T2,Descriptor2>& lattice2, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional(DotProcessingFunctional2D_SS<T1,T2>* functional,
@@ -428,102 +429,102 @@ void integrateProcessingFunctional(DotProcessingFunctional2D_SS<T1,T2>* function
 /// Easy instantiation of dotted data processor for TensorField-TensorField coupling
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
-        DotList2D const& dotList,
-        TensorField2D<T1,nDim1>& field1,
-        TensorField2D<T2,nDim2>& field2 );
+    DotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
+    DotList2D const& dotList,
+    TensorField2D<T1,nDim1>& field1,
+    TensorField2D<T2,nDim2>& field2 );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
-        DotList2D const& dotList,
-        TensorField2D<T1,nDim1>& field1,
-        TensorField2D<T2,nDim2>& field2, plint level=0 );
+    DotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
+    DotList2D const& dotList,
+    TensorField2D<T1,nDim1>& field1,
+    TensorField2D<T2,nDim2>& field2, plint level=0 );
 
 /// Easy instantiation of dotted data processor for NTensorField-NTensorField coupling
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_NN<T1,T2>* functional,
-        DotList2D const& dotList,
-        NTensorField2D<T1>& field1,
-        NTensorField2D<T2>& field2 );
+    DotProcessingFunctional2D_NN<T1,T2>* functional,
+    DotList2D const& dotList,
+    NTensorField2D<T1>& field1,
+    NTensorField2D<T2>& field2 );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_NN<T1,T2>* functional,
-        DotList2D const& dotList,
-        NTensorField2D<T1>& field1,
-        NTensorField2D<T2>& field2, plint level=0 );
+    DotProcessingFunctional2D_NN<T1,T2>* functional,
+    DotList2D const& dotList,
+    NTensorField2D<T1>& field1,
+    NTensorField2D<T2>& field2, plint level=0 );
 
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_ST<T1,T2,nDim>* functional,
-        DotList2D const& dotList,
-        ScalarField2D<T1>& field1,
-        TensorField2D<T2,nDim>& field2 );
+    DotProcessingFunctional2D_ST<T1,T2,nDim>* functional,
+    DotList2D const& dotList,
+    ScalarField2D<T1>& field1,
+    TensorField2D<T2,nDim>& field2 );
 
 template<typename T1, typename T2, int nDim>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_ST<T1,T2,nDim>* functional,
-        DotList2D const& dotList,
-        ScalarField2D<T1>& field1,
-        TensorField2D<T2,nDim>& field2, plint level=0 );
+    DotProcessingFunctional2D_ST<T1,T2,nDim>* functional,
+    DotList2D const& dotList,
+    ScalarField2D<T1>& field1,
+    TensorField2D<T2,nDim>& field2, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_SN<T1,T2>* functional,
-        DotList2D const& dotList,
-        ScalarField2D<T1>& field1,
-        NTensorField2D<T2>& field2 );
+    DotProcessingFunctional2D_SN<T1,T2>* functional,
+    DotList2D const& dotList,
+    ScalarField2D<T1>& field1,
+    NTensorField2D<T2>& field2 );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_SN<T1,T2>* functional,
-        DotList2D const& dotList,
-        ScalarField2D<T1>& field1,
-        NTensorField2D<T2>& field2, plint level=0 );
+    DotProcessingFunctional2D_SN<T1,T2>* functional,
+    DotList2D const& dotList,
+    ScalarField2D<T1>& field1,
+    NTensorField2D<T2>& field2, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        DotList2D const& dotList,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        ScalarField2D<T2>& field );
+    DotProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    DotList2D const& dotList,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    ScalarField2D<T2>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        DotList2D const& dotList,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        ScalarField2D<T2>& field, plint level=0 );
+    DotProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    DotList2D const& dotList,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    ScalarField2D<T2>& field, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        DotList2D const& dotList,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        TensorField2D<T2,nDim>& field );
+    DotProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    DotList2D const& dotList,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    TensorField2D<T2,nDim>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        DotList2D const& dotList,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        TensorField2D<T2,nDim>& field, plint level=0 );
+    DotProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    DotList2D const& dotList,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    TensorField2D<T2,nDim>& field, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
-        DotList2D const& dotList,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        NTensorField2D<T2>& field );
+    DotProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
+    DotList2D const& dotList,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    NTensorField2D<T2>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
-        DotList2D const& dotList,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        NTensorField2D<T2>& field, plint level=0 );
+    DotProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
+    DotList2D const& dotList,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    NTensorField2D<T2>& field, plint level=0 );
 
 
 /* *************** Generic wrappers, bounded and boxed functionals ********** */
@@ -533,76 +534,76 @@ void applyProcessingFunctional(BoundedBoxProcessingFunctional2D* functional,
                                plint boundaryWidth );
 
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D* functional,
-        Box2D domain, std::vector<AtomicBlock2D*> atomicBlocks,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D* functional,
+    Box2D domain, std::vector<AtomicBlock2D*> atomicBlocks,
+    plint boundaryWidth, plint level=0 );
 
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        BoundedLatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
-        Box2D domain,
-        std::vector<BlockLattice2D<T,Descriptor>*> lattices,
-        plint boundaryWidth = Descriptor<T>::boundaryWidth );
+    BoundedLatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
+    Box2D domain,
+    std::vector<BlockLattice2D<T,Descriptor>*> lattices,
+    plint boundaryWidth = Descriptor<T>::boundaryWidth );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        BoundedLatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
-        Box2D domain, std::vector<BlockLattice2D<T,Descriptor>*> lattices,
-        plint boundaryWidth = Descriptor<T>::boundaryWidth, plint level=0 );
+    BoundedLatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
+    Box2D domain, std::vector<BlockLattice2D<T,Descriptor>*> lattices,
+    plint boundaryWidth = Descriptor<T>::boundaryWidth, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional (
-        BoundedScalarFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain, std::vector<ScalarField2D<T>*> fields,
-        plint boundaryWidth );
+    BoundedScalarFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain, std::vector<ScalarField2D<T>*> fields,
+    plint boundaryWidth );
 
 template<typename T>
 void integrateProcessingFunctional (
-        BoundedScalarFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain, std::vector<ScalarField2D<T>*> fields,
-        plint boundaryWidth );
+    BoundedScalarFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain, std::vector<ScalarField2D<T>*> fields,
+    plint boundaryWidth );
 
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        BoundedTensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
-        Box2D domain, std::vector<TensorField2D<T,nDim>*> fields,
-        plint boundaryWidth );
+    BoundedTensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
+    Box2D domain, std::vector<TensorField2D<T,nDim>*> fields,
+    plint boundaryWidth );
 
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        BoundedTensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
-        Box2D domain,
-        std::vector<TensorField2D<T,nDim>*> fields, plint boundaryWidth );
+    BoundedTensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
+    Box2D domain,
+    std::vector<TensorField2D<T,nDim>*> fields, plint boundaryWidth );
 
 template<typename T>
 void applyProcessingFunctional (
-        BoundedNTensorFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain, std::vector<NTensorField2D<T>*> fields,
-        plint boundaryWidth );
+    BoundedNTensorFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain, std::vector<NTensorField2D<T>*> fields,
+    plint boundaryWidth );
 
 template<typename T>
 void integrateProcessingFunctional (
-        BoundedNTensorFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain,
-        std::vector<NTensorField2D<T>*> fields, plint boundaryWidth );
+    BoundedNTensorFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain,
+    std::vector<NTensorField2D<T>*> fields, plint boundaryWidth );
 
 
 /* ** Typed wrappers with a single argument, bounded and boxed functionals * */
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_L<T,Descriptor>* functional,
-        Box2D domain,
-        BlockLattice2D<T,Descriptor>& lattice,
-        plint boundaryWidth = Descriptor<T>::boundaryWidth );
+    BoundedBoxProcessingFunctional2D_L<T,Descriptor>* functional,
+    Box2D domain,
+    BlockLattice2D<T,Descriptor>& lattice,
+    plint boundaryWidth = Descriptor<T>::boundaryWidth );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_L<T,Descriptor>* functional,
-        Box2D domain,
-        BlockLattice2D<T,Descriptor>& lattice,
-        plint boundaryWidth = Descriptor<T>::boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_L<T,Descriptor>* functional,
+    Box2D domain,
+    BlockLattice2D<T,Descriptor>& lattice,
+    plint boundaryWidth = Descriptor<T>::boundaryWidth, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional(BoundedBoxProcessingFunctional2D_S<T>* functional,
@@ -621,10 +622,10 @@ void applyProcessingFunctional(BoundedBoxProcessingFunctional2D_T<T,nDim>* funct
 
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_T<T,nDim>* functional,
-        Box2D domain,
-        TensorField2D<T,nDim>& field,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_T<T,nDim>* functional,
+    Box2D domain,
+    TensorField2D<T,nDim>& field,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional(BoundedBoxProcessingFunctional2D_N<T>* functional,
@@ -633,10 +634,10 @@ void applyProcessingFunctional(BoundedBoxProcessingFunctional2D_N<T>* functional
 
 template<typename T>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_N<T>* functional,
-        Box2D domain,
-        NTensorField2D<T>& field,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_N<T>* functional,
+    Box2D domain,
+    NTensorField2D<T>& field,
+    plint boundaryWidth, plint level=0 );
 
 
 /* ** Typed wrappers with two arguments, bounded and boxed functionals *** */
@@ -644,148 +645,148 @@ void integrateProcessingFunctional (
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor1>& lattice1,
-        BlockLattice2D<T2,Descriptor2>& lattice2,
-        plint boundaryWidth = Descriptor1<T1>::boundaryWidth );
+    BoundedBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor1>& lattice1,
+    BlockLattice2D<T2,Descriptor2>& lattice2,
+    plint boundaryWidth = Descriptor1<T1>::boundaryWidth );
 
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor1>& lattice1,
-        BlockLattice2D<T2,Descriptor2>& lattice2,
-        plint boundaryWidth = Descriptor1<T1>::boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor1>& lattice1,
+    BlockLattice2D<T2,Descriptor2>& lattice2,
+    plint boundaryWidth = Descriptor1<T1>::boundaryWidth, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_SS<T1,T2>* functional,
-        Box2D domain,
-        ScalarField2D<T1>& field1,
-        ScalarField2D<T2>& field2,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_SS<T1,T2>* functional,
+    Box2D domain,
+    ScalarField2D<T1>& field1,
+    ScalarField2D<T2>& field2,
+    plint boundaryWidth );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_SS<T1,T2>* functional,
-        Box2D domain,
-        ScalarField2D<T1>& field1,
-        ScalarField2D<T2>& field2,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_SS<T1,T2>* functional,
+    Box2D domain,
+    ScalarField2D<T1>& field1,
+    ScalarField2D<T2>& field2,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
-        Box2D domain,
-        TensorField2D<T1,nDim1>& field1,
-        TensorField2D<T2,nDim2>& field2,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
+    Box2D domain,
+    TensorField2D<T1,nDim1>& field1,
+    TensorField2D<T2,nDim2>& field2,
+    plint boundaryWidth );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
-        Box2D domain,
-        TensorField2D<T1,nDim1>& field1,
-        TensorField2D<T2,nDim2>& field2,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
+    Box2D domain,
+    TensorField2D<T1,nDim1>& field1,
+    TensorField2D<T2,nDim2>& field2,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_NN<T1,T2>* functional,
-        Box2D domain,
-        NTensorField2D<T1>& field1,
-        NTensorField2D<T2>& field2,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_NN<T1,T2>* functional,
+    Box2D domain,
+    NTensorField2D<T1>& field1,
+    NTensorField2D<T2>& field2,
+    plint boundaryWidth );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_NN<T1,T2>* functional,
-        Box2D domain,
-        NTensorField2D<T1>& field1,
-        NTensorField2D<T2>& field2,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_NN<T1,T2>* functional,
+    Box2D domain,
+    NTensorField2D<T1>& field1,
+    NTensorField2D<T2>& field2,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_ST<T1,T2,nDim>* functional,
-        Box2D domain,
-        ScalarField2D<T1>& field1,
-        TensorField2D<T2,nDim>& field2,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_ST<T1,T2,nDim>* functional,
+    Box2D domain,
+    ScalarField2D<T1>& field1,
+    TensorField2D<T2,nDim>& field2,
+    plint boundaryWidth );
 
 template<typename T1, typename T2, int nDim>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_ST<T1,T2,nDim>* functional,
-        Box2D domain,
-        ScalarField2D<T1>& field1,
-        TensorField2D<T2,nDim>& field2,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_ST<T1,T2,nDim>* functional,
+    Box2D domain,
+    ScalarField2D<T1>& field1,
+    TensorField2D<T2,nDim>& field2,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_SN<T1,T2>* functional,
-        Box2D domain,
-        ScalarField2D<T1>& field1,
-        NTensorField2D<T2>& field2,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_SN<T1,T2>* functional,
+    Box2D domain,
+    ScalarField2D<T1>& field1,
+    NTensorField2D<T2>& field2,
+    plint boundaryWidth );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_SN<T1,T2>* functional,
-        Box2D domain,
-        ScalarField2D<T1>& field1,
-        NTensorField2D<T2>& field2,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_SN<T1,T2>* functional,
+    Box2D domain,
+    ScalarField2D<T1>& field1,
+    NTensorField2D<T2>& field2,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        ScalarField2D<T2>& field,
-        plint boundaryWidth = Descriptor<T1>::boundaryWidth );
+    BoundedBoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    ScalarField2D<T2>& field,
+    plint boundaryWidth = Descriptor<T1>::boundaryWidth );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        ScalarField2D<T2>& field,
-        plint boundaryWidth = Descriptor<T1>::boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    ScalarField2D<T2>& field,
+    plint boundaryWidth = Descriptor<T1>::boundaryWidth, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        TensorField2D<T2,nDim>& field,
-        plint boundaryWidth = Descriptor<T1>::boundaryWidth );
+    BoundedBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    TensorField2D<T2,nDim>& field,
+    plint boundaryWidth = Descriptor<T1>::boundaryWidth );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        TensorField2D<T2,nDim>& field,
-        plint boundaryWidth = Descriptor<T1>::boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    TensorField2D<T2,nDim>& field,
+    plint boundaryWidth = Descriptor<T1>::boundaryWidth, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        NTensorField2D<T2>& field,
-        plint boundaryWidth = Descriptor<T1>::boundaryWidth );
+    BoundedBoxProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    NTensorField2D<T2>& field,
+    plint boundaryWidth = Descriptor<T1>::boundaryWidth );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        BlockLattice2D<T1,Descriptor>& lattice,
-        NTensorField2D<T2>& field,
-        plint boundaryWidth = Descriptor<T1>::boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_LN<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    BlockLattice2D<T1,Descriptor>& lattice,
+    NTensorField2D<T2>& field,
+    plint boundaryWidth = Descriptor<T1>::boundaryWidth, plint level=0 );
 
 }  // namespace plb
 

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,43 +28,50 @@
 #include "plbWrapper/block/multiBlockInfo2D.h"
 #include "plbWrapper/block/multiBlockInfo2D.hh"
 
-namespace plb {
+namespace plb
+{
 
 template class MultiNTensorInfo2D<PRECOMP_T>;
 
 
 MultiBlockInfo2D::MultiBlockInfo2D(MultiBlock2D const& multiBlock)
-    : nx(),
-      ny(),
-      numBlocks(),
-      numAllocatedCells()
+	: nx(),
+	  ny(),
+	  numBlocks(),
+	  numAllocatedCells()
 {
-    getMultiBlockInfo(multiBlock, nx, ny, numBlocks,
-                      smallest, largest, numAllocatedCells);
+	getMultiBlockInfo(multiBlock, nx, ny, numBlocks,
+	                  smallest, largest, numAllocatedCells);
 }
 
-plint MultiBlockInfo2D::getNx() const {
-    return nx;
+plint MultiBlockInfo2D::getNx() const
+{
+	return nx;
 }
 
-plint MultiBlockInfo2D::getNy() const {
-    return ny;
+plint MultiBlockInfo2D::getNy() const
+{
+	return ny;
 }
 
-plint MultiBlockInfo2D::getNumBlocks() const {
-    return numBlocks;
+plint MultiBlockInfo2D::getNumBlocks() const
+{
+	return numBlocks;
 }
 
-plint MultiBlockInfo2D::getNumAllocatedCells() const {
-    return numAllocatedCells;
+plint MultiBlockInfo2D::getNumAllocatedCells() const
+{
+	return numAllocatedCells;
 }
 
-Box2D MultiBlockInfo2D::getSmallestBlock() const {
-    return smallest;
+Box2D MultiBlockInfo2D::getSmallestBlock() const
+{
+	return smallest;
 }
 
-Box2D MultiBlockInfo2D::getLargestBlock() const {
-    return largest;
+Box2D MultiBlockInfo2D::getLargestBlock() const
+{
+	return largest;
 }
 
 }  // namespace plb

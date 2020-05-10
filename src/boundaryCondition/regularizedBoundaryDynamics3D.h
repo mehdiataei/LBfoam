@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,109 +32,111 @@
 #include "core/globalDefs.h"
 #include "boundaryCondition/regularizedBoundaryDynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor,
          int plane, int normal1, int normal2>
 class RegularizedVelocityInnerEdgeDynamics3D : public BoundaryCompositeDynamics<T,Descriptor>
 {
 public:
-    enum { direction1 = (plane+1)%3, direction2 = (plane+2)%3 };
+	enum { direction1 = (plane+1)%3, direction2 = (plane+2)%3 };
 public:
-/* *************** Construction and Destruction ********************** */
+	/* *************** Construction and Destruction ********************** */
 
-    RegularizedVelocityInnerEdgeDynamics3D(Dynamics<T,Descriptor>* baseDynamics_,
-                                           bool automaticPrepareCollision_=true);
+	RegularizedVelocityInnerEdgeDynamics3D(Dynamics<T,Descriptor>* baseDynamics_,
+	                                       bool automaticPrepareCollision_=true);
 
-    /// Clone the object, based on its dynamic type
-    virtual RegularizedVelocityInnerEdgeDynamics3D
-        <T,Descriptor,plane,normal1,normal2>* clone() const;
+	/// Clone the object, based on its dynamic type
+	virtual RegularizedVelocityInnerEdgeDynamics3D
+	<T,Descriptor,plane,normal1,normal2>* clone() const;
 
-    virtual void replaceBaseDynamics(Dynamics<T,Descriptor>* newBaseDynamics);
+	virtual void replaceBaseDynamics(Dynamics<T,Descriptor>* newBaseDynamics);
 
-/* *************** Computation of macroscopic variables ************** */
+	/* *************** Computation of macroscopic variables ************** */
 
-    /// Compute the local fluid velocity in lattice units
-    virtual void computeVelocity( Cell<T,Descriptor> const& cell,
-                                  Array<T,Descriptor<T>::d>& u_ ) const;
+	/// Compute the local fluid velocity in lattice units
+	virtual void computeVelocity( Cell<T,Descriptor> const& cell,
+	                              Array<T,Descriptor<T>::d>& u_ ) const;
 
-    /// Define velocity. Stores value inside Dynamics object.
-    virtual void defineVelocity(Cell<T,Descriptor>& cell, Array<T,Descriptor<T>::d> const& u_);
+	/// Define velocity. Stores value inside Dynamics object.
+	virtual void defineVelocity(Cell<T,Descriptor>& cell, Array<T,Descriptor<T>::d> const& u_);
 
-    /// Compute density from incoming particle populations
-    virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
+	/// Compute density from incoming particle populations
+	virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
 
-/* *************** Other virtual methods ***************************** */
+	/* *************** Other virtual methods ***************************** */
 
-    /// Compute order-0 moment rho-bar
-    virtual T computeRhoBar(Cell<T,Descriptor> const& cell) const;
+	/// Compute order-0 moment rho-bar
+	virtual T computeRhoBar(Cell<T,Descriptor> const& cell) const;
 
-    /// Compute order-0 moment rho-bar and order-1 moment j
-    virtual void computeRhoBarJ(Cell<T,Descriptor> const& cell,
-                                T& rhoBar_, Array<T,Descriptor<T>::d>& j) const;
+	/// Compute order-0 moment rho-bar and order-1 moment j
+	virtual void computeRhoBarJ(Cell<T,Descriptor> const& cell,
+	                            T& rhoBar_, Array<T,Descriptor<T>::d>& j) const;
 
-    /// Compute order-0 moment rho-bar, order-1 moment j, and order-2
-    ///   off-equilibrium moment PiNeq.
-    virtual void computeRhoBarJPiNeq(Cell<T,Descriptor> const& cell,
-                                     T& rhoBar, Array<T,Descriptor<T>::d>& j,
-                                     Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq) const;
+	/// Compute order-0 moment rho-bar, order-1 moment j, and order-2
+	///   off-equilibrium moment PiNeq.
+	virtual void computeRhoBarJPiNeq(Cell<T,Descriptor> const& cell,
+	                                 T& rhoBar, Array<T,Descriptor<T>::d>& j,
+	                                 Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq) const;
 
-    /// Default completion scheme, does nothing
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	/// Default completion scheme, does nothing
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
 private:
-    RegularizedVelocityBoundaryDynamics<T,Descriptor,direction1,normal1> dynamics1;
-    RegularizedVelocityBoundaryDynamics<T,Descriptor,direction2,normal2> dynamics2;
+	RegularizedVelocityBoundaryDynamics<T,Descriptor,direction1,normal1> dynamics1;
+	RegularizedVelocityBoundaryDynamics<T,Descriptor,direction2,normal2> dynamics2;
 };
 
 
 template<typename T, template<typename U> class Descriptor,
          int normalX, int normalY, int normalZ>
-class RegularizedVelocityInnerCornerDynamics3D : public BoundaryCompositeDynamics<T,Descriptor> {
+class RegularizedVelocityInnerCornerDynamics3D : public BoundaryCompositeDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction and Destruction ********************** */
+	/* *************** Construction and Destruction ********************** */
 
-    RegularizedVelocityInnerCornerDynamics3D(Dynamics<T,Descriptor>* baseDynamics_,
-                                             bool automaticPrepareCollision_=true);
+	RegularizedVelocityInnerCornerDynamics3D(Dynamics<T,Descriptor>* baseDynamics_,
+	        bool automaticPrepareCollision_=true);
 
-    /// Clone the object, based on its dynamic type
-    virtual RegularizedVelocityInnerCornerDynamics3D
-        <T,Descriptor,normalX,normalY,normalZ>* clone() const;
+	/// Clone the object, based on its dynamic type
+	virtual RegularizedVelocityInnerCornerDynamics3D
+	<T,Descriptor,normalX,normalY,normalZ>* clone() const;
 
-    virtual void replaceBaseDynamics(Dynamics<T,Descriptor>* newBaseDynamics);
+	virtual void replaceBaseDynamics(Dynamics<T,Descriptor>* newBaseDynamics);
 
-/* *************** Computation of macroscopic variables ************** */
+	/* *************** Computation of macroscopic variables ************** */
 
-    /// Compute the local fluid velocity in lattice units
-    virtual void computeVelocity( Cell<T,Descriptor> const& cell,
-                                  Array<T,Descriptor<T>::d>& u_ ) const;
+	/// Compute the local fluid velocity in lattice units
+	virtual void computeVelocity( Cell<T,Descriptor> const& cell,
+	                              Array<T,Descriptor<T>::d>& u_ ) const;
 
-    /// Define velocity. Stores value inside Dynamics object.
-    virtual void defineVelocity(Cell<T,Descriptor>& cell, Array<T,Descriptor<T>::d> const& u_);
+	/// Define velocity. Stores value inside Dynamics object.
+	virtual void defineVelocity(Cell<T,Descriptor>& cell, Array<T,Descriptor<T>::d> const& u_);
 
-    /// Compute density from incoming particle populations
-    virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
+	/// Compute density from incoming particle populations
+	virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
 
-/* *************** Other virtual methods ***************************** */
+	/* *************** Other virtual methods ***************************** */
 
-    /// Compute order-0 moment rho-bar
-    virtual T computeRhoBar(Cell<T,Descriptor> const& cell) const;
+	/// Compute order-0 moment rho-bar
+	virtual T computeRhoBar(Cell<T,Descriptor> const& cell) const;
 
-    /// Compute order-0 moment rho-bar and order-1 moment j
-    virtual void computeRhoBarJ(Cell<T,Descriptor> const& cell,
-                                T& rhoBar_, Array<T,Descriptor<T>::d>& j) const;
+	/// Compute order-0 moment rho-bar and order-1 moment j
+	virtual void computeRhoBarJ(Cell<T,Descriptor> const& cell,
+	                            T& rhoBar_, Array<T,Descriptor<T>::d>& j) const;
 
-    /// Compute order-0 moment rho-bar, order-1 moment j, and order-2
-    ///   off-equilibrium moment PiNeq.
-    virtual void computeRhoBarJPiNeq(Cell<T,Descriptor> const& cell,
-                                     T& rhoBar, Array<T,Descriptor<T>::d>& j,
-                                     Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq) const;
+	/// Compute order-0 moment rho-bar, order-1 moment j, and order-2
+	///   off-equilibrium moment PiNeq.
+	virtual void computeRhoBarJPiNeq(Cell<T,Descriptor> const& cell,
+	                                 T& rhoBar, Array<T,Descriptor<T>::d>& j,
+	                                 Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq) const;
 
-    /// Default completion scheme, does nothing
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	/// Default completion scheme, does nothing
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
 private:
-    RegularizedVelocityBoundaryDynamics<T,Descriptor,0,normalX> xDynamics;
-    RegularizedVelocityBoundaryDynamics<T,Descriptor,1,normalY> yDynamics;
-    RegularizedVelocityBoundaryDynamics<T,Descriptor,2,normalZ> zDynamics;
+	RegularizedVelocityBoundaryDynamics<T,Descriptor,0,normalX> xDynamics;
+	RegularizedVelocityBoundaryDynamics<T,Descriptor,1,normalY> yDynamics;
+	RegularizedVelocityBoundaryDynamics<T,Descriptor,2,normalZ> zDynamics;
 };
 
 }  // namespace plb

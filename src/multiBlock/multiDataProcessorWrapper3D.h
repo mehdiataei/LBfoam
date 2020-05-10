@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -41,7 +41,8 @@
 
 #include "atomicBlock/dataProcessingFunctional3D.h"
 
-namespace plb {
+namespace plb
+{
 
 class MultiBlock3D;
 template<typename T, template<typename U> class Descriptor> class MultiBlockLattice3D;
@@ -75,54 +76,54 @@ void integrateProcessingFunctional(BoxProcessingFunctional3D* functional, Box3D 
 /// of the functional.
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        LatticeBoxProcessingFunctional3D<T,Descriptor>* functional,
-        Box3D domain,
-        std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices );
+    LatticeBoxProcessingFunctional3D<T,Descriptor>* functional,
+    Box3D domain,
+    std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices );
 
 /// Integrate a functional into a sequence of block-lattices. If the
 /// number of lattices is 1 or 2, you should prefer the _L and _LL version
 /// of the functional.
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        LatticeBoxProcessingFunctional3D<T,Descriptor>* functional,
-        Box3D domain,
-        std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices, plint level=0 );
+    LatticeBoxProcessingFunctional3D<T,Descriptor>* functional,
+    Box3D domain,
+    std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices, plint level=0 );
 
 /// Apply a functional on a sequence of scalar-fields. If the number
 /// of lattices is 1 or 2, you should prefer the _S and _SS version
 /// of the functional.
 template<typename T>
 void applyProcessingFunctional (
-        ScalarFieldBoxProcessingFunctional3D<T>* functional,
-        Box3D domain,
-        std::vector<MultiScalarField3D<T>*> fields );
+    ScalarFieldBoxProcessingFunctional3D<T>* functional,
+    Box3D domain,
+    std::vector<MultiScalarField3D<T>*> fields );
 
 /// Integrate a functional into a sequence of scalar-fields. If the
 /// number of lattices is 1 or 2, you should prefer the _S and _SS version
 /// of the functional.
 template<typename T>
 void integrateProcessingFunctional (
-        ScalarFieldBoxProcessingFunctional3D<T>* functional,
-        Box3D domain,
-        std::vector<MultiScalarField3D<T>*> fields, plint level=0 );
+    ScalarFieldBoxProcessingFunctional3D<T>* functional,
+    Box3D domain,
+    std::vector<MultiScalarField3D<T>*> fields, plint level=0 );
 
 /// Apply a functional on a sequence of tensor-fields. If the number
 /// of lattices is 1 or 2, you should prefer the _T and _TT version
 /// of the functional.
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        TensorFieldBoxProcessingFunctional3D<T,nDim>* functional,
-        Box3D domain,
-        std::vector<MultiTensorField3D<T,nDim>*> fields );
+    TensorFieldBoxProcessingFunctional3D<T,nDim>* functional,
+    Box3D domain,
+    std::vector<MultiTensorField3D<T,nDim>*> fields );
 
 /// Integrate a functional into a sequence of tensor-fields. If the
 /// number of lattices is 1 or 2, you should prefer the _T and _TT version
 /// of the functional.
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        TensorFieldBoxProcessingFunctional3D<T,nDim>* functional,
-        Box3D domain,
-        std::vector<MultiTensorField3D<T,nDim>*> fields, plint level=0 );
+    TensorFieldBoxProcessingFunctional3D<T,nDim>* functional,
+    Box3D domain,
+    std::vector<MultiTensorField3D<T,nDim>*> fields, plint level=0 );
 
 
 /// Apply a functional on a sequence of n/tensor-fields. If the number
@@ -130,39 +131,39 @@ void integrateProcessingFunctional (
 /// of the functional.
 template<typename T>
 void applyProcessingFunctional (
-        NTensorFieldBoxProcessingFunctional3D<T>* functional,
-        Box3D domain,
-        std::vector<MultiNTensorField3D<T>*> fields );
+    NTensorFieldBoxProcessingFunctional3D<T>* functional,
+    Box3D domain,
+    std::vector<MultiNTensorField3D<T>*> fields );
 
 /// Apply a functional on a sequence of n/tensor-fields, with bool mask.
 /// If the number of lattices is 1 or 2, you should prefer the _N and _NN
 /// version of the functional.
 template<typename T>
 void applyProcessingFunctional (
-        MaskedNTensorFieldBoxProcessingFunctional3D<T>* functional,
-        Box3D domain,
-        std::vector<MultiNTensorField3D<T>*> fields,
-        MultiNTensorField3D<int>& mask);
+    MaskedNTensorFieldBoxProcessingFunctional3D<T>* functional,
+    Box3D domain,
+    std::vector<MultiNTensorField3D<T>*> fields,
+    MultiNTensorField3D<int>& mask);
 
 /// Integrate a functional into a sequence of n/tensor-fields. If the
 /// number of lattices is 1 or 2, you should prefer the _N and _NN version
 /// of the functional.
 template<typename T>
 void integrateProcessingFunctional (
-        NTensorFieldBoxProcessingFunctional3D<T>* functional,
-        Box3D domain,
-        std::vector<MultiNTensorField3D<T>*> fields, plint level=0 );
+    NTensorFieldBoxProcessingFunctional3D<T>* functional,
+    Box3D domain,
+    std::vector<MultiNTensorField3D<T>*> fields, plint level=0 );
 
 /// Integrate a functional into a sequence of n/tensor-fields, with mask. If the
 /// number of lattices is 1 or 2, you should prefer the _N and _NN version
 /// of the functional.
 template<typename T>
 void integrateProcessingFunctional (
-        MaskedNTensorFieldBoxProcessingFunctional3D<T>* functional,
-        Box3D domain,
-        std::vector<MultiNTensorField3D<T>*> fields,
-        MultiNTensorField3D<int>& mask,
-        plint level=0 );
+    MaskedNTensorFieldBoxProcessingFunctional3D<T>* functional,
+    Box3D domain,
+    std::vector<MultiNTensorField3D<T>*> fields,
+    MultiNTensorField3D<int>& mask,
+    plint level=0 );
 
 
 /* *************** Typed wrappers with a single argument, boxed functionals * */
@@ -230,18 +231,18 @@ void integrateProcessingFunctional(MaskedBoxProcessingFunctional3D_N<T>* functio
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor1>& lattice1,
-        MultiBlockLattice3D<T2,Descriptor2>& lattice2 );
+    BoxProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor1>& lattice1,
+    MultiBlockLattice3D<T2,Descriptor2>& lattice2 );
 
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor1>& lattice1,
-        MultiBlockLattice3D<T2,Descriptor2>& lattice2, plint level=0 );
+    BoxProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor1>& lattice1,
+    MultiBlockLattice3D<T2,Descriptor2>& lattice2, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional(BoxProcessingFunctional3D_SS<T1,T2>* functional,
@@ -257,45 +258,45 @@ void integrateProcessingFunctional(BoxProcessingFunctional3D_SS<T1,T2>* function
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional,
-        Box3D domain,
-        MultiTensorField3D<T1,nDim1>& field1,
-        MultiTensorField3D<T2,nDim2>& field2 );
+    BoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional,
+    Box3D domain,
+    MultiTensorField3D<T1,nDim1>& field1,
+    MultiTensorField3D<T2,nDim2>& field2 );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional, Box3D domain,
-        MultiTensorField3D<T1,nDim1>& field1,
-        MultiTensorField3D<T2,nDim2>& field2, plint level=0 );
+    BoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional, Box3D domain,
+    MultiTensorField3D<T1,nDim1>& field1,
+    MultiTensorField3D<T2,nDim2>& field2, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional3D_NN<T1,T2>* functional,
-        Box3D domain,
-        MultiNTensorField3D<T1>& field1,
-        MultiNTensorField3D<T2>& field2 );
+    BoxProcessingFunctional3D_NN<T1,T2>* functional,
+    Box3D domain,
+    MultiNTensorField3D<T1>& field1,
+    MultiNTensorField3D<T2>& field2 );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional3D_NN<T1,T2>* functional, Box3D domain,
-        MultiNTensorField3D<T1>& field1,
-        MultiNTensorField3D<T2>& field2, plint level=0 );
+    BoxProcessingFunctional3D_NN<T1,T2>* functional, Box3D domain,
+    MultiNTensorField3D<T1>& field1,
+    MultiNTensorField3D<T2>& field2, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        MaskedBoxProcessingFunctional3D_NN<T1,T2>* functional,
-        Box3D domain,
-        MultiNTensorField3D<T1>& field1,
-        MultiNTensorField3D<T2>& field2,
-        MultiNTensorField3D<int>& mask );
+    MaskedBoxProcessingFunctional3D_NN<T1,T2>* functional,
+    Box3D domain,
+    MultiNTensorField3D<T1>& field1,
+    MultiNTensorField3D<T2>& field2,
+    MultiNTensorField3D<int>& mask );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        MaskedBoxProcessingFunctional3D_NN<T1,T2>* functional, Box3D domain,
-        MultiNTensorField3D<T1>& field1,
-        MultiNTensorField3D<T2>& field2,
-        MultiNTensorField3D<int>& mask,
-        plint level=0 );
+    MaskedBoxProcessingFunctional3D_NN<T1,T2>* functional, Box3D domain,
+    MultiNTensorField3D<T1>& field1,
+    MultiNTensorField3D<T2>& field2,
+    MultiNTensorField3D<int>& mask,
+    plint level=0 );
 
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional(BoxProcessingFunctional3D_ST<T1,T2,nDim>* functional,
@@ -323,62 +324,62 @@ void integrateProcessingFunctional(BoxProcessingFunctional3D_SN<T1,T2>* function
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiScalarField3D<T2>& field );
+    BoxProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiScalarField3D<T2>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiScalarField3D<T2>& field, plint level=0 );
+    BoxProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiScalarField3D<T2>& field, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        BoxProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiTensorField3D<T2,nDim>& field );
+    BoxProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiTensorField3D<T2,nDim>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiTensorField3D<T2,nDim>& field, plint level=0 );
+    BoxProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiTensorField3D<T2,nDim>& field, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiNTensorField3D<T2>& field );
+    BoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiNTensorField3D<T2>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiNTensorField3D<T2>& field, plint level=0 );
+    BoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiNTensorField3D<T2>& field, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        MaskedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiNTensorField3D<T2>& field,
-        MultiNTensorField3D<int>& mask );
+    MaskedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiNTensorField3D<T2>& field,
+    MultiNTensorField3D<int>& mask );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        MaskedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiNTensorField3D<T2>& field,
-        MultiNTensorField3D<int>& mask,
-        plint level=0 );
+    MaskedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiNTensorField3D<T2>& field,
+    MultiNTensorField3D<int>& mask,
+    plint level=0 );
 
 
 /* *************** Generic wrappers, dotted functionals ********************* */
@@ -394,54 +395,54 @@ void integrateProcessingFunctional(DotProcessingFunctional3D* functional,
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        LatticeDotProcessingFunctional3D<T,Descriptor>* functional,
-        DotList3D const& dotList,
-        std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices );
+    LatticeDotProcessingFunctional3D<T,Descriptor>* functional,
+    DotList3D const& dotList,
+    std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        LatticeDotProcessingFunctional3D<T,Descriptor>* functional,
-        DotList3D const& dotList,
-        std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices, plint level=0 );
+    LatticeDotProcessingFunctional3D<T,Descriptor>* functional,
+    DotList3D const& dotList,
+    std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional (
-        ScalarFieldDotProcessingFunctional3D<T>* functional,
-        DotList3D const& dotList,
-        std::vector<MultiScalarField3D<T>*> fields );
+    ScalarFieldDotProcessingFunctional3D<T>* functional,
+    DotList3D const& dotList,
+    std::vector<MultiScalarField3D<T>*> fields );
 
 template<typename T>
 void integrateProcessingFunctional (
-        ScalarFieldDotProcessingFunctional3D<T>* functional,
-        DotList3D const& dotList,
-        std::vector<MultiScalarField3D<T>*> fields, plint level=0 );
+    ScalarFieldDotProcessingFunctional3D<T>* functional,
+    DotList3D const& dotList,
+    std::vector<MultiScalarField3D<T>*> fields, plint level=0 );
 
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        TensorFieldDotProcessingFunctional3D<T,nDim>* functional,
-        DotList3D const& dotList,
-        std::vector<MultiTensorField3D<T,nDim>*> fields );
+    TensorFieldDotProcessingFunctional3D<T,nDim>* functional,
+    DotList3D const& dotList,
+    std::vector<MultiTensorField3D<T,nDim>*> fields );
 
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        TensorFieldDotProcessingFunctional3D<T,nDim>* functional,
-        DotList3D const& dotList,
-        std::vector<MultiTensorField3D<T,nDim>*> fields, plint level=0 );
+    TensorFieldDotProcessingFunctional3D<T,nDim>* functional,
+    DotList3D const& dotList,
+    std::vector<MultiTensorField3D<T,nDim>*> fields, plint level=0 );
 
 
 /* *************** Typed wrappers with a single argument, dotted functionals* */
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        DotProcessingFunctional3D_L<T,Descriptor>* functional,
-        DotList3D const& dotList,
-        MultiBlockLattice3D<T,Descriptor>& lattice );
+    DotProcessingFunctional3D_L<T,Descriptor>* functional,
+    DotList3D const& dotList,
+    MultiBlockLattice3D<T,Descriptor>& lattice );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        DotProcessingFunctional3D_L<T,Descriptor>* functional,
-        DotList3D const& dotList,
-        MultiBlockLattice3D<T,Descriptor>& lattice, plint level=0 );
+    DotProcessingFunctional3D_L<T,Descriptor>* functional,
+    DotList3D const& dotList,
+    MultiBlockLattice3D<T,Descriptor>& lattice, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional(DotProcessingFunctional3D_S<T>* functional,
@@ -469,18 +470,18 @@ void integrateProcessingFunctional(DotProcessingFunctional3D_T<T,nDim>* function
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        DotProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        DotList3D const& dotList,
-        MultiBlockLattice3D<T1,Descriptor1>& lattice1,
-        MultiBlockLattice3D<T2,Descriptor2>& lattice2 );
+    DotProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    DotList3D const& dotList,
+    MultiBlockLattice3D<T1,Descriptor1>& lattice1,
+    MultiBlockLattice3D<T2,Descriptor2>& lattice2 );
 
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        DotList3D const& dotList,
-        MultiBlockLattice3D<T1,Descriptor1>& lattice1,
-        MultiBlockLattice3D<T2,Descriptor2>& lattice2, plint level=0 );
+    DotProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    DotList3D const& dotList,
+    MultiBlockLattice3D<T1,Descriptor1>& lattice1,
+    MultiBlockLattice3D<T2,Descriptor2>& lattice2, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional(DotProcessingFunctional3D_SS<T1,T2>* functional,
@@ -497,59 +498,59 @@ void integrateProcessingFunctional(DotProcessingFunctional3D_SS<T1,T2>* function
 /// Easy instantiation of dotted data processor for MultiTensorField-MultiTensorField coupling
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        DotProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional,
-        DotList3D const& dotList,
-        MultiTensorField3D<T1,nDim1>& field1,
-        MultiTensorField3D<T2,nDim2>& field2 );
+    DotProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional,
+    DotList3D const& dotList,
+    MultiTensorField3D<T1,nDim1>& field1,
+    MultiTensorField3D<T2,nDim2>& field2 );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional,
-        DotList3D const& dotList,
-        MultiTensorField3D<T1,nDim1>& field1,
-        MultiTensorField3D<T2,nDim2>& field2, plint level=0 );
+    DotProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional,
+    DotList3D const& dotList,
+    MultiTensorField3D<T1,nDim1>& field1,
+    MultiTensorField3D<T2,nDim2>& field2, plint level=0 );
 
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional (
-        DotProcessingFunctional3D_ST<T1,T2,nDim>* functional,
-        DotList3D const& dotList,
-        MultiScalarField3D<T1>& field1,
-        MultiTensorField3D<T2,nDim>& field2 );
+    DotProcessingFunctional3D_ST<T1,T2,nDim>* functional,
+    DotList3D const& dotList,
+    MultiScalarField3D<T1>& field1,
+    MultiTensorField3D<T2,nDim>& field2 );
 
 template<typename T1, typename T2, int nDim>
 void integrateProcessingFunctional (
-        DotProcessingFunctional3D_ST<T1,T2,nDim>* functional,
-        DotList3D const& dotList,
-        MultiScalarField3D<T1>& field1,
-        MultiTensorField3D<T2,nDim>& field2, plint level=0 );
+    DotProcessingFunctional3D_ST<T1,T2,nDim>* functional,
+    DotList3D const& dotList,
+    MultiScalarField3D<T1>& field1,
+    MultiTensorField3D<T2,nDim>& field2, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        DotProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
-        DotList3D const& dotList,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiScalarField3D<T2>& field );
+    DotProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
+    DotList3D const& dotList,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiScalarField3D<T2>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
-        DotList3D const& dotList,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiScalarField3D<T2>& field, plint level=0 );
+    DotProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
+    DotList3D const& dotList,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiScalarField3D<T2>& field, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        DotProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
-        DotList3D const& dotList,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiTensorField3D<T2,nDim>& field );
+    DotProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
+    DotList3D const& dotList,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiTensorField3D<T2,nDim>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void integrateProcessingFunctional (
-        DotProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
-        DotList3D const& dotList,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiTensorField3D<T2,nDim>& field, plint level=0 );
+    DotProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
+    DotList3D const& dotList,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiTensorField3D<T2,nDim>& field, plint level=0 );
 
 
 /* *************** Generic wrappers, bounded and boxed functionals ********** */
@@ -559,64 +560,64 @@ void applyProcessingFunctional(BoundedBoxProcessingFunctional3D* functional,
                                plint boundaryWidth );
 
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D* functional,
-        Box3D domain, std::vector<MultiBlock3D*> multiBlocks,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional3D* functional,
+    Box3D domain, std::vector<MultiBlock3D*> multiBlocks,
+    plint boundaryWidth, plint level=0 );
 
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        BoundedLatticeBoxProcessingFunctional3D<T,Descriptor>* functional,
-        Box3D domain,
-        std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices,
-        plint boundaryWidth = Descriptor<T>::vicinity );
+    BoundedLatticeBoxProcessingFunctional3D<T,Descriptor>* functional,
+    Box3D domain,
+    std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices,
+    plint boundaryWidth = Descriptor<T>::vicinity );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        BoundedLatticeBoxProcessingFunctional3D<T,Descriptor>* functional,
-        Box3D domain, std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices,
-        plint boundaryWidth = Descriptor<T>::vicinity, plint level=0 );
+    BoundedLatticeBoxProcessingFunctional3D<T,Descriptor>* functional,
+    Box3D domain, std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices,
+    plint boundaryWidth = Descriptor<T>::vicinity, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional (
-        BoundedScalarFieldBoxProcessingFunctional3D<T>* functional,
-        Box3D domain, std::vector<MultiScalarField3D<T>*> fields,
-        plint boundaryWidth );
+    BoundedScalarFieldBoxProcessingFunctional3D<T>* functional,
+    Box3D domain, std::vector<MultiScalarField3D<T>*> fields,
+    plint boundaryWidth );
 
 template<typename T>
 void integrateProcessingFunctional (
-        BoundedScalarFieldBoxProcessingFunctional3D<T>* functional,
-        Box3D domain, std::vector<MultiScalarField3D<T>*> fields,
-        plint boundaryWidth );
+    BoundedScalarFieldBoxProcessingFunctional3D<T>* functional,
+    Box3D domain, std::vector<MultiScalarField3D<T>*> fields,
+    plint boundaryWidth );
 
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        BoundedTensorFieldBoxProcessingFunctional3D<T,nDim>* functional,
-        Box3D domain, std::vector<MultiTensorField3D<T,nDim>*> fields,
-        plint boundaryWidth );
+    BoundedTensorFieldBoxProcessingFunctional3D<T,nDim>* functional,
+    Box3D domain, std::vector<MultiTensorField3D<T,nDim>*> fields,
+    plint boundaryWidth );
 
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        BoundedTensorFieldBoxProcessingFunctional3D<T,nDim>* functional,
-        Box3D domain,
-        std::vector<MultiTensorField3D<T,nDim>*> fields, plint boundaryWidth );
+    BoundedTensorFieldBoxProcessingFunctional3D<T,nDim>* functional,
+    Box3D domain,
+    std::vector<MultiTensorField3D<T,nDim>*> fields, plint boundaryWidth );
 
 
 /* ** Typed wrappers with a single argument, bounded and boxed functionals * */
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_L<T,Descriptor>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T,Descriptor>& lattice,
-        plint boundaryWidth = Descriptor<T>::vicinity );
+    BoundedBoxProcessingFunctional3D_L<T,Descriptor>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T,Descriptor>& lattice,
+    plint boundaryWidth = Descriptor<T>::vicinity );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_L<T,Descriptor>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T,Descriptor>& lattice,
-        plint boundaryWidth = Descriptor<T>::vicinity, plint level=0 );
+    BoundedBoxProcessingFunctional3D_L<T,Descriptor>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T,Descriptor>& lattice,
+    plint boundaryWidth = Descriptor<T>::vicinity, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional(BoundedBoxProcessingFunctional3D_S<T>* functional,
@@ -635,10 +636,10 @@ void applyProcessingFunctional(BoundedBoxProcessingFunctional3D_T<T,nDim>* funct
 
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_T<T,nDim>* functional,
-        Box3D domain,
-        MultiTensorField3D<T,nDim>& field,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional3D_T<T,nDim>* functional,
+    Box3D domain,
+    MultiTensorField3D<T,nDim>& field,
+    plint boundaryWidth, plint level=0 );
 
 
 template<typename T>
@@ -648,10 +649,10 @@ void applyProcessingFunctional(BoundedBoxProcessingFunctional3D_N<T>* functional
 
 template<typename T>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_N<T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<T>& field,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional3D_N<T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<T>& field,
+    plint boundaryWidth, plint level=0 );
 
 
 template<typename T>
@@ -663,11 +664,11 @@ void applyProcessingFunctional(BoundedMaskedBoxProcessingFunctional3D_N<T>* func
 
 template<typename T>
 void integrateProcessingFunctional (
-        BoundedMaskedBoxProcessingFunctional3D_N<T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<T>& field,
-        MultiNTensorField3D<int>& mask,
-        plint boundaryWidth, plint level=0 );
+    BoundedMaskedBoxProcessingFunctional3D_N<T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<T>& field,
+    MultiNTensorField3D<int>& mask,
+    plint boundaryWidth, plint level=0 );
 
 
 /* ** Typed wrappers with two arguments, bounded and boxed functionals *** */
@@ -675,168 +676,168 @@ void integrateProcessingFunctional (
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor1>& lattice1,
-        MultiBlockLattice3D<T2,Descriptor2>& lattice2,
-        plint boundaryWidth = Descriptor1<T1>::vicinity );
+    BoundedBoxProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor1>& lattice1,
+    MultiBlockLattice3D<T2,Descriptor2>& lattice2,
+    plint boundaryWidth = Descriptor1<T1>::vicinity );
 
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor1>& lattice1,
-        MultiBlockLattice3D<T2,Descriptor2>& lattice2,
-        plint boundaryWidth = Descriptor1<T1>::vicinity, plint level=0 );
+    BoundedBoxProcessingFunctional3D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor1>& lattice1,
+    MultiBlockLattice3D<T2,Descriptor2>& lattice2,
+    plint boundaryWidth = Descriptor1<T1>::vicinity, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_SS<T1,T2>* functional,
-        Box3D domain,
-        MultiScalarField3D<T1>& field1,
-        MultiScalarField3D<T2>& field2,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional3D_SS<T1,T2>* functional,
+    Box3D domain,
+    MultiScalarField3D<T1>& field1,
+    MultiScalarField3D<T2>& field2,
+    plint boundaryWidth );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_SS<T1,T2>* functional,
-        Box3D domain,
-        MultiScalarField3D<T1>& field1,
-        MultiScalarField3D<T2>& field2,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional3D_SS<T1,T2>* functional,
+    Box3D domain,
+    MultiScalarField3D<T1>& field1,
+    MultiScalarField3D<T2>& field2,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional,
-        Box3D domain,
-        MultiTensorField3D<T1,nDim1>& field1,
-        MultiTensorField3D<T2,nDim2>& field2,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional,
+    Box3D domain,
+    MultiTensorField3D<T1,nDim1>& field1,
+    MultiTensorField3D<T2,nDim2>& field2,
+    plint boundaryWidth );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional,
-        Box3D domain,
-        MultiTensorField3D<T1,nDim1>& field1,
-        MultiTensorField3D<T2,nDim2>& field2,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional,
+    Box3D domain,
+    MultiTensorField3D<T1,nDim1>& field1,
+    MultiTensorField3D<T2,nDim2>& field2,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_NN<T1,T2>* functional,
-        Box3D domain,
-        MultiNTensorField3D<T1>& field1,
-        MultiNTensorField3D<T2>& field2,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional3D_NN<T1,T2>* functional,
+    Box3D domain,
+    MultiNTensorField3D<T1>& field1,
+    MultiNTensorField3D<T2>& field2,
+    plint boundaryWidth );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_NN<T1,T2>* functional,
-        Box3D domain,
-        MultiNTensorField3D<T1>& field1,
-        MultiNTensorField3D<T2>& field2,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional3D_NN<T1,T2>* functional,
+    Box3D domain,
+    MultiNTensorField3D<T1>& field1,
+    MultiNTensorField3D<T2>& field2,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoundedMaskedBoxProcessingFunctional3D_NN<T1,T2>* functional,
-        Box3D domain,
-        MultiNTensorField3D<T1>& field1,
-        MultiNTensorField3D<T2>& field2,
-        MultiNTensorField3D<int>& mask,
-        plint boundaryWidth );
+    BoundedMaskedBoxProcessingFunctional3D_NN<T1,T2>* functional,
+    Box3D domain,
+    MultiNTensorField3D<T1>& field1,
+    MultiNTensorField3D<T2>& field2,
+    MultiNTensorField3D<int>& mask,
+    plint boundaryWidth );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        BoundedMaskedBoxProcessingFunctional3D_NN<T1,T2>* functional,
-        Box3D domain,
-        MultiNTensorField3D<T1>& field1,
-        MultiNTensorField3D<T2>& field2,
-        MultiNTensorField3D<int>& mask,
-        plint boundaryWidth, plint level=0 );
+    BoundedMaskedBoxProcessingFunctional3D_NN<T1,T2>* functional,
+    Box3D domain,
+    MultiNTensorField3D<T1>& field1,
+    MultiNTensorField3D<T2>& field2,
+    MultiNTensorField3D<int>& mask,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_ST<T1,T2,nDim>* functional,
-        Box3D domain,
-        MultiScalarField3D<T1>& field1,
-        MultiTensorField3D<T2,nDim>& field2,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional3D_ST<T1,T2,nDim>* functional,
+    Box3D domain,
+    MultiScalarField3D<T1>& field1,
+    MultiTensorField3D<T2,nDim>& field2,
+    plint boundaryWidth );
 
 template<typename T1, typename T2, int nDim>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_ST<T1,T2,nDim>* functional,
-        Box3D domain,
-        MultiScalarField3D<T1>& field1,
-        MultiTensorField3D<T2,nDim>& field2,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional3D_ST<T1,T2,nDim>* functional,
+    Box3D domain,
+    MultiScalarField3D<T1>& field1,
+    MultiTensorField3D<T2,nDim>& field2,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiScalarField3D<T2>& field,
-        plint boundaryWidth = Descriptor<T1>::vicinity );
+    BoundedBoxProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiScalarField3D<T2>& field,
+    plint boundaryWidth = Descriptor<T1>::vicinity );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiScalarField3D<T2>& field,
-        plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
+    BoundedBoxProcessingFunctional3D_LS<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiScalarField3D<T2>& field,
+    plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiTensorField3D<T2,nDim>& field,
-        plint boundaryWidth = Descriptor<T1>::vicinity );
+    BoundedBoxProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiTensorField3D<T2,nDim>& field,
+    plint boundaryWidth = Descriptor<T1>::vicinity );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiTensorField3D<T2,nDim>& field,
-        plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
+    BoundedBoxProcessingFunctional3D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiTensorField3D<T2,nDim>& field,
+    plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiNTensorField3D<T2>& field,
-        plint boundaryWidth = Descriptor<T1>::vicinity );
+    BoundedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiNTensorField3D<T2>& field,
+    plint boundaryWidth = Descriptor<T1>::vicinity );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiNTensorField3D<T2>& field,
-        plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
+    BoundedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiNTensorField3D<T2>& field,
+    plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoundedMaskedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiNTensorField3D<T2>& field,
-        MultiNTensorField3D<int>& mask,
-        plint boundaryWidth = Descriptor<T1>::vicinity );
+    BoundedMaskedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiNTensorField3D<T2>& field,
+    MultiNTensorField3D<int>& mask,
+    plint boundaryWidth = Descriptor<T1>::vicinity );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        BoundedMaskedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
-        Box3D domain,
-        MultiBlockLattice3D<T1,Descriptor>& lattice,
-        MultiNTensorField3D<T2>& field,
-        MultiNTensorField3D<int>& mask,
-        plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
+    BoundedMaskedBoxProcessingFunctional3D_LN<T1,Descriptor,T2>* functional,
+    Box3D domain,
+    MultiBlockLattice3D<T1,Descriptor>& lattice,
+    MultiNTensorField3D<T2>& field,
+    MultiNTensorField3D<int>& mask,
+    plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
 
 }  // namespace plb
 

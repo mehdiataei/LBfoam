@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -41,11 +41,11 @@ typedef Array<T,3> Velocity;
 #define DESCRIPTOR descriptors::D3Q19Descriptor
 
 plint extraLayer      = 0;  // Make the bounding box larger; for visualization purposes
-                            //   only. For the simulation, it is OK to have extraLayer=0.
+//   only. For the simulation, it is OK to have extraLayer=0.
 const plint blockSize = 20; // Zero means: no sparse representation.
 const plint envelopeWidth = 1;  // For standard BGK dynamics.
 const plint extendedEnvelopeWidth = 2;  // Because the Guo off lattice boundary condition
-                                        //   needs 2-cell neighbor access.
+//   needs 2-cell neighbor access.
 
 bool performOutput = false;
 bool doImages = false;
@@ -75,10 +75,11 @@ TriangleSet<T>* triangleSet = 0;
 T currentTime = 0;
 
 // Structure which defines an ``opening''. The surface geometry of the aneurysm,
-//   as given by the user in the form of an STL file, contains holes, which in 
+//   as given by the user in the form of an STL file, contains holes, which in
 //   the specific simulation represent inlets and outlets.
 template<typename T>
-struct Opening {
+struct Opening
+{
     bool inlet;
     Array<T,3> center;
     T innerRadius;
@@ -106,28 +107,33 @@ void setOpenings (
     std::vector<BoundaryProfile3D<T,Velocity>*>& inletOutlets,
     TriangleBoundary3D<T>& boundary, T uLB, T dx, T dt )
 {
-    for (pluint i=0; i<openings.size(); ++i) {
+    for (pluint i=0; i<openings.size(); ++i)
+    {
         Opening<T>& opening = openings[i];
         opening.center = computeBaryCenter (
-                boundary.getMesh(),
-                boundary.getInletOutlet(openingSortDirection)[i] );
+                             boundary.getMesh(),
+                             boundary.getInletOutlet(openingSortDirection)[i] );
         opening.innerRadius = computeInnerRadius (
-                boundary.getMesh(),
-                boundary.getInletOutlet(openingSortDirection)[i] );
+                                  boundary.getMesh(),
+                                  boundary.getInletOutlet(openingSortDirection)[i] );
 
-        if (opening.inlet) {
-            if (poiseuilleInlet) {
+        if (opening.inlet)
+        {
+            if (poiseuilleInlet)
+            {
                 inletOutlets.push_back (
-                        new PoiseuilleProfile3D<T>(uLB) );
+                    new PoiseuilleProfile3D<T>(uLB) );
             }
-            else {
+            else
+            {
                 inletOutlets.push_back (
-                        new VelocityPlugProfile3D<T>(uLB) );
+                    new VelocityPlugProfile3D<T>(uLB) );
             }
         }
-        else {
+        else
+        {
             inletOutlets.push_back (
-                    new DensityNeumannBoundaryProfile3D<T> );
+                new DensityNeumannBoundaryProfile3D<T> );
         }
     }
 }
@@ -135,8 +141,8 @@ void setOpenings (
 // This function outputs velocity, vorticity and pressure data, at selected
 //   points of the computational domain, given their coordinates in physical units.
 std::vector<T> pointMeasures (
-        MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
-        Array<T,3> location, T dx, T dt )
+    MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
+    Array<T,3> location, T dx, T dt )
 {
     std::vector<Array<T,3> > physicalPositions, positions;
     physicalPositions.push_back(Array<T,3>(0.022046, 0.015072, 0.044152));
@@ -147,7 +153,8 @@ std::vector<T> pointMeasures (
     physicalPositions.push_back(Array<T,3>(0.018413, 0.011439, 0.076848));
     positions.resize(physicalPositions.size());
 
-    for (pluint i=0; i<physicalPositions.size(); ++i) {
+    for (pluint i=0; i<physicalPositions.size(); ++i)
+    {
         positions[i] = (physicalPositions[i]-location)/dx;
     }
 
@@ -156,12 +163,14 @@ std::vector<T> pointMeasures (
     std::vector<T> densities = densitySingleProbes(lattice, positions);
 
     std::vector<T> data;
-    for (pluint i=0; i<physicalPositions.size(); ++i) {
+    for (pluint i=0; i<physicalPositions.size(); ++i)
+    {
         Array<T,3> pos = physicalPositions[i];
         Array<T,3> vel = velocities[i]*dx/dt;
         Array<T,3> vort = vorticities[i]/dt;
         T pressure = DESCRIPTOR<T>::cs2*(densities[i]-1.)*dx*dx/(dt*dt)*fluidDensity;
-        if (performOutput) {
+        if (performOutput)
+        {
             pcout << "Pos ("
                   << pos[0] << "," << pos[1] << "," << pos[2]
                   << "); Velocity ("
@@ -178,8 +187,8 @@ std::vector<T> pointMeasures (
 }
 
 void writeImages (
-         OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>& boundaryCondition,
-         Box3D const& imageDomain, Box3D const& vtkDomain, std::string fname, Array<T,3> location, T dx, T dt )
+    OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>& boundaryCondition,
+    Box3D const& imageDomain, Box3D const& vtkDomain, std::string fname, Array<T,3> location, T dx, T dt )
 {
     VtkImageOutput3D<T> vtkOut(fname, dx, location);
     vtkOut.writeData<float>(*boundaryCondition.computePressure(vtkDomain), "p", util::sqr(dx/dt)*fluidDensity);
@@ -193,7 +202,7 @@ void writeImages (
 // This function produces images at predefined yz, xz and xy planes. The coordinates of the planes are given
 //   in physical coordinates, and the output variables are velocity, vorticity and pressure.
 void writeImages (
-         OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>& boundaryCondition, plint level, Array<T,3> location, T dx, T dt )
+    OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>& boundaryCondition, plint level, Array<T,3> location, T dx, T dt )
 {
     plint nx = boundaryCondition.getLattice().getNx();
     plint ny = boundaryCondition.getLattice().getNy();
@@ -207,26 +216,26 @@ void writeImages (
     Array<T,3> lxy_plane((xy_plane-location)/dx);
 
     Box3D yz_imageDomain (
-            util::roundToInt(lyz_plane[0]), util::roundToInt(lyz_plane[0]),
-            0, ny-1, 0, nz-1 );
+        util::roundToInt(lyz_plane[0]), util::roundToInt(lyz_plane[0]),
+        0, ny-1, 0, nz-1 );
     Box3D xz_imageDomain (
-            0, nx-1,
-            util::roundToInt(lxz_plane[1]), util::roundToInt(lxz_plane[1]),
-            0, nz-1 );
+        0, nx-1,
+        util::roundToInt(lxz_plane[1]), util::roundToInt(lxz_plane[1]),
+        0, nz-1 );
     Box3D xy_imageDomain (
-            0, nx-1, 0, ny-1,
-            util::roundToInt(lxy_plane[2]), util::roundToInt(lxy_plane[2]) );
+        0, nx-1, 0, ny-1,
+        util::roundToInt(lxy_plane[2]), util::roundToInt(lxy_plane[2]) );
 
     Box3D yz_vtkDomain (
-            util::roundToInt(lyz_plane[0])-3, util::roundToInt(lyz_plane[0])+3,
-            0, ny-1, 0, nz-1 );
+        util::roundToInt(lyz_plane[0])-3, util::roundToInt(lyz_plane[0])+3,
+        0, ny-1, 0, nz-1 );
     Box3D xz_vtkDomain (
-            0, nx-1,
-            util::roundToInt(lxz_plane[1])-3, util::roundToInt(lxz_plane[1])+3,
-            0, nz-1 );
+        0, nx-1,
+        util::roundToInt(lxz_plane[1])-3, util::roundToInt(lxz_plane[1])+3,
+        0, nz-1 );
     Box3D xy_vtkDomain (
-            0, nx-1, 0, ny-1,
-            util::roundToInt(lxy_plane[2])-3, util::roundToInt(lxy_plane[2])+3 );
+        0, nx-1, 0, ny-1,
+        util::roundToInt(lxy_plane[2])-3, util::roundToInt(lxy_plane[2])+3 );
 
     writeImages(boundaryCondition, xy_imageDomain, xy_vtkDomain, "xy_"+util::val2str(level), location, dx, dt);
     writeImages(boundaryCondition, xz_imageDomain, xz_vtkDomain, "xz_"+util::val2str(level), location, dx, dt);
@@ -235,12 +244,12 @@ void writeImages (
 
 
 // This is the function that prepares and performs the actual simulation.
-std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
-        plint level, MultiBlockLattice3D<T,DESCRIPTOR>* iniVal=0 )
+std::auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
+    plint level, MultiBlockLattice3D<T,DESCRIPTOR>* iniVal=0 )
 {
-    plint margin = 3; // Extra margin of allocated cells around the obstacle. 
+    plint margin = 3; // Extra margin of allocated cells around the obstacle.
     plint borderWidth = 1; // Because the Guo boundary condition acts in a one-cell layer.
-                           // Requirement: margin>=borderWidth.
+    // Requirement: margin>=borderWidth.
 
     // The resolution is doubled at each coordinate direction with the increase of the
     //   resolution level by one. The parameter ``referenceResolution'' is by definition
@@ -260,7 +269,8 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
     // When convective scaling is used (relationship of dt with respect to dx as the grid is
     //   refined) the value of the kinematic viscosity must be also properly adjusted.
     T nuLB_ = nuLB;
-    if (convectiveScaling) {
+    if (convectiveScaling)
+    {
         nuLB_ = nuLB * util::twoToThePower(level);
     }
     T dx = boundary.getDx();
@@ -273,7 +283,8 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
     pcout << "uLB=" << uAveLB << std::endl;
     pcout << "nuLB=" << nuLB_ << std::endl;
     pcout << "tau=" << 1./omega << std::endl;
-    if (performOutput) {
+    if (performOutput)
+    {
         pcout << "dx=" << dx << std::endl;
         pcout << "dt=" << dt << std::endl;
     }
@@ -283,8 +294,10 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
     std::vector<BoundaryProfile3D<T,Velocity>*> inletOutlets;
     setOpenings(inletOutlets, boundary, uAveLB, dx, dt);
     Array<T,3> inletCenter(0.0, 0.0, 0.0);
-    for (pluint i=0; i<openings.size(); ++i) {
-        if (openings[i].inlet) {
+    for (pluint i=0; i<openings.size(); ++i)
+    {
+        if (openings[i].inlet)
+        {
             pcout << "Inner radius of inlet " << i << " : "
                   << openings[i].innerRadius << " lattice nodes" << std::endl;
             inletCenter=openings[i].center;
@@ -301,8 +314,9 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
     //   handled by the following voxelization process.
     const int flowType = voxelFlag::inside;
     VoxelizedDomain3D<T> voxelizedDomain (
-            boundary, flowType, extraLayer, borderWidth, extendedEnvelopeWidth, blockSize );
-    if (performOutput) {
+        boundary, flowType, extraLayer, borderWidth, extendedEnvelopeWidth, blockSize );
+    if (performOutput)
+    {
         pcout << getMultiBlockInfo(voxelizedDomain.getVoxelMatrix()) << std::endl;
     }
 
@@ -314,16 +328,18 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
     pcout << "Number of fluid cells: " << computeSum(flagMatrix) << std::endl;
 
     Dynamics<T,DESCRIPTOR>* dynamics = 0;
-    if (useIncompressible) {
+    if (useIncompressible)
+    {
         dynamics = new IncBGKdynamics<T,DESCRIPTOR>(omega); // In this model velocity equals momentum.
     }
-    else {
+    else
+    {
         dynamics = new BGKdynamics<T,DESCRIPTOR>(omega); // In this model velocity equals momentum
-                                                         //   divided by density.
+        //   divided by density.
     }
-    std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > lattice 
+    std::auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > lattice
         = generateMultiBlockLattice<T,DESCRIPTOR> (
-                voxelizedDomain.getVoxelMatrix(), envelopeWidth, dynamics );
+              voxelizedDomain.getVoxelMatrix(), envelopeWidth, dynamics );
     lattice->toggleInternalStatistics(false);
 
     // The next piece of code is put for efficiency reasons at communications in parallel runs.
@@ -332,32 +348,33 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
     std::vector<MultiBlock3D*> rhoBarJarg;
     plint numScalars = 4;
     MultiNTensorField3D<T>* rhoBarJfield =
-          generateMultiNTensorField3D<T>(*lattice, extendedEnvelopeWidth, numScalars);
+        generateMultiNTensorField3D<T>(*lattice, extendedEnvelopeWidth, numScalars);
     rhoBarJfield->toggleInternalStatistics(false);
     rhoBarJarg.push_back(rhoBarJfield);
     plint processorLevel=0;
     integrateProcessingFunctional (
-            new PackedRhoBarJfunctional3D<T,DESCRIPTOR>(),
-            lattice->getBoundingBox(), *lattice, *rhoBarJfield, processorLevel );
+        new PackedRhoBarJfunctional3D<T,DESCRIPTOR>(),
+        lattice->getBoundingBox(), *lattice, *rhoBarJfield, processorLevel );
 
     // The Guo off lattice boundary condition is set up.
     GuoOffLatticeModel3D<T,DESCRIPTOR>* model =
-            new GuoOffLatticeModel3D<T,DESCRIPTOR> (
-                new TriangleFlowShape3D<T,Array<T,3> > (
-                    voxelizedDomain.getBoundary(), profiles),
-                flowType, useAllDirections );
+        new GuoOffLatticeModel3D<T,DESCRIPTOR> (
+        new TriangleFlowShape3D<T,Array<T,3> > (
+            voxelizedDomain.getBoundary(), profiles),
+        flowType, useAllDirections );
     model->setVelIsJ(useIncompressible); // When the incompressible BGK model is used, velocity equals momentum.
     model->selectUseRegularizedModel(useRegularizedWall);
     model->selectComputeStat(false);
     OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity> boundaryCondition (
-            model, voxelizedDomain, *lattice);
+        model, voxelizedDomain, *lattice);
     boundaryCondition.insert(rhoBarJarg);
 
     iniLattice(*lattice, voxelizedDomain);
-    if(iniVal) {
+    if(iniVal)
+    {
         Box3D toDomain(lattice->getBoundingBox());
         Box3D fromDomain(toDomain.shift(margin,margin,margin)); // During rescaling, the margin doubled in size,
-                                                                //   an effect which is cancelled here through a shift.
+        //   an effect which is cancelled here through a shift.
         copy(*iniVal, fromDomain, *lattice, toDomain, modif::staticVariables);
         computePackedRhoBarJ(*lattice, *rhoBarJfield, lattice->getBoundingBox());
         boundaryCondition.apply(rhoBarJarg);
@@ -376,17 +393,20 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
     // Collision and streaming iterations.
     while(!velocityTracer.hasConverged() && currentTime<simTime)
     {
-        if (i%200==0 && performOutput) {
+        if (i%200==0 && performOutput)
+        {
             pcout << "T= " << currentTime << "; "
                   << "Average energy: "
                   << boundaryCondition.computeAverageEnergy()*util::sqr(dx/dt) << std::endl;
         }
-        if (i%convergenceIter==0) {
+        if (i%convergenceIter==0)
+        {
             velocityTracer.takeValue(computeAverageEnergy(*lattice));
         }
 
         lattice->collideAndStream();
-        if (checkForErrors) {
+        if (checkForErrors)
+        {
             abortIfErrorsOccurred();
             checkForErrors = false;
         }
@@ -401,7 +421,8 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
     T inletPressure = DESCRIPTOR<T>::cs2*(boundaryCondition.computeAverageDensity(measureBox)-1.);
 
     // Image output.
-    if (doImages) {
+    if (doImages)
+    {
         writeImages(boundaryCondition, level, location, dx, dt);
         std::vector<std::string> scalarNames;
         scalarNames.push_back("pressure");
@@ -415,10 +436,10 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
         vectorFactor.push_back(util::sqr(dx/dt)*fluidDensity);
         bool dynamicMesh = false;
         writeSurfaceVTK (
-                boundary,
-                *computeSurfaceForce( boundary, voxelizedDomain, *lattice, model->velIsJ(), dynamicMesh ),
-                scalarNames, vectorNames, "surface_"+util::val2str(level)+".vtk", dynamicMesh, 0,
-                scalarFactor, vectorFactor );
+            boundary,
+            *computeSurfaceForce( boundary, voxelizedDomain, *lattice, model->velIsJ(), dynamicMesh ),
+            scalarNames, vectorNames, "surface_"+util::val2str(level)+".vtk", dynamicMesh, 0,
+            scalarFactor, vectorFactor );
     }
 
     T averageEnergy = boundaryCondition.computeAverageEnergy()*util::sqr(dx/dt);
@@ -426,7 +447,8 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
     T pressureDrop = inletPressure*util::sqr(dx/dt)*fluidDensity;
     T inletAverageVel = boundaryCondition.computeAverageVelocityComponent(measureBox,2)*dx/dt;
 
-    if (performOutput) {
+    if (performOutput)
+    {
         pcout << "Average energy: " << averageEnergy << std::endl;
         pcout << "Total energy: " << averageEnergy*volume << std::endl;
         pcout << "RMS vorticity * volume * 0.5: " << rmsVorticity*0.5*volume << std::endl;
@@ -437,7 +459,8 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
     pcout << "Elapsed time: " << global::timer("iteration").stop() << std::endl;
     pcout << "Total elapsed time: " << global::timer("global").getTime() << std::endl;
 
-    if (performOutput) {
+    if (performOutput)
+    {
         pcout << "Description: "
               << "Tot. energy, pressure-drop, tot. enstrophy,"
               << "  vel1, vort1, pres1,  vel2, vort2, pres2,"
@@ -447,9 +470,11 @@ std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > run (
     }
     pcout << averageEnergy*volume << ", " << pressureDrop << ", " << rmsVorticity*volume*0.5 << ", ";
     std::vector<T> pointData = pointMeasures(*lattice, location, dx, dt);
-    for (pluint i=0; i<pointData.size(); ++i) {
+    for (pluint i=0; i<pointData.size(); ++i)
+    {
         pcout << pointData[i];
-        if (i!=pointData.size()-1) {
+        if (i!=pointData.size()-1)
+        {
             pcout << ", ";
         }
     }
@@ -504,15 +529,19 @@ void readParameters(XMLreader const& document)
     //   will be imposed by palabos. Which opening is inlet and which is outlet, is
     //   identified by the user in the input XML file.
     openings.resize(openingType.size());
-    for (pluint i=0; i<openingType.size(); ++i) {
+    for (pluint i=0; i<openingType.size(); ++i)
+    {
         std::string next_opening = util::tolower(openingType[i]);
-        if (next_opening=="inlet") {
+        if (next_opening=="inlet")
+        {
             openings[i].inlet = true;
         }
-        else if (next_opening=="outlet") {
+        else if (next_opening=="outlet")
+        {
             openings[i].inlet = false;
         }
-        else {
+        else
+        {
             plbIOError("Unknown opening type.");
         }
     }
@@ -526,21 +555,25 @@ int main(int argc, char* argv[])
     global::IOpolicy().activateParallelIO(false);
 
     string paramXmlFileName;
-    try {
+    try
+    {
         global::argv(1).read(paramXmlFileName);
     }
-    catch (PlbIOException& exception) {
-        pcout << "Wrong parameters; the syntax is: " 
+    catch (PlbIOException& exception)
+    {
+        pcout << "Wrong parameters; the syntax is: "
               << (std::string)global::argv(0) << " parameter-input-file.xml" << std::endl;
         return -1;
     }
 
     // Read the parameter XML input file. (Lots of comments are included there too).
-    try {
+    try
+    {
         XMLreader document(paramXmlFileName);
         readParameters(paramXmlFileName);
     }
-    catch (PlbIOException& exception) {
+    catch (PlbIOException& exception)
+    {
         pcout << "Error in input file " << paramXmlFileName
               << ": " << exception.what() << std::endl;
         return -1;
@@ -548,35 +581,39 @@ int main(int argc, char* argv[])
 
     global::timer("global").start();
     plint iniLevel=0;
-    std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > iniConditionLattice(nullptr);
+    std::auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > iniConditionLattice(0);
     // This code incorporates the concept of smooth grid refinement until convergence is
     //   achieved. The word ``smooth'' indicates that as the refinement level increases
     //   by one, the whole grid doubles in each direction. When the grid is refined, both
     //   dx and dt have to change. Whether dt is changed as dx^2 (diffusive behavior)
     //   or as dx (convective behavior), is controlled by the input variable
     //   ``convectiveScaling'' (the recommended choice is not to use convective scaling).
-    try {
-        for (plint level=iniLevel; level<=maxLevel; ++level) {
+    try
+    {
+        for (plint level=iniLevel; level<=maxLevel; ++level)
+        {
             pcout << std::endl << "Running new simulation at level " << level << std::endl;
-            std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > convergedLattice (
-                    run(level, iniConditionLattice.get()) );
-            if (level != maxLevel) {
+            std::auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > convergedLattice (
+                run(level, iniConditionLattice.get()) );
+            if (level != maxLevel)
+            {
                 plint dxScale = -1;
                 plint dtScale = -2;
-                if (convectiveScaling) {
+                if (convectiveScaling)
+                {
                     dtScale = -1;
                 }
                 // The converged simulation of the previous grid level is used as the initial condition
                 //   for the simulation at the next grid level (after appropriate interpolation has
                 //   taken place).
-                iniConditionLattice = std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > (
-                        refine(*convergedLattice, dxScale, dtScale, new BGKdynamics<T,DESCRIPTOR>(1.)) );
+                iniConditionLattice = std::auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > (
+                                          refine(*convergedLattice, dxScale, dtScale, new BGKdynamics<T,DESCRIPTOR>(1.)) );
             }
         }
     }
-    catch(PlbException& exception) {
+    catch(PlbException& exception)
+    {
         pcout << exception.what() << std::endl;
         return -1;
     }
 }
-

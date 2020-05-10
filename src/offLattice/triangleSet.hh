@@ -417,7 +417,6 @@ template<typename T>
 void TriangleSet<T>::readBinarySTL(FILE* fp, TriangleSelector<T>* selector)
 {
     char buf[PLB_CBUFSIZ];
-    std::fill(buf, buf+PLB_CBUFSIZ, '\0');
     unsigned int nt;
     float array[3];
     unsigned short abc;

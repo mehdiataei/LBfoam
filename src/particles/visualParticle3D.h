@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,77 +33,90 @@
 #include "atomicBlock/blockLattice3D.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-class VisualParticle3D : public Particle3D<T,Descriptor> {
+class VisualParticle3D : public Particle3D<T,Descriptor>
+{
 public:
-    VisualParticle3D();
-    VisualParticle3D( plint tag_, Array<T,3> const& position );
-    VisualParticle3D( plint tag_, Array<T,3> const& position,
-                      std::vector<T> const& scalars_,
-                      std::vector<Array<T,3> > const& vectors_ );
-    virtual void velocityToParticle(TensorField3D<T,3>& velocityField, T scaling=1.) { }
-    virtual void velocityToParticle(NTensorField3D<T>& velocityField, T scaling=1.) { }
-    virtual void rhoBarJtoParticle(NTensorField3D<T>& rhoBarJfield, bool velIsJ,
-                                   T scaling=1.) { }
-    virtual void fluidToParticle(BlockLattice3D<T,Descriptor>& fluid, T scaling=1.) { }
-    virtual void advance() { }
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    virtual int getId() const;
-    virtual void reset(Array<T,3> const& position);
-    virtual VisualParticle3D<T,Descriptor>* clone() const;
-    virtual bool getScalar(plint whichScalar, T& scalar) const;
-    virtual bool setScalar(plint whichScalar, T scalar);
-    virtual bool setScalars(std::vector<T> const& scalars_);
-    virtual bool getVector(plint whichVector, Array<T,3>& vector) const;
-    virtual bool setVector(plint whichVector, Array<T,3> const& vector);
-    virtual bool setVectors(std::vector<Array<T,3> > const& vectors_);
+	VisualParticle3D();
+	VisualParticle3D( plint tag_, Array<T,3> const& position );
+	VisualParticle3D( plint tag_, Array<T,3> const& position,
+	                  std::vector<T> const& scalars_,
+	                  std::vector<Array<T,3> > const& vectors_ );
+	virtual void velocityToParticle(TensorField3D<T,3>& velocityField, T scaling=1.) { }
+	virtual void velocityToParticle(NTensorField3D<T>& velocityField, T scaling=1.) { }
+	virtual void rhoBarJtoParticle(NTensorField3D<T>& rhoBarJfield, bool velIsJ,
+	                               T scaling=1.) { }
+	virtual void fluidToParticle(BlockLattice3D<T,Descriptor>& fluid, T scaling=1.) { }
+	virtual void advance() { }
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	virtual void unserialize(HierarchicUnserializer& unserializer);
+	virtual int getId() const;
+	virtual void reset(Array<T,3> const& position);
+	virtual VisualParticle3D<T,Descriptor>* clone() const;
+	virtual bool getScalar(plint whichScalar, T& scalar) const;
+	virtual bool setScalar(plint whichScalar, T scalar);
+	virtual bool setScalars(std::vector<T> const& scalars_);
+	virtual bool getVector(plint whichVector, Array<T,3>& vector) const;
+	virtual bool setVector(plint whichVector, Array<T,3> const& vector);
+	virtual bool setVectors(std::vector<Array<T,3> > const& vectors_);
 private:
-    std::vector<T> scalars;
-    std::vector<Array<T,3> > vectors;
-    static int id;
+	std::vector<T> scalars;
+	std::vector<Array<T,3> > vectors;
+	static int id;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class MappingParticle3D : public PointParticle3D<T,Descriptor> {
+class MappingParticle3D : public PointParticle3D<T,Descriptor>
+{
 public:
-    MappingParticle3D();
-    MappingParticle3D(plint tag_, Array<T,3> const& position_, Array<T,3> const& velocity_);
-    virtual void advance();
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    virtual void rescale(int dxScale, int dtScale);
-    Array<T,3> const& getPos1() const { return pos1; }
-    Array<T,3> const& getPos2() const { return pos2; }
-    bool endOfCycle() const { return stage==3; }
+	MappingParticle3D();
+	MappingParticle3D(plint tag_, Array<T,3> const& position_, Array<T,3> const& velocity_);
+	virtual void advance();
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	virtual void unserialize(HierarchicUnserializer& unserializer);
+	virtual void rescale(int dxScale, int dtScale);
+	Array<T,3> const& getPos1() const
+	{
+		return pos1;
+	}
+	Array<T,3> const& getPos2() const
+	{
+		return pos2;
+	}
+	bool endOfCycle() const
+	{
+		return stage==3;
+	}
 public:
-    virtual bool crossedSurface1() const =0;
-    virtual bool crossedSurface2() const =0;
-    virtual T getSurfaceDistance() const =0;
+	virtual bool crossedSurface1() const =0;
+	virtual bool crossedSurface2() const =0;
+	virtual T getSurfaceDistance() const =0;
 private:
-    int stage;
-    Array<T,3> pos1, pos2;
+	int stage;
+	Array<T,3> pos1, pos2;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class MappingParticleZslice3D : public MappingParticle3D<T,Descriptor> {
+class MappingParticleZslice3D : public MappingParticle3D<T,Descriptor>
+{
 public:
-    MappingParticleZslice3D();
-    MappingParticleZslice3D(plint tag_, Array<T,3> const& position_, Array<T,3> const& velocity_, T zSlice1_, T zSlice2_);
-    virtual int getId() const;
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    virtual MappingParticleZslice3D<T,Descriptor>* clone() const;
-    virtual void rescale(int dxScale, int dtScale);
+	MappingParticleZslice3D();
+	MappingParticleZslice3D(plint tag_, Array<T,3> const& position_, Array<T,3> const& velocity_, T zSlice1_, T zSlice2_);
+	virtual int getId() const;
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	virtual void unserialize(HierarchicUnserializer& unserializer);
+	virtual MappingParticleZslice3D<T,Descriptor>* clone() const;
+	virtual void rescale(int dxScale, int dtScale);
 public:
-    virtual bool crossedSurface1() const;
-    virtual bool crossedSurface2() const;
-    virtual T getSurfaceDistance() const;
+	virtual bool crossedSurface1() const;
+	virtual bool crossedSurface2() const;
+	virtual T getSurfaceDistance() const;
 private:
-    T zSlice1, zSlice2;
-    static int id;
+	T zSlice1, zSlice2;
+	static int id;
 };
 
 /* PlaneMappingParticle3D: This particle type, is used essentially to compute
@@ -115,36 +128,64 @@ private:
  * of the particle integration, and the time step of the fluid integration.
  * */
 template<typename T, template<typename U> class Descriptor>
-class PlaneMappingParticle3D : public PointParticle3D<T,Descriptor> {
+class PlaneMappingParticle3D : public PointParticle3D<T,Descriptor>
+{
 public:
-    PlaneMappingParticle3D();
-    PlaneMappingParticle3D(plint tag_, Array<T,3> const& position_, Array<T,3> const& velocity_,
-            Plane<T> const& terminalPlane_, bool advanceBackwardInTime_, T timeScaling_);
-    virtual PlaneMappingParticle3D<T,Descriptor>* clone() const;
-    virtual int getId() const;
-    virtual void advance();
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    virtual void rescale(int dxScale, int dtScale);
-    Array<T,3> const& getInitialPosition() const { return initialPosition; }
-    Array<T,3> const& getInitialVelocity() const { return initialVelocity; }
-    Array<T,3>& getInitialVelocity() { return initialVelocity; }
-    Array<T,3> const& getTerminalVelocity() const { return terminalVelocity; }
-    Plane<T> const& getTerminalPlane() const { return terminalPlane; }
-    T getResidenceTime() const { return residenceTime; }
-    T getTimeScaling() const { return timeScaling; }
-    T& getTimeScaling() { return timeScaling; }
-    virtual bool passedTerminalPlane() const { return reachedTerminalPlane; }
+	PlaneMappingParticle3D();
+	PlaneMappingParticle3D(plint tag_, Array<T,3> const& position_, Array<T,3> const& velocity_,
+	                       Plane<T> const& terminalPlane_, bool advanceBackwardInTime_, T timeScaling_);
+	virtual PlaneMappingParticle3D<T,Descriptor>* clone() const;
+	virtual int getId() const;
+	virtual void advance();
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	virtual void unserialize(HierarchicUnserializer& unserializer);
+	virtual void rescale(int dxScale, int dtScale);
+	Array<T,3> const& getInitialPosition() const
+	{
+		return initialPosition;
+	}
+	Array<T,3> const& getInitialVelocity() const
+	{
+		return initialVelocity;
+	}
+	Array<T,3>& getInitialVelocity()
+	{
+		return initialVelocity;
+	}
+	Array<T,3> const& getTerminalVelocity() const
+	{
+		return terminalVelocity;
+	}
+	Plane<T> const& getTerminalPlane() const
+	{
+		return terminalPlane;
+	}
+	T getResidenceTime() const
+	{
+		return residenceTime;
+	}
+	T getTimeScaling() const
+	{
+		return timeScaling;
+	}
+	T& getTimeScaling()
+	{
+		return timeScaling;
+	}
+	virtual bool passedTerminalPlane() const
+	{
+		return reachedTerminalPlane;
+	}
 private:
-    Plane<T> terminalPlane;
-    Array<T,3> initialPosition;
-    Array<T,3> initialVelocity;
-    Array<T,3> terminalVelocity;
-    T residenceTime;
-    bool advanceBackwardInTime;
-    T timeScaling;
-    bool reachedTerminalPlane;
-    static int id;
+	Plane<T> terminalPlane;
+	Array<T,3> initialPosition;
+	Array<T,3> initialVelocity;
+	Array<T,3> terminalVelocity;
+	T residenceTime;
+	bool advanceBackwardInTime;
+	T timeScaling;
+	bool reachedTerminalPlane;
+	static int id;
 };
 
 /*
@@ -160,32 +201,49 @@ private:
  * fluid integration.
  */
 template<typename T, template<typename U> class Descriptor>
-class TimeRegisteringParticle3D : public PointParticle3D<T,Descriptor> {
+class TimeRegisteringParticle3D : public PointParticle3D<T,Descriptor>
+{
 public:
-    TimeRegisteringParticle3D();
-    TimeRegisteringParticle3D(plint tag_, Array<T,3> const& position_,
-            Array<T,3> const& velocity_, Plane<T> const& initialPlane_,
-            T timeScaling_);
-    virtual TimeRegisteringParticle3D<T,Descriptor>* clone() const;
-    virtual int getId() const;
-    virtual void advance();
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    virtual void rescale(int dxScale, int dtScale);
-    Plane<T> const& getInitialPlane() const { return initialPlane; }
-    T getRegisteredTime() const { return registeredTime; }
-    T getTimeScaling() const { return timeScaling; }
-    T& getTimeScaling() { return timeScaling; }
-    virtual bool passedInitialPlane() const { return reachedInitialPlane; }
+	TimeRegisteringParticle3D();
+	TimeRegisteringParticle3D(plint tag_, Array<T,3> const& position_,
+	                          Array<T,3> const& velocity_, Plane<T> const& initialPlane_,
+	                          T timeScaling_);
+	virtual TimeRegisteringParticle3D<T,Descriptor>* clone() const;
+	virtual int getId() const;
+	virtual void advance();
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	virtual void unserialize(HierarchicUnserializer& unserializer);
+	virtual void rescale(int dxScale, int dtScale);
+	Plane<T> const& getInitialPlane() const
+	{
+		return initialPlane;
+	}
+	T getRegisteredTime() const
+	{
+		return registeredTime;
+	}
+	T getTimeScaling() const
+	{
+		return timeScaling;
+	}
+	T& getTimeScaling()
+	{
+		return timeScaling;
+	}
+	virtual bool passedInitialPlane() const
+	{
+		return reachedInitialPlane;
+	}
 private:
-    Plane<T> initialPlane;
-    T registeredTime;
-    T timeScaling;
-    bool reachedInitialPlane;
-    static int id;
+	Plane<T> initialPlane;
+	T registeredTime;
+	T timeScaling;
+	bool reachedInitialPlane;
+	static int id;
 };
 
-namespace meta {
+namespace meta
+{
 
 template<typename T, template<typename U> class Descriptor>
 ParticleRegistration3D<T,Descriptor>& particleRegistration3D();
@@ -196,33 +254,34 @@ template< typename T,
           class VisualParticle >
 class VisualParticleGenerator3D : public ParticleGenerator3D<T,Descriptor>
 {
-    virtual Particle3D<T,Descriptor>* generate (
-            HierarchicUnserializer& unserializer ) const
-    {
-        // tag, position, scalars, vectors.
-        plint tag;
-        unserializer.readValue(tag);
-        Array<T,3> position;
-        unserializer.readValues<T,3>(position);
-        pluint scalarSize;
-        unserializer.readValue(scalarSize);
-        std::vector<T> scalars(scalarSize);
-        unserializer.readValues(scalars);
-        pluint vectorSize;
-        unserializer.readValue(vectorSize);
-        std::vector<Array<T,3> > vectors(vectorSize);
-        unserializer.readValues(vectors);
-        return new VisualParticle(tag, position, scalars, vectors);
-    }
+	virtual Particle3D<T,Descriptor>* generate (
+	    HierarchicUnserializer& unserializer ) const
+	{
+		// tag, position, scalars, vectors.
+		plint tag;
+		unserializer.readValue(tag);
+		Array<T,3> position;
+		unserializer.readValues<T,3>(position);
+		pluint scalarSize;
+		unserializer.readValue(scalarSize);
+		std::vector<T> scalars(scalarSize);
+		unserializer.readValues(scalars);
+		pluint vectorSize;
+		unserializer.readValue(vectorSize);
+		std::vector<Array<T,3> > vectors(vectorSize);
+		unserializer.readValues(vectors);
+		return new VisualParticle(tag, position, scalars, vectors);
+	}
 };
 
 
 template< typename T,
           template<typename U> class Descriptor,
           class VisualParticle >
-int registerVisualParticle3D(std::string name) {
-    return particleRegistration3D<T,Descriptor>().announce (
-               name, new VisualParticleGenerator3D<T,Descriptor,VisualParticle> );
+int registerVisualParticle3D(std::string name)
+{
+	return particleRegistration3D<T,Descriptor>().announce (
+	           name, new VisualParticleGenerator3D<T,Descriptor,VisualParticle> );
 }
 
 }  // namespace meta

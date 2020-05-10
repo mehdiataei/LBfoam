@@ -29,30 +29,30 @@
 /** \internal
   * convenient macro to defined the return type of a cwise binary operation */
 #define EIGEN_CWISE_BINOP_RETURN_TYPE(OP) \
-    CwiseBinaryOp<OP<typename ei_traits<ExpressionType>::Scalar>, ExpressionType, OtherDerived>
+	CwiseBinaryOp<OP<typename ei_traits<ExpressionType>::Scalar>, ExpressionType, OtherDerived>
 
 #define EIGEN_CWISE_PRODUCT_RETURN_TYPE \
-    CwiseBinaryOp< \
-      ei_scalar_product_op< \
-        typename ei_scalar_product_traits< \
-          typename ei_traits<ExpressionType>::Scalar, \
-          typename ei_traits<OtherDerived>::Scalar \
-        >::ReturnType \
-      >, \
-      ExpressionType, \
-      OtherDerived \
-    >
+	CwiseBinaryOp< \
+	ei_scalar_product_op< \
+	typename ei_scalar_product_traits< \
+	typename ei_traits<ExpressionType>::Scalar, \
+	typename ei_traits<OtherDerived>::Scalar \
+	>::ReturnType \
+	>, \
+	ExpressionType, \
+	OtherDerived \
+	>
 
 /** \internal
   * convenient macro to defined the return type of a cwise unary operation */
 #define EIGEN_CWISE_UNOP_RETURN_TYPE(OP) \
-    CwiseUnaryOp<OP<typename ei_traits<ExpressionType>::Scalar>, ExpressionType>
+	CwiseUnaryOp<OP<typename ei_traits<ExpressionType>::Scalar>, ExpressionType>
 
 /** \internal
   * convenient macro to defined the return type of a cwise comparison to a scalar */
 #define EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(OP) \
-    CwiseBinaryOp<OP<typename ei_traits<ExpressionType>::Scalar>, ExpressionType, \
-        NestByValue<typename ExpressionType::ConstantReturnType> >
+	CwiseBinaryOp<OP<typename ei_traits<ExpressionType>::Scalar>, ExpressionType, \
+	NestByValue<typename ExpressionType::ConstantReturnType> >
 
 /** \class Cwise
   *
@@ -73,114 +73,119 @@
   */
 template<typename ExpressionType> class Cwise
 {
-  public:
+public:
 
-    typedef typename ei_traits<ExpressionType>::Scalar Scalar;
-    typedef typename ei_meta_if<ei_must_nest_by_value<ExpressionType>::ret,
-        ExpressionType, const ExpressionType&>::ret ExpressionTypeNested;
-    typedef CwiseUnaryOp<ei_scalar_add_op<Scalar>, ExpressionType> ScalarAddReturnType;
+	typedef typename ei_traits<ExpressionType>::Scalar Scalar;
+	typedef typename ei_meta_if<ei_must_nest_by_value<ExpressionType>::ret,
+	        ExpressionType, const ExpressionType&>::ret ExpressionTypeNested;
+	typedef CwiseUnaryOp<ei_scalar_add_op<Scalar>, ExpressionType> ScalarAddReturnType;
 
-    inline Cwise(const ExpressionType& matrix) : m_matrix(matrix) {}
+	inline Cwise(const ExpressionType& matrix) : m_matrix(matrix) {}
 
-    /** \internal */
-    inline const ExpressionType& _expression() const { return m_matrix; }
+	/** \internal */
+	inline const ExpressionType& _expression() const
+	{
+		return m_matrix;
+	}
 
-    template<typename OtherDerived>
-    const EIGEN_CWISE_PRODUCT_RETURN_TYPE
-    operator*(const MatrixBase<OtherDerived> &other) const;
+	template<typename OtherDerived>
+	const EIGEN_CWISE_PRODUCT_RETURN_TYPE
+	operator*(const MatrixBase<OtherDerived> &other) const;
 
-    template<typename OtherDerived>
-    const EIGEN_CWISE_BINOP_RETURN_TYPE(ei_scalar_quotient_op)
-    operator/(const MatrixBase<OtherDerived> &other) const;
+	template<typename OtherDerived>
+	const EIGEN_CWISE_BINOP_RETURN_TYPE(ei_scalar_quotient_op)
+	operator/(const MatrixBase<OtherDerived> &other) const;
 
-    template<typename OtherDerived>
-    const EIGEN_CWISE_BINOP_RETURN_TYPE(ei_scalar_min_op)
-    min(const MatrixBase<OtherDerived> &other) const;
+	template<typename OtherDerived>
+	const EIGEN_CWISE_BINOP_RETURN_TYPE(ei_scalar_min_op)
+	min(const MatrixBase<OtherDerived> &other) const;
 
-    template<typename OtherDerived>
-    const EIGEN_CWISE_BINOP_RETURN_TYPE(ei_scalar_max_op)
-    max(const MatrixBase<OtherDerived> &other) const;
+	template<typename OtherDerived>
+	const EIGEN_CWISE_BINOP_RETURN_TYPE(ei_scalar_max_op)
+	max(const MatrixBase<OtherDerived> &other) const;
 
-    const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_abs_op)      abs() const;
-    const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_abs2_op)     abs2() const;
-    const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_square_op)   square() const;
-    const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_cube_op)     cube() const;
-    const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_inverse_op)  inverse() const;
-    const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_sqrt_op)     sqrt() const;
-    const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_exp_op)      exp() const;
-    const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_log_op)      log() const;
-    const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_cos_op)      cos() const;
-    const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_sin_op)      sin() const;
-    const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_pow_op)      pow(const Scalar& exponent) const;
+	const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_abs_op)      abs() const;
+	const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_abs2_op)     abs2() const;
+	const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_square_op)   square() const;
+	const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_cube_op)     cube() const;
+	const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_inverse_op)  inverse() const;
+	const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_sqrt_op)     sqrt() const;
+	const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_exp_op)      exp() const;
+	const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_log_op)      log() const;
+	const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_cos_op)      cos() const;
+	const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_sin_op)      sin() const;
+	const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_pow_op)      pow(const Scalar& exponent) const;
 
-    const ScalarAddReturnType
-    operator+(const Scalar& scalar) const;
+	const ScalarAddReturnType
+	operator+(const Scalar& scalar) const;
 
-    /** \relates Cwise */
-    friend const ScalarAddReturnType
-    operator+(const Scalar& scalar, const Cwise& mat)
-    { return mat + scalar; }
+	/** \relates Cwise */
+	friend const ScalarAddReturnType
+	operator+(const Scalar& scalar, const Cwise& mat)
+	{
+		return mat + scalar;
+	}
 
-    ExpressionType& operator+=(const Scalar& scalar);
+	ExpressionType& operator+=(const Scalar& scalar);
 
-    const ScalarAddReturnType
-    operator-(const Scalar& scalar) const;
+	const ScalarAddReturnType
+	operator-(const Scalar& scalar) const;
 
-    ExpressionType& operator-=(const Scalar& scalar);
+	ExpressionType& operator-=(const Scalar& scalar);
 
-    template<typename OtherDerived>
-    inline ExpressionType& operator*=(const MatrixBase<OtherDerived> &other);
+	template<typename OtherDerived>
+	inline ExpressionType& operator*=(const MatrixBase<OtherDerived> &other);
 
-    template<typename OtherDerived>
-    inline ExpressionType& operator/=(const MatrixBase<OtherDerived> &other);
+	template<typename OtherDerived>
+	inline ExpressionType& operator/=(const MatrixBase<OtherDerived> &other);
 
-    template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::less)
-    operator<(const MatrixBase<OtherDerived>& other) const;
+	template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::less)
+	operator<(const MatrixBase<OtherDerived>& other) const;
 
-    template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::less_equal)
-    operator<=(const MatrixBase<OtherDerived>& other) const;
+	template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::less_equal)
+	operator<=(const MatrixBase<OtherDerived>& other) const;
 
-    template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::greater)
-    operator>(const MatrixBase<OtherDerived>& other) const;
+	template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::greater)
+	operator>(const MatrixBase<OtherDerived>& other) const;
 
-    template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::greater_equal)
-    operator>=(const MatrixBase<OtherDerived>& other) const;
+	template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::greater_equal)
+	operator>=(const MatrixBase<OtherDerived>& other) const;
 
-    template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::equal_to)
-    operator==(const MatrixBase<OtherDerived>& other) const;
+	template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::equal_to)
+	operator==(const MatrixBase<OtherDerived>& other) const;
 
-    template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::not_equal_to)
-    operator!=(const MatrixBase<OtherDerived>& other) const;
+	template<typename OtherDerived> const EIGEN_CWISE_BINOP_RETURN_TYPE(std::not_equal_to)
+	operator!=(const MatrixBase<OtherDerived>& other) const;
 
-    // comparisons to a scalar value
-    const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::less)
-    operator<(Scalar s) const;
+	// comparisons to a scalar value
+	const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::less)
+	operator<(Scalar s) const;
 
-    const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::less_equal)
-    operator<=(Scalar s) const;
+	const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::less_equal)
+	operator<=(Scalar s) const;
 
-    const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::greater)
-    operator>(Scalar s) const;
+	const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::greater)
+	operator>(Scalar s) const;
 
-    const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::greater_equal)
-    operator>=(Scalar s) const;
+	const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::greater_equal)
+	operator>=(Scalar s) const;
 
-    const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::equal_to)
-    operator==(Scalar s) const;
+	const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::equal_to)
+	operator==(Scalar s) const;
 
-    const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::not_equal_to)
-    operator!=(Scalar s) const;
+	const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::not_equal_to)
+	operator!=(Scalar s) const;
 
-    // allow to extend Cwise outside Eigen
-    #ifdef EIGEN_CWISE_PLUGIN
-    #include EIGEN_CWISE_PLUGIN
-    #endif
+	// allow to extend Cwise outside Eigen
+#ifdef EIGEN_CWISE_PLUGIN
+#include EIGEN_CWISE_PLUGIN
+#endif
 
-  protected:
-    ExpressionTypeNested m_matrix;
+protected:
+	ExpressionTypeNested m_matrix;
 
-  private:
-    Cwise& operator=(const Cwise&);
+private:
+	Cwise& operator=(const Cwise&);
 };
 
 /** \returns a Cwise wrapper of *this providing additional coefficient-wise operations
@@ -194,7 +199,7 @@ template<typename Derived>
 inline const Cwise<Derived>
 MatrixBase<Derived>::cwise() const
 {
-  return derived();
+	return derived();
 }
 
 /** \returns a Cwise wrapper of *this providing additional coefficient-wise operations
@@ -208,7 +213,7 @@ template<typename Derived>
 inline Cwise<Derived>
 MatrixBase<Derived>::cwise()
 {
-  return derived();
+	return derived();
 }
 
 #endif // EIGEN_CWISE_H

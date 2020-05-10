@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,11 +32,12 @@
 #include "multiBlock/defaultMultiBlockPolicy2D.h"
 #include "core/blockIdentifiers.h"
 
-namespace plb {
+namespace plb
+{
 
 MultiContainerBlock2D::MultiContainerBlock2D (
-        MultiBlockManagement2D const& multiBlockManagement_,
-        CombinedStatistics* combinedStatistics_ )
+    MultiBlockManagement2D const& multiBlockManagement_,
+    CombinedStatistics* combinedStatistics_ )
 
     : MultiBlock2D(multiBlockManagement_,
                    defaultMultiBlockPolicy2D().getBlockCommunicator(),
@@ -45,16 +46,17 @@ MultiContainerBlock2D::MultiContainerBlock2D (
     allocateBlocks();
 }
 
-MultiContainerBlock2D::~MultiContainerBlock2D() {
+MultiContainerBlock2D::~MultiContainerBlock2D()
+{
     deAllocateBlocks();
 }
 
 MultiContainerBlock2D::MultiContainerBlock2D(plint nx_, plint ny_)
     : MultiBlock2D (
-            // Default envelope-width to 0
-            defaultMultiBlockPolicy2D().getMultiBlockManagement(nx_,ny_, 0),
-            defaultMultiBlockPolicy2D().getBlockCommunicator(),
-            defaultMultiBlockPolicy2D().getCombinedStatistics() )
+          // Default envelope-width to 0
+          defaultMultiBlockPolicy2D().getMultiBlockManagement(nx_,ny_, 0),
+          defaultMultiBlockPolicy2D().getBlockCommunicator(),
+          defaultMultiBlockPolicy2D().getCombinedStatistics() )
 {
     allocateBlocks();
 }
@@ -67,9 +69,9 @@ MultiContainerBlock2D::MultiContainerBlock2D(MultiBlock2D const& rhs)
 
 MultiContainerBlock2D::MultiContainerBlock2D(MultiBlock2D const& rhs, Box2D subDomain, bool crop)
     : MultiBlock2D (
-            intersect(rhs.getMultiBlockManagement(), subDomain, crop),
-            rhs.getBlockCommunicator().clone(),
-            rhs.getCombinedStatistics().clone() )
+          intersect(rhs.getMultiBlockManagement(), subDomain, crop),
+          rhs.getBlockCommunicator().clone(),
+          rhs.getCombinedStatistics().clone() )
 {
     allocateBlocks();
 }
@@ -81,24 +83,26 @@ MultiContainerBlock2D::MultiContainerBlock2D(MultiContainerBlock2D const& rhs)
 }
 
 MultiContainerBlock2D& MultiContainerBlock2D::operator= (
-        MultiContainerBlock2D const& rhs )
+    MultiContainerBlock2D const& rhs )
 {
     MultiContainerBlock2D tmp(rhs);
     swap(tmp);
     return *this;
 }
 
-void MultiContainerBlock2D::swap(MultiContainerBlock2D& rhs) {
+void MultiContainerBlock2D::swap(MultiContainerBlock2D& rhs)
+{
     blocks.swap(rhs.blocks);
     MultiBlock2D::swap(rhs);
 }
 
-MultiContainerBlock2D* MultiContainerBlock2D::clone() const {
+MultiContainerBlock2D* MultiContainerBlock2D::clone() const
+{
     return new MultiContainerBlock2D(*this);
 }
 
 MultiContainerBlock2D* MultiContainerBlock2D::clone (
-        MultiBlockManagement2D const& multiBlockManagement ) const
+    MultiBlockManagement2D const& multiBlockManagement ) const
 {
     // By definition, a multi container block cannot be redistributed over
     //   a different block arrangement. Consequently, this function
@@ -106,7 +110,7 @@ MultiContainerBlock2D* MultiContainerBlock2D::clone (
     return clone();
 }
 
-void MultiContainerBlock2D::allocateBlocks() 
+void MultiContainerBlock2D::allocateBlocks()
 {
     for (pluint iBlock=0; iBlock<this->getLocalInfo().getBlocks().size(); ++iBlock)
     {
@@ -115,13 +119,13 @@ void MultiContainerBlock2D::allocateBlocks()
         Box2D envelope = bulk.computeEnvelope();
         AtomicContainerBlock2D* newBlock =
             new AtomicContainerBlock2D (
-                    envelope.getNx(), envelope.getNy() );
+            envelope.getNx(), envelope.getNy() );
         newBlock -> setLocation(Dot2D(envelope.x0, envelope.y0));
         blocks[blockId] = newBlock;
     }
 }
 
-void MultiContainerBlock2D::allocateBlocks(MultiContainerBlock2D const& rhs) 
+void MultiContainerBlock2D::allocateBlocks(MultiContainerBlock2D const& rhs)
 {
     for (pluint iBlock=0; iBlock<this->getLocalInfo().getBlocks().size(); ++iBlock)
     {
@@ -133,7 +137,7 @@ void MultiContainerBlock2D::allocateBlocks(MultiContainerBlock2D const& rhs)
     }
 }
 
-void MultiContainerBlock2D::deAllocateBlocks() 
+void MultiContainerBlock2D::deAllocateBlocks()
 {
     for (BlockMap::iterator it = blocks.begin(); it != blocks.end(); ++it)
     {
@@ -149,37 +153,42 @@ AtomicContainerBlock2D& MultiContainerBlock2D::getComponent(plint blockId)
 }
 
 AtomicContainerBlock2D const& MultiContainerBlock2D::
-    getComponent(plint blockId) const
+getComponent(plint blockId) const
 {
     BlockMap::const_iterator it = blocks.find(blockId);
     PLB_ASSERT (it != blocks.end());
     return *it->second;
 }
 
-plint MultiContainerBlock2D::sizeOfCell() const {
+plint MultiContainerBlock2D::sizeOfCell() const
+{
     return 0;
 }
 
-plint MultiContainerBlock2D::getCellDim() const {
+plint MultiContainerBlock2D::getCellDim() const
+{
     return 0;
 }
 
-int MultiContainerBlock2D::getStaticId() const {
+int MultiContainerBlock2D::getStaticId() const
+{
     return 0;
 }
 
 void MultiContainerBlock2D::copyReceive (
-                MultiBlock2D const& fromBlock, Box2D const& fromDomain,
-                Box2D const& toDomain, modif::ModifT whichData )
+    MultiBlock2D const& fromBlock, Box2D const& fromDomain,
+    Box2D const& toDomain, modif::ModifT whichData )
 {
     PLB_ASSERT( false );
 }
 
-std::string MultiContainerBlock2D::getBlockName() const {
+std::string MultiContainerBlock2D::getBlockName() const
+{
     return std::string("ContainerBlock2D");
 }
 
-std::vector<std::string> MultiContainerBlock2D::getTypeInfo() const {
+std::vector<std::string> MultiContainerBlock2D::getTypeInfo() const
+{
     return std::vector<std::string>();
 }
 
@@ -195,9 +204,11 @@ MultiContainerBlock2D* createContainerBlock(MultiBlock2D& templ, ContainerBlockD
 
     std::map<plint,Box2D>::const_iterator it = domains.begin();
     plint pos = 0;
-    for (; it != domains.end(); ++it, ++pos) {
+    for (; it != domains.end(); ++it, ++pos)
+    {
         plint id = it->first;
-        if (threadAttribution.isLocal(id)) {
+        if (threadAttribution.isLocal(id))
+        {
             AtomicContainerBlock2D& atomicDataContainer = dataContainer->getComponent(id);
             ContainerBlockData* nextData = data->clone();
             nextData->setUniqueID(pos);

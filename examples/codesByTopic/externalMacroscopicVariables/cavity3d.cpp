@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -63,7 +63,8 @@ void cavitySetup( MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     lattice.initialize();
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
@@ -71,27 +72,27 @@ int main(int argc, char* argv[]) {
     //defaultMultiBlockPolicy3D().setNumProcesses(8);
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 100.,  // Re
-            100,        // N
-            1.,        // lx
-            1.,        // ly
-            1.         // lz
+        (T) 1e-2,  // uMax
+        (T) 100.,  // Re
+        100,        // N
+        1.,        // lx
+        1.,        // ly
+        1.         // lz
     );
     const T maxT     = (T)10.1;
 
     writeLogFile(parameters, "3D diagonal cavity");
 
     MultiBlockLattice3D<T, DESCRIPTOR> lattice (
-            parameters.getNx(), parameters.getNy(), parameters.getNz(),
-            new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(), parameters.getNz(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     MultiBlockLattice3D<T, DESCRIPTOR> lattice2 (
-            parameters.getNx(), parameters.getNy(), parameters.getNz(),
-            new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(), parameters.getNz(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* boundaryCondition
-        //= createInterpBoundaryCondition3D<T,DESCRIPTOR>();
+    //= createInterpBoundaryCondition3D<T,DESCRIPTOR>();
         = createLocalBoundaryCondition3D<T,DESCRIPTOR>();
 
     cavitySetup(lattice, parameters, *boundaryCondition);
@@ -115,7 +116,8 @@ int main(int argc, char* argv[]) {
 
     // Loop over main time iteration.
     global::timer("iterations").start();
-    for (plint iT=0; iT<parameters.nStep(maxT); ++iT) {
+    for (plint iT=0; iT<parameters.nStep(maxT); ++iT)
+    {
 
         // Execute a time iteration.
         lattice.collideAndStream();
@@ -123,7 +125,8 @@ int main(int argc, char* argv[]) {
         lattice2.executeInternalProcessors();
         computeRhoBarJ(lattice2, rhoBar, j, lattice2.getBoundingBox());
 
-        if (iT%100==0) {
+        if (iT%100==0)
+        {
             pcout << "Energy 1: " << computeAverageEnergy(lattice) << std::endl;
             pcout << "Energy 2: " << computeAverageEnergy(lattice2) << std::endl;
             pcout << global::timer("iterations").getTime()/(iT+1) << std::endl;
@@ -132,8 +135,8 @@ int main(int argc, char* argv[]) {
             T dt = parameters.getDeltaT();
             VtkImageOutput3D<T> vtkOut(createFileName("diff_", iT, 6), dx);
             vtkOut.writeData<float>(
-                    *subtract(*computeVelocityNorm(lattice, slice),*computeVelocityNorm(lattice2, slice)), 
-                    "velocityNormDiff", dx/dt);
+                *subtract(*computeVelocityNorm(lattice, slice),*computeVelocityNorm(lattice2, slice)),
+                "velocityNormDiff", dx/dt);
         }
 
     }

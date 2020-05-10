@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,7 +29,8 @@
 #include "atomicBlock/dataProcessingFunctional2D.h"
 #include "atomicBlock/blockLattice2D.h"
 
-namespace plb {
+namespace plb
+{
 
 /**
 * This class computes the Skordos BC
@@ -37,22 +38,27 @@ namespace plb {
 * equilibrium distributions (i.e. only the Q_i : Pi term)
 */
 template<typename T, template<typename U> class Descriptor, int direction, int orientation>
-class StraightFdBoundaryFunctional2D : public BoxProcessingFunctional2D_L<T,Descriptor> {
+class StraightFdBoundaryFunctional2D : public BoxProcessingFunctional2D_L<T,Descriptor>
+{
 public:
-    virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
-    virtual StraightFdBoundaryFunctional2D<T,Descriptor,direction,orientation>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-    }
+	virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
+	virtual StraightFdBoundaryFunctional2D<T,Descriptor,direction,orientation>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+	}
 public:
-    static void processCell(plint iX, plint iY, BlockLattice2D<T,Descriptor>& lattice);
+	static void processCell(plint iX, plint iY, BlockLattice2D<T,Descriptor>& lattice);
 private:
-    template<int deriveDirection>
-    static void interpolateGradients (
-            BlockLattice2D<T,Descriptor> const& lattice,
-            Array<T,Descriptor<T>::d>& velDeriv, plint iX, plint iY );
-    virtual int getStaticId() const { return staticId; }
-    static const int staticId;
+	template<int deriveDirection>
+	static void interpolateGradients (
+	    BlockLattice2D<T,Descriptor> const& lattice,
+	    Array<T,Descriptor<T>::d>& velDeriv, plint iX, plint iY );
+	virtual int getStaticId() const
+	{
+		return staticId;
+	}
+	static const int staticId;
 };
 
 /**
@@ -64,15 +70,19 @@ template<typename T, template<typename U> class Descriptor, int xNormal, int yNo
 class OuterVelocityCornerFunctional2D : public BoxProcessingFunctional2D_L<T,Descriptor>
 {
 public:
-    virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
-    virtual OuterVelocityCornerFunctional2D<T,Descriptor,xNormal,yNormal>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-    }
-    virtual int getStaticId() const { return staticId; }
+	virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
+	virtual OuterVelocityCornerFunctional2D<T,Descriptor,xNormal,yNormal>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+	}
+	virtual int getStaticId() const
+	{
+		return staticId;
+	}
 public:
-    static void processCell(plint iX, plint iY, BlockLattice2D<T,Descriptor>& lattice);
-    static const int staticId;
+	static void processCell(plint iX, plint iY, BlockLattice2D<T,Descriptor>& lattice);
+	static const int staticId;
 };
 
 }  // namespace plb

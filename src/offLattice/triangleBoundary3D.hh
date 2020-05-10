@@ -1064,7 +1064,7 @@ VoxelizedDomain3D<T>::VoxelizedDomain3D (
     else {
         boundary.pushSelect(1,0); // Closed, Static.
     }
-    std::unique_ptr<MultiScalarField3D<int> > fullVoxelMatrix ( 
+    std::auto_ptr<MultiScalarField3D<int> > fullVoxelMatrix ( 
             voxelize( boundary.getMesh(),
                       boundary.getMargin()+extraLayer_, borderWidth ) );
     fullVoxelMatrix->setRefinementLevel(gridLevel_);
@@ -1090,7 +1090,7 @@ VoxelizedDomain3D<T>::VoxelizedDomain3D (
     else {
         boundary.pushSelect(1,0); // Closed, Static.
     }
-    std::unique_ptr<MultiScalarField3D<int> > fullVoxelMatrix ( 
+    std::auto_ptr<MultiScalarField3D<int> > fullVoxelMatrix ( 
             voxelize( boundary.getMesh(), boundingBox, borderWidth ) );
     fullVoxelMatrix->setRefinementLevel(gridLevel_);
     createSparseVoxelMatrix(*fullVoxelMatrix, blockSize_, envelopeWidth_);
@@ -1115,7 +1115,7 @@ VoxelizedDomain3D<T>::VoxelizedDomain3D (
     else {
         boundary.pushSelect(1,0); // Closed, Static.
     }
-    std::unique_ptr<MultiScalarField3D<int> > fullVoxelMatrix ( 
+    std::auto_ptr<MultiScalarField3D<int> > fullVoxelMatrix ( 
             voxelize( boundary.getMesh(), boundingBox, borderWidth, seed ) );
     fullVoxelMatrix->setRefinementLevel(gridLevel_);
     createSparseVoxelMatrix(*fullVoxelMatrix, blockSize_, envelopeWidth_);

@@ -33,10 +33,10 @@
 namespace Eigen
 {
 
-template static void ei_tridiagonal_qr_step(float* , float* , int, int, float* , int);
-template static void ei_tridiagonal_qr_step(double* , double* , int, int, double* , int);
-template static void ei_tridiagonal_qr_step(float* , float* , int, int, std::complex<float>* , int);
-template static void ei_tridiagonal_qr_step(double* , double* , int, int, std::complex<double>* , int);
+template static void ei_tridiagonal_qr_step(float*, float*, int, int, float*, int);
+template static void ei_tridiagonal_qr_step(double*, double*, int, int, double*, int);
+template static void ei_tridiagonal_qr_step(float*, float*, int, int, std::complex<float>*, int);
+template static void ei_tridiagonal_qr_step(double*, double*, int, int, std::complex<double>*, int);
 
 EIGEN_QR_MODULE_INSTANTIATE();
 

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,64 +30,74 @@
 #include "multiBlock/threadAttribution.h"
 #include "core/plbDebug.h"
 
-namespace plb {
+namespace plb
+{
 
-bool SerialThreadAttribution::isLocal(plint blockId) const {
+bool SerialThreadAttribution::isLocal(plint blockId) const
+{
     return true;
 }
 
-bool SerialThreadAttribution::allBlocksAreLocal() const {
+bool SerialThreadAttribution::allBlocksAreLocal() const
+{
     return true;
 }
 
-int SerialThreadAttribution::getMpiProcess(plint blockId) const {
+int SerialThreadAttribution::getMpiProcess(plint blockId) const
+{
     return global::mpi().bossId();
 }
 
-int SerialThreadAttribution::getLocalThreadId(plint blockId) const {
+int SerialThreadAttribution::getLocalThreadId(plint blockId) const
+{
     return 0;
 }
 
 ThreadAttribution* SerialThreadAttribution::merge (
-            ThreadAttribution const& rhs,
-            std::map<plint,std::vector<plint> > const& remappedIds ) const
+    ThreadAttribution const& rhs,
+    std::map<plint,std::vector<plint> > const& remappedIds ) const
 {
     // Serial remains serial. Nothing to be done here.
     return new SerialThreadAttribution();
 }
 
 ThreadAttribution* SerialThreadAttribution::extend (
-              std::vector<plint> const& ids,
-              std::vector<plint> const& mpiProcesses, std::vector<plint> const& localThreads ) const
+    std::vector<plint> const& ids,
+    std::vector<plint> const& mpiProcesses, std::vector<plint> const& localThreads ) const
 {
     // Serial remains serial. Nothing to be done here.
     return new SerialThreadAttribution();
 }
 
-ThreadAttribution* SerialThreadAttribution::clone() const {
+ThreadAttribution* SerialThreadAttribution::clone() const
+{
     return new SerialThreadAttribution;
 }
 
 
-bool OneToOneThreadAttribution::isLocal(plint blockId) const {
+bool OneToOneThreadAttribution::isLocal(plint blockId) const
+{
     return blockId == global::mpi().getRank();
 }
 
-bool OneToOneThreadAttribution::allBlocksAreLocal() const {
+bool OneToOneThreadAttribution::allBlocksAreLocal() const
+{
     return false;
 }
 
-int OneToOneThreadAttribution::getMpiProcess(plint blockId) const {
+int OneToOneThreadAttribution::getMpiProcess(plint blockId) const
+{
     return blockId;
 }
-int OneToOneThreadAttribution::getLocalThreadId(plint blockId) const {
+int OneToOneThreadAttribution::getLocalThreadId(plint blockId) const
+{
     return 0;
 }
 
 
 ThreadAttribution* OneToOneThreadAttribution::merge (
-            ThreadAttribution const& rhs,
-            std::map<plint,std::vector<plint> > const& remappedIds ) const
+    ThreadAttribution const& rhs,
+    std::map<plint,std::vector<plint> > const& remappedIds ) const
 {
     // Need to turn to an explicit form of thread attribution. Remember that
     //   ExplicitThreadAttribution defaults to OneToOneThreadAttribution
@@ -95,22 +105,24 @@ ThreadAttribution* OneToOneThreadAttribution::merge (
     ExplicitThreadAttribution* newThreadAttribution
         = new ExplicitThreadAttribution();
     std::map<plint,std::vector<plint> >::const_iterator it = remappedIds.begin();
-    for (; it != remappedIds.end(); ++it) {
+    for (; it != remappedIds.end(); ++it)
+    {
         plint oldId = it->first;
         std::vector<plint> const& newIds = it->second;
-        for (pluint iNew=0; iNew<newIds.size(); ++iNew) {
+        for (pluint iNew=0; iNew<newIds.size(); ++iNew)
+        {
             newThreadAttribution->addBlock (
-                    newIds[iNew],
-                    rhs.getMpiProcess(oldId),
-                    rhs.getLocalThreadId(oldId) );
+                newIds[iNew],
+                rhs.getMpiProcess(oldId),
+                rhs.getLocalThreadId(oldId) );
         }
     }
     return newThreadAttribution;
 }
 
 ThreadAttribution* OneToOneThreadAttribution::extend (
-              std::vector<plint> const& ids,
-              std::vector<plint> const& mpiProcesses, std::vector<plint> const& localThreads ) const
+    std::vector<plint> const& ids,
+    std::vector<plint> const& mpiProcesses, std::vector<plint> const& localThreads ) const
 {
     PLB_PRECONDITION( ids.size() == mpiProcesses.size() &&
                       ids.size() == localThreads.size() );
@@ -119,14 +131,16 @@ ThreadAttribution* OneToOneThreadAttribution::extend (
     //   for all non-specified blockIds, so we are safe.
     ExplicitThreadAttribution* newThreadAttribution
         = new ExplicitThreadAttribution();
-    for (pluint iNew=0; iNew<ids.size(); ++iNew) {
+    for (pluint iNew=0; iNew<ids.size(); ++iNew)
+    {
         newThreadAttribution->addBlock (
-                ids[iNew], mpiProcesses[iNew], localThreads[iNew] );
+            ids[iNew], mpiProcesses[iNew], localThreads[iNew] );
     }
     return newThreadAttribution;
 }
 
-ThreadAttribution* OneToOneThreadAttribution::clone() const {
+ThreadAttribution* OneToOneThreadAttribution::clone() const
+{
     return new OneToOneThreadAttribution;
 }
 
@@ -134,43 +148,48 @@ ExplicitThreadAttribution::ExplicitThreadAttribution()
 { }
 
 ExplicitThreadAttribution::ExplicitThreadAttribution (
-        std::map<plint,plint> const& mpiProcessAttribution_ )
+    std::map<plint,plint> const& mpiProcessAttribution_ )
     : mpiProcessAttribution(mpiProcessAttribution_)
 {
     std::map<plint,plint>::const_iterator it = mpiProcessAttribution.begin();
     // Default local threads to zero.
-    for (; it != mpiProcessAttribution.end(); ++it) {
+    for (; it != mpiProcessAttribution.end(); ++it)
+    {
         localThreadAttribution[it->first] = 0;
     }
 }
 
 ExplicitThreadAttribution::ExplicitThreadAttribution (
-        std::map<plint,plint> const& mpiProcessAttribution_,
-        std::map<plint,plint> const& localThreadAttribution_ )
+    std::map<plint,plint> const& mpiProcessAttribution_,
+    std::map<plint,plint> const& localThreadAttribution_ )
     : mpiProcessAttribution(mpiProcessAttribution_),
       localThreadAttribution(localThreadAttribution_)
 { }
 
 void ExplicitThreadAttribution::addBlock (
-        plint blockId, plint mpiProcess, plint localThread )
+    plint blockId, plint mpiProcess, plint localThread )
 {
     mpiProcessAttribution[blockId] = mpiProcess;
     localThreadAttribution[blockId] = localThread;
 }
 
-bool ExplicitThreadAttribution::isLocal(plint blockId) const {
+bool ExplicitThreadAttribution::isLocal(plint blockId) const
+{
     std::map<plint,plint>::const_iterator it = mpiProcessAttribution.find(blockId);
     // If this blockId is not registered, fall back to default behavior,
     //   which is the one specified by OneToOneThreadAttribution.
-    if (it == mpiProcessAttribution.end()) {
+    if (it == mpiProcessAttribution.end())
+    {
         return blockId == global::mpi().getRank();
     }
-    else {
+    else
+    {
         return it->second == global::mpi().getRank();
     }
 }
 
-bool ExplicitThreadAttribution::allBlocksAreLocal() const {
+bool ExplicitThreadAttribution::allBlocksAreLocal() const
+{
     // They might all be local, but we a priori don't know. Remember that
     //   ExplicitThreadAttribution defaults to OneToOneThreadAttribution
     //   for all blockIds which have not been subscribed. Does, we can't
@@ -178,33 +197,39 @@ bool ExplicitThreadAttribution::allBlocksAreLocal() const {
     return false;
 }
 
-int ExplicitThreadAttribution::getMpiProcess(plint blockId) const {
+int ExplicitThreadAttribution::getMpiProcess(plint blockId) const
+{
     std::map<plint,plint>::const_iterator it = mpiProcessAttribution.find(blockId);
     // If this blockId is not registered, fall back to default behavior,
     //   which is the one specified by OneToOneThreadAttribution.
-    if (it == mpiProcessAttribution.end()) {
+    if (it == mpiProcessAttribution.end())
+    {
         return blockId;
     }
-    else {
+    else
+    {
         return it->second;
     }
 }
 
-int ExplicitThreadAttribution::getLocalThreadId(plint blockId) const {
+int ExplicitThreadAttribution::getLocalThreadId(plint blockId) const
+{
     std::map<plint,plint>::const_iterator it = localThreadAttribution.find(blockId);
     // If this blockId is not registered, fall back to default behavior,
     //   which is the one specified by OneToOneThreadAttribution.
-    if (it == localThreadAttribution.end()) {
+    if (it == localThreadAttribution.end())
+    {
         return 0;
     }
-    else {
+    else
+    {
         return it->second;
     }
 }
 
 ThreadAttribution* ExplicitThreadAttribution::merge (
-            ThreadAttribution const& rhs,
-            std::map<plint,std::vector<plint> > const& remappedIds ) const
+    ThreadAttribution const& rhs,
+    std::map<plint,std::vector<plint> > const& remappedIds ) const
 {
     ExplicitThreadAttribution* newThreadAttribution
         = new ExplicitThreadAttribution();
@@ -212,35 +237,39 @@ ThreadAttribution* ExplicitThreadAttribution::merge (
     newThreadAttribution->localThreadAttribution = localThreadAttribution;
 
     std::map<plint,std::vector<plint> >::const_iterator it = remappedIds.begin();
-    for (; it != remappedIds.end(); ++it) {
+    for (; it != remappedIds.end(); ++it)
+    {
         plint oldId = it->first;
         std::vector<plint> const& newIds = it->second;
-        for (pluint iNew=0; iNew<newIds.size(); ++iNew) {
+        for (pluint iNew=0; iNew<newIds.size(); ++iNew)
+        {
             newThreadAttribution->addBlock (
-                    newIds[iNew],
-                    rhs.getMpiProcess(oldId),
-                    rhs.getLocalThreadId(oldId) );
+                newIds[iNew],
+                rhs.getMpiProcess(oldId),
+                rhs.getLocalThreadId(oldId) );
         }
     }
     return newThreadAttribution;
 }
 
 ThreadAttribution* ExplicitThreadAttribution::extend (
-              std::vector<plint> const& ids,
-              std::vector<plint> const& mpiProcesses, std::vector<plint> const& localThreads ) const
+    std::vector<plint> const& ids,
+    std::vector<plint> const& mpiProcesses, std::vector<plint> const& localThreads ) const
 {
     PLB_PRECONDITION( ids.size() == mpiProcesses.size() &&
                       ids.size() == localThreads.size() );
     ExplicitThreadAttribution* newThreadAttribution
         = new ExplicitThreadAttribution(mpiProcessAttribution, localThreadAttribution);
-    for (pluint iNew=0; iNew<ids.size(); ++iNew) {
+    for (pluint iNew=0; iNew<ids.size(); ++iNew)
+    {
         newThreadAttribution->addBlock (
-                ids[iNew], mpiProcesses[iNew], localThreads[iNew] );
+            ids[iNew], mpiProcesses[iNew], localThreads[iNew] );
     }
     return newThreadAttribution;
 }
 
-ThreadAttribution* ExplicitThreadAttribution::clone() const {
+ThreadAttribution* ExplicitThreadAttribution::clone() const
+{
     return new ExplicitThreadAttribution(*this);
 }
 

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,7 +35,8 @@
 #include <memory>
 
 
-namespace plb {
+namespace plb
+{
 
 template<typename T1, typename T2>
 void copy( MultiNTensorField3D<T1>& field,
@@ -52,12 +53,11 @@ template<typename T>
 void scalarToNTensor(MultiScalarField3D<T>& scalar, MultiNTensorField3D<T>& nTensor);
 
 template<typename T>
-std::unique_ptr<MultiNTensorField3D<T> > scalarToNTensor(MultiScalarField3D<T>& scalar);
+std::auto_ptr<MultiNTensorField3D<T> > scalarToNTensor(MultiScalarField3D<T>& scalar);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > nTensorToScalar(MultiNTensorField3D<T>& nTensor);
+std::auto_ptr<MultiScalarField3D<T> > nTensorToScalar(MultiNTensorField3D<T>& nTensor);
 
 }  // namespace plb
 
 #endif  // NTENSOR_ANALYSIS_WRAPPER_3D_H
-

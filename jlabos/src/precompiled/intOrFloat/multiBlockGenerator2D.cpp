@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,69 +29,70 @@
 #include "multiBlock/multiBlockGenerator2D.h"
 #include "multiBlock/multiBlockGenerator2D.hh"
 
-namespace plb {
+namespace plb
+{
 
 template
-std::unique_ptr<MultiNTensorField2D<PRECOMP_T> > defaultGenerateMultiNTensorField2D<PRECOMP_T> (
-        MultiBlockManagement2D const& management, plint nDim );
+std::auto_ptr<MultiNTensorField2D<PRECOMP_T> > defaultGenerateMultiNTensorField2D<PRECOMP_T> (
+    MultiBlockManagement2D const& management, plint nDim );
 
 template
 MultiNTensorField2D<PRECOMP_T>* generateMultiNTensorField2D(Box2D const& domain, plint ndim);
 
 template
 MultiNTensorField2D<int>*
-    generateNTensorFieldFromNTensor2D (
-            MultiNTensorField2D<PRECOMP_T> const& field,
-            Box2D const& intersection, plint nDim);
+generateNTensorFieldFromNTensor2D (
+    MultiNTensorField2D<PRECOMP_T> const& field,
+    Box2D const& intersection, plint nDim);
 
 template
 MultiNTensorField2D<PRECOMP_T>* clone<PRECOMP_T> (
-        MultiNTensorField2D<PRECOMP_T>& originalField, Box2D const& subDomain, bool crop );
+    MultiNTensorField2D<PRECOMP_T>& originalField, Box2D const& subDomain, bool crop );
 
 template
 MultiNTensorField2D<PRECOMP_T>* generateMultiNTensorField<PRECOMP_T> (
-        MultiBlock2D const& originalField, Box2D const& intersection,
-        plint nDim, bool crop );
+    MultiBlock2D const& originalField, Box2D const& intersection,
+    plint nDim, bool crop );
 
 template
 MultiNTensorField2D<PRECOMP_T>* generateIntersectMultiNTensorField<PRECOMP_T> (
-        MultiBlock2D const& originalField1,
-        MultiBlock2D const& originalField2,
-        plint nDim, bool crop );
+    MultiBlock2D const& originalField1,
+    MultiBlock2D const& originalField2,
+    plint nDim, bool crop );
 
 template
 MultiNTensorField2D<PRECOMP_T>* generateIntersectMultiNTensorField<PRECOMP_T> (
-        MultiBlock2D const& originalField1,
-        MultiBlock2D const& originalField2,
-        Box2D const& intersection, plint nDim,  bool crop );
+    MultiBlock2D const& originalField1,
+    MultiBlock2D const& originalField2,
+    Box2D const& intersection, plint nDim,  bool crop );
 
 template
 MultiNTensorField2D<PRECOMP_T>* generateJoinMultiNTensorField<PRECOMP_T> (
-        MultiBlock2D const& originalField1,
-        MultiBlock2D const& originalField2,
-        plint nDim );
+    MultiBlock2D const& originalField1,
+    MultiBlock2D const& originalField2,
+    plint nDim );
 
 template
 MultiNTensorField2D<PRECOMP_T>* extend<PRECOMP_T> (
-        MultiNTensorField2D<PRECOMP_T>& originalBlock, Box2D const& addedBlock );
+    MultiNTensorField2D<PRECOMP_T>& originalBlock, Box2D const& addedBlock );
 
 template
 MultiNTensorField2D<PRECOMP_T>* except<PRECOMP_T> (
-        MultiNTensorField2D<PRECOMP_T>& originalBlock,
-        Box2D const& exceptedBlock );
+    MultiNTensorField2D<PRECOMP_T>& originalBlock,
+    Box2D const& exceptedBlock );
 
 template
 MultiNTensorField2D<PRECOMP_T>* align<PRECOMP_T> (
-        MultiNTensorField2D<PRECOMP_T> const& originalBlock,
-        MultiBlock2D const& partnerBlock );
+    MultiNTensorField2D<PRECOMP_T> const& originalBlock,
+    MultiBlock2D const& partnerBlock );
 
 template
 MultiNTensorField2D<PRECOMP_T>* reparallelize<PRECOMP_T> (
-        MultiNTensorField2D<PRECOMP_T> const& originalBlock );
+    MultiNTensorField2D<PRECOMP_T> const& originalBlock );
 
 
 template
-std::unique_ptr<MultiScalarField2D<PRECOMP_T> > defaultGenerateMultiScalarField2D<PRECOMP_T> (
-        MultiBlockManagement2D const& management, PRECOMP_T iniVal );
+std::auto_ptr<MultiScalarField2D<PRECOMP_T> > defaultGenerateMultiScalarField2D<PRECOMP_T> (
+    MultiBlockManagement2D const& management, PRECOMP_T iniVal );
 
 }  // namespace plb

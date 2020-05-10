@@ -48,7 +48,7 @@ void MultiFreeSurfaceOneWayCoupling3D<T,Descriptor>
 {
     PLB_ASSERT(atomicBlocks.size() == 20);
 
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     std::vector<AtomicBlock3D*> atomicBlocks1, atomicBlocks2;
 
@@ -105,7 +105,7 @@ void MultiFreeSurfaceVelocityContinuityCoupling3D<T,Descriptor>
 {
     PLB_ASSERT(atomicBlocks.size() == 20);
 
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     std::vector<AtomicBlock3D*> atomicBlocks1, atomicBlocks2;
 
@@ -236,7 +236,7 @@ void MultiFreeSurfaceRepellingForceCoupling3D<T,Descriptor>
 {
     PLB_ASSERT(atomicBlocks.size() == 20);
 
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     std::vector<AtomicBlock3D*> atomicBlocks1, atomicBlocks2;
 
@@ -452,7 +452,7 @@ void MultiFreeSurfaceComplexCoupling3D<T,Descriptor>
 {
     PLB_ASSERT(atomicBlocks.size() == 20);
 
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     std::vector<AtomicBlock3D*> atomicBlocks1, atomicBlocks2;
 

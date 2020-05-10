@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,41 +34,43 @@
 #include "atomicBlock/atomicContainerBlock2D.h"
 #include "multiBlock/multiBlock2D.h"
 
-namespace plb {
+namespace plb
+{
 
-class MultiContainerBlock2D : public MultiBlock2D {
+class MultiContainerBlock2D : public MultiBlock2D
+{
 public:
-    typedef std::map<plint,AtomicContainerBlock2D*> BlockMap;
+	typedef std::map<plint,AtomicContainerBlock2D*> BlockMap;
 public:
-    MultiContainerBlock2D (
-            MultiBlockManagement2D const& multiBlockManagement_,
-            CombinedStatistics* combinedStatistics_ );
-    MultiContainerBlock2D(plint nx_, plint ny);
-    MultiContainerBlock2D(MultiBlock2D const& rhs);
-    MultiContainerBlock2D(MultiBlock2D const& rhs, Box2D subDomain, bool crop);
-    ~MultiContainerBlock2D();
-    MultiContainerBlock2D& operator=(MultiContainerBlock2D const& rhs);
-    MultiContainerBlock2D(MultiContainerBlock2D const& rhs);
-    MultiContainerBlock2D* clone() const;
-    MultiContainerBlock2D* clone(MultiBlockManagement2D const& multiBlockManagement) const;
-    void swap(MultiContainerBlock2D& rhs);
-    std::string getBlockName() const;
-    std::vector<std::string> getTypeInfo() const;
+	MultiContainerBlock2D (
+	    MultiBlockManagement2D const& multiBlockManagement_,
+	    CombinedStatistics* combinedStatistics_ );
+	MultiContainerBlock2D(plint nx_, plint ny);
+	MultiContainerBlock2D(MultiBlock2D const& rhs);
+	MultiContainerBlock2D(MultiBlock2D const& rhs, Box2D subDomain, bool crop);
+	~MultiContainerBlock2D();
+	MultiContainerBlock2D& operator=(MultiContainerBlock2D const& rhs);
+	MultiContainerBlock2D(MultiContainerBlock2D const& rhs);
+	MultiContainerBlock2D* clone() const;
+	MultiContainerBlock2D* clone(MultiBlockManagement2D const& multiBlockManagement) const;
+	void swap(MultiContainerBlock2D& rhs);
+	std::string getBlockName() const;
+	std::vector<std::string> getTypeInfo() const;
 public:
-    virtual AtomicContainerBlock2D& getComponent(plint iBlock);
-    virtual AtomicContainerBlock2D const& getComponent(plint iBlock) const;
-    virtual plint sizeOfCell() const;
-    virtual plint getCellDim() const;
-    virtual int getStaticId() const;
-    virtual void copyReceive (
-                MultiBlock2D const& fromBlock, Box2D const& fromDomain,
-                Box2D const& toDomain, modif::ModifT whichData=modif::dataStructure );
+	virtual AtomicContainerBlock2D& getComponent(plint iBlock);
+	virtual AtomicContainerBlock2D const& getComponent(plint iBlock) const;
+	virtual plint sizeOfCell() const;
+	virtual plint getCellDim() const;
+	virtual int getStaticId() const;
+	virtual void copyReceive (
+	    MultiBlock2D const& fromBlock, Box2D const& fromDomain,
+	    Box2D const& toDomain, modif::ModifT whichData=modif::dataStructure );
 private:
-    void allocateBlocks();
-    void allocateBlocks(MultiContainerBlock2D const& rhs);
-    void deAllocateBlocks();
+	void allocateBlocks();
+	void allocateBlocks(MultiContainerBlock2D const& rhs);
+	void deAllocateBlocks();
 private:
-    BlockMap blocks;
+	BlockMap blocks;
 };
 
 MultiContainerBlock2D* createContainerBlock(MultiBlock2D& templ, ContainerBlockData* data);
@@ -76,4 +78,3 @@ MultiContainerBlock2D* createContainerBlock(MultiBlock2D& templ, ContainerBlockD
 }  // namespace plb
 
 #endif  // MULTI_CONTAINER_BLOCK_2D_H
-

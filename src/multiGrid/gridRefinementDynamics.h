@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -37,7 +37,8 @@
 #include "boundaryCondition/boundaryDynamics.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 /// Dynamics attributed to boundary cell of fine lattice with grid refinement
 /** This Dynamics
@@ -47,40 +48,41 @@ namespace plb {
  *    executes ordinary collision
  */
 template<typename T, template<typename U> class Descriptor>
-class FineGridBoundaryDynamics : public BoundaryCompositeDynamics<T,Descriptor> {
+class FineGridBoundaryDynamics : public BoundaryCompositeDynamics<T,Descriptor>
+{
 public:
-    /// Constructor
-    /** \param referenceLattice_ From the reference lattice, the FineGridBoundaryDynamics
-     *                           determines the value of the current iteration.
-     *  \param numTimeSteps_ Number of iteration steps leading from time t0 to time t1
-     */
-    FineGridBoundaryDynamics (
-            Dynamics<T,Descriptor>* baseDynamics_,
-            TimeCounter const& timeCounter_,
-            plint numTimeSteps_,
-            plint orderOfDecomposition_ );
-    FineGridBoundaryDynamics(HierarchicUnserializer& unserializer);
-    virtual FineGridBoundaryDynamics<T,Descriptor>* clone() const;
-    bool isComposeable() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Serialize the dynamics object.
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    /// Un-Serialize the dynamics object.
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    /// Execute completion scheme before base collision
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
-    std::vector<T>& getDecomposedValues(plint whichTime);
-    std::vector<T> const& getDecomposedValues(plint whichTime) const;
+	/// Constructor
+	/** \param referenceLattice_ From the reference lattice, the FineGridBoundaryDynamics
+	 *                           determines the value of the current iteration.
+	 *  \param numTimeSteps_ Number of iteration steps leading from time t0 to time t1
+	 */
+	FineGridBoundaryDynamics (
+	    Dynamics<T,Descriptor>* baseDynamics_,
+	    TimeCounter const& timeCounter_,
+	    plint numTimeSteps_,
+	    plint orderOfDecomposition_ );
+	FineGridBoundaryDynamics(HierarchicUnserializer& unserializer);
+	virtual FineGridBoundaryDynamics<T,Descriptor>* clone() const;
+	bool isComposeable() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Serialize the dynamics object.
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	/// Un-Serialize the dynamics object.
+	virtual void unserialize(HierarchicUnserializer& unserializer);
+	/// Execute completion scheme before base collision
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	std::vector<T>& getDecomposedValues(plint whichTime);
+	std::vector<T> const& getDecomposedValues(plint whichTime) const;
 private:
-    TimeCounter defaultTimeCounter;
-    TimeCounter const& timeCounter;
-    plint numTimeSteps;
-    plint orderOfDecomposition;
-    std::vector<T> decomposedValuesT0;
-    std::vector<T> decomposedValuesT1;
+	TimeCounter defaultTimeCounter;
+	TimeCounter const& timeCounter;
+	plint numTimeSteps;
+	plint orderOfDecomposition;
+	std::vector<T> decomposedValuesT0;
+	std::vector<T> decomposedValuesT1;
 private:
-    static int id;
+	static int id;
 };
 
 

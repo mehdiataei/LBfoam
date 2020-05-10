@@ -700,7 +700,7 @@ inline MultiBlockManagement2D scaleMultiBlockManagement (
 
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > coarsen (
+std::auto_ptr<MultiScalarField2D<T> > coarsen (
         MultiScalarField2D<T>& fineField,
         plint dimDx, plint dimDt, plint dxScale, plint dtScale )
 {
@@ -717,11 +717,11 @@ std::unique_ptr<MultiScalarField2D<T> > coarsen (
             new ScalarCopyFineToCoarseZerothOrder2D<T>(dimDx,dimDt,dxScale,dtScale),
             fineField.getBoundingBox(), fineField, *result );
                             
-    return std::unique_ptr<MultiScalarField2D<T> >(result);
+    return std::auto_ptr<MultiScalarField2D<T> >(result);
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > coarsen (
+std::auto_ptr<MultiTensorField2D<T,nDim> > coarsen (
         MultiTensorField2D<T,nDim>& fineField,
         plint dimDx, plint dimDt, plint dxScale, plint dtScale )
 {
@@ -738,11 +738,11 @@ std::unique_ptr<MultiTensorField2D<T,nDim> > coarsen (
             new TensorCopyFineToCoarseZerothOrder2D<T,nDim>(dimDx,dimDt,dxScale,dtScale),
             fineField.getBoundingBox(), fineField, *result );
                             
-    return std::unique_ptr<MultiTensorField2D<T,nDim> >(result);
+    return std::auto_ptr<MultiTensorField2D<T,nDim> >(result);
 }
 
 template <typename T>
-std::unique_ptr<MultiScalarField2D<T> > refine (
+std::auto_ptr<MultiScalarField2D<T> > refine (
         MultiScalarField2D<T>& coarseField,
         plint dimDx, plint dimDt, plint dxScale, plint dtScale )
 {
@@ -760,11 +760,11 @@ std::unique_ptr<MultiScalarField2D<T> > refine (
             new ScalarInterpolateCoarseToFine2D<T>(dimDx,dimDt,dxScale,dtScale),
             coarseField.getBoundingBox(), coarseField, *result );
                             
-    return std::unique_ptr<MultiScalarField2D<T> >(result);
+    return std::auto_ptr<MultiScalarField2D<T> >(result);
 }
 
 template <typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > refine (
+std::auto_ptr<MultiTensorField2D<T,nDim> > refine (
         MultiTensorField2D<T,nDim>& coarseField,
         plint dimDx, plint dimDt, plint dxScale, plint dtScale )
 {
@@ -782,11 +782,11 @@ std::unique_ptr<MultiTensorField2D<T,nDim> > refine (
             new TensorInterpolateCoarseToFine2D<T,nDim>(dimDx,dimDt,dxScale,dtScale),
             coarseField.getBoundingBox(), coarseField, *result );
                             
-    return std::unique_ptr<MultiTensorField2D<T,nDim> >(result);
+    return std::auto_ptr<MultiTensorField2D<T,nDim> >(result);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > coarsen (
+std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > coarsen (
         MultiBlockLattice2D<T,Descriptor>& fineLattice,
         plint dxScale, plint dtScale, Dynamics<T,Descriptor>* backgroundDynamics )
 {
@@ -806,11 +806,11 @@ std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > coarsen (
             new LatticeCopyFineToCoarseZerothOrder2D<T,Descriptor>(dxScale,dtScale),
             fineLattice.getBoundingBox(), fineLattice, *result );
                             
-    return std::unique_ptr<MultiBlockLattice2D<T,Descriptor> >(result);
+    return std::auto_ptr<MultiBlockLattice2D<T,Descriptor> >(result);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > refine (
+std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > refine (
         MultiBlockLattice2D<T,Descriptor>& coarseLattice,
         plint dxScale, plint dtScale, Dynamics<T,Descriptor>* backgroundDynamics )
 {
@@ -830,11 +830,11 @@ std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > refine (
             new LatticeInterpolateCoarseToFine2D<T,Descriptor>(dxScale,dtScale),
             coarseLattice.getBoundingBox(), coarseLattice, *result );
                             
-    return std::unique_ptr<MultiBlockLattice2D<T,Descriptor> >(result);
+    return std::auto_ptr<MultiBlockLattice2D<T,Descriptor> >(result);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > linearRefine (
+std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > linearRefine (
         MultiBlockLattice2D<T,Descriptor>& coarseLattice,
         plint dxScale, plint dtScale, Dynamics<T,Descriptor>* backgroundDynamics )
 {
@@ -854,7 +854,7 @@ std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > linearRefine (
             new LatticeLinearInterpolateCoarseToFine2D<T,Descriptor>(dxScale,dtScale),
             coarseLattice.getBoundingBox(), coarseLattice, *result );
                             
-    return std::unique_ptr<MultiBlockLattice2D<T,Descriptor> >(result);
+    return std::auto_ptr<MultiBlockLattice2D<T,Descriptor> >(result);
 }
 
 }  // namespace plb

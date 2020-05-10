@@ -37,32 +37,48 @@
 // generic version for dense matrix and expressions
 template<typename Derived> class MatrixBase<Derived>::InnerIterator
 {
-    typedef typename Derived::Scalar Scalar;
-    enum { IsRowMajor = (Derived::Flags&RowMajorBit)==RowMajorBit };
-  public:
-    EIGEN_STRONG_INLINE InnerIterator(const Derived& expr, int outer)
-      : m_expression(expr), m_inner(0), m_outer(outer), m_end(expr.rows())
-    {}
+	typedef typename Derived::Scalar Scalar;
+	enum { IsRowMajor = (Derived::Flags&RowMajorBit)==RowMajorBit };
+public:
+	EIGEN_STRONG_INLINE InnerIterator(const Derived& expr, int outer)
+		: m_expression(expr), m_inner(0), m_outer(outer), m_end(expr.rows())
+	{}
 
-    EIGEN_STRONG_INLINE Scalar value() const
-    {
-      return (IsRowMajor) ? m_expression.coeff(m_outer, m_inner)
-                          : m_expression.coeff(m_inner, m_outer);
-    }
+	EIGEN_STRONG_INLINE Scalar value() const
+	{
+		return (IsRowMajor) ? m_expression.coeff(m_outer, m_inner)
+		       : m_expression.coeff(m_inner, m_outer);
+	}
 
-    EIGEN_STRONG_INLINE InnerIterator& operator++() { m_inner++; return *this; }
+	EIGEN_STRONG_INLINE InnerIterator& operator++()
+	{
+		m_inner++;
+		return *this;
+	}
 
-    EIGEN_STRONG_INLINE int index() const { return m_inner; }
-    inline int row() const { return IsRowMajor ? m_outer : index(); }
-    inline int col() const { return IsRowMajor ? index() : m_outer; }
+	EIGEN_STRONG_INLINE int index() const
+	{
+		return m_inner;
+	}
+	inline int row() const
+	{
+		return IsRowMajor ? m_outer : index();
+	}
+	inline int col() const
+	{
+		return IsRowMajor ? index() : m_outer;
+	}
 
-    EIGEN_STRONG_INLINE operator bool() const { return m_inner < m_end && m_inner>=0; }
+	EIGEN_STRONG_INLINE operator bool() const
+	{
+		return m_inner < m_end && m_inner>=0;
+	}
 
-  protected:
-    const Derived& m_expression;
-    int m_inner;
-    const int m_outer;
-    const int m_end;
+protected:
+	const Derived& m_expression;
+	int m_inner;
+	const int m_outer;
+	const int m_end;
 };
 
 #endif // EIGEN_COREITERATORS_H

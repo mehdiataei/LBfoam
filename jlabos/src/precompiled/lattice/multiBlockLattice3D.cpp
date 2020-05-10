@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,16 +35,17 @@
 #include "coProcessors/coProcessor3D.h"
 #include "coProcessors/coProcessor3D.hh"
 
-namespace plb {
+namespace plb
+{
 
-    template class MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>;
 
-    template double getStoredAverageDensity<FLOAT_T, descriptors::DESCRIPTOR_3D>
-        (MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& blockLattice);
-    template double getStoredAverageEnergy<FLOAT_T, descriptors::DESCRIPTOR_3D>
-        (MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& blockLattice);
-    template double getStoredMaxVelocity<FLOAT_T, descriptors::DESCRIPTOR_3D>
-        (MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& blockLattice);
+template double getStoredAverageDensity<FLOAT_T, descriptors::DESCRIPTOR_3D>
+(MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& blockLattice);
+template double getStoredAverageEnergy<FLOAT_T, descriptors::DESCRIPTOR_3D>
+(MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& blockLattice);
+template double getStoredMaxVelocity<FLOAT_T, descriptors::DESCRIPTOR_3D>
+(MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& blockLattice);
 
 }
 

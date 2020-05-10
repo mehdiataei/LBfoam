@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -39,89 +39,85 @@
 #include "core/globalDefs.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 
-namespace plb {
+namespace plb
+{
 
-namespace descriptors {
+namespace descriptors
+{
 
-    struct ExternalOmegaDescriptor3d {
-        static const int numScalars    = 1;
-        static const int numSpecies    = 1;
-        static const int omegaBeginsAt = 0;
-        static const int sizeOfOmega   = 1;
-    };
+struct ExternalOmegaDescriptor3d {
+	static const int numScalars    = 1;
+	static const int numSpecies    = 1;
+	static const int omegaBeginsAt = 0;
+	static const int sizeOfOmega   = 1;
+};
 
-    struct ExternalOmegaBase3d {
-        typedef ExternalOmegaDescriptor3d ExternalField;
-    };
+struct ExternalOmegaBase3d {
+	typedef ExternalOmegaDescriptor3d ExternalField;
+};
 
-    struct ExternalOmegaAndForceDescriptor3d {
-        static const int numScalars    = 4;
-        static const int numSpecies    = 2;
-        static const int omegaBeginsAt = 0;
-        static const int sizeOfOmega   = 1;
-        static const int forceBeginsAt = 1;
-        static const int sizeOfForce   = 3;
-    };
+struct ExternalOmegaAndForceDescriptor3d {
+	static const int numScalars    = 4;
+	static const int numSpecies    = 2;
+	static const int omegaBeginsAt = 0;
+	static const int sizeOfOmega   = 1;
+	static const int forceBeginsAt = 1;
+	static const int sizeOfForce   = 3;
+};
 
-    struct ExternalOmegaAndForceBase3d {
-        typedef ExternalOmegaAndForceDescriptor3d ExternalField;
-    };
+struct ExternalOmegaAndForceBase3d {
+	typedef ExternalOmegaAndForceDescriptor3d ExternalField;
+};
 
-    template <typename T> struct ExternalOmegaD3Q19Descriptor
-        : public D3Q19DescriptorBase<T>, public ExternalOmegaBase3d
-    {
-        static const char name[];
-    };
+template <typename T> struct ExternalOmegaD3Q19Descriptor
+	: public D3Q19DescriptorBase<T>, public ExternalOmegaBase3d {
+	static const char name[];
+};
 
-    template <typename T> struct ForcedExternalOmegaD3Q19Descriptor
-        : public D3Q19DescriptorBase<T>, public ExternalOmegaAndForceBase3d
-    {
-        static const char name[];
-    };
+template <typename T> struct ForcedExternalOmegaD3Q19Descriptor
+	: public D3Q19DescriptorBase<T>, public ExternalOmegaAndForceBase3d {
+	static const char name[];
+};
 
-    template<typename T>
-    const char ExternalOmegaD3Q19Descriptor<T>::name[] = "ExternalOmegaD3Q19";
+template<typename T>
+const char ExternalOmegaD3Q19Descriptor<T>::name[] = "ExternalOmegaD3Q19";
 
-    template<typename T>
-    const char ForcedExternalOmegaD3Q19Descriptor<T>::name[] = "ExternalOmegaAndForceD3Q19";
-
-
-    template <typename T> struct ExternalOmegaD3Q15Descriptor
-        : public D3Q15DescriptorBase<T>, public ExternalOmegaBase3d
-    {
-        static const char name[];
-    };
-
-    template <typename T> struct ForcedExternalOmegaD3Q15Descriptor
-        : public D3Q15DescriptorBase<T>, public ExternalOmegaAndForceBase3d
-    {
-        static const char name[];
-    };
-
-    template<typename T>
-    const char ExternalOmegaD3Q15Descriptor<T>::name[] = "ExternalOmegaD3Q15";
-
-    template<typename T>
-    const char ForcedExternalOmegaD3Q15Descriptor<T>::name[] = "ExternalOmegaAndForceD3Q15";
+template<typename T>
+const char ForcedExternalOmegaD3Q19Descriptor<T>::name[] = "ExternalOmegaAndForceD3Q19";
 
 
-    template <typename T> struct ExternalOmegaD3Q27Descriptor
-        : public D3Q27DescriptorBase<T>, public ExternalOmegaBase3d
-    {
-        static const char name[];
-    };
+template <typename T> struct ExternalOmegaD3Q15Descriptor
+	: public D3Q15DescriptorBase<T>, public ExternalOmegaBase3d {
+	static const char name[];
+};
 
-    template <typename T> struct ForcedExternalOmegaD3Q27Descriptor
-        : public D3Q27DescriptorBase<T>, public ExternalOmegaAndForceBase3d
-    {
-        static const char name[];
-    };
+template <typename T> struct ForcedExternalOmegaD3Q15Descriptor
+	: public D3Q15DescriptorBase<T>, public ExternalOmegaAndForceBase3d {
+	static const char name[];
+};
 
-    template<typename T>
-    const char ExternalOmegaD3Q27Descriptor<T>::name[] = "ExternalOmegaD3Q27";
+template<typename T>
+const char ExternalOmegaD3Q15Descriptor<T>::name[] = "ExternalOmegaD3Q15";
 
-    template<typename T>
-    const char ForcedExternalOmegaD3Q27Descriptor<T>::name[] = "ExternalOmegaAndForceD3Q27";
+template<typename T>
+const char ForcedExternalOmegaD3Q15Descriptor<T>::name[] = "ExternalOmegaAndForceD3Q15";
+
+
+template <typename T> struct ExternalOmegaD3Q27Descriptor
+	: public D3Q27DescriptorBase<T>, public ExternalOmegaBase3d {
+	static const char name[];
+};
+
+template <typename T> struct ForcedExternalOmegaD3Q27Descriptor
+	: public D3Q27DescriptorBase<T>, public ExternalOmegaAndForceBase3d {
+	static const char name[];
+};
+
+template<typename T>
+const char ExternalOmegaD3Q27Descriptor<T>::name[] = "ExternalOmegaD3Q27";
+
+template<typename T>
+const char ForcedExternalOmegaD3Q27Descriptor<T>::name[] = "ExternalOmegaAndForceD3Q27";
 
 }  // namespace descriptors
 

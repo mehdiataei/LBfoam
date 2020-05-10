@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,25 +34,26 @@
 #include "latticeBoltzmann/nearestNeighborLattices2D.hh"
 
 
-namespace plb {
+namespace plb
+{
 
 template
 MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>*
-    generateMultiBlockLattice2D (
-            Box2D const& domain,
-            Dynamics<FLOAT_T,descriptors::DESCRIPTOR_2D> const* backgroundDynamics );
+generateMultiBlockLattice2D (
+    Box2D const& domain,
+    Dynamics<FLOAT_T,descriptors::DESCRIPTOR_2D> const* backgroundDynamics );
 
 template
 MultiNTensorField2D<FLOAT_T>*
-    generateNTensorFieldFromLattice2D (
-            MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& lattice,
-            Box2D const& domain, plint ndim );
+generateNTensorFieldFromLattice2D (
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& lattice,
+    Box2D const& domain, plint ndim );
 
 template
 MultiNTensorField2D<int>*
-    generateNTensorFieldFromLattice2D (
-            MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& lattice,
-            Box2D const& domain, plint ndim);
+generateNTensorFieldFromLattice2D (
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& lattice,
+    Box2D const& domain, plint ndim);
 
 }  // namespace plb
 

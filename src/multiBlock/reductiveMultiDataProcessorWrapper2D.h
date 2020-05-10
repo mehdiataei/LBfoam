@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -41,7 +41,8 @@
 
 #include "atomicBlock/reductiveDataProcessingFunctional2D.h"
 
-namespace plb {
+namespace plb
+{
 
 class MultiBlock2D;
 template<typename T, template<typename U> class Descriptor> class MultiBlockLattice2D;
@@ -62,36 +63,36 @@ void applyProcessingFunctional(ReductiveBoxProcessingFunctional2D& functional,
 /// of the functional.
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        ReductiveLatticeBoxProcessingFunctional2D<T,Descriptor>& functional,
-        Box2D domain,
-        std::vector<MultiBlockLattice2D<T,Descriptor>*> lattices );
+    ReductiveLatticeBoxProcessingFunctional2D<T,Descriptor>& functional,
+    Box2D domain,
+    std::vector<MultiBlockLattice2D<T,Descriptor>*> lattices );
 
 /// Apply a functional on a sequence of scalar-fields. If the number
 /// of lattices is 1 or 2, you should prefer the _S and _SS version
 /// of the functional.
 template<typename T>
 void applyProcessingFunctional (
-        ReductiveScalarFieldBoxProcessingFunctional2D<T>& functional,
-        Box2D domain,
-        std::vector<MultiScalarField2D<T>*> fields );
+    ReductiveScalarFieldBoxProcessingFunctional2D<T>& functional,
+    Box2D domain,
+    std::vector<MultiScalarField2D<T>*> fields );
 
 /// Apply a functional on a sequence of tensor-fields. If the number
 /// of lattices is 1 or 2, you should prefer the _T and _TT version
 /// of the functional.
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        ReductiveTensorFieldBoxProcessingFunctional2D<T,nDim>& functional,
-        Box2D domain,
-        std::vector<MultiTensorField2D<T,nDim>*> fields );
+    ReductiveTensorFieldBoxProcessingFunctional2D<T,nDim>& functional,
+    Box2D domain,
+    std::vector<MultiTensorField2D<T,nDim>*> fields );
 
 /// Apply a functional on a sequence of n-tensor-fields. If the number
 /// of lattices is 1 or 2, you should prefer the _N and _NN version
 /// of the functional.
 template<typename T>
 void applyProcessingFunctional (
-        ReductiveNTensorFieldBoxProcessingFunctional2D<T>& functional,
-        Box2D domain,
-        std::vector<MultiNTensorField2D<T>*> fields );
+    ReductiveNTensorFieldBoxProcessingFunctional2D<T>& functional,
+    Box2D domain,
+    std::vector<MultiNTensorField2D<T>*> fields );
 
 /* *************** Typed wrappers with a single argument, boxed functionals * */
 
@@ -112,7 +113,7 @@ void applyProcessingFunctional(ReductiveBoxProcessingFunctional2D_N<T>& function
                                Box2D domain, MultiNTensorField2D<T>& field);
 
 template<typename T>
-    void applyProcessingFunctional(MaskedReductiveBoxProcessingFunctional2D_N<T>& functional,
+void applyProcessingFunctional(MaskedReductiveBoxProcessingFunctional2D_N<T>& functional,
                                Box2D domain,
                                MultiNTensorField2D<T>& field,
                                MultiNTensorField2D<int>& mask);
@@ -122,10 +123,10 @@ template<typename T>
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        ReductiveBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>& functional,
-        Box2D domain,
-        MultiBlockLattice2D<T1,Descriptor1>& lattice1,
-        MultiBlockLattice2D<T2,Descriptor2>& lattice2 );
+    ReductiveBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>& functional,
+    Box2D domain,
+    MultiBlockLattice2D<T1,Descriptor1>& lattice1,
+    MultiBlockLattice2D<T2,Descriptor2>& lattice2 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional(ReductiveBoxProcessingFunctional2D_SS<T1,T2>& functional,
@@ -135,25 +136,25 @@ void applyProcessingFunctional(ReductiveBoxProcessingFunctional2D_SS<T1,T2>& fun
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        ReductiveBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>& functional,
-        Box2D domain,
-        MultiTensorField2D<T1,nDim1>& field1,
-        MultiTensorField2D<T2,nDim2>& field2 );
+    ReductiveBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>& functional,
+    Box2D domain,
+    MultiTensorField2D<T1,nDim1>& field1,
+    MultiTensorField2D<T2,nDim2>& field2 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        ReductiveBoxProcessingFunctional2D_NN<T1,T2>& functional,
-        Box2D domain,
-        MultiNTensorField2D<T1>& field1,
-        MultiNTensorField2D<T2>& field2 );
+    ReductiveBoxProcessingFunctional2D_NN<T1,T2>& functional,
+    Box2D domain,
+    MultiNTensorField2D<T1>& field1,
+    MultiNTensorField2D<T2>& field2 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-            MaskedReductiveBoxProcessingFunctional2D_NN<T1,T2>& functional,
-        Box2D domain,
-        MultiNTensorField2D<T1>& field1,
-        MultiNTensorField2D<T2>& field2,
-        MultiNTensorField2D<int>& mask );
+    MaskedReductiveBoxProcessingFunctional2D_NN<T1,T2>& functional,
+    Box2D domain,
+    MultiNTensorField2D<T1>& field1,
+    MultiNTensorField2D<T2>& field2,
+    MultiNTensorField2D<int>& mask );
 
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional(ReductiveBoxProcessingFunctional2D_ST<T1,T2,nDim>& functional,
@@ -169,32 +170,32 @@ void applyProcessingFunctional(ReductiveBoxProcessingFunctional2D_SN<T1,T2>& fun
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        ReductiveBoxProcessingFunctional2D_LS<T1,Descriptor,T2>& functional,
-        Box2D domain,
-        MultiBlockLattice2D<T1,Descriptor>& lattice,
-        MultiScalarField2D<T2>& field );
+    ReductiveBoxProcessingFunctional2D_LS<T1,Descriptor,T2>& functional,
+    Box2D domain,
+    MultiBlockLattice2D<T1,Descriptor>& lattice,
+    MultiScalarField2D<T2>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        ReductiveBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>& functional,
-        Box2D domain,
-        MultiBlockLattice2D<T1,Descriptor>& lattice,
-        MultiTensorField2D<T2,nDim>& field );
+    ReductiveBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>& functional,
+    Box2D domain,
+    MultiBlockLattice2D<T1,Descriptor>& lattice,
+    MultiTensorField2D<T2,nDim>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        ReductiveBoxProcessingFunctional2D_LN<T1,Descriptor,T2>& functional,
-        Box2D domain,
-        MultiBlockLattice2D<T1,Descriptor>& lattice,
-        MultiNTensorField2D<T2>& field );
+    ReductiveBoxProcessingFunctional2D_LN<T1,Descriptor,T2>& functional,
+    Box2D domain,
+    MultiBlockLattice2D<T1,Descriptor>& lattice,
+    MultiNTensorField2D<T2>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-            MaskedReductiveBoxProcessingFunctional2D_LN<T1,Descriptor,T2>& functional,
-        Box2D domain,
-        MultiBlockLattice2D<T1,Descriptor>& lattice,
-        MultiNTensorField2D<T2>& field,
-        MultiNTensorField2D<int>& mask );
+    MaskedReductiveBoxProcessingFunctional2D_LN<T1,Descriptor,T2>& functional,
+    Box2D domain,
+    MultiBlockLattice2D<T1,Descriptor>& lattice,
+    MultiNTensorField2D<T2>& field,
+    MultiNTensorField2D<int>& mask );
 
 
 /* *************** Generic wrappers, dotted functionals ********************* */
@@ -205,36 +206,36 @@ void applyProcessingFunctional(ReductiveDotProcessingFunctional2D& functional,
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        ReductiveLatticeDotProcessingFunctional2D<T,Descriptor>& functional,
-        DotList2D const& dotList,
-        std::vector<MultiBlockLattice2D<T,Descriptor>*> lattices );
+    ReductiveLatticeDotProcessingFunctional2D<T,Descriptor>& functional,
+    DotList2D const& dotList,
+    std::vector<MultiBlockLattice2D<T,Descriptor>*> lattices );
 
 template<typename T>
 void applyProcessingFunctional (
-        ReductiveScalarFieldDotProcessingFunctional2D<T>& functional,
-        DotList2D const& dotList,
-        std::vector<MultiScalarField2D<T>*> fields );
+    ReductiveScalarFieldDotProcessingFunctional2D<T>& functional,
+    DotList2D const& dotList,
+    std::vector<MultiScalarField2D<T>*> fields );
 
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        ReductiveTensorFieldDotProcessingFunctional2D<T,nDim>& functional,
-        DotList2D const& dotList,
-        std::vector<MultiTensorField2D<T,nDim>*> fields );
+    ReductiveTensorFieldDotProcessingFunctional2D<T,nDim>& functional,
+    DotList2D const& dotList,
+    std::vector<MultiTensorField2D<T,nDim>*> fields );
 
 template<typename T>
 void applyProcessingFunctional (
-        ReductiveNTensorFieldDotProcessingFunctional2D<T>& functional,
-        DotList2D const& dotList,
-        std::vector<MultiNTensorField2D<T>*> fields );
+    ReductiveNTensorFieldDotProcessingFunctional2D<T>& functional,
+    DotList2D const& dotList,
+    std::vector<MultiNTensorField2D<T>*> fields );
 
 
 /* *************** Typed wrappers with a single argument, dotted functionals* */
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        ReductiveDotProcessingFunctional2D_L<T,Descriptor>& functional,
-        DotList2D const& dotList,
-        MultiBlockLattice2D<T,Descriptor>& lattice );
+    ReductiveDotProcessingFunctional2D_L<T,Descriptor>& functional,
+    DotList2D const& dotList,
+    MultiBlockLattice2D<T,Descriptor>& lattice );
 
 template<typename T>
 void applyProcessingFunctional(ReductiveDotProcessingFunctional2D_S<T>& functional,
@@ -257,10 +258,10 @@ void applyProcessingFunctional(ReductiveDotProcessingFunctional2D_N<T>& function
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        ReductiveDotProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>& functional,
-        DotList2D const& dotList,
-        MultiBlockLattice2D<T1,Descriptor1>& lattice1,
-        MultiBlockLattice2D<T2,Descriptor2>& lattice2 );
+    ReductiveDotProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>& functional,
+    DotList2D const& dotList,
+    MultiBlockLattice2D<T1,Descriptor1>& lattice1,
+    MultiBlockLattice2D<T2,Descriptor2>& lattice2 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional(ReductiveDotProcessingFunctional2D_SS<T1,T2>& functional,
@@ -271,52 +272,52 @@ void applyProcessingFunctional(ReductiveDotProcessingFunctional2D_SS<T1,T2>& fun
 /// Easy instantiation of dotted data processor for MultiTensorField-MultiTensorField coupling
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        ReductiveDotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>& functional,
-        DotList2D const& dotList,
-        MultiTensorField2D<T1,nDim1>& field1,
-        MultiTensorField2D<T2,nDim2>& field2 );
+    ReductiveDotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>& functional,
+    DotList2D const& dotList,
+    MultiTensorField2D<T1,nDim1>& field1,
+    MultiTensorField2D<T2,nDim2>& field2 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        ReductiveDotProcessingFunctional2D_NN<T1,T2>& functional,
-        DotList2D const& dotList,
-        MultiNTensorField2D<T1>& field1,
-        MultiNTensorField2D<T2>& field2 );
+    ReductiveDotProcessingFunctional2D_NN<T1,T2>& functional,
+    DotList2D const& dotList,
+    MultiNTensorField2D<T1>& field1,
+    MultiNTensorField2D<T2>& field2 );
 
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional (
-        ReductiveDotProcessingFunctional2D_ST<T1,T2,nDim>& functional,
-        DotList2D const& dotList,
-        MultiScalarField2D<T1>& field1,
-        MultiTensorField2D<T2,nDim>& field2 );
+    ReductiveDotProcessingFunctional2D_ST<T1,T2,nDim>& functional,
+    DotList2D const& dotList,
+    MultiScalarField2D<T1>& field1,
+    MultiTensorField2D<T2,nDim>& field2 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        ReductiveDotProcessingFunctional2D_SN<T1,T2>& functional,
-        DotList2D const& dotList,
-        MultiScalarField2D<T1>& field1,
-        MultiNTensorField2D<T2>& field2 );
+    ReductiveDotProcessingFunctional2D_SN<T1,T2>& functional,
+    DotList2D const& dotList,
+    MultiScalarField2D<T1>& field1,
+    MultiNTensorField2D<T2>& field2 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        ReductiveDotProcessingFunctional2D_LS<T1,Descriptor,T2>& functional,
-        DotList2D const& dotList,
-        MultiBlockLattice2D<T1,Descriptor>& lattice,
-        MultiScalarField2D<T2>& field );
+    ReductiveDotProcessingFunctional2D_LS<T1,Descriptor,T2>& functional,
+    DotList2D const& dotList,
+    MultiBlockLattice2D<T1,Descriptor>& lattice,
+    MultiScalarField2D<T2>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        ReductiveDotProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>& functional,
-        DotList2D const& dotList,
-        MultiBlockLattice2D<T1,Descriptor>& lattice,
-        MultiTensorField2D<T2,nDim>& field );
+    ReductiveDotProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>& functional,
+    DotList2D const& dotList,
+    MultiBlockLattice2D<T1,Descriptor>& lattice,
+    MultiTensorField2D<T2,nDim>& field );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        ReductiveDotProcessingFunctional2D_LN<T1,Descriptor,T2>& functional,
-        DotList2D const& dotList,
-        MultiBlockLattice2D<T1,Descriptor>& lattice,
-        MultiNTensorField2D<T2>& field );
+    ReductiveDotProcessingFunctional2D_LN<T1,Descriptor,T2>& functional,
+    DotList2D const& dotList,
+    MultiBlockLattice2D<T1,Descriptor>& lattice,
+    MultiNTensorField2D<T2>& field );
 
 /* *************** Generic wrappers, bounded and boxed functionals ********** */
 
@@ -326,38 +327,38 @@ void applyProcessingFunctional(BoundedReductiveBoxProcessingFunctional2D& functi
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        BoundedReductiveLatticeBoxProcessingFunctional2D<T,Descriptor>& functional,
-        Box2D domain,
-        std::vector<MultiBlockLattice2D<T,Descriptor>*> lattices,
-        plint boundaryWidth = Descriptor<T>::boundaryWidth );
+    BoundedReductiveLatticeBoxProcessingFunctional2D<T,Descriptor>& functional,
+    Box2D domain,
+    std::vector<MultiBlockLattice2D<T,Descriptor>*> lattices,
+    plint boundaryWidth = Descriptor<T>::boundaryWidth );
 
 template<typename T>
 void applyProcessingFunctional (
-        BoundedReductiveScalarFieldBoxProcessingFunctional2D<T>& functional,
-        Box2D domain, std::vector<MultiScalarField2D<T>*> fields,
-        plint boundaryWidth );
+    BoundedReductiveScalarFieldBoxProcessingFunctional2D<T>& functional,
+    Box2D domain, std::vector<MultiScalarField2D<T>*> fields,
+    plint boundaryWidth );
 
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        BoundedReductiveTensorFieldBoxProcessingFunctional2D<T,nDim>& functional,
-        Box2D domain, std::vector<MultiTensorField2D<T,nDim>*> fields,
-        plint boundaryWidth );
+    BoundedReductiveTensorFieldBoxProcessingFunctional2D<T,nDim>& functional,
+    Box2D domain, std::vector<MultiTensorField2D<T,nDim>*> fields,
+    plint boundaryWidth );
 
 template<typename T>
 void applyProcessingFunctional (
-        BoundedReductiveNTensorFieldBoxProcessingFunctional2D<T>& functional,
-        Box2D domain, std::vector<MultiNTensorField2D<T>*> fields,
-        plint boundaryWidth );
+    BoundedReductiveNTensorFieldBoxProcessingFunctional2D<T>& functional,
+    Box2D domain, std::vector<MultiNTensorField2D<T>*> fields,
+    plint boundaryWidth );
 
 
 /* ** Typed wrappers with a single argument, bounded and boxed functionals * */
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        BoundedReductiveBoxProcessingFunctional2D_L<T,Descriptor>& functional,
-        Box2D domain,
-        MultiBlockLattice2D<T,Descriptor>& lattice,
-        plint boundaryWidth = Descriptor<T>::boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional2D_L<T,Descriptor>& functional,
+    Box2D domain,
+    MultiBlockLattice2D<T,Descriptor>& lattice,
+    plint boundaryWidth = Descriptor<T>::boundaryWidth );
 
 template<typename T>
 void applyProcessingFunctional(BoundedReductiveBoxProcessingFunctional2D_S<T>& functional,
@@ -387,93 +388,93 @@ void applyProcessingFunctional(BoundedMaskedReductiveBoxProcessingFunctional2D_N
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        BoundedReductiveBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>& functional,
-        Box2D domain,
-        MultiBlockLattice2D<T1,Descriptor1>& lattice1,
-        MultiBlockLattice2D<T2,Descriptor2>& lattice2,
-        plint boundaryWidth = Descriptor1<T1>::boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>& functional,
+    Box2D domain,
+    MultiBlockLattice2D<T1,Descriptor1>& lattice1,
+    MultiBlockLattice2D<T2,Descriptor2>& lattice2,
+    plint boundaryWidth = Descriptor1<T1>::boundaryWidth );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoundedReductiveBoxProcessingFunctional2D_SS<T1,T2>& functional,
-        Box2D domain,
-        MultiScalarField2D<T1>& field1,
-        MultiScalarField2D<T2>& field2,
-        plint boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional2D_SS<T1,T2>& functional,
+    Box2D domain,
+    MultiScalarField2D<T1>& field1,
+    MultiScalarField2D<T2>& field2,
+    plint boundaryWidth );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        BoundedReductiveBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>& functional,
-        Box2D domain,
-        MultiTensorField2D<T1,nDim1>& field1,
-        MultiTensorField2D<T2,nDim2>& field2,
-        plint boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>& functional,
+    Box2D domain,
+    MultiTensorField2D<T1,nDim1>& field1,
+    MultiTensorField2D<T2,nDim2>& field2,
+    plint boundaryWidth );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoundedReductiveBoxProcessingFunctional2D_NN<T1,T2>& functional,
-        Box2D domain,
-        MultiNTensorField2D<T1>& field1,
-        MultiNTensorField2D<T2>& field2,
-        plint boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional2D_NN<T1,T2>& functional,
+    Box2D domain,
+    MultiNTensorField2D<T1>& field1,
+    MultiNTensorField2D<T2>& field2,
+    plint boundaryWidth );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoundedMaskedReductiveBoxProcessingFunctional2D_NN<T1,T2>& functional,
-        Box2D domain,
-        MultiNTensorField2D<T1>& field1,
-        MultiNTensorField2D<T2>& field2,
-        MultiNTensorField2D<int>& mask,
-        plint boundaryWidth );
+    BoundedMaskedReductiveBoxProcessingFunctional2D_NN<T1,T2>& functional,
+    Box2D domain,
+    MultiNTensorField2D<T1>& field1,
+    MultiNTensorField2D<T2>& field2,
+    MultiNTensorField2D<int>& mask,
+    plint boundaryWidth );
 
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional (
-        BoundedReductiveBoxProcessingFunctional2D_ST<T1,T2,nDim>& functional,
-        Box2D domain,
-        MultiScalarField2D<T1>& field1,
-        MultiTensorField2D<T2,nDim>& field2,
-        plint boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional2D_ST<T1,T2,nDim>& functional,
+    Box2D domain,
+    MultiScalarField2D<T1>& field1,
+    MultiTensorField2D<T2,nDim>& field2,
+    plint boundaryWidth );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoundedReductiveBoxProcessingFunctional2D_SN<T1,T2>& functional,
-        Box2D domain,
-        MultiScalarField2D<T1>& field1,
-        MultiNTensorField2D<T2>& field2,
-        plint boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional2D_SN<T1,T2>& functional,
+    Box2D domain,
+    MultiScalarField2D<T1>& field1,
+    MultiNTensorField2D<T2>& field2,
+    plint boundaryWidth );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoundedReductiveBoxProcessingFunctional2D_LS<T1,Descriptor,T2>& functional,
-        Box2D domain,
-        MultiBlockLattice2D<T1,Descriptor>& lattice,
-        MultiScalarField2D<T2>& field,
-        plint boundaryWidth = Descriptor<T1>::boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional2D_LS<T1,Descriptor,T2>& functional,
+    Box2D domain,
+    MultiBlockLattice2D<T1,Descriptor>& lattice,
+    MultiScalarField2D<T2>& field,
+    plint boundaryWidth = Descriptor<T1>::boundaryWidth );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        BoundedReductiveBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>& functional,
-        Box2D domain,
-        MultiBlockLattice2D<T1,Descriptor>& lattice,
-        MultiTensorField2D<T2,nDim>& field,
-        plint boundaryWidth = Descriptor<T1>::boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>& functional,
+    Box2D domain,
+    MultiBlockLattice2D<T1,Descriptor>& lattice,
+    MultiTensorField2D<T2,nDim>& field,
+    plint boundaryWidth = Descriptor<T1>::boundaryWidth );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoundedReductiveBoxProcessingFunctional2D_LN<T1,Descriptor,T2>& functional,
-        Box2D domain,
-        MultiBlockLattice2D<T1,Descriptor>& lattice,
-        MultiNTensorField2D<T2>& field,
-        plint boundaryWidth = Descriptor<T1>::boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional2D_LN<T1,Descriptor,T2>& functional,
+    Box2D domain,
+    MultiBlockLattice2D<T1,Descriptor>& lattice,
+    MultiNTensorField2D<T2>& field,
+    plint boundaryWidth = Descriptor<T1>::boundaryWidth );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoundedMaskedReductiveBoxProcessingFunctional2D_LN<T1,Descriptor,T2>& functional,
-        Box2D domain,
-        MultiBlockLattice2D<T1,Descriptor>& lattice,
-        MultiNTensorField2D<T2>& field,
-        MultiNTensorField2D<int>& mask,
-        plint boundaryWidth = Descriptor<T1>::boundaryWidth );
+    BoundedMaskedReductiveBoxProcessingFunctional2D_LN<T1,Descriptor,T2>& functional,
+    Box2D domain,
+    MultiBlockLattice2D<T1,Descriptor>& lattice,
+    MultiNTensorField2D<T2>& field,
+    MultiNTensorField2D<int>& mask,
+    plint boundaryWidth = Descriptor<T1>::boundaryWidth );
 
 }  // namespace plb
 

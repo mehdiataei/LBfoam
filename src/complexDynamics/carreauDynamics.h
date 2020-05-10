@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,23 +32,25 @@
 #include "core/dynamics.h"
 #include "complexDynamics/variableOmegaDynamics.h"
 
-namespace plb {
+namespace plb
+{
 
-	
+
 /// This class recomputes omega for a generalied newtonian fluid with a carreau constitutive equation.
 /** The constitutive equation is nu=nu0*(1+(lambda*|gamma|)^2)^((n-1)/2).
  * Note that in order to be numerically efficient there is no resolution of the implicit equation
  * rather we try to get to the fixed point by auto-replacement in the solution.(??? need to be rewritten)
 */
 template<typename T, template<typename U> class Descriptor, int N>
-class CarreauDynamics : public OmegaFromPiDynamics<T,Descriptor> {
+class CarreauDynamics : public OmegaFromPiDynamics<T,Descriptor>
+{
 public:
-    CarreauDynamics(Dynamics<T,Descriptor>* baseDynamics_, bool automaticPrepareCollision=true);
-    virtual T getOmegaFromPiAndRhoBar(Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T rhoBar) const;
-    CarreauDynamics<T,Descriptor,N>* clone() const;
-    virtual int getId() const;
+	CarreauDynamics(Dynamics<T,Descriptor>* baseDynamics_, bool automaticPrepareCollision=true);
+	virtual T getOmegaFromPiAndRhoBar(Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T rhoBar) const;
+	CarreauDynamics<T,Descriptor,N>* clone() const;
+	virtual int getId() const;
 private:
-    static int id;
+	static int id;
 };
 
 /// Implementation of O(Ma^2) BGK dynamics with constant average density
@@ -56,29 +58,30 @@ private:
  *  but the implementation is more efficient.
  */
 template<typename T, template<typename U> class Descriptor, int N>
-class BGKCarreauDynamics : public IsoThermalBulkDynamics<T,Descriptor> {
+class BGKCarreauDynamics : public IsoThermalBulkDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    BGKCarreauDynamics(T omega=(T)1);
-    BGKCarreauDynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	BGKCarreauDynamics(T omega=(T)1);
+	BGKCarreauDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual BGKCarreauDynamics<T,Descriptor,N>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual BGKCarreauDynamics<T,Descriptor,N>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// Implementation of O(Ma^2) BGK dynamics with constant average density
@@ -86,29 +89,30 @@ private:
  *  but the implementation is more efficient.
  */
 template<typename T, template<typename U> class Descriptor, int N>
-class RegularizedBGKCarreauDynamics : public IsoThermalBulkDynamics<T,Descriptor> {
+class RegularizedBGKCarreauDynamics : public IsoThermalBulkDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    RegularizedBGKCarreauDynamics(T omega=(T)1);
-    RegularizedBGKCarreauDynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	RegularizedBGKCarreauDynamics(T omega=(T)1);
+	RegularizedBGKCarreauDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual RegularizedBGKCarreauDynamics<T,Descriptor,N>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual RegularizedBGKCarreauDynamics<T,Descriptor,N>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
+	static int id;
 };
 
 } // namespace plb

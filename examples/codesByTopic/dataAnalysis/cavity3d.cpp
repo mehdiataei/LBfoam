@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -60,24 +60,25 @@ void cavitySetup( MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 void analyzeStrainRate(MultiBlockLattice3D<T,DESCRIPTOR>& lattice)
 {
     Box3D slice(0, lattice.getNx()-1, 0, lattice.getNy()-1, lattice.getNz()/2, lattice.getNz()/2);
-    std::unique_ptr<MultiTensorField3D<T,6> > strainRate_LB (
-            computeStrainRateFromStress(lattice) );
-    std::unique_ptr<MultiTensorField3D<T,6> > strainRate_FD (
-            computeStrainRate(*computeVelocity(lattice)) );
-    std::unique_ptr<MultiScalarField3D<T> > Snorm_LB (
-            computeSymmetricTensorNorm(*strainRate_LB) );
-    std::unique_ptr<MultiScalarField3D<T> > Snorm_FD (
-            computeSymmetricTensorNorm(*strainRate_FD) );
+    auto_ptr<MultiTensorField3D<T,6> > strainRate_LB (
+        computeStrainRateFromStress(lattice) );
+    auto_ptr<MultiTensorField3D<T,6> > strainRate_FD (
+        computeStrainRate(*computeVelocity(lattice)) );
+    auto_ptr<MultiScalarField3D<T> > Snorm_LB (
+        computeSymmetricTensorNorm(*strainRate_LB) );
+    auto_ptr<MultiScalarField3D<T> > Snorm_FD (
+        computeSymmetricTensorNorm(*strainRate_FD) );
 
     const plint imSize = 400;
     ImageWriter<T> imageWriter("leeloo");
     imageWriter.writeScaledGif( "S_LB",
-            *extractSubDomain(*Snorm_LB, slice), imSize,imSize );
+                                *extractSubDomain(*Snorm_LB, slice), imSize,imSize );
     imageWriter.writeScaledGif( "S_FD",
-            *extractSubDomain(*Snorm_FD, slice), imSize,imSize );
+                                *extractSubDomain(*Snorm_FD, slice), imSize,imSize );
     imageWriter.writeScaledGif( "S_LB_Trace",
-            *extractSubDomain(*computeSymmetricTensorTrace(*strainRate_LB), slice), imSize,imSize );
-    if (global::mpi().isMainProcessor()) {
+                                *extractSubDomain(*computeSymmetricTensorTrace(*strainRate_LB), slice), imSize,imSize );
+    if (global::mpi().isMainProcessor())
+    {
         int err = 0;
         err = system("convert +append tmp/S_FD.gif tmp/S_LB.gif tmp/S_LB_Trace.gif tmp/strain.gif");
         if (err != 0)
@@ -87,13 +88,13 @@ void analyzeStrainRate(MultiBlockLattice3D<T,DESCRIPTOR>& lattice)
             exit(err);
     }
 
-    std::unique_ptr<MultiScalarField3D<T> > differenceSqr (
-            computeSymmetricTensorNorm (
-                *subtract (
-                    *strainRate_LB, *strainRate_FD ) ) );
+    auto_ptr<MultiScalarField3D<T> > differenceSqr (
+        computeSymmetricTensorNorm (
+            *subtract (
+                *strainRate_LB, *strainRate_FD ) ) );
 
     imageWriter.writeScaledGif( "differenceSqr",
-            *extractSubDomain(*differenceSqr, slice), imSize,imSize );
+                                *extractSubDomain(*differenceSqr, slice), imSize,imSize );
 
     T maxSnorm_LB = computeMax(*Snorm_LB);
     T maxSnorm_FD = computeMax(*Snorm_FD);
@@ -109,17 +110,18 @@ void analyzeStrainRate(MultiBlockLattice3D<T,DESCRIPTOR>& lattice)
           << differenceMax/maxSnorm_LB << "]" << endl;
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 2e-2,  // uMax
-            (T) 40.,   // Re
-            40,        // N
-            1.,        // lx
-            1.,        // ly
-            1.         // lz
+        (T) 2e-2,  // uMax
+        (T) 40.,   // Re
+        40,        // N
+        1.,        // lx
+        1.,        // ly
+        1.         // lz
     );
     const T logT     = (T)1/(T)100;
     const T imSave   = (T)0.2;
@@ -128,25 +130,28 @@ int main(int argc, char* argv[]) {
     writeLogFile(parameters, "3D diagonal cavity");
 
     MultiBlockLattice3D<T, DESCRIPTOR> lattice (
-            parameters.getNx(), parameters.getNy(), parameters.getNz(),
-            new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(), parameters.getNz(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* boundaryCondition
-        //= createInterpBoundaryCondition3D<T,DESCRIPTOR>();
+    //= createInterpBoundaryCondition3D<T,DESCRIPTOR>();
         = createLocalBoundaryCondition3D<T,DESCRIPTOR>();
 
     cavitySetup(lattice, parameters, *boundaryCondition);
 
     // Main loop over time iterations.
-    for (plint iT=0; iT<parameters.nStep(maxT); ++iT) {
-        if (iT%parameters.nStep(imSave)==0) {
+    for (plint iT=0; iT<parameters.nStep(maxT); ++iT)
+    {
+        if (iT%parameters.nStep(imSave)==0)
+        {
             pcout << "Processing analysis of the strain rate ..." << endl
                   << "=========================================="
                   << endl << endl;
             analyzeStrainRate(lattice);
         }
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "Compute averages at time step " << iT << endl;
             pcout << "================================" << endl;
             pcout << "t=" << iT*parameters.getDeltaT() << endl;
@@ -163,7 +168,8 @@ int main(int argc, char* argv[]) {
         // Lattice Boltzmann iteration step.
         lattice.collideAndStream();
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "Access internal statistics for time step " << iT << endl;
             pcout << "===========================================" << endl;
             // Display averages by accessing internal statistics of the lattice.

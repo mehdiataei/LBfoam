@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,13 +34,14 @@
 #include "io/parallelIO.h"
 #include <algorithm>
 
-namespace plb {
+namespace plb
+{
 
 
 MultiBlockManagement2D::MultiBlockManagement2D (
-        SparseBlockStructure2D const& sparseBlock_,
-        ThreadAttribution* threadAttribution_,
-        plint envelopeWidth_, plint refinementLevel_ )
+    SparseBlockStructure2D const& sparseBlock_,
+    ThreadAttribution* threadAttribution_,
+    plint envelopeWidth_, plint refinementLevel_ )
     : envelopeWidth(envelopeWidth_),
       sparseBlock(sparseBlock_),
       threadAttribution(threadAttribution_),
@@ -56,13 +57,15 @@ MultiBlockManagement2D::MultiBlockManagement2D(MultiBlockManagement2D const& rhs
       refinementLevel(rhs.refinementLevel)
 { }
 
-MultiBlockManagement2D& MultiBlockManagement2D::operator=(MultiBlockManagement2D const& rhs) {
+MultiBlockManagement2D& MultiBlockManagement2D::operator=(MultiBlockManagement2D const& rhs)
+{
     MultiBlockManagement2D newBlockManagement(rhs);
     newBlockManagement.swap(*this);
     return *this;
 }
 
-void MultiBlockManagement2D::swap(MultiBlockManagement2D& rhs) {
+void MultiBlockManagement2D::swap(MultiBlockManagement2D& rhs)
+{
     std::swap(envelopeWidth, rhs.envelopeWidth);
     sparseBlock.swap(rhs.sparseBlock);
     std::swap(threadAttribution, rhs.threadAttribution);
@@ -70,19 +73,23 @@ void MultiBlockManagement2D::swap(MultiBlockManagement2D& rhs) {
     std::swap(refinementLevel, rhs.refinementLevel);
 }
 
-MultiBlockManagement2D::~MultiBlockManagement2D() {
+MultiBlockManagement2D::~MultiBlockManagement2D()
+{
     delete threadAttribution;
 }
 
-plint MultiBlockManagement2D::getEnvelopeWidth() const {
+plint MultiBlockManagement2D::getEnvelopeWidth() const
+{
     return envelopeWidth;
 }
 
-Box2D MultiBlockManagement2D::getBoundingBox() const {
+Box2D MultiBlockManagement2D::getBoundingBox() const
+{
     return sparseBlock.getBoundingBox();
 }
 
-Box2D MultiBlockManagement2D::getBulk(plint blockId) const {
+Box2D MultiBlockManagement2D::getBulk(plint blockId) const
+{
     Box2D bulk;
 #ifdef PLB_DEBUG
     bool ok =
@@ -92,7 +99,8 @@ Box2D MultiBlockManagement2D::getBulk(plint blockId) const {
     return bulk;
 }
 
-Box2D MultiBlockManagement2D::getUniqueBulk(plint blockId) const {
+Box2D MultiBlockManagement2D::getUniqueBulk(plint blockId) const
+{
     Box2D uniqueBulk;
 #ifdef PLB_DEBUG
     bool ok =
@@ -102,7 +110,8 @@ Box2D MultiBlockManagement2D::getUniqueBulk(plint blockId) const {
     return uniqueBulk;
 }
 
-Box2D MultiBlockManagement2D::getEnvelope(plint blockId) const {
+Box2D MultiBlockManagement2D::getEnvelope(plint blockId) const
+{
     Box2D bulk;
 #ifdef PLB_DEBUG
     bool ok =
@@ -112,22 +121,25 @@ Box2D MultiBlockManagement2D::getEnvelope(plint blockId) const {
     return SmartBulk2D(sparseBlock, envelopeWidth, bulk).computeEnvelope();
 }
 
-SparseBlockStructure2D const& MultiBlockManagement2D::getSparseBlockStructure() const {
+SparseBlockStructure2D const& MultiBlockManagement2D::getSparseBlockStructure() const
+{
     return sparseBlock;
 }
 
-LocalMultiBlockInfo2D const& MultiBlockManagement2D::getLocalInfo() const {
+LocalMultiBlockInfo2D const& MultiBlockManagement2D::getLocalInfo() const
+{
     return localInfo;
 }
 
-ThreadAttribution const& MultiBlockManagement2D::getThreadAttribution() const {
+ThreadAttribution const& MultiBlockManagement2D::getThreadAttribution() const
+{
     return *threadAttribution;
 }
 
 
 bool MultiBlockManagement2D::findInLocalBulk (
-            plint iX, plint iY, plint& foundId,
-            plint& localX, plint& localY ) const
+    plint iX, plint iY, plint& foundId,
+    plint& localX, plint& localY ) const
 {
     foundId = sparseBlock.locate(iX,iY);
     SmartBulk2D bulk(sparseBlock, envelopeWidth, foundId);
@@ -137,24 +149,27 @@ bool MultiBlockManagement2D::findInLocalBulk (
 }
 
 bool MultiBlockManagement2D::findAllLocalRepresentations (
-            plint iX, plint iY, std::vector<plint>& foundId,
-            std::vector<plint>& foundX, std::vector<plint>& foundY ) const
+    plint iX, plint iY, std::vector<plint>& foundId,
+    std::vector<plint>& foundX, std::vector<plint>& foundY ) const
 {
     bool hasBulkCell = false;
     // First, search in all blocks which are local to the current processor,
     // including in the envelopes.
-    for (pluint iBlock=0; iBlock < localInfo.getBlocks().size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock < localInfo.getBlocks().size(); ++iBlock)
+    {
         plint blockId = localInfo.getBlocks()[iBlock];
         SmartBulk2D bulk(sparseBlock, envelopeWidth, blockId);
         if (contained(iX, iY, bulk.computeEnvelope()))
         {
-            if (contained(iX, iY, bulk.getBulk())) {
+            if (contained(iX, iY, bulk.getBulk()))
+            {
                 hasBulkCell = true;
                 foundId.insert(foundId.begin(), blockId);
                 foundX.insert(foundX.begin(), bulk.toLocalX(iX));
                 foundY.insert(foundY.begin(), bulk.toLocalY(iY));
             }
-            else {
+            else
+            {
                 foundId.push_back(blockId);
                 foundX.push_back(bulk.toLocalX(iX));
                 foundY.push_back(bulk.toLocalY(iY));
@@ -166,10 +181,11 @@ bool MultiBlockManagement2D::findAllLocalRepresentations (
     //   boundary. Therefore, this loop checks all blocks which overlap with the current
     //   one by periodicity.
     for (pluint iOverlap=0; iOverlap<localInfo.getPeriodicOverlapWithRemoteData().size();
-         ++iOverlap)
+            ++iOverlap)
     {
         Overlap2D overlap = localInfo.getPeriodicOverlapWithRemoteData()[iOverlap].overlap;
-        if (contained(iX,iY, overlap.getOriginalCoordinates())) {
+        if (contained(iX,iY, overlap.getOriginalCoordinates()))
+        {
             plint overlapId = overlap.getOverlapId();
             foundId.push_back(overlapId);
             SmartBulk2D bulk(sparseBlock, envelopeWidth, overlapId);
@@ -180,27 +196,32 @@ bool MultiBlockManagement2D::findAllLocalRepresentations (
     return hasBulkCell;
 }
 
-plint MultiBlockManagement2D::getRefinementLevel() const {
+plint MultiBlockManagement2D::getRefinementLevel() const
+{
     return refinementLevel;
 }
 
-void MultiBlockManagement2D::setRefinementLevel(plint newLevel) {
+void MultiBlockManagement2D::setRefinementLevel(plint newLevel)
+{
     refinementLevel = newLevel;
 }
 
-void MultiBlockManagement2D::changeEnvelopeWidth(plint newEnvelopeWidth) {
+void MultiBlockManagement2D::changeEnvelopeWidth(plint newEnvelopeWidth)
+{
     envelopeWidth = newEnvelopeWidth;
     localInfo = LocalMultiBlockInfo2D(sparseBlock, getThreadAttribution(), envelopeWidth);
 }
 
-bool MultiBlockManagement2D::equivalentTo(MultiBlockManagement2D const& rhs) const {
+bool MultiBlockManagement2D::equivalentTo(MultiBlockManagement2D const& rhs) const
+{
     std::map<plint,Box2D> const& bulks = sparseBlock.getBulks();
     std::map<plint,Box2D>::const_iterator it = bulks.begin();
     bool equalThreadAttribution = true;
-    for (; it != bulks.end(); ++it) {
+    for (; it != bulks.end(); ++it)
+    {
         plint blockId = it->first;
         if (threadAttribution->getMpiProcess(blockId) != rhs.threadAttribution->getMpiProcess(blockId) ||
-            threadAttribution->getLocalThreadId(blockId) != rhs.threadAttribution->getLocalThreadId(blockId))
+                threadAttribution->getLocalThreadId(blockId) != rhs.threadAttribution->getLocalThreadId(blockId))
         {
             equalThreadAttribution =false;
             break;
@@ -213,37 +234,37 @@ bool MultiBlockManagement2D::equivalentTo(MultiBlockManagement2D const& rhs) con
 
 
 MultiBlockManagement2D intersect (
-        MultiBlockManagement2D const& originalManagement,
-        Box2D subDomain, bool crop )
+    MultiBlockManagement2D const& originalManagement,
+    Box2D subDomain, bool crop )
 {
     return MultiBlockManagement2D (
-            intersect(originalManagement.getSparseBlockStructure(), subDomain, crop),
-            originalManagement.getThreadAttribution().clone(),
-            originalManagement.getEnvelopeWidth(),
-            originalManagement.getRefinementLevel() );
+               intersect(originalManagement.getSparseBlockStructure(), subDomain, crop),
+               originalManagement.getThreadAttribution().clone(),
+               originalManagement.getEnvelopeWidth(),
+               originalManagement.getRefinementLevel() );
 }
 
 MultiBlockManagement2D intersect (
-        MultiBlockManagement2D const& originalManagement,
-        Box2D subDomain, Box2D newBoundingBox )
+    MultiBlockManagement2D const& originalManagement,
+    Box2D subDomain, Box2D newBoundingBox )
 {
     return MultiBlockManagement2D (
-            intersect(originalManagement.getSparseBlockStructure(),
-                      subDomain, newBoundingBox),
-            originalManagement.getThreadAttribution().clone(),
-            originalManagement.getEnvelopeWidth(),
-            originalManagement.getRefinementLevel() );
+               intersect(originalManagement.getSparseBlockStructure(),
+                         subDomain, newBoundingBox),
+               originalManagement.getThreadAttribution().clone(),
+               originalManagement.getEnvelopeWidth(),
+               originalManagement.getRefinementLevel() );
 }
 
 MultiBlockManagement2D intersect( MultiBlockManagement2D const& management1,
                                   MultiBlockManagement2D const& management2, bool crop )
 {
     return MultiBlockManagement2D (
-            intersect(management1.getSparseBlockStructure(),
-                      management2.getSparseBlockStructure(), crop),
-            management1.getThreadAttribution().clone(),
-            management1.getEnvelopeWidth(),
-            management1.getRefinementLevel() );
+               intersect(management1.getSparseBlockStructure(),
+                         management2.getSparseBlockStructure(), crop),
+               management1.getThreadAttribution().clone(),
+               management1.getEnvelopeWidth(),
+               management1.getRefinementLevel() );
 }
 
 
@@ -254,17 +275,18 @@ MultiBlockManagement2D extend( MultiBlockManagement2D const& management,
     SparseBlockStructure2D resultStructure =
         extend( management.getSparseBlockStructure(), addedBulk, addedBulk, newIds );
     std::vector<plint> mpiProcesses(newIds.size()), localThreads(newIds.size());
-    for (pluint iNew=0; iNew<newIds.size(); ++iNew) {
+    for (pluint iNew=0; iNew<newIds.size(); ++iNew)
+    {
         // Default-attribute the newly created blocks to the main process.
         mpiProcesses[iNew] = global::mpi().bossId();
         localThreads[iNew] = 0;
     }
     return MultiBlockManagement2D (
-            resultStructure,
-            management.getThreadAttribution().extend (
-                newIds, mpiProcesses, localThreads ),
-            management.getEnvelopeWidth(),
-            management.getRefinementLevel() );
+               resultStructure,
+               management.getThreadAttribution().extend (
+                   newIds, mpiProcesses, localThreads ),
+               management.getEnvelopeWidth(),
+               management.getRefinementLevel() );
 }
 
 MultiBlockManagement2D except( MultiBlockManagement2D const& management,
@@ -275,11 +297,11 @@ MultiBlockManagement2D except( MultiBlockManagement2D const& management,
         except( management.getSparseBlockStructure(), exceptedBlock,
                 remappedIds );
     return MultiBlockManagement2D (
-            resultStructure,
-            management.getThreadAttribution().merge (
-                management.getThreadAttribution(), remappedIds ),
-            management.getEnvelopeWidth(),
-            management.getRefinementLevel() );
+               resultStructure,
+               management.getThreadAttribution().merge (
+                   management.getThreadAttribution(), remappedIds ),
+               management.getEnvelopeWidth(),
+               management.getRefinementLevel() );
 }
 
 MultiBlockManagement2D block_union( MultiBlockManagement2D const& management1,
@@ -290,12 +312,12 @@ MultiBlockManagement2D block_union( MultiBlockManagement2D const& management1,
         block_union( management1.getSparseBlockStructure(),
                      management2.getSparseBlockStructure(), remappedIds );
     return MultiBlockManagement2D (
-            resultStructure,
-            management1.getThreadAttribution().merge (
-                management2.getThreadAttribution(), remappedIds ),
-            management1.getEnvelopeWidth(),
-            management1.getRefinementLevel() );
-            
+               resultStructure,
+               management1.getThreadAttribution().merge (
+                   management2.getThreadAttribution(), remappedIds ),
+               management1.getEnvelopeWidth(),
+               management1.getRefinementLevel() );
+
 }
 
 MultiBlockManagement2D align( MultiBlockManagement2D const& originalManagement,
@@ -314,12 +336,15 @@ MultiBlockManagement2D align( MultiBlockManagement2D const& originalManagement,
     plint numBlocks = (plint) newIds.size();
     plint numProcs = global::mpi().getSize();
     plint iBlock=0;
-    for (plint iProc=0; iProc<numProcs; ++iProc) {
+    for (plint iProc=0; iProc<numProcs; ++iProc)
+    {
         plint localNumBlocks = numBlocks/numProcs;
-        if (iProc<numBlocks%numProcs) {
+        if (iProc<numBlocks%numProcs)
+        {
             ++localNumBlocks;
         }
-        for (plint iLocal=0; iLocal<localNumBlocks; ++iLocal) {
+        for (plint iLocal=0; iLocal<localNumBlocks; ++iLocal)
+        {
             attribution.addBlock(newIds[iBlock], iProc);
             ++iBlock;
         }
@@ -327,11 +352,11 @@ MultiBlockManagement2D align( MultiBlockManagement2D const& originalManagement,
     // 2. Merge remapped ids into the thread attribution, and return a
     //    corresponding MultiBlockManagement2D object.
     return MultiBlockManagement2D (
-            resultStructure,
-            attribution.merge (
-                partnerManagement.getThreadAttribution(), remappedFromPartner ),
-            originalManagement.getEnvelopeWidth(),
-            originalManagement.getRefinementLevel() );
+               resultStructure,
+               attribution.merge (
+                   partnerManagement.getThreadAttribution(), remappedFromPartner ),
+               originalManagement.getEnvelopeWidth(),
+               originalManagement.getRefinementLevel() );
 }
 
 MultiBlockManagement2D align( std::vector<Box2D> const& originalDomain,
@@ -339,19 +364,22 @@ MultiBlockManagement2D align( std::vector<Box2D> const& originalDomain,
                               plint envelopeWidth, plint refinementLevel, bool crop )
 {
     Box2D bbox(alignWith.getBoundingBox());
-    if (crop && !originalDomain.empty()) {
+    if (crop && !originalDomain.empty())
+    {
         bbox = originalDomain[0];
-        for (pluint i=1; i<originalDomain.size(); ++i) {
+        for (pluint i=1; i<originalDomain.size(); ++i)
+        {
             bbox = bound(bbox, originalDomain[i]);
         }
     }
     SparseBlockStructure2D originalSparseBlock(bbox);
-    for (plint i=0; i<(plint)originalDomain.size(); ++i) {
+    for (plint i=0; i<(plint)originalDomain.size(); ++i)
+    {
         originalSparseBlock.addBlock(originalDomain[i], i);
     }
     MultiBlockManagement2D originalManagement (
-            originalSparseBlock, defaultMultiBlockPolicy2D().getThreadAttribution(),
-            envelopeWidth, refinementLevel );
+        originalSparseBlock, defaultMultiBlockPolicy2D().getThreadAttribution(),
+        envelopeWidth, refinementLevel );
     return align(originalManagement, alignWith);
 }
 
@@ -366,19 +394,22 @@ MultiBlockManagement2D reparallelize(MultiBlockManagement2D const& management,
     //   available blocks equally.
     ExplicitThreadAttribution* threadAttribution = new ExplicitThreadAttribution;
     plint iBlock=0;
-    for (plint iProc=0; iProc<numProcs; ++iProc) {
+    for (plint iProc=0; iProc<numProcs; ++iProc)
+    {
         plint localNumBlocks = numBlocks/numProcs;
-        if (iProc<numBlocks%numProcs) {
+        if (iProc<numBlocks%numProcs)
+        {
             ++localNumBlocks;
         }
-        for (plint iLocal=0; iLocal<localNumBlocks; ++iLocal) {
+        for (plint iLocal=0; iLocal<localNumBlocks; ++iLocal)
+        {
             threadAttribution->addBlock(iBlock, iProc);
             ++iBlock;
         }
     }
     return MultiBlockManagement2D (
-            resultStructure, threadAttribution,
-            management.getEnvelopeWidth(), management.getRefinementLevel() );
+               resultStructure, threadAttribution,
+               management.getEnvelopeWidth(), management.getRefinementLevel() );
 }
 
 
@@ -405,7 +436,8 @@ SmartBulk2D::SmartBulk2D( SparseBlockStructure2D const& sparseBlock_,
       bulk(bulk_)
 { }
 
-Box2D SmartBulk2D::getBulk() const {
+Box2D SmartBulk2D::getBulk() const
+{
     return bulk;
 }
 
@@ -430,11 +462,13 @@ Box2D SmartBulk2D::toLocal(Box2D const& coord) const
 
 }
 
-plint SmartBulk2D::toLocalX(plint iX) const {
+plint SmartBulk2D::toLocalX(plint iX) const
+{
     return iX-bulk.x0+envelopeWidth;
 }
 
-plint SmartBulk2D::toLocalY(plint iY) const {
+plint SmartBulk2D::toLocalY(plint iY) const
+{
     return iY-bulk.y0+envelopeWidth;
 }
 

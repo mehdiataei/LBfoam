@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,120 +33,121 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.hh"
 
-namespace plb {
+namespace plb
+{
 
 template void computeDensity<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& density, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& density, Box3D domain );
 
 template void maskedComputeDensity<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& density, MultiNTensorField3D<int>& mask, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& density, MultiNTensorField3D<int>& mask, Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* pypal_computeDensity (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* maskedPypal_computeDensity (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
+    Box3D domain );
 
 template void computeKineticEnergy<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& energy, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& energy, Box3D domain );
 
 template void maskedComputeKineticEnergy<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& energy, MultiNTensorField3D<int>& mask, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& energy, MultiNTensorField3D<int>& mask, Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* pypal_computeKineticEnergy (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* maskedPypal_computeKineticEnergy (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
+    Box3D domain );
 
 
 template void computeVelocityNorm<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& velocityNorm, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& velocityNorm, Box3D domain );
 
 template void maskedComputeVelocityNorm<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& velocityNorm, MultiNTensorField3D<int>& mask, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& velocityNorm, MultiNTensorField3D<int>& mask, Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* pypal_computeVelocityNorm (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* maskedPypal_computeVelocityNorm (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
+    Box3D domain );
 
 
 template void computeVelocityComponent<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& velocityComponent, Box3D domain, plint iComponent );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& velocityComponent, Box3D domain, plint iComponent );
 
 template void maskedComputeVelocityComponent<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& velocityComponent, MultiNTensorField3D<int>& mask, Box3D domain, plint iComponent );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& velocityComponent, MultiNTensorField3D<int>& mask, Box3D domain, plint iComponent );
 
 template
 MultiNTensorField3D<FLOAT_T>* pypal_computeVelocityComponent (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        Box3D domain, plint iComponent );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    Box3D domain, plint iComponent );
 
 template
 MultiNTensorField3D<FLOAT_T>* maskedPypal_computeVelocityComponent (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
-        Box3D domain, plint iComponent );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
+    Box3D domain, plint iComponent );
 
 template void computeVelocity<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& velocity, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& velocity, Box3D domain );
 
 template void maskedComputeVelocity<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& velocity, MultiNTensorField3D<int>& mask, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& velocity, MultiNTensorField3D<int>& mask, Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* pypal_computeVelocity (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* maskedPypal_computeVelocity (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
+    Box3D domain );
 
 
 template
 void computePiNeq (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& PiNeq, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& PiNeq, Box3D domain );
 
 template
 void maskedComputePiNeq (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& PiNeq, MultiNTensorField3D<int>& mask, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& PiNeq, MultiNTensorField3D<int>& mask, Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* pypal_computePiNeq (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* maskedPypal_computePiNeq (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
+    Box3D domain );
 
 template
 void computeShearStress (
@@ -170,130 +171,130 @@ MultiNTensorField3D<FLOAT_T>* maskedPypal_computeShearStress (
 
 template
 void computeStrainRateFromStress (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& S, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& S, Box3D domain );
 
 template
 void maskedComputeStrainRateFromStress (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& S, MultiNTensorField3D<int>& mask, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& S, MultiNTensorField3D<int>& mask, Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* pypal_computeStrainRateFromStress (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* maskedPypal_computeStrainRateFromStress (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
+    Box3D domain );
 
 template void computePopulation<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& population, Box3D domain, plint iPop );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& population, Box3D domain, plint iPop );
 
 template void maskedComputePopulation<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& population, MultiNTensorField3D<int>& mask, Box3D domain, plint iPop );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& population, MultiNTensorField3D<int>& mask, Box3D domain, plint iPop );
 
 template
 MultiNTensorField3D<FLOAT_T>* pypal_computePopulation (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        Box3D domain, plint iPop );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    Box3D domain, plint iPop );
 
 template
 MultiNTensorField3D<FLOAT_T>* maskedPypal_computePopulation (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
-        Box3D domain, plint iPop );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
+    Box3D domain, plint iPop );
 
 
 template void computePopulations<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& populations, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& populations, Box3D domain );
 
 template void maskedComputePopulations<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& populations, MultiNTensorField3D<int>& mask, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& populations, MultiNTensorField3D<int>& mask, Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* pypal_computePopulations (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* maskedPypal_computePopulations (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
-        Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, MultiNTensorField3D<int>& mask,
+    Box3D domain );
 
 
 template
 void compute_UPO_Rhs<FLOAT_T,descriptors::DESCRIPTOR_3D>(
-                     MultiNTensorField3D<FLOAT_T>& lattice,
-                     MultiNTensorField3D<FLOAT_T>& result, Box3D domain, FLOAT_T omega);
+    MultiNTensorField3D<FLOAT_T>& lattice,
+    MultiNTensorField3D<FLOAT_T>& result, Box3D domain, FLOAT_T omega);
 
 template
 void masked_compute_UPO_Rhs<FLOAT_T,descriptors::DESCRIPTOR_3D>(
-                            MultiNTensorField3D<FLOAT_T>& lattice,
-                            MultiNTensorField3D<FLOAT_T>& result,
-                            MultiNTensorField3D<int>& mask, Box3D domain, FLOAT_T omega);
+    MultiNTensorField3D<FLOAT_T>& lattice,
+    MultiNTensorField3D<FLOAT_T>& result,
+    MultiNTensorField3D<int>& mask, Box3D domain, FLOAT_T omega);
 
 template
 MultiNTensorField3D<FLOAT_T>* compute_UPO_Rhs<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-                           MultiNTensorField3D<FLOAT_T>& lattice, Box3D domain, FLOAT_T omega );
+    MultiNTensorField3D<FLOAT_T>& lattice, Box3D domain, FLOAT_T omega );
 
 template
 MultiNTensorField3D<FLOAT_T>* masked_compute_UPO_Rhs<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-                                 MultiNTensorField3D<FLOAT_T>& lattice,
-                                 MultiNTensorField3D<int>& mask, Box3D domain, FLOAT_T omega );
+    MultiNTensorField3D<FLOAT_T>& lattice,
+    MultiNTensorField3D<int>& mask, Box3D domain, FLOAT_T omega );
 
 
 
 template
 void UPO_ApplyJ<FLOAT_T,descriptors::DESCRIPTOR_3D>(
-                 MultiNTensorField3D<FLOAT_T>& f,
-                 MultiNTensorField3D<FLOAT_T>& g,
-                 MultiNTensorField3D<FLOAT_T>& h, Box3D domain, FLOAT_T omega);
+    MultiNTensorField3D<FLOAT_T>& f,
+    MultiNTensorField3D<FLOAT_T>& g,
+    MultiNTensorField3D<FLOAT_T>& h, Box3D domain, FLOAT_T omega);
 
 template
 void masked_UPO_ApplyJ<FLOAT_T,descriptors::DESCRIPTOR_3D>(
-                        MultiNTensorField3D<FLOAT_T>& f,
-                        MultiNTensorField3D<FLOAT_T>& g,
-                        MultiNTensorField3D<FLOAT_T>& h,
-                        MultiNTensorField3D<int>& mask, Box3D domain, FLOAT_T omega);
+    MultiNTensorField3D<FLOAT_T>& f,
+    MultiNTensorField3D<FLOAT_T>& g,
+    MultiNTensorField3D<FLOAT_T>& h,
+    MultiNTensorField3D<int>& mask, Box3D domain, FLOAT_T omega);
 
 template
 MultiNTensorField3D<FLOAT_T>* UPO_ApplyJ<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-                           MultiNTensorField3D<FLOAT_T>& f,
-                           MultiNTensorField3D<FLOAT_T>& g,
-                           Box3D domain, FLOAT_T omega );
+    MultiNTensorField3D<FLOAT_T>& f,
+    MultiNTensorField3D<FLOAT_T>& g,
+    Box3D domain, FLOAT_T omega );
 
 template
 MultiNTensorField3D<FLOAT_T>* masked_UPO_ApplyJ<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-                                 MultiNTensorField3D<FLOAT_T>& f,
-                                 MultiNTensorField3D<FLOAT_T>& g,
-                                 MultiNTensorField3D<int>& mask, Box3D domain, FLOAT_T omega );
+    MultiNTensorField3D<FLOAT_T>& f,
+    MultiNTensorField3D<FLOAT_T>& g,
+    MultiNTensorField3D<int>& mask, Box3D domain, FLOAT_T omega );
 
 
 
 template
 void compute_UPO_EnergyDerivative<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-                 MultiNTensorField3D<FLOAT_T>& lattice,
-                 MultiNTensorField3D<FLOAT_T>& result, Box3D domain );
+    MultiNTensorField3D<FLOAT_T>& lattice,
+    MultiNTensorField3D<FLOAT_T>& result, Box3D domain );
 
 template
 void masked_compute_UPO_EnergyDerivative<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-                        MultiNTensorField3D<FLOAT_T>& lattice,
-                        MultiNTensorField3D<FLOAT_T>& result,
-                        MultiNTensorField3D<int>& mask, Box3D domain);
+    MultiNTensorField3D<FLOAT_T>& lattice,
+    MultiNTensorField3D<FLOAT_T>& result,
+    MultiNTensorField3D<int>& mask, Box3D domain);
 
 template
 MultiNTensorField3D<FLOAT_T>* compute_UPO_EnergyDerivative<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-                           MultiNTensorField3D<FLOAT_T>& lattice, Box3D domain );
+    MultiNTensorField3D<FLOAT_T>& lattice, Box3D domain );
 
 template
 MultiNTensorField3D<FLOAT_T>* masked_compute_UPO_EnergyDerivative<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-                                 MultiNTensorField3D<FLOAT_T>& lattice,
-                                 MultiNTensorField3D<int>& mask, Box3D domain );
+    MultiNTensorField3D<FLOAT_T>& lattice,
+    MultiNTensorField3D<int>& mask, Box3D domain );
 
 }  // namespace plb
 

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,37 +32,39 @@
 #include "atomicBlock/blockLattice2D.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-class VisualParticle2D : public Particle2D<T,Descriptor> {
+class VisualParticle2D : public Particle2D<T,Descriptor>
+{
 public:
-    VisualParticle2D();
-    VisualParticle2D( plint tag_, Array<T,2> const& position );
-    VisualParticle2D( plint tag_, Array<T,2> const& position,
-                      std::vector<T> const& scalars_,
-                      std::vector<Array<T,2> > const& vectors_ );
-    virtual void velocityToParticle(TensorField2D<T,2>& velocityField, T scaling=1.) { }
-    virtual void velocityToParticle(NTensorField2D<T>& velocityField, T scaling=1.) { }
-    virtual void rhoBarJtoParticle(NTensorField2D<T>& rhoBarJfield, bool velIsJ,
-                                   T scaling=1.) { }
-    virtual void fluidToParticle(BlockLattice2D<T,Descriptor>& fluid, T scaling=1.) { }
-    virtual void advance() { }
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    virtual int getId() const;
-    virtual void reset(Array<T,2> const& position);
-    virtual VisualParticle2D<T,Descriptor>* clone() const;
-    virtual bool getVector(plint whichVector, Array<T,2>& vector) const;
-    virtual bool getScalar(plint whichScalar, T& scalar) const;
-    virtual bool setScalar(plint whichScalar, T scalar);
-    virtual bool setScalars(std::vector<T> const& scalars_);
-    virtual bool setVector(plint whichVector, Array<T,2> const& vector);
-    virtual bool setVectors(std::vector<Array<T,2> > const& vectors_);
+	VisualParticle2D();
+	VisualParticle2D( plint tag_, Array<T,2> const& position );
+	VisualParticle2D( plint tag_, Array<T,2> const& position,
+	                  std::vector<T> const& scalars_,
+	                  std::vector<Array<T,2> > const& vectors_ );
+	virtual void velocityToParticle(TensorField2D<T,2>& velocityField, T scaling=1.) { }
+	virtual void velocityToParticle(NTensorField2D<T>& velocityField, T scaling=1.) { }
+	virtual void rhoBarJtoParticle(NTensorField2D<T>& rhoBarJfield, bool velIsJ,
+	                               T scaling=1.) { }
+	virtual void fluidToParticle(BlockLattice2D<T,Descriptor>& fluid, T scaling=1.) { }
+	virtual void advance() { }
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	virtual void unserialize(HierarchicUnserializer& unserializer);
+	virtual int getId() const;
+	virtual void reset(Array<T,2> const& position);
+	virtual VisualParticle2D<T,Descriptor>* clone() const;
+	virtual bool getVector(plint whichVector, Array<T,2>& vector) const;
+	virtual bool getScalar(plint whichScalar, T& scalar) const;
+	virtual bool setScalar(plint whichScalar, T scalar);
+	virtual bool setScalars(std::vector<T> const& scalars_);
+	virtual bool setVector(plint whichVector, Array<T,2> const& vector);
+	virtual bool setVectors(std::vector<Array<T,2> > const& vectors_);
 private:
-    std::vector<T> scalars;
-    std::vector<Array<T,2> > vectors;
-    static int id;
+	std::vector<T> scalars;
+	std::vector<Array<T,2> > vectors;
+	static int id;
 };
 
 // template<typename T, template<typename U> class Descriptor>
@@ -85,7 +87,7 @@ private:
 //     int stage;
 //     Array<T,2> pos1, pos2;
 // };
-// 
+//
 // template<typename T, template<typename U> class Descriptor>
 // class MappingParticleZslice2D : public MappingParticle2D<T,Descriptor> {
 // public:
@@ -105,7 +107,8 @@ private:
 //     static int id;
 // };
 
-namespace meta {
+namespace meta
+{
 
 template<typename T, template<typename U> class Descriptor>
 ParticleRegistration2D<T,Descriptor>& particleRegistration2D();
@@ -116,33 +119,34 @@ template< typename T,
           class VisualParticle >
 class VisualParticleGenerator2D : public ParticleGenerator2D<T,Descriptor>
 {
-    virtual Particle2D<T,Descriptor>* generate (
-            HierarchicUnserializer& unserializer ) const
-    {
-        // tag, position, scalars, vectors.
-        plint tag;
-        unserializer.readValue(tag);
-        Array<T,2> position;
-        unserializer.readValues<T,2>(position);
-        pluint scalarSize;
-        unserializer.readValue(scalarSize);
-        std::vector<T> scalars(scalarSize);
-        unserializer.readValues(scalars);
-        pluint vectorSize;
-        unserializer.readValue(vectorSize);
-        std::vector<Array<T,2> > vectors(vectorSize);
-        unserializer.readValues(vectors);
-        return new VisualParticle(tag, position, scalars, vectors);
-    }
+	virtual Particle2D<T,Descriptor>* generate (
+	    HierarchicUnserializer& unserializer ) const
+	{
+		// tag, position, scalars, vectors.
+		plint tag;
+		unserializer.readValue(tag);
+		Array<T,2> position;
+		unserializer.readValues<T,2>(position);
+		pluint scalarSize;
+		unserializer.readValue(scalarSize);
+		std::vector<T> scalars(scalarSize);
+		unserializer.readValues(scalars);
+		pluint vectorSize;
+		unserializer.readValue(vectorSize);
+		std::vector<Array<T,2> > vectors(vectorSize);
+		unserializer.readValues(vectors);
+		return new VisualParticle(tag, position, scalars, vectors);
+	}
 };
 
 
 template< typename T,
           template<typename U> class Descriptor,
           class VisualParticle >
-int registerVisualParticle2D(std::string name) {
-    return particleRegistration2D<T,Descriptor>().announce (
-               name, new VisualParticleGenerator2D<T,Descriptor,VisualParticle> );
+int registerVisualParticle2D(std::string name)
+{
+	return particleRegistration2D<T,Descriptor>().announce (
+	           name, new VisualParticleGenerator2D<T,Descriptor,VisualParticle> );
 }
 
 }  // namespace meta

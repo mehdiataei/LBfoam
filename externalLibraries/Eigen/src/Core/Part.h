@@ -44,90 +44,115 @@
   * \sa MatrixBase::part()
   */
 template<typename MatrixType, unsigned int Mode>
-struct ei_traits<Part<MatrixType, Mode> > : ei_traits<MatrixType>
-{
-  typedef typename ei_nested<MatrixType>::type MatrixTypeNested;
-  typedef typename ei_unref<MatrixTypeNested>::type _MatrixTypeNested;
-  enum {
-    Flags = (_MatrixTypeNested::Flags & (HereditaryBits) & (~(PacketAccessBit | DirectAccessBit | LinearAccessBit))) | Mode,
-    CoeffReadCost = _MatrixTypeNested::CoeffReadCost + ConditionalJumpCost
-  };
+struct ei_traits<Part<MatrixType, Mode> > : ei_traits<MatrixType> {
+	typedef typename ei_nested<MatrixType>::type MatrixTypeNested;
+	typedef typename ei_unref<MatrixTypeNested>::type _MatrixTypeNested;
+	enum {
+		Flags = (_MatrixTypeNested::Flags & (HereditaryBits) & (~(PacketAccessBit | DirectAccessBit | LinearAccessBit))) | Mode,
+		CoeffReadCost = _MatrixTypeNested::CoeffReadCost + ConditionalJumpCost
+	};
 };
 
 template<typename MatrixType, unsigned int Mode> class Part
-  : public MatrixBase<Part<MatrixType, Mode> >
+	: public MatrixBase<Part<MatrixType, Mode> >
 {
-  public:
+public:
 
-    EIGEN_GENERIC_PUBLIC_INTERFACE(Part)
+	EIGEN_GENERIC_PUBLIC_INTERFACE(Part)
 
-    inline Part(const MatrixType& matrix) : m_matrix(matrix)
-    { ei_assert(ei_are_flags_consistent<Mode>::ret); }
+	inline Part(const MatrixType& matrix) : m_matrix(matrix)
+	{
+		ei_assert(ei_are_flags_consistent<Mode>::ret);
+	}
 
-    /** \sa MatrixBase::operator+=() */
-    template<typename Other> Part&  operator+=(const Other& other);
-    /** \sa MatrixBase::operator-=() */
-    template<typename Other> Part&  operator-=(const Other& other);
-    /** \sa MatrixBase::operator*=() */
-    Part&  operator*=(const typename ei_traits<MatrixType>::Scalar& other);
-    /** \sa MatrixBase::operator/=() */
-    Part&  operator/=(const typename ei_traits<MatrixType>::Scalar& other);
+	/** \sa MatrixBase::operator+=() */
+	template<typename Other> Part&  operator+=(const Other& other);
+	/** \sa MatrixBase::operator-=() */
+	template<typename Other> Part&  operator-=(const Other& other);
+	/** \sa MatrixBase::operator*=() */
+	Part&  operator*=(const typename ei_traits<MatrixType>::Scalar& other);
+	/** \sa MatrixBase::operator/=() */
+	Part&  operator/=(const typename ei_traits<MatrixType>::Scalar& other);
 
-    /** \sa operator=(), MatrixBase::lazyAssign() */
-    template<typename Other> void lazyAssign(const Other& other);
-    /** \sa MatrixBase::operator=() */
-    template<typename Other> Part& operator=(const Other& other);
+	/** \sa operator=(), MatrixBase::lazyAssign() */
+	template<typename Other> void lazyAssign(const Other& other);
+	/** \sa MatrixBase::operator=() */
+	template<typename Other> Part& operator=(const Other& other);
 
-    inline int rows() const { return m_matrix.rows(); }
-    inline int cols() const { return m_matrix.cols(); }
-    inline int stride() const { return m_matrix.stride(); }
+	inline int rows() const
+	{
+		return m_matrix.rows();
+	}
+	inline int cols() const
+	{
+		return m_matrix.cols();
+	}
+	inline int stride() const
+	{
+		return m_matrix.stride();
+	}
 
-    inline Scalar coeff(int row, int col) const
-    {
-      // SelfAdjointBit doesn't play any role here: just because a matrix is selfadjoint doesn't say anything about
-      // each individual coefficient, except for the not-very-useful-here fact that diagonal coefficients are real.
-      if( ((Flags & LowerTriangularBit) && (col>row)) || ((Flags & UpperTriangularBit) && (row>col)) )
-        return (Scalar)0;
-      if(Flags & UnitDiagBit)
-        return col==row ? (Scalar)1 : m_matrix.coeff(row, col);
-      else if(Flags & ZeroDiagBit)
-        return col==row ? (Scalar)0 : m_matrix.coeff(row, col);
-      else
-        return m_matrix.coeff(row, col);
-    }
+	inline Scalar coeff(int row, int col) const
+	{
+		// SelfAdjointBit doesn't play any role here: just because a matrix is selfadjoint doesn't say anything about
+		// each individual coefficient, except for the not-very-useful-here fact that diagonal coefficients are real.
+		if( ((Flags & LowerTriangularBit) && (col>row)) || ((Flags & UpperTriangularBit) && (row>col)) )
+			return (Scalar)0;
+		if(Flags & UnitDiagBit)
+			return col==row ? (Scalar)1 : m_matrix.coeff(row, col);
+		else if(Flags & ZeroDiagBit)
+			return col==row ? (Scalar)0 : m_matrix.coeff(row, col);
+		else
+			return m_matrix.coeff(row, col);
+	}
 
-    inline Scalar& coeffRef(int row, int col)
-    {
-      EIGEN_STATIC_ASSERT(!(Flags & UnitDiagBit), WRITING_TO_TRIANGULAR_PART_WITH_UNIT_DIAGONAL_IS_NOT_SUPPORTED)
-      EIGEN_STATIC_ASSERT(!(Flags & SelfAdjointBit), COEFFICIENT_WRITE_ACCESS_TO_SELFADJOINT_NOT_SUPPORTED)
-      ei_assert(   (Mode==UpperTriangular && col>=row)
-                || (Mode==LowerTriangular && col<=row)
-                || (Mode==StrictlyUpperTriangular && col>row)
-                || (Mode==StrictlyLowerTriangular && col<row));
-      return m_matrix.const_cast_derived().coeffRef(row, col);
-    }
+	inline Scalar& coeffRef(int row, int col)
+	{
+		EIGEN_STATIC_ASSERT(!(Flags & UnitDiagBit), WRITING_TO_TRIANGULAR_PART_WITH_UNIT_DIAGONAL_IS_NOT_SUPPORTED)
+		EIGEN_STATIC_ASSERT(!(Flags & SelfAdjointBit), COEFFICIENT_WRITE_ACCESS_TO_SELFADJOINT_NOT_SUPPORTED)
+		ei_assert(   (Mode==UpperTriangular && col>=row)
+		             || (Mode==LowerTriangular && col<=row)
+		             || (Mode==StrictlyUpperTriangular && col>row)
+		             || (Mode==StrictlyLowerTriangular && col<row));
+		return m_matrix.const_cast_derived().coeffRef(row, col);
+	}
 
-    /** \internal */
-    const MatrixType& _expression() const { return m_matrix; }
+	/** \internal */
+	const MatrixType& _expression() const
+	{
+		return m_matrix;
+	}
 
-    /** discard any writes to a row */
-    const Block<Part, 1, ColsAtCompileTime> row(int i) { return Base::row(i); }
-    const Block<Part, 1, ColsAtCompileTime> row(int i) const { return Base::row(i); }
-    /** discard any writes to a column */
-    const Block<Part, RowsAtCompileTime, 1> col(int i) { return Base::col(i); }
-    const Block<Part, RowsAtCompileTime, 1> col(int i) const { return Base::col(i); }
+	/** discard any writes to a row */
+	const Block<Part, 1, ColsAtCompileTime> row(int i)
+	{
+		return Base::row(i);
+	}
+	const Block<Part, 1, ColsAtCompileTime> row(int i) const
+	{
+		return Base::row(i);
+	}
+	/** discard any writes to a column */
+	const Block<Part, RowsAtCompileTime, 1> col(int i)
+	{
+		return Base::col(i);
+	}
+	const Block<Part, RowsAtCompileTime, 1> col(int i) const
+	{
+		return Base::col(i);
+	}
 
-    template<typename OtherDerived>
-    void swap(const MatrixBase<OtherDerived>& other)
-    {
-      Part<SwapWrapper<MatrixType>,Mode>(const_cast<MatrixType&>(m_matrix)).lazyAssign(other.derived());
-    }
+	template<typename OtherDerived>
+	void swap(const MatrixBase<OtherDerived>& other)
+	{
+		Part<SwapWrapper<MatrixType>,Mode>(const_cast<MatrixType&>(m_matrix)).lazyAssign(other.derived());
+	}
 
-  protected:
-    const typename MatrixType::Nested m_matrix;
+protected:
+	const typename MatrixType::Nested m_matrix;
 
-  private:
-    Part& operator=(const Part&);
+private:
+	Part& operator=(const Part&);
 };
 
 /** \nonstableyet
@@ -147,139 +172,125 @@ template<typename Derived>
 template<unsigned int Mode>
 const Part<Derived, Mode> MatrixBase<Derived>::part() const
 {
-  return derived();
+	return derived();
 }
 
 template<typename MatrixType, unsigned int Mode>
 template<typename Other>
 inline Part<MatrixType, Mode>& Part<MatrixType, Mode>::operator=(const Other& other)
 {
-  if(Other::Flags & EvalBeforeAssigningBit)
-  {
-    typename MatrixBase<Other>::PlainMatrixType other_evaluated(other.rows(), other.cols());
-    other_evaluated.template part<Mode>().lazyAssign(other);
-    lazyAssign(other_evaluated);
-  }
-  else
-    lazyAssign(other.derived());
-  return *this;
+	if(Other::Flags & EvalBeforeAssigningBit) {
+		typename MatrixBase<Other>::PlainMatrixType other_evaluated(other.rows(), other.cols());
+		other_evaluated.template part<Mode>().lazyAssign(other);
+		lazyAssign(other_evaluated);
+	} else
+		lazyAssign(other.derived());
+	return *this;
 }
 
 template<typename Derived1, typename Derived2, unsigned int Mode, int UnrollCount>
-struct ei_part_assignment_impl
-{
-  enum {
-    col = (UnrollCount-1) / Derived1::RowsAtCompileTime,
-    row = (UnrollCount-1) % Derived1::RowsAtCompileTime
-  };
+struct ei_part_assignment_impl {
+	enum {
+		col = (UnrollCount-1) / Derived1::RowsAtCompileTime,
+		row = (UnrollCount-1) % Derived1::RowsAtCompileTime
+	};
 
-  inline static void run(Derived1 &dst, const Derived2 &src)
-  {
-    ei_part_assignment_impl<Derived1, Derived2, Mode, UnrollCount-1>::run(dst, src);
+	inline static void run(Derived1 &dst, const Derived2 &src)
+	{
+		ei_part_assignment_impl<Derived1, Derived2, Mode, UnrollCount-1>::run(dst, src);
 
-    if(Mode == SelfAdjoint)
-    {
-      if(row == col)
-        dst.coeffRef(row, col) = ei_real(src.coeff(row, col));
-      else if(row < col)
-        dst.coeffRef(col, row) = ei_conj(dst.coeffRef(row, col) = src.coeff(row, col));
-    }
-    else
-    {
-      ei_assert(Mode == UpperTriangular || Mode == LowerTriangular || Mode == StrictlyUpperTriangular || Mode == StrictlyLowerTriangular);
-      if((Mode == UpperTriangular && row <= col)
-      || (Mode == LowerTriangular && row >= col)
-      || (Mode == StrictlyUpperTriangular && row < col)
-      || (Mode == StrictlyLowerTriangular && row > col))
-        dst.copyCoeff(row, col, src);
-    }
-  }
+		if(Mode == SelfAdjoint) {
+			if(row == col)
+				dst.coeffRef(row, col) = ei_real(src.coeff(row, col));
+			else if(row < col)
+				dst.coeffRef(col, row) = ei_conj(dst.coeffRef(row, col) = src.coeff(row, col));
+		} else {
+			ei_assert(Mode == UpperTriangular || Mode == LowerTriangular || Mode == StrictlyUpperTriangular || Mode == StrictlyLowerTriangular);
+			if((Mode == UpperTriangular && row <= col)
+			   || (Mode == LowerTriangular && row >= col)
+			   || (Mode == StrictlyUpperTriangular && row < col)
+			   || (Mode == StrictlyLowerTriangular && row > col))
+				dst.copyCoeff(row, col, src);
+		}
+	}
 };
 
 template<typename Derived1, typename Derived2, unsigned int Mode>
-struct ei_part_assignment_impl<Derived1, Derived2, Mode, 1>
-{
-  inline static void run(Derived1 &dst, const Derived2 &src)
-  {
-    if(!(Mode & ZeroDiagBit))
-      dst.copyCoeff(0, 0, src);
-  }
+struct ei_part_assignment_impl<Derived1, Derived2, Mode, 1> {
+	inline static void run(Derived1 &dst, const Derived2 &src)
+	{
+		if(!(Mode & ZeroDiagBit))
+			dst.copyCoeff(0, 0, src);
+	}
 };
 
 // prevent buggy user code from causing an infinite recursion
 template<typename Derived1, typename Derived2, unsigned int Mode>
-struct ei_part_assignment_impl<Derived1, Derived2, Mode, 0>
-{
-  inline static void run(Derived1 &, const Derived2 &) {}
+struct ei_part_assignment_impl<Derived1, Derived2, Mode, 0> {
+	inline static void run(Derived1 &, const Derived2 &) {}
 };
 
 template<typename Derived1, typename Derived2>
-struct ei_part_assignment_impl<Derived1, Derived2, UpperTriangular, Dynamic>
-{
-  inline static void run(Derived1 &dst, const Derived2 &src)
-  {
-    for(int j = 0; j < dst.cols(); ++j)
-      for(int i = 0; i <= j; ++i)
-        dst.copyCoeff(i, j, src);
-  }
+struct ei_part_assignment_impl<Derived1, Derived2, UpperTriangular, Dynamic> {
+	inline static void run(Derived1 &dst, const Derived2 &src)
+	{
+		for(int j = 0; j < dst.cols(); ++j)
+			for(int i = 0; i <= j; ++i)
+				dst.copyCoeff(i, j, src);
+	}
 };
 
 template<typename Derived1, typename Derived2>
-struct ei_part_assignment_impl<Derived1, Derived2, LowerTriangular, Dynamic>
-{
-  inline static void run(Derived1 &dst, const Derived2 &src)
-  {
-    for(int j = 0; j < dst.cols(); ++j)
-      for(int i = j; i < dst.rows(); ++i)
-        dst.copyCoeff(i, j, src);
-  }
+struct ei_part_assignment_impl<Derived1, Derived2, LowerTriangular, Dynamic> {
+	inline static void run(Derived1 &dst, const Derived2 &src)
+	{
+		for(int j = 0; j < dst.cols(); ++j)
+			for(int i = j; i < dst.rows(); ++i)
+				dst.copyCoeff(i, j, src);
+	}
 };
 
 template<typename Derived1, typename Derived2>
-struct ei_part_assignment_impl<Derived1, Derived2, StrictlyUpperTriangular, Dynamic>
-{
-  inline static void run(Derived1 &dst, const Derived2 &src)
-  {
-    for(int j = 0; j < dst.cols(); ++j)
-      for(int i = 0; i < j; ++i)
-        dst.copyCoeff(i, j, src);
-  }
+struct ei_part_assignment_impl<Derived1, Derived2, StrictlyUpperTriangular, Dynamic> {
+	inline static void run(Derived1 &dst, const Derived2 &src)
+	{
+		for(int j = 0; j < dst.cols(); ++j)
+			for(int i = 0; i < j; ++i)
+				dst.copyCoeff(i, j, src);
+	}
 };
 template<typename Derived1, typename Derived2>
-struct ei_part_assignment_impl<Derived1, Derived2, StrictlyLowerTriangular, Dynamic>
-{
-  inline static void run(Derived1 &dst, const Derived2 &src)
-  {
-    for(int j = 0; j < dst.cols(); ++j)
-      for(int i = j+1; i < dst.rows(); ++i)
-        dst.copyCoeff(i, j, src);
-  }
+struct ei_part_assignment_impl<Derived1, Derived2, StrictlyLowerTriangular, Dynamic> {
+	inline static void run(Derived1 &dst, const Derived2 &src)
+	{
+		for(int j = 0; j < dst.cols(); ++j)
+			for(int i = j+1; i < dst.rows(); ++i)
+				dst.copyCoeff(i, j, src);
+	}
 };
 template<typename Derived1, typename Derived2>
-struct ei_part_assignment_impl<Derived1, Derived2, SelfAdjoint, Dynamic>
-{
-  inline static void run(Derived1 &dst, const Derived2 &src)
-  {
-    for(int j = 0; j < dst.cols(); ++j)
-    {
-      for(int i = 0; i < j; ++i)
-        dst.coeffRef(j, i) = ei_conj(dst.coeffRef(i, j) = src.coeff(i, j));
-      dst.coeffRef(j, j) = ei_real(src.coeff(j, j));
-    }
-  }
+struct ei_part_assignment_impl<Derived1, Derived2, SelfAdjoint, Dynamic> {
+	inline static void run(Derived1 &dst, const Derived2 &src)
+	{
+		for(int j = 0; j < dst.cols(); ++j) {
+			for(int i = 0; i < j; ++i)
+				dst.coeffRef(j, i) = ei_conj(dst.coeffRef(i, j) = src.coeff(i, j));
+			dst.coeffRef(j, j) = ei_real(src.coeff(j, j));
+		}
+	}
 };
 
 template<typename MatrixType, unsigned int Mode>
 template<typename Other>
 void Part<MatrixType, Mode>::lazyAssign(const Other& other)
 {
-  const bool unroll = MatrixType::SizeAtCompileTime * Other::CoeffReadCost / 2 <= EIGEN_UNROLLING_LIMIT;
-  ei_assert(m_matrix.rows() == other.rows() && m_matrix.cols() == other.cols());
+	const bool unroll = MatrixType::SizeAtCompileTime * Other::CoeffReadCost / 2 <= EIGEN_UNROLLING_LIMIT;
+	ei_assert(m_matrix.rows() == other.rows() && m_matrix.cols() == other.cols());
 
-  ei_part_assignment_impl
-    <MatrixType, Other, Mode,
-    unroll ? int(MatrixType::SizeAtCompileTime) : Dynamic
-    >::run(m_matrix.const_cast_derived(), other.derived());
+	ei_part_assignment_impl
+	<MatrixType, Other, Mode,
+	unroll ? int(MatrixType::SizeAtCompileTime) : Dynamic
+	>::run(m_matrix.const_cast_derived(), other.derived());
 }
 
 /** \nonstableyet
@@ -299,7 +310,7 @@ template<typename Derived>
 template<unsigned int Mode>
 inline Part<Derived, Mode> MatrixBase<Derived>::part()
 {
-  return Part<Derived, Mode>(derived());
+	return Part<Derived, Mode>(derived());
 }
 
 /** \returns true if *this is approximately equal to an upper triangular matrix,
@@ -310,18 +321,17 @@ inline Part<Derived, Mode> MatrixBase<Derived>::part()
 template<typename Derived>
 bool MatrixBase<Derived>::isUpperTriangular(RealScalar prec) const
 {
-  if(cols() != rows()) return false;
-  RealScalar maxAbsOnUpperTriangularPart = static_cast<RealScalar>(-1);
-  for(int j = 0; j < cols(); ++j)
-    for(int i = 0; i <= j; ++i)
-    {
-      RealScalar absValue = ei_abs(coeff(i,j));
-      if(absValue > maxAbsOnUpperTriangularPart) maxAbsOnUpperTriangularPart = absValue;
-    }
-  for(int j = 0; j < cols()-1; ++j)
-    for(int i = j+1; i < rows(); ++i)
-      if(!ei_isMuchSmallerThan(coeff(i, j), maxAbsOnUpperTriangularPart, prec)) return false;
-  return true;
+	if(cols() != rows()) return false;
+	RealScalar maxAbsOnUpperTriangularPart = static_cast<RealScalar>(-1);
+	for(int j = 0; j < cols(); ++j)
+		for(int i = 0; i <= j; ++i) {
+			RealScalar absValue = ei_abs(coeff(i,j));
+			if(absValue > maxAbsOnUpperTriangularPart) maxAbsOnUpperTriangularPart = absValue;
+		}
+	for(int j = 0; j < cols()-1; ++j)
+		for(int i = j+1; i < rows(); ++i)
+			if(!ei_isMuchSmallerThan(coeff(i, j), maxAbsOnUpperTriangularPart, prec)) return false;
+	return true;
 }
 
 /** \returns true if *this is approximately equal to a lower triangular matrix,
@@ -332,46 +342,45 @@ bool MatrixBase<Derived>::isUpperTriangular(RealScalar prec) const
 template<typename Derived>
 bool MatrixBase<Derived>::isLowerTriangular(RealScalar prec) const
 {
-  if(cols() != rows()) return false;
-  RealScalar maxAbsOnLowerTriangularPart = static_cast<RealScalar>(-1);
-  for(int j = 0; j < cols(); ++j)
-    for(int i = j; i < rows(); ++i)
-    {
-      RealScalar absValue = ei_abs(coeff(i,j));
-      if(absValue > maxAbsOnLowerTriangularPart) maxAbsOnLowerTriangularPart = absValue;
-    }
-  for(int j = 1; j < cols(); ++j)
-    for(int i = 0; i < j; ++i)
-      if(!ei_isMuchSmallerThan(coeff(i, j), maxAbsOnLowerTriangularPart, prec)) return false;
-  return true;
+	if(cols() != rows()) return false;
+	RealScalar maxAbsOnLowerTriangularPart = static_cast<RealScalar>(-1);
+	for(int j = 0; j < cols(); ++j)
+		for(int i = j; i < rows(); ++i) {
+			RealScalar absValue = ei_abs(coeff(i,j));
+			if(absValue > maxAbsOnLowerTriangularPart) maxAbsOnLowerTriangularPart = absValue;
+		}
+	for(int j = 1; j < cols(); ++j)
+		for(int i = 0; i < j; ++i)
+			if(!ei_isMuchSmallerThan(coeff(i, j), maxAbsOnLowerTriangularPart, prec)) return false;
+	return true;
 }
 
 template<typename MatrixType, unsigned int Mode>
 template<typename Other>
 inline Part<MatrixType, Mode>& Part<MatrixType, Mode>::operator+=(const Other& other)
 {
-  return *this = m_matrix + other;
+	return *this = m_matrix + other;
 }
 
 template<typename MatrixType, unsigned int Mode>
 template<typename Other>
 inline Part<MatrixType, Mode>& Part<MatrixType, Mode>::operator-=(const Other& other)
 {
-  return *this = m_matrix - other;
+	return *this = m_matrix - other;
 }
 
 template<typename MatrixType, unsigned int Mode>
 inline Part<MatrixType, Mode>& Part<MatrixType, Mode>::operator*=
 (const typename ei_traits<MatrixType>::Scalar& other)
 {
-  return *this = m_matrix * other;
+	return *this = m_matrix * other;
 }
 
 template<typename MatrixType, unsigned int Mode>
 inline Part<MatrixType, Mode>& Part<MatrixType, Mode>::operator/=
 (const typename ei_traits<MatrixType>::Scalar& other)
 {
-  return *this = m_matrix / other;
+	return *this = m_matrix / other;
 }
 
 #endif // EIGEN_PART_H

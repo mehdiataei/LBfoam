@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,13 +32,13 @@
 #include "coProcessors/coProcessorFunctional3D.h"
 #include <map>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
 std::map<plint,PureDynamics<T> > identifyBlocksWithPureDynamics (
-        MultiBlockLattice3D<T,Descriptor>& lattice, plint dynamicsId );
+    MultiBlockLattice3D<T,Descriptor>& lattice, plint dynamicsId );
 
 }  // namespace plb
 
 #endif  // CO_PROCESSOR_INSTANTIATION_3D_H
-

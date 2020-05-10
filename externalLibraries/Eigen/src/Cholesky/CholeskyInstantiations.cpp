@@ -30,6 +30,7 @@
 
 #include "../../Cholesky"
 
-namespace Eigen {
-  EIGEN_CHOLESKY_MODULE_INSTANTIATE();
+namespace Eigen
+{
+EIGEN_CHOLESKY_MODULE_INSTANTIATE();
 }

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -24,18 +24,21 @@
 
 #include "atomicBlock/atomicContainerBlock2D.h"
 
-namespace plb {
+namespace plb
+{
 
 AtomicContainerBlock2D::AtomicContainerBlock2D(plint nx_, plint ny_)
     : AtomicBlock2D(nx_,ny_),
       data(0)
 { }
 
-AtomicContainerBlock2D::~AtomicContainerBlock2D() {
+AtomicContainerBlock2D::~AtomicContainerBlock2D()
+{
     delete data;
 }
 
-AtomicContainerBlock2D& AtomicContainerBlock2D::operator=(AtomicContainerBlock2D const& rhs) {
+AtomicContainerBlock2D& AtomicContainerBlock2D::operator=(AtomicContainerBlock2D const& rhs)
+{
     AtomicContainerBlock2D tmp(rhs);
     swap(tmp);
     return *this;
@@ -46,25 +49,30 @@ AtomicContainerBlock2D::AtomicContainerBlock2D(AtomicContainerBlock2D const& rhs
       data(rhs.data ? rhs.data->clone() : 0)
 { }
 
-void AtomicContainerBlock2D::swap(AtomicContainerBlock2D& rhs) {
+void AtomicContainerBlock2D::swap(AtomicContainerBlock2D& rhs)
+{
     std::swap(data, rhs.data);
     AtomicBlock2D::swap(rhs);
 }
 
-void AtomicContainerBlock2D::setData(ContainerBlockData* data_) {
+void AtomicContainerBlock2D::setData(ContainerBlockData* data_)
+{
     delete data;
     data = data_;
 }
 
-ContainerBlockData* AtomicContainerBlock2D::getData() {
+ContainerBlockData* AtomicContainerBlock2D::getData()
+{
     return data;
 }
 
-ContainerBlockData const* AtomicContainerBlock2D::getData() const {
+ContainerBlockData const* AtomicContainerBlock2D::getData() const
+{
     return data;
 }
 
-identifiers::BlockId AtomicContainerBlock2D::getBlockId() const {
+identifiers::BlockId AtomicContainerBlock2D::getBlockId() const
+{
     return identifiers::getContainerId();
 }
 

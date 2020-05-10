@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,11 +36,13 @@
 #include <ostream>
 #include <fstream>
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Class Base64Writer ******************************** */
 
-class Base64Writer : public SerializedWriter {
+class Base64Writer : public SerializedWriter
+{
 public:
     Base64Writer(std::ostream* ostr_, bool enforceUint_, bool switchEndianness_);
     Base64Writer(Base64Writer const& rhs);
@@ -67,33 +69,41 @@ Base64Writer::Base64Writer(Base64Writer const& rhs)
       enforceUint(rhs.enforceUint),
       dataEncoder(0)
 {
-    if (rhs.dataEncoder) {
+    if (rhs.dataEncoder)
+    {
         dataEncoder = new Base64Encoder<char>(*rhs.dataEncoder);
     }
 }
 
-Base64Writer* Base64Writer::clone() const {
+Base64Writer* Base64Writer::clone() const
+{
     return new Base64Writer(*this);
 }
 
-Base64Writer::~Base64Writer() {
+Base64Writer::~Base64Writer()
+{
     delete dataEncoder;
 }
 
-void Base64Writer::writeHeader(pluint dataSize) {
+void Base64Writer::writeHeader(pluint dataSize)
+{
     PLB_PRECONDITION( ostr && (bool)(*ostr) );
-    if (enforceUint) {
+    if (enforceUint)
+    {
         Base64Encoder<unsigned int> sizeEncoder(*ostr, 1);
         PLB_PRECONDITION(dataSize <= std::numeric_limits<unsigned int>::max());
         unsigned int uintBinarySize = (unsigned int)dataSize;
-        if (switchEndianness) {
+        if (switchEndianness)
+        {
             endianByteSwap(uintBinarySize);
         }
         sizeEncoder.encode(&uintBinarySize, 1);
     }
-    else {
+    else
+    {
         Base64Encoder<pluint> sizeEncoder(*ostr, 1);
-        if (switchEndianness) {
+        if (switchEndianness)
+        {
             endianByteSwap(dataSize);
         }
         sizeEncoder.encode(&dataSize, 1);
@@ -111,7 +121,8 @@ void Base64Writer::writeData(char const* dataBuffer, pluint bufferSize)
 
 /* *************** Class RawBinaryWriter ******************************** */
 
-class RawBinaryWriter : public SerializedWriter {
+class RawBinaryWriter : public SerializedWriter
+{
 public:
     RawBinaryWriter(std::ostream* ostr_);
     RawBinaryWriter(RawBinaryWriter const& rhs);
@@ -131,13 +142,15 @@ RawBinaryWriter::RawBinaryWriter(RawBinaryWriter const& rhs)
     : ostr(rhs.ostr)
 { }
 
-RawBinaryWriter* RawBinaryWriter::clone() const {
+RawBinaryWriter* RawBinaryWriter::clone() const
+{
     return new RawBinaryWriter(*this);
 }
 
 RawBinaryWriter::~RawBinaryWriter() { }
 
-void RawBinaryWriter::writeHeader(pluint dataSize) {
+void RawBinaryWriter::writeHeader(pluint dataSize)
+{
     ostr->write((char const*)&dataSize, sizeof(dataSize));
 }
 
@@ -151,7 +164,8 @@ void RawBinaryWriter::writeData(char const* dataBuffer, pluint bufferSize)
 
 /* *************** Class Base64Reader ******************************** */
 
-class Base64Reader : public SerializedReader {
+class Base64Reader : public SerializedReader
+{
 public:
     Base64Reader(std::istream* istr_, bool enforceUint_, bool switchEndianness_);
     Base64Reader(Base64Reader const& rhs);
@@ -178,35 +192,43 @@ Base64Reader::Base64Reader(Base64Reader const& rhs)
       enforceUint(rhs.enforceUint),
       dataDecoder(0)
 {
-    if (rhs.dataDecoder) {
+    if (rhs.dataDecoder)
+    {
         dataDecoder = new Base64Decoder<char>(*rhs.dataDecoder);
     }
 }
 
-Base64Reader* Base64Reader::clone() const {
+Base64Reader* Base64Reader::clone() const
+{
     return new Base64Reader(*this);
 }
 
-Base64Reader::~Base64Reader() {
+Base64Reader::~Base64Reader()
+{
     delete dataDecoder;
 }
 
-void Base64Reader::readHeader(pluint dataSize) const {
+void Base64Reader::readHeader(pluint dataSize) const
+{
     PLB_PRECONDITION( istr && (bool)(*istr) );
     pluint binarySize = 0;
-    if (enforceUint) {
+    if (enforceUint)
+    {
         unsigned int uintBinarySize;
         Base64Decoder<unsigned int> sizeDecoder(*istr, 1);
         sizeDecoder.decode(&uintBinarySize, 1);
-        if (switchEndianness) {
+        if (switchEndianness)
+        {
             endianByteSwap(uintBinarySize);
         }
         binarySize = uintBinarySize;
     }
-    else {
+    else
+    {
         Base64Decoder<pluint> sizeDecoder(*istr, 1);
         sizeDecoder.decode(&binarySize, 1);
-        if (switchEndianness) {
+        if (switchEndianness)
+        {
             endianByteSwap(binarySize);
         }
     }
@@ -228,28 +250,28 @@ void Base64Reader::readData(char* dataBuffer, pluint bufferSize) const
 void serializerToBase64Stream(DataSerializer const* serializer, std::ostream* ostr, bool enforceUint, bool mainProcOnly)
 {
     serializerToSink (
-            serializer,
-            new Base64Writer(ostr, enforceUint,
-                                global::IOpolicy().getEndianSwitchOnBase64out()),
-            mainProcOnly );
+        serializer,
+        new Base64Writer(ostr, enforceUint,
+                         global::IOpolicy().getEndianSwitchOnBase64out()),
+        mainProcOnly );
 }
 
 void serializerToRawBinaryStream(DataSerializer const* serializer, std::ostream* ostr, bool mainProcOnly)
 {
     serializerToSink (
-            serializer,
-            new RawBinaryWriter(ostr),
-            mainProcOnly );
+        serializer,
+        new RawBinaryWriter(ostr),
+        mainProcOnly );
 }
 
 void base64StreamToUnSerializer( std::istream* istr, DataUnSerializer* unSerializer,
                                  bool enforceUint, bool mainProcOnly )
 {
     sourceToUnSerializer (
-            new Base64Reader(istr, enforceUint,
-                             global::IOpolicy().getEndianSwitchOnBase64in()),
-            unSerializer,
-            mainProcOnly );
+        new Base64Reader(istr, enforceUint,
+                         global::IOpolicy().getEndianSwitchOnBase64in()),
+        unSerializer,
+        mainProcOnly );
 }
 
 } // namespace plb

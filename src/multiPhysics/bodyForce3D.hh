@@ -258,84 +258,6 @@ void addForceToMomentum(MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarF
     applyProcessingFunctional(new AddForceToMomentum3D<T,Descriptor>, domain, args);
 }
 
-/* ****************** FreeSurfaceAddConstForceToMomentum3D *************************************************** */
-
-template<typename T, template<typename U> class Descriptor>
-FreeSurfaceAddConstForceToMomentum3D<T,Descriptor>::FreeSurfaceAddConstForceToMomentum3D(Array<T,3> const& force_)
-    : force(force_)
-{ }
-
-template<typename T, template<typename U> class Descriptor>
-void FreeSurfaceAddConstForceToMomentum3D<T,Descriptor>::processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks)
-{
-    PLB_ASSERT(blocks.size() == 4);
-    BlockLattice3D<T,Descriptor>* lattice = dynamic_cast<BlockLattice3D<T,Descriptor>*>(blocks[0]);
-    PLB_ASSERT(lattice);
-    ScalarField3D<T>* rhoBar = dynamic_cast<ScalarField3D<T>*>(blocks[1]);
-    PLB_ASSERT(rhoBar);
-    TensorField3D<T,3>* j = dynamic_cast<TensorField3D<T,3>*>(blocks[2]);
-    PLB_ASSERT(j);
-    ScalarField3D<int>* flag = dynamic_cast<ScalarField3D<int>*>(blocks[3]);
-    PLB_ASSERT(flag);
-
-    Dot3D ofsRhoBar = computeRelativeDisplacement(*lattice, *rhoBar);
-    Dot3D ofsJ = computeRelativeDisplacement(*lattice, *j);
-    Dot3D ofsFlag = computeRelativeDisplacement(*lattice, *flag);
-
-    for (plint iX = domain.x0; iX <= domain.x1; iX++) {
-        for (plint iY = domain.y0; iY <= domain.y1; iY++) {
-            for (plint iZ = domain.z0; iZ <= domain.z1; iZ++) {
-                if (freeSurfaceFlag::isWet(flag->get(iX+ofsFlag.x, iY+ofsFlag.y, iZ+ofsFlag.z))) {
-                    // Momentum correction.
-                    Cell<T,Descriptor>& cell = lattice->get(iX, iY, iZ);
-                    T dynamicOmega = cell.getDynamics().getDynamicParameter(dynamicParams::dynamicOmega, cell);
-                    T tau = 0.0;
-                    if (!util::isZero(dynamicOmega)) {
-                        tau = (T) 1 / dynamicOmega;
-                    } else {
-                        tau = (T) 1 / cell.getDynamics().getOmega();
-                    }
-                    T rho = Descriptor<T>::fullRho(rhoBar->get(iX+ofsRhoBar.x, iY+ofsRhoBar.y, iZ+ofsRhoBar.z));
-                    j->get(iX+ofsJ.x, iY+ofsJ.y, iZ+ofsJ.z) += rho * tau * force;
-                }
-            }
-        }
-    }   
-}
-
-template<typename T, template<typename U> class Descriptor>
-FreeSurfaceAddConstForceToMomentum3D<T,Descriptor>* FreeSurfaceAddConstForceToMomentum3D<T,Descriptor>::clone() const
-{
-    return new FreeSurfaceAddConstForceToMomentum3D<T,Descriptor>(*this);
-}
-
-template<typename T, template<typename U> class Descriptor>
-void FreeSurfaceAddConstForceToMomentum3D<T,Descriptor>::getTypeOfModification(std::vector<modif::ModifT>& modified) const
-{
-    modified[0] = modif::nothing;           // Lattice
-    modified[1] = modif::nothing;           // rhoBar
-    modified[2] = modif::staticVariables;   // j
-    modified[3] = modif::nothing;           // Flag
-}
-
-template<typename T, template<typename U> class Descriptor>
-BlockDomain::DomainT FreeSurfaceAddConstForceToMomentum3D<T,Descriptor>::appliesTo() const
-{
-    return BlockDomain::bulk;
-}
-
-template<typename T, template<typename U> class Descriptor>
-void freeSurfaceAddConstForceToMomentum(MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarField3D<T>& rhoBar,
-        MultiTensorField3D<T,3>& j, MultiScalarField3D<int>& flag, Array<T,3> const& force, Box3D const& domain)
-{
-    std::vector<MultiBlock3D*> args;
-    args.push_back(&lattice);
-    args.push_back(&rhoBar);
-    args.push_back(&j);
-    args.push_back(&flag);
-    applyProcessingFunctional(new FreeSurfaceAddConstForceToMomentum3D<T,Descriptor>(force), domain, args);
-}
-
 /* ****************** FreeSurfaceAddForceToMomentum3D *************************************************** */
 
 template<typename T, template<typename U> class Descriptor>
@@ -361,7 +283,7 @@ void FreeSurfaceAddForceToMomentum3D<T,Descriptor>::processGenericBlocks(Box3D d
     for (plint iX = domain.x0; iX <= domain.x1; iX++) {
         for (plint iY = domain.y0; iY <= domain.y1; iY++) {
             for (plint iZ = domain.z0; iZ <= domain.z1; iZ++) {
-                if (freeSurfaceFlag::isWet(flag->get(iX+ofsFlag.x, iY+ofsFlag.y, iZ+ofsFlag.z))) {
+                if (freeSurfaceFlag3D::isWet(flag->get(iX+ofsFlag.x, iY+ofsFlag.y, iZ+ofsFlag.z))) {
                     // Momentum correction.
                     Cell<T,Descriptor>& cell = lattice->get(iX, iY, iZ);
                     T dynamicOmega = cell.getDynamics().getDynamicParameter(dynamicParams::dynamicOmega, cell);
@@ -574,7 +496,7 @@ void FreeSurfaceComputeRotatingFrameForce3D<T,Descriptor>::processGenericBlocks(
 
                 Array<T,3> newForce(Array<T,3>::zero());
 
-                if (freeSurfaceFlag::isWet(flag->get(iX+ofsFlag.x, iY+ofsFlag.y, iZ+ofsFlag.z))) {
+                if (freeSurfaceFlag3D::isWet(flag->get(iX+ofsFlag.x, iY+ofsFlag.y, iZ+ofsFlag.z))) {
 
                     // Constant force.
                     newForce = constantForce;
@@ -635,135 +557,6 @@ void freeSurfaceComputeRotatingFrameForce(MultiBlockLattice3D<T,Descriptor>& lat
     applyProcessingFunctional(
             new FreeSurfaceComputeRotatingFrameForce3D<T,Descriptor>(constantForce, angularVelocity, origin, incompressibleModel),
             domain, args);
-}
-
-/* ****************** ComputeTorqueFromBodyForce3D *************************************************** */
-
-template<typename T>
-ComputeTorqueFromBodyForce3D<T>::ComputeTorqueFromBodyForce3D(Array<T,3> const& center_)
-    : center(center_),
-      torqueIds(
-              this->getStatistics().subscribeSum(),
-              this->getStatistics().subscribeSum(),
-              this->getStatistics().subscribeSum())
-{ }
-
-template<typename T>
-void ComputeTorqueFromBodyForce3D<T>::process(Box3D domain, TensorField3D<T,3>& force)
-{
-    Dot3D location = force.getLocation();
-    for (plint iX = domain.x0; iX <= domain.x1; iX++) {
-        plint x = iX + location.x;
-        for (plint iY = domain.y0; iY <= domain.y1; iY++) {
-            plint y = iY + location.y;
-            for (plint iZ = domain.z0; iZ <= domain.z1; iZ++) {
-                plint z = iZ + location.z;
-
-                Array<T,3> r((T) x - center[0], (T) y - center[1], (T) z - center[2]);
-                Array<T,3> torque = crossProduct(r, force.get(iX, iY, iZ));
-
-                this->getStatistics().gatherSum(torqueIds[0], torque[0]);
-                this->getStatistics().gatherSum(torqueIds[1], torque[1]);
-                this->getStatistics().gatherSum(torqueIds[2], torque[2]);
-            }
-        }
-    }
-}
-
-template<typename T>
-ComputeTorqueFromBodyForce3D<T>* ComputeTorqueFromBodyForce3D<T>::clone() const
-{
-    return new ComputeTorqueFromBodyForce3D<T>(*this);
-}
-
-template<typename T>
-void ComputeTorqueFromBodyForce3D<T>::getTypeOfModification(std::vector<modif::ModifT>& modified) const
-{
-    modified[0] = modif::nothing;   // Force
-}
-
-template<typename T>
-Array<T,3> ComputeTorqueFromBodyForce3D<T>::getTorque() const
-{
-    return Array<T,3>(
-            this->getStatistics().getSum(torqueIds[0]),
-            this->getStatistics().getSum(torqueIds[1]),
-            this->getStatistics().getSum(torqueIds[2]));
-}
-
-template<typename T>
-Array<T,3> computeTorqueFromBodyForce(MultiTensorField3D<T,3>& force, Array<T,3> const& center, Box3D domain)
-{
-    ComputeTorqueFromBodyForce3D<T> functional(center);
-    applyProcessingFunctional(functional, domain, force);
-    return functional.getTorque();
-}
-
-/* ****************** MaskedComputeTorqueFromBodyForce3D *************************************************** */
-
-template<typename T>
-MaskedComputeTorqueFromBodyForce3D<T>::MaskedComputeTorqueFromBodyForce3D(Array<T,3> const& center_, int flag_)
-    : center(center_),
-      flag(flag_),
-      torqueIds(
-              this->getStatistics().subscribeSum(),
-              this->getStatistics().subscribeSum(),
-              this->getStatistics().subscribeSum())
-{ }
-
-template<typename T>
-void MaskedComputeTorqueFromBodyForce3D<T>::process(Box3D domain, ScalarField3D<int>& mask, TensorField3D<T,3>& force)
-{
-    Dot3D offset = computeRelativeDisplacement(mask, force);
-    Dot3D location = mask.getLocation();
-    for (plint iX = domain.x0; iX <= domain.x1; iX++) {
-        plint x = iX + location.x;
-        for (plint iY = domain.y0; iY <= domain.y1; iY++) {
-            plint y = iY + location.y;
-            for (plint iZ = domain.z0; iZ <= domain.z1; iZ++) {
-                plint z = iZ + location.z;
-                if (mask.get(iX, iY, iZ) == flag) {
-                    Array<T,3> r((T) x - center[0], (T) y - center[1], (T) z - center[2]);
-                    Array<T,3> torque = crossProduct(r, force.get(iX + offset.x, iY + offset.y, iZ + offset.z));
-
-                    this->getStatistics().gatherSum(torqueIds[0], torque[0]);
-                    this->getStatistics().gatherSum(torqueIds[1], torque[1]);
-                    this->getStatistics().gatherSum(torqueIds[2], torque[2]);
-                }
-            }
-        }
-    }
-}
-
-template<typename T>
-MaskedComputeTorqueFromBodyForce3D<T>* MaskedComputeTorqueFromBodyForce3D<T>::clone() const
-{
-    return new MaskedComputeTorqueFromBodyForce3D<T>(*this);
-}
-
-template<typename T>
-void MaskedComputeTorqueFromBodyForce3D<T>::getTypeOfModification(std::vector<modif::ModifT>& modified) const
-{
-    modified[0] = modif::nothing;   // Mask
-    modified[1] = modif::nothing;   // Force
-}
-
-template<typename T>
-Array<T,3> MaskedComputeTorqueFromBodyForce3D<T>::getTorque() const
-{
-    return Array<T,3>(
-            this->getStatistics().getSum(torqueIds[0]),
-            this->getStatistics().getSum(torqueIds[1]),
-            this->getStatistics().getSum(torqueIds[2]));
-}
-
-template<typename T>
-Array<T,3> computeTorqueFromBodyForce(MultiTensorField3D<T,3>& force, MultiScalarField3D<int>& mask,
-        Array<T,3> const& center, int flag, Box3D domain)
-{
-    MaskedComputeTorqueFromBodyForce3D<T> functional(center, flag);
-    applyProcessingFunctional(functional, domain, mask, force);
-    return functional.getTorque();
 }
 
 }  // namespace plb

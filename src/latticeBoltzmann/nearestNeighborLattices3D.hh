@@ -91,7 +91,7 @@ namespace descriptors {
     const char D3Q13Descriptor<T>::name[] = "D3Q13";
 
     template<typename T>
-    const char ForcedD3Q13Descriptor<T>::name[] = "ForcedD3Q13";
+    const char ForcedD3Q13Descriptor<T>::name[] = "ForcedD3Q19";
 
 
     // D3Q15 ///////////////////////////////////////////////////////////

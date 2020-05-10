@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,7 +33,8 @@
 #include "core/dynamics.h"
 #include "atomicBlock/dataProcessingFunctional3D.h"
 
-namespace plb {
+namespace plb
+{
 
 // Data processor to implement a viscosity sponge zone:
 // The relaxation parameter (kinematic viscosity) is progressively increased
@@ -45,66 +46,35 @@ template<typename T, template<typename U> class Descriptor>
 class ViscositySpongeZone3D : public BoxProcessingFunctional3D
 {
 public:
-    // Constructor for the tanh sponge function.
-    //   Nice value for the translation parameters is 0.5.
-    //   Nice value for the scale parameters is 0.12.
-    ViscositySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkOmega_,
-            Array<plint,6> const& numSpongeCells_, Array<T,6> const& translationParameters_,
-            Array<T,6> const& scaleParameters_);
+	// Constructor for the tanh sponge function.
+	//   Nice value for the translation parameters is 0.5.
+	//   Nice value for the scale parameters is 0.12.
+	ViscositySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkOmega_,
+	                      Array<plint,6> const& numSpongeCells_, Array<T,6> const& translationParameters_,
+	                      Array<T,6> const& scaleParameters_);
 
-    // Constructor for the cos sponge function.
-    ViscositySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkOmega_,
-                        Array<plint,6> const& numSpongeCells_);
+	// Constructor for the cos sponge function.
+	ViscositySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkOmega_,
+	                      Array<plint,6> const& numSpongeCells_);
 
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
 
-    virtual ViscositySpongeZone3D<T,Descriptor>* clone() const
-    {
-        return new ViscositySpongeZone3D<T,Descriptor>(*this);
-    }
+	virtual ViscositySpongeZone3D<T,Descriptor>* clone() const
+	{
+		return new ViscositySpongeZone3D<T,Descriptor>(*this);
+	}
 
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
-    {
-        modified[0] = modif::dynamicVariables; // Block lattice.
-    }
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::dynamicVariables; // Block lattice.
+	}
 private:
-    plint nx, ny, nz;                  // Lattice dimensions.
-    T bulkOmega;                       // Value of the relaxation parameter outside of the sponge zone.
-    Array<plint,6> numSpongeCells;     // Width of the sponge zones.
-    Array<T,6> translationParameters;  // Translation parameters of the tanh sponge functions.
-    Array<T,6> scaleParameters;        // Scaling parameters of the tanh sponge functions.
-    bool useTanhSpongeFunction;        // Use a tanh sponge function, or a cos sponge function.
-};
-
-// Data processor to implement a viscosity sponge zone:
-// The relaxation parameter (kinematic viscosity) is progressively increased
-// inside the zone.
-// The dynamics object of every cell is changed by this data processor, so
-// the user must make sure in the construction of the MultiBlockLattice3D that
-// each node has its own dynamics object.
-template<typename T, template<typename U> class Descriptor>
-class LocalViscositySpongeZone3D : public BoxProcessingFunctional3D
-{
-public:
-    // Constructor for the cos sponge function.
-    LocalViscositySpongeZone3D(Box3D globalDomain_, T bulkOmega_,
-                               Array<plint,6> const& numSpongeCells_);
-
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
-
-    virtual LocalViscositySpongeZone3D<T,Descriptor>* clone() const
-    {
-        return new LocalViscositySpongeZone3D<T,Descriptor>(*this);
-    }
-
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
-    {
-        modified[0] = modif::dynamicVariables; // Block lattice.
-    }
-private:
-    Box3D globalDomain;
-    T bulkOmega;                       // Value of the relaxation parameter outside of the sponge zone.
-    Array<plint,6> numSpongeCells;     // Width of the sponge zones.
+	plint nx, ny, nz;                  // Lattice dimensions.
+	T bulkOmega;                       // Value of the relaxation parameter outside of the sponge zone.
+	Array<plint,6> numSpongeCells;     // Width of the sponge zones.
+	Array<T,6> translationParameters;  // Translation parameters of the tanh sponge functions.
+	Array<T,6> scaleParameters;        // Scaling parameters of the tanh sponge functions.
+	bool useTanhSpongeFunction;        // Use a tanh sponge function, or a cos sponge function.
 };
 
 
@@ -112,37 +82,37 @@ template<typename T, template<typename U> class Descriptor>
 class MaskedViscositySpongeZone3D : public BoxProcessingFunctional3D
 {
 public:
-    // Constructor for the tanh sponge function.
-    //   Nice value for the translation parameters is 0.5.
-    //   Nice value for the scale parameters is 0.12.
-    MaskedViscositySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkOmega_, int flag_,
-            Array<plint,6> const& numSpongeCells_, Array<T,6> const& translationParameters_,
-            Array<T,6> const& scaleParameters_);
+	// Constructor for the tanh sponge function.
+	//   Nice value for the translation parameters is 0.5.
+	//   Nice value for the scale parameters is 0.12.
+	MaskedViscositySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkOmega_, int flag_,
+	                            Array<plint,6> const& numSpongeCells_, Array<T,6> const& translationParameters_,
+	                            Array<T,6> const& scaleParameters_);
 
-    // Constructor for the cos sponge function.
-    MaskedViscositySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkOmega_, int flag_,
-                        Array<plint,6> const& numSpongeCells_);
+	// Constructor for the cos sponge function.
+	MaskedViscositySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkOmega_, int flag_,
+	                            Array<plint,6> const& numSpongeCells_);
 
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
 
-    virtual MaskedViscositySpongeZone3D<T,Descriptor>* clone() const
-    {
-        return new MaskedViscositySpongeZone3D<T,Descriptor>(*this);
-    }
+	virtual MaskedViscositySpongeZone3D<T,Descriptor>* clone() const
+	{
+		return new MaskedViscositySpongeZone3D<T,Descriptor>(*this);
+	}
 
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
-    {
-        modified[0] = modif::dynamicVariables; // Block lattice.
-        modified[1] = modif::nothing;          // Flag matrix.
-    }
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::dynamicVariables; // Block lattice.
+		modified[1] = modif::nothing;          // Flag matrix.
+	}
 private:
-    plint nx, ny, nz;                  // Lattice dimensions.
-    T bulkOmega;                       // Value of the relaxation parameter outside of the sponge zone.
-    Array<plint,6> numSpongeCells;     // Width of the sponge zones.
-    Array<T,6> translationParameters;  // Translation parameters of the tanh sponge functions.
-    Array<T,6> scaleParameters;        // Scaling parameters of the tanh sponge functions.
-    bool useTanhSpongeFunction;        // Use a tanh sponge function, or a cos sponge function.
-    int flag;
+	plint nx, ny, nz;                  // Lattice dimensions.
+	T bulkOmega;                       // Value of the relaxation parameter outside of the sponge zone.
+	Array<plint,6> numSpongeCells;     // Width of the sponge zones.
+	Array<T,6> translationParameters;  // Translation parameters of the tanh sponge functions.
+	Array<T,6> scaleParameters;        // Scaling parameters of the tanh sponge functions.
+	bool useTanhSpongeFunction;        // Use a tanh sponge function, or a cos sponge function.
+	int flag;
 };
 
 
@@ -156,35 +126,35 @@ template<typename T, template<typename U> class Descriptor>
 class SmagorinskySpongeZone3D : public BoxProcessingFunctional3D
 {
 public:
-    // Constructor for the tanh sponge function.
-    //   Nice value for the translation parameters is 0.5.
-    //   Nice value for the scale parameters is 0.12.
-    SmagorinskySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkCSmago_, T targetCSmago_,
-            Array<plint,6> const& numSpongeCells_, Array<T,6> const& translationParameters_,
-            Array<T,6> const& scaleParameters_);
+	// Constructor for the tanh sponge function.
+	//   Nice value for the translation parameters is 0.5.
+	//   Nice value for the scale parameters is 0.12.
+	SmagorinskySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkCSmago_, T targetCSmago_,
+	                        Array<plint,6> const& numSpongeCells_, Array<T,6> const& translationParameters_,
+	                        Array<T,6> const& scaleParameters_);
 
-    // Constructor for the cos sponge function.
-    SmagorinskySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkCSmago_, T targetCSmago_,
-            Array<plint,6> const& numSpongeCells_);
+	// Constructor for the cos sponge function.
+	SmagorinskySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkCSmago_, T targetCSmago_,
+	                        Array<plint,6> const& numSpongeCells_);
 
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
 
-    virtual SmagorinskySpongeZone3D<T,Descriptor>* clone() const
-    {
-        return new SmagorinskySpongeZone3D<T,Descriptor>(*this);
-    }
+	virtual SmagorinskySpongeZone3D<T,Descriptor>* clone() const
+	{
+		return new SmagorinskySpongeZone3D<T,Descriptor>(*this);
+	}
 
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
-    {
-        modified[0] = modif::dynamicVariables; // Block lattice.
-    }
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::dynamicVariables; // Block lattice.
+	}
 private:
-    plint nx, ny, nz;                  // Lattice dimensions.
-    T bulkCSmago, targetCSmago;        // Varying parameter: bulk and target values.
-    Array<plint,6> numSpongeCells;     // Width of the sponge zones.
-    Array<T,6> translationParameters;  // Translation parameters of the tanh sponge functions.
-    Array<T,6> scaleParameters;        // Scaling parameters of the tanh sponge functions.
-    bool useTanhSpongeFunction;        // Use a tanh sponge function, or a cos sponge function.
+	plint nx, ny, nz;                  // Lattice dimensions.
+	T bulkCSmago, targetCSmago;        // Varying parameter: bulk and target values.
+	Array<plint,6> numSpongeCells;     // Width of the sponge zones.
+	Array<T,6> translationParameters;  // Translation parameters of the tanh sponge functions.
+	Array<T,6> scaleParameters;        // Scaling parameters of the tanh sponge functions.
+	bool useTanhSpongeFunction;        // Use a tanh sponge function, or a cos sponge function.
 };
 
 
@@ -192,40 +162,39 @@ template<typename T, template<typename U> class Descriptor>
 class MaskedSmagorinskySpongeZone3D : public BoxProcessingFunctional3D
 {
 public:
-    // Constructor for the tanh sponge function.
-    //   Nice value for the translation parameters is 0.5.
-    //   Nice value for the scale parameters is 0.12.
-    MaskedSmagorinskySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkCSmago_, T targetCSmago_, int flag_,
-            Array<plint,6> const& numSpongeCells_, Array<T,6> const& translationParameters_,
-            Array<T,6> const& scaleParameters_);
+	// Constructor for the tanh sponge function.
+	//   Nice value for the translation parameters is 0.5.
+	//   Nice value for the scale parameters is 0.12.
+	MaskedSmagorinskySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkCSmago_, T targetCSmago_, int flag_,
+	                              Array<plint,6> const& numSpongeCells_, Array<T,6> const& translationParameters_,
+	                              Array<T,6> const& scaleParameters_);
 
-    // Constructor for the cos sponge function.
-    MaskedSmagorinskySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkCSmago_, T targetCSmago_, int flag_,
-            Array<plint,6> const& numSpongeCells_);
+	// Constructor for the cos sponge function.
+	MaskedSmagorinskySpongeZone3D(plint nx_, plint ny_, plint nz_, T bulkCSmago_, T targetCSmago_, int flag_,
+	                              Array<plint,6> const& numSpongeCells_);
 
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
 
-    virtual MaskedSmagorinskySpongeZone3D<T,Descriptor>* clone() const
-    {
-        return new MaskedSmagorinskySpongeZone3D<T,Descriptor>(*this);
-    }
+	virtual MaskedSmagorinskySpongeZone3D<T,Descriptor>* clone() const
+	{
+		return new MaskedSmagorinskySpongeZone3D<T,Descriptor>(*this);
+	}
 
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
-    {
-        modified[0] = modif::dynamicVariables; // Block lattice.
-        modified[1] = modif::nothing;          // Flag matrix.
-    }
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::dynamicVariables; // Block lattice.
+		modified[1] = modif::nothing;          // Flag matrix.
+	}
 private:
-    plint nx, ny, nz;                  // Lattice dimensions.
-    T bulkCSmago, targetCSmago;        // Varying parameter: bulk and target values.
-    Array<plint,6> numSpongeCells;     // Width of the sponge zones.
-    Array<T,6> translationParameters;  // Translation parameters of the tanh sponge functions.
-    Array<T,6> scaleParameters;        // Scaling parameters of the tanh sponge functions.
-    bool useTanhSpongeFunction;        // Use a tanh sponge function, or a cos sponge function.
-    int flag;
+	plint nx, ny, nz;                  // Lattice dimensions.
+	T bulkCSmago, targetCSmago;        // Varying parameter: bulk and target values.
+	Array<plint,6> numSpongeCells;     // Width of the sponge zones.
+	Array<T,6> translationParameters;  // Translation parameters of the tanh sponge functions.
+	Array<T,6> scaleParameters;        // Scaling parameters of the tanh sponge functions.
+	bool useTanhSpongeFunction;        // Use a tanh sponge function, or a cos sponge function.
+	int flag;
 };
 
 }
 
 #endif  // SPONGE_ZONES_3D_H
-

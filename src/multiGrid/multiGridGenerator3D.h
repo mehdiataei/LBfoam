@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,7 +36,8 @@
 #include "multiBlock/multiDataField3D.h"
 #include "multiGrid/multiGridManagement3D.h"
 
-namespace plb {
+namespace plb
+{
 
 /// Compute the reduced bulk of the domain for fine to coarse copy
 inline Box3D computeCopyReducedBulk(Box3D domain);
@@ -49,15 +50,15 @@ void computeFilteringIndicesEdges(Box3D domain, std::vector<std::vector<plint> >
 
 template<typename T, template<typename U> class Descriptor>
 std::vector<MultiBlockLattice3D<T,Descriptor>*> generateLattices(
-                MultiGridManagement3D management,
-                std::vector<Dynamics<T,Descriptor>*> backgroundDynamics,
-                std::vector<BlockCommunicator3D*> communicators,
-                std::vector<CombinedStatistics*> combinedStatistics );
+    MultiGridManagement3D management,
+    std::vector<Dynamics<T,Descriptor>*> backgroundDynamics,
+    std::vector<BlockCommunicator3D*> communicators,
+    std::vector<CombinedStatistics*> combinedStatistics );
 
 template<typename T, template<typename U> class Descriptor>
 std::vector<MultiBlockLattice3D<T,Descriptor>*> generateLattices(
-                MultiGridManagement3D management,
-                std::vector<Dynamics<T,Descriptor>*> backgroundDynamics);
+    MultiGridManagement3D management,
+    std::vector<Dynamics<T,Descriptor>*> backgroundDynamics);
 
 
 template<typename T, template<typename U> class Descriptor>
@@ -67,32 +68,31 @@ void createInterfaces(std::vector<MultiBlockLattice3D<T,Descriptor>*>& multiBloc
 
 template<typename T, template<typename U> class Descriptor>
 void createCoarseGridInterface (
-        plint coarseLevel, Box3D coarseGridInterface, std::vector<MultiBlockLattice3D<T,Descriptor>*>& multiBlocks );
+    plint coarseLevel, Box3D coarseGridInterface, std::vector<MultiBlockLattice3D<T,Descriptor>*>& multiBlocks );
 
 
 template<typename T, template<typename U> class Descriptor>
 void createFineGridInterface (
-        plint coarseLevel, Box3D fineGridInterface, 
-        std::vector<MultiBlockLattice3D<T,Descriptor>*>& multiBlocks );
-    
+    plint coarseLevel, Box3D fineGridInterface,
+    std::vector<MultiBlockLattice3D<T,Descriptor>*>& multiBlocks );
+
 
 
 
 template<typename T>
 std::vector<MultiScalarField3D<T>*> generateScalarFields(
-                        MultiGridManagement3D const& management,
-                        std::vector<BlockCommunicator3D*> communicators,
-                        std::vector<CombinedStatistics*> combinedStatistics );
+    MultiGridManagement3D const& management,
+    std::vector<BlockCommunicator3D*> communicators,
+    std::vector<CombinedStatistics*> combinedStatistics );
 
 
 template<typename T, int nDim>
 std::vector<MultiTensorField3D<T,nDim> *> generateTensorFields (
-        MultiGridManagement3D const& management,
-        std::vector<BlockCommunicator3D*> communicators,
-        std::vector<CombinedStatistics*> combinedStatistics );
+    MultiGridManagement3D const& management,
+    std::vector<BlockCommunicator3D*> communicators,
+    std::vector<CombinedStatistics*> combinedStatistics );
 
 
 } // namespace plb
 
 #endif  // MULTI_GRID_GENERATOR_3D_H
-

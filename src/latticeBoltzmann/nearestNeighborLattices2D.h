@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -42,7 +42,8 @@
 #include "latticeBoltzmann/roundOffPolicy.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 /// Descriptors for the 2D and 3D lattices.
 /** \warning Attention: The lattice directions must always be ordered in
@@ -56,86 +57,71 @@ namespace plb {
  * aformentioned relations are utilized in the code to enable a few
  * optimizations.
 */
-namespace descriptors {
+namespace descriptors
+{
 
-    /// D2Q9 lattice constants
-    template <typename T> struct D2Q9Constants
-    {
-        enum { d = 2, q = 9 };        ///< number of dimensions/distr. functions
-        static const T invD;          ///< 1 / (number of dimensions)
-        static const int vicinity;    ///< size of neighborhood
-        static const int c[q][d];     ///< lattice directions
-        static const int cNormSqr[q]; ///< norm-square of the vector c
-        static const T t[q];          ///< lattice weights
-        static const T cs2;           ///< lattice constant cs2 (in BGK, this is the square-speed-of-sound)
-        static const T invCs2;        ///< 1 / cs2
-    };
+/// D2Q9 lattice constants
+template <typename T> struct D2Q9Constants {
+	enum { d = 2, q = 9 };        ///< number of dimensions/distr. functions
+	static const T invD;          ///< 1 / (number of dimensions)
+	static const int vicinity;    ///< size of neighborhood
+	static const int c[q][d];     ///< lattice directions
+	static const int cNormSqr[q]; ///< norm-square of the vector c
+	static const T t[q];          ///< lattice weights
+	static const T cs2;           ///< lattice constant cs2 (in BGK, this is the square-speed-of-sound)
+	static const T invCs2;        ///< 1 / cs2
+};
 
-    template <typename T> struct D2Q9DescriptorBase
-        : public D2Q9Constants<T>, public DefaultRoundOffPolicy<T>
-    {
-        typedef D2Q9DescriptorBase<T> BaseDescriptor;
-        enum { numPop=D2Q9Constants<T>::q };
-    };
+template <typename T> struct D2Q9DescriptorBase
+	: public D2Q9Constants<T>, public DefaultRoundOffPolicy<T> {
+	typedef D2Q9DescriptorBase<T> BaseDescriptor;
+	enum { numPop=D2Q9Constants<T>::q };
+};
 
-    template <typename T> struct D2Q9Descriptor
-        : public D2Q9DescriptorBase<T>, public NoExternalFieldBase
-    {
-        static const char name[];
-    };
+template <typename T> struct D2Q9Descriptor
+	: public D2Q9DescriptorBase<T>, public NoExternalFieldBase {
+	static const char name[];
+};
 
-    template <typename T> struct ForcedD2Q9Descriptor
-        : public D2Q9DescriptorBase<T>, public Force2dDescriptorBase
-    {
-        static const char name[];
-    };
+template <typename T> struct ForcedD2Q9Descriptor
+	: public D2Q9DescriptorBase<T>, public Force2dDescriptorBase {
+	static const char name[];
+};
 
-    template <typename T> struct RhoBarJD2Q9Descriptor
-        : public D2Q9DescriptorBase<T>, public RhoBarJdescriptorBase2D
-    {
-        static const char name[];
-    };
-    
-    template <typename T> struct RhoBarVelocityPiNeqOmegaD2Q9Descriptor
-        : public D2Q9DescriptorBase<T>, public RhoBarVelocityPiNeqOmegaDescriptorBase2D
-    {
-        static const char name[];
-    };
-    
-    template <typename T> struct VelocityD2Q9Descriptor
-        : public D2Q9DescriptorBase<T>, public Velocity2dDescriptorBase
-    {
-        static const char name[];
-    };
 
-    template <typename T> struct Tau1_D2Q9DescriptorBase
-        : public D2Q9Constants<T>, public DefaultRoundOffPolicy<T>
-    {
-        typedef D2Q9DescriptorBase<T> BaseDescriptor;
-        enum { numPop=0 };
-    };
+template <typename T> struct RhoBarJD2Q9Descriptor
+	: public D2Q9DescriptorBase<T>, public RhoBarJdescriptorBase2D {
+	static const char name[];
+};
 
-    template <typename T> struct Tau1_D2Q9Descriptor
-        : public Tau1_D2Q9DescriptorBase<T>, public RhoBarJdescriptorBase2D
-    {
-        static const char name[];
-    };
+template <typename T> struct RhoBarVelocityPiNeqOmegaD2Q9Descriptor
+	: public D2Q9DescriptorBase<T>, public RhoBarVelocityPiNeqOmegaDescriptorBase2D {
+	static const char name[];
+};
 
-    template <typename T> struct AbsorbingWaveD2Q9Descriptor
-        : public D2Q9DescriptorBase<T>, public AbsorbingWaveExternalField2dBase
-    {
-        static const char name[];
-    };
+template <typename T> struct VelocityD2Q9Descriptor
+	: public D2Q9DescriptorBase<T>, public Velocity2dDescriptorBase {
+	static const char name[];
+};
 
-    template <typename T> struct ExtSymTensorD2Q9Descriptor
-        : public D2Q9DescriptorBase<T>, public SymTensorDescriptorBase2D
-    {
-        static const char name[];
-    };
+template <typename T> struct Tau1_D2Q9DescriptorBase
+	: public D2Q9Constants<T>, public DefaultRoundOffPolicy<T> {
+	typedef D2Q9DescriptorBase<T> BaseDescriptor;
+	enum { numPop=0 };
+};
+
+template <typename T> struct Tau1_D2Q9Descriptor
+	: public Tau1_D2Q9DescriptorBase<T>, public RhoBarJdescriptorBase2D {
+	static const char name[];
+};
+
+template <typename T> struct AbsorbingWaveD2Q9Descriptor
+	: public D2Q9DescriptorBase<T>, public AbsorbingWaveExternalField2dBase {
+	static const char name[];
+};
 
 }  // namespace descriptors
 
 }  // namespace plb
 
 #endif  // NEAREST_NEIGHBOR_LATTICES_2D_H
-

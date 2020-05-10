@@ -27,68 +27,81 @@
 #define EIGEN_SPARSE_FLAGGED_H
 
 template<typename ExpressionType, unsigned int Added, unsigned int Removed>
-struct ei_traits<SparseFlagged<ExpressionType, Added, Removed> > : ei_traits<ExpressionType>
-{
-  enum { Flags = (ExpressionType::Flags | Added) & ~Removed };
+struct ei_traits<SparseFlagged<ExpressionType, Added, Removed> > : ei_traits<ExpressionType> {
+	enum { Flags = (ExpressionType::Flags | Added) & ~Removed };
 };
 
 template<typename ExpressionType, unsigned int Added, unsigned int Removed> class SparseFlagged
-  : public SparseMatrixBase<SparseFlagged<ExpressionType, Added, Removed> >
+	: public SparseMatrixBase<SparseFlagged<ExpressionType, Added, Removed> >
 {
-  public:
+public:
 
-    EIGEN_SPARSE_GENERIC_PUBLIC_INTERFACE(SparseFlagged)
-    class InnerIterator;
-    class ReverseInnerIterator;
-    
-    typedef typename ei_meta_if<ei_must_nest_by_value<ExpressionType>::ret,
-        ExpressionType, const ExpressionType&>::ret ExpressionTypeNested;
+	EIGEN_SPARSE_GENERIC_PUBLIC_INTERFACE(SparseFlagged)
+	class InnerIterator;
+	class ReverseInnerIterator;
 
-    inline SparseFlagged(const ExpressionType& matrix) : m_matrix(matrix) {}
+	typedef typename ei_meta_if<ei_must_nest_by_value<ExpressionType>::ret,
+	        ExpressionType, const ExpressionType&>::ret ExpressionTypeNested;
 
-    inline int rows() const { return m_matrix.rows(); }
-    inline int cols() const { return m_matrix.cols(); }
-    
-    // FIXME should be keep them ?
-    inline Scalar& coeffRef(int row, int col)
-    { return m_matrix.const_cast_derived().coeffRef(col, row); }
+	inline SparseFlagged(const ExpressionType& matrix) : m_matrix(matrix) {}
 
-    inline const Scalar coeff(int row, int col) const
-    { return m_matrix.coeff(col, row); }
+	inline int rows() const
+	{
+		return m_matrix.rows();
+	}
+	inline int cols() const
+	{
+		return m_matrix.cols();
+	}
 
-    inline const Scalar coeff(int index) const
-    { return m_matrix.coeff(index); }
+	// FIXME should be keep them ?
+	inline Scalar& coeffRef(int row, int col)
+	{
+		return m_matrix.const_cast_derived().coeffRef(col, row);
+	}
 
-    inline Scalar& coeffRef(int index)
-    { return m_matrix.const_cast_derived().coeffRef(index); }
+	inline const Scalar coeff(int row, int col) const
+	{
+		return m_matrix.coeff(col, row);
+	}
 
-  protected:
-    ExpressionTypeNested m_matrix;
+	inline const Scalar coeff(int index) const
+	{
+		return m_matrix.coeff(index);
+	}
 
-  private:
-    SparseFlagged& operator=(const SparseFlagged&);
+	inline Scalar& coeffRef(int index)
+	{
+		return m_matrix.const_cast_derived().coeffRef(index);
+	}
+
+protected:
+	ExpressionTypeNested m_matrix;
+
+private:
+	SparseFlagged& operator=(const SparseFlagged&);
 };
 
 template<typename ExpressionType, unsigned int Added, unsigned int Removed>
-  class SparseFlagged<ExpressionType,Added,Removed>::InnerIterator : public ExpressionType::InnerIterator
+class SparseFlagged<ExpressionType,Added,Removed>::InnerIterator : public ExpressionType::InnerIterator
 {
-  public:
-    EIGEN_STRONG_INLINE InnerIterator(const SparseFlagged& xpr, int outer)
-      : ExpressionType::InnerIterator(xpr.m_matrix, outer)
-    {}
+public:
+	EIGEN_STRONG_INLINE InnerIterator(const SparseFlagged& xpr, int outer)
+		: ExpressionType::InnerIterator(xpr.m_matrix, outer)
+	{}
 
-  private:
-    InnerIterator& operator=(const InnerIterator&);
+private:
+	InnerIterator& operator=(const InnerIterator&);
 };
 
 template<typename ExpressionType, unsigned int Added, unsigned int Removed>
-  class SparseFlagged<ExpressionType,Added,Removed>::ReverseInnerIterator : public ExpressionType::ReverseInnerIterator
+class SparseFlagged<ExpressionType,Added,Removed>::ReverseInnerIterator : public ExpressionType::ReverseInnerIterator
 {
-  public:
+public:
 
-    EIGEN_STRONG_INLINE ReverseInnerIterator(const SparseFlagged& xpr, int outer)
-      : ExpressionType::ReverseInnerIterator(xpr.m_matrix, outer)
-    {}
+	EIGEN_STRONG_INLINE ReverseInnerIterator(const SparseFlagged& xpr, int outer)
+		: ExpressionType::ReverseInnerIterator(xpr.m_matrix, outer)
+	{}
 };
 
 template<typename Derived>
@@ -96,7 +109,7 @@ template<unsigned int Added>
 inline const SparseFlagged<Derived, Added, 0>
 SparseMatrixBase<Derived>::marked() const
 {
-  return derived();
+	return derived();
 }
 
 #endif // EIGEN_SPARSE_FLAGGED_H

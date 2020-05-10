@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -37,7 +37,8 @@
 #include "gridRefinement/multiLevelTensorField3D.h"
 #include "gridRefinement/multiLevelNTensorField3D.h"
 
-namespace plb {
+namespace plb
+{
 
 // ======================================================= //
 // =================== Standard MultiLevels ============== //
@@ -45,104 +46,104 @@ namespace plb {
 
 // ========== MultiLevelScalarField3D ==================== //
 template<typename T>
-std::unique_ptr<MultiLevelScalarField3D<T> > generateMultiLevelScalarField3D(
+std::auto_ptr<MultiLevelScalarField3D<T> > generateMultiLevelScalarField3D(
     const OctreeGridStructure &ogs);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, typename T3>
-std::unique_ptr<MultiLevelScalarField3D<T3> > generateMultiLevelScalarField3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine, typename T3>
+std::auto_ptr<MultiLevelScalarField3D<T3> > generateMultiLevelScalarField3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices);
 
 template<typename T>
-std::unique_ptr<MultiLevelScalarField3D<T> > generateMultiLevelScalarField3D(
+std::auto_ptr<MultiLevelScalarField3D<T> > generateMultiLevelScalarField3D(
     const OctreeGridStructure &ogs, const Box3D &domain, plint levelOfDomain);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3>
-std::unique_ptr<MultiLevelScalarField3D<T3> > generateMultiLevelScalarField3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3>
+std::auto_ptr<MultiLevelScalarField3D<T3> > generateMultiLevelScalarField3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, const Box3D &domain, plint levelOfDomain);
 
 template<typename T>
-std::unique_ptr<MultiLevelScalarField3D<T> > generateMultiLevelScalarField3D(
+std::auto_ptr<MultiLevelScalarField3D<T> > generateMultiLevelScalarField3D(
     const OctreeGridStructure &ogs, T iniVal);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, typename T3>
-std::unique_ptr<MultiLevelScalarField3D<T3> > generateMultiLevelScalarField3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine, typename T3>
+std::auto_ptr<MultiLevelScalarField3D<T3> > generateMultiLevelScalarField3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, T iniVal);
 
 template<typename T>
-std::unique_ptr<MultiLevelScalarField3D<T> > generateMultiLevelScalarField3D(
+std::auto_ptr<MultiLevelScalarField3D<T> > generateMultiLevelScalarField3D(
     const OctreeGridStructure &ogs, const Box3D &domain, plint levelOfDomain, T iniVal);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3>
-std::unique_ptr<MultiLevelScalarField3D<T3> > generateMultiLevelScalarField3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3>
+std::auto_ptr<MultiLevelScalarField3D<T3> > generateMultiLevelScalarField3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, const Box3D &domain, plint levelOfDomain, T iniVal);
 
 
 // ========== MultiLevelTensorField3D ==================== //
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T,nDim> > generateMultiLevelTensorField3D(
+std::auto_ptr<MultiLevelTensorField3D<T,nDim> > generateMultiLevelTensorField3D(
     const OctreeGridStructure &ogs);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T3,nDim> > generateMultiLevelTensorField3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3, int nDim>
+std::auto_ptr<MultiLevelTensorField3D<T3,nDim> > generateMultiLevelTensorField3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T,nDim> > generateMultiLevelTensorField3D(
+std::auto_ptr<MultiLevelTensorField3D<T,nDim> > generateMultiLevelTensorField3D(
     const OctreeGridStructure &ogs, const Box3D &domain, plint levelOfDomain);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T3,nDim> > generateMultiLevelTensorField3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3, int nDim>
+std::auto_ptr<MultiLevelTensorField3D<T3,nDim> > generateMultiLevelTensorField3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, const Box3D &domain, plint levelOfDomain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T,nDim> > generateMultiLevelTensorField3D(
+std::auto_ptr<MultiLevelTensorField3D<T,nDim> > generateMultiLevelTensorField3D(
     const OctreeGridStructure &ogs, const Array<T,nDim> &iniVal);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T3,nDim> > generateMultiLevelTensorField3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3, int nDim>
+std::auto_ptr<MultiLevelTensorField3D<T3,nDim> > generateMultiLevelTensorField3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, const Array<T,nDim> &iniVal);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T,nDim> > generateMultiLevelTensorField3D(
+std::auto_ptr<MultiLevelTensorField3D<T,nDim> > generateMultiLevelTensorField3D(
     const OctreeGridStructure &ogs, const Box3D &domain, plint levelOfDomain, const Array<T,nDim> &iniVal);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3, int nDim>
-std::unique_ptr<MultiLevelTensorField3D<T3,nDim> > generateMultiLevelTensorField3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3, int nDim>
+std::auto_ptr<MultiLevelTensorField3D<T3,nDim> > generateMultiLevelTensorField3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, const Box3D &domain, plint levelOfDomain, const Array<T,nDim> &iniVal);
 
 // ========== MultiLevelNTensorField3D ==================== //
 template<typename T>
-std::unique_ptr<MultiLevelNTensorField3D<T> > generateMultiLevelNTensorField3D(
+std::auto_ptr<MultiLevelNTensorField3D<T> > generateMultiLevelNTensorField3D(
     const OctreeGridStructure &ogs);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3>
-std::unique_ptr<MultiLevelNTensorField3D<T3> > generateMultiLevelNTensorField3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3>
+std::auto_ptr<MultiLevelNTensorField3D<T3> > generateMultiLevelNTensorField3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices);
 
 template<typename T>
-std::unique_ptr<MultiLevelNTensorField3D<T> > generateMultiLevelNTensorField3D(
+std::auto_ptr<MultiLevelNTensorField3D<T> > generateMultiLevelNTensorField3D(
     const OctreeGridStructure &ogs, const Box3D &domain, plint levelOfDomain);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3>
-std::unique_ptr<MultiLevelNTensorField3D<T3> > generateMultiLevelNTensorField3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3>
+std::auto_ptr<MultiLevelNTensorField3D<T3> > generateMultiLevelNTensorField3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, const Box3D &domain, plint levelOfDomain);
 
 // MultiLevels For Output
@@ -152,65 +153,65 @@ std::unique_ptr<MultiLevelNTensorField3D<T3> > generateMultiLevelNTensorField3D(
 
 // ========== MultiLevelScalarFieldForOutput3D ==================== //
 template<typename T>
-std::unique_ptr<MultiLevelScalarFieldForOutput3D<T> > generateMultiLevelScalarFieldForOutput3D(
+std::auto_ptr<MultiLevelScalarFieldForOutput3D<T> > generateMultiLevelScalarFieldForOutput3D(
     const OctreeGridStructure &ogs, bool crop);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, typename T3>
-std::unique_ptr<MultiLevelScalarFieldForOutput3D<T3> > generateMultiLevelScalarFieldForOutput3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine, typename T3>
+std::auto_ptr<MultiLevelScalarFieldForOutput3D<T3> > generateMultiLevelScalarFieldForOutput3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, bool crop);
 
 template<typename T>
-std::unique_ptr<MultiLevelScalarFieldForOutput3D<T> > generateMultiLevelScalarFieldForOutput3D(
+std::auto_ptr<MultiLevelScalarFieldForOutput3D<T> > generateMultiLevelScalarFieldForOutput3D(
     const OctreeGridStructure &ogs, const Box3D &domain, plint levelOfDomain, bool crop);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3>
-std::unique_ptr<MultiLevelScalarFieldForOutput3D<T3> > generateMultiLevelScalarFieldForOutput3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3>
+std::auto_ptr<MultiLevelScalarFieldForOutput3D<T3> > generateMultiLevelScalarFieldForOutput3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, const Box3D &domain, plint levelOfDomain, bool crop);
 
 
 // ========== MultiLevelTensorFieldForOutput3D ==================== //
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,nDim> > generateMultiLevelTensorFieldForOutput3D(
+std::auto_ptr<MultiLevelTensorFieldForOutput3D<T,nDim> > generateMultiLevelTensorFieldForOutput3D(
     const OctreeGridStructure &ogs, bool crop);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3, int nDim>
-std::unique_ptr<MultiLevelTensorFieldForOutput3D<T3,nDim> > generateMultiLevelTensorFieldForOutput3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3, int nDim>
+std::auto_ptr<MultiLevelTensorFieldForOutput3D<T3,nDim> > generateMultiLevelTensorFieldForOutput3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, bool crop);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiLevelTensorFieldForOutput3D<T,nDim> > generateMultiLevelTensorFieldForOutput3D(
+std::auto_ptr<MultiLevelTensorFieldForOutput3D<T,nDim> > generateMultiLevelTensorFieldForOutput3D(
     const OctreeGridStructure &ogs, const Box3D &domain, plint levelOfDomain, bool crop);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3, int nDim>
-std::unique_ptr<MultiLevelTensorFieldForOutput3D<T3,nDim> > generateMultiLevelTensorFieldForOutput3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3, int nDim>
+std::auto_ptr<MultiLevelTensorFieldForOutput3D<T3,nDim> > generateMultiLevelTensorFieldForOutput3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, const Box3D &domain, plint levelOfDomain, bool crop);
 
 // ========== MultiLevelNTensorFieldForOutput3D ==================== //
 template<typename T>
-std::unique_ptr<MultiLevelNTensorFieldForOutput3D<T> > generateMultiLevelNTensorFieldForOutput3D(
+std::auto_ptr<MultiLevelNTensorFieldForOutput3D<T> > generateMultiLevelNTensorFieldForOutput3D(
     const OctreeGridStructure &ogs, bool crop);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3>
-std::unique_ptr<MultiLevelNTensorFieldForOutput3D<T3> > generateMultiLevelNTensorFieldForOutput3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3>
+std::auto_ptr<MultiLevelNTensorFieldForOutput3D<T3> > generateMultiLevelNTensorFieldForOutput3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, bool crop);
 
 template<typename T>
-std::unique_ptr<MultiLevelNTensorFieldForOutput3D<T> > generateMultiLevelNTensorFieldForOutput3D(
+std::auto_ptr<MultiLevelNTensorFieldForOutput3D<T> > generateMultiLevelNTensorFieldForOutput3D(
     const OctreeGridStructure &ogs, const Box3D &domain, plint levelOfDomain, bool crop);
 
 template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T3>
-std::unique_ptr<MultiLevelNTensorFieldForOutput3D<T3> > generateMultiLevelNTensorFieldForOutput3D(
+         template<typename T2, template<typename U2> class Descriptor2> class Engine,
+         typename T3>
+std::auto_ptr<MultiLevelNTensorFieldForOutput3D<T3> > generateMultiLevelNTensorFieldForOutput3D(
     const MultiLevelCoupling3D<T,Descriptor,Engine> &lattices, const Box3D &domain, plint levelOfDomain, bool crop);
 
 }  // namespace plb

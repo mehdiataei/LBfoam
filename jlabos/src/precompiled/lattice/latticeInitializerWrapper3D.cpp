@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,26 +29,27 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.hh"
 
-namespace plb {
+namespace plb
+{
 
 template void defineDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, Box3D domain,
-        Dynamics<FLOAT_T,descriptors::DESCRIPTOR_3D>* dynamics);
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, Box3D domain,
+    Dynamics<FLOAT_T,descriptors::DESCRIPTOR_3D>* dynamics);
 
 template void setCompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain,
-        CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>* compositeDynamics );
+    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain,
+    CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>* compositeDynamics );
 
 template void setCompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain,
-        CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>* compositeDynamics );
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain,
+    CompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>* compositeDynamics );
 
 template void setBoundaryDensity<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain, FLOAT_T rho );
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain, FLOAT_T rho );
 
 template void setExternalScalar<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain,
-        int whichScalar, FLOAT_T externalScalar );
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain,
+    int whichScalar, FLOAT_T externalScalar );
 
 
 }  // namespace plb

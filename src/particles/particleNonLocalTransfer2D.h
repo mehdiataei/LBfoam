@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,12 +30,13 @@
 #include "particles/multiParticleField2D.h"
 
 
-namespace plb {
+namespace plb
+{
 
 template<class ParticleFieldT>
-void copy (                                                                   
-        MultiParticleField2D<ParticleFieldT> const& from, Box2D const& fromDomain,
-        MultiParticleField2D<ParticleFieldT>& to, Box2D const& toDomain );
+void copy (
+    MultiParticleField2D<ParticleFieldT> const& from, Box2D const& fromDomain,
+    MultiParticleField2D<ParticleFieldT>& to, Box2D const& toDomain );
 
 /// Gather particles from a particle-field into a vector of particles,
 /// on the main processor only.

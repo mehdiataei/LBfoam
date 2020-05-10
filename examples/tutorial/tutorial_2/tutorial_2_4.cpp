@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -39,7 +39,8 @@ typedef double T;
 
 /// Describe the geometry of the half-circular channel, used in tutorial 2.
 template<typename T>
-class BounceBackNodes : public DomainFunctional2D {
+class BounceBackNodes : public DomainFunctional2D
+{
 public:
     BounceBackNodes(plint N, plint radius)
         : cx(N/2),
@@ -49,11 +50,13 @@ public:
     { }
     /// Return true for all cells outside the channel, on which bounce-back
     ///  dynamics must be instantiated.
-    virtual bool operator() (plint iX, plint iY) const {
+    virtual bool operator() (plint iX, plint iY) const
+    {
         T rSqr = util::sqr(iX-cx) + util::sqr(iY-cy);
         return rSqr <= innerR*innerR || rSqr >= outerR*outerR;
     }
-    virtual BounceBackNodes<T>* clone() const {
+    virtual BounceBackNodes<T>* clone() const
+    {
         return new BounceBackNodes<T>(*this);
     }
 private:
@@ -64,11 +67,13 @@ private:
 };
 
 template<typename T>
-class FluidNodes {
+class FluidNodes
+{
 public:
     FluidNodes(plint N_, plint radius_) : N(N_), radius(radius_)
     { }
-    bool operator() (plint iX, plint iY) const {
+    bool operator() (plint iX, plint iY) const
+    {
         return ! BounceBackNodes<T>(N,radius)(iX,iY);
     }
 private:
@@ -76,8 +81,8 @@ private:
 };
 
 void halfCircleSetup (
-        MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint N, plint radius,
-        OnLatticeBoundaryCondition2D<T,DESCRIPTOR>& boundaryCondition )
+    MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint N, plint radius,
+    OnLatticeBoundaryCondition2D<T,DESCRIPTOR>& boundaryCondition )
 {
     // The channel is pressure-driven, with a difference deltaRho
     //   between inlet and outlet.
@@ -99,7 +104,7 @@ void halfCircleSetup (
     Array<T,2> zeroVelocity((T)0.,(T)0.);
     T constantDensity = (T)1;
     initializeAtEquilibrium (
-       lattice, lattice.getBoundingBox(), constantDensity, zeroVelocity );
+        lattice, lattice.getBoundingBox(), constantDensity, zeroVelocity );
 
     defineDynamics(lattice, lattice.getBoundingBox(),
                    new BounceBackNodes<T>(N, radius),
@@ -117,7 +122,8 @@ void writeGifs(MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint iter)
                                imSize, imSize );
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
@@ -135,8 +141,8 @@ int main(int argc, char* argv[]) {
     plint envelopeWidth = 1;
     MultiBlockManagement2D sparseBlockManagement =
         computeSparseManagement (
-                *plb::reparallelize(flagMatrix, blockSize,blockSize),
-                envelopeWidth );
+            *plb::reparallelize(flagMatrix, blockSize,blockSize),
+            envelopeWidth );
 
     // Instantiate the multi-block, based on the created block distribution and
     // on default parameters.
@@ -151,13 +157,15 @@ int main(int argc, char* argv[]) {
     pcout << getMultiBlockInfo(lattice) << std::endl;
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     halfCircleSetup(lattice, N, radius, *boundaryCondition);
 
     // Main loop over time iterations.
-    for (plint iT=0; iT<maxT; ++iT) {
-        if (iT%imageIter==0) {
+    for (plint iT=0; iT<maxT; ++iT)
+    {
+        if (iT%imageIter==0)
+        {
             pcout << "Saving Gif at time step " << iT << endl;
             writeGifs(lattice, iT);
         }

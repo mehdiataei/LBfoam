@@ -30,23 +30,22 @@ template<typename OtherDerived>
 typename ei_traits<Derived>::Scalar
 SparseMatrixBase<Derived>::dot(const MatrixBase<OtherDerived>& other) const
 {
-  EIGEN_STATIC_ASSERT_VECTOR_ONLY(Derived)
-  EIGEN_STATIC_ASSERT_VECTOR_ONLY(OtherDerived)
-  EIGEN_STATIC_ASSERT_SAME_VECTOR_SIZE(Derived,OtherDerived)
-  EIGEN_STATIC_ASSERT((ei_is_same_type<Scalar, typename OtherDerived::Scalar>::ret),
-    YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
+	EIGEN_STATIC_ASSERT_VECTOR_ONLY(Derived)
+	EIGEN_STATIC_ASSERT_VECTOR_ONLY(OtherDerived)
+	EIGEN_STATIC_ASSERT_SAME_VECTOR_SIZE(Derived,OtherDerived)
+	EIGEN_STATIC_ASSERT((ei_is_same_type<Scalar, typename OtherDerived::Scalar>::ret),
+	                    YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
 
-  ei_assert(size() == other.size());
-  ei_assert(other.size()>0 && "you are using a non initialized vector");
-  
-  typename Derived::InnerIterator i(derived(),0);
-  Scalar res = 0;
-  while (i)
-  {
-    res += i.value() * ei_conj(other.coeff(i.index()));
-    ++i;
-  }
-  return res;
+	ei_assert(size() == other.size());
+	ei_assert(other.size()>0 && "you are using a non initialized vector");
+
+	typename Derived::InnerIterator i(derived(),0);
+	Scalar res = 0;
+	while (i) {
+		res += i.value() * ei_conj(other.coeff(i.index()));
+		++i;
+	}
+	return res;
 }
 
 template<typename Derived>
@@ -54,44 +53,42 @@ template<typename OtherDerived>
 typename ei_traits<Derived>::Scalar
 SparseMatrixBase<Derived>::dot(const SparseMatrixBase<OtherDerived>& other) const
 {
-  EIGEN_STATIC_ASSERT_VECTOR_ONLY(Derived)
-  EIGEN_STATIC_ASSERT_VECTOR_ONLY(OtherDerived)
-  EIGEN_STATIC_ASSERT_SAME_VECTOR_SIZE(Derived,OtherDerived)
-  EIGEN_STATIC_ASSERT((ei_is_same_type<Scalar, typename OtherDerived::Scalar>::ret),
-    YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
-  
-  ei_assert(size() == other.size());
-  
-  typename Derived::InnerIterator i(derived(),0);
-  typename OtherDerived::InnerIterator j(other.derived(),0);
-  Scalar res = 0;
-  while (i && j)
-  {
-    if (i.index()==j.index())
-    {
-      res += i.value() * ei_conj(j.value());
-      ++i; ++j;
-    }
-    else if (i.index()<j.index())
-      ++i;
-    else
-      ++j;
-  }
-  return res;
+	EIGEN_STATIC_ASSERT_VECTOR_ONLY(Derived)
+	EIGEN_STATIC_ASSERT_VECTOR_ONLY(OtherDerived)
+	EIGEN_STATIC_ASSERT_SAME_VECTOR_SIZE(Derived,OtherDerived)
+	EIGEN_STATIC_ASSERT((ei_is_same_type<Scalar, typename OtherDerived::Scalar>::ret),
+	                    YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
+
+	ei_assert(size() == other.size());
+
+	typename Derived::InnerIterator i(derived(),0);
+	typename OtherDerived::InnerIterator j(other.derived(),0);
+	Scalar res = 0;
+	while (i && j) {
+		if (i.index()==j.index()) {
+			res += i.value() * ei_conj(j.value());
+			++i;
+			++j;
+		} else if (i.index()<j.index())
+			++i;
+		else
+			++j;
+	}
+	return res;
 }
 
 template<typename Derived>
 inline typename NumTraits<typename ei_traits<Derived>::Scalar>::Real
 SparseMatrixBase<Derived>::squaredNorm() const
 {
-  return ei_real((*this).cwise().abs2().sum());
+	return ei_real((*this).cwise().abs2().sum());
 }
 
 template<typename Derived>
 inline typename NumTraits<typename ei_traits<Derived>::Scalar>::Real
 SparseMatrixBase<Derived>::norm() const
 {
-  return ei_sqrt(squaredNorm());
+	return ei_sqrt(squaredNorm());
 }
 
 #endif // EIGEN_SPARSE_DOT_H

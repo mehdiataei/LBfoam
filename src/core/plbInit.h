@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,42 +34,46 @@
 #include <vector>
 #include <string>
 
-namespace plb {
+namespace plb
+{
 
 void plbInit(int *argc, char ***argv, bool verbous=false);
 void plbInit();
 
-namespace global {
+namespace global
+{
 
-    class MainArgv {
-    public:
-        MainArgv(std::string argument_, int whichArg_);
-        operator std::string() const;
-        template<typename T> void read(T& variable);
-        template<typename T> bool readNoThrow(T& variable);
-    private:
-        std::string argument;
-        int whichArg;
-    };
+class MainArgv
+{
+public:
+	MainArgv(std::string argument_, int whichArg_);
+	operator std::string() const;
+	template<typename T> void read(T& variable);
+	template<typename T> bool readNoThrow(T& variable);
+private:
+	std::string argument;
+	int whichArg;
+};
 
-    class MainArgs {
-    public:
-        int argc() const;
-        MainArgv argv(int whichArg) const;
-        void setArgs(int argcValue, char*** argvPointer);
-        void setArgs(std::vector<std::string> arguments_);
-    private:
-        MainArgs();
-    private:
-        std::vector<std::string> arguments;
+class MainArgs
+{
+public:
+	int argc() const;
+	MainArgv argv(int whichArg) const;
+	void setArgs(int argcValue, char*** argvPointer);
+	void setArgs(std::vector<std::string> arguments_);
+private:
+	MainArgs();
+private:
+	std::vector<std::string> arguments;
 
-    friend MainArgs& mainArguments();
-    };
+	friend MainArgs& mainArguments();
+};
 
 
-    MainArgs& mainArguments();
-    int argc();
-    MainArgv argv(int whichArg);
+MainArgs& mainArguments();
+int argc();
+MainArgv argv(int whichArg);
 
 }  // namespace global
 

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,37 +32,40 @@
 #include "multiBlock/multiDataField3D.h"
 #include "multiBlock/multiBlockInfo3D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class MultiNTensorInfo3D {
+class MultiNTensorInfo3D
+{
 public:
-    MultiNTensorInfo3D(MultiNTensorField3D<T> const& multiBlock);
-    plint getNx() const;
-    plint getNy() const;
-    plint getNz() const;
-    plint getNumBlocks() const;
-    Box3D getSmallestBlock() const;
-    Box3D getLargestBlock() const;
-    plint getNumAllocatedCells() const;
+	MultiNTensorInfo3D(MultiNTensorField3D<T> const& multiBlock);
+	plint getNx() const;
+	plint getNy() const;
+	plint getNz() const;
+	plint getNumBlocks() const;
+	Box3D getSmallestBlock() const;
+	Box3D getLargestBlock() const;
+	plint getNumAllocatedCells() const;
 private:
-    plint nx, ny, nz, numBlocks, numAllocatedCells;
-    Box3D smallest, largest;
+	plint nx, ny, nz, numBlocks, numAllocatedCells;
+	Box3D smallest, largest;
 };
 
-class MultiBlockInfo3D {
+class MultiBlockInfo3D
+{
 public:
-    MultiBlockInfo3D(MultiBlock3D const& multiBlock);
-    plint getNx() const;
-    plint getNy() const;
-    plint getNz() const;
-    plint getNumBlocks() const;
-    Box3D getSmallestBlock() const;
-    Box3D getLargestBlock() const;
-    plint getNumAllocatedCells() const;
+	MultiBlockInfo3D(MultiBlock3D const& multiBlock);
+	plint getNx() const;
+	plint getNy() const;
+	plint getNz() const;
+	plint getNumBlocks() const;
+	Box3D getSmallestBlock() const;
+	Box3D getLargestBlock() const;
+	plint getNumAllocatedCells() const;
 private:
-    plint nx, ny, nz, numBlocks, numAllocatedCells;
-    Box3D smallest, largest;
+	plint nx, ny, nz, numBlocks, numAllocatedCells;
+	Box3D smallest, largest;
 };
 
 }  // namespace plb

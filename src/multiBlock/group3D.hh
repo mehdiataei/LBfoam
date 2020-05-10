@@ -248,10 +248,10 @@ MultiParticleField3D<DenseParticleField3D<T, Descriptor> >& Group3D::getDensePar
 
 template<typename T, typename TConv>
 void addTransform (
-        Group3D& group, std::unique_ptr<MultiScalarField3D<T> > field,
+        Group3D& group, std::auto_ptr<MultiScalarField3D<T> > field,
         std::string name, TConv scalingFactor, TConv additiveOffset )
 {
-    std::unique_ptr<MultiScalarField3D<TConv> > transformedField = copyConvert<T,TConv>(*field);
+    std::auto_ptr<MultiScalarField3D<TConv> > transformedField = copyConvert<T,TConv>(*field);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -263,7 +263,7 @@ void addTransform (
 
 template<typename T>
 void addTransform (
-        Group3D& group, std::unique_ptr<MultiScalarField3D<T> > field,
+        Group3D& group, std::auto_ptr<MultiScalarField3D<T> > field,
         std::string name, T scalingFactor, T additiveOffset )
 {
     group.add(add(*multiply(*field,scalingFactor),additiveOffset).release(), name);
@@ -271,10 +271,10 @@ void addTransform (
 
 template<typename T, typename TConv, int nDim>
 void addTransform (
-        Group3D& group, std::unique_ptr<MultiTensorField3D<T,nDim> > field,
+        Group3D& group, std::auto_ptr<MultiTensorField3D<T,nDim> > field,
         std::string name, TConv scalingFactor )
 {
-    std::unique_ptr<MultiTensorField3D<TConv,nDim> > transformedField = copyConvert<T,TConv>(*field);
+    std::auto_ptr<MultiTensorField3D<TConv,nDim> > transformedField = copyConvert<T,TConv>(*field);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -283,7 +283,7 @@ void addTransform (
 
 template<typename T, int nDim>
 void addTransform (
-        Group3D& group, std::unique_ptr<MultiTensorField3D<T,nDim> > field,
+        Group3D& group, std::auto_ptr<MultiTensorField3D<T,nDim> > field,
         std::string name, T scalingFactor )
 {
     group.add(multiply(*field,scalingFactor).release(), name);
@@ -294,7 +294,7 @@ void addTransform (
         Group3D& group, MultiScalarField3D<T> &field,
         std::string name, TConv scalingFactor, TConv additiveOffset )
 {
-    std::unique_ptr<MultiScalarField3D<TConv> > transformedField = copyConvert<T,TConv>(field);
+    std::auto_ptr<MultiScalarField3D<TConv> > transformedField = copyConvert<T,TConv>(field);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -317,7 +317,7 @@ void addTransform (
         Group3D& group, MultiTensorField3D<T,nDim> &field,
         std::string name, TConv scalingFactor )
 {
-    std::unique_ptr<MultiTensorField3D<TConv,nDim> > transformedField = copyConvert<T,TConv>(field);
+    std::auto_ptr<MultiTensorField3D<TConv,nDim> > transformedField = copyConvert<T,TConv>(field);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }

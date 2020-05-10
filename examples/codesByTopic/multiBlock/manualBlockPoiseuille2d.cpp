@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -38,31 +38,36 @@ typedef double T;
 #define DESCRIPTOR D2Q9Descriptor
 
 /// Velocity on the parabolic Poiseuille profile
-T poiseuilleVelocity(plint iY, IncomprFlowParam<T> const& parameters) {
+T poiseuilleVelocity(plint iY, IncomprFlowParam<T> const& parameters)
+{
     T y = (T)iY / parameters.getResolution();
     return 4.*parameters.getLatticeU() * (y-y*y);
 }
 
 /// Linearly decreasing pressure profile
-T poiseuillePressure(plint iX, IncomprFlowParam<T> const& parameters) {
+T poiseuillePressure(plint iX, IncomprFlowParam<T> const& parameters)
+{
     T Lx = parameters.getNx()-1;
     T Ly = parameters.getNy()-1;
     return 8.*parameters.getLatticeNu()*parameters.getLatticeU() / (Ly*Ly) * (Lx/(T)2-(T)iX);
 }
 
 /// Convert pressure to density according to ideal gas law
-T poiseuilleDensity(plint iX, IncomprFlowParam<T> const& parameters) {
+T poiseuilleDensity(plint iX, IncomprFlowParam<T> const& parameters)
+{
     return poiseuillePressure(iX,parameters)*DESCRIPTOR<T>::invCs2 + (T)1;
 }
 
 /// A functional, used to initialize the velocity for the boundary conditions
 template<typename T>
-class PoiseuilleVelocity {
+class PoiseuilleVelocity
+{
 public:
     PoiseuilleVelocity(IncomprFlowParam<T> parameters_)
         : parameters(parameters_)
     { }
-    void operator()(plint iX, plint iY, Array<T,2>& u) const {
+    void operator()(plint iX, plint iY, Array<T,2>& u) const
+    {
         u[0] = poiseuilleVelocity(iY, parameters);
         u[1] = T();
     }
@@ -72,12 +77,14 @@ private:
 
 /// A functional, used to create an initial condition for the density and velocity
 template<typename T>
-class PoiseuilleVelocityAndDensity {
+class PoiseuilleVelocityAndDensity
+{
 public:
     PoiseuilleVelocityAndDensity(IncomprFlowParam<T> parameters_)
         : parameters(parameters_)
     { }
-    void operator()(plint iX, plint iY, T& rho, Array<T,2>& u) const {
+    void operator()(plint iX, plint iY, T& rho, Array<T,2>& u) const
+    {
         rho = poiseuilleDensity(iX,parameters);
         u[0] = poiseuilleVelocity(iY, parameters);
         u[1] = T();
@@ -94,11 +101,11 @@ void definePoiseuilleGeometry( MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
     boundaryCondition.setVelocityConditionOnBlockBoundaries(lattice);
 
     setBoundaryVelocity (
-            lattice, lattice.getBoundingBox(),
-            PoiseuilleVelocity<T>(parameters) );
+        lattice, lattice.getBoundingBox(),
+        PoiseuilleVelocity<T>(parameters) );
     initializeAtEquilibrium (
-            lattice, lattice.getBoundingBox(),
-            PoiseuilleVelocityAndDensity<T>(parameters) );
+        lattice, lattice.getBoundingBox(),
+        PoiseuilleVelocityAndDensity<T>(parameters) );
 
     lattice.initialize();
 }
@@ -113,17 +120,18 @@ void writeGifs(MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint iter)
                                imSize, imSize );
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 100.,  // Re
-            128,        // N
-            1.,        // lx
-            1.         // ly 
+        (T) 1e-2,  // uMax
+        (T) 100.,  // Re
+        128,        // N
+        1.,        // lx
+        1.         // ly
     );
 
     writeLogFile(parameters, "Poiseuille flow");
@@ -139,14 +147,16 @@ int main(int argc, char* argv[]) {
     );
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
-        //boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
+    //boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     definePoiseuilleGeometry(lattice, parameters, *boundaryCondition);
 
     // Main loop over time iterations.
-    for (plint iT=0; iT<1000; ++iT) {
-        if (iT%100==0) {
+    for (plint iT=0; iT<1000; ++iT)
+    {
+        if (iT%100==0)
+        {
             pcout << "step " << iT
                   << "; lattice time=" << lattice.getTimeCounter().getTime()
                   << "; t=" << iT*parameters.getDeltaT()
@@ -156,7 +166,8 @@ int main(int argc, char* argv[]) {
                   << getStoredAverageDensity<T>(lattice) << endl;
         }
 
-        if (iT%200==0) {
+        if (iT%200==0)
+        {
             pcout << "Saving Gif ..." << endl;
             writeGifs(lattice, iT);
         }

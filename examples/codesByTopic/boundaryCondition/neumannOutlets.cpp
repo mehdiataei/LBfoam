@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -65,11 +65,11 @@ void setupInletAndBulk( MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
     boundaryCondition.addVelocityBoundary0N(Box2D(   0,   0,   0,ny-1), lattice);
 
     setBoundaryVelocity (
-            lattice, Box2D(   0,   0,   0,ny-1),
-            PoiseuilleVelocity<T>(parameters) );
+        lattice, Box2D(   0,   0,   0,ny-1),
+        PoiseuilleVelocity<T>(parameters) );
     initializeAtEquilibrium (
-            lattice, lattice.getBoundingBox(),
-            PoiseuilleVelocityAndDensity<T,DESCRIPTOR>(parameters) );
+        lattice, lattice.getBoundingBox(),
+        PoiseuilleVelocityAndDensity<T,DESCRIPTOR>(parameters) );
 }
 
 void copyUnknownOnOutlet( MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
@@ -92,7 +92,7 @@ void velocityNeumannOutlet( MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
     const plint ny = parameters.getNy();
 
     boundaryCondition.addVelocityBoundary0P (
-            Box2D(nx-1,nx-1, 0,ny-1), lattice, boundary::outflow );
+        Box2D(nx-1,nx-1, 0,ny-1), lattice, boundary::outflow );
 }
 
 void writeGifs(MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint iter)
@@ -115,17 +115,18 @@ void writeVTK(MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
     vtkOut.writeData<2,float>(*computeVelocity(lattice), "velocity", dx/dt);
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 300.,  // Re
-            100,       // N
-            5.,        // lx
-            1.         // ly 
+        (T) 1e-2,  // uMax
+        (T) 300.,  // Re
+        100,       // N
+        5.,        // lx
+        1.         // ly
     );
     const T logT     = (T)0.02;
     const T imSave   = (T)0.1;
@@ -135,14 +136,14 @@ int main(int argc, char* argv[]) {
     writeLogFile(parameters, "Poiseuille flow");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-            parameters.getNx(), parameters.getNy(),
-            new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     lattice.periodicity().toggle(0, false);
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        //boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
-        boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    //boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     defineCylinderGeometry(lattice, parameters);
     setupInletAndBulk(lattice, parameters, *boundaryCondition);
@@ -151,12 +152,15 @@ int main(int argc, char* argv[]) {
     lattice.initialize();
 
     // Main loop over time iterations.
-    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT) {
-        if ((iT+1)%parameters.nStep(logT)==0) {
+    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT)
+    {
+        if ((iT+1)%parameters.nStep(logT)==0)
+        {
             pcout << computeAverageDensity(lattice) << endl;
             pcout << computeAverageEnergy(lattice) << endl;
         }
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "step " << iT
                   << "; lattice time=" << lattice.getTimeCounter().getTime()
                   << "; t=" << iT*parameters.getDeltaT()
@@ -166,12 +170,14 @@ int main(int argc, char* argv[]) {
                   << getStoredAverageDensity<T>(lattice) << endl;
         }
 
-        if (iT%parameters.nStep(imSave)==0) {
+        if (iT%parameters.nStep(imSave)==0)
+        {
             pcout << "Saving Gif ..." << endl;
             writeGifs(lattice, iT);
         }
 
-        if (iT%parameters.nStep(vtkSave)==0 && iT>0) {
+        if (iT%parameters.nStep(vtkSave)==0 && iT>0)
+        {
             pcout << "Saving VTK file ..." << endl;
             writeVTK(lattice, parameters, iT);
         }

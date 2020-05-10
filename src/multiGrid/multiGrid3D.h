@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -41,28 +41,30 @@
 #include "multiGrid/multiGridManagement3D.h"
 
 
-namespace plb {
-  
+namespace plb
+{
+
 class MultiGrid3D;
 
-/// Class that allows periodicity to be toggled on/off in the multigrid  
-class MultiGridPeriodicitySwitch3D {
-  public:
-    MultiGridPeriodicitySwitch3D(MultiGrid3D *block_);
-    MultiGridPeriodicitySwitch3D(MultiGridPeriodicitySwitch3D const& rhs);
-    MultiGridPeriodicitySwitch3D& operator=(MultiGridPeriodicitySwitch3D const& rhs);
-    
-    void swap(MultiGridPeriodicitySwitch3D& rhs);
- 
-    void toggle(int direction, bool periodicity);
-    void toggleAll(bool periodicity);
- 
-    Array<bool,3> const& getPeriodicityArray() const;
-    
-  private:
-    MultiGrid3D* block;
-    Array<bool,3> periodicityArray;
-    
+/// Class that allows periodicity to be toggled on/off in the multigrid
+class MultiGridPeriodicitySwitch3D
+{
+public:
+	MultiGridPeriodicitySwitch3D(MultiGrid3D *block_);
+	MultiGridPeriodicitySwitch3D(MultiGridPeriodicitySwitch3D const& rhs);
+	MultiGridPeriodicitySwitch3D& operator=(MultiGridPeriodicitySwitch3D const& rhs);
+
+	void swap(MultiGridPeriodicitySwitch3D& rhs);
+
+	void toggle(int direction, bool periodicity);
+	void toggleAll(bool periodicity);
+
+	Array<bool,3> const& getPeriodicityArray() const;
+
+private:
+	MultiGrid3D* block;
+	Array<bool,3> periodicityArray;
+
 };
 
 /// Handles statistics subscriptions for the MultiGridLattice3D
@@ -70,124 +72,125 @@ class MultiGridPeriodicitySwitch3D {
  *  each subscription comes with two parameters which will allow the rescaling of quantities
  *  among grids of different resolution.
  */
-class MultiGridStatSubscriber3D {
+class MultiGridStatSubscriber3D
+{
 public:
-    MultiGridStatSubscriber3D(MultiGrid3D* multiGrid_);
-    MultiGridStatSubscriber3D(MultiGridStatSubscriber3D const& rhs);
-    
-    void swap(MultiGridStatSubscriber3D& rhs);
-    MultiGridStatSubscriber3D& operator=(MultiGridStatSubscriber3D const& rhs);
-    
-    /// Subscribe a new observable for which the average value is computed.
-    plint subscribeAverage(plint dimDx, plint dimDt);
-    /// Subscribe a new observable for which the sum is computed.
-    plint subscribeSum(plint dimDx, plint dimDt);
-    /// Subscribe a new observable for which the maximum is computed.
-    plint subscribeMax(plint dimDx, plint dimDt);
-    /// Subscribe a new integer observable for which the sum is computed.
-    plint subscribeIntSum(plint dimDx, plint dimDt);
-    /// Initialize the default subscriptions (rho, uSqr, et max uSqr)
-    void initialize();    
-    
-    /// Retrieve the dimensions of dx and dt for all the components
-    std::vector<int> const& getDimensionsX() const;
-    std::vector<int> const& getDimensionsT() const;
-    
+	MultiGridStatSubscriber3D(MultiGrid3D* multiGrid_);
+	MultiGridStatSubscriber3D(MultiGridStatSubscriber3D const& rhs);
+
+	void swap(MultiGridStatSubscriber3D& rhs);
+	MultiGridStatSubscriber3D& operator=(MultiGridStatSubscriber3D const& rhs);
+
+	/// Subscribe a new observable for which the average value is computed.
+	plint subscribeAverage(plint dimDx, plint dimDt);
+	/// Subscribe a new observable for which the sum is computed.
+	plint subscribeSum(plint dimDx, plint dimDt);
+	/// Subscribe a new observable for which the maximum is computed.
+	plint subscribeMax(plint dimDx, plint dimDt);
+	/// Subscribe a new integer observable for which the sum is computed.
+	plint subscribeIntSum(plint dimDx, plint dimDt);
+	/// Initialize the default subscriptions (rho, uSqr, et max uSqr)
+	void initialize();
+
+	/// Retrieve the dimensions of dx and dt for all the components
+	std::vector<int> const& getDimensionsX() const;
+	std::vector<int> const& getDimensionsT() const;
+
 private:
-    MultiGrid3D* multiGrid;
-    std::vector<int> dimensionsX;
-    std::vector<int> dimensionsT;
+	MultiGrid3D* multiGrid;
+	std::vector<int> dimensionsX;
+	std::vector<int> dimensionsT;
 };
 
-  
-/// Base non-typed object that represents a multigrid  
+
+/// Base non-typed object that represents a multigrid
 class MultiGrid3D : public Block3D
 {
-  public:
-    MultiGrid3D( MultiGridManagement3D management, 
-                 plint behaviorLevel_);
-    // Copy constructor
-    MultiGrid3D(const MultiGrid3D& rhs);
-    MultiGrid3D(MultiGrid3D const& rhs, Box3D subDomain, bool crop);
-    virtual ~MultiGrid3D();
-    
-    void swap(MultiGrid3D& rhs);
-    
-    /// Retrieving the components of the multigrid
-    virtual MultiBlock3D const& getComponent(plint level) const = 0;
-    virtual MultiBlock3D& getComponent(plint level)             = 0;
-    
-    MultiGridManagement3D const& getMultiGridManagement() const;
-    MultiGridManagement3D& getMultiGridManagement();
-     
-    /// "Sizes" of the multigrid, according to a definition made by the end-user class.
-    plint getNx() const;
-    plint getNy() const;
-    plint getNz() const;
-    
-    /// Retrieve the bounding box of the domain according to a definition made by user
-    virtual Box3D getBoundingBox() const;
-    
-    /// Retrieve the multigrid informations (for the implementing classes)
-    plint getReferenceLevel() const;
-    plint getNumLevels() const;
-    plint getBehaviorLevel() const;
-    void setBehaviorLevel(plint behaviorLevel_);
-    
-    /// Execute all processors one
-    void initialize();
-    
-    /// Execute data processors
-    void executeInternalProcessors();
-    void executeInternalProcessors(plint level);   
+public:
+	MultiGrid3D( MultiGridManagement3D management,
+	             plint behaviorLevel_);
+	// Copy constructor
+	MultiGrid3D(const MultiGrid3D& rhs);
+	MultiGrid3D(MultiGrid3D const& rhs, Box3D subDomain, bool crop);
+	virtual ~MultiGrid3D();
 
-    /// Subscription of a Data Processor
-    void subscribeProcessor(plint level);
-    
-    /// Retrieve the multigrid statistics (this contains all the statistics rescaled)
-    BlockStatistics& getInternalStatistics();
-    BlockStatistics const& getInternalStatistics() const;
-    
-    /// statistics related manipulations like evaluation
-    void reduceStatistics();
-    void evaluateStatistics();
-    void toggleInternalStatistics(bool statisticsOn_);
-    bool isInternalStatisticsOn() const;
-    
-    /// Periodicity control
-    MultiGridPeriodicitySwitch3D const& periodicity() const;
-    /// Periodicity control
-    MultiGridPeriodicitySwitch3D& periodicity();
-    void signalPeriodicity();
-    
-    /// Retrieve the stats subscriber
-    MultiGridStatSubscriber3D& internalStatSubscription();
-    
-    /// Retrieve the scale manager 
-    MultiScaleManager const& getScaleManager() const;
+	void swap(MultiGrid3D& rhs);
 
-    virtual DataSerializer* getBlockSerializer (
-            Box3D const& domain, IndexOrdering::OrderingT ordering ) const;
-    virtual DataUnSerializer* getBlockUnSerializer (
-            Box3D const& domain, IndexOrdering::OrderingT ordering );
+	/// Retrieving the components of the multigrid
+	virtual MultiBlock3D const& getComponent(plint level) const = 0;
+	virtual MultiBlock3D& getComponent(plint level)             = 0;
 
-    virtual int getBlockId () const =0;
+	MultiGridManagement3D const& getMultiGridManagement() const;
+	MultiGridManagement3D& getMultiGridManagement();
 
-  private:
-    // reference level management
-    MultiGridManagement3D management; 
+	/// "Sizes" of the multigrid, according to a definition made by the end-user class.
+	plint getNx() const;
+	plint getNy() const;
+	plint getNz() const;
 
-    plint behaviorLevel;
-    MultiGridPeriodicitySwitch3D periodicitySwitch;
+	/// Retrieve the bounding box of the domain according to a definition made by user
+	virtual Box3D getBoundingBox() const;
 
-    plint maxProcessorLevel;
-    bool statisticsOn;
-    
-    MultiGridStatSubscriber3D statsSubscriber;
-    BlockStatistics internalStatistics;
-    
-    // Used to easen the scale conversion in this class
-    MultiScaleManager *scaleManager; 
+	/// Retrieve the multigrid informations (for the implementing classes)
+	plint getReferenceLevel() const;
+	plint getNumLevels() const;
+	plint getBehaviorLevel() const;
+	void setBehaviorLevel(plint behaviorLevel_);
+
+	/// Execute all processors one
+	void initialize();
+
+	/// Execute data processors
+	void executeInternalProcessors();
+	void executeInternalProcessors(plint level);
+
+	/// Subscription of a Data Processor
+	void subscribeProcessor(plint level);
+
+	/// Retrieve the multigrid statistics (this contains all the statistics rescaled)
+	BlockStatistics& getInternalStatistics();
+	BlockStatistics const& getInternalStatistics() const;
+
+	/// statistics related manipulations like evaluation
+	void reduceStatistics();
+	void evaluateStatistics();
+	void toggleInternalStatistics(bool statisticsOn_);
+	bool isInternalStatisticsOn() const;
+
+	/// Periodicity control
+	MultiGridPeriodicitySwitch3D const& periodicity() const;
+	/// Periodicity control
+	MultiGridPeriodicitySwitch3D& periodicity();
+	void signalPeriodicity();
+
+	/// Retrieve the stats subscriber
+	MultiGridStatSubscriber3D& internalStatSubscription();
+
+	/// Retrieve the scale manager
+	MultiScaleManager const& getScaleManager() const;
+
+	virtual DataSerializer* getBlockSerializer (
+	    Box3D const& domain, IndexOrdering::OrderingT ordering ) const;
+	virtual DataUnSerializer* getBlockUnSerializer (
+	    Box3D const& domain, IndexOrdering::OrderingT ordering );
+
+	virtual int getBlockId () const =0;
+
+private:
+	// reference level management
+	MultiGridManagement3D management;
+
+	plint behaviorLevel;
+	MultiGridPeriodicitySwitch3D periodicitySwitch;
+
+	plint maxProcessorLevel;
+	bool statisticsOn;
+
+	MultiGridStatSubscriber3D statsSubscriber;
+	BlockStatistics internalStatistics;
+
+	// Used to easen the scale conversion in this class
+	MultiScaleManager *scaleManager;
 };
 
 // checkpointing for the multiGrid

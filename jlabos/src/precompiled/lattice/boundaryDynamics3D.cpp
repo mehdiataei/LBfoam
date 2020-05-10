@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,27 +33,28 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.hh"
 
-namespace plb {
+namespace plb
+{
 
-    template class BoundaryCompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    template class StoreDensityDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    template class StoreVelocityDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    template class StoreDensityAndVelocityDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    template class StoreTemperatureAndVelocityDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class BoundaryCompositeDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class StoreDensityDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class StoreVelocityDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class StoreDensityAndVelocityDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class StoreTemperatureAndVelocityDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
 
-    template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 0, 1>;
-    template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 0, -1>;
-    template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 1, 1>;
-    template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 1, -1>;
-    template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 2, 1>;
-    template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 2, -1>;
+template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 0, 1>;
+template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 0, -1>;
+template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 1, 1>;
+template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 1, -1>;
+template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 2, 1>;
+template class VelocityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 2, -1>;
 
-    template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 0, 1>;
-    template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 0, -1>;
-    template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 1, 1>;
-    template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 1, -1>;
-    template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 2, 1>;
-    template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 2, -1>;
+template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 0, 1>;
+template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 0, -1>;
+template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 1, 1>;
+template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 1, -1>;
+template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 2, 1>;
+template class DensityDirichletBoundaryDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D, 2, -1>;
 
 }
 

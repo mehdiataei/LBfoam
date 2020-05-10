@@ -19,6 +19,8 @@ palabosRoot  = ../../..
 # Name of source files in current directory to compile and link with Palabos
 projectFiles = carreauPoiseuille.cpp
 
+# Choose between generic and precompiled mode
+precompiled  = false
 # Set optimization flags on/off
 optimize     = true
 # Set debug mode and debug flags on/off
@@ -33,6 +35,10 @@ SMPparallel  = false
 #   including Windows, this flag must be false, unless a POSIX environment is
 #   emulated (such as with Cygwin).
 usePOSIX     = true
+# This flag must be defined true if you are using the external library
+# cvmlcpp. But first, you need to download cvmlcpp and put it into the
+# directory "externalLibraries" of the Palabos root.
+useCVMLCPP   = false
 
 # Path to external source files (other than Palabos)
 srcPaths =
@@ -48,7 +54,7 @@ serialCXX    = g++
 # Compiler to use with MPI parallelism
 parallelCXX  = mpicxx
 # General compiler flags (e.g. -Wall to turn on all warnings on g++)
-compileFlags = -Wall -Wnon-virtual-dtor -std=c++11 #-DPLB_MAC_OS_X
+compileFlags = -Wall -Wnon-virtual-dtor -Wno-deprecated-declarations
 # General linker flags (don't put library includes into this flag)
 linkFlags    =
 # Compiler flags to use when optimization mode is on
@@ -87,8 +93,8 @@ SConsArgs = palabosRoot=$(palabosRoot) \
             libraries="$(libraries)"
 
 compile:
-	python2 $(SCons) $(SConsArgs)
+	python2.7 $(SCons) $(SConsArgs)
 
 clean:
-	python2 $(SCons) -c $(SConsArgs)
+	python2.7 $(SCons) -c $(SConsArgs)
 	/bin/rm -vf `find $(palabosRoot) -name '*~'`

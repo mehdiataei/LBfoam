@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -37,7 +37,8 @@
 #include <memory>
 
 
-namespace plb {
+namespace plb
+{
 
 /* ******************************************************************* */
 /* *************** PART II. Atomic-block wrappers: Scalar-Field ****** */
@@ -49,15 +50,15 @@ void realPart( ScalarField2D<T>& complexField,
                Box2D domain);
 
 template<typename T, typename U>
-std::unique_ptr<ScalarField2D<U> > realPart(ScalarField2D<T>& complexField, Box2D domain);
-    
+std::auto_ptr<ScalarField2D<U> > realPart(ScalarField2D<T>& complexField, Box2D domain);
+
 template<typename T, typename U>
 void imaginaryPart( ScalarField2D<T>& complexField,
                     ScalarField2D<U>& realField,
                     Box2D domain);
 
 template<typename T, typename U>
-std::unique_ptr<ScalarField2D<U> > imaginaryPart(ScalarField2D<T>& complexField, Box2D domain);
+std::auto_ptr<ScalarField2D<U> > imaginaryPart(ScalarField2D<T>& complexField, Box2D domain);
 
 /* ******************************************************************* */
 /* *************** PART III. Atomic-block wrappers: Tensor-field ***** */
@@ -69,7 +70,7 @@ void realPart( TensorField2D<T,d>& complexField,
                Box2D domain);
 
 template<typename T, typename R, int d>
-std::unique_ptr<TensorField2D<R,d> > realPart(TensorField2D<T,d>& complexField, Box2D domain);
+std::auto_ptr<TensorField2D<R,d> > realPart(TensorField2D<T,d>& complexField, Box2D domain);
 
 template<typename T, typename R, int d>
 void imaginaryPart( TensorField2D<T,d>& complexField,
@@ -77,13 +78,13 @@ void imaginaryPart( TensorField2D<T,d>& complexField,
                     Box2D domain);
 
 template<typename T, typename R, int d>
-std::unique_ptr<TensorField2D<R,d> > imaginaryPart(TensorField2D<T,d>& complexField, Box2D domain); 
+std::auto_ptr<TensorField2D<R,d> > imaginaryPart(TensorField2D<T,d>& complexField, Box2D domain);
 
 
 /* *********************************************************************** */
 /* *************** PART V : Multi-block wrappers: Multi-Scalar-Field ***** */
 /* *********************************************************************** */
-	
+
 /* *************** From Complex to real fields ******************************* */
 
 template<typename T, typename U>
@@ -92,15 +93,15 @@ void realPart( MultiScalarField2D<T>& complexField,
                Box2D domain);
 
 template<typename T, typename U>
-std::unique_ptr<MultiScalarField2D<U> > realPart(MultiScalarField2D<T>& complexField, Box2D domain);
-	
+std::auto_ptr<MultiScalarField2D<U> > realPart(MultiScalarField2D<T>& complexField, Box2D domain);
+
 template<typename T, typename U>
 void imaginaryPart( MultiScalarField2D<T>& complexField,
                     MultiScalarField2D<U>& realField,
                     Box2D domain);
 
 template<typename T, typename U>
-std::unique_ptr<MultiScalarField2D<U> > imaginaryPart(MultiScalarField2D<T>& complexField, Box2D domain);
+std::auto_ptr<MultiScalarField2D<U> > imaginaryPart(MultiScalarField2D<T>& complexField, Box2D domain);
 
 /* *********************************************************************** */
 /* ************** PART VI : Multi-block wrappers: Multi-Tensor-Field ***** */
@@ -112,7 +113,7 @@ void realPart( MultiTensorField2D<T,d>& complexField,
                Box2D domain);
 
 template<typename T, typename R, int d>
-std::unique_ptr<MultiTensorField2D<R,d> > realPart(MultiTensorField2D<T,d>& complexField, Box2D domain);
+std::auto_ptr<MultiTensorField2D<R,d> > realPart(MultiTensorField2D<T,d>& complexField, Box2D domain);
 
 template<typename T, typename R, int d>
 void imaginaryPart( MultiTensorField2D<T,d>& complexField,
@@ -120,8 +121,8 @@ void imaginaryPart( MultiTensorField2D<T,d>& complexField,
                     Box2D domain);
 
 template<typename T, typename R, int d>
-std::unique_ptr<MultiTensorField2D<R,d> > imaginaryPart(MultiTensorField2D<T,d>& complexField, Box2D domain);	
-	
+std::auto_ptr<MultiTensorField2D<R,d> > imaginaryPart(MultiTensorField2D<T,d>& complexField, Box2D domain);
+
 }  // namespace plb
 
 #endif  // COMPLEX_DATA_ANALYSIS_WRAPPER_2D_H

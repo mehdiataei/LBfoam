@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,17 +32,19 @@
 #include <exception>
 #include <set>
 
-namespace plb {
+namespace plb
+{
 
-class DiagnosticFileSingleton {
+class DiagnosticFileSingleton
+{
 public:
-    DiagnosticFileSingleton(std::string fName_);
-    ~DiagnosticFileSingleton();
-    void write(std::string message);
+	DiagnosticFileSingleton(std::string fName_);
+	~DiagnosticFileSingleton();
+	void write(std::string message);
 private:
-    DiagnosticFileSingleton();
-    std::ofstream* ofile;
-    std::string fName;
+	DiagnosticFileSingleton();
+	std::ofstream* ofile;
+	std::string fName;
 };
 
 DiagnosticFileSingleton& warningFile();
@@ -96,119 +98,127 @@ void plbMainProcOutOfRangeError(bool issueError, std::string message);
 class PlbException : public std::exception
 { };
 
-class PlbGenericException : public PlbException {
+class PlbGenericException : public PlbException
+{
 public:
-    PlbGenericException(std::string message_) throw();
-    virtual ~PlbGenericException() throw() { }
-    virtual const char* what() const throw();
+	PlbGenericException(std::string message_) throw();
+	virtual ~PlbGenericException() throw() { }
+	virtual const char* what() const throw();
 private:
-    std::string message;
+	std::string message;
 };
 
-class PlbMemoryException : public PlbException {
+class PlbMemoryException : public PlbException
+{
 public:
-    PlbMemoryException(std::string message_) throw();
-    virtual ~PlbMemoryException() throw() { }
-    virtual const char* what() const throw();
+	PlbMemoryException(std::string message_) throw();
+	virtual ~PlbMemoryException() throw() { }
+	virtual const char* what() const throw();
 private:
-    std::string message;
+	std::string message;
 };
 
-class PlbIOException : public PlbException {
+class PlbIOException : public PlbException
+{
 public:
-    PlbIOException(std::string message_) throw();
-    virtual ~PlbIOException() throw() { }
-    virtual const char* what() const throw();
+	PlbIOException(std::string message_) throw();
+	virtual ~PlbIOException() throw() { }
+	virtual const char* what() const throw();
 private:
-    std::string message;
+	std::string message;
 };
 
-class PlbNetworkException : public PlbException {
+class PlbNetworkException : public PlbException
+{
 public:
-    PlbNetworkException(std::string message_) throw();
-    virtual ~PlbNetworkException() throw() { }
-    virtual const char* what() const throw();
+	PlbNetworkException(std::string message_) throw();
+	virtual ~PlbNetworkException() throw() { }
+	virtual const char* what() const throw();
 private:
-    std::string message;
+	std::string message;
 };
 
-class PlbLogicException : public PlbException {
+class PlbLogicException : public PlbException
+{
 public:
-    PlbLogicException(std::string message_) throw();
-    virtual ~PlbLogicException() throw() { }
-    virtual const char* what() const throw();
+	PlbLogicException(std::string message_) throw();
+	virtual ~PlbLogicException() throw() { }
+	virtual const char* what() const throw();
 private:
-    std::string message;
+	std::string message;
 };
 
-class PlbOutOfRangeException : public PlbException {
+class PlbOutOfRangeException : public PlbException
+{
 public:
-    PlbOutOfRangeException(std::string message_) throw();
-    virtual ~PlbOutOfRangeException() throw() { }
-    virtual const char* what() const throw();
+	PlbOutOfRangeException(std::string message_) throw();
+	virtual ~PlbOutOfRangeException() throw() { }
+	virtual const char* what() const throw();
 private:
-    std::string message;
+	std::string message;
 };
 
-namespace global {
+namespace global
+{
 
-class PlbErrors {
+class PlbErrors
+{
 public:
-    void registerError(std::string const& message);
-    void registerMemoryError(std::string const& message);
-    void registerIOError(std::string const& message);
-    void registerNetworkError(std::string const& message);
-    void registerLogicError(std::string const& message);
-    void registerOutOfRangeError(std::string const& message);
+	void registerError(std::string const& message);
+	void registerMemoryError(std::string const& message);
+	void registerIOError(std::string const& message);
+	void registerNetworkError(std::string const& message);
+	void registerLogicError(std::string const& message);
+	void registerOutOfRangeError(std::string const& message);
 
-    void clear();
-    void memoryClear();
-    void ioClear();
-    void networkClear();
-    void logicClear();
-    void outOfRangeClear();
+	void clear();
+	void memoryClear();
+	void ioClear();
+	void networkClear();
+	void logicClear();
+	void outOfRangeClear();
 
-    bool empty() const;
-    bool memoryEmpty() const;
-    bool ioEmpty() const;
-    bool networkEmpty() const;
-    bool logicEmpty() const;
-    bool outOfRangeEmpty() const;
+	bool empty() const;
+	bool memoryEmpty() const;
+	bool ioEmpty() const;
+	bool networkEmpty() const;
+	bool logicEmpty() const;
+	bool outOfRangeEmpty() const;
 
-    bool messageExists(std::string const& message) const;
-    bool memoryMessageExists(std::string const& message) const;
-    bool ioMessageExists(std::string const& message) const;
-    bool networkMessageExists(std::string const& message) const;
-    bool logicMessageExists(std::string const& message) const;
-    bool outOfRangeMessageExists(std::string const& message) const;
+	bool messageExists(std::string const& message) const;
+	bool memoryMessageExists(std::string const& message) const;
+	bool ioMessageExists(std::string const& message) const;
+	bool networkMessageExists(std::string const& message) const;
+	bool logicMessageExists(std::string const& message) const;
+	bool outOfRangeMessageExists(std::string const& message) const;
 
-    std::string allMessages() const;
-    std::string allMemoryMessages() const;
-    std::string allIOMessages() const;
-    std::string allNetworkMessages() const;
-    std::string allLogicMessages() const;
-    std::string allOutOfRangeMessages() const;
+	std::string allMessages() const;
+	std::string allMemoryMessages() const;
+	std::string allIOMessages() const;
+	std::string allNetworkMessages() const;
+	std::string allLogicMessages() const;
+	std::string allOutOfRangeMessages() const;
 
-    void printMessages() const;
-    void printMemoryMessages() const;
-    void printIOMessages() const;
-    void printNetworkMessages() const;
-    void printLogicMessages() const;
-    void printOutOfRangeMessages() const;
+	void printMessages() const;
+	void printMemoryMessages() const;
+	void printIOMessages() const;
+	void printNetworkMessages() const;
+	void printLogicMessages() const;
+	void printOutOfRangeMessages() const;
 
-    std::set<std::string> const& getMessages() const;
-    std::set<std::string> const& getMemoryMessages() const;
-    std::set<std::string> const& getIOMessages() const;
-    std::set<std::string> const& getNetworkMessages() const;
-    std::set<std::string> const& getLogicMessages() const;
-    std::set<std::string> const& getOutOfRangeMessages() const;
+	std::set<std::string> const& getMessages() const;
+	std::set<std::string> const& getMemoryMessages() const;
+	std::set<std::string> const& getIOMessages() const;
+	std::set<std::string> const& getNetworkMessages() const;
+	std::set<std::string> const& getLogicMessages() const;
+	std::set<std::string> const& getOutOfRangeMessages() const;
 private:
-    std::set<std::string> messages;
-    std::set<std::string> memoryMessages;
-    std::set<std::string> ioMessages;
-    std::set<std::string> networkMessages;
-    std::set<std::string> logicMessages;
-    std::set<std::string> outOfRangeMessages;
+	std::set<std::string> messages;
+	std::set<std::string> memoryMessages;
+	std::set<std::string> ioMessages;
+	std::set<std::string> networkMessages;
+	std::set<std::string> logicMessages;
+	std::set<std::string> outOfRangeMessages;
 };
 
 PlbErrors& plbErrors();

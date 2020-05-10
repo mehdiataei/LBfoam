@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -25,24 +25,25 @@
 #include "multiBlock/nonLocalTransfer2D.h"
 #include "multiBlock/nonLocalTransfer2D.hh"
 
-namespace plb {
+namespace plb
+{
 
 template
 void copyNonLocal<PRECOMP_T> (
-        MultiNTensorField2D<PRECOMP_T> const& from, MultiNTensorField2D<PRECOMP_T>& to, Box2D const& domain );
+    MultiNTensorField2D<PRECOMP_T> const& from, MultiNTensorField2D<PRECOMP_T>& to, Box2D const& domain );
 
 template
 void copy<PRECOMP_T> (
-        MultiNTensorField2D<PRECOMP_T> const& from, Box2D const& fromDomain,
-        MultiNTensorField2D<PRECOMP_T>& to, Box2D const& toDomain );
+    MultiNTensorField2D<PRECOMP_T> const& from, Box2D const& fromDomain,
+    MultiNTensorField2D<PRECOMP_T>& to, Box2D const& toDomain );
 
 template
 void copyNonLocal<PRECOMP_T> (
-        MultiScalarField2D<PRECOMP_T> const& from, MultiScalarField2D<PRECOMP_T>& to, Box2D const& domain );
+    MultiScalarField2D<PRECOMP_T> const& from, MultiScalarField2D<PRECOMP_T>& to, Box2D const& domain );
 
 template
 void copy<PRECOMP_T> (
-        MultiScalarField2D<PRECOMP_T> const& from, Box2D const& fromDomain,
-        MultiScalarField2D<PRECOMP_T>& to, Box2D const& toDomain );
+    MultiScalarField2D<PRECOMP_T> const& from, Box2D const& fromDomain,
+    MultiScalarField2D<PRECOMP_T>& to, Box2D const& toDomain );
 
 }  // namespace plb

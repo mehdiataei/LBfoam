@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -46,7 +46,7 @@ typedef double T;
 plint smallEnvelopeWidth  = 1;
 plint largeEnvelopeWidth  = 4; // Because of immersed walls.
 
-std::string outputDir("./tmp/");
+std::string outputDir("./tmp2/");
 
 T pi = std::acos((T) -1);
 
@@ -57,7 +57,8 @@ T pi = std::acos((T) -1);
 // dimensions 708 x 216 x 216. If a desktop computer is
 // used to run this code, and not a parallel cluster,
 // be sure to reduce the size of the grid.
-struct Param {
+struct Param
+{
     // User defined parameters.
 
     T lx, ly, lz;                                   // Dimensions of the simulation domain in physical units.
@@ -90,12 +91,12 @@ void setParam()
 {
     // User input data (all in physical units).
 
-    param.lx = 29.5;
+    param.lx = 9.0;
     param.ly = 9.0;
     param.lz = 9.0;
     param.xSide = 2.0;
     param.ySide = 1.0;
-    param.resolution = 25;
+    param.resolution = 10;
     param.dt = 0.00082;
     param.maxIter = 500000;
     param.statIter = 200;
@@ -119,11 +120,14 @@ void computeLbParam()
     // Derived quantities.
 
     param.dx = param.ySide / (param.resolution - 1.0);
-    if (param.periodicBoundaries) {
+    if (param.periodicBoundaries)
+    {
         param.nx = util::roundToInt(param.lx / param.dx) + 1;
         param.ny = util::roundToInt(param.ly / param.dx);
         param.nz = util::roundToInt(param.lz / param.dx);
-    } else {
+    }
+    else
+    {
         param.nx = util::roundToInt(param.lx / param.dx) + 1;
         param.ny = util::roundToInt(param.ly / param.dx) + 1;
         param.nz = util::roundToInt(param.lz / param.dx) + 1;
@@ -201,13 +205,14 @@ T getAngularVelocity(T t)
 
 
 // This class computes the velocity of the immersed surface at every
-// time step. The immersed surface has a defined position given by 
+// time step. The immersed surface has a defined position given by
 // an angle of the form:
 //   phi = phi_0 + A * sin(2 * pi * f * t)
-// So its velocity is given by the cross product between its 
+// So its velocity is given by the cross product between its
 // angular velocity (time derivative of the angle) and its position.
 // The axis of rotation is the y-axis.
-class SurfaceVelocity {
+class SurfaceVelocity
+{
 public:
     SurfaceVelocity(T t_)
         : t(t_)
@@ -254,24 +259,24 @@ void writeVTK(MultiBlockLattice3D<T,DESCRIPTOR>& lattice, Array<T,3> center, pli
     Box3D box_z(0, param.nx - 1, 0, param.ny - 1, cz - 1, cz + 1);
 
     VtkImageOutput3D<T> vtkOut_x(createFileName("fluid_x_", iT, PADDING), param.dx);
-    std::unique_ptr<MultiTensorField3D<T,3> > vx = computeVelocity(lattice, box_x);
+    std::auto_ptr<MultiTensorField3D<T,3> > vx = computeVelocity(lattice, box_x);
 
     vtkOut_x.writeData<3,float>(*vx, "v", param.dx / param.dt);
-    std::unique_ptr<MultiScalarField3D<T> > rhox = computeDensity(lattice, box_x);
+    std::auto_ptr<MultiScalarField3D<T> > rhox = computeDensity(lattice, box_x);
     vtkOut_x.writeData<float>(*rhox, "p", (param.dx * param.dx) / (param.dt * param.dt));
 
     VtkImageOutput3D<T> vtkOut_y(createFileName("fluid_y_", iT, PADDING), param.dx);
-    std::unique_ptr<MultiTensorField3D<T,3> > vy = computeVelocity(lattice, box_y);
+    std::auto_ptr<MultiTensorField3D<T,3> > vy = computeVelocity(lattice, box_y);
 
     vtkOut_y.writeData<3,float>(*vy, "v", param.dx / param.dt);
-    std::unique_ptr<MultiScalarField3D<T> > rhoy = computeDensity(lattice, box_y);
+    std::auto_ptr<MultiScalarField3D<T> > rhoy = computeDensity(lattice, box_y);
     vtkOut_y.writeData<float>(*rhoy, "p", (param.dx * param.dx) / (param.dt * param.dt));
 
     VtkImageOutput3D<T> vtkOut_z(createFileName("fluid_z_", iT, PADDING), param.dx);
-    std::unique_ptr<MultiTensorField3D<T,3> > vz = computeVelocity(lattice, box_z);
+    std::auto_ptr<MultiTensorField3D<T,3> > vz = computeVelocity(lattice, box_z);
 
     vtkOut_z.writeData<3,float>(*vz, "v", param.dx / param.dt);
-    std::unique_ptr<MultiScalarField3D<T> > rhoz = computeDensity(lattice, box_z);
+    std::auto_ptr<MultiScalarField3D<T> > rhoz = computeDensity(lattice, box_z);
     vtkOut_z.writeData<float>(*rhoz, "p", (param.dx * param.dx) / (param.dt * param.dt));
 }
 
@@ -295,7 +300,7 @@ int main(int argc, char* argv[])
     pcout << "Dynamics: Incompressible BGK." << std::endl;
 
     MultiBlockLattice3D<T,DESCRIPTOR> *lattice = new MultiBlockLattice3D<T,DESCRIPTOR>(
-            param.nx, param.ny, param.nz, dynamics->clone());
+        param.nx, param.ny, param.nz, dynamics->clone());
     defineDynamics(*lattice, lattice->getBoundingBox(), dynamics->clone());
     delete dynamics;
     lattice->toggleInternalStatistics(false);
@@ -311,17 +316,18 @@ int main(int argc, char* argv[])
     rhoBarJarg.push_back(rhoBar);
     rhoBarJarg.push_back(j);
     integrateProcessingFunctional(
-            new ExternalRhoJcollideAndStream3D<T,DESCRIPTOR>(),
-            lattice->getBoundingBox(), rhoBarJarg, 0);
+        new ExternalRhoJcollideAndStream3D<T,DESCRIPTOR>(),
+        lattice->getBoundingBox(), rhoBarJarg, 0);
     integrateProcessingFunctional(
-            new BoxRhoBarJfunctional3D<T,DESCRIPTOR>(),
-            lattice->getBoundingBox(), rhoBarJarg, 2);
+        new BoxRhoBarJfunctional3D<T,DESCRIPTOR>(),
+        lattice->getBoundingBox(), rhoBarJarg, 2);
 
     // Boundary conditions.
 
     pcout << "Generating boundary conditions." << std::endl;
 
-    if (param.periodicBoundaries) {
+    if (param.periodicBoundaries)
+    {
         lattice->periodicity().toggle(0, false);
         lattice->periodicity().toggle(1, true);
         lattice->periodicity().toggle(2, true);
@@ -335,7 +341,9 @@ int main(int argc, char* argv[])
         j->periodicity().toggle(2, true);
 
         pcout << "Periodic lateral boundaries." << std::endl;
-    } else {
+    }
+    else
+    {
         lattice->periodicity().toggleAll(false);
         rhoBar->periodicity().toggleAll(false);
         j->periodicity().toggleAll(false);
@@ -347,7 +355,8 @@ int main(int argc, char* argv[])
 
     Box3D inlet(0, 0, 0, param.ny - 1, 0, param.nz - 1);
     Box3D outlet(param.nx - 1, param.nx - 1, 0, param.ny - 1, 0, param.nz - 1);
-    if (param.periodicBoundaries) {
+    if (param.periodicBoundaries)
+    {
         // Inlet velocity boundary condition.
         bc->addVelocityBoundary0N(inlet, *lattice);
         T vx = getInletVelocity(param.inletVelocityLB, 0);
@@ -370,9 +379,11 @@ int main(int argc, char* argv[])
         T outsideDensity = 1.0;
         int bcType = 1;
         integrateProcessingFunctional(new VirtualOutlet<T,DESCRIPTOR>(outsideDensity, globalDomain, bcType),
-                outlet, bcargs, 1);
+                                      outlet, bcargs, 1);
         setBoundaryVelocity(*lattice, outlet, Array<T,3>(vx, (T) 0, (T) 0));
-    } else {
+    }
+    else
+    {
         // Inlet velocity boundary condition.
         bc->setVelocityConditionOnBlockBoundaries(*lattice, inlet, boundary::dirichlet);
         T vx = getInletVelocity(param.inletVelocityLB, 0);
@@ -403,7 +414,7 @@ int main(int argc, char* argv[])
         T outsideDensity = 1.0;
         int bcType = 1;
         integrateProcessingFunctional(new VirtualOutlet<T,DESCRIPTOR>(outsideDensity, globalDomain, bcType),
-                outlet, bcargs, 1);
+                                      outlet, bcargs, 1);
         setBoundaryVelocity(*lattice, outlet, Array<T,3>(vx, (T) 0, (T) 0));
     }
 
@@ -413,10 +424,10 @@ int main(int argc, char* argv[])
 
     T vx = getInletVelocity(param.inletVelocityLB, 0);
     initializeAtEquilibrium(*lattice, lattice->getBoundingBox(),
-            (T)1.0, Array<T,3>(vx, (T) 0, (T) 0));
+                            (T)1.0, Array<T,3>(vx, (T) 0, (T) 0));
     applyProcessingFunctional(
-            new BoxRhoBarJfunctional3D<T,DESCRIPTOR>(),
-            lattice->getBoundingBox(), rhoBarJarg);
+        new BoxRhoBarJfunctional3D<T,DESCRIPTOR>(),
+        lattice->getBoundingBox(), rhoBarJarg);
     T energy = computeAverageEnergy(*lattice) * (param.dx * param.dx) / (param.dt * param.dt);
     pcout << "Initial average kinetic energy: " << energy << std::endl;
     pcout << std::endl;
@@ -434,14 +445,15 @@ int main(int argc, char* argv[])
     // The initial geometry of the immersed surface can be created analyticaly or, alternatively,
     // it can be loaded by reading a user provided STL file.
     TriangleSet<T> rectangleTriangleSet = constructRectangle<T>(param.xSideLB, param.ySideLB,
-            util::roundToInt(2.0 * param.xSideLB), util::roundToInt(2.0 * param.ySideLB));
+                                          util::roundToInt(2.0 * param.xSideLB), util::roundToInt(2.0 * param.ySideLB));
     Array<T,3> mount = Array<T,3>((T) 0, (T) -0.5 * param.ySideLB, (T) 0) + param.mountPointLB;
     rectangleTriangleSet.translate(mount);
 
     DEFscaledMesh<T> *rectangleDef = new DEFscaledMesh<T>(rectangleTriangleSet, 0, 0, 0, Dot3D(0, 0, 0));
     pcout << "The rectangle has " << rectangleDef->getMesh().getNumVertices() << " vertices and " <<
-        rectangleDef->getMesh().getNumTriangles() << " triangles." << std::endl;
-    for (pluint iVertex = 0; iVertex < (pluint) rectangleDef->getMesh().getNumVertices(); iVertex++) {
+          rectangleDef->getMesh().getNumTriangles() << " triangles." << std::endl;
+    for (pluint iVertex = 0; iVertex < (pluint) rectangleDef->getMesh().getNumVertices(); iVertex++)
+    {
         vertices.push_back(rectangleDef->getMesh().getVertex(iVertex));
         areas.push_back(rectangleDef->getMesh().computeVertexArea(iVertex));
     }
@@ -462,14 +474,17 @@ int main(int argc, char* argv[])
 
     pcout << "Starting simulation." << std::endl;
 
-    for (plint iT = 0; iT < param.maxIter; iT++) {
+    for (plint iT = 0; iT < param.maxIter; iT++)
+    {
         // Set the time dependent inlet boundary velocity.
-        if (iT <= param.startIter) {
+        if (iT <= param.startIter)
+        {
             T vx = getInletVelocity(param.inletVelocityLB, iT);
             setBoundaryVelocity(*lattice, inlet, Array<T,3>(vx, (T) 0, (T) 0));
         }
 
-        if ((iT % param.statIter == 0 && iT != 0) || iT == param.maxIter - 1) {
+        if ((iT % param.statIter == 0 && iT != 0) || iT == param.maxIter - 1)
+        {
             pcout << "At iteration " << iT << ", t = " << iT * param.dt << std::endl;
             T energy = computeAverageEnergy(*lattice) * (param.dx * param.dx) / (param.dt * param.dt);
             pcout << "Average kinetic energy: " << energy << std::endl;
@@ -477,7 +492,8 @@ int main(int argc, char* argv[])
             pcout << std::endl;
         }
 
-        if (iT % param.outIter == 0 || iT == param.maxIter - 1) {
+        if (iT % param.outIter == 0 || iT == param.maxIter - 1)
+        {
             pcout << "Output to disk at iteration: " << iT << std::endl;
             writeVTK(*lattice, param.mountPointLB, iT);
             writeSurface(rectangleTriangleSet, iT);
@@ -494,7 +510,8 @@ int main(int argc, char* argv[])
         // The angle of rotation is given by a function of the form:
         //   phi = phi_0 + A * sin(2 * pi * f * t)
         // The rotation axis is the y-axis.
-        for (plint iVertex = 0; iVertex < (plint) vertices.size(); iVertex++) {
+        for (plint iVertex = 0; iVertex < (plint) vertices.size(); iVertex++)
+        {
             T z = vertices[iVertex][2] - param.mountPointLB[2];
             T x = vertices[iVertex][0] - param.mountPointLB[0];
             T r = std::sqrt(z * z + x * x);
@@ -505,9 +522,10 @@ int main(int argc, char* argv[])
 
         // Instantiate the immersed wall data and performed the immersed boundary iterations.
         instantiateImmersedWallData(vertices, areas, container);
-        for (int i = 0; i < param.ibIter; i++) {
+        for (int i = 0; i < param.ibIter; i++)
+        {
             inamuroIteration(SurfaceVelocity(timeLB),
-                    *rhoBar, *j, container, (T) 1.0 / param.omega, incompressibleModel);
+                             *rhoBar, *j, container, (T) 1.0 / param.omega, incompressibleModel);
         }
     }
 
@@ -519,4 +537,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-

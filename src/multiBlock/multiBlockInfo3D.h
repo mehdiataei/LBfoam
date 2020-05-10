@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,7 +33,8 @@
 #ifndef MULTI_BLOCK_INFO_3D_H
 #define MULTI_BLOCK_INFO_3D_H
 
-namespace plb {
+namespace plb
+{
 
 bool getMultiBlockInfo(MultiBlock3D const& multiBlock,
                        plint& nx, plint& ny, plint& nz, plint& numBlocks,

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,103 +35,106 @@
 #include <iomanip>
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class ImageWriter {
+class ImageWriter
+{
 public:
-    ImageWriter(std::string const& map);
-    ImageWriter(std::string const& map, plint colorRange_, plint numColors_);
-    void setMap(std::string const& map, plint colorRange_, plint numColors_);
+	ImageWriter(std::string const& map);
+	ImageWriter(std::string const& map, plint colorRange_, plint numColors_);
+	void setMap(std::string const& map, plint colorRange_, plint numColors_);
 
-    void writePpm(std::string const& fName,
-                  ScalarField2D<T>& field,
-                  T minVal, T maxVal) const;
-    void writeScaledPpm(std::string const& fName,
-                        ScalarField2D<T>& field) const;
-    void writeGif(std::string const& fName,
-                  ScalarField2D<T>& field,
-                  T minVal, T maxVal) const;
-    void writeGif(std::string const& fName,
-                  ScalarField2D<T>& field,
-                  T minVal, T maxVal, plint sizeX, plint sizeY) const;
-    void writeScaledGif(std::string const& fName,
-                        ScalarField2D<T>& field) const;
-    void writeScaledGif(std::string const& fName,
-                        ScalarField2D<T>& field,
-                        plint sizeX, plint sizeY) const;
+	void writePpm(std::string const& fName,
+	              ScalarField2D<T>& field,
+	              T minVal, T maxVal) const;
+	void writeScaledPpm(std::string const& fName,
+	                    ScalarField2D<T>& field) const;
+	void writeGif(std::string const& fName,
+	              ScalarField2D<T>& field,
+	              T minVal, T maxVal) const;
+	void writeGif(std::string const& fName,
+	              ScalarField2D<T>& field,
+	              T minVal, T maxVal, plint sizeX, plint sizeY) const;
+	void writeScaledGif(std::string const& fName,
+	                    ScalarField2D<T>& field) const;
+	void writeScaledGif(std::string const& fName,
+	                    ScalarField2D<T>& field,
+	                    plint sizeX, plint sizeY) const;
 
-    void writePpm(std::string const& fName,
-                  MultiScalarField2D<T>& field,
-                  T minVal, T maxVal) const;
-    void writeScaledPpm(std::string const& fName,
-                        MultiScalarField2D<T>& field) const;
-    void writeGif(std::string const& fName,
-                  MultiScalarField2D<T>& field,
-                  T minVal, T maxVal) const;
-    void writeGif(std::string const& fName,
-                  MultiScalarField2D<T>& field,
-                  T minVal, T maxVal, plint sizeX, plint sizeY) const;
-    void writeScaledGif(std::string const& fName,
-                        MultiScalarField2D<T>& field) const;
-    void writeScaledGif(std::string const& fName,
-                        MultiScalarField2D<T>& field,
-                        plint sizeX, plint sizeY) const;
+	void writePpm(std::string const& fName,
+	              MultiScalarField2D<T>& field,
+	              T minVal, T maxVal) const;
+	void writeScaledPpm(std::string const& fName,
+	                    MultiScalarField2D<T>& field) const;
+	void writeGif(std::string const& fName,
+	              MultiScalarField2D<T>& field,
+	              T minVal, T maxVal) const;
+	void writeGif(std::string const& fName,
+	              MultiScalarField2D<T>& field,
+	              T minVal, T maxVal, plint sizeX, plint sizeY) const;
+	void writeScaledGif(std::string const& fName,
+	                    MultiScalarField2D<T>& field) const;
+	void writeScaledGif(std::string const& fName,
+	                    MultiScalarField2D<T>& field,
+	                    plint sizeX, plint sizeY) const;
 
 
-    void writePpm(std::string const& fName,
-                  ScalarField3D<T>& field,
-                  T minVal, T maxVal) const;
-    void writeScaledPpm(std::string const& fName,
-                        ScalarField3D<T>& field) const;
-    void writeGif(std::string const& fName,
-                  ScalarField3D<T>& field,
-                  T minVal, T maxVal) const;
-    void writeGif(std::string const& fName,
-                  ScalarField3D<T>& field,
-                  T minVal, T maxVal, plint sizeX, plint sizeY) const;
-    void writeScaledGif(std::string const& fName,
-                        ScalarField3D<T>& field) const;
-    void writeScaledGif(std::string const& fName,
-                        ScalarField3D<T>& field,
-                        plint sizeX, plint sizeY) const;
+	void writePpm(std::string const& fName,
+	              ScalarField3D<T>& field,
+	              T minVal, T maxVal) const;
+	void writeScaledPpm(std::string const& fName,
+	                    ScalarField3D<T>& field) const;
+	void writeGif(std::string const& fName,
+	              ScalarField3D<T>& field,
+	              T minVal, T maxVal) const;
+	void writeGif(std::string const& fName,
+	              ScalarField3D<T>& field,
+	              T minVal, T maxVal, plint sizeX, plint sizeY) const;
+	void writeScaledGif(std::string const& fName,
+	                    ScalarField3D<T>& field) const;
+	void writeScaledGif(std::string const& fName,
+	                    ScalarField3D<T>& field,
+	                    plint sizeX, plint sizeY) const;
 
-    void writePpm(std::string const& fName,
-                  MultiScalarField3D<T>& field,
-                  T minVal, T maxVal) const;
-    void writeScaledPpm(std::string const& fName,
-                        MultiScalarField3D<T>& field) const;
-    void writeGif(std::string const& fName,
-                  MultiScalarField3D<T>& field,
-                  T minVal, T maxVal) const;
-    void writeGif(std::string const& fName,
-                  MultiScalarField3D<T>& field,
-                  T minVal, T maxVal, plint sizeX, plint sizeY) const;
-    void writeScaledGif(std::string const& fName,
-                        MultiScalarField3D<T>& field) const;
-    void writeScaledGif(std::string const& fName,
-                        MultiScalarField3D<T>& field,
-                        plint sizeX, plint sizeY) const;
+	void writePpm(std::string const& fName,
+	              MultiScalarField3D<T>& field,
+	              T minVal, T maxVal) const;
+	void writeScaledPpm(std::string const& fName,
+	                    MultiScalarField3D<T>& field) const;
+	void writeGif(std::string const& fName,
+	              MultiScalarField3D<T>& field,
+	              T minVal, T maxVal) const;
+	void writeGif(std::string const& fName,
+	              MultiScalarField3D<T>& field,
+	              T minVal, T maxVal, plint sizeX, plint sizeY) const;
+	void writeScaledGif(std::string const& fName,
+	                    MultiScalarField3D<T>& field) const;
+	void writeScaledGif(std::string const& fName,
+	                    MultiScalarField3D<T>& field,
+	                    plint sizeX, plint sizeY) const;
 
 private:
-    void writePpmImplementation (
-        std::string const& fName,
-        ScalarField2D<T>& localField, T minVal, T maxVal) const;
-    void imageMagickPpmToGif(std::string const& fName) const;
-    void imageMagickResize(std::string const& fName,
-                           plint sizeX, plint sizeY) const;
+	void writePpmImplementation (
+	    std::string const& fName,
+	    ScalarField2D<T>& localField, T minVal, T maxVal) const;
+	void imageMagickPpmToGif(std::string const& fName) const;
+	void imageMagickResize(std::string const& fName,
+	                       plint sizeX, plint sizeY) const;
 private:
-    plint colorRange, numColors;
-    ColorMap colorMap;
+	plint colorRange, numColors;
+	ColorMap colorMap;
 };
 
 
 ////////// Standalone functions ////////////////////////////////////////
 
-inline std::string createFileName(std::string name, plint number, plint width) {
-    std::stringstream fNameStream;
-    fNameStream << name << std::setfill('0') << std::setw(width) << number;
-    return fNameStream.str();
+inline std::string createFileName(std::string name, plint number, plint width)
+{
+	std::stringstream fNameStream;
+	fNameStream << name << std::setfill('0') << std::setw(width) << number;
+	return fNameStream.str();
 }
 
 }  // namespace plb

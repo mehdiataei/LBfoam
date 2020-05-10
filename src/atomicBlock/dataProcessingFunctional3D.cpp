@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,57 +29,67 @@
 #include "atomicBlock/dataProcessor3D.h"
 #include "core/plbDebug.h"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Class BoxProcessingFunctional3D ************************* */
 
 BoxProcessingFunctional3D::BoxProcessingFunctional3D()
     : dxScale(0),
       dtScale(0)
-{ } 
+{ }
 
 /** Operations are not executed on envelope by default. **/
-BlockDomain::DomainT BoxProcessingFunctional3D::appliesTo() const {
+BlockDomain::DomainT BoxProcessingFunctional3D::appliesTo() const
+{
     return BlockDomain::bulk;
 }
 
 void BoxProcessingFunctional3D::rescale(double dxScale, double dtScale)
 { }
 
-void BoxProcessingFunctional3D::setscale(int dxScale_, int dtScale_) {
+void BoxProcessingFunctional3D::setscale(int dxScale_, int dtScale_)
+{
     dxScale = dxScale_;
     dtScale = dtScale_;
 }
 
-int BoxProcessingFunctional3D::getDxScale() const {
+int BoxProcessingFunctional3D::getDxScale() const
+{
     return dxScale;
 }
 
-int BoxProcessingFunctional3D::getDtScale() const {
+int BoxProcessingFunctional3D::getDtScale() const
+{
     return dtScale;
 }
 
-void BoxProcessingFunctional3D::serialize(std::string& data) const {
+void BoxProcessingFunctional3D::serialize(std::string& data) const
+{
     std::string newData = util::val2str(dxScale, dtScale);
     data += newData + " ";
 }
 
-void BoxProcessingFunctional3D::unserialize(std::string& data) {
+void BoxProcessingFunctional3D::unserialize(std::string& data)
+{
     data = util::consume(data, dxScale, dtScale);
 }
 
 /** Return a default value of -1. This is to help transition for legacy
  *  code that has not yet implemented this method.
  ***/
-int BoxProcessingFunctional3D::getStaticId() const {
+int BoxProcessingFunctional3D::getStaticId() const
+{
     return -1;
 }
 
-void BoxProcessingFunctional3D::getModificationPattern(std::vector<bool>& isWritten) const {
+void BoxProcessingFunctional3D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     std::vector<modif::ModifT> modified(isWritten.size());
     getTypeOfModification(modified);
     PLB_ASSERT(modified.size()==isWritten.size());
-    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock)
+    {
         isWritten[iBlock] = modified[iBlock]==modif::nothing ? false:true;
     }
 }
@@ -87,7 +97,7 @@ void BoxProcessingFunctional3D::getModificationPattern(std::vector<bool>& isWrit
 /* *************** Class BoxProcessor3D ************************************ */
 
 BoxProcessor3D::BoxProcessor3D(BoxProcessingFunctional3D* functional_,
-               Box3D domain_, std::vector<AtomicBlock3D*> atomicBlocks_)
+                               Box3D domain_, std::vector<AtomicBlock3D*> atomicBlocks_)
     : functional(functional_), domain(domain_), atomicBlocks(atomicBlocks_)
 { }
 
@@ -96,30 +106,37 @@ BoxProcessor3D::BoxProcessor3D(BoxProcessor3D const& rhs)
       domain(rhs.domain), atomicBlocks(rhs.atomicBlocks)
 { }
 
-BoxProcessor3D& BoxProcessor3D::operator=(BoxProcessor3D const& rhs) {
-    delete functional; functional = rhs.functional->clone();
+BoxProcessor3D& BoxProcessor3D::operator=(BoxProcessor3D const& rhs)
+{
+    delete functional;
+    functional = rhs.functional->clone();
     domain = rhs.domain;
     atomicBlocks = rhs.atomicBlocks;
     return *this;
 }
 
-BoxProcessor3D::~BoxProcessor3D() {
+BoxProcessor3D::~BoxProcessor3D()
+{
     delete functional;
 }
 
-Box3D BoxProcessor3D::getDomain() const {
+Box3D BoxProcessor3D::getDomain() const
+{
     return domain;
 }
 
-void BoxProcessor3D::process() {
+void BoxProcessor3D::process()
+{
     functional -> processGenericBlocks(domain, atomicBlocks);
 }
 
-BoxProcessor3D* BoxProcessor3D::clone() const {
+BoxProcessor3D* BoxProcessor3D::clone() const
+{
     return new BoxProcessor3D(*this);
 }
 
-int BoxProcessor3D::getStaticId() const {
+int BoxProcessor3D::getStaticId() const
+{
     return functional->getStaticId();
 }
 
@@ -127,8 +144,8 @@ int BoxProcessor3D::getStaticId() const {
 /* *************** Class MultiBoxProcessor3D ************************************ */
 
 MultiBoxProcessor3D::MultiBoxProcessor3D (
-               BoxProcessingFunctional3D* functional_,
-               std::vector<Box3D> const& domains_, std::vector<AtomicBlock3D*> atomicBlocks_)
+    BoxProcessingFunctional3D* functional_,
+    std::vector<Box3D> const& domains_, std::vector<AtomicBlock3D*> atomicBlocks_)
     : functional(functional_), domains(domains_), atomicBlocks(atomicBlocks_)
 { }
 
@@ -137,32 +154,40 @@ MultiBoxProcessor3D::MultiBoxProcessor3D(MultiBoxProcessor3D const& rhs)
       domains(rhs.domains), atomicBlocks(rhs.atomicBlocks)
 { }
 
-MultiBoxProcessor3D& MultiBoxProcessor3D::operator=(MultiBoxProcessor3D const& rhs) {
-    delete functional; functional = rhs.functional->clone();
+MultiBoxProcessor3D& MultiBoxProcessor3D::operator=(MultiBoxProcessor3D const& rhs)
+{
+    delete functional;
+    functional = rhs.functional->clone();
     domains = rhs.domains;
     atomicBlocks = rhs.atomicBlocks;
     return *this;
 }
 
-MultiBoxProcessor3D::~MultiBoxProcessor3D() {
+MultiBoxProcessor3D::~MultiBoxProcessor3D()
+{
     delete functional;
 }
 
-std::vector<Box3D> const& MultiBoxProcessor3D::getDomains() const {
+std::vector<Box3D> const& MultiBoxProcessor3D::getDomains() const
+{
     return domains;
 }
 
-void MultiBoxProcessor3D::process() {
-    for (pluint i=0; i<domains.size(); ++i) {
+void MultiBoxProcessor3D::process()
+{
+    for (pluint i=0; i<domains.size(); ++i)
+    {
         functional -> processGenericBlocks(domains[i], atomicBlocks);
     }
 }
 
-MultiBoxProcessor3D* MultiBoxProcessor3D::clone() const {
+MultiBoxProcessor3D* MultiBoxProcessor3D::clone() const
+{
     return new MultiBoxProcessor3D(*this);
 }
 
-int MultiBoxProcessor3D::getStaticId() const {
+int MultiBoxProcessor3D::getStaticId() const
+{
     return functional->getStaticId();
 }
 
@@ -174,7 +199,8 @@ BoxProcessorGenerator3D::BoxProcessorGenerator3D(BoxProcessingFunctional3D* func
       functional(functional_)
 { }
 
-BoxProcessorGenerator3D::~BoxProcessorGenerator3D() {
+BoxProcessorGenerator3D::~BoxProcessorGenerator3D()
+{
     delete functional;
 }
 
@@ -183,45 +209,56 @@ BoxProcessorGenerator3D::BoxProcessorGenerator3D(BoxProcessorGenerator3D const& 
       functional(rhs.functional->clone())
 { }
 
-BoxProcessorGenerator3D& BoxProcessorGenerator3D::operator=(BoxProcessorGenerator3D const& rhs) {
-    delete functional; functional = rhs.functional->clone();
+BoxProcessorGenerator3D& BoxProcessorGenerator3D::operator=(BoxProcessorGenerator3D const& rhs)
+{
+    delete functional;
+    functional = rhs.functional->clone();
     return *this;
 }
 
-BlockDomain::DomainT BoxProcessorGenerator3D::appliesTo() const {
+BlockDomain::DomainT BoxProcessorGenerator3D::appliesTo() const
+{
     return functional->appliesTo();
 }
 
-void BoxProcessorGenerator3D::rescale(double dxScale, double dtScale) {
+void BoxProcessorGenerator3D::rescale(double dxScale, double dtScale)
+{
     functional->rescale(dxScale, dtScale);
 }
 
-void BoxProcessorGenerator3D::setscale(int dxScale, int dtScale) {
+void BoxProcessorGenerator3D::setscale(int dxScale, int dtScale)
+{
     functional->setscale(dxScale, dtScale);
 }
 
-void BoxProcessorGenerator3D::getModificationPattern(std::vector<bool>& isWritten) const {
+void BoxProcessorGenerator3D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     functional->getModificationPattern(isWritten);
 }
 
-void BoxProcessorGenerator3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void BoxProcessorGenerator3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
     functional->getTypeOfModification(modified);
 }
 
-DataProcessor3D* BoxProcessorGenerator3D::generate(std::vector<AtomicBlock3D*> atomicBlocks) const {
+DataProcessor3D* BoxProcessorGenerator3D::generate(std::vector<AtomicBlock3D*> atomicBlocks) const
+{
     return new BoxProcessor3D(functional->clone(), this->getDomain(), atomicBlocks);
 }
 
-BoxProcessorGenerator3D* BoxProcessorGenerator3D::clone() const {
+BoxProcessorGenerator3D* BoxProcessorGenerator3D::clone() const
+{
     return new BoxProcessorGenerator3D(*this);
 }
 
-void BoxProcessorGenerator3D::serialize(Box3D& domain, std::string& data) const {
+void BoxProcessorGenerator3D::serialize(Box3D& domain, std::string& data) const
+{
     BoxedDataProcessorGenerator3D::serialize(domain, data);
     functional->serialize(data);
 }
 
-int BoxProcessorGenerator3D::getStaticId() const {
+int BoxProcessorGenerator3D::getStaticId() const
+{
     return functional->getStaticId();
 }
 
@@ -229,13 +266,14 @@ int BoxProcessorGenerator3D::getStaticId() const {
 /* *************** Class MultiBoxProcessorGenerator3D *************************** */
 
 MultiBoxProcessorGenerator3D::MultiBoxProcessorGenerator3D (
-        BoxProcessingFunctional3D* functional_,
-        std::vector<Box3D> const& domains )
+    BoxProcessingFunctional3D* functional_,
+    std::vector<Box3D> const& domains )
     : MultiBoxedDataProcessorGenerator3D(domains),
       functional(functional_)
 { }
 
-MultiBoxProcessorGenerator3D::~MultiBoxProcessorGenerator3D() {
+MultiBoxProcessorGenerator3D::~MultiBoxProcessorGenerator3D()
+{
     delete functional;
 }
 
@@ -244,45 +282,56 @@ MultiBoxProcessorGenerator3D::MultiBoxProcessorGenerator3D(MultiBoxProcessorGene
       functional(rhs.functional->clone())
 { }
 
-MultiBoxProcessorGenerator3D& MultiBoxProcessorGenerator3D::operator=(MultiBoxProcessorGenerator3D const& rhs) {
-    delete functional; functional = rhs.functional->clone();
+MultiBoxProcessorGenerator3D& MultiBoxProcessorGenerator3D::operator=(MultiBoxProcessorGenerator3D const& rhs)
+{
+    delete functional;
+    functional = rhs.functional->clone();
     return *this;
 }
 
-BlockDomain::DomainT MultiBoxProcessorGenerator3D::appliesTo() const {
+BlockDomain::DomainT MultiBoxProcessorGenerator3D::appliesTo() const
+{
     return functional->appliesTo();
 }
 
-void MultiBoxProcessorGenerator3D::rescale(double dxScale, double dtScale) {
+void MultiBoxProcessorGenerator3D::rescale(double dxScale, double dtScale)
+{
     functional->rescale(dxScale, dtScale);
 }
 
-void MultiBoxProcessorGenerator3D::setscale(int dxScale, int dtScale) {
+void MultiBoxProcessorGenerator3D::setscale(int dxScale, int dtScale)
+{
     functional->setscale(dxScale, dtScale);
 }
 
-void MultiBoxProcessorGenerator3D::getModificationPattern(std::vector<bool>& isWritten) const {
+void MultiBoxProcessorGenerator3D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     functional->getModificationPattern(isWritten);
 }
 
-void MultiBoxProcessorGenerator3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void MultiBoxProcessorGenerator3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
     functional->getTypeOfModification(modified);
 }
 
-DataProcessor3D* MultiBoxProcessorGenerator3D::generate(std::vector<AtomicBlock3D*> atomicBlocks) const {
+DataProcessor3D* MultiBoxProcessorGenerator3D::generate(std::vector<AtomicBlock3D*> atomicBlocks) const
+{
     return new MultiBoxProcessor3D(functional->clone(), this->getDomains(), atomicBlocks);
 }
 
-MultiBoxProcessorGenerator3D* MultiBoxProcessorGenerator3D::clone() const {
+MultiBoxProcessorGenerator3D* MultiBoxProcessorGenerator3D::clone() const
+{
     return new MultiBoxProcessorGenerator3D(*this);
 }
 
-void MultiBoxProcessorGenerator3D::serialize(Box3D& domain, std::string& data) const {
+void MultiBoxProcessorGenerator3D::serialize(Box3D& domain, std::string& data) const
+{
     MultiBoxedDataProcessorGenerator3D::serialize(domain, data);
     functional->serialize(data);
 }
 
-int MultiBoxProcessorGenerator3D::getStaticId() const {
+int MultiBoxProcessorGenerator3D::getStaticId() const
+{
     return functional->getStaticId();
 }
 
@@ -304,11 +353,13 @@ void DotProcessingFunctional3D::setscale(int dxScale, int dtScale)
 
 /** The default assumption is conservative: all blocks have potentially been modified.
  */
-void DotProcessingFunctional3D::getModificationPattern(std::vector<bool>& isWritten) const {
+void DotProcessingFunctional3D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     std::vector<modif::ModifT> modified(isWritten.size());
     getTypeOfModification(modified);
     PLB_ASSERT(modified.size()==isWritten.size());
-    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock)
+    {
         isWritten[iBlock] = modified[iBlock]==modif::nothing ? false:true;
     }
 }
@@ -316,7 +367,7 @@ void DotProcessingFunctional3D::getModificationPattern(std::vector<bool>& isWrit
 /* *************** Class DotProcessor3D ************************************ */
 
 DotProcessor3D::DotProcessor3D(DotProcessingFunctional3D* functional_,
-               DotList3D const& dotList_, std::vector<AtomicBlock3D*> atomicBlocks_)
+                               DotList3D const& dotList_, std::vector<AtomicBlock3D*> atomicBlocks_)
     : functional(functional_), dotList(dotList_), atomicBlocks(atomicBlocks_)
 { }
 
@@ -325,26 +376,32 @@ DotProcessor3D::DotProcessor3D(DotProcessor3D const& rhs)
       dotList(rhs.dotList), atomicBlocks(rhs.atomicBlocks)
 { }
 
-DotProcessor3D& DotProcessor3D::operator=(DotProcessor3D const& rhs) {
-    delete functional; functional = rhs.functional->clone();
+DotProcessor3D& DotProcessor3D::operator=(DotProcessor3D const& rhs)
+{
+    delete functional;
+    functional = rhs.functional->clone();
     dotList = rhs.dotList;
     atomicBlocks = rhs.atomicBlocks;
     return *this;
 }
 
-DotProcessor3D::~DotProcessor3D() {
+DotProcessor3D::~DotProcessor3D()
+{
     delete functional;
 }
 
-void DotProcessor3D::process() {
+void DotProcessor3D::process()
+{
     functional -> processGenericBlocks(dotList, atomicBlocks);
 }
 
-DotProcessor3D* DotProcessor3D::clone() const {
+DotProcessor3D* DotProcessor3D::clone() const
+{
     return new DotProcessor3D(*this);
 }
 
-DotList3D const& DotProcessor3D::getDotList() const {
+DotList3D const& DotProcessor3D::getDotList() const
+{
     return dotList;
 }
 
@@ -356,7 +413,8 @@ DotProcessorGenerator3D::DotProcessorGenerator3D(DotProcessingFunctional3D* func
       functional(functional_)
 { }
 
-DotProcessorGenerator3D::~DotProcessorGenerator3D() {
+DotProcessorGenerator3D::~DotProcessorGenerator3D()
+{
     delete functional;
 }
 
@@ -365,20 +423,25 @@ DotProcessorGenerator3D::DotProcessorGenerator3D(DotProcessorGenerator3D const& 
       functional(rhs.functional->clone())
 { }
 
-DotProcessorGenerator3D& DotProcessorGenerator3D::operator=(DotProcessorGenerator3D const& rhs) {
-    delete functional; functional = rhs.functional->clone();
+DotProcessorGenerator3D& DotProcessorGenerator3D::operator=(DotProcessorGenerator3D const& rhs)
+{
+    delete functional;
+    functional = rhs.functional->clone();
     return *this;
 }
 
-BlockDomain::DomainT DotProcessorGenerator3D::appliesTo() const {
+BlockDomain::DomainT DotProcessorGenerator3D::appliesTo() const
+{
     return functional->appliesTo();
 }
 
-void DotProcessorGenerator3D::rescale(double dxScale, double dtScale) {
+void DotProcessorGenerator3D::rescale(double dxScale, double dtScale)
+{
     functional->rescale(dxScale, dtScale);
 }
 
-void DotProcessorGenerator3D::setscale(int dxScale, int dtScale) {
+void DotProcessorGenerator3D::setscale(int dxScale, int dtScale)
+{
     functional->setscale(dxScale, dtScale);
 }
 
@@ -387,15 +450,18 @@ void DotProcessorGenerator3D::getModificationPattern(std::vector<bool>& isWritte
     functional->getModificationPattern(isWritten);
 }
 
-void DotProcessorGenerator3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void DotProcessorGenerator3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
     functional->getTypeOfModification(modified);
 }
 
-DataProcessor3D* DotProcessorGenerator3D::generate(std::vector<AtomicBlock3D*> atomicBlocks) const {
+DataProcessor3D* DotProcessorGenerator3D::generate(std::vector<AtomicBlock3D*> atomicBlocks) const
+{
     return new DotProcessor3D(functional->clone(), this->getDotList(), atomicBlocks);
 }
 
-DotProcessorGenerator3D* DotProcessorGenerator3D::clone() const {
+DotProcessorGenerator3D* DotProcessorGenerator3D::clone() const
+{
     return new DotProcessorGenerator3D(*this);
 }
 
@@ -407,7 +473,8 @@ BoundedBoxProcessingFunctional3D::BoundedBoxProcessingFunctional3D()
 { }
 
 /** Operation is not applied to envelope by default. **/
-BlockDomain::DomainT BoundedBoxProcessingFunctional3D::appliesTo() const {
+BlockDomain::DomainT BoundedBoxProcessingFunctional3D::appliesTo() const
+{
     return BlockDomain::bulk;
 }
 
@@ -421,42 +488,47 @@ void BoundedBoxProcessingFunctional3D::setscale(int dxScale_, int dtScale_)
     dtScale = dtScale_;
 }
 
-int BoundedBoxProcessingFunctional3D::getDxScale() const {
+int BoundedBoxProcessingFunctional3D::getDxScale() const
+{
     return dxScale;
 }
 
-int BoundedBoxProcessingFunctional3D::getDtScale() const {
+int BoundedBoxProcessingFunctional3D::getDtScale() const
+{
     return dtScale;
 }
 
-void BoundedBoxProcessingFunctional3D::getModificationPattern(std::vector<bool>& isWritten) const {
+void BoundedBoxProcessingFunctional3D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     std::vector<modif::ModifT> modified(isWritten.size());
     getTypeOfModification(modified);
     PLB_ASSERT(modified.size()==isWritten.size());
-    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock)
+    {
         isWritten[iBlock] = modified[iBlock]==modif::nothing ? false:true;
     }
 }
 
 
-BoxProcessingFunctional3D* BoundedBoxProcessingFunctional3D::getBulkProcessor() const {
+BoxProcessingFunctional3D* BoundedBoxProcessingFunctional3D::getBulkProcessor() const
+{
     return new BulkWrapperFunctional(this->clone());
 }
 
 BoxProcessingFunctional3D* BoundedBoxProcessingFunctional3D::getPlaneProcessor (
-                                  int direction, int orientation ) const
+    int direction, int orientation ) const
 {
     return new PlaneWrapperFunctional(this->clone(), direction, orientation);
 }
 
 BoxProcessingFunctional3D* BoundedBoxProcessingFunctional3D::getEdgeProcessor (
-                                  int plane, int normal1, int normal2 ) const
+    int plane, int normal1, int normal2 ) const
 {
     return new EdgeWrapperFunctional(this->clone(), plane, normal1, normal2);
 }
 
 BoxProcessingFunctional3D* BoundedBoxProcessingFunctional3D::getCornerProcessor (
-                                  int normalX, int normalY, int normalZ ) const
+    int normalX, int normalY, int normalZ ) const
 {
     return new CornerWrapperFunctional(this->clone(), normalX, normalY, normalZ);
 }
@@ -464,22 +536,23 @@ BoxProcessingFunctional3D* BoundedBoxProcessingFunctional3D::getCornerProcessor 
 /* *************** Class BoundedBoxProcessingFunctional3D::BulkWrapperFunctional ** */
 
 BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::BulkWrapperFunctional (
-        BoundedBoxProcessingFunctional3D* boundedFunctional_ )
+    BoundedBoxProcessingFunctional3D* boundedFunctional_ )
     : boundedFunctional(boundedFunctional_)
 { }
 
 BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::BulkWrapperFunctional (
-        BulkWrapperFunctional const& rhs )
+    BulkWrapperFunctional const& rhs )
     : boundedFunctional(rhs.boundedFunctional->clone())
 { }
 
-BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::~BulkWrapperFunctional() {
+BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::~BulkWrapperFunctional()
+{
     delete boundedFunctional;
 }
 
 BoundedBoxProcessingFunctional3D::BulkWrapperFunctional&
-    BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::operator= (
-            BulkWrapperFunctional const& rhs )
+BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::operator= (
+    BulkWrapperFunctional const& rhs )
 {
     delete boundedFunctional;
     boundedFunctional = rhs.boundedFunctional->clone();
@@ -487,7 +560,7 @@ BoundedBoxProcessingFunctional3D::BulkWrapperFunctional&
 }
 
 void BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::processGenericBlocks (
-        Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
+    Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
     boundedFunctional->processBulkGeneric(domain, atomicBlocks);
 }
@@ -498,31 +571,31 @@ BlockDomain::DomainT BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::ap
 }
 
 void BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::rescale (
-        double dxScale, double dtScale )
+    double dxScale, double dtScale )
 {
     boundedFunctional->rescale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::setscale (
-        int dxScale, int dtScale )
+    int dxScale, int dtScale )
 {
     boundedFunctional->setscale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::getModificationPattern (
-        std::vector<bool>& isWritten ) const
+    std::vector<bool>& isWritten ) const
 {
     boundedFunctional->getModificationPattern(isWritten);
 }
 
 void BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::getTypeOfModification (
-        std::vector<modif::ModifT>& modified) const
+    std::vector<modif::ModifT>& modified) const
 {
     boundedFunctional->getTypeOfModification(modified);
 }
 
 BoundedBoxProcessingFunctional3D::BulkWrapperFunctional*
-    BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::clone() const
+BoundedBoxProcessingFunctional3D::BulkWrapperFunctional::clone() const
 {
     return new BulkWrapperFunctional(*this);
 }
@@ -530,27 +603,28 @@ BoundedBoxProcessingFunctional3D::BulkWrapperFunctional*
 /* *************** Class BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional ** */
 
 BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::PlaneWrapperFunctional (
-        BoundedBoxProcessingFunctional3D* boundedFunctional_,
-        int direction_, int orientation_)
+    BoundedBoxProcessingFunctional3D* boundedFunctional_,
+    int direction_, int orientation_)
     : boundedFunctional(boundedFunctional_),
       direction(direction_),
       orientation(orientation_)
 { }
 
 BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::PlaneWrapperFunctional (
-        PlaneWrapperFunctional const& rhs )
+    PlaneWrapperFunctional const& rhs )
     : boundedFunctional(rhs.boundedFunctional->clone()),
       direction(rhs.direction),
       orientation(rhs.orientation)
 { }
 
-BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::~PlaneWrapperFunctional() {
+BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::~PlaneWrapperFunctional()
+{
     delete boundedFunctional;
 }
 
 BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional&
-    BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::operator= (
-            PlaneWrapperFunctional const& rhs )
+BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::operator= (
+    PlaneWrapperFunctional const& rhs )
 {
     delete boundedFunctional;
     boundedFunctional = rhs.boundedFunctional->clone();
@@ -560,7 +634,7 @@ BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional&
 }
 
 void BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::processGenericBlocks (
-        Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
+    Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
     boundedFunctional->processPlaneGeneric(direction, orientation, domain, atomicBlocks);
 }
@@ -571,32 +645,32 @@ BlockDomain::DomainT BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::a
 }
 
 void BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::rescale (
-        double dxScale, double dtScale )
+    double dxScale, double dtScale )
 {
     boundedFunctional->rescale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::setscale (
-        int dxScale, int dtScale )
+    int dxScale, int dtScale )
 {
     boundedFunctional->setscale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::getModificationPattern (
-        std::vector<bool>& isWritten ) const
+    std::vector<bool>& isWritten ) const
 {
     boundedFunctional->getModificationPattern(isWritten);
 }
 
 void BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::getTypeOfModification (
-        std::vector<modif::ModifT>& modified) const
+    std::vector<modif::ModifT>& modified) const
 {
     boundedFunctional->getTypeOfModification(modified);
 }
 
 
 BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional*
-    BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::clone() const
+BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional::clone() const
 {
     return new PlaneWrapperFunctional(*this);
 }
@@ -604,8 +678,8 @@ BoundedBoxProcessingFunctional3D::PlaneWrapperFunctional*
 /* *************** Class BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional ** */
 
 BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::EdgeWrapperFunctional (
-        BoundedBoxProcessingFunctional3D* boundedFunctional_,
-        int plane_, int normal1_, int normal2_ )
+    BoundedBoxProcessingFunctional3D* boundedFunctional_,
+    int plane_, int normal1_, int normal2_ )
     : boundedFunctional(boundedFunctional_),
       plane(plane_),
       normal1(normal1_),
@@ -613,20 +687,21 @@ BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::EdgeWrapperFunctional (
 { }
 
 BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::EdgeWrapperFunctional (
-        EdgeWrapperFunctional const& rhs )
+    EdgeWrapperFunctional const& rhs )
     : boundedFunctional(rhs.boundedFunctional->clone()),
       plane(rhs.plane),
       normal1(rhs.normal1),
       normal2(rhs.normal2)
 { }
 
-BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::~EdgeWrapperFunctional() {
+BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::~EdgeWrapperFunctional()
+{
     delete boundedFunctional;
 }
 
 BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional&
-    BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::operator= (
-            EdgeWrapperFunctional const& rhs )
+BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::operator= (
+    EdgeWrapperFunctional const& rhs )
 {
     delete boundedFunctional;
     boundedFunctional = rhs.boundedFunctional->clone();
@@ -637,7 +712,7 @@ BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional&
 }
 
 void BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::processGenericBlocks (
-        Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
+    Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
     boundedFunctional->processEdgeGeneric(plane, normal1, normal2, domain, atomicBlocks);
 }
@@ -648,32 +723,32 @@ BlockDomain::DomainT BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::ap
 }
 
 void BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::rescale (
-        double dxScale, double dtScale )
+    double dxScale, double dtScale )
 {
     boundedFunctional->rescale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::setscale (
-        int dxScale, int dtScale )
+    int dxScale, int dtScale )
 {
     boundedFunctional->setscale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::getModificationPattern (
-        std::vector<bool>& isWritten ) const
+    std::vector<bool>& isWritten ) const
 {
     boundedFunctional->getModificationPattern(isWritten);
 }
 
 void BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::getTypeOfModification (
-        std::vector<modif::ModifT>& modified) const
+    std::vector<modif::ModifT>& modified) const
 {
     boundedFunctional->getTypeOfModification(modified);
 }
 
 
 BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional*
-    BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::clone() const
+BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional::clone() const
 {
     return new EdgeWrapperFunctional(*this);
 }
@@ -681,10 +756,10 @@ BoundedBoxProcessingFunctional3D::EdgeWrapperFunctional*
 /* *************** Class BoundedBoxProcessingFunctional3D::CornerWrapperFunctional ** */
 
 BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::CornerWrapperFunctional (
-        BoundedBoxProcessingFunctional3D* boundedFunctional_,
-        int normalX_,
-        int normalY_,
-        int normalZ_ )
+    BoundedBoxProcessingFunctional3D* boundedFunctional_,
+    int normalX_,
+    int normalY_,
+    int normalZ_ )
     : boundedFunctional(boundedFunctional_),
       normalX(normalX_),
       normalY(normalY_),
@@ -692,20 +767,21 @@ BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::CornerWrapperFunction
 { }
 
 BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::CornerWrapperFunctional (
-        CornerWrapperFunctional const& rhs )
+    CornerWrapperFunctional const& rhs )
     : boundedFunctional(rhs.boundedFunctional->clone()),
       normalX(rhs.normalX),
       normalY(rhs.normalY),
       normalZ(rhs.normalZ)
 { }
 
-BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::~CornerWrapperFunctional() {
+BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::~CornerWrapperFunctional()
+{
     delete boundedFunctional;
 }
 
 BoundedBoxProcessingFunctional3D::CornerWrapperFunctional&
-    BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::operator= (
-            CornerWrapperFunctional const& rhs )
+BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::operator= (
+    CornerWrapperFunctional const& rhs )
 {
     delete boundedFunctional;
     boundedFunctional = rhs.boundedFunctional->clone();
@@ -716,7 +792,7 @@ BoundedBoxProcessingFunctional3D::CornerWrapperFunctional&
 }
 
 void BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::processGenericBlocks (
-        Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
+    Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
     boundedFunctional->processCornerGeneric(normalX, normalY, normalZ, domain, atomicBlocks);
 }
@@ -727,38 +803,38 @@ BlockDomain::DomainT BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::
 }
 
 void BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::rescale (
-        double dxScale, double dtScale )
+    double dxScale, double dtScale )
 {
     boundedFunctional->rescale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::setscale (
-        int dxScale, int dtScale )
+    int dxScale, int dtScale )
 {
     boundedFunctional->setscale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::getModificationPattern (
-        std::vector<bool>& isWritten ) const
+    std::vector<bool>& isWritten ) const
 {
     boundedFunctional->getModificationPattern(isWritten);
 }
 
 void BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::getTypeOfModification (
-        std::vector<modif::ModifT>& modified) const
+    std::vector<modif::ModifT>& modified) const
 {
     boundedFunctional->getTypeOfModification(modified);
 }
 
 BoundedBoxProcessingFunctional3D::CornerWrapperFunctional*
-    BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::clone() const
+BoundedBoxProcessingFunctional3D::CornerWrapperFunctional::clone() const
 {
     return new CornerWrapperFunctional(*this);
 }
 
 void BoundedBoxProcessingFunctional3D::getGenerators (
-        Box3D const& fullDomain, plint boundaryWidth,
-        std::vector<BoxProcessorGenerator3D*>& generators )
+    Box3D const& fullDomain, plint boundaryWidth,
+    std::vector<BoxProcessorGenerator3D*>& generators )
 {
     generators.resize(27);
     BlockSurface3D surf(fullDomain, boundaryWidth);
@@ -795,4 +871,3 @@ void BoundedBoxProcessingFunctional3D::getGenerators (
 }
 
 }  // namespace plb
-

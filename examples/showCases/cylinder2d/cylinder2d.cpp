@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -45,31 +45,36 @@ typedef double T;
 #define DESCRIPTOR D2Q9Descriptor
 
 /// Velocity on the parabolic Poiseuille profile
-T poiseuilleVelocity(plint iY, IncomprFlowParam<T> const& parameters) {
+T poiseuilleVelocity(plint iY, IncomprFlowParam<T> const& parameters)
+{
     T y = (T)iY / parameters.getResolution();
     return 4.*parameters.getLatticeU() * (y-y*y);
 }
 
 /// Linearly decreasing pressure profile
-T poiseuillePressure(plint iX, IncomprFlowParam<T> const& parameters) {
+T poiseuillePressure(plint iX, IncomprFlowParam<T> const& parameters)
+{
     T Lx = parameters.getNx()-1;
     T Ly = parameters.getNy()-1;
     return 8.*parameters.getLatticeNu()*parameters.getLatticeU() / (Ly*Ly) * (Lx/(T)2-(T)iX);
 }
 
 /// Convert pressure to density according to ideal gas law
-T poiseuilleDensity(plint iX, IncomprFlowParam<T> const& parameters) {
+T poiseuilleDensity(plint iX, IncomprFlowParam<T> const& parameters)
+{
     return poiseuillePressure(iX,parameters)*DESCRIPTOR<T>::invCs2 + (T)1;
 }
 
 /// A functional, used to initialize the velocity for the boundary conditions
 template<typename T>
-class PoiseuilleVelocity {
+class PoiseuilleVelocity
+{
 public:
     PoiseuilleVelocity(IncomprFlowParam<T> parameters_)
         : parameters(parameters_)
     { }
-    void operator()(plint iX, plint iY, Array<T,2>& u) const {
+    void operator()(plint iX, plint iY, Array<T,2>& u) const
+    {
         u[0] = poiseuilleVelocity(iY, parameters);
         u[1] = T();
     }
@@ -79,12 +84,14 @@ private:
 
 /// A functional, used to initialize a pressure boundary to constant density
 template<typename T>
-class ConstantDensity {
+class ConstantDensity
+{
 public:
     ConstantDensity(T density_)
         : density(density_)
     { }
-    T operator()(plint iX, plint iY) const {
+    T operator()(plint iX, plint iY) const
+    {
         return density;
     }
 private:
@@ -93,12 +100,14 @@ private:
 
 /// A functional, used to create an initial condition for the density and velocity
 template<typename T>
-class PoiseuilleVelocityAndDensity {
+class PoiseuilleVelocityAndDensity
+{
 public:
     PoiseuilleVelocityAndDensity(IncomprFlowParam<T> parameters_)
         : parameters(parameters_)
     { }
-    void operator()(plint iX, plint iY, T& rho, Array<T,2>& u) const {
+    void operator()(plint iX, plint iY, T& rho, Array<T,2>& u) const
+    {
         rho = poiseuilleDensity(iX,parameters);
         u[0] = poiseuilleVelocity(iY, parameters);
         u[1] = T();
@@ -109,17 +118,20 @@ private:
 
 /// A functional, used to instantiate bounce-back nodes at the locations of the cylinder
 template<typename T>
-class CylinderShapeDomain2D : public plb::DomainFunctional2D {
+class CylinderShapeDomain2D : public plb::DomainFunctional2D
+{
 public:
     CylinderShapeDomain2D(plb::plint cx_, plb::plint cy_, plb::plint radius)
         : cx(cx_),
           cy(cy_),
           radiusSqr(plb::util::sqr(radius))
     { }
-    virtual bool operator() (plb::plint iX, plb::plint iY) const {
+    virtual bool operator() (plb::plint iX, plb::plint iY) const
+    {
         return plb::util::sqr(iX-cx) + plb::util::sqr(iY-cy) <= radiusSqr;
     }
-    virtual CylinderShapeDomain2D<T>* clone() const {
+    virtual CylinderShapeDomain2D<T>* clone() const
+    {
         return new CylinderShapeDomain2D<T>(*this);
     }
 private:
@@ -139,29 +151,29 @@ void cylinderSetup( MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
 
     // Create Velocity boundary conditions everywhere
     boundaryCondition.setVelocityConditionOnBlockBoundaries (
-            lattice, Box2D(0, 0, 1, ny-2) );
+        lattice, Box2D(0, 0, 1, ny-2) );
     boundaryCondition.setVelocityConditionOnBlockBoundaries (
-            lattice, Box2D(0, nx-1, 0, 0) );
+        lattice, Box2D(0, nx-1, 0, 0) );
     boundaryCondition.setVelocityConditionOnBlockBoundaries (
-            lattice, Box2D(0, nx-1, ny-1, ny-1) );
+        lattice, Box2D(0, nx-1, ny-1, ny-1) );
     // .. except on right boundary, where we prefer an outflow condition
     //    (zero velocity-gradient).
     boundaryCondition.setVelocityConditionOnBlockBoundaries (
-            lattice, Box2D(nx-1, nx-1, 1, ny-2), boundary::outflow );
+        lattice, Box2D(nx-1, nx-1, 1, ny-2), boundary::outflow );
 
     setBoundaryVelocity (
-            lattice, lattice.getBoundingBox(),
-            PoiseuilleVelocity<T>(parameters) );
+        lattice, lattice.getBoundingBox(),
+        PoiseuilleVelocity<T>(parameters) );
     setBoundaryDensity (
-            lattice, outlet,
-            ConstantDensity<T>(1.) );
+        lattice, outlet,
+        ConstantDensity<T>(1.) );
     initializeAtEquilibrium (
-            lattice, lattice.getBoundingBox(),
-            PoiseuilleVelocityAndDensity<T>(parameters) );
+        lattice, lattice.getBoundingBox(),
+        PoiseuilleVelocityAndDensity<T>(parameters) );
 
     plint cx     = nx/4;
     plint cy     = ny/2+2; // cy is slightly offset to avoid full symmetry,
-                          //   and to get a Von Karman Vortex street.
+    //   and to get a Von Karman Vortex street.
     plint radius = cy/4;
     defineDynamics(lattice, lattice.getBoundingBox(),
                    new CylinderShapeDomain2D<T>(cx,cy,radius),
@@ -187,17 +199,18 @@ void writeVTK(MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
     vtkOut.writeData<2,float>(*computeVelocity(lattice), "velocity", dx/dt);
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 600.,  // Re
-            100,       // N
-            6.,        // lx
-            1.         // ly 
+        (T) 1e-2,  // uMax
+        (T) 600.,  // Re
+        100,       // N
+        6.,        // lx
+        1.         // ly
     );
     const T logT     = (T)0.02;
     const T imSave   = (T)0.06;
@@ -207,31 +220,35 @@ int main(int argc, char* argv[]) {
     writeLogFile(parameters, "Poiseuille flow");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-            parameters.getNx(), parameters.getNy(),
-            new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     cylinderSetup(lattice, parameters, *boundaryCondition);
 
     // Main loop over time iterations.
-    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT) {
+    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT)
+    {
         // At this point, the state of the lattice corresponds to the
         //   discrete time iT. However, the stored averages (getStoredAverageEnergy
         //   and getStoredAverageDensity) correspond to the previous time iT-1.
 
-       if (iT%parameters.nStep(imSave)==0) {
+        if (iT%parameters.nStep(imSave)==0)
+        {
             pcout << "Saving Gif ..." << endl;
             writeGif(lattice, iT);
         }
 
-        if (iT%parameters.nStep(vtkSave)==0 && iT>0) {
+        if (iT%parameters.nStep(vtkSave)==0 && iT>0)
+        {
             pcout << "Saving VTK file ..." << endl;
             writeVTK(lattice, parameters, iT);
         }
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "step " << iT
                   << "; t=" << iT*parameters.getDeltaT();
         }
@@ -241,13 +258,14 @@ int main(int argc, char* argv[]) {
 
         // At this point, the state of the lattice corresponds to the
         //   discrete time iT+1, and the stored averages are upgraded to time iT.
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "; av energy ="
                   << setprecision(10) << getStoredAverageEnergy<T>(lattice)
                   << "; av rho ="
                   << getStoredAverageDensity<T>(lattice) << endl;
         }
     }
-    
+
     delete boundaryCondition;
 }

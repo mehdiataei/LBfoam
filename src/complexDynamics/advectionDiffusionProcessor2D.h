@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,21 +30,24 @@
 #include "atomicBlock/dataProcessingFunctional2D.h"
 
 
-namespace plb {
+namespace plb
+{
 
 // This data processor uses asymmetric finite differences to compute a gradient.
 template<typename T, template<typename U> class Descriptor, int xNormal, int yNormal>
 class AdvectionDiffusionCornerBoundaryFunctional2D : public BoxProcessingFunctional2D_L<T,Descriptor>
 {
 public:
-    virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
-    
-    virtual AdvectionDiffusionCornerBoundaryFunctional2D<T,Descriptor,xNormal,yNormal>* clone() const {
-        return new AdvectionDiffusionCornerBoundaryFunctional2D<T,Descriptor,xNormal,yNormal>(*this);
-    }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;   // lattice
-    }
+	virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
+
+	virtual AdvectionDiffusionCornerBoundaryFunctional2D<T,Descriptor,xNormal,yNormal>* clone() const
+	{
+		return new AdvectionDiffusionCornerBoundaryFunctional2D<T,Descriptor,xNormal,yNormal>(*this);
+	}
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;   // lattice
+	}
 };
 
 // This data processor uses asymmetric finite differences to compute a gradient.
@@ -52,19 +55,20 @@ template<typename T, template<typename U> class Descriptor, int xNormal, int yNo
 class CompleteAdvectionDiffusionCornerBoundaryFunctional2D : public BoxProcessingFunctional2D_L<T,Descriptor>
 {
 public:
-    virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
-    
-    virtual CompleteAdvectionDiffusionCornerBoundaryFunctional2D<T,Descriptor,xNormal,yNormal>* clone() const {
-        return new CompleteAdvectionDiffusionCornerBoundaryFunctional2D<T,Descriptor,xNormal,yNormal>(*this);
-    }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;   // lattice
-    }
+	virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
+
+	virtual CompleteAdvectionDiffusionCornerBoundaryFunctional2D<T,Descriptor,xNormal,yNormal>* clone() const
+	{
+		return new CompleteAdvectionDiffusionCornerBoundaryFunctional2D<T,Descriptor,xNormal,yNormal>(*this);
+	}
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;   // lattice
+	}
 };
 
 
-    
+
 } // namespace plb
 
 #endif  // ADVECTION_DIFFUSION_PROCESSOR_2D_H
-

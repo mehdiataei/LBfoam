@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -26,41 +26,44 @@
  **/
 
 /** \file
- * Generator of Dynamics vectors for multigrid 
+ * Generator of Dynamics vectors for multigrid
  */
 #ifndef DYNAMICS_GENERATORS_H
 #define DYNAMICS_GENERATORS_H
 
 #include "basicDynamics/isoThermalDynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 template <typename T, template <typename U> class Descriptor>
-std::vector<Dynamics<T,Descriptor>*> generateBGKdynamics(RefinementParameters<T>* refinementParameters){
-    
-    plint numLevel = refinementParameters->getNumLevels();
-    
-    std::vector<Dynamics<T,Descriptor>*> result(numLevel);
-    for (plint iLevel=0; iLevel<numLevel; ++iLevel) {
-        T omega = refinementParameters->getParameters(iLevel).getOmega();
-        result[iLevel] = new BGKdynamics<T,Descriptor>(omega);
-    }
-    
-    return result;
+std::vector<Dynamics<T,Descriptor>*> generateBGKdynamics(RefinementParameters<T>* refinementParameters)
+{
+
+	plint numLevel = refinementParameters->getNumLevels();
+
+	std::vector<Dynamics<T,Descriptor>*> result(numLevel);
+	for (plint iLevel=0; iLevel<numLevel; ++iLevel) {
+		T omega = refinementParameters->getParameters(iLevel).getOmega();
+		result[iLevel] = new BGKdynamics<T,Descriptor>(omega);
+	}
+
+	return result;
 }
 
 
 template <typename T, template <typename U> class Descriptor>
-std::vector<Dynamics<T,Descriptor>*> generateBounceBackDynamics(RefinementParameters<T>* refinementParameters){
-    
-    plint numLevel = refinementParameters->getNumLevels();
-    
-    std::vector<Dynamics<T,Descriptor>*> result(numLevel);
-    for (plint iLevel=0; iLevel<numLevel; ++iLevel) {
-        result[iLevel] = new BounceBack<T,Descriptor>(0.0);        
-    }
-    
-    return result;
+std::vector<Dynamics<T,Descriptor>*> generateBounceBackDynamics(RefinementParameters<T>* refinementParameters)
+{
+
+	plint numLevel = refinementParameters->getNumLevels();
+
+	std::vector<Dynamics<T,Descriptor>*> result(numLevel);
+	for (plint iLevel=0; iLevel<numLevel; ++iLevel) {
+		result[iLevel] = new BounceBack<T,Descriptor>(0.0);
+	}
+
+	return result;
 }
 
 

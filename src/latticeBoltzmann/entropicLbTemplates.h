@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,51 +36,49 @@
 #include "latticeBoltzmann/geometricOperationTemplates.h"
 #include <cmath>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-struct entropicLbTemplates 
-{
-    /// Computation of equilibrium distribution
-    // Follows S. Ansumali, I. V. Karlin and H. C. Ottinger,
-    // Europhys. Lett. 63, 798 (2003)
-    static T equilibrium( plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& u)
-    {
-        typedef Descriptor<T> L;
+struct entropicLbTemplates {
+	/// Computation of equilibrium distribution
+	// Follows S. Ansumali, I. V. Karlin and H. C. Ottinger,
+	// Europhys. Lett. 63, 798 (2003)
+	static T equilibrium( plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& u)
+	{
+		typedef Descriptor<T> L;
 
-        const T invCs = sqrt(L::invCs2);
-        const T sqt3 = sqrt(3.0);
-        T prod = (T)1;
-        for (int iD=0; iD < L::d; ++iD)
-        {
-            T uc = u[iD] * invCs; // u[iD] / c_s
+		const T invCs = sqrt(L::invCs2);
+		const T sqt3 = sqrt(3.0);
+		T prod = (T)1;
+		for (int iD=0; iD < L::d; ++iD) {
+			T uc = u[iD] * invCs; // u[iD] / c_s
 
-            prod *= ((T)2 - sqrt(1.0+uc*uc)) * 
-                    pow((2.0 / sqt3 * uc + 
-                    sqrt(1.0+uc*uc))/(1.0-uc/sqt3),
-                        L::c[iPop][iD]/sqt3*invCs);
-        }
-        return ((rhoBar+L::SkordosFactor())*prod-L::SkordosFactor())*L::t[iPop];
-    }
-    
-    /// Computation of equilibrium distribution
-    static T equilibriumApprox( plint iPop, T rho, Array<T,Descriptor<T>::d> const& u)
-    {
-        typedef Descriptor<T> L;
+			prod *= ((T)2 - sqrt(1.0+uc*uc)) *
+			        pow((2.0 / sqt3 * uc +
+			             sqrt(1.0+uc*uc))/(1.0-uc/sqt3),
+			            L::c[iPop][iD]/sqt3*invCs);
+		}
+		return ((rhoBar+L::SkordosFactor())*prod-L::SkordosFactor())*L::t[iPop];
+	}
 
-        T uSqr = VectorTemplate<T,Descriptor>::normSqr(u);
-        T cu = T();
-        for (int iD=0; iD < Descriptor<T>::d; ++iD)
-        {
-            cu += L::c[iPop][iD]*u[iD];
-        }
-        
-        return rho * L::t[iPop] * (1.0 +
-                cu*L::invCs2 - 0.5 * uSqr*L::invCs2 + 0.5*pow(L::invCs2,2)*cu*cu
-                - 0.5*pow(L::invCs2,2)*cu*uSqr + pow(cu,3)*pow(L::invCs2,3)/6.0
-                + 0.125*uSqr*uSqr*pow(L::invCs2,2) - 0.25*cu*cu*uSqr*pow(L::invCs2,3)
-                + pow(cu,4)*pow(L::invCs2,4)/24.0)-L::SkordosFactor()*L::t[iPop];
-    }
+	/// Computation of equilibrium distribution
+	static T equilibriumApprox( plint iPop, T rho, Array<T,Descriptor<T>::d> const& u)
+	{
+		typedef Descriptor<T> L;
+
+		T uSqr = VectorTemplate<T,Descriptor>::normSqr(u);
+		T cu = T();
+		for (int iD=0; iD < Descriptor<T>::d; ++iD) {
+			cu += L::c[iPop][iD]*u[iD];
+		}
+
+		return rho * L::t[iPop] * (1.0 +
+		                           cu*L::invCs2 - 0.5 * uSqr*L::invCs2 + 0.5*pow(L::invCs2,2)*cu*cu
+		                           - 0.5*pow(L::invCs2,2)*cu*uSqr + pow(cu,3)*pow(L::invCs2,3)/6.0
+		                           + 0.125*uSqr*uSqr*pow(L::invCs2,2) - 0.25*cu*cu*uSqr*pow(L::invCs2,3)
+		                           + pow(cu,4)*pow(L::invCs2,4)/24.0)-L::SkordosFactor()*L::t[iPop];
+	}
 };
 
 }

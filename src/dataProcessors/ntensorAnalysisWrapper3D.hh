@@ -76,17 +76,17 @@ void scalarToNTensor(MultiScalarField3D<T>& scalar, MultiNTensorField3D<T>& nTen
 }
 
 template<typename T>
-std::unique_ptr<MultiNTensorField3D<T> > scalarToNTensor(MultiScalarField3D<T>& scalar) {
+std::auto_ptr<MultiNTensorField3D<T> > scalarToNTensor(MultiScalarField3D<T>& scalar) {
     plint nDim = 1;
-    std::unique_ptr<MultiNTensorField3D<T> > nTensor =
+    std::auto_ptr<MultiNTensorField3D<T> > nTensor =
         defaultGenerateMultiNTensorField3D<T>(scalar.getMultiBlockManagement(), nDim);
     scalarToNTensor(scalar, *nTensor);
     return nTensor;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > nTensorToScalar(MultiNTensorField3D<T>& nTensor) {
-    std::unique_ptr<MultiScalarField3D<T> > scalar =
+std::auto_ptr<MultiScalarField3D<T> > nTensorToScalar(MultiNTensorField3D<T>& nTensor) {
+    std::auto_ptr<MultiScalarField3D<T> > scalar =
         generateMultiScalarField<T>(nTensor, nTensor.getBoundingBox());
     nTensorToScalar(nTensor, *scalar);
     return scalar;

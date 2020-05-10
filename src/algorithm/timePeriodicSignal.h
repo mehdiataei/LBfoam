@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,32 +28,45 @@
 #include <string>
 #include "algorithm/spline.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class TimePeriodicSignal {
+class TimePeriodicSignal
+{
 public:
-    TimePeriodicSignal() : period() { }
-    TimePeriodicSignal(std::string fname);
-    TimePeriodicSignal(std::vector<T> const& t, std::vector<T> const& x);
-    ~TimePeriodicSignal() { }
-    TimePeriodicSignal<T>* clone() const;
-    std::vector<T> const& getTimeValues() const { return signal.getAbscissae(); }
-    std::vector<T>& getTimeValues() { return signal.getAbscissae(); }
-    std::vector<T> const& getSignalValues() const { return signal.getOrdinates(); }
-    std::vector<T>& getSignalValues() { return signal.getOrdinates(); }
-    T getSignalValue(T t) const;
-    T getDerivativeValue(T t) const;
-    T getSecondDerivativeValue(T t) const;
-    T getThirdDerivativeValue(T t) const;
-    T getIntegralValue() const;
-    T getIntegralValue(T tmin, T tmax) const;
+	TimePeriodicSignal() : period() { }
+	TimePeriodicSignal(std::string fname);
+	TimePeriodicSignal(std::vector<T> const& t, std::vector<T> const& x);
+	~TimePeriodicSignal() { }
+	TimePeriodicSignal<T>* clone() const;
+	std::vector<T> const& getTimeValues() const
+	{
+		return signal.getAbscissae();
+	}
+	std::vector<T>& getTimeValues()
+	{
+		return signal.getAbscissae();
+	}
+	std::vector<T> const& getSignalValues() const
+	{
+		return signal.getOrdinates();
+	}
+	std::vector<T>& getSignalValues()
+	{
+		return signal.getOrdinates();
+	}
+	T getSignalValue(T t) const;
+	T getDerivativeValue(T t) const;
+	T getSecondDerivativeValue(T t) const;
+	T getThirdDerivativeValue(T t) const;
+	T getIntegralValue() const;
+	T getIntegralValue(T tmin, T tmax) const;
 private:
-    NaturalCubicSpline<T> signal;
-    T period;
+	NaturalCubicSpline<T> signal;
+	T period;
 };
 
 }  // namespace plb
 
 #endif  // TIME_PERIODIC_SIGNAL_H
-

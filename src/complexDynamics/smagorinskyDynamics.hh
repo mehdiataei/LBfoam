@@ -713,35 +713,20 @@ void ConsistentSmagorinskyCompleteRegularizedBGKdynamics<T,Descriptor>::collideE
         Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j,
         T thetaBar, BlockStatistics& stat)
 {
-    T invRho = Descriptor<T>::invRho(rhoBar);
-    Array<T,SymmetricTensor<T,Descriptor>::n> piNeq;
-    momentTemplates<T,Descriptor>::compute_PiNeq(cell, rhoBar, j, piNeq, invRho);
-    T uSqr = dynamicsTemplates<T,Descriptor>::complete_regularized_bgk_ma2_collision(cell, rhoBar, j, piNeq, this->getOmega());
+    // T rhoBarLb; 
+    // Array<T,Descriptor<T>::d> jLb;
+    // Array<T,SymmetricTensor<T,Descriptor>::n> piNeqLb;
+    // momentTemplates<T,Descriptor>::compute_rhoBar_j_PiNeq(cell,rhoBarLb,jLb,piNeqLb);
+    // T jSqrLb = VectorTemplate<T,Descriptor>::normSqr(jLb);
+    // this->regularize(cell,rhoBarLb,jLb,jSqrLb,piNeqLb);
 
-    T rho = Descriptor<T>::fullRho(rhoBar);
+    // T uSqr = dynamicsTemplates<T,Descriptor>::complete_mrt_smagorinsky_ma2_ext_rhoBar_j_collision(cell, rhoBar, j, cSmago, this->getOmega(), this->getPsi());
     
-    T tau = (T)1/this->getOmega();
-    
-    T normPiNeq = std::sqrt((T)2*SymmetricTensor<T,Descriptor>::tensorNormSqr(piNeq));
-    normPiNeq *= (T)2*rho*util::sqr(Descriptor<T>::cs2*cSmago*cSmago);
-    
-    Array<T,SymmetricTensor<T,Descriptor>::n> S; S.resetToZero();
-    if (normPiNeq != T()) { // test to avoid division per 0
-        S = (-rho*tau*Descriptor<T>::cs2+std::sqrt(util::sqr(rho*tau*Descriptor<T>::cs2)+normPiNeq)) / normPiNeq * piNeq;
-    }
-    T sNorm = std::sqrt((T)2*SymmetricTensor<T,Descriptor>::tensorNormSqr(S));
-    T preFactor = (T)0.5*Descriptor<T>::invCs2*Descriptor<T>::invCs2*this->getOmega()*cSmago*cSmago*sNorm;
-    
-    for (plint iPop = 0; iPop < Descriptor<T>::q; ++iPop) {
-        Array<T,SymmetricTensor<T,Descriptor>::n> H2 = HermiteTemplate<T,Descriptor>::order2(iPop);
-        T H_S = SymmetricTensor<T,Descriptor>::contractIndexes(H2, S);
-        cell[iPop] += Descriptor<T>::t[iPop]*preFactor*H_S;
-    }
-    
-    if (cell.takesStatistics()) {
-        T rhoBar = momentTemplates<T,Descriptor>::get_rhoBar(cell);
-        gatherStatistics(stat, rhoBar, uSqr);
-    }
+    // if (cell.takesStatistics()) {
+    //     gatherStatistics(stat, rhoBar, uSqr);
+    // }
+
+    PLB_ASSERT(false && "collide external not implemented for ConsistentSmagorinskyCompleteRegularizedBGKdynamics"); // TODO IMPLEMENT THE METHOD
 }
 
 

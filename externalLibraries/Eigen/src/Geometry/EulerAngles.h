@@ -45,51 +45,42 @@ template<typename Derived>
 inline Matrix<typename MatrixBase<Derived>::Scalar,3,1>
 MatrixBase<Derived>::eulerAngles(int a0, int a1, int a2) const
 {
-  /* Implemented from Graphics Gems IV */
-  EIGEN_STATIC_ASSERT_MATRIX_SPECIFIC_SIZE(Derived,3,3)
+	/* Implemented from Graphics Gems IV */
+	EIGEN_STATIC_ASSERT_MATRIX_SPECIFIC_SIZE(Derived,3,3)
 
-  Matrix<Scalar,3,1> res;
-  typedef Matrix<typename Derived::Scalar,2,1> Vector2;
-  const Scalar epsilon = precision<Scalar>();
+	Matrix<Scalar,3,1> res;
+	typedef Matrix<typename Derived::Scalar,2,1> Vector2;
+	const Scalar epsilon = precision<Scalar>();
 
-  const int odd = ((a0+1)%3 == a1) ? 0 : 1;
-  const int i = a0;
-  const int j = (a0 + 1 + odd)%3;
-  const int k = (a0 + 2 - odd)%3;
+	const int odd = ((a0+1)%3 == a1) ? 0 : 1;
+	const int i = a0;
+	const int j = (a0 + 1 + odd)%3;
+	const int k = (a0 + 2 - odd)%3;
 
-  if (a0==a2)
-  {
-    Scalar s = Vector2(coeff(j,i) , coeff(k,i)).norm();
-    res[1] = ei_atan2(s, coeff(i,i));
-    if (s > epsilon)
-    {
-      res[0] = ei_atan2(coeff(j,i), coeff(k,i));
-      res[2] = ei_atan2(coeff(i,j),-coeff(i,k));
-    }
-    else
-    {
-      res[0] = Scalar(0);
-      res[2] = (coeff(i,i)>0?1:-1)*ei_atan2(-coeff(k,j), coeff(j,j));
-    }
-  }
-  else
-  {
-    Scalar c = Vector2(coeff(i,i) , coeff(i,j)).norm();
-    res[1] = ei_atan2(-coeff(i,k), c);
-    if (c > epsilon)
-    {
-      res[0] = ei_atan2(coeff(j,k), coeff(k,k));
-      res[2] = ei_atan2(coeff(i,j), coeff(i,i));
-    }
-    else
-    {
-      res[0] = Scalar(0);
-      res[2] = (coeff(i,k)>0?1:-1)*ei_atan2(-coeff(k,j), coeff(j,j));
-    }
-  }
-  if (!odd)
-    res = -res;
-  return res;
+	if (a0==a2) {
+		Scalar s = Vector2(coeff(j,i), coeff(k,i)).norm();
+		res[1] = ei_atan2(s, coeff(i,i));
+		if (s > epsilon) {
+			res[0] = ei_atan2(coeff(j,i), coeff(k,i));
+			res[2] = ei_atan2(coeff(i,j),-coeff(i,k));
+		} else {
+			res[0] = Scalar(0);
+			res[2] = (coeff(i,i)>0?1:-1)*ei_atan2(-coeff(k,j), coeff(j,j));
+		}
+	} else {
+		Scalar c = Vector2(coeff(i,i), coeff(i,j)).norm();
+		res[1] = ei_atan2(-coeff(i,k), c);
+		if (c > epsilon) {
+			res[0] = ei_atan2(coeff(j,k), coeff(k,k));
+			res[2] = ei_atan2(coeff(i,j), coeff(i,i));
+		} else {
+			res[0] = Scalar(0);
+			res[2] = (coeff(i,k)>0?1:-1)*ei_atan2(-coeff(k,j), coeff(j,j));
+		}
+	}
+	if (!odd)
+		res = -res;
+	return res;
 }
 
 

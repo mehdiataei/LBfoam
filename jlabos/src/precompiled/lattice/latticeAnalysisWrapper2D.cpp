@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,56 +34,57 @@
 #include "latticeBoltzmann/nearestNeighborLattices2D.h"
 #include "latticeBoltzmann/nearestNeighborLattices2D.hh"
 
-namespace plb {
+namespace plb
+{
 
 // Atomic-block
 
 template FLOAT_T computeAverageDensity<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
+    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
 template FLOAT_T computeAverageDensity<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
+    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
 
 template FLOAT_T computeAverageRhoBar<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
+    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
 template FLOAT_T computeAverageRhoBar<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
+    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
 
 template FLOAT_T computeAverageEnergy<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
+    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
 template FLOAT_T computeAverageEnergy<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
+    BlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
 
 // Multi-block
 
 template FLOAT_T computeAverageDensity<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
 template FLOAT_T computeAverageDensity<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
 
 template FLOAT_T computeAverageRhoBar<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
 template FLOAT_T computeAverageRhoBar<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
 
 template FLOAT_T computeAverageEnergy<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, Box2D domain );
 template FLOAT_T computeAverageEnergy<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-                    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice );
 
 template
 void copyPopulations<FLOAT_T,descriptors::DESCRIPTOR_2D> (
-        BlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeFrom,
-        BlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeTo, Box2D domain );
+    BlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeFrom,
+    BlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeTo, Box2D domain );
 
 template
 void copyAll<FLOAT_T,descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeFrom,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeTo, Box2D domain );
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeFrom,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeTo, Box2D domain );
 
 template
 void copyRegenerate<FLOAT_T,descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeFrom,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeTo, Box2D domain );
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeFrom,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& latticeTo, Box2D domain );
 
 }  // namespace plb
 

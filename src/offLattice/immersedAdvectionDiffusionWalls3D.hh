@@ -54,10 +54,11 @@ void InamuroAdvectionDiffusionIteration3D<T,ScalarFunction>::processGenericBlock
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[1]);
     PLB_ASSERT( rhoBar );
     PLB_ASSERT( container );
-    Dot3D location = rhoBar->getLocation();
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
+    Array<T,3> absOffset = wallData->offset;
 
     std::vector< Array<T,3> > const& vertices = wallData->vertices;
     std::vector<T> const& areas = wallData->areas;
@@ -67,45 +68,39 @@ void InamuroAdvectionDiffusionIteration3D<T,ScalarFunction>::processGenericBlock
     // In this iteration, the source is computed for every vertex.
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
         T averageRhoBar = T();
         // Use the weighting function to compute the average density
         // on the surface vertex.
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextRhoBar = rhoBar->get(pos[0], pos[1], pos[2]);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
-                    T W = inamuroDeltaFunction<T>().W(r);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
+                    T W = inamuroDeltaFunction3D<T>().W(r);
                     averageRhoBar += W*nextRhoBar;
                 }
             }
         }
-        T wallScalar = scalarFunction(vertex);
+        T wallScalar = scalarFunction(vertex+absOffset);
         deltaS[i] = areas[i]*((wallScalar-(T)1.0)-averageRhoBar);
     }
     
     // In this iteration, the source is applied from every vertex to the grid nodes.
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextRhoBar = rhoBar->get(pos[0], pos[1], pos[2]);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
-                    T W = inamuroDeltaFunction<T>().W(r);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
+                    T W = inamuroDeltaFunction3D<T>().W(r);
                     nextRhoBar += tau*W*deltaS[i];
                     rhoBar->get(pos[0], pos[1], pos[2]) = nextRhoBar;
                 }
@@ -148,7 +143,7 @@ void IndexedInamuroAdvectionDiffusionIteration3D<T,ScalarFunction>::processGener
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[1]);
     PLB_ASSERT( rhoBar );
     PLB_ASSERT( container );
-    Dot3D location = rhoBar->getLocation();
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
@@ -162,20 +157,17 @@ void IndexedInamuroAdvectionDiffusionIteration3D<T,ScalarFunction>::processGener
 
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
         T averageRhoBar = T();
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextRhoBar = rhoBar->get(pos[0], pos[1], pos[2]);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
-                    T W = inamuroDeltaFunction<T>().W(r);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
+                    T W = inamuroDeltaFunction3D<T>().W(r);
                     averageRhoBar += W*nextRhoBar;
                 }
             }
@@ -186,18 +178,15 @@ void IndexedInamuroAdvectionDiffusionIteration3D<T,ScalarFunction>::processGener
     
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextRhoBar = rhoBar->get(pos[0], pos[1], pos[2]);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
-                    T W = inamuroDeltaFunction<T>().W(r);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
+                    T W = inamuroDeltaFunction3D<T>().W(r);
                     nextRhoBar += tau*W*deltaS[i];
                     rhoBar->get(pos[0], pos[1], pos[2]) = nextRhoBar;
                 }
@@ -240,7 +229,7 @@ void ConstScalarInamuroAdvectionDiffusionIteration3D<T>::processGenericBlocks (
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[1]);
     PLB_ASSERT( rhoBar );
     PLB_ASSERT( container );
-    Dot3D location = rhoBar->getLocation();
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
@@ -251,20 +240,17 @@ void ConstScalarInamuroAdvectionDiffusionIteration3D<T>::processGenericBlocks (
 
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
         T averageRhoBar = T();
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextRhoBar = rhoBar->get(pos[0], pos[1], pos[2]);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
-                    T W = inamuroDeltaFunction<T>().W(r);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
+                    T W = inamuroDeltaFunction3D<T>().W(r);
                     averageRhoBar += W*nextRhoBar;
                 }
             }
@@ -274,18 +260,15 @@ void ConstScalarInamuroAdvectionDiffusionIteration3D<T>::processGenericBlocks (
     
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextRhoBar = rhoBar->get(pos[0], pos[1], pos[2]);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
-                    T W = inamuroDeltaFunction<T>().W(r);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
+                    T W = inamuroDeltaFunction3D<T>().W(r);
                     nextRhoBar += tau*W*deltaS[i];
                     rhoBar->get(pos[0], pos[1], pos[2]) = nextRhoBar;
                 }
@@ -335,12 +318,14 @@ void InstantiateImmersedAdvectionDiffusionWallData3D<T>::processGenericBlocks (
     PLB_ASSERT( container );
     bool useNormals = normals.size()>0;
     Dot3D location = container->getLocation();
+    Array<T,3> offset(location.x,location.y,location.z);
     ImmersedWallData3D<T>* wallData = new ImmersedWallData3D<T>;
-    Box3D extendedEnvelope(domain.enlarge(2).shift(location.x, location.y, location.z));
+    Box3D extendedEnvelope(domain.enlarge(2));
 
     for (pluint i=0; i<vertices.size(); ++i) {
-        if (contained(vertices[i], extendedEnvelope)) {
-            wallData->vertices.push_back(vertices[i]);
+        Array<T,3> vertex = vertices[i]-offset;
+        if (contained(vertex, extendedEnvelope)) {
+            wallData->vertices.push_back(vertex);
             wallData->areas.push_back(areas[i]);
             if (useNormals) {
                 wallData->normals.push_back(normals[i]);
@@ -350,6 +335,7 @@ void InstantiateImmersedAdvectionDiffusionWallData3D<T>::processGenericBlocks (
     }
     wallData->g.clear();
     wallData->flags = std::vector<int>(wallData->vertices.size(), 0);
+    wallData->offset = offset;
     container->setData(wallData);
 }
 
@@ -389,6 +375,7 @@ void InstantiateImmersedAdvectionDiffusionWallDataWithTagging3D<T>::processGener
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[0]);
     PLB_ASSERT( container );
     Dot3D location = container->getLocation();
+    Array<T,3> offset(location.x,location.y,location.z);
 
     ScalarField3D<int>* flagMatrix = dynamic_cast<ScalarField3D<int>*>(blocks[1]);
     PLB_ASSERT(flagMatrix);
@@ -396,22 +383,20 @@ void InstantiateImmersedAdvectionDiffusionWallDataWithTagging3D<T>::processGener
     Array<plint,3> flagDispl(ofsFlag.x,ofsFlag.y,ofsFlag.z);
 
     ImmersedWallData3D<T>* wallData = new ImmersedWallData3D<T>;
-    Box3D extendedEnvelope(domain.enlarge(2).shift(location.x, location.y, location.z));
+    Box3D extendedEnvelope(domain.enlarge(2));
 
     for (pluint i=0; i<vertices.size(); ++i) {
-        Array<T,3> vertex = vertices[i];
+        Array<T,3> vertex = vertices[i]-offset;
         if (contained(vertex, extendedEnvelope)) {
             wallData->vertices.push_back(vertex);
             wallData->areas.push_back(areas[i]);
             wallData->globalVertexIds.push_back(i);
-            Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-            const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
+            Array<plint,3> intPos (
+                    (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
             bool hasSolutionDomainNeighbor=false;
-            for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-                for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                    for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+            for (plint dx=-1; dx<=+2; ++dx) {
+                for (plint dy=-1; dy<=+2; ++dy) {
+                    for (plint dz=-1; dz<=+2; ++dz) {
                         Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz)+flagDispl);
                         if(flagMatrix->get(pos[0],pos[1],pos[2])==solutionDomainFlag) {
                             hasSolutionDomainNeighbor=true;
@@ -428,6 +413,7 @@ void InstantiateImmersedAdvectionDiffusionWallDataWithTagging3D<T>::processGener
         }
     }
     wallData->g.clear();
+    wallData->offset = offset;
     container->setData(wallData);
 }
 
@@ -471,18 +457,22 @@ void InstantiateImmersedAdvectionDiffusionWallDataWithIndexedTagging3D<T>::proce
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[0]);
     PLB_ASSERT( container );
     Dot3D location = container->getLocation();
+    Array<T,3> offset(location.x,location.y,location.z);
+
     ImmersedWallData3D<T>* wallData = new ImmersedWallData3D<T>;
-    Box3D extendedEnvelope(domain.enlarge(2).shift(location.x, location.y, location.z));
+    Box3D extendedEnvelope(domain.enlarge(2));
 
     for (pluint i=0; i<vertices.size(); ++i) {
-        if (contained(vertices[i], extendedEnvelope)) {
-            wallData->vertices.push_back(vertices[i]);
+        Array<T,3> vertex = vertices[i]-offset;
+        if (contained(vertex, extendedEnvelope)) {
+            wallData->vertices.push_back(vertex);
             wallData->areas.push_back(areas[i]);
             wallData->flags.push_back(flags[i]);
             wallData->globalVertexIds.push_back(i);
         }
     }
     wallData->g.clear();
+    wallData->offset = offset;
     container->setData(wallData);
 }
 

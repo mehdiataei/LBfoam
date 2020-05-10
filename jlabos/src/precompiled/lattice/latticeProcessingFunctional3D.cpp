@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,7 +32,8 @@
 #include "latticeBoltzmann/mrtLattices.hh"
 #include "multiPhysics/shanChenLattices3D.h"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Exotic lattices *********************************** */
 
@@ -49,7 +50,7 @@ template class BoxProcessingFunctional3D_L<FLOAT_T, descriptors::MRTD3Q19Descrip
 template class BoxProcessingFunctional3D_L<FLOAT_T, descriptors::DESCRIPTOR_3D>;
 template class MaskedBoxProcessingFunctional3D_L<FLOAT_T, descriptors::DESCRIPTOR_3D>;
 template class BoxProcessingFunctional3D_LL< FLOAT_T, descriptors::DESCRIPTOR_3D,
-                                             FLOAT_T, descriptors::DESCRIPTOR_3D >;
+        FLOAT_T, descriptors::DESCRIPTOR_3D >;
 template class BoxProcessingFunctional3D_LN<FLOAT_T, descriptors::DESCRIPTOR_3D, FLOAT_T>;
 template class BoxProcessingFunctional3D_LN<FLOAT_T, descriptors::DESCRIPTOR_3D, int>;
 template class MaskedBoxProcessingFunctional3D_LN<FLOAT_T, descriptors::DESCRIPTOR_3D, FLOAT_T>;
@@ -62,11 +63,11 @@ template class BoxProcessingFunctional3D_LS<FLOAT_T, descriptors::DESCRIPTOR_3D,
 
 template class BoundedBoxProcessingFunctional3D_L<FLOAT_T, descriptors::DESCRIPTOR_3D>;
 template class BoundedBoxProcessingFunctional3D_LL< FLOAT_T, descriptors::DESCRIPTOR_3D,
-                                                    FLOAT_T, descriptors::DESCRIPTOR_3D>;
+        FLOAT_T, descriptors::DESCRIPTOR_3D>;
 template class BoundedBoxProcessingFunctional3D_LN< FLOAT_T, descriptors::DESCRIPTOR_3D,
-                                                    FLOAT_T >;
+        FLOAT_T >;
 template class BoundedMaskedBoxProcessingFunctional3D_LN< FLOAT_T, descriptors::DESCRIPTOR_3D,
-                                                          FLOAT_T >;
+        FLOAT_T >;
 template class BoundedLatticeBoxProcessingFunctional3D <
     FLOAT_T, descriptors::DESCRIPTOR_3D >;
 

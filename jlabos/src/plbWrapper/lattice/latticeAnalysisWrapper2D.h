@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,7 +36,8 @@
 #include <memory>
 
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
 void computeDensity(MultiBlockLattice2D<T,Descriptor>& lattice,
@@ -48,11 +49,11 @@ void maskedComputeDensity(MultiBlockLattice2D<T,Descriptor>& lattice,
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* pypal_computeDensity (
-        MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* maskedPypal_computeDensity (
-              MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask, Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask, Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 void computeKineticEnergy(MultiBlockLattice2D<T,Descriptor>& lattice,
@@ -64,13 +65,13 @@ void maskedComputeKineticEnergy(MultiBlockLattice2D<T,Descriptor>& lattice,
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* pypal_computeKineticEnergy (
-                            MultiBlockLattice2D<T,Descriptor>& lattice,
-                            Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice,
+    Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* maskedPypal_computeKineticEnergy (
-                                  MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
-                                  Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
+    Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 void computeVelocityNorm(MultiBlockLattice2D<T,Descriptor>& lattice,
@@ -82,13 +83,13 @@ void maskedComputeVelocityNorm(MultiBlockLattice2D<T,Descriptor>& lattice,
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* pypal_computeVelocityNorm (
-                            MultiBlockLattice2D<T,Descriptor>& lattice,
-                            Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice,
+    Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* maskedPypal_computeVelocityNorm (
-                                  MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
-                                  Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
+    Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 void computeVelocityComponent(MultiBlockLattice2D<T,Descriptor>& lattice,
@@ -102,13 +103,13 @@ void maskedComputeVelocityComponent(MultiBlockLattice2D<T,Descriptor>& lattice,
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* pypal_computeVelocityComponent (
-                            MultiBlockLattice2D<T,Descriptor>& lattice,
-                            Box2D domain, plint iComponent );
+    MultiBlockLattice2D<T,Descriptor>& lattice,
+    Box2D domain, plint iComponent );
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* maskedPypal_computeVelocityComponent (
-                                  MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
-                                  Box2D domain, plint iComponent );
+    MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
+    Box2D domain, plint iComponent );
 
 template<typename T, template<typename U> class Descriptor>
 void computeVelocity(MultiBlockLattice2D<T,Descriptor>& lattice,
@@ -120,40 +121,40 @@ void maskedComputeVelocity(MultiBlockLattice2D<T,Descriptor>& lattice,
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* pypal_computeVelocity (
-                            MultiBlockLattice2D<T,Descriptor>& lattice,
-                            Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice,
+    Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* maskedPypal_computeVelocity (
-                                  MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
-                                  Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
+    Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 void computePiNeq(MultiBlockLattice2D<T,Descriptor>& lattice,
-                             MultiNTensorField2D<T>& PiNeq, Box2D domain);
+                  MultiNTensorField2D<T>& PiNeq, Box2D domain);
 
 template<typename T, template<typename U> class Descriptor>
 void maskedComputePiNeq(MultiBlockLattice2D<T,Descriptor>& lattice,
-                                   MultiNTensorField2D<T>& PiNeq, MultiNTensorField2D<int>& mask, Box2D domain);
+                        MultiNTensorField2D<T>& PiNeq, MultiNTensorField2D<int>& mask, Box2D domain);
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* pypal_computePiNeq (
-                            MultiBlockLattice2D<T,Descriptor>& lattice,
-                            Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice,
+    Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* maskedPypal_computePiNeq (
-                                  MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
-                                  Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
+    Box2D domain );
 
 
 template<typename T, template<typename U> class Descriptor>
 void computeShearStress(MultiBlockLattice2D<T,Descriptor>& lattice,
-                  MultiNTensorField2D<T>& ShearStress, Box2D domain);
+                        MultiNTensorField2D<T>& ShearStress, Box2D domain);
 
 template<typename T, template<typename U> class Descriptor>
 void maskedComputeShearStress(MultiBlockLattice2D<T,Descriptor>& lattice,
-                        MultiNTensorField2D<T>& ShearStress, MultiNTensorField2D<int>& mask, Box2D domain);
+                              MultiNTensorField2D<T>& ShearStress, MultiNTensorField2D<int>& mask, Box2D domain);
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* pypal_computeShearStress (
@@ -175,13 +176,13 @@ void maskedComputeStrainRateFromStress(MultiBlockLattice2D<T,Descriptor>& lattic
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* pypal_computeStrainRateFromStress (
-                           MultiBlockLattice2D<T,Descriptor>& lattice,
-                           Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice,
+    Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* maskedPypal_computeStrainRateFromStress (
-                                 MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
-                                 Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
+    Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 void computePopulation(MultiBlockLattice2D<T,Descriptor>& lattice,
@@ -195,13 +196,13 @@ void maskedComputePopulation(MultiBlockLattice2D<T,Descriptor>& lattice,
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* pypal_computePopulation (
-                            MultiBlockLattice2D<T,Descriptor>& lattice,
-                            Box2D domain, plint iPop );
+    MultiBlockLattice2D<T,Descriptor>& lattice,
+    Box2D domain, plint iPop );
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* maskedPypal_computePopulation (
-                                  MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
-                                  Box2D domain, plint iPop );
+    MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
+    Box2D domain, plint iPop );
 
 
 template<typename T, template<typename U> class Descriptor>
@@ -216,13 +217,13 @@ void maskedComputePopulations(MultiBlockLattice2D<T,Descriptor>& lattice,
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* pypal_computePopulations (
-                            MultiBlockLattice2D<T,Descriptor>& lattice,
-                            Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice,
+    Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
 MultiNTensorField2D<T>* maskedPypal_computePopulations (
-                                  MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
-                                  Box2D domain );
+    MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTensorField2D<int>& mask,
+    Box2D domain );
 
 }  // namespace plb
 

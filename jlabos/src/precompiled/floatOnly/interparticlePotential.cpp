@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -25,15 +25,17 @@
 #include "multiPhysics/interparticlePotential.h"
 #include "multiPhysics/interparticlePotential.hh"
 
-namespace plb {
+namespace plb
+{
 
-namespace interparticlePotential {
+namespace interparticlePotential
+{
 
-    template class PsiFunction<FLOAT_T>;
-    template class PsiIsRho<FLOAT_T>;
-    template class PsiShanChen93<FLOAT_T>;
-    template class PsiShanChen94<FLOAT_T>;
-    template class PsiQian95<FLOAT_T>;
+template class PsiFunction<FLOAT_T>;
+template class PsiIsRho<FLOAT_T>;
+template class PsiShanChen93<FLOAT_T>;
+template class PsiShanChen94<FLOAT_T>;
+template class PsiQian95<FLOAT_T>;
 
 }
 

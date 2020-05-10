@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,7 +28,8 @@
 #include "atomicBlock/dataProcessor2D.h"
 #include "core/util.h"
 
-namespace plb {
+namespace plb
+{
 
 ////////////////////// Class DataProcessor2D /////////////////
 
@@ -47,21 +48,24 @@ namespace plb {
  *  Still, LatticeProcessors are much easier to write when there's only
  *  one method to override, so we'll let it be this way.
  */
-plint DataProcessor2D::extent() const {
+plint DataProcessor2D::extent() const
+{
     return 1;
 }
 
 /** By default, this method assumes a symmetric neighborhood relation
  *  and refers to the non-directed version of extent().
  */
-plint DataProcessor2D::extent(int direction) const {
+plint DataProcessor2D::extent(int direction) const
+{
     return extent();
 }
 
 /** Return -1 as default to help transition period as some
  *  data processors have no ID.
  **/
-int DataProcessor2D::getStaticId() const {
+int DataProcessor2D::getStaticId() const
+{
     return -1;
 }
 
@@ -84,11 +88,13 @@ void DataProcessorGenerator2D::rescale(double dxScale_, double dtScale_)
 void DataProcessorGenerator2D::setscale(int dxScale_, int dtScale_)
 { }
 
-void DataProcessorGenerator2D::getModificationPattern(std::vector<bool>& isWritten) const {
+void DataProcessorGenerator2D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     std::vector<modif::ModifT> modified(isWritten.size());
     getTypeOfModification(modified);
     PLB_ASSERT(modified.size()==isWritten.size());
-    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock)
+    {
         isWritten[iBlock] = modified[iBlock]==modif::nothing ? false:true;
     }
 }
@@ -96,7 +102,8 @@ void DataProcessorGenerator2D::getModificationPattern(std::vector<bool>& isWritt
 /** Return -1 as default to help transition period as some
  *  data processors have no ID.
  **/
-int DataProcessorGenerator2D::getStaticId() const {
+int DataProcessorGenerator2D::getStaticId() const
+{
     return -1;
 }
 
@@ -111,30 +118,37 @@ BoxedDataProcessorGenerator2D::BoxedDataProcessorGenerator2D(Box2D domain_)
 {
 }
 
-void BoxedDataProcessorGenerator2D::shift(plint deltaX, plint deltaY) {
+void BoxedDataProcessorGenerator2D::shift(plint deltaX, plint deltaY)
+{
     domain = domain.shift(deltaX, deltaY);
 }
 
-void BoxedDataProcessorGenerator2D::multiply(plint scale) {
+void BoxedDataProcessorGenerator2D::multiply(plint scale)
+{
     domain = domain.multiply(scale);
 }
 
-void BoxedDataProcessorGenerator2D::divide(plint scale) {
+void BoxedDataProcessorGenerator2D::divide(plint scale)
+{
     domain = domain.divide(scale);
 }
 
-bool BoxedDataProcessorGenerator2D::extract(Box2D subDomain) {
+bool BoxedDataProcessorGenerator2D::extract(Box2D subDomain)
+{
     Box2D intersection;
-    if (intersect(domain, subDomain, intersection)) {
+    if (intersect(domain, subDomain, intersection))
+    {
         domain = intersection;
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-Box2D BoxedDataProcessorGenerator2D::getDomain() const {
+Box2D BoxedDataProcessorGenerator2D::getDomain() const
+{
     return domain;
 }
 
@@ -174,31 +188,37 @@ void ReductiveDataProcessorGenerator2D::setscale(int dxScale_, int dtScale_)
     dtScale = dtScale_;
 }
 
-int ReductiveDataProcessorGenerator2D::getDxScale() const {
+int ReductiveDataProcessorGenerator2D::getDxScale() const
+{
     return dxScale;
 }
 
-int ReductiveDataProcessorGenerator2D::getDtScale() const {
+int ReductiveDataProcessorGenerator2D::getDtScale() const
+{
     return dtScale;
 }
 
 /** Default implementation: constant dimensions.
  **/
-void ReductiveDataProcessorGenerator2D::getDimensionsX(std::vector<int>& dimensions) const {
+void ReductiveDataProcessorGenerator2D::getDimensionsX(std::vector<int>& dimensions) const
+{
     dimensions.clear();
 }
 
 /** Default implementation: constant dimensions.
  **/
-void ReductiveDataProcessorGenerator2D::getDimensionsT(std::vector<int>& dimensions) const {
+void ReductiveDataProcessorGenerator2D::getDimensionsT(std::vector<int>& dimensions) const
+{
     dimensions.clear();
 }
 
-void ReductiveDataProcessorGenerator2D::getModificationPattern(std::vector<bool>& isWritten) const {
+void ReductiveDataProcessorGenerator2D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     std::vector<modif::ModifT> modified(isWritten.size());
     getTypeOfModification(modified);
     PLB_ASSERT(modified.size()==isWritten.size());
-    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock)
+    {
         isWritten[iBlock] = modified[iBlock]==modif::nothing ? false:true;
     }
 }
@@ -214,30 +234,37 @@ BoxedReductiveDataProcessorGenerator2D::BoxedReductiveDataProcessorGenerator2D(B
     : domain(domain_)
 { }
 
-void BoxedReductiveDataProcessorGenerator2D::shift(plint deltaX, plint deltaY) {
+void BoxedReductiveDataProcessorGenerator2D::shift(plint deltaX, plint deltaY)
+{
     domain = domain.shift(deltaX, deltaY);
 }
 
-void BoxedReductiveDataProcessorGenerator2D::multiply(plint scale) {
+void BoxedReductiveDataProcessorGenerator2D::multiply(plint scale)
+{
     domain = domain.multiply(scale);
 }
 
-void BoxedReductiveDataProcessorGenerator2D::divide(plint scale) {
+void BoxedReductiveDataProcessorGenerator2D::divide(plint scale)
+{
     domain = domain.divide(scale);
 }
 
-bool BoxedReductiveDataProcessorGenerator2D::extract(Box2D subDomain) {
+bool BoxedReductiveDataProcessorGenerator2D::extract(Box2D subDomain)
+{
     Box2D intersection;
-    if (intersect(domain, subDomain, intersection)) {
+    if (intersect(domain, subDomain, intersection))
+    {
         domain = intersection;
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-Box2D BoxedReductiveDataProcessorGenerator2D::getDomain() const {
+Box2D BoxedReductiveDataProcessorGenerator2D::getDomain() const
+{
     return domain;
 }
 
@@ -250,70 +277,83 @@ void BoxedReductiveDataProcessorGenerator2D::serialize(Box2D& domain_, std::stri
 ////////////////////// Class DottedDataProcessorGenerator2D /////////////////
 
 DottedDataProcessorGenerator2D::DottedDataProcessorGenerator2D (
-        DotList2D const& dots_)
+    DotList2D const& dots_)
     : dots(dots_)
 { }
 
-void DottedDataProcessorGenerator2D::shift(plint deltaX, plint deltaY) {
+void DottedDataProcessorGenerator2D::shift(plint deltaX, plint deltaY)
+{
     dots = dots.shift(deltaX,deltaY);
 }
 
-void DottedDataProcessorGenerator2D::multiply(plint scale) {
+void DottedDataProcessorGenerator2D::multiply(plint scale)
+{
     dots = dots.multiply(scale);
 }
 
-void DottedDataProcessorGenerator2D::divide(plint scale) {
+void DottedDataProcessorGenerator2D::divide(plint scale)
+{
     dots = dots.divide(scale);
 }
 
-bool DottedDataProcessorGenerator2D::extract(Box2D subDomain) {
+bool DottedDataProcessorGenerator2D::extract(Box2D subDomain)
+{
     DotList2D intersection;
-    if (intersect(subDomain, dots, intersection)) {
+    if (intersect(subDomain, dots, intersection))
+    {
         dots = intersection;
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-DotList2D const& DottedDataProcessorGenerator2D::getDotList() const {
+DotList2D const& DottedDataProcessorGenerator2D::getDotList() const
+{
     return dots;
 }
 
 ////////////////////// Class DottedReductiveDataProcessorGenerator2D /////////////////
 
 DottedReductiveDataProcessorGenerator2D::DottedReductiveDataProcessorGenerator2D (
-        DotList2D const& dots_)
+    DotList2D const& dots_)
     : dots(dots_)
 { }
 
-void DottedReductiveDataProcessorGenerator2D::shift(plint deltaX, plint deltaY) {
+void DottedReductiveDataProcessorGenerator2D::shift(plint deltaX, plint deltaY)
+{
     dots = dots.shift(deltaX,deltaY);
 }
 
-void DottedReductiveDataProcessorGenerator2D::multiply(plint scale) {
+void DottedReductiveDataProcessorGenerator2D::multiply(plint scale)
+{
     dots = dots.multiply(scale);
 }
 
-void DottedReductiveDataProcessorGenerator2D::divide(plint scale) {
+void DottedReductiveDataProcessorGenerator2D::divide(plint scale)
+{
     dots = dots.divide(scale);
 }
 
-bool DottedReductiveDataProcessorGenerator2D::extract(Box2D subDomain) {
+bool DottedReductiveDataProcessorGenerator2D::extract(Box2D subDomain)
+{
     DotList2D intersection;
-    if (intersect(subDomain, dots, intersection)) {
+    if (intersect(subDomain, dots, intersection))
+    {
         dots = intersection;
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-DotList2D const& DottedReductiveDataProcessorGenerator2D::getDotList() const {
+DotList2D const& DottedReductiveDataProcessorGenerator2D::getDotList() const
+{
     return dots;
 }
 
 }  // namespace plb
-

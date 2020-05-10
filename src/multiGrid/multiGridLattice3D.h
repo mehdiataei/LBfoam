@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -45,67 +45,69 @@
 
 #include <memory>
 
-namespace plb {
+namespace plb
+{
 
 template <typename T, template <typename U> class Descriptor>
-class MultiGridLattice3D : public BlockLatticeBase3D< T,Descriptor >, public MultiGrid3D {
+class MultiGridLattice3D : public BlockLatticeBase3D< T,Descriptor >, public MultiGrid3D
+{
 
-  public:
-    MultiGridLattice3D(MultiGridManagement3D management,
-                       std::vector<BlockCommunicator3D* > communicators_,
-                       std::vector<CombinedStatistics*> combinedStatistics_, 
-                       Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel=0) ;
+public:
+	MultiGridLattice3D(MultiGridManagement3D management,
+	                   std::vector<BlockCommunicator3D* > communicators_,
+	                   std::vector<CombinedStatistics*> combinedStatistics_,
+	                   Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel=0) ;
 
-    MultiGridLattice3D(MultiGridManagement3D management,
-                       Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel=0) ;
+	MultiGridLattice3D(MultiGridManagement3D management,
+	                   Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel=0) ;
 
-    /// Copy constructor for the whole multi grid
-    MultiGridLattice3D(MultiGridLattice3D<T,Descriptor> const& rhs);
-    /// Copy constructor for a subdomain of the multi grid
-    MultiGridLattice3D(MultiGridLattice3D<T,Descriptor> const& rhs, Box3D subDomain, bool crop=true);
-    
-    MultiGridLattice3D(MultiGrid3D const& rhs);
-    MultiGridLattice3D(MultiGrid3D const& rhs, Box3D subDomain, bool crop=true);
-    
-    MultiGridLattice3D<T,Descriptor>& operator=(MultiGridLattice3D<T,Descriptor> const& rhs);
-    
-    ~MultiGridLattice3D();
-    
-    /// Create the couplings between lattices
-    void initialize();
+	/// Copy constructor for the whole multi grid
+	MultiGridLattice3D(MultiGridLattice3D<T,Descriptor> const& rhs);
+	/// Copy constructor for a subdomain of the multi grid
+	MultiGridLattice3D(MultiGridLattice3D<T,Descriptor> const& rhs, Box3D subDomain, bool crop=true);
 
-    void createInterfaces();
+	MultiGridLattice3D(MultiGrid3D const& rhs);
+	MultiGridLattice3D(MultiGrid3D const& rhs, Box3D subDomain, bool crop=true);
 
-    /// Create a single multiBlock that represents the multiGrid. 
-    std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > convertToLevel(plint level) const;
-        
-    /* *** MultiGrid3D methods *** */
-    int getBlockId () const;
-    
-    
-    /// Retrieve the lattices representing each a refinement level
-    MultiBlockLattice3D<T,Descriptor>& getComponent(plint iBlock);
-    const MultiBlockLattice3D<T,Descriptor>& getComponent(plint iBlock) const;
-    
-    /* **** BlockLatticeBase3D methods **** */
-    
-    virtual Cell<T,Descriptor>& get(plint iX, plint iY, plint iZ);
-    virtual Cell<T,Descriptor> const& get(plint iX, plint iY, plint iZ) const;
-    virtual void specifyStatisticsStatus (Box3D domain, bool status);
-    virtual void collide(Box3D domain);
-    virtual void collide();
-    virtual void stream(Box3D domain);
-    virtual void stream();              
-    virtual void collideAndStream(Box3D domain);
-    virtual void collideAndStream();
-    virtual void incrementTime();
-    TimeCounter& getTimeCounter();
-    TimeCounter const& getTimeCounter() const;
-  private:
-    void iterateMultiGrid(plint level);
-    void eliminateStatisticsInOverlap();
-  private:
-    std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices;
+	MultiGridLattice3D<T,Descriptor>& operator=(MultiGridLattice3D<T,Descriptor> const& rhs);
+
+	~MultiGridLattice3D();
+
+	/// Create the couplings between lattices
+	void initialize();
+
+	void createInterfaces();
+
+	/// Create a single multiBlock that represents the multiGrid.
+	std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > convertToLevel(plint level) const;
+
+	/* *** MultiGrid3D methods *** */
+	int getBlockId () const;
+
+
+	/// Retrieve the lattices representing each a refinement level
+	MultiBlockLattice3D<T,Descriptor>& getComponent(plint iBlock);
+	const MultiBlockLattice3D<T,Descriptor>& getComponent(plint iBlock) const;
+
+	/* **** BlockLatticeBase3D methods **** */
+
+	virtual Cell<T,Descriptor>& get(plint iX, plint iY, plint iZ);
+	virtual Cell<T,Descriptor> const& get(plint iX, plint iY, plint iZ) const;
+	virtual void specifyStatisticsStatus (Box3D domain, bool status);
+	virtual void collide(Box3D domain);
+	virtual void collide();
+	virtual void stream(Box3D domain);
+	virtual void stream();
+	virtual void collideAndStream(Box3D domain);
+	virtual void collideAndStream();
+	virtual void incrementTime();
+	TimeCounter& getTimeCounter();
+	TimeCounter const& getTimeCounter() const;
+private:
+	void iterateMultiGrid(plint level);
+	void eliminateStatisticsInOverlap();
+private:
+	std::vector<MultiBlockLattice3D<T,Descriptor>*> lattices;
 };
 
 template<typename T, template<typename U> class Descriptor>

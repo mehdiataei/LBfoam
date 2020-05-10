@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,7 +28,8 @@
 #include "atomicBlock/atomicBlock2D.h"
 #include "atomicBlock/atomicBlockSerializer2D.h"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Class StatSubscriber2D *********************************** */
 
@@ -36,19 +37,23 @@ StatSubscriber2D::StatSubscriber2D(AtomicBlock2D& block_)
     : block(block_)
 { }
 
-plint StatSubscriber2D::subscribeAverage() {
+plint StatSubscriber2D::subscribeAverage()
+{
     return block.getInternalStatistics().subscribeAverage();
 }
 
-plint StatSubscriber2D::subscribeSum() {
+plint StatSubscriber2D::subscribeSum()
+{
     return block.getInternalStatistics().subscribeSum();
 }
 
-plint StatSubscriber2D::subscribeMax() {
+plint StatSubscriber2D::subscribeMax()
+{
     return block.getInternalStatistics().subscribeMax();
 }
 
-plint StatSubscriber2D::subscribeIntSum() {
+plint StatSubscriber2D::subscribeIntSum()
+{
     return block.getInternalStatistics().subscribeIntSum();
 }
 
@@ -71,9 +76,9 @@ AtomicBlock2D::AtomicBlock2D(AtomicBlock2D const& rhs)
       statisticsSubscriber(*this)
 {
     copyDataProcessors (
-            rhs.explicitInternalProcessors, explicitInternalProcessors );
+        rhs.explicitInternalProcessors, explicitInternalProcessors );
     copyDataProcessors (
-            rhs.automaticInternalProcessors, automaticInternalProcessors );
+        rhs.automaticInternalProcessors, automaticInternalProcessors );
 }
 
 AtomicBlock2D::~AtomicBlock2D()
@@ -81,7 +86,8 @@ AtomicBlock2D::~AtomicBlock2D()
     clearDataProcessors();
 }
 
-void AtomicBlock2D::swap(AtomicBlock2D& rhs) {
+void AtomicBlock2D::swap(AtomicBlock2D& rhs)
+{
     std::swap(nx, rhs.nx);
     std::swap(ny, rhs.ny);
     std::swap(location, rhs.location);
@@ -91,35 +97,43 @@ void AtomicBlock2D::swap(AtomicBlock2D& rhs) {
     automaticInternalProcessors.swap(rhs.automaticInternalProcessors);
 }
 
-void AtomicBlock2D::initialize() {
+void AtomicBlock2D::initialize()
+{
     executeInternalProcessors();
 }
 
-BlockStatistics& AtomicBlock2D::getInternalStatistics() {
+BlockStatistics& AtomicBlock2D::getInternalStatistics()
+{
     return internalStatistics;
 }
 
-BlockStatistics const& AtomicBlock2D::getInternalStatistics() const {
+BlockStatistics const& AtomicBlock2D::getInternalStatistics() const
+{
     return internalStatistics;
 }
 
-void AtomicBlock2D::setLocation(Dot2D const& location_) {
+void AtomicBlock2D::setLocation(Dot2D const& location_)
+{
     location = location_;
 }
 
-Dot2D AtomicBlock2D::getLocation() const {
+Dot2D AtomicBlock2D::getLocation() const
+{
     return location;
 }
 
-void AtomicBlock2D::setFlag(bool value) {
+void AtomicBlock2D::setFlag(bool value)
+{
     flag = value;
 }
 
-bool AtomicBlock2D::getFlag() const {
+bool AtomicBlock2D::getFlag() const
+{
     return flag;
 }
 
-Box2D AtomicBlock2D::getBoundingBox() const {
+Box2D AtomicBlock2D::getBoundingBox() const
+{
     return Box2D(0, getNx()-1, 0, getNy()-1);
 }
 
@@ -127,11 +141,13 @@ void AtomicBlock2D::integrateDataProcessor (
     DataProcessor2D* processor, plint level )
 {
     // Negative level numbers account for explicit internal BlockProcessors
-    if (level<0) {
+    if (level<0)
+    {
         integrateDataProcessor(processor, -level-1, explicitInternalProcessors);
     }
     // Positive-or-zero level numbers account for automatic internal BlockProcessors
-    else {
+    else
+    {
         integrateDataProcessor(processor, level, automaticInternalProcessors);
     }
 }
@@ -139,42 +155,54 @@ void AtomicBlock2D::integrateDataProcessor (
 void AtomicBlock2D::integrateDataProcessor (
     DataProcessor2D* processor, plint level, DataProcessorVector& processors )
 {
-    if (level >= (plint)processors.size()) {
+    if (level >= (plint)processors.size())
+    {
         processors.resize(level+1);
     }
     processors[level].push_back(processor);
 }
 
-void AtomicBlock2D::copyDataProcessors(DataProcessorVector const& from, DataProcessorVector& to) {
+void AtomicBlock2D::copyDataProcessors(DataProcessorVector const& from, DataProcessorVector& to)
+{
     clearDataProcessors(to);
     to.resize(from.size());
-    for (pluint iLevel=0; iLevel<from.size(); ++iLevel) {
+    for (pluint iLevel=0; iLevel<from.size(); ++iLevel)
+    {
         to[iLevel].resize(from[iLevel].size());
-        for (pluint iProc=0; iProc<from[iLevel].size(); ++iProc) {
+        for (pluint iProc=0; iProc<from[iLevel].size(); ++iProc)
+        {
             to[iLevel][iProc] = from[iLevel][iProc]->clone();
         }
     }
 }
 
-void AtomicBlock2D::clearDataProcessors() {
+void AtomicBlock2D::clearDataProcessors()
+{
     clearDataProcessors(explicitInternalProcessors);
     clearDataProcessors(automaticInternalProcessors);
 }
 
-void AtomicBlock2D::removeDataProcessors(int staticId) {
-    for (pluint iLevel=0; iLevel<explicitInternalProcessors.size(); ++iLevel) {
+void AtomicBlock2D::removeDataProcessors(int staticId)
+{
+    for (pluint iLevel=0; iLevel<explicitInternalProcessors.size(); ++iLevel)
+    {
         std::vector<DataProcessor2D*>::iterator it = explicitInternalProcessors[iLevel].begin();
-        for (;  it != explicitInternalProcessors[iLevel].end(); ++it) {
-            if ((*it)->getStaticId()==staticId) {
+        for (;  it != explicitInternalProcessors[iLevel].end(); ++it)
+        {
+            if ((*it)->getStaticId()==staticId)
+            {
                 delete *it;
                 it = explicitInternalProcessors[iLevel].erase(it);
             }
         }
     }
-    for (pluint iLevel=0; iLevel<automaticInternalProcessors.size(); ++iLevel) {
+    for (pluint iLevel=0; iLevel<automaticInternalProcessors.size(); ++iLevel)
+    {
         std::vector<DataProcessor2D*>::iterator it = automaticInternalProcessors[iLevel].begin();
-        for (;  it != automaticInternalProcessors[iLevel].end(); ++it) {
-            if ((*it)->getStaticId()==staticId) {
+        for (;  it != automaticInternalProcessors[iLevel].end(); ++it)
+        {
+            if ((*it)->getStaticId()==staticId)
+            {
                 delete *it;
                 it = automaticInternalProcessors[iLevel].erase(it);
             }
@@ -182,17 +210,22 @@ void AtomicBlock2D::removeDataProcessors(int staticId) {
     }
 }
 
-void AtomicBlock2D::clearDataProcessors(DataProcessorVector& processors) {
-    for (pluint iLevel=0; iLevel<processors.size(); ++iLevel) {
-        for (pluint iProc=0; iProc<processors[iLevel].size(); ++iProc) {
+void AtomicBlock2D::clearDataProcessors(DataProcessorVector& processors)
+{
+    for (pluint iLevel=0; iLevel<processors.size(); ++iLevel)
+    {
+        for (pluint iProc=0; iProc<processors[iLevel].size(); ++iProc)
+        {
             delete processors[iLevel][iProc];
         }
     }
     processors.clear();
 }
 
-void AtomicBlock2D::executeInternalProcessors() {
-    for (pluint iLevel=0; iLevel<automaticInternalProcessors.size(); ++iLevel) {
+void AtomicBlock2D::executeInternalProcessors()
+{
+    for (pluint iLevel=0; iLevel<automaticInternalProcessors.size(); ++iLevel)
+    {
         executeInternalProcessors(iLevel, automaticInternalProcessors);
     }
 }
@@ -200,49 +233,55 @@ void AtomicBlock2D::executeInternalProcessors() {
 void AtomicBlock2D::executeInternalProcessors(plint level)
 {
     // Negative level numbers account for explicit internal BlockProcessors
-    if (level<0) {
+    if (level<0)
+    {
         executeInternalProcessors(-level-1, explicitInternalProcessors);
     }
     // Positive-or-zero level numbers account for automatic internal BlockProcessors
-    else {
+    else
+    {
         executeInternalProcessors(level, automaticInternalProcessors);
     }
 }
 
 void AtomicBlock2D::executeInternalProcessors(plint level, DataProcessorVector& processors)
 {
-    if (level<(plint)processors.size()) {
-        for (pluint iProc=0; iProc<processors[level].size(); ++iProc) {
+    if (level<(plint)processors.size())
+    {
+        for (pluint iProc=0; iProc<processors[level].size(); ++iProc)
+        {
             processors[level][iProc] -> process();
         }
     }
 }
 
 DataSerializer* AtomicBlock2D::getBlockSerializer (
-            Box2D const& domain, IndexOrdering::OrderingT ordering ) const
+    Box2D const& domain, IndexOrdering::OrderingT ordering ) const
 {
     return new AtomicBlockSerializer2D(*this, domain, ordering);
 }
 
 DataUnSerializer* AtomicBlock2D::getBlockUnSerializer (
-            Box2D const& domain, IndexOrdering::OrderingT ordering )
+    Box2D const& domain, IndexOrdering::OrderingT ordering )
 {
     return new AtomicBlockUnSerializer2D(*this, domain, ordering);
 }
 
-StatSubscriber& AtomicBlock2D::internalStatSubscription() {
+StatSubscriber& AtomicBlock2D::internalStatSubscription()
+{
     return statisticsSubscriber;
 }
 
-void AtomicBlock2D::evaluateStatistics() {
+void AtomicBlock2D::evaluateStatistics()
+{
     getInternalStatistics().evaluate();
 }
 
 
-Dot2D computeRelativeDisplacement(AtomicBlock2D const& block1, AtomicBlock2D const& block2) {
+Dot2D computeRelativeDisplacement(AtomicBlock2D const& block1, AtomicBlock2D const& block2)
+{
     return Dot2D(block1.getLocation().x-block2.getLocation().x,
                  block1.getLocation().y-block2.getLocation().y);
 }
 
 }  // namespace plb
-

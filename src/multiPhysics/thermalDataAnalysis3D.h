@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -37,52 +37,54 @@
 #include "atomicBlock/dataProcessorWrapper3D.h"
 #include "atomicBlock/reductiveDataProcessorWrapper3D.h"
 
-namespace plb {
-    
+namespace plb
+{
+
 template< typename T,
-          template<typename U1> class FluidDescriptor, 
+          template<typename U1> class FluidDescriptor,
           template<typename U2> class TemperatureDescriptor
-        >
+          >
 T computeNusseltNumber(BlockLattice3D<T,FluidDescriptor>& fluid,
                        BlockLattice3D<T,TemperatureDescriptor>& temperature,
                        Box3D domain,
                        int direction, T deltaX, T kappa, T deltaTemperature);
-                      
+
 template< typename T,
-          template<typename U1> class FluidDescriptor, 
+          template<typename U1> class FluidDescriptor,
           template<typename U2> class TemperatureDescriptor
-        >
+          >
 T computeNusseltNumber(MultiBlockLattice3D<T,FluidDescriptor>& fluid,
                        MultiBlockLattice3D<T,TemperatureDescriptor>& temperature,
                        Box3D domain,
                        int direction, T deltaX, T kappa, T deltaTemperature);
 
 /** This class computes the product between the component "direction" of the
- *  velocity (computed from the fluid-lattice) and the temperature 
+ *  velocity (computed from the fluid-lattice) and the temperature
  *  computed from the advection-diffusion-lattice), and returns its sum
  *  over the whole domain.
  */
 template< typename T,
-          template<typename U1> class FluidDescriptor, 
+          template<typename U1> class FluidDescriptor,
           template<typename U2> class TemperatureDescriptor
-        >
+          >
 class BoxSumVelocityTemperatureFunctional3D :
-    public ReductiveBoxProcessingFunctional3D_LL<T,FluidDescriptor,T,TemperatureDescriptor>
+	public ReductiveBoxProcessingFunctional3D_LL<T,FluidDescriptor,T,TemperatureDescriptor>
 {
 public:
-    BoxSumVelocityTemperatureFunctional3D(int direction_);
-    virtual void process(Box3D domain,
-                         BlockLattice3D<T,FluidDescriptor>& fluid,
-                         BlockLattice3D<T,TemperatureDescriptor>& temperature);
-    virtual BoxSumVelocityTemperatureFunctional3D<T,FluidDescriptor,TemperatureDescriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::nothing;
-    }
-    T getSumVelocityTemperature() const;
+	BoxSumVelocityTemperatureFunctional3D(int direction_);
+	virtual void process(Box3D domain,
+	                     BlockLattice3D<T,FluidDescriptor>& fluid,
+	                     BlockLattice3D<T,TemperatureDescriptor>& temperature);
+	virtual BoxSumVelocityTemperatureFunctional3D<T,FluidDescriptor,TemperatureDescriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::nothing;
+	}
+	T getSumVelocityTemperature() const;
 private:
-    int  direction;
-    plint sumVelocityTemperatureId;
+	int  direction;
+	plint sumVelocityTemperatureId;
 };
 
 }  // namespace plb

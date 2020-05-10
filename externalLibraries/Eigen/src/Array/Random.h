@@ -26,15 +26,19 @@
 #define EIGEN_RANDOM_H
 
 template<typename Scalar> struct ei_scalar_random_op EIGEN_EMPTY_STRUCT {
-  inline ei_scalar_random_op(void) {}
-  inline const Scalar operator() (int, int) const { return ei_random<Scalar>(); }
+	inline ei_scalar_random_op(void) {}
+	inline const Scalar operator() (int, int) const
+	{
+		return ei_random<Scalar>();
+	}
 };
 template<typename Scalar>
-struct ei_functor_traits<ei_scalar_random_op<Scalar> >
-{ enum { Cost = 5 * NumTraits<Scalar>::MulCost, PacketAccess = false, IsRepeatable = false }; };
+struct ei_functor_traits<ei_scalar_random_op<Scalar> > {
+	enum { Cost = 5 * NumTraits<Scalar>::MulCost, PacketAccess = false, IsRepeatable = false };
+};
 
 /** \array_module
-  * 
+  *
   * \returns a random matrix (not an expression, the matrix is immediately evaluated).
   *
   * The parameters \a rows and \a cols are the number of rows and of columns of
@@ -55,11 +59,11 @@ template<typename Derived>
 inline const CwiseNullaryOp<ei_scalar_random_op<typename ei_traits<Derived>::Scalar>, Derived>
 MatrixBase<Derived>::Random(int rows, int cols)
 {
-  return NullaryExpr(rows, cols, ei_scalar_random_op<Scalar>());
+	return NullaryExpr(rows, cols, ei_scalar_random_op<Scalar>());
 }
 
 /** \array_module
-  * 
+  *
   * \returns a random vector (not an expression, the vector is immediately evaluated).
   *
   * The parameter \a size is the size of the returned vector.
@@ -80,11 +84,11 @@ template<typename Derived>
 inline const CwiseNullaryOp<ei_scalar_random_op<typename ei_traits<Derived>::Scalar>, Derived>
 MatrixBase<Derived>::Random(int size)
 {
-  return NullaryExpr(size, ei_scalar_random_op<Scalar>());
+	return NullaryExpr(size, ei_scalar_random_op<Scalar>());
 }
 
 /** \array_module
-  * 
+  *
   * \returns a fixed-size random matrix or vector
   * (not an expression, the matrix is immediately evaluated).
   *
@@ -100,11 +104,11 @@ template<typename Derived>
 inline const CwiseNullaryOp<ei_scalar_random_op<typename ei_traits<Derived>::Scalar>, Derived>
 MatrixBase<Derived>::Random()
 {
-  return NullaryExpr(RowsAtCompileTime, ColsAtCompileTime, ei_scalar_random_op<Scalar>());
+	return NullaryExpr(RowsAtCompileTime, ColsAtCompileTime, ei_scalar_random_op<Scalar>());
 }
 
 /** \array_module
-  * 
+  *
   * Sets all coefficients in this expression to random values.
   *
   * Example: \include MatrixBase_setRandom.cpp
@@ -115,7 +119,7 @@ MatrixBase<Derived>::Random()
 template<typename Derived>
 inline Derived& MatrixBase<Derived>::setRandom()
 {
-  return *this = Random(rows(), cols());
+	return *this = Random(rows(), cols());
 }
 
 /** Resizes to the given \a size, and sets all coefficients in this expression to random values.
@@ -131,8 +135,8 @@ template<typename _Scalar, int _Rows, int _Cols, int _Options, int _MaxRows, int
 EIGEN_STRONG_INLINE Matrix<_Scalar, _Rows, _Cols, _Options, _MaxRows, _MaxCols>&
 Matrix<_Scalar, _Rows, _Cols, _Options, _MaxRows, _MaxCols>::setRandom(int size)
 {
-  resize(size);
-  return setRandom();
+	resize(size);
+	return setRandom();
 }
 
 /** Resizes to the given size, and sets all coefficients in this expression to random values.
@@ -149,8 +153,8 @@ template<typename _Scalar, int _Rows, int _Cols, int _Options, int _MaxRows, int
 EIGEN_STRONG_INLINE Matrix<_Scalar, _Rows, _Cols, _Options, _MaxRows, _MaxCols>&
 Matrix<_Scalar, _Rows, _Cols, _Options, _MaxRows, _MaxCols>::setRandom(int rows, int cols)
 {
-  resize(rows, cols);
-  return setRandom();
+	resize(rows, cols);
+	return setRandom();
 }
 
 #endif // EIGEN_RANDOM_H

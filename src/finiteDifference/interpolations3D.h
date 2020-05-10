@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,41 +31,41 @@
 #include "atomicBlock/dataField3D.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 /// Helper function: linear interpolation within one cell.
 template<typename T>
 void linearInterpolationCoefficients (
-        AtomicBlock3D const& block, Array<T,3> const& position,
-        std::vector<Dot3D>& cellPos, std::vector<T>& weights );
+    AtomicBlock3D const& block, Array<T,3> const& position,
+    std::vector<Dot3D>& cellPos, std::vector<T>& weights );
 
 template<typename T, plint nDim>
 Array<T,nDim> linearInterpolateTensorField (
-        TensorField3D<T,nDim>& tensorField, Array<T,3> const& position );
+    TensorField3D<T,nDim>& tensorField, Array<T,3> const& position );
 
 template<typename T>
 void linearInterpolateNtensorField (
-        NTensorField3D<T>& tensorField, Array<T,3> const& position,
-        std::vector<T>& result );
+    NTensorField3D<T>& tensorField, Array<T,3> const& position,
+    std::vector<T>& result );
 
 template<typename T, plint nDim>
 Array<T,nDim> predictorCorrectorTensorField (
-        TensorField3D<T,nDim>& tensorField, Array<T,3> const& position, T scaling );
+    TensorField3D<T,nDim>& tensorField, Array<T,3> const& position, T scaling );
 
 template<typename T>
 Array<T,3> predictorCorrectorNTensorField (
-        NTensorField3D<T>& tensorField, Array<T,3> const& position, T scaling );
+    NTensorField3D<T>& tensorField, Array<T,3> const& position, T scaling );
 
 template<typename T>
 void predictorCorrectorRhoBarJ (
-        NTensorField3D<T>& rhoBarJ, Array<T,3> const& position,
-        bool velIsJ, Array<T,3>& j, T& rhoBar );
+    NTensorField3D<T>& rhoBarJ, Array<T,3> const& position,
+    bool velIsJ, Array<T,3>& j, T& rhoBar );
 
 template<typename T>
 T linearInterpolateScalarField (
-        ScalarField3D<T>& scalarField, Array<T,3> const& position );
+    ScalarField3D<T>& scalarField, Array<T,3> const& position );
 
 }  // namespace plb
 
 #endif  // INTERPOLATIONS_3D_H
-

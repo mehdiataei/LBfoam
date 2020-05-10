@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,7 +31,8 @@
 
 #include "multiBlock/multiDataField3D.h"
 
-namespace plb {
+namespace plb
+{
 
 
 /* *************** Reductive functions ******************************* */
@@ -77,7 +78,7 @@ void maskedCopy( MultiNTensorField3D<T1>& field,
 
 template<typename T1, typename T2>
 MultiNTensorField3D<T2>* maskedCopyConvert( MultiNTensorField3D<T1>& field, MultiNTensorField3D<int>& mask,
-                                            Box3D domain );
+        Box3D domain );
 
 
 /* *************** Component out of a tensor-field ****** */
@@ -93,11 +94,11 @@ void maskedExtractComponent(MultiNTensorField3D<T>& tensorField, MultiNTensorFie
 
 template<typename T>
 MultiNTensorField3D<T>* extractComponent( MultiNTensorField3D<T>& tensorField,
-                                          Box3D domain, int iComponent );
+        Box3D domain, int iComponent );
 
 template<typename T>
 MultiNTensorField3D<T>* maskedExtractComponent( MultiNTensorField3D<T>& tensorField, MultiNTensorField3D<int>& mask,
-                                                Box3D domain, int iComponent );
+        Box3D domain, int iComponent );
 
 
 /* *************** Vector-norm of each cell in the field *************** */
@@ -116,7 +117,7 @@ MultiNTensorField3D<T>* computeNorm(MultiNTensorField3D<T>& tensorField, Box3D d
 
 template<typename T>
 MultiNTensorField3D<T>* maskedComputeNorm(MultiNTensorField3D<T>& tensorField, MultiNTensorField3D<int>& mask,
-                                          Box3D domain);
+        Box3D domain);
 
 
 /* *************** Squared vector-norm of each cell in the field ******** */
@@ -133,7 +134,7 @@ MultiNTensorField3D<T>* computeNormSqr(MultiNTensorField3D<T>& tensorField, Box3
 
 template<typename T>
 MultiNTensorField3D<T>* maskedComputeNormSqr(MultiNTensorField3D<T>& tensorField, MultiNTensorField3D<int>& mask,
-                                             Box3D domain);
+        Box3D domain);
 
 
 /* *************** Tensor-norm of each symmetric tensor of a field ***** */
@@ -151,12 +152,12 @@ void maskedComputeSymmetricTensorNorm(MultiNTensorField3D<T>& tensorField,
 
 template<typename T>
 MultiNTensorField3D<T>* computeSymmetricTensorNorm(MultiNTensorField3D<T>& tensorField,
-                                                   Box3D domain);
+        Box3D domain);
 
 template<typename T>
 MultiNTensorField3D<T>* maskedComputeSymmetricTensorNorm(MultiNTensorField3D<T>& tensorField,
-                                                         MultiNTensorField3D<int>& mask,
-                                                         Box3D domain);
+        MultiNTensorField3D<int>& mask,
+        Box3D domain);
 
 
 /* *************** Squared Tensor-norm of each symmetric tensor of a field*/
@@ -168,18 +169,18 @@ void computeSymmetricTensorNormSqr(MultiNTensorField3D<T>& tensorField,
 
 template<typename T>
 void maskedComputeSymmetricTensorNormSqr(MultiNTensorField3D<T>& tensorField,
-                                         MultiNTensorField3D<T>& normSqr,
-                                         MultiNTensorField3D<int>& mask,
-                                         Box3D domain);
+        MultiNTensorField3D<T>& normSqr,
+        MultiNTensorField3D<int>& mask,
+        Box3D domain);
 
 template<typename T>
 MultiNTensorField3D<T>* computeSymmetricTensorNormSqr(MultiNTensorField3D<T>& tensorField,
-                                                      Box3D domain);
+        Box3D domain);
 
 template<typename T>
 MultiNTensorField3D<T>* maskedComputeSymmetricTensorNormSqr(MultiNTensorField3D<T>& tensorField,
-                                                            MultiNTensorField3D<int>& mask,
-                                                            Box3D domain);
+        MultiNTensorField3D<int>& mask,
+        Box3D domain);
 
 
 /* *************** Trace of each symmetric tensor of a field ************ */
@@ -197,12 +198,12 @@ void maskedComputeSymmetricTensorTrace(MultiNTensorField3D<T>& tensorField,
 
 template<typename T>
 MultiNTensorField3D<T>* computeSymmetricTensorTrace(MultiNTensorField3D<T>& tensorField,
-                                                    Box3D domain);
+        Box3D domain);
 
 template<typename T>
 MultiNTensorField3D<T>* maskedComputeSymmetricTensorTrace(MultiNTensorField3D<T>& tensorField,
-                                                          MultiNTensorField3D<int>& mask,
-                                                          Box3D domain);
+        MultiNTensorField3D<int>& mask,
+        Box3D domain);
 
 
 /* *************** Vorticity from Velocity field *********************** */
@@ -218,12 +219,12 @@ void maskedComputeVorticity(MultiNTensorField3D<T>& velocity, MultiNTensorField3
 
 template<typename T>
 MultiNTensorField3D<T>* computeVorticity(MultiNTensorField3D<T>& velocity,
-                                         Box3D domain);
+        Box3D domain);
 
 template<typename T>
 MultiNTensorField3D<T>* maskedComputeVorticity(MultiNTensorField3D<T>& velocity,
-                                              MultiNTensorField3D<int>& mask,
-                                              Box3D domain);
+        MultiNTensorField3D<int>& mask,
+        Box3D domain);
 
 
 /* *************** Vorticity, witout boundary treatment, from Velocity field  */
@@ -239,12 +240,12 @@ void maskedComputeBulkVorticity(MultiNTensorField3D<T>& velocity, MultiNTensorFi
 
 template<typename T>
 MultiNTensorField3D<T>* computeBulkVorticity(MultiNTensorField3D<T>& velocity,
-                                             Box3D domain);
+        Box3D domain);
 
 template<typename T>
 MultiNTensorField3D<T>* maskedComputeBulkVorticity(MultiNTensorField3D<T>& velocity,
-                                                   MultiNTensorField3D<int>& mask,
-                                                   Box3D domain);
+        MultiNTensorField3D<int>& mask,
+        Box3D domain);
 
 
 /* *************** Strain rate from Velocity field ********************* */
@@ -263,7 +264,7 @@ MultiNTensorField3D<T>* computeStrainRate(MultiNTensorField3D<T>& velocity, Box3
 
 template<typename T>
 MultiNTensorField3D<T>* maskedComputeStrainRate(MultiNTensorField3D<T>& velocity,
-                                                MultiNTensorField3D<int>& mask, Box3D domain);
+        MultiNTensorField3D<int>& mask, Box3D domain);
 
 
 /* *************** Str. rate, witout boundary treatment, from Velocity field  */
@@ -280,7 +281,7 @@ MultiNTensorField3D<T>* computeBulkStrainRate(MultiNTensorField3D<T>& velocity, 
 
 template<typename T>
 MultiNTensorField3D<T>* maskedComputeBulkStrainRate(MultiNTensorField3D<T>& velocity,
-                                                    MultiNTensorField3D<int>& mask, Box3D domain);
+        MultiNTensorField3D<int>& mask, Box3D domain);
 
 
 /* *************** MultiNTensorField - MultiNTensorField operations *************** */
@@ -328,7 +329,7 @@ void maskedSubtract(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B,
                     MultiNTensorField3D<T>& result, MultiNTensorField3D<int>& mask, Box3D domain);
 
 template<typename T> MultiNTensorField3D<T>* subtract(MultiNTensorField3D<T>& A,
-                                                      MultiNTensorField3D<T>& B, Box3D domain);
+        MultiNTensorField3D<T>& B, Box3D domain);
 
 template<typename T>
 MultiNTensorField3D<T>* maskedSubtract(MultiNTensorField3D<T>& A,
@@ -468,7 +469,7 @@ MultiNTensorField3D<T>* toThePower(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<T>* maskedToThePower(MultiNTensorField3D<T>& A,
-                                         MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
+        MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
 
 
 template<typename T>
@@ -485,7 +486,7 @@ MultiNTensorField3D<T>* toThePower(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<T>* maskedToThePower(MultiNTensorField3D<T>& A,
-                                         T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
+        T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
 
 
 template<typename T>
@@ -502,7 +503,7 @@ MultiNTensorField3D<T>* toThePower(T* alpha, int size,
 
 template<typename T>
 MultiNTensorField3D<T>* maskedToThePower(T* alpha, int size,
-                                         MultiNTensorField3D<T>& A, MultiNTensorField3D<int>& mask, Box3D domain);
+        MultiNTensorField3D<T>& A, MultiNTensorField3D<int>& mask, Box3D domain);
 
 
 template<typename T>
@@ -552,7 +553,7 @@ MultiNTensorField3D<int>* lessThan(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<int>* maskedLessThan(MultiNTensorField3D<T>& A,
-                                         MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
+        MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
 
 template<typename T>
 void lessThan(MultiNTensorField3D<T>& A, T* alpha, int size,
@@ -568,7 +569,7 @@ MultiNTensorField3D<int>* lessThan(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<int>* maskedLessThan(MultiNTensorField3D<T>& A,
-                                         T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
+        T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
 
 
 template<typename T>
@@ -585,7 +586,7 @@ MultiNTensorField3D<int>* lessEqual(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<int>* maskedLessEqual(MultiNTensorField3D<T>& A,
-                                          MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
+        MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
 
 template<typename T>
 void lessEqual(MultiNTensorField3D<T>& A, T* alpha, int size,
@@ -601,7 +602,7 @@ MultiNTensorField3D<int>* lessEqual(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<int>* maskedLessEqual(MultiNTensorField3D<T>& A,
-                                          T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
+        T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
 
 
 template<typename T>
@@ -618,7 +619,7 @@ MultiNTensorField3D<int>* greaterThan(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<int>* maskedGreaterThan(MultiNTensorField3D<T>& A,
-                                            MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
+        MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
 
 template<typename T>
 void greaterThan(MultiNTensorField3D<T>& A, T* alpha, int size,
@@ -634,7 +635,7 @@ MultiNTensorField3D<int>* greaterThan(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<int>* maskedGreaterThan(MultiNTensorField3D<T>& A,
-                                            T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
+        T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
 
 
 
@@ -652,7 +653,7 @@ MultiNTensorField3D<int>* greaterEqual(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<int>* maskedGreaterEqual(MultiNTensorField3D<T>& A,
-                                             MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
+        MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
 
 template<typename T>
 void greaterEqual(MultiNTensorField3D<T>& A, T* alpha, int size,
@@ -668,7 +669,7 @@ MultiNTensorField3D<int>* greaterEqual(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<int>* maskedGreaterEqual(MultiNTensorField3D<T>& A,
-                                             T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
+        T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
 
 
 template<typename T>
@@ -685,7 +686,7 @@ MultiNTensorField3D<int>* logicalAnd(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<int>* maskedLogicalAnd(MultiNTensorField3D<T>& A,
-                                           MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
+        MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
 
 
 template<typename T>
@@ -702,7 +703,7 @@ MultiNTensorField3D<int>* logicalOr(MultiNTensorField3D<T>& A,
 
 template<typename T>
 MultiNTensorField3D<int>* maskedLogicalOr(MultiNTensorField3D<T>& A,
-                                          MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
+        MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
 
 
 template<typename T>
@@ -729,78 +730,78 @@ void assignInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, Box3D d
 
 template<typename T>
 void maskedAssignInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
-      
+
 template<typename T>
 void assignInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, Box3D domain);
 
 template<typename T>
 void maskedAssignInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
-      
+
 
 template<typename T>
 void addInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, Box3D domain);
 
 template<typename T>
 void maskedAddInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
-      
+
 template<typename T>
 void addInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, Box3D domain);
 
 template<typename T>
 void maskedAddInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
-      
+
 
 template<typename T>
 void subtractInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, Box3D domain);
 
 template<typename T>
 void maskedSubtractInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
-      
+
 template<typename T>
 void subtractInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, Box3D domain);
 
 template<typename T>
 void maskedSubtractInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
-      
+
 
 template<typename T>
 void multiplyInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, Box3D domain);
 
 template<typename T>
 void maskedMultiplyInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
-      
+
 template<typename T>
 void multiplyInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, Box3D domain);
 
 template<typename T>
 void maskedMultiplyInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
-      
+
 
 template<typename T>
 void divideInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, Box3D domain);
 
 template<typename T>
 void maskedDivideInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
-      
+
 template<typename T>
 void divideInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, Box3D domain);
 
 template<typename T>
 void maskedDivideInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
 
-      
+
 template<typename T>
 void toThePowerInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, Box3D domain);
 
 template<typename T>
 void maskedToThePowerInPlace(MultiNTensorField3D<T>& A, MultiNTensorField3D<T>& B, MultiNTensorField3D<int>& mask, Box3D domain);
-      
+
 template<typename T>
 void toThePowerInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, Box3D domain);
 
 template<typename T>
 void maskedToThePowerInPlace(MultiNTensorField3D<T>& A, T* alpha, int size, MultiNTensorField3D<int>& mask, Box3D domain);
-      
+
 /* *************** UPO ******************************* */
 
 template<typename T>

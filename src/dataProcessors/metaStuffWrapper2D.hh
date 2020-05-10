@@ -49,16 +49,16 @@ void extractTopMostDynamics(MultiBlockLattice2D<T,Descriptor>& lattice, MultiSca
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractTopMostDynamics (
+std::auto_ptr< MultiScalarField2D<int> > extractTopMostDynamics (
                                              MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain )
 {
     MultiScalarField2D<int>* dynamicsId = new MultiScalarField2D<int>(lattice, domain);
     extractTopMostDynamics(lattice, *dynamicsId, domain);
-    return std::unique_ptr<MultiScalarField2D<int> >(dynamicsId);
+    return std::auto_ptr<MultiScalarField2D<int> >(dynamicsId);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractTopMostDynamics (
+std::auto_ptr< MultiScalarField2D<int> > extractTopMostDynamics (
                                              MultiBlockLattice2D<T,Descriptor>& lattice )
 {
     return extractTopMostDynamics(lattice, lattice.getBoundingBox());
@@ -75,16 +75,16 @@ void extractBottomMostDynamics(MultiBlockLattice2D<T,Descriptor>& lattice, Multi
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractBottomMostDynamics (
+std::auto_ptr< MultiScalarField2D<int> > extractBottomMostDynamics (
                                              MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain )
 {
     MultiScalarField2D<int>* dynamicsId = new MultiScalarField2D<int>(lattice, domain);
     extractBottomMostDynamics(lattice, *dynamicsId, domain);
-    return std::unique_ptr<MultiScalarField2D<int> >(dynamicsId);
+    return std::auto_ptr<MultiScalarField2D<int> >(dynamicsId);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractBottomMostDynamics (
+std::auto_ptr< MultiScalarField2D<int> > extractBottomMostDynamics (
                                              MultiBlockLattice2D<T,Descriptor>& lattice )
 {
     return extractBottomMostDynamics(lattice, lattice.getBoundingBox());
@@ -161,17 +161,17 @@ void extractDynamicsChain(MultiBlockLattice2D<T,Descriptor>& lattice,
 
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractDynamicsChain (
+std::auto_ptr< MultiScalarField2D<int> > extractDynamicsChain (
             MultiBlockLattice2D<T,Descriptor>& lattice,
             std::map<int,std::string>& nameOfDynamics, Box2D domain )
 {
     MultiScalarField2D<int>* dynamicsId = new MultiScalarField2D<int>(lattice, domain);
     extractDynamicsChain(lattice, *dynamicsId, nameOfDynamics, domain);
-    return std::unique_ptr<MultiScalarField2D<int> >(dynamicsId);
+    return std::auto_ptr<MultiScalarField2D<int> >(dynamicsId);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractDynamicsChain (
+std::auto_ptr< MultiScalarField2D<int> > extractDynamicsChain (
             MultiBlockLattice2D<T,Descriptor>& lattice,
             std::map<int,std::string>& nameOfDynamics )
 {
@@ -189,19 +189,19 @@ void copyEntireCells( MultiBlockLattice2D<T,Descriptor>& sourceLattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiBlockLattice2D<T,Descriptor> > copyEntireCells (
+std::auto_ptr< MultiBlockLattice2D<T,Descriptor> > copyEntireCells (
             MultiBlockLattice2D<T,Descriptor>& lattice )
 {
     return copyEntireCells(lattice, lattice.getBoundingBox());
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiBlockLattice2D<T,Descriptor> > copyEntireCells (
+std::auto_ptr< MultiBlockLattice2D<T,Descriptor> > copyEntireCells (
             MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain )
 {
     MultiBlockLattice2D<T,Descriptor>* newLattice = new MultiBlockLattice2D<T,Descriptor>(lattice, domain);
     copyEntireCells(lattice, *newLattice, domain);
-    return std::unique_ptr<MultiBlockLattice2D<T,Descriptor> >(newLattice);
+    return std::auto_ptr<MultiBlockLattice2D<T,Descriptor> >(newLattice);
 }
 
 }  // namespace plb

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -68,7 +68,7 @@ T concentr_l = 0.;     // Initial concentration for light phase.
 
 MultiBlockLattice3D<T,DESCRIPTOR> *g;  // "The fluid" --> velocity u and pressure p1.
 MultiBlockLattice3D<T,DESCRIPTOR> *f;  // "The concentration" --> Conc. C, density rho and
-                                       //    potential mu.
+//    potential mu.
 MultiScalarField3D<T> *C;   // Concentration of the heavy fluid.
 MultiScalarField3D<T> *rho; // Total density, summed over both components.
 MultiScalarField3D<T> *mu, *laplaceMu;   // Chemical potential and its Laplacian.
@@ -91,14 +91,14 @@ std::string fNameOut;
 /********* Lattices and ScalarField Parallel subdivision *************/
 plint blocks_xDir, blocks_yDir, blocks_zDir;
 
-  
+
 void initializeParameters()
 {
-    
+
     blocks_xDir=2;
-    blocks_yDir=2; 
+    blocks_yDir=2;
     blocks_zDir=2;
-    
+
     max_iter = 20000;
     nx = 251;
     ny = 151;
@@ -129,10 +129,10 @@ void initializeParameters()
     concentr_l = 0.;
 
     // Eq.9 from LeePaper. Not clear why he is using concentr_h-concentr_l here.
-    beta = 12.*sigma/std::pow((T)(concentr_h-concentr_l),(T)4.)/delta;   
+    beta = 12.*sigma/std::pow((T)(concentr_h-concentr_l),(T)4.)/delta;
     kappa = beta*util::sqr(delta)*util::sqr(concentr_h-concentr_l)/8.;
-    M = Pe/beta;    
-    
+    M = Pe/beta;
+
     getStatistics =    10;
     getImages     =    120;
     getVTK        =    50;
@@ -144,18 +144,18 @@ MultiBlockLattice3D<T,DESCRIPTOR>* createLattice()
     //   difference schemes.
     plint envelopeWidth = 2;
     SparseBlockStructure3D blockStructure (
-            createRegularDistribution3D(nx, ny, nz) );
+        createRegularDistribution3D(nx, ny, nz) );
 
     MultiBlockLattice3D<T,DESCRIPTOR>* lattice =
-            new MultiBlockLattice3D<T,DESCRIPTOR> (
-                    MultiBlockManagement3D (
-                        blockStructure,
-                        defaultMultiBlockPolicy3D().getThreadAttribution(),
-                        envelopeWidth ),
-                    defaultMultiBlockPolicy3D().getBlockCommunicator(),
-                    defaultMultiBlockPolicy3D().getCombinedStatistics(),
-                    defaultMultiBlockPolicy3D().getMultiCellAccess<T,DESCRIPTOR>(),
-                    new NoDynamics<T,DESCRIPTOR>() );
+        new MultiBlockLattice3D<T,DESCRIPTOR> (
+        MultiBlockManagement3D (
+            blockStructure,
+            defaultMultiBlockPolicy3D().getThreadAttribution(),
+            envelopeWidth ),
+        defaultMultiBlockPolicy3D().getBlockCommunicator(),
+        defaultMultiBlockPolicy3D().getCombinedStatistics(),
+        defaultMultiBlockPolicy3D().getMultiCellAccess<T,DESCRIPTOR>(),
+        new NoDynamics<T,DESCRIPTOR>() );
     lattice->periodicity().toggleAll(true);
     //lattice->periodicity().toggle(true,2);
     return lattice;
@@ -167,17 +167,17 @@ MultiScalarField3D<T>* createScalarField()
     //   difference schemes.
     plint envelopeWidth = 2;
     SparseBlockStructure3D blockStructure (
-            createRegularDistribution3D(nx, ny, nz) );
+        createRegularDistribution3D(nx, ny, nz) );
 
     MultiScalarField3D<T>* field =
-               new MultiScalarField3D<T> (
-                    MultiBlockManagement3D (
-                        blockStructure,
-                        defaultMultiBlockPolicy3D().getThreadAttribution(),
-                        envelopeWidth ),
-                    defaultMultiBlockPolicy3D().getBlockCommunicator(),
-                    defaultMultiBlockPolicy3D().getCombinedStatistics(),
-                    defaultMultiBlockPolicy3D().getMultiScalarAccess<T>() );
+        new MultiScalarField3D<T> (
+        MultiBlockManagement3D (
+            blockStructure,
+            defaultMultiBlockPolicy3D().getThreadAttribution(),
+            envelopeWidth ),
+        defaultMultiBlockPolicy3D().getBlockCommunicator(),
+        defaultMultiBlockPolicy3D().getCombinedStatistics(),
+        defaultMultiBlockPolicy3D().getMultiScalarAccess<T>() );
     field->periodicity().toggleAll(true);
     return field;
 }
@@ -188,17 +188,17 @@ MultiTensorField3D<T,3>* createVectorField()
     //   difference schemes.
     plint envelopeWidth = 2;
     SparseBlockStructure3D blockStructure (
-            createRegularDistribution3D(nx, ny, nz) );
+        createRegularDistribution3D(nx, ny, nz) );
 
     MultiTensorField3D<T,3>* field =
-            new MultiTensorField3D<T,3> (
-                    MultiBlockManagement3D (
-                        blockStructure,
-                        defaultMultiBlockPolicy3D().getThreadAttribution(),
-                        envelopeWidth ),
-                    defaultMultiBlockPolicy3D().getBlockCommunicator(),
-                    defaultMultiBlockPolicy3D().getCombinedStatistics(),
-                    defaultMultiBlockPolicy3D().getMultiTensorAccess<T,3>() );
+        new MultiTensorField3D<T,3> (
+        MultiBlockManagement3D (
+            blockStructure,
+            defaultMultiBlockPolicy3D().getThreadAttribution(),
+            envelopeWidth ),
+        defaultMultiBlockPolicy3D().getBlockCommunicator(),
+        defaultMultiBlockPolicy3D().getCombinedStatistics(),
+        defaultMultiBlockPolicy3D().getMultiTensorAccess<T,3>() );
     field->periodicity().toggleAll(true);
     return field;
 }
@@ -279,25 +279,25 @@ void addCouplings()
     //   has a special role (after level 0, the communication step would
     //   be called only for f, and not for the other modified blocks).
     integrateProcessingFunctional(
-            new Compute_C_processor<T,DESCRIPTOR>(M),
-            C->getBoundingBox(),
-            C_processorArguments,
-            1 );
+        new Compute_C_processor<T,DESCRIPTOR>(M),
+        C->getBoundingBox(),
+        C_processorArguments,
+        1 );
     integrateProcessingFunctional(
-            new Compute_gradC_rho_mu_processor<T>(beta, kappa, rho_h, rho_l),
-            f->getBoundingBox(),
-            gradC_rho_mu_processorArguments,
-            2 );
+        new Compute_gradC_rho_mu_processor<T>(beta, kappa, rho_h, rho_l),
+        f->getBoundingBox(),
+        gradC_rho_mu_processorArguments,
+        2 );
     integrateProcessingFunctional(
-            new Compute_gradMu_laplaceMu_u_p1_processor<T,DESCRIPTOR>(rho_h, rho_l, RT),
-            f->getBoundingBox(),
-            gradMu_u_p_processorArguments,
-            3 );
+        new Compute_gradMu_laplaceMu_u_p1_processor<T,DESCRIPTOR>(rho_h, rho_l, RT),
+        f->getBoundingBox(),
+        gradMu_u_p_processorArguments,
+        3 );
     integrateProcessingFunctional(
-            new HeLeeCollisionProcessor<T,DESCRIPTOR>(rho_h, rho_l, tau_h, tau_l, M, RT),
-            f->getBoundingBox(),
-            heLeeProcessorArguments,
-            4 );
+        new HeLeeCollisionProcessor<T,DESCRIPTOR>(rho_h, rho_l, tau_h, tau_l, M, RT),
+        f->getBoundingBox(),
+        heLeeProcessorArguments,
+        4 );
 }
 
 void cleanup()
@@ -353,22 +353,22 @@ void initialCondition()
 
     // 2. Compute the derived quantities.
     applyProcessingFunctional (
-            new Compute_gradC_rho_mu_processor<T>(beta, kappa, rho_h, rho_l),
-            f->getBoundingBox(),
-            gradC_rho_mu_processorArguments );
+        new Compute_gradC_rho_mu_processor<T>(beta, kappa, rho_h, rho_l),
+        f->getBoundingBox(),
+        gradC_rho_mu_processorArguments );
 
     applyProcessingFunctional (
-            new Compute_gradMu_laplaceMu_processor<T,DESCRIPTOR>(),
-            f->getBoundingBox(),
-            gradMu_processorArguments );
+        new Compute_gradMu_laplaceMu_processor<T,DESCRIPTOR>(),
+        f->getBoundingBox(),
+        gradMu_processorArguments );
 
     // 3. Initialize populations at equilibrium.
     bool onlySetToEquilibrium = true;
     applyProcessingFunctional(
-            new HeLeeCollisionProcessor<T,DESCRIPTOR> (
-                rho_h, rho_l, tau_h, tau_l, M, RT, onlySetToEquilibrium ),
-            f->getBoundingBox(),
-            heLeeProcessorArguments );
+        new HeLeeCollisionProcessor<T,DESCRIPTOR> (
+            rho_h, rho_l, tau_h, tau_l, M, RT, onlySetToEquilibrium ),
+        f->getBoundingBox(),
+        heLeeProcessorArguments );
 }
 
 void writeGifs(plint iter)
@@ -378,16 +378,16 @@ void writeGifs(plint iter)
     ImageWriter<T> imageWriter("leeloo");
 
     imageWriter.writePpm( createFileName("rho", iter, 6),
-                                *extractSubDomain(*rho, slice),
-                                imSize, imSize );
+                          *extractSubDomain(*rho, slice),
+                          imSize, imSize );
     imageWriter.writePpm( createFileName("C", iter, 6),
-                                *extractSubDomain(*C, slice),
-                                imSize, imSize );
+                          *extractSubDomain(*C, slice),
+                          imSize, imSize );
 }
 
 void writeVTKscalarField(MultiScalarField3D<T>& scalarField, std::string name, plint iter)
 {
- 
+
     T dx = (T)1/(T)(scalarField.getNx()-1);
     // Write full image
     VtkImageOutput3D<T> vtkOut(createFileName("vtk_"+name+"_", iter, 8), dx);
@@ -396,33 +396,36 @@ void writeVTKscalarField(MultiScalarField3D<T>& scalarField, std::string name, p
 
 void readCommandLine(int argc, char* argv[])
 {
-    try {
+    try
+    {
         global::argv(1).read(sigma);
         global::argv(2).read(delta);
         global::argv(3).read(radius);
         global::argv(4).read(fNameOut);
     }
-    catch(...) {
+    catch(...)
+    {
         pcout << "Error : Wrong parameters specified." << endl;
-       
+
         pcout << "1 : surface tension" << endl;
         pcout << "2 : thickness bubble" << endl;
         pcout << "3 : bubble radius" << endl;
         pcout << "4 : output folder name" << endl;
-        pcout << "Possible parameters are: " << argv[0] << " 1.e-4  5  15  tmp" << endl; 
+        pcout << "Possible parameters are: " << argv[0] << " 1.e-4  5  15  tmp" << endl;
         exit(1);
     }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
-    
+
     plbInit(&argc, &argv);
     defaultMultiBlockPolicy3D().toggleBlockingCommunication(true);
-    
+
     readCommandLine(argc, argv);
     global::directories().setOutputDir("./"+fNameOut+"/");
-    
+
     initializeParameters();
     createFields();
     createProcessorArguments();
@@ -430,22 +433,25 @@ int main(int argc, char* argv[]) {
     addCouplings();
 
     pcout << getMultiBlockInfo(*f) << std::endl;
-    
+
     double elapsed=0;
-    for (plint iter=0; iter<max_iter; ++iter) {
+    for (plint iter=0; iter<max_iter; ++iter)
+    {
         global::timer("iteration").restart();
-        
-        if (iter%getImages==0) {
-            if (iter>0) {
+
+        if (iter%getImages==0)
+        {
+            if (iter>0)
+            {
                 pcout << "Mega Site updates per second: "
                       << (double)g->getBoundingBox().nCells() / elapsed / 1.e6
                       << std::endl;
             }
             pcout << "Iteration step " << iter << endl;
-            writeGifs(iter);      
+            writeGifs(iter);
             writeVTKscalarField(*C, "C", iter);
         }
-  
+
         global::timer("sups").restart();
         g->collideAndStream();
         f->collideAndStream();

@@ -74,12 +74,12 @@ MultiLevelActions3D<T,Descriptor,Engine>::MultiLevelActions3D (
         groups(groups_),
         filterAll(filterAll_)
 { 
-    //pcout << "Generate coupling-interfaces" << std::endl;
+    pcout << "Generate coupling-interfaces" << std::endl;
     // Creation of the coupling interfaces vector
     for (plint level=0; level < getNumLevels()-1; ++level) {
         interfaces.push_back(new CouplingInterfaces3D(ogs, level+1,overlapWidth));
     }
-    //pcout << "Initialize tensor-fields" << std::endl;
+    pcout << "Initialize tensor-fields" << std::endl;
     initializeTensorFields();
 }
 

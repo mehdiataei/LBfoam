@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,66 +33,81 @@
 #include "core/globalDefs.h"
 #include "atomicBlock/atomicBlock2D.h"
 
-namespace plb {
+namespace plb
+{
 
-class AtomicContainerDataTransfer2D : public BlockDataTransfer2D {
+class AtomicContainerDataTransfer2D : public BlockDataTransfer2D
+{
 public:
-    AtomicContainerDataTransfer2D() { }
-    virtual plint staticCellSize() const { return 0; }
-    virtual void send(Box2D domain, std::vector<char>& buffer, modif::ModifT kind) const { }
-    virtual void receive( Box2D domain, std::vector<char> const& buffer, modif::ModifT kind ) { }
-    virtual void receive(Box2D domain, std::vector<char> const& buffer, modif::ModifT kind, Dot2D offset) {
-        receive(domain, buffer, kind);
-    }
-    virtual void receive( Box2D domain, std::vector<char> const& buffer, modif::ModifT kind,
-                          std::map<int,std::string> const& foreignIds ) { }
-    virtual void attribute(Box2D toDomain, plint deltaX, plint deltaY,
-                           AtomicBlock2D const& from, modif::ModifT kind) { }
-    virtual void attribute(Box2D toDomain, plint deltaX, plint deltaY,
-                           AtomicBlock2D const& from, modif::ModifT kind, Dot2D absoluteOffset)
-    {
-        attribute(toDomain, deltaX, deltaY, from, kind);
-    }
+	AtomicContainerDataTransfer2D() { }
+	virtual plint staticCellSize() const
+	{
+		return 0;
+	}
+	virtual void send(Box2D domain, std::vector<char>& buffer, modif::ModifT kind) const { }
+	virtual void receive( Box2D domain, std::vector<char> const& buffer, modif::ModifT kind ) { }
+	virtual void receive(Box2D domain, std::vector<char> const& buffer, modif::ModifT kind, Dot2D offset)
+	{
+		receive(domain, buffer, kind);
+	}
+	virtual void receive( Box2D domain, std::vector<char> const& buffer, modif::ModifT kind,
+	                      std::map<int,std::string> const& foreignIds ) { }
+	virtual void attribute(Box2D toDomain, plint deltaX, plint deltaY,
+	                       AtomicBlock2D const& from, modif::ModifT kind) { }
+	virtual void attribute(Box2D toDomain, plint deltaX, plint deltaY,
+	                       AtomicBlock2D const& from, modif::ModifT kind, Dot2D absoluteOffset)
+	{
+		attribute(toDomain, deltaX, deltaY, from, kind);
+	}
 };
 
-class ContainerBlockData {
+class ContainerBlockData
+{
 public:
-    ContainerBlockData()
-        : uniqueID(0)
-    { }
-    virtual ~ContainerBlockData() { }
-    virtual ContainerBlockData* clone() const=0;
-    void setUniqueID(plint uniqueID_) { uniqueID = uniqueID_; }
-    plint getUniqueID() const { return uniqueID; }
+	ContainerBlockData()
+		: uniqueID(0)
+	{ }
+	virtual ~ContainerBlockData() { }
+	virtual ContainerBlockData* clone() const=0;
+	void setUniqueID(plint uniqueID_)
+	{
+		uniqueID = uniqueID_;
+	}
+	plint getUniqueID() const
+	{
+		return uniqueID;
+	}
 private:
-    plint uniqueID;
+	plint uniqueID;
 };
 
-class AtomicContainerBlock2D : public AtomicBlock2D {
+class AtomicContainerBlock2D : public AtomicBlock2D
+{
 public:
-    AtomicContainerBlock2D(plint nx_, plint ny_);
-    ~AtomicContainerBlock2D();
-    AtomicContainerBlock2D& operator=(AtomicContainerBlock2D const& rhs);
-    AtomicContainerBlock2D(AtomicContainerBlock2D const& rhs);
-    void swap(AtomicContainerBlock2D& rhs);
+	AtomicContainerBlock2D(plint nx_, plint ny_);
+	~AtomicContainerBlock2D();
+	AtomicContainerBlock2D& operator=(AtomicContainerBlock2D const& rhs);
+	AtomicContainerBlock2D(AtomicContainerBlock2D const& rhs);
+	void swap(AtomicContainerBlock2D& rhs);
 public:
-    void setData(ContainerBlockData* data_);
-    ContainerBlockData* getData();
-    ContainerBlockData const* getData() const;
-    virtual identifiers::BlockId getBlockId() const;
+	void setData(ContainerBlockData* data_);
+	ContainerBlockData* getData();
+	ContainerBlockData const* getData() const;
+	virtual identifiers::BlockId getBlockId() const;
 public:
-    virtual BlockDataTransfer2D& getDataTransfer() {
-        return dataTransfer;
-    }
-    virtual BlockDataTransfer2D const& getDataTransfer() const {
-        return dataTransfer;
-    }
+	virtual BlockDataTransfer2D& getDataTransfer()
+	{
+		return dataTransfer;
+	}
+	virtual BlockDataTransfer2D const& getDataTransfer() const
+	{
+		return dataTransfer;
+	}
 private:
-    ContainerBlockData* data;
-    AtomicContainerDataTransfer2D dataTransfer;
+	ContainerBlockData* data;
+	AtomicContainerDataTransfer2D dataTransfer;
 };
 
 }  // namespace plb
 
 #endif  // ATOMIC_CONTAINER_BLOCK_2D_H
-

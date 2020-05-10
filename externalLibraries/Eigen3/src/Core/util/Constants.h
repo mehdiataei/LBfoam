@@ -11,7 +11,8 @@
 #ifndef EIGEN_CONSTANTS_H
 #define EIGEN_CONSTANTS_H
 
-namespace Eigen {
+namespace Eigen
+{
 
 /** This value means that a positive quantity (e.g., a size) is not known at compile-time, and that instead the value is
   * stored in some runtime variable.
@@ -188,7 +189,7 @@ const unsigned int CompressedAccessBit = 0x400;
 
 // list of flags that are inherited by default
 const unsigned int HereditaryBits = RowMajorBit
-                                  | EvalBeforeNestingBit;
+                                    | EvalBeforeNestingBit;
 
 /** \defgroup enums Enumerations
   * \ingroup Core_Module
@@ -200,51 +201,51 @@ const unsigned int HereditaryBits = RowMajorBit
   * Enum containing possible values for the \c Mode or \c UpLo parameter of
   * MatrixBase::selfadjointView() and MatrixBase::triangularView(), and selfadjoint solvers. */
 enum UpLoType {
-  /** View matrix as a lower triangular matrix. */
-  Lower=0x1,                      
-  /** View matrix as an upper triangular matrix. */
-  Upper=0x2,                      
-  /** %Matrix has ones on the diagonal; to be used in combination with #Lower or #Upper. */
-  UnitDiag=0x4, 
-  /** %Matrix has zeros on the diagonal; to be used in combination with #Lower or #Upper. */
-  ZeroDiag=0x8,
-  /** View matrix as a lower triangular matrix with ones on the diagonal. */
-  UnitLower=UnitDiag|Lower, 
-  /** View matrix as an upper triangular matrix with ones on the diagonal. */
-  UnitUpper=UnitDiag|Upper,
-  /** View matrix as a lower triangular matrix with zeros on the diagonal. */
-  StrictlyLower=ZeroDiag|Lower, 
-  /** View matrix as an upper triangular matrix with zeros on the diagonal. */
-  StrictlyUpper=ZeroDiag|Upper,
-  /** Used in BandMatrix and SelfAdjointView to indicate that the matrix is self-adjoint. */
-  SelfAdjoint=0x10,
-  /** Used to support symmetric, non-selfadjoint, complex matrices. */
-  Symmetric=0x20
+	/** View matrix as a lower triangular matrix. */
+	Lower=0x1,
+	/** View matrix as an upper triangular matrix. */
+	Upper=0x2,
+	/** %Matrix has ones on the diagonal; to be used in combination with #Lower or #Upper. */
+	UnitDiag=0x4,
+	/** %Matrix has zeros on the diagonal; to be used in combination with #Lower or #Upper. */
+	ZeroDiag=0x8,
+	/** View matrix as a lower triangular matrix with ones on the diagonal. */
+	UnitLower=UnitDiag|Lower,
+	/** View matrix as an upper triangular matrix with ones on the diagonal. */
+	UnitUpper=UnitDiag|Upper,
+	/** View matrix as a lower triangular matrix with zeros on the diagonal. */
+	StrictlyLower=ZeroDiag|Lower,
+	/** View matrix as an upper triangular matrix with zeros on the diagonal. */
+	StrictlyUpper=ZeroDiag|Upper,
+	/** Used in BandMatrix and SelfAdjointView to indicate that the matrix is self-adjoint. */
+	SelfAdjoint=0x10,
+	/** Used to support symmetric, non-selfadjoint, complex matrices. */
+	Symmetric=0x20
 };
 
 /** \ingroup enums
   * Enum for indicating whether a buffer is aligned or not. */
 enum AlignmentType {
-  Unaligned=0,        /**< Data pointer has no specific alignment. */
-  Aligned8=8,         /**< Data pointer is aligned on a 8 bytes boundary. */
-  Aligned16=16,       /**< Data pointer is aligned on a 16 bytes boundary. */
-  Aligned32=32,       /**< Data pointer is aligned on a 32 bytes boundary. */
-  Aligned64=64,       /**< Data pointer is aligned on a 64 bytes boundary. */
-  Aligned128=128,     /**< Data pointer is aligned on a 128 bytes boundary. */
-  AlignedMask=255,
-  Aligned=16,         /**< \deprecated Synonym for Aligned16. */
+	Unaligned=0,        /**< Data pointer has no specific alignment. */
+	Aligned8=8,         /**< Data pointer is aligned on a 8 bytes boundary. */
+	Aligned16=16,       /**< Data pointer is aligned on a 16 bytes boundary. */
+	Aligned32=32,       /**< Data pointer is aligned on a 32 bytes boundary. */
+	Aligned64=64,       /**< Data pointer is aligned on a 64 bytes boundary. */
+	Aligned128=128,     /**< Data pointer is aligned on a 128 bytes boundary. */
+	AlignedMask=255,
+	Aligned=16,         /**< \deprecated Synonym for Aligned16. */
 #if EIGEN_MAX_ALIGN_BYTES==128
-  AlignedMax = Aligned128
+	AlignedMax = Aligned128
 #elif EIGEN_MAX_ALIGN_BYTES==64
-  AlignedMax = Aligned64
+	AlignedMax = Aligned64
 #elif EIGEN_MAX_ALIGN_BYTES==32
-  AlignedMax = Aligned32
+	AlignedMax = Aligned32
 #elif EIGEN_MAX_ALIGN_BYTES==16
-  AlignedMax = Aligned16
+	AlignedMax = Aligned16
 #elif EIGEN_MAX_ALIGN_BYTES==8
-  AlignedMax = Aligned8
+	AlignedMax = Aligned8
 #elif EIGEN_MAX_ALIGN_BYTES==0
-  AlignedMax = Unaligned
+	AlignedMax = Unaligned
 #else
 #error Invalid value for EIGEN_MAX_ALIGN_BYTES
 #endif
@@ -259,80 +260,80 @@ enum CornerType { TopLeft, TopRight, BottomLeft, BottomRight };
 /** \ingroup enums
   * Enum containing possible values for the \p Direction parameter of
   * Reverse, PartialReduxExpr and VectorwiseOp. */
-enum DirectionType { 
-  /** For Reverse, all columns are reversed; 
-    * for PartialReduxExpr and VectorwiseOp, act on columns. */
-  Vertical, 
-  /** For Reverse, all rows are reversed; 
-    * for PartialReduxExpr and VectorwiseOp, act on rows. */
-  Horizontal, 
-  /** For Reverse, both rows and columns are reversed; 
-    * not used for PartialReduxExpr and VectorwiseOp. */
-  BothDirections 
+enum DirectionType {
+	/** For Reverse, all columns are reversed;
+	  * for PartialReduxExpr and VectorwiseOp, act on columns. */
+	Vertical,
+	/** For Reverse, all rows are reversed;
+	  * for PartialReduxExpr and VectorwiseOp, act on rows. */
+	Horizontal,
+	/** For Reverse, both rows and columns are reversed;
+	  * not used for PartialReduxExpr and VectorwiseOp. */
+	BothDirections
 };
 
 /** \internal \ingroup enums
   * Enum to specify how to traverse the entries of a matrix. */
 enum TraversalType {
-  /** \internal Default traversal, no vectorization, no index-based access */
-  DefaultTraversal,
-  /** \internal No vectorization, use index-based access to have only one for loop instead of 2 nested loops */
-  LinearTraversal,
-  /** \internal Equivalent to a slice vectorization for fixed-size matrices having good alignment
-    * and good size */
-  InnerVectorizedTraversal,
-  /** \internal Vectorization path using a single loop plus scalar loops for the
-    * unaligned boundaries */
-  LinearVectorizedTraversal,
-  /** \internal Generic vectorization path using one vectorized loop per row/column with some
-    * scalar loops to handle the unaligned boundaries */
-  SliceVectorizedTraversal,
-  /** \internal Special case to properly handle incompatible scalar types or other defecting cases*/
-  InvalidTraversal,
-  /** \internal Evaluate all entries at once */
-  AllAtOnceTraversal
+	/** \internal Default traversal, no vectorization, no index-based access */
+	DefaultTraversal,
+	/** \internal No vectorization, use index-based access to have only one for loop instead of 2 nested loops */
+	LinearTraversal,
+	/** \internal Equivalent to a slice vectorization for fixed-size matrices having good alignment
+	  * and good size */
+	InnerVectorizedTraversal,
+	/** \internal Vectorization path using a single loop plus scalar loops for the
+	  * unaligned boundaries */
+	LinearVectorizedTraversal,
+	/** \internal Generic vectorization path using one vectorized loop per row/column with some
+	  * scalar loops to handle the unaligned boundaries */
+	SliceVectorizedTraversal,
+	/** \internal Special case to properly handle incompatible scalar types or other defecting cases*/
+	InvalidTraversal,
+	/** \internal Evaluate all entries at once */
+	AllAtOnceTraversal
 };
 
 /** \internal \ingroup enums
   * Enum to specify whether to unroll loops when traversing over the entries of a matrix. */
 enum UnrollingType {
-  /** \internal Do not unroll loops. */
-  NoUnrolling,
-  /** \internal Unroll only the inner loop, but not the outer loop. */
-  InnerUnrolling,
-  /** \internal Unroll both the inner and the outer loop. If there is only one loop, 
-    * because linear traversal is used, then unroll that loop. */
-  CompleteUnrolling
+	/** \internal Do not unroll loops. */
+	NoUnrolling,
+	/** \internal Unroll only the inner loop, but not the outer loop. */
+	InnerUnrolling,
+	/** \internal Unroll both the inner and the outer loop. If there is only one loop,
+	  * because linear traversal is used, then unroll that loop. */
+	CompleteUnrolling
 };
 
 /** \internal \ingroup enums
   * Enum to specify whether to use the default (built-in) implementation or the specialization. */
 enum SpecializedType {
-  Specialized,
-  BuiltIn
+	Specialized,
+	BuiltIn
 };
 
 /** \ingroup enums
   * Enum containing possible values for the \p _Options template parameter of
   * Matrix, Array and BandMatrix. */
 enum StorageOptions {
-  /** Storage order is column major (see \ref TopicStorageOrders). */
-  ColMajor = 0,
-  /** Storage order is row major (see \ref TopicStorageOrders). */
-  RowMajor = 0x1,  // it is only a coincidence that this is equal to RowMajorBit -- don't rely on that
-  /** Align the matrix itself if it is vectorizable fixed-size */
-  AutoAlign = 0,
-  /** Don't require alignment for the matrix itself (the array of coefficients, if dynamically allocated, may still be requested to be aligned) */ // FIXME --- clarify the situation
-  DontAlign = 0x2
+	/** Storage order is column major (see \ref TopicStorageOrders). */
+	ColMajor = 0,
+	/** Storage order is row major (see \ref TopicStorageOrders). */
+	RowMajor = 0x1,  // it is only a coincidence that this is equal to RowMajorBit -- don't rely on that
+	/** Align the matrix itself if it is vectorizable fixed-size */
+	AutoAlign = 0,
+	/** Don't require alignment for the matrix itself (the array of coefficients, if dynamically allocated, may still be requested to be aligned) */ // FIXME --- clarify the situation
+	DontAlign = 0x2
 };
 
 /** \ingroup enums
   * Enum for specifying whether to apply or solve on the left or right. */
 enum SideType {
-  /** Apply transformation on the left. */
-  OnTheLeft = 1,  
-  /** Apply transformation on the right. */
-  OnTheRight = 2  
+	/** Apply transformation on the left. */
+	OnTheLeft = 1,
+	/** Apply transformation on the right. */
+	OnTheRight = 2
 };
 
 /* the following used to be written as:
@@ -342,7 +343,7 @@ enum SideType {
  *     EIGEN_UNUSED NoChange_t NoChange;
  *   }
  *
- * on the ground that it feels dangerous to disambiguate overloaded functions on enum/integer types.  
+ * on the ground that it feels dangerous to disambiguate overloaded functions on enum/integer types.
  * However, this leads to "variable declared but never referenced" warnings on Intel Composer XE,
  * and we do not know how to get rid of them (bug 450).
  */
@@ -354,71 +355,71 @@ enum Default_t    { Default };
 /** \internal \ingroup enums
   * Used in AmbiVector. */
 enum AmbiVectorMode {
-  IsDense         = 0,
-  IsSparse
+	IsDense         = 0,
+	IsSparse
 };
 
 /** \ingroup enums
-  * Used as template parameter in DenseCoeffBase and MapBase to indicate 
+  * Used as template parameter in DenseCoeffBase and MapBase to indicate
   * which accessors should be provided. */
 enum AccessorLevels {
-  /** Read-only access via a member function. */
-  ReadOnlyAccessors, 
-  /** Read/write access via member functions. */
-  WriteAccessors, 
-  /** Direct read-only access to the coefficients. */
-  DirectAccessors, 
-  /** Direct read/write access to the coefficients. */
-  DirectWriteAccessors
+	/** Read-only access via a member function. */
+	ReadOnlyAccessors,
+	/** Read/write access via member functions. */
+	WriteAccessors,
+	/** Direct read-only access to the coefficients. */
+	DirectAccessors,
+	/** Direct read/write access to the coefficients. */
+	DirectWriteAccessors
 };
 
 /** \ingroup enums
   * Enum with options to give to various decompositions. */
 enum DecompositionOptions {
-  /** \internal Not used (meant for LDLT?). */
-  Pivoting            = 0x01, 
-  /** \internal Not used (meant for LDLT?). */
-  NoPivoting          = 0x02, 
-  /** Used in JacobiSVD to indicate that the square matrix U is to be computed. */
-  ComputeFullU        = 0x04,
-  /** Used in JacobiSVD to indicate that the thin matrix U is to be computed. */
-  ComputeThinU        = 0x08,
-  /** Used in JacobiSVD to indicate that the square matrix V is to be computed. */
-  ComputeFullV        = 0x10,
-  /** Used in JacobiSVD to indicate that the thin matrix V is to be computed. */
-  ComputeThinV        = 0x20,
-  /** Used in SelfAdjointEigenSolver and GeneralizedSelfAdjointEigenSolver to specify
-    * that only the eigenvalues are to be computed and not the eigenvectors. */
-  EigenvaluesOnly     = 0x40,
-  /** Used in SelfAdjointEigenSolver and GeneralizedSelfAdjointEigenSolver to specify
-    * that both the eigenvalues and the eigenvectors are to be computed. */
-  ComputeEigenvectors = 0x80,
-  /** \internal */
-  EigVecMask = EigenvaluesOnly | ComputeEigenvectors,
-  /** Used in GeneralizedSelfAdjointEigenSolver to indicate that it should
-    * solve the generalized eigenproblem \f$ Ax = \lambda B x \f$. */
-  Ax_lBx              = 0x100,
-  /** Used in GeneralizedSelfAdjointEigenSolver to indicate that it should
-    * solve the generalized eigenproblem \f$ ABx = \lambda x \f$. */
-  ABx_lx              = 0x200,
-  /** Used in GeneralizedSelfAdjointEigenSolver to indicate that it should
-    * solve the generalized eigenproblem \f$ BAx = \lambda x \f$. */
-  BAx_lx              = 0x400,
-  /** \internal */
-  GenEigMask = Ax_lBx | ABx_lx | BAx_lx
+	/** \internal Not used (meant for LDLT?). */
+	Pivoting            = 0x01,
+	/** \internal Not used (meant for LDLT?). */
+	NoPivoting          = 0x02,
+	/** Used in JacobiSVD to indicate that the square matrix U is to be computed. */
+	ComputeFullU        = 0x04,
+	/** Used in JacobiSVD to indicate that the thin matrix U is to be computed. */
+	ComputeThinU        = 0x08,
+	/** Used in JacobiSVD to indicate that the square matrix V is to be computed. */
+	ComputeFullV        = 0x10,
+	/** Used in JacobiSVD to indicate that the thin matrix V is to be computed. */
+	ComputeThinV        = 0x20,
+	/** Used in SelfAdjointEigenSolver and GeneralizedSelfAdjointEigenSolver to specify
+	  * that only the eigenvalues are to be computed and not the eigenvectors. */
+	EigenvaluesOnly     = 0x40,
+	/** Used in SelfAdjointEigenSolver and GeneralizedSelfAdjointEigenSolver to specify
+	  * that both the eigenvalues and the eigenvectors are to be computed. */
+	ComputeEigenvectors = 0x80,
+	/** \internal */
+	EigVecMask = EigenvaluesOnly | ComputeEigenvectors,
+	/** Used in GeneralizedSelfAdjointEigenSolver to indicate that it should
+	  * solve the generalized eigenproblem \f$ Ax = \lambda B x \f$. */
+	Ax_lBx              = 0x100,
+	/** Used in GeneralizedSelfAdjointEigenSolver to indicate that it should
+	  * solve the generalized eigenproblem \f$ ABx = \lambda x \f$. */
+	ABx_lx              = 0x200,
+	/** Used in GeneralizedSelfAdjointEigenSolver to indicate that it should
+	  * solve the generalized eigenproblem \f$ BAx = \lambda x \f$. */
+	BAx_lx              = 0x400,
+	/** \internal */
+	GenEigMask = Ax_lBx | ABx_lx | BAx_lx
 };
 
 /** \ingroup enums
   * Possible values for the \p QRPreconditioner template parameter of JacobiSVD. */
 enum QRPreconditioners {
-  /** Do not specify what is to be done if the SVD of a non-square matrix is asked for. */
-  NoQRPreconditioner,
-  /** Use a QR decomposition without pivoting as the first step. */
-  HouseholderQRPreconditioner,
-  /** Use a QR decomposition with column pivoting as the first step. */
-  ColPivHouseholderQRPreconditioner,
-  /** Use a QR decomposition with full pivoting as the first step. */
-  FullPivHouseholderQRPreconditioner
+	/** Do not specify what is to be done if the SVD of a non-square matrix is asked for. */
+	NoQRPreconditioner,
+	/** Use a QR decomposition without pivoting as the first step. */
+	HouseholderQRPreconditioner,
+	/** Use a QR decomposition with column pivoting as the first step. */
+	ColPivHouseholderQRPreconditioner,
+	/** Use a QR decomposition with full pivoting as the first step. */
+	FullPivHouseholderQRPreconditioner
 };
 
 #ifdef Success
@@ -428,54 +429,54 @@ enum QRPreconditioners {
 /** \ingroup enums
   * Enum for reporting the status of a computation. */
 enum ComputationInfo {
-  /** Computation was successful. */
-  Success = 0,        
-  /** The provided data did not satisfy the prerequisites. */
-  NumericalIssue = 1, 
-  /** Iterative procedure did not converge. */
-  NoConvergence = 2,
-  /** The inputs are invalid, or the algorithm has been improperly called.
-    * When assertions are enabled, such errors trigger an assert. */
-  InvalidInput = 3
+	/** Computation was successful. */
+	Success = 0,
+	/** The provided data did not satisfy the prerequisites. */
+	NumericalIssue = 1,
+	/** Iterative procedure did not converge. */
+	NoConvergence = 2,
+	/** The inputs are invalid, or the algorithm has been improperly called.
+	  * When assertions are enabled, such errors trigger an assert. */
+	InvalidInput = 3
 };
 
 /** \ingroup enums
   * Enum used to specify how a particular transformation is stored in a matrix.
   * \sa Transform, Hyperplane::transform(). */
 enum TransformTraits {
-  /** Transformation is an isometry. */
-  Isometry      = 0x1,
-  /** Transformation is an affine transformation stored as a (Dim+1)^2 matrix whose last row is 
-    * assumed to be [0 ... 0 1]. */
-  Affine        = 0x2,
-  /** Transformation is an affine transformation stored as a (Dim) x (Dim+1) matrix. */
-  AffineCompact = 0x10 | Affine,
-  /** Transformation is a general projective transformation stored as a (Dim+1)^2 matrix. */
-  Projective    = 0x20
+	/** Transformation is an isometry. */
+	Isometry      = 0x1,
+	/** Transformation is an affine transformation stored as a (Dim+1)^2 matrix whose last row is
+	  * assumed to be [0 ... 0 1]. */
+	Affine        = 0x2,
+	/** Transformation is an affine transformation stored as a (Dim) x (Dim+1) matrix. */
+	AffineCompact = 0x10 | Affine,
+	/** Transformation is a general projective transformation stored as a (Dim+1)^2 matrix. */
+	Projective    = 0x20
 };
 
 /** \internal \ingroup enums
   * Enum used to choose between implementation depending on the computer architecture. */
 namespace Architecture
 {
-  enum Type {
-    Generic = 0x0,
-    SSE = 0x1,
-    AltiVec = 0x2,
-    VSX = 0x3,
-    NEON = 0x4,
+enum Type {
+	Generic = 0x0,
+	SSE = 0x1,
+	AltiVec = 0x2,
+	VSX = 0x3,
+	NEON = 0x4,
 #if defined EIGEN_VECTORIZE_SSE
-    Target = SSE
+	Target = SSE
 #elif defined EIGEN_VECTORIZE_ALTIVEC
-    Target = AltiVec
+	Target = AltiVec
 #elif defined EIGEN_VECTORIZE_VSX
-    Target = VSX
+	Target = VSX
 #elif defined EIGEN_VECTORIZE_NEON
-    Target = NEON
+	Target = NEON
 #else
-    Target = Generic
+	Target = Generic
 #endif
-  };
+};
 }
 
 /** \internal \ingroup enums
@@ -509,36 +510,87 @@ struct MatrixXpr {};
 struct ArrayXpr {};
 
 // An evaluator must define its shape. By default, it can be one of the following:
-struct DenseShape             { static std::string debugName() { return "DenseShape"; } };
-struct SolverShape            { static std::string debugName() { return "SolverShape"; } };
-struct HomogeneousShape       { static std::string debugName() { return "HomogeneousShape"; } };
-struct DiagonalShape          { static std::string debugName() { return "DiagonalShape"; } };
-struct BandShape              { static std::string debugName() { return "BandShape"; } };
-struct TriangularShape        { static std::string debugName() { return "TriangularShape"; } };
-struct SelfAdjointShape       { static std::string debugName() { return "SelfAdjointShape"; } };
-struct PermutationShape       { static std::string debugName() { return "PermutationShape"; } };
-struct TranspositionsShape    { static std::string debugName() { return "TranspositionsShape"; } };
-struct SparseShape            { static std::string debugName() { return "SparseShape"; } };
+struct DenseShape             {
+	static std::string debugName()
+	{
+		return "DenseShape";
+	}
+};
+struct SolverShape            {
+	static std::string debugName()
+	{
+		return "SolverShape";
+	}
+};
+struct HomogeneousShape       {
+	static std::string debugName()
+	{
+		return "HomogeneousShape";
+	}
+};
+struct DiagonalShape          {
+	static std::string debugName()
+	{
+		return "DiagonalShape";
+	}
+};
+struct BandShape              {
+	static std::string debugName()
+	{
+		return "BandShape";
+	}
+};
+struct TriangularShape        {
+	static std::string debugName()
+	{
+		return "TriangularShape";
+	}
+};
+struct SelfAdjointShape       {
+	static std::string debugName()
+	{
+		return "SelfAdjointShape";
+	}
+};
+struct PermutationShape       {
+	static std::string debugName()
+	{
+		return "PermutationShape";
+	}
+};
+struct TranspositionsShape    {
+	static std::string debugName()
+	{
+		return "TranspositionsShape";
+	}
+};
+struct SparseShape            {
+	static std::string debugName()
+	{
+		return "SparseShape";
+	}
+};
 
-namespace internal {
+namespace internal
+{
 
-  // random access iterators based on coeff*() accessors.
+// random access iterators based on coeff*() accessors.
 struct IndexBased {};
 
-// evaluator based on iterators to access coefficients. 
+// evaluator based on iterators to access coefficients.
 struct IteratorBased {};
 
 /** \internal
  * Constants for comparison functors
  */
 enum ComparisonName {
-  cmp_EQ = 0,
-  cmp_LT = 1,
-  cmp_LE = 2,
-  cmp_UNORD = 3,
-  cmp_NEQ = 4,
-  cmp_GT = 5,
-  cmp_GE = 6
+	cmp_EQ = 0,
+	cmp_LT = 1,
+	cmp_LE = 2,
+	cmp_UNORD = 3,
+	cmp_NEQ = 4,
+	cmp_GT = 5,
+	cmp_GE = 6
 };
 } // end namespace internal
 

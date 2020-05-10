@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -39,49 +39,50 @@
 #include <memory>
 
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
 void computeXderivative(MultiScalarField3D<T>& value, MultiScalarField3D<T>& derivative, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeXderivative(MultiScalarField3D<T>& value, Box3D const& domain);
+std::auto_ptr<MultiScalarField3D<T> > computeXderivative(MultiScalarField3D<T>& value, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeXderivative(MultiScalarField3D<T>& value);
+std::auto_ptr<MultiScalarField3D<T> > computeXderivative(MultiScalarField3D<T>& value);
 
 template<typename T>
 void computeYderivative(MultiScalarField3D<T>& value, MultiScalarField3D<T>& derivative, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeYderivative(MultiScalarField3D<T>& value, Box3D const& domain);
+std::auto_ptr<MultiScalarField3D<T> > computeYderivative(MultiScalarField3D<T>& value, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeYderivative(MultiScalarField3D<T>& value);
+std::auto_ptr<MultiScalarField3D<T> > computeYderivative(MultiScalarField3D<T>& value);
 
 template<typename T>
 void computeZderivative(MultiScalarField3D<T>& value, MultiScalarField3D<T>& derivative, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeZderivative(MultiScalarField3D<T>& value, Box3D const& domain);
+std::auto_ptr<MultiScalarField3D<T> > computeZderivative(MultiScalarField3D<T>& value, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeZderivative(MultiScalarField3D<T>& value);
+std::auto_ptr<MultiScalarField3D<T> > computeZderivative(MultiScalarField3D<T>& value);
 
 template<typename T>
 void computeGradientNorm(MultiScalarField3D<T>& value, MultiScalarField3D<T>& derivative, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeGradientNorm(MultiScalarField3D<T>& value, Box3D const& domain);
+std::auto_ptr<MultiScalarField3D<T> > computeGradientNorm(MultiScalarField3D<T>& value, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeGradientNorm(MultiScalarField3D<T>& value);
+std::auto_ptr<MultiScalarField3D<T> > computeGradientNorm(MultiScalarField3D<T>& value);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computePoissonRHS(MultiTensorField3D<T,3>& velocity, Box3D const& domain);
+std::auto_ptr<MultiScalarField3D<T> > computePoissonRHS(MultiTensorField3D<T,3>& velocity, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computePoissonRHS(MultiTensorField3D<T,3>& velocity);
+std::auto_ptr<MultiScalarField3D<T> > computePoissonRHS(MultiTensorField3D<T,3>& velocity);
 
 
 template<typename T>
@@ -99,57 +100,57 @@ template<typename T>
 void computeXperiodicDerivative(MultiScalarField3D<T>& value, MultiScalarField3D<T>& derivative, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeXperiodicDerivative(MultiScalarField3D<T>& value, Box3D const& domain);
+std::auto_ptr<MultiScalarField3D<T> > computeXperiodicDerivative(MultiScalarField3D<T>& value, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeXperiodicDerivative(MultiScalarField3D<T>& value);
+std::auto_ptr<MultiScalarField3D<T> > computeXperiodicDerivative(MultiScalarField3D<T>& value);
 
 template<typename T>
 void computeYperiodicDerivative(MultiScalarField3D<T>& value, MultiScalarField3D<T>& derivative, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeYperiodicDerivative(MultiScalarField3D<T>& value, Box3D const& domain);
+std::auto_ptr<MultiScalarField3D<T> > computeYperiodicDerivative(MultiScalarField3D<T>& value, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeYperiodicDerivative(MultiScalarField3D<T>& value);
+std::auto_ptr<MultiScalarField3D<T> > computeYperiodicDerivative(MultiScalarField3D<T>& value);
 
 template<typename T>
 void computeZperiodicDerivative(MultiScalarField3D<T>& value, MultiScalarField3D<T>& derivative, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeZperiodicDerivative(MultiScalarField3D<T>& value, Box3D const& domain);
+std::auto_ptr<MultiScalarField3D<T> > computeZperiodicDerivative(MultiScalarField3D<T>& value, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computeZperiodicDerivative(MultiScalarField3D<T>& value);
+std::auto_ptr<MultiScalarField3D<T> > computeZperiodicDerivative(MultiScalarField3D<T>& value);
 
 template<typename T>
 void computePeriodicGradientNorm(MultiScalarField3D<T>& value, MultiScalarField3D<T>& derivative, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computePeriodicGradientNorm(MultiScalarField3D<T>& value, Box3D const& domain);
+std::auto_ptr<MultiScalarField3D<T> > computePeriodicGradientNorm(MultiScalarField3D<T>& value, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computePeriodicGradientNorm(MultiScalarField3D<T>& value);
+std::auto_ptr<MultiScalarField3D<T> > computePeriodicGradientNorm(MultiScalarField3D<T>& value);
 
 template<typename T>
 void computePeriodicGradient(MultiScalarField3D<T>& value, MultiTensorField3D<T,3>& derivative, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiTensorField3D<T,2> > computePeriodicGradient(MultiScalarField3D<T>& value, Box3D const& domain);
+std::auto_ptr<MultiTensorField3D<T,2> > computePeriodicGradient(MultiScalarField3D<T>& value, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiTensorField3D<T,2> > computePeriodicGradient(MultiScalarField3D<T>& value);
+std::auto_ptr<MultiTensorField3D<T,2> > computePeriodicGradient(MultiScalarField3D<T>& value);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computePeriodicPoissonRHS(MultiTensorField3D<T,3>& velocity, Box3D const& domain);
+std::auto_ptr<MultiScalarField3D<T> > computePeriodicPoissonRHS(MultiTensorField3D<T,3>& velocity, Box3D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > computePeriodicPoissonRHS(MultiTensorField3D<T,3>& velocity);
+std::auto_ptr<MultiScalarField3D<T> > computePeriodicPoissonRHS(MultiTensorField3D<T,3>& velocity);
 
 
 template<typename T>
 void periodicPoissonIterate(MultiScalarField3D<T>& oldPressure, MultiScalarField3D<T>& newPressure,
-                           MultiScalarField3D<T>& rhs, T beta, Box3D const& domain);
+                            MultiScalarField3D<T>& rhs, T beta, Box3D const& domain);
 
 // General Stencils.
 
@@ -162,27 +163,27 @@ void periodicPoissonIterate(MultiScalarField3D<T>& oldPressure, MultiScalarField
 
 template<typename T, int order, int maxWidth>
 T computeScalarXderivative(ScalarField3D<T> const& scalar, int width, int position,
-        plint iX, plint iY, plint iZ);
+                           plint iX, plint iY, plint iZ);
 
 template<typename T, int order, int maxWidth>
 T computeScalarYderivative(ScalarField3D<T> const& scalar, int width, int position,
-        plint iX, plint iY, plint iZ);
+                           plint iX, plint iY, plint iZ);
 
 template<typename T, int order, int maxWidth>
 T computeScalarZderivative(ScalarField3D<T> const& scalar, int width, int position,
-        plint iX, plint iY, plint iZ);
+                           plint iX, plint iY, plint iZ);
 
 template<typename T, int nDim, int order, int maxWidth>
 Array<T,nDim> computeTensorXderivative(TensorField3D<T,nDim> const& tensor, int width, int position,
-        plint iX, plint iY, plint iZ);
+                                       plint iX, plint iY, plint iZ);
 
 template<typename T, int nDim, int order, int maxWidth>
 Array<T,nDim> computeTensorYderivative(TensorField3D<T,nDim> const& tensor, int width, int position,
-        plint iX, plint iY, plint iZ);
+                                       plint iX, plint iY, plint iZ);
 
 template<typename T, int nDim, int order, int maxWidth>
 Array<T,nDim> computeTensorZderivative(TensorField3D<T,nDim> const& tensor, int width, int position,
-        plint iX, plint iY, plint iZ);
+                                       plint iX, plint iY, plint iZ);
 
 }  // namespace plb
 

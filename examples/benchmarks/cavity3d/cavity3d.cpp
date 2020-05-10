@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -57,13 +57,15 @@ void cavitySetup( MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     lattice.initialize();
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     plbInit(&argc, &argv);
     //defaultMultiBlockPolicy3D().toggleBlockingCommunication(true);
 
     plint N;
-    try {
+    try
+    {
         global::argv(1).read(N);
     }
     catch(...)
@@ -80,18 +82,18 @@ int main(int argc, char* argv[]) {
 
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 1.,    // Re
-            N,         // N
-            1.,        // lx
-            1.,        // ly
-            1.         // lz
+        (T) 1e-2,  // uMax
+        (T) 1.,    // Re
+        N,         // N
+        1.,        // lx
+        1.,        // ly
+        1.         // lz
     );
 
 
     MultiBlockLattice3D<T, DESCRIPTOR> lattice (
-            parameters.getNx(), parameters.getNy(), parameters.getNz(),
-            new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(), parameters.getNz(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     plint numCores = global::mpi().getSize();
     pcout << "Number of MPI threads: " << numCores << std::endl;
@@ -112,20 +114,22 @@ int main(int argc, char* argv[]) {
     cavitySetup(lattice, parameters, *boundaryCondition);
 
     // Run the benchmark once "to warm up the machine".
-    for (plint iT=0; iT<numIter; ++iT) {
+    for (plint iT=0; iT<numIter; ++iT)
+    {
         lattice.collideAndStream();
     }
 
     // Run the benchmark for good.
     global::timer("benchmark").start();
     global::profiler().turnOn();
-    for (plint iT=0; iT<numIter; ++iT) {
+    for (plint iT=0; iT<numIter; ++iT)
+    {
         lattice.collideAndStream();
     }
 
     pcout << "After " << numIter << " iterations: "
           << (T) (numCells*numIter) /
-             global::timer("benchmark").getTime() / 1.e6
+          global::timer("benchmark").getTime() / 1.e6
           << " Mega site updates per second." << std::endl << std::endl;
 
     global::profiler().writeReport();

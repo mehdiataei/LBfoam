@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,25 +34,26 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.hh"
 
 
-namespace plb {
+namespace plb
+{
 
 template
 MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>*
-    generateMultiBlockLattice3D (
-            Box3D const& domain,
-            Dynamics<FLOAT_T,descriptors::DESCRIPTOR_3D> const* backgroundDynamics );
+generateMultiBlockLattice3D (
+    Box3D const& domain,
+    Dynamics<FLOAT_T,descriptors::DESCRIPTOR_3D> const* backgroundDynamics );
 
 template
 MultiNTensorField3D<FLOAT_T>*
-    generateNTensorFieldFromLattice3D (
-            MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& lattice,
-            Box3D const& domain, plint ndim );
+generateNTensorFieldFromLattice3D (
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& lattice,
+    Box3D const& domain, plint ndim );
 
 template
 MultiNTensorField3D<int>*
-    generateNTensorFieldFromLattice3D (
-            MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& lattice,
-            Box3D const& domain, plint ndim);
+generateNTensorFieldFromLattice3D (
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& lattice,
+    Box3D const& domain, plint ndim);
 
 }  // namespace plb
 

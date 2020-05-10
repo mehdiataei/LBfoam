@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,9 +34,11 @@
 #include "core/serializer.h"
 #include "io/plbFiles.h"
 
-namespace plb {
+namespace plb
+{
 
-namespace parallelIO {
+namespace parallelIO
+{
 
 void dumpRestoreData( MultiBlock3D& multiBlock, bool dynamicContent,
                       std::vector<plint> const& myBlockIds, std::vector<std::vector<char> > const& data,
@@ -51,31 +53,32 @@ MultiBlock3D* load3D(FileName fName);
 
 void load(FileName fName, MultiBlock3D& intoBlock, bool dynamicContent = true );
 
-class SavedFullMultiBlockSerializer3D : public DataSerializer {
+class SavedFullMultiBlockSerializer3D : public DataSerializer
+{
 public:
-    SavedFullMultiBlockSerializer3D(FileName fName);
-    ~SavedFullMultiBlockSerializer3D();
-    SavedFullMultiBlockSerializer3D(SavedFullMultiBlockSerializer3D const& rhs);
-    virtual SavedFullMultiBlockSerializer3D* clone() const;
-    virtual pluint getSize() const;
-    virtual const char* getNextDataBuffer(pluint& bufferSize) const;
-    virtual bool isEmpty() const;
-    plint getCellDim() const;
-    std::string dataType() const;
-    Box3D getBoundingBox() const;
-    bool orderingIsForward() const;
+	SavedFullMultiBlockSerializer3D(FileName fName);
+	~SavedFullMultiBlockSerializer3D();
+	SavedFullMultiBlockSerializer3D(SavedFullMultiBlockSerializer3D const& rhs);
+	virtual SavedFullMultiBlockSerializer3D* clone() const;
+	virtual pluint getSize() const;
+	virtual const char* getNextDataBuffer(pluint& bufferSize) const;
+	virtual bool isEmpty() const;
+	plint getCellDim() const;
+	std::string dataType() const;
+	Box3D getBoundingBox() const;
+	bool orderingIsForward() const;
 private:
-    void computeSlice() const;
+	void computeSlice() const;
 private:
-    Box3D boundingBox;
-    plint cellDim, typeSize;
-    plint sizeOfChunk;
-    FileName data_fName;
-    std::string str_dataType;
-    bool forwardOrdering;
-    mutable plint pos;
-    mutable std::vector<char> buffer;
-    FILE *fp;
+	Box3D boundingBox;
+	plint cellDim, typeSize;
+	plint sizeOfChunk;
+	FileName data_fName;
+	std::string str_dataType;
+	bool forwardOrdering;
+	mutable plint pos;
+	mutable std::vector<char> buffer;
+	FILE *fp;
 };
 
 }  // namespace parallelIO

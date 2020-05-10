@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,47 +28,55 @@
 #include "plbWrapper/block/multiBlockInfo3D.h"
 #include "plbWrapper/block/multiBlockInfo3D.hh"
 
-namespace plb {
+namespace plb
+{
 
 template class MultiNTensorInfo3D<PRECOMP_T>;
 
 MultiBlockInfo3D::MultiBlockInfo3D(MultiBlock3D const& multiBlock)
-    : nx(),
-      ny(),
-      nz(),
-      numBlocks(),
-      numAllocatedCells()
+	: nx(),
+	  ny(),
+	  nz(),
+	  numBlocks(),
+	  numAllocatedCells()
 {
-    getMultiBlockInfo(multiBlock, nx, ny, nz, numBlocks,
-                      smallest, largest, numAllocatedCells);
+	getMultiBlockInfo(multiBlock, nx, ny, nz, numBlocks,
+	                  smallest, largest, numAllocatedCells);
 }
 
-plint MultiBlockInfo3D::getNx() const {
-    return nx;
+plint MultiBlockInfo3D::getNx() const
+{
+	return nx;
 }
 
-plint MultiBlockInfo3D::getNy() const {
-    return ny;
+plint MultiBlockInfo3D::getNy() const
+{
+	return ny;
 }
 
-plint MultiBlockInfo3D::getNz() const {
-    return nz;
+plint MultiBlockInfo3D::getNz() const
+{
+	return nz;
 }
 
-plint MultiBlockInfo3D::getNumBlocks() const {
-    return numBlocks;
+plint MultiBlockInfo3D::getNumBlocks() const
+{
+	return numBlocks;
 }
 
-plint MultiBlockInfo3D::getNumAllocatedCells() const {
-    return numAllocatedCells;
+plint MultiBlockInfo3D::getNumAllocatedCells() const
+{
+	return numAllocatedCells;
 }
 
-Box3D MultiBlockInfo3D::getSmallestBlock() const {
-    return smallest;
+Box3D MultiBlockInfo3D::getSmallestBlock() const
+{
+	return smallest;
 }
 
-Box3D MultiBlockInfo3D::getLargestBlock() const {
-    return largest;
+Box3D MultiBlockInfo3D::getLargestBlock() const
+{
+	return largest;
 }
 
 

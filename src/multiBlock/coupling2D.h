@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,182 +32,193 @@
 #include "multiBlock/multiBlock2D.h"
 #include "atomicBlock/dataProcessingFunctional2D.h"
 
-namespace plb {
+namespace plb
+{
 
-class Coupling2D {
+class Coupling2D
+{
 public:
-    Coupling2D( DataProcessorGenerator2D* generator_,
-                std::vector<plint> const& multiBlocks_, // Local ID (0, 1, 2, ...) inside Actions2D of
-                                                        // multi-blocks to be coupled.
-                std::vector<id_t>& allMultiBlocks );    // Global ID of all multi-blocks inside Actions2D.
-    ~Coupling2D();
-    Coupling2D(Coupling2D const& rhs);
-    Coupling2D& operator=(Coupling2D const& rhs);
-    void swap(Coupling2D& rhs);
-    Coupling2D* clone() const;
-    void execute();
-    void generate(std::vector<id_t>& allMultiBlocks);
+	Coupling2D( DataProcessorGenerator2D* generator_,
+	            std::vector<plint> const& multiBlocks_, // Local ID (0, 1, 2, ...) inside Actions2D of
+	            // multi-blocks to be coupled.
+	            std::vector<id_t>& allMultiBlocks );    // Global ID of all multi-blocks inside Actions2D.
+	~Coupling2D();
+	Coupling2D(Coupling2D const& rhs);
+	Coupling2D& operator=(Coupling2D const& rhs);
+	void swap(Coupling2D& rhs);
+	Coupling2D* clone() const;
+	void execute();
+	void generate(std::vector<id_t>& allMultiBlocks);
 private:
-    void clearDataProcessors();
+	void clearDataProcessors();
 private:
-    DataProcessorGenerator2D* generator;
-    std::vector<plint> multiBlocks;
-    std::vector<DataProcessor2D*> dataProcessors;
+	DataProcessorGenerator2D* generator;
+	std::vector<plint> multiBlocks;
+	std::vector<DataProcessor2D*> dataProcessors;
 };
 
 
 struct Action2D {
-    virtual ~Action2D() { }
-    virtual void execute(std::vector<id_t>& allMultiBlocks) =0;
-    virtual void regenerate(std::vector<id_t>& allMultiBlocks) =0;
-    virtual Action2D* clone() const =0;
+	virtual ~Action2D() { }
+	virtual void execute(std::vector<id_t>& allMultiBlocks) =0;
+	virtual void regenerate(std::vector<id_t>& allMultiBlocks) =0;
+	virtual Action2D* clone() const =0;
 };
 
-class CouplingAction2D : public Action2D {
+class CouplingAction2D : public Action2D
+{
 public:
-    CouplingAction2D(Coupling2D* coupling_);
-    CouplingAction2D(CouplingAction2D const& rhs);
-    CouplingAction2D& operator=(CouplingAction2D const& rhs);
-    void swap(CouplingAction2D& rhs);
-    virtual ~CouplingAction2D();
-    virtual CouplingAction2D* clone() const;
-    virtual void execute(std::vector<id_t>& allMultiBlocks);
-    virtual void regenerate(std::vector<id_t>& allMultiBlocks);
+	CouplingAction2D(Coupling2D* coupling_);
+	CouplingAction2D(CouplingAction2D const& rhs);
+	CouplingAction2D& operator=(CouplingAction2D const& rhs);
+	void swap(CouplingAction2D& rhs);
+	virtual ~CouplingAction2D();
+	virtual CouplingAction2D* clone() const;
+	virtual void execute(std::vector<id_t>& allMultiBlocks);
+	virtual void regenerate(std::vector<id_t>& allMultiBlocks);
 private:
-    Coupling2D* coupling;
-};
-
-template<typename T, template<typename U> class Descriptor>
-class FullDomainCollideAndStreamAction2D : public Action2D {
-public:
-    FullDomainCollideAndStreamAction2D(plint blockId_);
-    virtual FullDomainCollideAndStreamAction2D<T,Descriptor>* clone() const;
-    virtual void execute(std::vector<id_t>& allMultiBlocks);
-    virtual void regenerate(std::vector<id_t>& allMultiBlocks);
-private:
-    plint blockId;
+	Coupling2D* coupling;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class CollideAndStreamAction2D : public Action2D {
+class FullDomainCollideAndStreamAction2D : public Action2D
+{
 public:
-    CollideAndStreamAction2D(plint blockId_, Box2D domain_);
-    virtual CollideAndStreamAction2D<T,Descriptor>* clone() const;
-    virtual void execute(std::vector<id_t>& allMultiBlocks);
-    virtual void regenerate(std::vector<id_t>& allMultiBlocks);
+	FullDomainCollideAndStreamAction2D(plint blockId_);
+	virtual FullDomainCollideAndStreamAction2D<T,Descriptor>* clone() const;
+	virtual void execute(std::vector<id_t>& allMultiBlocks);
+	virtual void regenerate(std::vector<id_t>& allMultiBlocks);
 private:
-    plint blockId;
-    Box2D domain;
+	plint blockId;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class FullDomainStreamAction2D : public Action2D {
+class CollideAndStreamAction2D : public Action2D
+{
 public:
-    FullDomainStreamAction2D(plint blockId_);
-    virtual FullDomainStreamAction2D<T,Descriptor>* clone() const;
-    virtual void execute(std::vector<id_t>& allMultiBlocks);
-    virtual void regenerate(std::vector<id_t>& allMultiBlocks);
+	CollideAndStreamAction2D(plint blockId_, Box2D domain_);
+	virtual CollideAndStreamAction2D<T,Descriptor>* clone() const;
+	virtual void execute(std::vector<id_t>& allMultiBlocks);
+	virtual void regenerate(std::vector<id_t>& allMultiBlocks);
 private:
-    plint blockId;
+	plint blockId;
+	Box2D domain;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class StreamAction2D : public Action2D {
+class FullDomainStreamAction2D : public Action2D
+{
 public:
-    StreamAction2D(plint blockId_, Box2D domain_);
-    virtual StreamAction2D<T,Descriptor>* clone() const;
-    virtual void execute(std::vector<id_t>& allMultiBlocks);
-    virtual void regenerate(std::vector<id_t>& allMultiBlocks);
+	FullDomainStreamAction2D(plint blockId_);
+	virtual FullDomainStreamAction2D<T,Descriptor>* clone() const;
+	virtual void execute(std::vector<id_t>& allMultiBlocks);
+	virtual void regenerate(std::vector<id_t>& allMultiBlocks);
 private:
-    plint blockId;
-    Box2D domain;
+	plint blockId;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class IncrementTimeAction2D : public Action2D {
+class StreamAction2D : public Action2D
+{
 public:
-    IncrementTimeAction2D(plint blockId_);
-    virtual IncrementTimeAction2D<T,Descriptor>* clone() const;
-    virtual void execute(std::vector<id_t>& allMultiBlocks);
-    virtual void regenerate(std::vector<id_t>& allMultiBlocks);
+	StreamAction2D(plint blockId_, Box2D domain_);
+	virtual StreamAction2D<T,Descriptor>* clone() const;
+	virtual void execute(std::vector<id_t>& allMultiBlocks);
+	virtual void regenerate(std::vector<id_t>& allMultiBlocks);
 private:
-    plint blockId;
+	plint blockId;
+	Box2D domain;
 };
 
-class CommunicateAction2D : public Action2D {
+template<typename T, template<typename U> class Descriptor>
+class IncrementTimeAction2D : public Action2D
+{
 public:
-    CommunicateAction2D(plint blockId_, modif::ModifT whichData_);
-    virtual CommunicateAction2D* clone() const;
-    virtual void execute(std::vector<id_t>& allMultiBlocks);
-    virtual void regenerate(std::vector<id_t>& allMultiBlocks);
+	IncrementTimeAction2D(plint blockId_);
+	virtual IncrementTimeAction2D<T,Descriptor>* clone() const;
+	virtual void execute(std::vector<id_t>& allMultiBlocks);
+	virtual void regenerate(std::vector<id_t>& allMultiBlocks);
 private:
-    plint blockId;
-    modif::ModifT whichData;
+	plint blockId;
 };
 
-class ExecuteInternalProcAction2D : public Action2D {
+class CommunicateAction2D : public Action2D
+{
 public:
-    ExecuteInternalProcAction2D(plint blockId_, plint level_);
-    virtual ExecuteInternalProcAction2D* clone() const;
-    virtual void execute(std::vector<id_t>& allMultiBlocks);
-    virtual void regenerate(std::vector<id_t>& allMultiBlocks);
+	CommunicateAction2D(plint blockId_, modif::ModifT whichData_);
+	virtual CommunicateAction2D* clone() const;
+	virtual void execute(std::vector<id_t>& allMultiBlocks);
+	virtual void regenerate(std::vector<id_t>& allMultiBlocks);
 private:
-    plint blockId, level;
+	plint blockId;
+	modif::ModifT whichData;
 };
 
-class EvaluateStatsAction2D : public Action2D {
+class ExecuteInternalProcAction2D : public Action2D
+{
 public:
-    EvaluateStatsAction2D(plint blockId_);
-    virtual EvaluateStatsAction2D* clone() const;
-    virtual void execute(std::vector<id_t>& allMultiBlocks);
-    virtual void regenerate(std::vector<id_t>& allMultiBlocks);
+	ExecuteInternalProcAction2D(plint blockId_, plint level_);
+	virtual ExecuteInternalProcAction2D* clone() const;
+	virtual void execute(std::vector<id_t>& allMultiBlocks);
+	virtual void regenerate(std::vector<id_t>& allMultiBlocks);
 private:
-    plint blockId;
+	plint blockId, level;
 };
 
-class Actions2D {
+class EvaluateStatsAction2D : public Action2D
+{
 public:
-    Actions2D();
-    ~Actions2D();
-    Actions2D(Actions2D const& rhs);
-    Actions2D& operator=(Actions2D const& rhs);
-    void swap(Actions2D& rhs);
-    Actions2D* clone() const;
-    plint addBlock(MultiBlock2D& block);
-    void replaceBlock(plint id, MultiBlock2D& block);
-    plint addProcessor(BoxProcessingFunctional2D* functional, std::vector<plint> blockNums, Box2D domain);
-    plint addProcessor(BoxProcessingFunctional2D* functional, plint blockNum1, Box2D domain);
-    plint addProcessor(BoxProcessingFunctional2D* functional, plint blockNum1,
-                      plint blockNum2, Box2D domain);
-    plint addProcessor(BoxProcessingFunctional2D* functional, plint blockNum1,
-                      plint blockNum2, plint blockNum3, Box2D domain);
-    plint addProcessor(BoxProcessingFunctional2D* functional, plint blockNum1,
-                      plint blockNum2, plint blockNum3, plint blockNum4, Box2D domain);
-    plint addProcessor(BoxProcessingFunctional2D* functional, plint blockNum1,
-                      plint blockNum2, plint blockNum3,
-                      plint blockNum4, plint blockNum5, Box2D domain);
-    plint addInternalProcessors(plint blockNum, plint level);
-    plint addCommunication(plint blockNum, modif::ModifT whichData);
-    plint addEvaluateStats(plint blockNum);
-    template<typename T, template<typename U> class Descriptor>
-    plint addCollideAndStream(plint blockNum, Box2D domain);
-    template<typename T, template<typename U> class Descriptor>
-    plint addCollideAndStream(plint blockNum);
-    template<typename T, template<typename U> class Descriptor>
-    plint addStream(plint blockNum, Box2D domain);
-    template<typename T, template<typename U> class Descriptor>
-    plint addStream(plint blockNum);
-    template<typename T, template<typename U> class Descriptor>
-    plint addIncrementTime(plint blockNum);
-    void execute();
-    void execute(plint actionId);
-    void execute(plint actionFrom, plint actionTo);
+	EvaluateStatsAction2D(plint blockId_);
+	virtual EvaluateStatsAction2D* clone() const;
+	virtual void execute(std::vector<id_t>& allMultiBlocks);
+	virtual void regenerate(std::vector<id_t>& allMultiBlocks);
 private:
-    std::vector<id_t> allMultiBlocks;
-    std::vector<Action2D*> actions;
+	plint blockId;
+};
+
+class Actions2D
+{
+public:
+	Actions2D();
+	~Actions2D();
+	Actions2D(Actions2D const& rhs);
+	Actions2D& operator=(Actions2D const& rhs);
+	void swap(Actions2D& rhs);
+	Actions2D* clone() const;
+	plint addBlock(MultiBlock2D& block);
+	void replaceBlock(plint id, MultiBlock2D& block);
+	plint addProcessor(BoxProcessingFunctional2D* functional, std::vector<plint> blockNums, Box2D domain);
+	plint addProcessor(BoxProcessingFunctional2D* functional, plint blockNum1, Box2D domain);
+	plint addProcessor(BoxProcessingFunctional2D* functional, plint blockNum1,
+	                   plint blockNum2, Box2D domain);
+	plint addProcessor(BoxProcessingFunctional2D* functional, plint blockNum1,
+	                   plint blockNum2, plint blockNum3, Box2D domain);
+	plint addProcessor(BoxProcessingFunctional2D* functional, plint blockNum1,
+	                   plint blockNum2, plint blockNum3, plint blockNum4, Box2D domain);
+	plint addProcessor(BoxProcessingFunctional2D* functional, plint blockNum1,
+	                   plint blockNum2, plint blockNum3,
+	                   plint blockNum4, plint blockNum5, Box2D domain);
+	plint addInternalProcessors(plint blockNum, plint level);
+	plint addCommunication(plint blockNum, modif::ModifT whichData);
+	plint addEvaluateStats(plint blockNum);
+	template<typename T, template<typename U> class Descriptor>
+	plint addCollideAndStream(plint blockNum, Box2D domain);
+	template<typename T, template<typename U> class Descriptor>
+	plint addCollideAndStream(plint blockNum);
+	template<typename T, template<typename U> class Descriptor>
+	plint addStream(plint blockNum, Box2D domain);
+	template<typename T, template<typename U> class Descriptor>
+	plint addStream(plint blockNum);
+	template<typename T, template<typename U> class Descriptor>
+	plint addIncrementTime(plint blockNum);
+	void execute();
+	void execute(plint actionId);
+	void execute(plint actionFrom, plint actionTo);
+private:
+	std::vector<id_t> allMultiBlocks;
+	std::vector<Action2D*> actions;
 };
 
 } // namespace plb
 
 #endif  // COUPLING_2D_H
-

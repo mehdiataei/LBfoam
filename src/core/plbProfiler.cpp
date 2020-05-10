@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,11 +28,14 @@
 #include "algorithm/statistics.h"
 #include "libraryInterfaces/TINYXML_xmlIO.hh"
 
-namespace plb {
+namespace plb
+{
 
-namespace global {
+namespace global
+{
 
-Profiler::Profiler() {
+Profiler::Profiler()
+{
     turnOff();
     automaticCycling();
     setReportFile("plbProfile");
@@ -41,7 +44,7 @@ Profiler::Profiler() {
     validCounters.insert("iterations");
     validCounters.insert("mpiSendChar");
     validCounters.insert("mpiReceiveChar");
-    
+
     validTimers.insert("collStream");
     validTimers.insert("cycle");
     validTimers.insert("dataProcessor");
@@ -50,29 +53,35 @@ Profiler::Profiler() {
     validTimers.insert("totalTime");
 }
 
-void Profiler::turnOn() {
+void Profiler::turnOn()
+{
     profilingFlag = true;
     start("totalTime");
 }
 
-void Profiler::turnOff() {
+void Profiler::turnOff()
+{
     profilingFlag = false;
 }
 
-void Profiler::automaticCycling() {
+void Profiler::automaticCycling()
+{
     manualCycleFlag = false;
 }
 
-void Profiler::manualCycling() {
+void Profiler::manualCycling()
+{
     manualCycleFlag = true;
 }
 
-void Profiler::cycle() {
+void Profiler::cycle()
+{
     increment("iterations");
 }
 
 
-void Profiler::writeReport() {
+void Profiler::writeReport()
+{
     plint collStreamCells = getCounter("collStreamCells");
     plint iterations = getCounter("iterations");
     //plint mpiSendChar = getCounter("mpiSendChar");
@@ -101,7 +110,8 @@ void Profiler::writeReport() {
     writer.print(reportFile);
 }
 
-void Profiler::addStatisticalValue(XMLwriter& writer, std::string name, double value) {
+void Profiler::addStatisticalValue(XMLwriter& writer, std::string name, double value)
+{
     std::vector<double> allValues(global::mpi().getSize());
     std::fill(allValues.begin(), allValues.end(), 0.);
     allValues[global::mpi().getRank()] = value;
@@ -116,24 +126,30 @@ void Profiler::addStatisticalValue(XMLwriter& writer, std::string name, double v
     writer[name]["Values"].set(allValues);
 }
 
-void Profiler::addMainProcValue(XMLwriter& writer, std::string name, plint value) {
+void Profiler::addMainProcValue(XMLwriter& writer, std::string name, plint value)
+{
     writer[name].set(value);
 }
 
 
-void Profiler::verifyTimer(std::string const& timer) {
-    if (validTimers.find(timer)==validTimers.end()) {
+void Profiler::verifyTimer(std::string const& timer)
+{
+    if (validTimers.find(timer)==validTimers.end())
+    {
         plbLogicError("Invalid timer for profiling: "+timer);
     }
 }
 
-void Profiler::verifyCounter(std::string const& counter) {
-    if (validCounters.find(counter)==validCounters.end()) {
+void Profiler::verifyCounter(std::string const& counter)
+{
+    if (validCounters.find(counter)==validCounters.end())
+    {
         plbLogicError("Invalid counter for profiling: "+counter);
     }
 }
 
-void Profiler::setReportFile(FileName const& reportFile_) {
+void Profiler::setReportFile(FileName const& reportFile_)
+{
     reportFile = reportFile_;
     reportFile.defaultPath(directories().getOutputDir());
     reportFile.defaultExt("xml");

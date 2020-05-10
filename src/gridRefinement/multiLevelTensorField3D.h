@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -38,82 +38,93 @@
 #include <map>
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 // Contains all the necessary information for a complete grid refined lattice.
 template<typename T, int nDim>
-class MultiLevelTensorField3D : public MultiLevel3D {
+class MultiLevelTensorField3D : public MultiLevel3D
+{
 public:
-    // The dynamics dyn must be right for the coarsest instantiated level.
-    MultiLevelTensorField3D(const OctreeGridStructure& ogs_);
-    MultiLevelTensorField3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel);
+	// The dynamics dyn must be right for the coarsest instantiated level.
+	MultiLevelTensorField3D(const OctreeGridStructure& ogs_);
+	MultiLevelTensorField3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel);
 
-    MultiLevelTensorField3D(const OctreeGridStructure& ogs_, const Array<T,nDim> &iniVal);
-    MultiLevelTensorField3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel, const Array<T,nDim> &iniVal);
+	MultiLevelTensorField3D(const OctreeGridStructure& ogs_, const Array<T,nDim> &iniVal);
+	MultiLevelTensorField3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel, const Array<T,nDim> &iniVal);
 
-    MultiLevelTensorField3D(MultiLevelTensorField3D<T,nDim> const& rhs);
+	MultiLevelTensorField3D(MultiLevelTensorField3D<T,nDim> const& rhs);
 
-    MultiLevelTensorField3D<T,nDim>& operator=(MultiLevelTensorField3D<T,nDim> const& rhs);
-    void swap(MultiLevelTensorField3D<T,nDim>& rhs);
-    ~MultiLevelTensorField3D();
+	MultiLevelTensorField3D<T,nDim>& operator=(MultiLevelTensorField3D<T,nDim> const& rhs);
+	void swap(MultiLevelTensorField3D<T,nDim>& rhs);
+	~MultiLevelTensorField3D();
 
-    virtual MultiTensorField3D<T,nDim> const &getLevel(plint iL) const {
-        PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
-        return *gridLevels[iL];
-    }
-    
-    virtual MultiTensorField3D<T,nDim> &getLevel(plint iL) {
-        PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
-        return *gridLevels[iL];
-    }
-    
-    plint getNumLevels() const { 
-        return ogs.getNumLevels();
-    }
-    
-    OctreeGridStructure const& getOgs() const {
-        return ogs;
-    }
+	virtual MultiTensorField3D<T,nDim> const &getLevel(plint iL) const
+	{
+		PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
+		return *gridLevels[iL];
+	}
+
+	virtual MultiTensorField3D<T,nDim> &getLevel(plint iL)
+	{
+		PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
+		return *gridLevels[iL];
+	}
+
+	plint const getNumLevels() const
+	{
+		return ogs.getNumLevels();
+	}
+
+	OctreeGridStructure const& getOgs() const
+	{
+		return ogs;
+	}
 private:
-    OctreeGridStructure ogs;
+	OctreeGridStructure ogs;
 private:
-    std::vector<MultiTensorField3D<T,nDim> *> gridLevels;
+	std::vector<MultiTensorField3D<T,nDim> *> gridLevels;
 };
 
 // Contains all the necessary information for a complete grid refined lattice.
 template<typename T, int nDim>
-class MultiLevelTensorFieldForOutput3D : public MultiLevel3D  {
+class MultiLevelTensorFieldForOutput3D : public MultiLevel3D
+{
 public:
-    // The dynamics dyn must be right for the coarsest instantiated level.
-    MultiLevelTensorFieldForOutput3D(const OctreeGridStructure& ogs_, bool crop);
-    MultiLevelTensorFieldForOutput3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel, bool crop);
-    MultiLevelTensorFieldForOutput3D(MultiLevelTensorFieldForOutput3D<T,nDim> const& rhs);
+	// The dynamics dyn must be right for the coarsest instantiated level.
+	MultiLevelTensorFieldForOutput3D(const OctreeGridStructure& ogs_, bool crop);
+	MultiLevelTensorFieldForOutput3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel, bool crop);
+	MultiLevelTensorFieldForOutput3D(MultiLevelTensorFieldForOutput3D<T,nDim> const& rhs);
 
-    MultiLevelTensorFieldForOutput3D<T,nDim>& operator=(MultiLevelTensorFieldForOutput3D<T,nDim> const& rhs);
-    void swap(MultiLevelTensorFieldForOutput3D<T,nDim>& rhs);
-    ~MultiLevelTensorFieldForOutput3D();
+	MultiLevelTensorFieldForOutput3D<T,nDim>& operator=(MultiLevelTensorFieldForOutput3D<T,nDim> const& rhs);
+	void swap(MultiLevelTensorFieldForOutput3D<T,nDim>& rhs);
+	~MultiLevelTensorFieldForOutput3D();
 
-    virtual MultiTensorField3D<T,nDim> const &getLevel(plint iL) const {
-        PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
-        return *gridLevels[iL];
-    }
-    
-    virtual MultiTensorField3D<T,nDim> &getLevel(plint iL) {
-        PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
-        return *gridLevels[iL];
-    }
-    
-    plint getNumLevels() const { 
-        return ogs.getNumLevels();
-    }
-    
-    OctreeGridStructure const& getOgs() const {
-        return ogs;
-    }
+	virtual MultiTensorField3D<T,nDim> const &getLevel(plint iL) const
+	{
+		PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
+		return *gridLevels[iL];
+	}
+
+	virtual MultiTensorField3D<T,nDim> &getLevel(plint iL)
+	{
+		PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
+		return *gridLevels[iL];
+	}
+
+	plint const getNumLevels() const
+	{
+		return ogs.getNumLevels();
+	}
+
+	OctreeGridStructure const& getOgs() const
+	{
+		return ogs;
+	}
 private:
-    OctreeGridStructure ogs;
+	OctreeGridStructure ogs;
 private:
-    std::vector<MultiTensorField3D<T,nDim> *> gridLevels;
+	std::vector<MultiTensorField3D<T,nDim> *> gridLevels;
 };
 
 }  // namespace plb

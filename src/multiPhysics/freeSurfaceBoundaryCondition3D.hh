@@ -43,7 +43,7 @@ void FreeSurfaceFadingArea3D<T,Descriptor>::process(Box3D domain, BlockLattice3D
 
     enum {
         momentumStoredOffset = Descriptor<T>::ExternalField::momentumBeginsAt,
-        densityStoredOffset  = Descriptor<T>::ExternalField::densityBeginsAt
+        densityStoredOffset  = Descriptor<T>::ExternalField::densityBeginsAt,
     };
     
     for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
@@ -81,7 +81,7 @@ FreeSurfaceFadingArea3D<T,Descriptor>* FreeSurfaceFadingArea3D<T,Descriptor>::cl
 template<typename T, template<typename U> class Descriptor>
 void RemoveMass3D<T,Descriptor>::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
             
     for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
@@ -107,7 +107,7 @@ RemoveMass3D<T,Descriptor>* RemoveMass3D<T,Descriptor>::clone() const {
 template<typename T, template<typename U> class Descriptor>
 void PouringLiquid3D<T,Descriptor>::processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
     
     for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
@@ -136,7 +136,7 @@ PouringLiquid3D<T,Descriptor>* PouringLiquid3D<T,Descriptor>::clone() const {
 template<typename T, template<typename U> class Descriptor>
 void ShortenBounceBack3D<T,Descriptor>::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     typedef Descriptor<T> D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
     Box3D extDomain = domain.enlarge(1);

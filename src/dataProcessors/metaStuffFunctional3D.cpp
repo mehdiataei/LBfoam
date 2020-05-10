@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,7 +35,8 @@
 #include "parallelism/mpiManager.h"
 #include <cmath>
 
-namespace plb {
+namespace plb
+{
 
 /* ******** IterateDynamicsFunctional3D ************************************ */
 
@@ -43,56 +44,69 @@ IterateDynamicsFunctional3D::IterateDynamicsFunctional3D(std::vector<int> previo
     : previousMaximum(previousMaximum_),
       maxIds(previousMaximum.size())
 {
-    for (pluint i=0; i<maxIds.size(); ++i) {
+    for (pluint i=0; i<maxIds.size(); ++i)
+    {
         maxIds[i] = this->getStatistics().subscribeMax();
     }
 }
 
 void IterateDynamicsFunctional3D::processGenericBlocks (
-        Box3D domain, std::vector<AtomicBlock3D*> blocks )
+    Box3D domain, std::vector<AtomicBlock3D*> blocks )
 {
     PLB_PRECONDITION( blocks.size()==1 );
     AtomicContainerBlock3D& container = *dynamic_cast<AtomicContainerBlock3D*>(blocks[0]);
     StoreDynamicsID* storeId = dynamic_cast<StoreDynamicsID*>(container.getData());
     std::vector<int> nextIDs(previousMaximum.size());
-    for (pluint i=0; i<nextIDs.size(); ++i) {
+    for (pluint i=0; i<nextIDs.size(); ++i)
+    {
         nextIDs[i] = -1;
     }
-    if (!storeId->empty()) {
+    if (!storeId->empty())
+    {
         nextIDs = storeId->getCurrent();
         util::extendVectorSize(nextIDs, previousMaximum.size());
-        if (vectorEquals(nextIDs,previousMaximum)) {
+        if (vectorEquals(nextIDs,previousMaximum))
+        {
             nextIDs = storeId->iterate();
             util::extendVectorSize(nextIDs, previousMaximum.size());
         }
     }
-    for (pluint i=0; i<nextIDs.size(); ++i) {
-        if(i>0 && this->getStatistics().getMax(maxIds[i-1])>=(double)nextIDs[i-1]){
+    for (pluint i=0; i<nextIDs.size(); ++i)
+    {
+        if(i>0 && this->getStatistics().getMax(maxIds[i-1])>=(double)nextIDs[i-1])
+        {
             this->getStatistics().gatherMax(maxIds[i], (double)nextIDs[i]);
         }
     }
 }
 
-IterateDynamicsFunctional3D* IterateDynamicsFunctional3D::clone() const {
+IterateDynamicsFunctional3D* IterateDynamicsFunctional3D::clone() const
+{
     return new IterateDynamicsFunctional3D(*this);
 }
 
-void IterateDynamicsFunctional3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void IterateDynamicsFunctional3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
     modified[0] = modif::staticVariables;
 }
 
-BlockDomain::DomainT IterateDynamicsFunctional3D::appliesTo() const {
+BlockDomain::DomainT IterateDynamicsFunctional3D::appliesTo() const
+{
     return BlockDomain::bulk;
 }
 
-std::vector<int> IterateDynamicsFunctional3D::getNextMaximum() const {
+std::vector<int> IterateDynamicsFunctional3D::getNextMaximum() const
+{
     std::vector<int> maximum(maxIds.size());
-    for (pluint i=0; i<maxIds.size(); ++i) {
+    for (pluint i=0; i<maxIds.size(); ++i)
+    {
         double d_maximum=this->getStatistics().getMax(maxIds[i]);
-        if (d_maximum<0.5) {
+        if (d_maximum<0.5)
+        {
             maximum[i] = -1;
         }
-        else {
+        else
+        {
             maximum[i] = (int)(.5+d_maximum);
         }
     }
@@ -107,50 +121,60 @@ AllFlagsTrueFunctional3D::AllFlagsTrueFunctional3D()
 { }
 
 void AllFlagsTrueFunctional3D::processGenericBlocks (
-        Box3D domain, std::vector<AtomicBlock3D*> blocks )
+    Box3D domain, std::vector<AtomicBlock3D*> blocks )
 {
     PLB_PRECONDITION( blocks.size()==1 );
-    if (!blocks[0]->getFlag()) {
+    if (!blocks[0]->getFlag())
+    {
         this->getStatistics().gatherIntSum(numFalseId, 1);
     }
 }
 
-AllFlagsTrueFunctional3D* AllFlagsTrueFunctional3D::clone() const {
+AllFlagsTrueFunctional3D* AllFlagsTrueFunctional3D::clone() const
+{
     return new AllFlagsTrueFunctional3D(*this);
 }
 
-void AllFlagsTrueFunctional3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void AllFlagsTrueFunctional3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
     modified[0] = modif::nothing;
 }
 
-BlockDomain::DomainT AllFlagsTrueFunctional3D::appliesTo() const {
+BlockDomain::DomainT AllFlagsTrueFunctional3D::appliesTo() const
+{
     return BlockDomain::bulk;
 }
 
-bool AllFlagsTrueFunctional3D::allTrue() const {
+bool AllFlagsTrueFunctional3D::allTrue() const
+{
     return this->getStatistics().getIntSum(numFalseId)==0;
 }
 
 
 /* ******** GetThreadNumFunctional3D ************************************ */
 
-void GetThreadNumFunctional3D::process(Box3D domain, ScalarField3D<int>& threadNum) {
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
+void GetThreadNumFunctional3D::process(Box3D domain, ScalarField3D<int>& threadNum)
+{
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX)
+    {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+        {
+            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ)
+            {
                 threadNum.get(iX,iY,iZ)=global::mpi().getRank()+1;
             }
         }
     }
 }
 
-GetThreadNumFunctional3D* GetThreadNumFunctional3D::clone() const {
-        return new GetThreadNumFunctional3D(*this);
+GetThreadNumFunctional3D* GetThreadNumFunctional3D::clone() const
+{
+    return new GetThreadNumFunctional3D(*this);
 }
 
-void GetThreadNumFunctional3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void GetThreadNumFunctional3D::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
     modified[0] = modif::staticVariables;
 }
 
 }  // namespace plb
-

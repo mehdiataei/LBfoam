@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,55 +36,56 @@
 #include "dataProcessors/metaStuffFunctional3D.h"
 #include <memory>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
 void extractTopMostDynamics(MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarField3D<int>& dynamicsId,
                             Box3D domain );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractTopMostDynamics (
-                                             MultiBlockLattice3D<T,Descriptor>& lattice );
+std::auto_ptr< MultiScalarField3D<int> > extractTopMostDynamics (
+    MultiBlockLattice3D<T,Descriptor>& lattice );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractTopMostDynamics (
-                                             MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain );
+std::auto_ptr< MultiScalarField3D<int> > extractTopMostDynamics (
+    MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain );
 
 
 template<typename T, template<typename U> class Descriptor>
 void extractBottomMostDynamics(MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarField3D<int>& dynamicsId,
-                            Box3D domain );
+                               Box3D domain );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractBottomMostDynamics (
-                                             MultiBlockLattice3D<T,Descriptor>& lattice );
+std::auto_ptr< MultiScalarField3D<int> > extractBottomMostDynamics (
+    MultiBlockLattice3D<T,Descriptor>& lattice );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractBottomMostDynamics (
-                                             MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain );
+std::auto_ptr< MultiScalarField3D<int> > extractBottomMostDynamics (
+    MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain );
 
 template<typename T, template<typename U> class Descriptor>
 void uniqueDynamicsChains (
-        MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain,
-        std::vector<std::vector<int> >& chains, pluint& maxChainLength );
+    MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain,
+    std::vector<std::vector<int> >& chains, pluint& maxChainLength );
 
 template<typename T, template<typename U> class Descriptor>
 void uniqueDynamicsIds (
-        MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, std::vector<int>& ids );
+    MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, std::vector<int>& ids );
 
 template<typename T, template<typename U> class Descriptor>
 void extractDynamicsChain(MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarField3D<int>& dynamicsId,
                           std::map<int,std::string>& nameOfDynamics, Box3D domain );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractDynamicsChain (
-            MultiBlockLattice3D<T,Descriptor>& lattice,
-            std::map<int,std::string>& nameOfDynamics );
+std::auto_ptr< MultiScalarField3D<int> > extractDynamicsChain (
+    MultiBlockLattice3D<T,Descriptor>& lattice,
+    std::map<int,std::string>& nameOfDynamics );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField3D<int> > extractDynamicsChain (
-            MultiBlockLattice3D<T,Descriptor>& lattice,
-            std::map<int,std::string>& nameOfDynamics, Box3D domain );
+std::auto_ptr< MultiScalarField3D<int> > extractDynamicsChain (
+    MultiBlockLattice3D<T,Descriptor>& lattice,
+    std::map<int,std::string>& nameOfDynamics, Box3D domain );
 
 
 template<typename T, template<typename U> class Descriptor>
@@ -93,12 +94,12 @@ void copyEntireCells( MultiBlockLattice3D<T,Descriptor>& sourceLattice,
                       Box3D domain );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiBlockLattice3D<T,Descriptor> > copyEntireCells (
-            MultiBlockLattice3D<T,Descriptor>& lattice );
+std::auto_ptr< MultiBlockLattice3D<T,Descriptor> > copyEntireCells (
+    MultiBlockLattice3D<T,Descriptor>& lattice );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiBlockLattice3D<T,Descriptor> > copyEntireCells (
-            MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain );
+std::auto_ptr< MultiBlockLattice3D<T,Descriptor> > copyEntireCells (
+    MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain );
 
 bool allFlagsTrue(MultiBlock3D* multiBlock);
 

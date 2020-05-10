@@ -1045,27 +1045,26 @@ void LinearScalarFieldToParticle3D<T,Descriptor>::processGenericBlocks (
     ScalarField3D<int>& voxelMatrix =
         *dynamic_cast<ScalarField3D<int>*>(blocks[2]);
 
-    Dot3D location = particleField.getLocation();
+    Dot3D partLoc = particleField.getLocation();
     Dot3D ofs = computeRelativeDisplacement(particleField, scalarField);
     Dot3D ofsV = computeRelativeDisplacement(particleField, voxelMatrix);
+
+    Array<T,3> realLoc((T)partLoc.x,(T)partLoc.y,(T)partLoc.z);
 
     std::vector<Particle3D<T,Descriptor>*> found;
     particleField.findParticles(domain, found);
 
     for (pluint iParticle=0; iParticle<found.size(); ++iParticle) {
         Particle3D<T,Descriptor>& particle = *found[iParticle];
-        Array<T,3> vertex = particle.getPosition();
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+        Array<T,3> vertex = particle.getPosition() - realLoc;
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
         T averageScalar = T();
         T totWeight = T();
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextScalar =
                         scalarField.get(pos[0]+ofs.x, pos[1]+ofs.y, pos[2]+ofs.z);
@@ -1076,8 +1075,8 @@ void LinearScalarFieldToParticle3D<T,Descriptor>::processGenericBlocks (
                     std::vector<int>::iterator it = 
                         std::find (usableFlowTypes.begin(), usableFlowTypes.end(), nextFlag);
                     if (it != usableFlowTypes.end()) {
-                        Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
-                        T W = inamuroDeltaFunction<T>().W(r);
+                        Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
+                        T W = inamuroDeltaFunction3D<T>().W(r);
                         averageScalar += W*nextScalar;
                         totWeight += W;
                     }
@@ -1137,29 +1136,28 @@ void ScalarFieldToParticle3D<T,Descriptor>::processGenericBlocks (
     ScalarField3D<T>& scalarField =
         *dynamic_cast<ScalarField3D<T>*>(blocks[1]);
 
-    Dot3D location = particleField.getLocation();
+    Dot3D partLoc = particleField.getLocation();
     Dot3D ofs = computeRelativeDisplacement(particleField, scalarField);
+    Array<T,3> realLoc((T)partLoc.x,(T)partLoc.y,(T)partLoc.z);
 
     std::vector<Particle3D<T,Descriptor>*> found;
     particleField.findParticles(domain, found);
 
     for (pluint iParticle=0; iParticle<found.size(); ++iParticle) {
         Particle3D<T,Descriptor>& particle = *found[iParticle];
-        Array<T,3> vertex = particle.getPosition();
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+        Array<T,3> vertex = particle.getPosition() - realLoc;
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
         T averageScalar = T();
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
-                    T nextScalar = scalarField.get(pos[0]+ofs.x, pos[1]+ofs.y, pos[2]+ofs.z);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
-                    T W = inamuroDeltaFunction<T>().W(r);
+                    T nextScalar =
+                        scalarField.get(pos[0]+ofs.x, pos[1]+ofs.y, pos[2]+ofs.z);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
+                    T W = inamuroDeltaFunction3D<T>().W(r);
                     averageScalar += W*nextScalar;
                 }
             }
@@ -1216,29 +1214,31 @@ void TensorFieldToParticle3D<T,nDim,Descriptor>::processGenericBlocks (
     TensorField3D<T,nDim>& tensorField =
         *dynamic_cast<TensorField3D<T,nDim>*>(blocks[1]);
 
-    Dot3D location = particleField.getLocation();
+    Dot3D partLoc = particleField.getLocation();
     Dot3D ofs = computeRelativeDisplacement(particleField, tensorField);
+    Array<T,3> realLoc((T)partLoc.x,(T)partLoc.y,(T)partLoc.z);
 
     std::vector<Particle3D<T,Descriptor>*> found;
     particleField.findParticles(domain, found);
 
+    std::vector<Dot3D> cellPos(8);
+    std::vector<T> weights(8);
+    std::vector<Cell<T,Descriptor>*> cells(8);
     for (pluint iParticle=0; iParticle<found.size(); ++iParticle) {
         Particle3D<T,Descriptor>& particle = *found[iParticle];
-        Array<T,3> vertex = particle.getPosition();
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+        Array<T,3> vertex = particle.getPosition() - realLoc;
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
         std::vector<T> averageData(nDim, T());
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
-                    Array<T,nDim> nextData = tensorField.get(pos[0]+ofs.x, pos[1]+ofs.y, pos[2]+ofs.z);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
-                    T W = inamuroDeltaFunction<T>().W(r);
+                    Array<T,nDim> nextData =
+                        tensorField.get(pos[0]+ofs.x, pos[1]+ofs.y, pos[2]+ofs.z);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
+                    T W = inamuroDeltaFunction3D<T>().W(r);
                     for (plint i=0; i<nDim; ++i) {
                         averageData[i] += W*nextData[i];
                     }

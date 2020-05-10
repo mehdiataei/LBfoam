@@ -39,7 +39,7 @@
 namespace plb {
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
     computeSurfaceForce (
             TriangleBoundary3D<T>& boundary,
             VoxelizedDomain3D<T>& voxelizedDomain,
@@ -51,7 +51,7 @@ std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
     computeSurfaceForce (
             TriangleBoundary3D<T>& boundary,
             VoxelizedDomain3D<T>& voxelizedDomain,
@@ -66,7 +66,7 @@ std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
         // Select Static, Open mesh.
         boundary.pushSelect(0,0);
     }
-    std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+    std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
         particles( new MultiParticleField3D<DenseParticleField3D<T,Descriptor> > (
                        lattice.getMultiBlockManagement(),
                        defaultMultiBlockPolicy3D().getCombinedStatistics() ) );
@@ -92,7 +92,7 @@ std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
     computeSurfaceForce (
             TriangleBoundary3D<T>& boundary,
             MultiParticleField3D<DenseParticleField3D<T,Descriptor> >& parallelWall,
@@ -108,7 +108,7 @@ std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
         // Select Static, Open mesh.
         boundary.pushSelect(0,0);
     }
-    std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+    std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
         particles( new MultiParticleField3D<DenseParticleField3D<T,Descriptor> > (
                        lattice.getMultiBlockManagement(),
                        defaultMultiBlockPolicy3D().getCombinedStatistics() ) );
@@ -135,7 +135,7 @@ std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
 
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
     computeSurfaceScalar (
             TriangleBoundary3D<T>& boundary,
             VoxelizedDomain3D<T>& voxelizedDomain,
@@ -148,7 +148,7 @@ std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
     computeSurfaceScalar (
             TriangleBoundary3D<T>& boundary,
             VoxelizedDomain3D<T>& voxelizedDomain,
@@ -165,10 +165,10 @@ std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
         boundary.pushSelect(0,0);
     }
 
-    std::unique_ptr<MultiScalarField3D<T> > extendedScalarField 
+    std::auto_ptr<MultiScalarField3D<T> > extendedScalarField 
         = extendEnvelopeWidth(scalarField, 2);
 
-    std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+    std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
         particles( new MultiParticleField3D<DenseParticleField3D<T,Descriptor> > (
                        extendedScalarField->getMultiBlockManagement(),
                        defaultMultiBlockPolicy3D().getCombinedStatistics() ) );
@@ -195,11 +195,11 @@ std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
     getParticlePosAndVelocity (
             MultiParticleField3D<DenseParticleField3D<T,Descriptor> >& originalParticles )
 {
-    std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+    std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
         particles( new MultiParticleField3D<DenseParticleField3D<T,Descriptor> > (
                        originalParticles.getMultiBlockManagement(),
                        defaultMultiBlockPolicy3D().getCombinedStatistics() ) );
@@ -236,14 +236,14 @@ void injectVisualScalarFieldParticles (
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
     injectVisualScalarFieldParticles (
         MultiScalarField3D<T>& scalarField,
         Box3D domain, Particle3D<T,Descriptor>* particleTemplate,
         T mostUnlikely, T mostLikely,
         T probability, plint numShotsPerCell )
 {
-    std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+    std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
         particleField( new MultiParticleField3D<DenseParticleField3D<T,Descriptor> > (
                        scalarField.getMultiBlockManagement(),
                        defaultMultiBlockPolicy3D().getCombinedStatistics() ) );
@@ -275,10 +275,10 @@ void tensorFieldToParticles(MultiTensorField3D<T,nDim>& tensor, MultiParticleFie
 
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
     scalarFieldToSurface(TriangularSurfaceMesh<T>& mesh, MultiScalarField3D<T>& scalar, Box3D domain)
 {
-    std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
+    std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >
         particles( new MultiParticleField3D<DenseParticleField3D<T,Descriptor> > (
                        scalar.getMultiBlockManagement(),
                        defaultMultiBlockPolicy3D().getCombinedStatistics() ) );

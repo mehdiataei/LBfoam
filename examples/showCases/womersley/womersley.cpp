@@ -41,34 +41,36 @@ const T pi = (T)4.0*std::atan((T)1.0);
 // #define DYNAMICS ShanExternalForceBGKdynamics<T, NSDESCRIPTOR>(omega)
 
 /// Velocity on the parabolic Womersley profile
-T womersleyVelocity(plint iY, T t, T A, T omega, T alpha, IncomprFlowParam<T> const& parameters) 
+T womersleyVelocity(plint iY, T t, T A, T omega, T alpha, IncomprFlowParam<T> const& parameters)
 {
     const complex<T> I(0.,1.);
     T y = (T)iY / parameters.getResolution();
 
-    return ( A / (I * omega) * std::exp(I * omega * t) * 
-            ( (T)1. - std::cosh(std::sqrt((T)2.)*(y-(T).5)*(alpha+I*alpha)) /
-                std::cosh(std::sqrt((T)2.)/(T)2. * (alpha+I*alpha)) ) ).real();
+    return ( A / (I * omega) * std::exp(I * omega * t) *
+             ( (T)1. - std::cosh(std::sqrt((T)2.)*(y-(T).5)*(alpha+I*alpha)) /
+               std::cosh(std::sqrt((T)2.)/(T)2. * (alpha+I*alpha)) ) ).real();
 }
 
 /// Time dependent but space-independent Womersley force.
-T womersleyForce(T t, T A, T omega, IncomprFlowParam<T> const& parameters) 
+T womersleyForce(T t, T A, T omega, IncomprFlowParam<T> const& parameters)
 {
     return A * std::cos(omega * t);
 }
 
 /// A functional, used to initialize the velocity for the boundary conditions
 template<typename T>
-class WomersleyVelocity {
+class WomersleyVelocity
+{
 public:
     WomersleyVelocity(IncomprFlowParam<T> parameters_, T alpha_, T t_)
-    :   parameters(parameters_), alpha(alpha_),  
-        omega((T)4*util::sqr(alpha)*parameters.getLatticeNu()/(T)(util::sqr(parameters.getResolution()))), 
-        A(8. * parameters.getLatticeNu() * parameters.getLatticeU() / ( (T)(util::sqr(parameters.getResolution())) )),
-        t(t_)
+        :   parameters(parameters_), alpha(alpha_),
+            omega((T)4*util::sqr(alpha)*parameters.getLatticeNu()/(T)(util::sqr(parameters.getResolution()))),
+            A(8. * parameters.getLatticeNu() * parameters.getLatticeU() / ( (T)(util::sqr(parameters.getResolution())) )),
+            t(t_)
     { }
-    
-    void operator()(plint iX, plint iY, Array<T,2>& u) const {
+
+    void operator()(plint iX, plint iY, Array<T,2>& u) const
+    {
         u[0] = womersleyVelocity(iY, t, A, omega, alpha, parameters);
         u[1] = T();
     }
@@ -85,26 +87,26 @@ void channelSetup( MultiBlockLattice2D<T,NSDESCRIPTOR>& lattice,
 {
     const plint nx = parameters.getNx();
     const plint ny = parameters.getNy();
-    
+
     Box2D bottom(   0,nx-1,   0,   0);
     Box2D top(   0,nx-1,   ny-1,   ny-1);
-    
+
     boundaryCondition.addVelocityBoundary1N(bottom, lattice);
     boundaryCondition.addPressureBoundary1P(top,    lattice);
-    
+
     Array<T,2> u((T)0.,(T)0.);
     setBoundaryVelocity( lattice, lattice.getBoundingBox(), u );
     initializeAtEquilibrium(lattice,lattice.getBoundingBox(),(T)1.0,u);
 
     Array<T,NSDESCRIPTOR<T>::d> force(womersleyForce((T)0, amplitude, frequency, parameters),0.);
     setExternalVector(lattice,lattice.getBoundingBox(),NSDESCRIPTOR<T>::ExternalField::forceBeginsAt,force);
-    
+
     lattice.initialize();
 }
 
 template<class BlockLatticeT>
 void writeVTK(BlockLatticeT& lattice,
-            IncomprFlowParam<T> const& parameters, plint iter)
+              IncomprFlowParam<T> const& parameters, plint iter)
 {
     T dx = parameters.getDeltaX();
     T dt = parameters.getDeltaT();
@@ -119,8 +121,8 @@ void writeGif(BlockLatticeT& lattice,plint iT)
     const plint imSize = 600;
     ImageWriter<T> imageWriter("leeloo.map");
     imageWriter.writeScaledGif(createFileName("u", iT, 6),
-                            *computeVelocityNorm(lattice),
-                            imSize, imSize);
+                               *computeVelocityNorm(lattice),
+                               imSize, imSize);
 }
 
 T computeRMSerror ( MultiBlockLattice2D<T,NSDESCRIPTOR>& lattice,
@@ -133,12 +135,12 @@ T computeRMSerror ( MultiBlockLattice2D<T,NSDESCRIPTOR>& lattice,
     MultiTensorField2D<T,2> numericalVelocity(lattice);
     computeVelocity(lattice, numericalVelocity, lattice.getBoundingBox());
 
-           // Divide by lattice velocity to normalize the error
+    // Divide by lattice velocity to normalize the error
     return 1./parameters.getLatticeU() *
            // Compute RMS difference between analytical and numerical solution
-               std::sqrt( computeAverage( *computeNormSqr (
-                              *subtract(analyticalVelocity, numericalVelocity)
-                         ) ) );
+           std::sqrt( computeAverage( *computeNormSqr (
+                                          *subtract(analyticalVelocity, numericalVelocity)
+                                      ) ) );
 }
 
 int main(int argc, char *argv[])
@@ -153,7 +155,7 @@ int main(int argc, char *argv[])
     }
 
     const plint N = atoi(argv[1]);
-    
+
     const T Re = 1.0;
     const T alpha = 1.0; // womersley number
 
@@ -171,15 +173,15 @@ int main(int argc, char *argv[])
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(uMax, Re, N, lx, ly);
-    
+
 //     The frequency of the force (lattice units)
-    T frequency = (T)4*alpha*alpha*parameters.getLatticeNu() 
-                   / (T)(parameters.getResolution()*parameters.getResolution());
-                   
+    T frequency = (T)4*alpha*alpha*parameters.getLatticeNu()
+                  / (T)(parameters.getResolution()*parameters.getResolution());
+
 //     The amplitude of the forcing term (lattice units)
-    T amplitude = 8. * parameters.getLatticeNu() * parameters.getLatticeU() 
-                   / ( (T)(parameters.getResolution()*parameters.getResolution()) );
-                   
+    T amplitude = 8. * parameters.getLatticeNu() * parameters.getLatticeU()
+                  / ( (T)(parameters.getResolution()*parameters.getResolution()) );
+
 //     Period of the force (lattice units)
     plint tPeriod = (plint)((T)2*pi/frequency + 0.5);
 
@@ -191,13 +193,13 @@ int main(int argc, char *argv[])
     T omega = parameters.getOmega();
 
     MultiBlockLattice2D<T, NSDESCRIPTOR> lattice (
-            nx,ny,new DYNAMICS );
-            
+        nx,ny,new DYNAMICS );
+
     OnLatticeBoundaryCondition2D<T,NSDESCRIPTOR>*
-        boundaryCondition = createLocalBoundaryCondition2D<T,NSDESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,NSDESCRIPTOR>();
 
     lattice.periodicity().toggle(0,true);
-    
+
     channelSetup( lattice, parameters, *boundaryCondition, alpha, frequency, amplitude);
 
     pcout << "Starting simulation" << endl;
@@ -205,29 +207,30 @@ int main(int argc, char *argv[])
     const plint maxIter = tPeriod * 100;
     //const plint tSave = tPeriod / 24;
 
-    
+
     T error = T();
-    
+
     lattice.resetTime(1);
-    
+
     pcout << "Omega = " << omega << ", it period = " << tPeriod << endl;
 
     util::ValueTracer<T> converge(uMax,N,1.0e-3);
     plint iT = 0;
-    for (iT = 0; iT < maxIter; ++iT) {
+    for (iT = 0; iT < maxIter; ++iT)
+    {
 //         Updating the force in the whole domain
         Array<T,NSDESCRIPTOR<T>::d> force(womersleyForce((T)iT, amplitude, frequency, parameters),0.);
         setExternalVector(lattice,lattice.getBoundingBox(),
                           NSDESCRIPTOR<T>::ExternalField::forceBeginsAt,force);
-        
+
         T errorTemp = computeRMSerror( lattice,parameters,alpha,iT);
         error += errorTemp;
-        
+
         //if (iT % tSave == 0) {
         //    pcout << "Writing Gif at time : " << iT << std::endl;
         //    writeGif(lattice,iT);
         //}
-        
+
         if (iT % tPeriod == 0)
         {
 //             The error is averaged over one period
@@ -241,10 +244,9 @@ int main(int argc, char *argv[])
             }
             error = T();
         }
-        
+
         lattice.collideAndStream();
     }
-    
+
     pcout << "For N = " << N << ", Error = " << computeRMSerror ( lattice,parameters,alpha,iT, true) << endl;
 }
-

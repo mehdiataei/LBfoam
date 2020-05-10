@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -39,46 +39,47 @@
 #include <memory>
 
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
 void computeLaplacian(MultiScalarField2D<T>& value, MultiScalarField2D<T>& laplacian, Box2D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeLaplacian(MultiScalarField2D<T>& value, Box2D const& domain);
+std::auto_ptr<MultiScalarField2D<T> > computeLaplacian(MultiScalarField2D<T>& value, Box2D const& domain);
 
 template<typename T>
 void computeXderivative(MultiScalarField2D<T>& value, MultiScalarField2D<T>& derivative, Box2D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeXderivative(MultiScalarField2D<T>& value, Box2D const& domain);
+std::auto_ptr<MultiScalarField2D<T> > computeXderivative(MultiScalarField2D<T>& value, Box2D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeXderivative(MultiScalarField2D<T>& value);
+std::auto_ptr<MultiScalarField2D<T> > computeXderivative(MultiScalarField2D<T>& value);
 
 template<typename T>
 void computeYderivative(MultiScalarField2D<T>& value, MultiScalarField2D<T>& derivative, Box2D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeYderivative(MultiScalarField2D<T>& value, Box2D const& domain);
+std::auto_ptr<MultiScalarField2D<T> > computeYderivative(MultiScalarField2D<T>& value, Box2D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeYderivative(MultiScalarField2D<T>& value);
+std::auto_ptr<MultiScalarField2D<T> > computeYderivative(MultiScalarField2D<T>& value);
 
 template<typename T>
 void computeGradientNorm(MultiScalarField2D<T>& value, MultiScalarField2D<T>& derivative, Box2D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeGradientNorm(MultiScalarField2D<T>& value, Box2D const& domain);
+std::auto_ptr<MultiScalarField2D<T> > computeGradientNorm(MultiScalarField2D<T>& value, Box2D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeGradientNorm(MultiScalarField2D<T>& value);
+std::auto_ptr<MultiScalarField2D<T> > computeGradientNorm(MultiScalarField2D<T>& value);
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computePoissonRHS(MultiTensorField2D<T,2>& velocity, Box2D const& domain);
+std::auto_ptr<MultiScalarField2D<T> > computePoissonRHS(MultiTensorField2D<T,2>& velocity, Box2D const& domain);
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computePoissonRHS(MultiTensorField2D<T,2>& velocity);
+std::auto_ptr<MultiScalarField2D<T> > computePoissonRHS(MultiTensorField2D<T,2>& velocity);
 
 
 template<typename T>
@@ -94,51 +95,51 @@ template<typename T>
 void JacobiIteration( MultiScalarField2D<T>& u_h, MultiScalarField2D<T>& new_u_h,
                       MultiScalarField2D<T>& rhs, Box2D const& domain );
 
-template<typename T> 
+template<typename T>
 void GaussSeidelIteration( MultiScalarField2D<T>& u_h, MultiScalarField2D<T>& jacobi_u_h,
                            MultiScalarField2D<T>& new_u_h, MultiScalarField2D<T>& rhs, Box2D const& domain );
-                      
+
 
 template<typename T>
 void GaussSeidelSolver( MultiScalarField2D<T>& initialValue,
                         MultiScalarField2D<T>& result,
                         MultiScalarField2D<T>& rhs, Box2D const& domain, T tolerance=1e-5, plint maxIter=100000 );
-                        
-template<typename T> 
-MultiScalarField2D<T>* computeGaussSeidelDefect(MultiScalarField2D<T>& u_h, MultiScalarField2D<T>& rhs, 
-                                                Box2D const& domain);
+
+template<typename T>
+MultiScalarField2D<T>* computeGaussSeidelDefect(MultiScalarField2D<T>& u_h, MultiScalarField2D<T>& rhs,
+        Box2D const& domain);
 
 
 /* ************ MultiGrid methods *************** */
 template<typename T>
-MultiScalarField2D<T>* smooth( MultiScalarField2D<T>& initialValue, 
+MultiScalarField2D<T>* smooth( MultiScalarField2D<T>& initialValue,
                                MultiScalarField2D<T>& rhs, Box2D const& domain,
                                plint smoothIters);
-                               
+
 template<typename T>
-MultiScalarField2D<T>* smoothAndInterpolate(MultiScalarField2D<T>& initialValue, 
-                                            MultiScalarField2D<T>& rhs, Box2D const& domain,
-                                            plint smoothIters);
+MultiScalarField2D<T>* smoothAndInterpolate(MultiScalarField2D<T>& initialValue,
+        MultiScalarField2D<T>& rhs, Box2D const& domain,
+        plint smoothIters);
 
 template<typename T>
 T smoothAndComputeError(MultiScalarField2D<T>& initialValue, MultiScalarField2D<T>& rhs, Box2D const& domain);
 
 template<typename T>
-MultiScalarField2D<T>* smoothAndComputeCoarseDefect( MultiScalarField2D<T>& initialValue, 
-                                               MultiScalarField2D<T>& rhs, Box2D const& domain, plint smoothIters );   
+MultiScalarField2D<T>* smoothAndComputeCoarseDefect( MultiScalarField2D<T>& initialValue,
+        MultiScalarField2D<T>& rhs, Box2D const& domain, plint smoothIters );
 
 
 template<typename T>
 T multiGridVCycle( MultiScalarField2D<T>& initialValue, MultiScalarField2D<T>& newValue,
-                      MultiScalarField2D<T>& rhs, Box2D const& domain, plint depth=1 );
+                   MultiScalarField2D<T>& rhs, Box2D const& domain, plint depth=1 );
 
 template<typename T>
 std::vector<MultiScalarField2D<T>* > fullMultiGrid( MultiScalarField2D<T>& initialValue, MultiScalarField2D<T>& rhs,
-                                                    Box2D const& domain, plint gridLevels=2, plint ncycles=1);
+        Box2D const& domain, plint gridLevels=2, plint ncycles=1);
 
 template<typename T>
 std::vector<MultiScalarField2D<T>* > fullMultiGrid( MultiScalarField2D<T>& initialValue, MultiScalarField2D<T>& rhs,
-                                                    Box2D const& domain, plint gridLevels=2 );
+        Box2D const& domain, plint gridLevels=2 );
 
 
 // General Stencils.
@@ -152,19 +153,19 @@ std::vector<MultiScalarField2D<T>* > fullMultiGrid( MultiScalarField2D<T>& initi
 
 template<typename T, int order, int maxWidth>
 T computeScalarXderivative(ScalarField2D<T> const& scalar, int width, int position,
-        plint iX, plint iY);
+                           plint iX, plint iY);
 
 template<typename T, int order, int maxWidth>
 T computeScalarYderivative(ScalarField2D<T> const& scalar, int width, int position,
-        plint iX, plint iY);
+                           plint iX, plint iY);
 
 template<typename T, int nDim, int order, int maxWidth>
 Array<T,nDim> computeTensorXderivative(TensorField2D<T,nDim> const& tensor, int width, int position,
-        plint iX, plint iY);
+                                       plint iX, plint iY);
 
 template<typename T, int nDim, int order, int maxWidth>
 Array<T,nDim> computeTensorYderivative(TensorField2D<T,nDim> const& tensor, int width, int position,
-        plint iX, plint iY);
+                                       plint iX, plint iY);
 
 }  // namespace plb
 

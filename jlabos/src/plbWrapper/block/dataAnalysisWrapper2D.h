@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,7 +31,8 @@
 
 #include "multiBlock/multiDataField2D.h"
 
-namespace plb {
+namespace plb
+{
 
 
 /* *************** Reductive functions ******************************* */
@@ -77,7 +78,7 @@ void maskedCopy( MultiNTensorField2D<T1>& field,
 
 template<typename T1, typename T2>
 MultiNTensorField2D<T2>* maskedCopyConvert( MultiNTensorField2D<T1>& field, MultiNTensorField2D<int>& mask,
-                                            Box2D domain );
+        Box2D domain );
 
 
 /* *************** Component out of a tensor-field ****** */
@@ -93,11 +94,11 @@ void maskedExtractComponent(MultiNTensorField2D<T>& tensorField, MultiNTensorFie
 
 template<typename T>
 MultiNTensorField2D<T>* extractComponent( MultiNTensorField2D<T>& tensorField,
-                                          Box2D domain, int iComponent );
+        Box2D domain, int iComponent );
 
 template<typename T>
 MultiNTensorField2D<T>* maskedExtractComponent( MultiNTensorField2D<T>& tensorField, MultiNTensorField2D<int>& mask,
-                                                Box2D domain, int iComponent );
+        Box2D domain, int iComponent );
 
 
 /* *************** Vector-norm of each cell in the field *************** */
@@ -116,7 +117,7 @@ MultiNTensorField2D<T>* computeNorm(MultiNTensorField2D<T>& tensorField, Box2D d
 
 template<typename T>
 MultiNTensorField2D<T>* maskedComputeNorm(MultiNTensorField2D<T>& tensorField, MultiNTensorField2D<int>& mask,
-                                          Box2D domain);
+        Box2D domain);
 
 
 /* *************** Squared vector-norm of each cell in the field ******** */
@@ -133,7 +134,7 @@ MultiNTensorField2D<T>* computeNormSqr(MultiNTensorField2D<T>& tensorField, Box2
 
 template<typename T>
 MultiNTensorField2D<T>* maskedComputeNormSqr(MultiNTensorField2D<T>& tensorField, MultiNTensorField2D<int>& mask,
-                                             Box2D domain);
+        Box2D domain);
 
 
 /* *************** Tensor-norm of each symmetric tensor of a field ***** */
@@ -151,12 +152,12 @@ void maskedComputeSymmetricTensorNorm(MultiNTensorField2D<T>& tensorField,
 
 template<typename T>
 MultiNTensorField2D<T>* computeSymmetricTensorNorm(MultiNTensorField2D<T>& tensorField,
-                                                   Box2D domain);
+        Box2D domain);
 
 template<typename T>
 MultiNTensorField2D<T>* maskedComputeSymmetricTensorNorm(MultiNTensorField2D<T>& tensorField,
-                                                         MultiNTensorField2D<int>& mask,
-                                                         Box2D domain);
+        MultiNTensorField2D<int>& mask,
+        Box2D domain);
 
 
 /* *************** Squared Tensor-norm of each symmetric tensor of a field*/
@@ -168,18 +169,18 @@ void computeSymmetricTensorNormSqr(MultiNTensorField2D<T>& tensorField,
 
 template<typename T>
 void maskedComputeSymmetricTensorNormSqr(MultiNTensorField2D<T>& tensorField,
-                                         MultiNTensorField2D<T>& normSqr,
-                                         MultiNTensorField2D<int>& mask,
-                                         Box2D domain);
+        MultiNTensorField2D<T>& normSqr,
+        MultiNTensorField2D<int>& mask,
+        Box2D domain);
 
 template<typename T>
 MultiNTensorField2D<T>* computeSymmetricTensorNormSqr(MultiNTensorField2D<T>& tensorField,
-                                                      Box2D domain);
+        Box2D domain);
 
 template<typename T>
 MultiNTensorField2D<T>* maskedComputeSymmetricTensorNormSqr(MultiNTensorField2D<T>& tensorField,
-                                                            MultiNTensorField2D<int>& mask,
-                                                            Box2D domain);
+        MultiNTensorField2D<int>& mask,
+        Box2D domain);
 
 
 /* *************** Trace of each symmetric tensor of a field ************ */
@@ -197,12 +198,12 @@ void maskedComputeSymmetricTensorTrace(MultiNTensorField2D<T>& tensorField,
 
 template<typename T>
 MultiNTensorField2D<T>* computeSymmetricTensorTrace(MultiNTensorField2D<T>& tensorField,
-                                                    Box2D domain);
+        Box2D domain);
 
 template<typename T>
 MultiNTensorField2D<T>* maskedComputeSymmetricTensorTrace(MultiNTensorField2D<T>& tensorField,
-                                                          MultiNTensorField2D<int>& mask,
-                                                          Box2D domain);
+        MultiNTensorField2D<int>& mask,
+        Box2D domain);
 
 
 /* *************** Vorticity from Velocity field *********************** */
@@ -218,12 +219,12 @@ void maskedComputeVorticity(MultiNTensorField2D<T>& velocity, MultiNTensorField2
 
 template<typename T>
 MultiNTensorField2D<T>* computeVorticity(MultiNTensorField2D<T>& velocity,
-                                         Box2D domain);
+        Box2D domain);
 
 template<typename T>
 MultiNTensorField2D<T>* maskedComputeVorticity(MultiNTensorField2D<T>& velocity,
-                                              MultiNTensorField2D<int>& mask,
-                                              Box2D domain);
+        MultiNTensorField2D<int>& mask,
+        Box2D domain);
 
 
 /* *************** Vorticity, witout boundary treatment, from Velocity field  */
@@ -239,12 +240,12 @@ void maskedComputeBulkVorticity(MultiNTensorField2D<T>& velocity, MultiNTensorFi
 
 template<typename T>
 MultiNTensorField2D<T>* computeBulkVorticity(MultiNTensorField2D<T>& velocity,
-                                             Box2D domain);
+        Box2D domain);
 
 template<typename T>
 MultiNTensorField2D<T>* maskedComputeBulkVorticity(MultiNTensorField2D<T>& velocity,
-                                                   MultiNTensorField2D<int>& mask,
-                                                   Box2D domain);
+        MultiNTensorField2D<int>& mask,
+        Box2D domain);
 
 
 /* *************** Strain rate from Velocity field ********************* */
@@ -263,7 +264,7 @@ MultiNTensorField2D<T>* computeStrainRate(MultiNTensorField2D<T>& velocity, Box2
 
 template<typename T>
 MultiNTensorField2D<T>* maskedComputeStrainRate(MultiNTensorField2D<T>& velocity,
-                                                MultiNTensorField2D<int>& mask, Box2D domain);
+        MultiNTensorField2D<int>& mask, Box2D domain);
 
 
 /* *************** Str. rate, witout boundary treatment, from Velocity field  */
@@ -280,7 +281,7 @@ MultiNTensorField2D<T>* computeBulkStrainRate(MultiNTensorField2D<T>& velocity, 
 
 template<typename T>
 MultiNTensorField2D<T>* maskedComputeBulkStrainRate(MultiNTensorField2D<T>& velocity,
-                                                    MultiNTensorField2D<int>& mask, Box2D domain);
+        MultiNTensorField2D<int>& mask, Box2D domain);
 
 
 /* *************** MultiNTensorField - MultiNTensorField operations *************** */
@@ -328,7 +329,7 @@ void maskedSubtract(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B,
                     MultiNTensorField2D<T>& result, MultiNTensorField2D<int>& mask, Box2D domain);
 
 template<typename T> MultiNTensorField2D<T>* subtract(MultiNTensorField2D<T>& A,
-                                                      MultiNTensorField2D<T>& B, Box2D domain);
+        MultiNTensorField2D<T>& B, Box2D domain);
 
 template<typename T>
 MultiNTensorField2D<T>* maskedSubtract(MultiNTensorField2D<T>& A,
@@ -468,7 +469,7 @@ MultiNTensorField2D<T>* toThePower(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<T>* maskedToThePower(MultiNTensorField2D<T>& A,
-                                         MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
+        MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
 
 
 template<typename T>
@@ -485,7 +486,7 @@ MultiNTensorField2D<T>* toThePower(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<T>* maskedToThePower(MultiNTensorField2D<T>& A,
-                                         T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
+        T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
 
 
 template<typename T>
@@ -502,7 +503,7 @@ MultiNTensorField2D<T>* toThePower(T* alpha, int size,
 
 template<typename T>
 MultiNTensorField2D<T>* maskedToThePower(T* alpha, int size,
-                                         MultiNTensorField2D<T>& A, MultiNTensorField2D<int>& mask, Box2D domain);
+        MultiNTensorField2D<T>& A, MultiNTensorField2D<int>& mask, Box2D domain);
 
 
 template<typename T>
@@ -552,7 +553,7 @@ MultiNTensorField2D<int>* lessThan(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<int>* maskedLessThan(MultiNTensorField2D<T>& A,
-                                         MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
+        MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
 
 template<typename T>
 void lessThan(MultiNTensorField2D<T>& A, T* alpha, int size,
@@ -568,7 +569,7 @@ MultiNTensorField2D<int>* lessThan(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<int>* maskedLessThan(MultiNTensorField2D<T>& A,
-                                         T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
+        T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
 
 
 template<typename T>
@@ -585,7 +586,7 @@ MultiNTensorField2D<int>* lessEqual(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<int>* maskedLessEqual(MultiNTensorField2D<T>& A,
-                                          MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
+        MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
 
 template<typename T>
 void lessEqual(MultiNTensorField2D<T>& A, T* alpha, int size,
@@ -601,7 +602,7 @@ MultiNTensorField2D<int>* lessEqual(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<int>* maskedLessEqual(MultiNTensorField2D<T>& A,
-                                          T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
+        T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
 
 
 template<typename T>
@@ -618,7 +619,7 @@ MultiNTensorField2D<int>* greaterThan(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<int>* maskedGreaterThan(MultiNTensorField2D<T>& A,
-                                            MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
+        MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
 
 template<typename T>
 void greaterThan(MultiNTensorField2D<T>& A, T* alpha, int size,
@@ -634,7 +635,7 @@ MultiNTensorField2D<int>* greaterThan(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<int>* maskedGreaterThan(MultiNTensorField2D<T>& A,
-                                            T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
+        T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
 
 
 
@@ -652,7 +653,7 @@ MultiNTensorField2D<int>* greaterEqual(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<int>* maskedGreaterEqual(MultiNTensorField2D<T>& A,
-                                             MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
+        MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
 
 template<typename T>
 void greaterEqual(MultiNTensorField2D<T>& A, T* alpha, int size,
@@ -668,7 +669,7 @@ MultiNTensorField2D<int>* greaterEqual(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<int>* maskedGreaterEqual(MultiNTensorField2D<T>& A,
-                                             T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
+        T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
 
 
 template<typename T>
@@ -685,7 +686,7 @@ MultiNTensorField2D<int>* logicalAnd(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<int>* maskedLogicalAnd(MultiNTensorField2D<T>& A,
-                                           MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
+        MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
 
 
 template<typename T>
@@ -702,7 +703,7 @@ MultiNTensorField2D<int>* logicalOr(MultiNTensorField2D<T>& A,
 
 template<typename T>
 MultiNTensorField2D<int>* maskedLogicalOr(MultiNTensorField2D<T>& A,
-                                          MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
+        MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
 
 
 template<typename T>
@@ -729,79 +730,79 @@ void assignInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, Box2D d
 
 template<typename T>
 void maskedAssignInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
-      
+
 template<typename T>
 void assignInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, Box2D domain);
 
 template<typename T>
 void maskedAssignInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
-      
+
 
 template<typename T>
 void addInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, Box2D domain);
 
 template<typename T>
 void maskedAddInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
-      
+
 template<typename T>
 void addInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, Box2D domain);
 
 template<typename T>
 void maskedAddInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
-      
+
 
 template<typename T>
 void subtractInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, Box2D domain);
 
 template<typename T>
 void maskedSubtractInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
-      
+
 template<typename T>
 void subtractInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, Box2D domain);
 
 template<typename T>
 void maskedSubtractInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
-      
+
 
 template<typename T>
 void multiplyInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, Box2D domain);
 
 template<typename T>
 void maskedMultiplyInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
-      
+
 template<typename T>
 void multiplyInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, Box2D domain);
 
 template<typename T>
 void maskedMultiplyInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
-      
+
 
 template<typename T>
 void divideInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, Box2D domain);
 
 template<typename T>
 void maskedDivideInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
-      
+
 template<typename T>
 void divideInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, Box2D domain);
 
 template<typename T>
 void maskedDivideInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
 
-      
+
 template<typename T>
 void toThePowerInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, Box2D domain);
 
 template<typename T>
 void maskedToThePowerInPlace(MultiNTensorField2D<T>& A, MultiNTensorField2D<T>& B, MultiNTensorField2D<int>& mask, Box2D domain);
-      
+
 template<typename T>
 void toThePowerInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, Box2D domain);
 
 template<typename T>
 void maskedToThePowerInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, MultiNTensorField2D<int>& mask, Box2D domain);
 
-      
+
 }  // namespace plb
 
 #endif  // SWIG_DATA_ANALYSIS_WRAPPER_2D_H

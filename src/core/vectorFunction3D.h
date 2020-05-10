@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,536 +36,541 @@
 
 #include <cmath>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
 struct VectorFunction3D {
-    virtual ~VectorFunction3D() { }
-    virtual Array<T,3> operator()(Array<T,3> const& position) const = 0;
-    virtual VectorFunction3D<T>* clone() const = 0;
+	virtual ~VectorFunction3D() { }
+	virtual Array<T,3> operator()(Array<T,3> const& position) const = 0;
+	virtual VectorFunction3D<T>* clone() const = 0;
 };
 
 template<typename T>
-class ConstantVectorFunction3D : public VectorFunction3D<T> {
+class ConstantVectorFunction3D : public VectorFunction3D<T>
+{
 public:
-    ConstantVectorFunction3D(Array<T,3> const& constantVector_)
-        : constantVector(constantVector_)
-    { }
+	ConstantVectorFunction3D(Array<T,3> const& constantVector_)
+		: constantVector(constantVector_)
+	{ }
 
-    virtual Array<T,3> operator()(Array<T,3> const& position) const
-    {
-        return constantVector;
-    }
+	virtual Array<T,3> operator()(Array<T,3> const& position) const
+	{
+		return constantVector;
+	}
 
-    virtual ConstantVectorFunction3D<T>* clone() const
-    {
-        return new ConstantVectorFunction3D<T>(*this);
-    }
+	virtual ConstantVectorFunction3D<T>* clone() const
+	{
+		return new ConstantVectorFunction3D<T>(*this);
+	}
 private:
-    Array<T,3> constantVector;
+	Array<T,3> constantVector;
 };
 
 template<typename T>
-class IdentityVectorFunction3D : public VectorFunction3D<T> {
+class IdentityVectorFunction3D : public VectorFunction3D<T>
+{
 public:
-    virtual Array<T,3> operator()(Array<T,3> const& position) const
-    {
-        return position;
-    }
+	virtual Array<T,3> operator()(Array<T,3> const& position) const
+	{
+		return position;
+	}
 
-    virtual IdentityVectorFunction3D<T>* clone() const
-    {
-        return new IdentityVectorFunction3D<T>(*this);
-    }
+	virtual IdentityVectorFunction3D<T>* clone() const
+	{
+		return new IdentityVectorFunction3D<T>(*this);
+	}
 };
 
 template<typename T>
-class DiscreteTranslationalPositionFunction3D : public VectorFunction3D<T> {
+class DiscreteTranslationalPositionFunction3D : public VectorFunction3D<T>
+{
 public:
-    DiscreteTranslationalPositionFunction3D(Array<T,3> const& velocity_)
-        : velocity(velocity_)
-    { }
+	DiscreteTranslationalPositionFunction3D(Array<T,3> const& velocity_)
+		: velocity(velocity_)
+	{ }
 
-    Array<T,3> getVelocity() const
-    {
-        return velocity;
-    }
+	Array<T,3> getVelocity() const
+	{
+		return velocity;
+	}
 
-    virtual Array<T,3> operator()(Array<T,3> const& position) const
-    {
-        return position + velocity;
-    }
+	virtual Array<T,3> operator()(Array<T,3> const& position) const
+	{
+		return position + velocity;
+	}
 
-    virtual DiscreteTranslationalPositionFunction3D<T>* clone() const
-    {
-        return new DiscreteTranslationalPositionFunction3D<T>(*this);
-    }
+	virtual DiscreteTranslationalPositionFunction3D<T>* clone() const
+	{
+		return new DiscreteTranslationalPositionFunction3D<T>(*this);
+	}
 private:
-    Array<T,3> velocity;
+	Array<T,3> velocity;
 };
 
 template<typename T>
-class DiscreteRotationalVelocityFunction3D : public VectorFunction3D<T> {
+class DiscreteRotationalVelocityFunction3D : public VectorFunction3D<T>
+{
 public:
-    DiscreteRotationalVelocityFunction3D(Array<T,3> const& angularVelocity_, Array<T,3> const& pointOnRotationAxis_)
-        : angularVelocity(angularVelocity_),
-          pointOnRotationAxis(pointOnRotationAxis_)
-    {
-        normAngularVelocity = norm(angularVelocity);
-        if (!util::isZero(normAngularVelocity)) {
-            rotationAxisUnitVector = angularVelocity / normAngularVelocity;
-        } else {
-            angularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normAngularVelocity = (T) 0;
-        }
-    }
+	DiscreteRotationalVelocityFunction3D(Array<T,3> const& angularVelocity_, Array<T,3> const& pointOnRotationAxis_)
+		: angularVelocity(angularVelocity_),
+		  pointOnRotationAxis(pointOnRotationAxis_)
+	{
+		normAngularVelocity = norm(angularVelocity);
+		if (!util::isZero(normAngularVelocity)) {
+			rotationAxisUnitVector = angularVelocity / normAngularVelocity;
+		} else {
+			angularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normAngularVelocity = (T) 0;
+		}
+	}
 
-    DiscreteRotationalVelocityFunction3D(Array<T,3> const& angularVelocity_)
-        : angularVelocity(angularVelocity_),
-          pointOnRotationAxis(Array<T,3>::zero())
-    {
-        normAngularVelocity = norm(angularVelocity);
-        if (!util::isZero(normAngularVelocity)) {
-            rotationAxisUnitVector = angularVelocity / normAngularVelocity;
-        } else {
-            angularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normAngularVelocity = (T) 0;
-        }
-    }
+	DiscreteRotationalVelocityFunction3D(Array<T,3> const& angularVelocity_)
+		: angularVelocity(angularVelocity_),
+		  pointOnRotationAxis(Array<T,3>::zero())
+	{
+		normAngularVelocity = norm(angularVelocity);
+		if (!util::isZero(normAngularVelocity)) {
+			rotationAxisUnitVector = angularVelocity / normAngularVelocity;
+		} else {
+			angularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normAngularVelocity = (T) 0;
+		}
+	}
 
-    Array<T,3> getAngularVelocity() const
-    {
-        return angularVelocity;
-    }
+	Array<T,3> getAngularVelocity() const
+	{
+		return angularVelocity;
+	}
 
-    // The rotation angle between two time instants is defined as the time integral of the
-    // norm of the angular velocity.
-    T getRotationAngle(T t1, T t2) const
-    {
-        return normAngularVelocity * (t2 - t1);
-    }
+	// The rotation angle between two time instants is defined as the time integral of the
+	// norm of the angular velocity.
+	T getRotationAngle(T t1, T t2) const
+	{
+		return normAngularVelocity * (t2 - t1);
+	}
 
-    // The current rotation angle is defined as the rotation angle between the current
-    // time instant t and and the time instant t + 1.
-    T getRotationAngle() const
-    {
-        return normAngularVelocity;
-    }
+	// The current rotation angle is defined as the rotation angle between the current
+	// time instant t and and the time instant t + 1.
+	T getRotationAngle() const
+	{
+		return normAngularVelocity;
+	}
 
-    virtual Array<T,3> operator()(Array<T,3> const& position) const
-    {
-        return getDiscreteRotationalVelocity(position, normAngularVelocity, rotationAxisUnitVector, pointOnRotationAxis);
-    }
+	virtual Array<T,3> operator()(Array<T,3> const& position) const
+	{
+		return getDiscreteRotationalVelocity(position, normAngularVelocity, rotationAxisUnitVector, pointOnRotationAxis);
+	}
 
-    virtual DiscreteRotationalVelocityFunction3D<T>* clone() const
-    {
-        return new DiscreteRotationalVelocityFunction3D<T>(*this);
-    }
+	virtual DiscreteRotationalVelocityFunction3D<T>* clone() const
+	{
+		return new DiscreteRotationalVelocityFunction3D<T>(*this);
+	}
 private:
-    Array<T,3> angularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
-    T normAngularVelocity;
+	Array<T,3> angularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
+	T normAngularVelocity;
 };
 
 template<typename T>
-class DiscreteRotationalPositionFunction3D : public VectorFunction3D<T> {
+class DiscreteRotationalPositionFunction3D : public VectorFunction3D<T>
+{
 public:
-    DiscreteRotationalPositionFunction3D(Array<T,3> const& angularVelocity_, Array<T,3> const& pointOnRotationAxis_)
-        : angularVelocity(angularVelocity_),
-          pointOnRotationAxis(pointOnRotationAxis_)
-    {
-        normAngularVelocity = norm(angularVelocity);
-        if (!util::isZero(normAngularVelocity)) {
-            rotationAxisUnitVector = angularVelocity / normAngularVelocity;
-        } else {
-            angularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normAngularVelocity = (T) 0;
-        }
-    }
+	DiscreteRotationalPositionFunction3D(Array<T,3> const& angularVelocity_, Array<T,3> const& pointOnRotationAxis_)
+		: angularVelocity(angularVelocity_),
+		  pointOnRotationAxis(pointOnRotationAxis_)
+	{
+		normAngularVelocity = norm(angularVelocity);
+		if (!util::isZero(normAngularVelocity)) {
+			rotationAxisUnitVector = angularVelocity / normAngularVelocity;
+		} else {
+			angularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normAngularVelocity = (T) 0;
+		}
+	}
 
-    DiscreteRotationalPositionFunction3D(Array<T,3> const& angularVelocity_)
-        : angularVelocity(angularVelocity_),
-          pointOnRotationAxis(Array<T,3>::zero())
-    {
-        normAngularVelocity = norm(angularVelocity);
-        if (!util::isZero(normAngularVelocity)) {
-            rotationAxisUnitVector = angularVelocity / normAngularVelocity;
-        } else {
-            angularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normAngularVelocity = (T) 0;
-        }
-    }
+	DiscreteRotationalPositionFunction3D(Array<T,3> const& angularVelocity_)
+		: angularVelocity(angularVelocity_),
+		  pointOnRotationAxis(Array<T,3>::zero())
+	{
+		normAngularVelocity = norm(angularVelocity);
+		if (!util::isZero(normAngularVelocity)) {
+			rotationAxisUnitVector = angularVelocity / normAngularVelocity;
+		} else {
+			angularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normAngularVelocity = (T) 0;
+		}
+	}
 
-    Array<T,3> getAngularVelocity() const
-    {
-        return angularVelocity;
-    }
+	Array<T,3> getAngularVelocity() const
+	{
+		return angularVelocity;
+	}
 
-    // The rotation angle between two time instants is defined as the time integral of the
-    // norm of the angular velocity.
-    T getRotationAngle(T t1, T t2) const
-    {
-        return normAngularVelocity * (t2 - t1);
-    }
+	// The rotation angle between two time instants is defined as the time integral of the
+	// norm of the angular velocity.
+	T getRotationAngle(T t1, T t2) const
+	{
+		return normAngularVelocity * (t2 - t1);
+	}
 
-    // The current rotation angle is defined as the rotation angle between the current
-    // time instant t and and the time instant t + 1.
-    T getRotationAngle() const
-    {
-        return normAngularVelocity;
-    }
+	// The current rotation angle is defined as the rotation angle between the current
+	// time instant t and and the time instant t + 1.
+	T getRotationAngle() const
+	{
+		return normAngularVelocity;
+	}
 
-    virtual Array<T,3> operator()(Array<T,3> const& position) const
-    {
-        return getRotatedPosition(position, normAngularVelocity, rotationAxisUnitVector, pointOnRotationAxis);
-    }
+	virtual Array<T,3> operator()(Array<T,3> const& position) const
+	{
+		return getRotatedPosition(position, normAngularVelocity, rotationAxisUnitVector, pointOnRotationAxis);
+	}
 
-    virtual DiscreteRotationalPositionFunction3D<T>* clone() const
-    {
-        return new DiscreteRotationalPositionFunction3D<T>(*this);
-    }
+	virtual DiscreteRotationalPositionFunction3D<T>* clone() const
+	{
+		return new DiscreteRotationalPositionFunction3D<T>(*this);
+	}
 private:
-    Array<T,3> angularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
-    T normAngularVelocity;
+	Array<T,3> angularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
+	T normAngularVelocity;
 };
 
 template<typename T>
-class ExactRotationalVelocityFunction3D : public VectorFunction3D<T> {
+class ExactRotationalVelocityFunction3D : public VectorFunction3D<T>
+{
 public:
-    ExactRotationalVelocityFunction3D(Array<T,3> const& angularVelocity_, Array<T,3> const& pointOnRotationAxis_)
-        : angularVelocity(angularVelocity_),
-          pointOnRotationAxis(pointOnRotationAxis_)
-    {
-        normAngularVelocity = norm(angularVelocity);
-        if (!util::isZero(normAngularVelocity)) {
-            rotationAxisUnitVector = angularVelocity / normAngularVelocity;
-        } else {
-            angularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normAngularVelocity = (T) 0;
-        }
-    }
+	ExactRotationalVelocityFunction3D(Array<T,3> const& angularVelocity_, Array<T,3> const& pointOnRotationAxis_)
+		: angularVelocity(angularVelocity_),
+		  pointOnRotationAxis(pointOnRotationAxis_)
+	{
+		normAngularVelocity = norm(angularVelocity);
+		if (!util::isZero(normAngularVelocity)) {
+			rotationAxisUnitVector = angularVelocity / normAngularVelocity;
+		} else {
+			angularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normAngularVelocity = (T) 0;
+		}
+	}
 
-    ExactRotationalVelocityFunction3D(Array<T,3> const& angularVelocity_)
-        : angularVelocity(angularVelocity_),
-          pointOnRotationAxis(Array<T,3>::zero())
-    {
-        normAngularVelocity = norm(angularVelocity);
-        if (!util::isZero(normAngularVelocity)) {
-            rotationAxisUnitVector = angularVelocity / normAngularVelocity;
-        } else {
-            angularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normAngularVelocity = (T) 0;
-        }
-    }
+	ExactRotationalVelocityFunction3D(Array<T,3> const& angularVelocity_)
+		: angularVelocity(angularVelocity_),
+		  pointOnRotationAxis(Array<T,3>::zero())
+	{
+		normAngularVelocity = norm(angularVelocity);
+		if (!util::isZero(normAngularVelocity)) {
+			rotationAxisUnitVector = angularVelocity / normAngularVelocity;
+		} else {
+			angularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normAngularVelocity = (T) 0;
+		}
+	}
 
-    Array<T,3> getAngularVelocity() const
-    {
-        return angularVelocity;
-    }
+	Array<T,3> getAngularVelocity() const
+	{
+		return angularVelocity;
+	}
 
-    // The rotation angle between two time instants is defined as the time integral of the
-    // norm of the angular velocity.
-    T getRotationAngle(T t1, T t2) const
-    {
-        return normAngularVelocity * (t2 - t1);
-    }
+	// The rotation angle between two time instants is defined as the time integral of the
+	// norm of the angular velocity.
+	T getRotationAngle(T t1, T t2) const
+	{
+		return normAngularVelocity * (t2 - t1);
+	}
 
-    // The current rotation angle is defined as the rotation angle between the current
-    // time instant t and and the time instant t + 1.
-    T getRotationAngle() const
-    {
-        return normAngularVelocity;
-    }
+	// The current rotation angle is defined as the rotation angle between the current
+	// time instant t and and the time instant t + 1.
+	T getRotationAngle() const
+	{
+		return normAngularVelocity;
+	}
 
-    virtual Array<T,3> operator()(Array<T,3> const& position) const
-    {
-        return getExactRotationalVelocity(position, angularVelocity, pointOnRotationAxis);
-    }
+	virtual Array<T,3> operator()(Array<T,3> const& position) const
+	{
+		return getExactRotationalVelocity(position, angularVelocity, pointOnRotationAxis);
+	}
 
-    virtual ExactRotationalVelocityFunction3D<T>* clone() const
-    {
-        return new ExactRotationalVelocityFunction3D<T>(*this);
-    }
+	virtual ExactRotationalVelocityFunction3D<T>* clone() const
+	{
+		return new ExactRotationalVelocityFunction3D<T>(*this);
+	}
 private:
-    Array<T,3> angularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
-    T normAngularVelocity;
+	Array<T,3> angularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
+	T normAngularVelocity;
 };
 
-template<typename T, template<typename U> class Descriptor, class IncreasingFunctionAndIntegral> 
-class IncreasingDiscreteRotationalVelocityFunction3D : public VectorFunction3D<T> {
+template<typename T, template<typename U> class Descriptor>
+class IncreasingDiscreteRotationalVelocityFunction3D : public VectorFunction3D<T>
+{
 public:
-    IncreasingDiscreteRotationalVelocityFunction3D(Array<T,3> const& maxAngularVelocity_,
-            Array<T,3> const& pointOnRotationAxis_, MultiBlockLattice3D<T,Descriptor> const& lattice_,
-            T tOffset_, IncreasingFunctionAndIntegral f_)
-        : maxAngularVelocity(maxAngularVelocity_),
-          pointOnRotationAxis(pointOnRotationAxis_),
-          lattice(lattice_),
-          tOffset(tOffset_),
-          f(f_)
-    {
-        normMaxAngularVelocity = norm(maxAngularVelocity);
-        if (!util::isZero(normMaxAngularVelocity)) {
-            rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
-        } else {
-            maxAngularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normMaxAngularVelocity = (T) 0;
-        }
-    }
+	IncreasingDiscreteRotationalVelocityFunction3D(Array<T,3> const& maxAngularVelocity_,
+	        Array<T,3> const& pointOnRotationAxis_, MultiBlockLattice3D<T,Descriptor> const& lattice_,
+	        T tOffset_, T maxT_)
+		: maxAngularVelocity(maxAngularVelocity_),
+		  pointOnRotationAxis(pointOnRotationAxis_),
+		  lattice(lattice_),
+		  tOffset(tOffset_),
+		  maxT(maxT_)
+	{
+		normMaxAngularVelocity = norm(maxAngularVelocity);
+		if (!util::isZero(normMaxAngularVelocity)) {
+			rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
+		} else {
+			maxAngularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normMaxAngularVelocity = (T) 0;
+		}
+	}
 
-    IncreasingDiscreteRotationalVelocityFunction3D(Array<T,3> const& maxAngularVelocity_,
-            MultiBlockLattice3D<T,Descriptor> const& lattice_, T tOffset_,
-            IncreasingFunctionAndIntegral f_)
-        : maxAngularVelocity(maxAngularVelocity_),
-          pointOnRotationAxis(Array<T,3>::zero()),
-          lattice(lattice_),
-          tOffset(tOffset_),
-          f(f_)
-    {
-        normMaxAngularVelocity = norm(maxAngularVelocity);
-        if (!util::isZero(normMaxAngularVelocity)) {
-            rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
-        } else {
-            maxAngularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normMaxAngularVelocity = (T) 0;
-        }
-    }
+	IncreasingDiscreteRotationalVelocityFunction3D(Array<T,3> const& maxAngularVelocity_,
+	        MultiBlockLattice3D<T,Descriptor> const& lattice_, T tOffset_, T maxT_)
+		: maxAngularVelocity(maxAngularVelocity_),
+		  pointOnRotationAxis(Array<T,3>::zero()),
+		  lattice(lattice_),
+		  tOffset(tOffset_),
+		  maxT(maxT_)
+	{
+		normMaxAngularVelocity = norm(maxAngularVelocity);
+		if (!util::isZero(normMaxAngularVelocity)) {
+			rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
+		} else {
+			maxAngularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normMaxAngularVelocity = (T) 0;
+		}
+	}
 
-    Array<T,3> getAngularVelocity() const
-    {
-        T t = (T) lattice.getTimeCounter().getTime() + tOffset;
-        Array<T,3> angularVelocity = f.getValue(t) * maxAngularVelocity;
-        return angularVelocity;
-    }
+	Array<T,3> getAngularVelocity() const
+	{
+		T t = (T) lattice.getTimeCounter().getTime() + tOffset;
+		Array<T,3> angularVelocity = util::sinIncreasingFunction<T>(t, maxT) * maxAngularVelocity;
+		return angularVelocity;
+	}
 
-    // The rotation angle between two time instants is defined as the time integral of the
-    // norm of the angular velocity.
-    T getRotationAngle(T t1, T t2) const
-    {
-        T theta = f.getIntegral(t1, t2) * normMaxAngularVelocity;
-        return theta;
-    }
+	// The rotation angle between two time instants is defined as the time integral of the
+	// norm of the angular velocity.
+	T getRotationAngle(T t1, T t2) const
+	{
+		T theta = util::sinIncreasingFunctionIntegral<T>(t1, t2, maxT) * normMaxAngularVelocity;
+		return theta;
+	}
 
-    // The current rotation angle is defined as the rotation angle between the current
-    // time instant t and and the time instant t + 1.
-    T getRotationAngle() const
-    {
-        T t = (T) lattice.getTimeCounter().getTime() + tOffset;
-        T theta = getRotationAngle(t, t + (T) 1);
-        return theta;
-    }
+	// The current rotation angle is defined as the rotation angle between the current
+	// time instant t and and the time instant t + 1.
+	T getRotationAngle() const
+	{
+		T t = (T) lattice.getTimeCounter().getTime() + tOffset;
+		T theta = getRotationAngle(t, t + (T) 1);
+		return theta;
+	}
 
-    virtual Array<T,3> operator()(Array<T,3> const& position) const
-    {
-        return getDiscreteRotationalVelocity(position, getRotationAngle(), rotationAxisUnitVector, pointOnRotationAxis);
-    }
+	virtual Array<T,3> operator()(Array<T,3> const& position) const
+	{
+		return getDiscreteRotationalVelocity(position, getRotationAngle(), rotationAxisUnitVector, pointOnRotationAxis);
+	}
 
-    virtual IncreasingDiscreteRotationalVelocityFunction3D<T,Descriptor,IncreasingFunctionAndIntegral>* clone() const
-    {
-        return new IncreasingDiscreteRotationalVelocityFunction3D<T,Descriptor,IncreasingFunctionAndIntegral>(*this);
-    }
+	virtual IncreasingDiscreteRotationalVelocityFunction3D<T,Descriptor>* clone() const
+	{
+		return new IncreasingDiscreteRotationalVelocityFunction3D<T,Descriptor>(*this);
+	}
 private:
-    Array<T,3> maxAngularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
-    MultiBlockLattice3D<T,Descriptor> const& lattice;
-    T tOffset, normMaxAngularVelocity;
-    IncreasingFunctionAndIntegral f;
+	Array<T,3> maxAngularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
+	MultiBlockLattice3D<T,Descriptor> const& lattice;
+	T tOffset, maxT, normMaxAngularVelocity;
 };
 
-template<typename T, template<typename U> class Descriptor, class IncreasingFunctionAndIntegral> 
-class IncreasingDiscreteRotationalPositionFunction3D : public VectorFunction3D<T> {
+template<typename T, template<typename U> class Descriptor>
+class IncreasingDiscreteRotationalPositionFunction3D : public VectorFunction3D<T>
+{
 public:
-    IncreasingDiscreteRotationalPositionFunction3D(Array<T,3> const& maxAngularVelocity_,
-            Array<T,3> const& pointOnRotationAxis_, MultiBlockLattice3D<T,Descriptor> const& lattice_,
-            T tOffset_, IncreasingFunctionAndIntegral f_)
-        : maxAngularVelocity(maxAngularVelocity_),
-          pointOnRotationAxis(pointOnRotationAxis_),
-          lattice(lattice_),
-          tOffset(tOffset_),
-          f(f_)
-    {
-        normMaxAngularVelocity = norm(maxAngularVelocity);
-        if (!util::isZero(normMaxAngularVelocity)) {
-            rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
-        } else {
-            maxAngularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normMaxAngularVelocity = (T) 0;
-        }
-    }
+	IncreasingDiscreteRotationalPositionFunction3D(Array<T,3> const& maxAngularVelocity_,
+	        Array<T,3> const& pointOnRotationAxis_, MultiBlockLattice3D<T,Descriptor> const& lattice_,
+	        T tOffset_, T maxT_)
+		: maxAngularVelocity(maxAngularVelocity_),
+		  pointOnRotationAxis(pointOnRotationAxis_),
+		  lattice(lattice_),
+		  tOffset(tOffset_),
+		  maxT(maxT_)
+	{
+		normMaxAngularVelocity = norm(maxAngularVelocity);
+		if (!util::isZero(normMaxAngularVelocity)) {
+			rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
+		} else {
+			maxAngularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normMaxAngularVelocity = (T) 0;
+		}
+	}
 
-    IncreasingDiscreteRotationalPositionFunction3D(Array<T,3> const& maxAngularVelocity_,
-            MultiBlockLattice3D<T,Descriptor> const& lattice_, T tOffset_,
-            IncreasingFunctionAndIntegral f_)
-        : maxAngularVelocity(maxAngularVelocity_),
-          pointOnRotationAxis(Array<T,3>::zero()),
-          lattice(lattice_),
-          tOffset(tOffset_),
-          f(f_)
-    {
-        normMaxAngularVelocity = norm(maxAngularVelocity);
-        if (!util::isZero(normMaxAngularVelocity)) {
-            rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
-        } else {
-            maxAngularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normMaxAngularVelocity = (T) 0;
-        }
-    }
+	IncreasingDiscreteRotationalPositionFunction3D(Array<T,3> const& maxAngularVelocity_,
+	        MultiBlockLattice3D<T,Descriptor> const& lattice_, T tOffset_, T maxT_)
+		: maxAngularVelocity(maxAngularVelocity_),
+		  pointOnRotationAxis(Array<T,3>::zero()),
+		  lattice(lattice_),
+		  tOffset(tOffset_),
+		  maxT(maxT_)
+	{
+		normMaxAngularVelocity = norm(maxAngularVelocity);
+		if (!util::isZero(normMaxAngularVelocity)) {
+			rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
+		} else {
+			maxAngularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normMaxAngularVelocity = (T) 0;
+		}
+	}
 
-    Array<T,3> getAngularVelocity() const
-    {
-        T t = (T) lattice.getTimeCounter().getTime() + tOffset;
-        Array<T,3> angularVelocity = f.getValue(t) * maxAngularVelocity;
-        return angularVelocity;
-    }
+	Array<T,3> getAngularVelocity() const
+	{
+		T t = (T) lattice.getTimeCounter().getTime() + tOffset;
+		Array<T,3> angularVelocity = util::sinIncreasingFunction<T>(t, maxT) * maxAngularVelocity;
+		return angularVelocity;
+	}
 
-    // The rotation angle between two time instants is defined as the time integral of the
-    // norm of the angular velocity.
-    T getRotationAngle(T t1, T t2) const
-    {
-        T theta = f.getIntegral(t1, t2) * normMaxAngularVelocity;
-        return theta;
-    }
+	// The rotation angle between two time instants is defined as the time integral of the
+	// norm of the angular velocity.
+	T getRotationAngle(T t1, T t2) const
+	{
+		T theta = util::sinIncreasingFunctionIntegral<T>(t1, t2, maxT) * normMaxAngularVelocity;
+		return theta;
+	}
 
-    // The current rotation angle is defined as the rotation angle between the current
-    // time instant t and and the time instant t + 1.
-    T getRotationAngle() const
-    {
-        T t = (T) lattice.getTimeCounter().getTime() + tOffset;
-        T theta = getRotationAngle(t, t + (T) 1);
-        return theta;
-    }
+	// The current rotation angle is defined as the rotation angle between the current
+	// time instant t and and the time instant t + 1.
+	T getRotationAngle() const
+	{
+		T t = (T) lattice.getTimeCounter().getTime() + tOffset;
+		T theta = getRotationAngle(t, t + (T) 1);
+		return theta;
+	}
 
-    virtual Array<T,3> operator()(Array<T,3> const& position) const
-    {
-        return getRotatedPosition(position, getRotationAngle(), rotationAxisUnitVector, pointOnRotationAxis);
-    }
+	virtual Array<T,3> operator()(Array<T,3> const& position) const
+	{
+		return getRotatedPosition(position, getRotationAngle(), rotationAxisUnitVector, pointOnRotationAxis);
+	}
 
-    virtual IncreasingDiscreteRotationalPositionFunction3D<T,Descriptor,IncreasingFunctionAndIntegral>* clone() const
-    {
-        return new IncreasingDiscreteRotationalPositionFunction3D<T,Descriptor,IncreasingFunctionAndIntegral>(*this);
-    }
+	virtual IncreasingDiscreteRotationalPositionFunction3D<T,Descriptor>* clone() const
+	{
+		return new IncreasingDiscreteRotationalPositionFunction3D<T,Descriptor>(*this);
+	}
 private:
-    Array<T,3> maxAngularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
-    MultiBlockLattice3D<T,Descriptor> const& lattice;
-    T tOffset, normMaxAngularVelocity;
-    IncreasingFunctionAndIntegral f;
+	Array<T,3> maxAngularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
+	MultiBlockLattice3D<T,Descriptor> const& lattice;
+	T tOffset, maxT, normMaxAngularVelocity;
 };
 
-template<typename T, template<typename U> class Descriptor, class IncreasingFunctionAndIntegral> 
-class IncreasingExactRotationalVelocityFunction3D : public VectorFunction3D<T> {
+template<typename T, template<typename U> class Descriptor>
+class IncreasingExactRotationalVelocityFunction3D : public VectorFunction3D<T>
+{
 public:
-    IncreasingExactRotationalVelocityFunction3D(Array<T,3> const& maxAngularVelocity_,
-            Array<T,3> const& pointOnRotationAxis_, MultiBlockLattice3D<T,Descriptor> const& lattice_,
-            T tOffset_, IncreasingFunctionAndIntegral f_)
-        : maxAngularVelocity(maxAngularVelocity_),
-          pointOnRotationAxis(pointOnRotationAxis_),
-          lattice(lattice_),
-          tOffset(tOffset_),
-          f(f_)
-    {
-        normMaxAngularVelocity = norm(maxAngularVelocity);
-        if (!util::isZero(normMaxAngularVelocity)) {
-            rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
-        } else {
-            maxAngularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normMaxAngularVelocity = (T) 0;
-        }
-    }
+	IncreasingExactRotationalVelocityFunction3D(Array<T,3> const& maxAngularVelocity_,
+	        Array<T,3> const& pointOnRotationAxis_, MultiBlockLattice3D<T,Descriptor> const& lattice_,
+	        T tOffset_, T maxT_)
+		: maxAngularVelocity(maxAngularVelocity_),
+		  pointOnRotationAxis(pointOnRotationAxis_),
+		  lattice(lattice_),
+		  tOffset(tOffset_),
+		  maxT(maxT_)
+	{
+		normMaxAngularVelocity = norm(maxAngularVelocity);
+		if (!util::isZero(normMaxAngularVelocity)) {
+			rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
+		} else {
+			maxAngularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normMaxAngularVelocity = (T) 0;
+		}
+	}
 
-    IncreasingExactRotationalVelocityFunction3D(Array<T,3> const& maxAngularVelocity_,
-            MultiBlockLattice3D<T,Descriptor> const& lattice_, T tOffset_,
-            IncreasingFunctionAndIntegral f_)
-        : maxAngularVelocity(maxAngularVelocity_),
-          pointOnRotationAxis(Array<T,3>::zero()),
-          lattice(lattice_),
-          tOffset(tOffset_),
-          f(f_)
-    {
-        normMaxAngularVelocity = norm(maxAngularVelocity);
-        if (!util::isZero(normMaxAngularVelocity)) {
-            rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
-        } else {
-            maxAngularVelocity = Array<T,3>::zero();
-            rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
-            normMaxAngularVelocity = (T) 0;
-        }
-    }
+	IncreasingExactRotationalVelocityFunction3D(Array<T,3> const& maxAngularVelocity_,
+	        MultiBlockLattice3D<T,Descriptor> const& lattice_, T tOffset_, T maxT_)
+		: maxAngularVelocity(maxAngularVelocity_),
+		  pointOnRotationAxis(Array<T,3>::zero()),
+		  lattice(lattice_),
+		  tOffset(tOffset_),
+		  maxT(maxT_)
+	{
+		normMaxAngularVelocity = norm(maxAngularVelocity);
+		if (!util::isZero(normMaxAngularVelocity)) {
+			rotationAxisUnitVector = maxAngularVelocity / normMaxAngularVelocity;
+		} else {
+			maxAngularVelocity = Array<T,3>::zero();
+			rotationAxisUnitVector = Array<T,3>((T) 1, (T) 0, (T) 0); // Array<T,3>::zero();
+			normMaxAngularVelocity = (T) 0;
+		}
+	}
 
-    Array<T,3> getAngularVelocity() const
-    {
-        T t = (T) lattice.getTimeCounter().getTime() + tOffset;
-        Array<T,3> angularVelocity = f.getValue(t) * maxAngularVelocity;
-        return angularVelocity;
-    }
+	Array<T,3> getAngularVelocity() const
+	{
+		T t = (T) lattice.getTimeCounter().getTime() + tOffset;
+		Array<T,3> angularVelocity = util::sinIncreasingFunction<T>(t, maxT) * maxAngularVelocity;
+		return angularVelocity;
+	}
 
-    // The rotation angle between two time instants is defined as the time integral of the
-    // norm of the angular velocity.
-    T getRotationAngle(T t1, T t2) const
-    {
-        T theta = f.getIntegral(t1, t2) * normMaxAngularVelocity;
-        return theta;
-    }
+	// The rotation angle between two time instants is defined as the time integral of the
+	// norm of the angular velocity.
+	T getRotationAngle(T t1, T t2) const
+	{
+		T theta = util::sinIncreasingFunctionIntegral<T>(t1, t2, maxT) * normMaxAngularVelocity;
+		return theta;
+	}
 
-    // The current rotation angle is defined as the rotation angle between the current
-    // time instant t and and the time instant t + 1.
-    T getRotationAngle() const
-    {
-        T t = (T) lattice.getTimeCounter().getTime() + tOffset;
-        T theta = getRotationAngle(t, t + (T) 1);
-        return theta;
-    }
+	// The current rotation angle is defined as the rotation angle between the current
+	// time instant t and and the time instant t + 1.
+	T getRotationAngle() const
+	{
+		T t = (T) lattice.getTimeCounter().getTime() + tOffset;
+		T theta = getRotationAngle(t, t + (T) 1);
+		return theta;
+	}
 
-    virtual Array<T,3> operator()(Array<T,3> const& position) const
-    {
-        return getExactRotationalVelocity(position, getAngularVelocity(), pointOnRotationAxis);
-    }
+	virtual Array<T,3> operator()(Array<T,3> const& position) const
+	{
+		return getExactRotationalVelocity(position, getAngularVelocity(), pointOnRotationAxis);
+	}
 
-    virtual IncreasingExactRotationalVelocityFunction3D<T,Descriptor,IncreasingFunctionAndIntegral>* clone() const
-    {
-        return new IncreasingExactRotationalVelocityFunction3D<T,Descriptor,IncreasingFunctionAndIntegral>(*this);
-    }
+	virtual IncreasingExactRotationalVelocityFunction3D<T,Descriptor>* clone() const
+	{
+		return new IncreasingExactRotationalVelocityFunction3D<T,Descriptor>(*this);
+	}
 private:
-    Array<T,3> maxAngularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
-    MultiBlockLattice3D<T,Descriptor> const& lattice;
-    T tOffset, normMaxAngularVelocity;
-    IncreasingFunctionAndIntegral f;
+	Array<T,3> maxAngularVelocity, rotationAxisUnitVector, pointOnRotationAxis;
+	MultiBlockLattice3D<T,Descriptor> const& lattice;
+	T tOffset, maxT, normMaxAngularVelocity;
 };
 
-template<typename T, template<typename U> class Descriptor> 
-class HarmonicVectorFunction3D : public VectorFunction3D<T> {
+template<typename T, template<typename U> class Descriptor>
+class HarmonicVectorFunction3D : public VectorFunction3D<T>
+{
 public:
-    HarmonicVectorFunction3D(Array<T,3> const& vectorAmplitude_, T angularFrequency_, T phase_,
-            MultiBlockLattice3D<T,Descriptor> const& lattice_, T tOffset_)
-        : vectorAmplitude(vectorAmplitude_),
-          angularFrequency(angularFrequency_),
-          phase(phase_),
-          lattice(lattice_),
-          tOffset(tOffset_)
-    { }
+	HarmonicVectorFunction3D(Array<T,3> const& vectorAmplitude_, T angularFrequency_, T phase_,
+	                         MultiBlockLattice3D<T,Descriptor> const& lattice_, T tOffset_)
+		: vectorAmplitude(vectorAmplitude_),
+		  angularFrequency(angularFrequency_),
+		  phase(phase_),
+		  lattice(lattice_),
+		  tOffset(tOffset_)
+	{ }
 
-    virtual Array<T,3> operator()(Array<T,3> const& position) const
-    {
-        T t = (T) lattice.getTimeCounter().getTime() + tOffset;
-        return std::cos(angularFrequency * t + phase) * vectorAmplitude;
-    }
+	virtual Array<T,3> operator()(Array<T,3> const& position) const
+	{
+		T t = (T) lattice.getTimeCounter().getTime() + tOffset;
+		return std::cos(angularFrequency * t + phase) * vectorAmplitude;
+	}
 
-    virtual HarmonicVectorFunction3D<T,Descriptor>* clone() const
-    {
-        return new HarmonicVectorFunction3D<T,Descriptor>(*this);
-    }
+	virtual HarmonicVectorFunction3D<T,Descriptor>* clone() const
+	{
+		return new HarmonicVectorFunction3D<T,Descriptor>(*this);
+	}
 private:
-    Array<T,3> vectorAmplitude;
-    T angularFrequency, phase;
-    MultiBlockLattice3D<T,Descriptor> const& lattice;
-    T tOffset;
+	Array<T,3> vectorAmplitude;
+	T angularFrequency, phase;
+	MultiBlockLattice3D<T,Descriptor> const& lattice;
+	T tOffset;
 };
 
 } // namespace plb

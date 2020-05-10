@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,21 +30,23 @@
 #include "multiBlock/multiBlock3D.h"
 #include "core/plbDebug.h"
 
-namespace plb {
+namespace plb
+{
 
 ////////////////////// Class SerialBlockCommunicator3D /////////////////////
 
 SerialBlockCommunicator3D::SerialBlockCommunicator3D()
 { }
 
-SerialBlockCommunicator3D* SerialBlockCommunicator3D::clone() const {
+SerialBlockCommunicator3D* SerialBlockCommunicator3D::clone() const
+{
     return new SerialBlockCommunicator3D;
 }
 
 void SerialBlockCommunicator3D::copyOverlap (
-        Overlap3D const& overlap,
-        MultiBlock3D const& fromMultiBlock, MultiBlock3D& toMultiBlock,
-        modif::ModifT whichData ) const
+    Overlap3D const& overlap,
+    MultiBlock3D const& fromMultiBlock, MultiBlock3D& toMultiBlock,
+    modif::ModifT whichData ) const
 {
     MultiBlockManagement3D const& fromManagement = fromMultiBlock.getMultiBlockManagement();
     MultiBlockManagement3D const& toManagement = toMultiBlock.getMultiBlockManagement();
@@ -71,7 +73,7 @@ void SerialBlockCommunicator3D::copyOverlap (
     plint deltaZ = originalCoords.z0 - overlapCoords.z0;
 
     overlapBlock -> getDataTransfer().attribute(overlapCoords, deltaX, deltaY, deltaZ,
-                                                *originalBlock, whichData);
+            *originalBlock, whichData);
 }
 
 void SerialBlockCommunicator3D::duplicateOverlaps(MultiBlock3D& multiBlock, modif::ModifT whichData) const
@@ -80,26 +82,30 @@ void SerialBlockCommunicator3D::duplicateOverlaps(MultiBlock3D& multiBlock, modi
     LocalMultiBlockInfo3D const& localInfo = multiBlockManagement.getLocalInfo();
 
     // Non-periodic communication
-    for (pluint iOverlap=0; iOverlap<localInfo.getNormalOverlaps().size(); ++iOverlap) {
+    for (pluint iOverlap=0; iOverlap<localInfo.getNormalOverlaps().size(); ++iOverlap)
+    {
         copyOverlap(localInfo.getNormalOverlaps()[iOverlap], multiBlock, multiBlock, whichData);
     }
 
     // Periodic communication
     PeriodicitySwitch3D const& periodicity = multiBlock.periodicity();
-    for (pluint iOverlap=0; iOverlap<localInfo.getPeriodicOverlaps().size(); ++iOverlap) {
+    for (pluint iOverlap=0; iOverlap<localInfo.getPeriodicOverlaps().size(); ++iOverlap)
+    {
         PeriodicOverlap3D const& pOverlap = localInfo.getPeriodicOverlaps()[iOverlap];
-        if (periodicity.get(pOverlap.normalX, pOverlap.normalY, pOverlap.normalZ)) {
+        if (periodicity.get(pOverlap.normalX, pOverlap.normalY, pOverlap.normalZ))
+        {
             copyOverlap(pOverlap.overlap, multiBlock, multiBlock, whichData);
         }
     }
 }
 
 void SerialBlockCommunicator3D::communicate (
-        std::vector<Overlap3D> const& overlaps,
-        MultiBlock3D const& originMultiBlock, MultiBlock3D& destinationMultiBlock,
-        modif::ModifT whichData ) const
+    std::vector<Overlap3D> const& overlaps,
+    MultiBlock3D const& originMultiBlock, MultiBlock3D& destinationMultiBlock,
+    modif::ModifT whichData ) const
 {
-    for (pluint iOverlap=0; iOverlap<overlaps.size(); ++iOverlap) {
+    for (pluint iOverlap=0; iOverlap<overlaps.size(); ++iOverlap)
+    {
         copyOverlap(overlaps[iOverlap], originMultiBlock, destinationMultiBlock, whichData);
     }
 }

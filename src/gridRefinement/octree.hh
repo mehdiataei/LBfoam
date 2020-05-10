@@ -36,7 +36,7 @@ template<typename DataT>
 OctreeNode<DataT>::OctreeNode(OctreeNode<DataT>* parent_, DataT* data_)
     : data(data_), parent(parent_)
 {
-    level = (parent != 0 ? parent->level + 1 : 0);  // The level must be >= 0 for normal octrees. Negative levels are reserved.
+    level = (parent != 0 ? parent->level + 1 : 0);
     isLeaf = true;
     memset(child, 0, sizeof child);
 }
@@ -46,17 +46,11 @@ int octreeChildType(OctreeNode<DataT>* node)
 {
     int o = -1;
     if (node->parent != 0) {
-        if (node->parent->level >= 0) {     // Normal octree.
-            for (int i = 0; i < 8; i++) {
-                if (node->parent->child[i] == node) {
-                    o = i;
-                    break;
-                }
+        for (int i = 0; i < 8; i++) {
+            if (node->parent->child[i] == node) {
+                o = i;
+                break;
             }
-        } else if (node->parent->level == -1) {     // The levels -1 and -2 are reserved for the octree periodic extensions.
-            o = 7;
-        } else if (node->parent->level == -2) {
-            o = 0;
         }
     }
     return(o);
@@ -357,123 +351,6 @@ std::vector<OctreeNode<DataT>*> gatherOctreeGreaterEqualNeighbors(OctreeNode<Dat
     neighbors[OT::cornerPPP()] = getOctreeGreaterEqualVertexNeighbor(node, OT::cornerPPP());
 
     return(neighbors);
-}
-
-template<typename DataT>
-OctreePeriodicExtension<DataT>::OctreePeriodicExtension(OctreeNode<DataT>* originalRoot_,
-        bool xPeriodic_, bool yPeriodic_, bool zPeriodic_)
-    : originalRoot(originalRoot_),
-      periodicExtensionRoot(0),
-      parentOfOriginalRoot(0),
-      levelOfOriginalRoot(0)
-{
-    if (originalRoot && (xPeriodic_ || yPeriodic_ || zPeriodic_)) {
-        parentOfOriginalRoot = originalRoot->parent;
-        levelOfOriginalRoot = originalRoot->level;
-        recalibrateOriginalRootLevels(0);
-
-        // Levels -1 and -2 are reserved for the octree periodic extensions only!
-        // At level -2, only the child 0 is allocated, and at level -1 only the child 7 is allocated.
-        // If any of these conventions is changed, the implementation of the octreeChildType() function
-        // must also be updated.
-
-        periodicExtensionRoot = new OctreeNode<DataT>(0, 0);
-        periodicExtensionRoot->level = -2;
-
-        periodicExtensionRoot->child[0] = new OctreeNode<DataT>(periodicExtensionRoot, 0);
-        periodicExtensionRoot->isLeaf = false;
-
-        originalRoot->parent = periodicExtensionRoot->child[0];
-        periodicExtensionRoot->child[0]->child[7] = originalRoot;
-        periodicExtensionRoot->child[0]->isLeaf = false;
-
-        if (xPeriodic_) {
-            periodicExtensionRoot->child[0]->child[3] = periodicExtensionRoot->child[0]->child[7];
-            periodicExtensionRoot->child[4] = periodicExtensionRoot->child[0];
-        }
-        if (yPeriodic_) {
-            periodicExtensionRoot->child[0]->child[5] = periodicExtensionRoot->child[0]->child[7];
-            periodicExtensionRoot->child[0]->child[1] = periodicExtensionRoot->child[0]->child[3];
-            periodicExtensionRoot->child[2] = periodicExtensionRoot->child[0];
-            periodicExtensionRoot->child[6] = periodicExtensionRoot->child[4];
-        }
-        if (zPeriodic_) {
-            periodicExtensionRoot->child[0]->child[6] = periodicExtensionRoot->child[0]->child[7];
-            periodicExtensionRoot->child[0]->child[2] = periodicExtensionRoot->child[0]->child[3];
-            periodicExtensionRoot->child[0]->child[4] = periodicExtensionRoot->child[0]->child[5];
-            periodicExtensionRoot->child[0]->child[0] = periodicExtensionRoot->child[0]->child[1];
-            periodicExtensionRoot->child[1] = periodicExtensionRoot->child[0];
-            periodicExtensionRoot->child[5] = periodicExtensionRoot->child[4];
-            periodicExtensionRoot->child[3] = periodicExtensionRoot->child[2];
-            periodicExtensionRoot->child[7] = periodicExtensionRoot->child[6];
-        }
-    }
-}
-
-template<typename DataT>
-OctreePeriodicExtension<DataT>::~OctreePeriodicExtension()
-{
-    restoreOriginalRootAndDestroyPeriodicExtension();
-}
-
-template<typename DataT>
-OctreeNode<DataT>* OctreePeriodicExtension<DataT>::get() const
-{
-    return(originalRoot);
-}
-
-template<typename DataT>
-OctreeNode<DataT>* OctreePeriodicExtension<DataT>::release()
-{
-    restoreOriginalRootAndDestroyPeriodicExtension();
-    return(originalRoot);
-}
-
-template<typename DataT>
-void OctreePeriodicExtension<DataT>::recalibrateOriginalRootLevels(int newRootLevel) const
-{
-    if (originalRoot->level == newRootLevel) {
-        return;
-    }
-
-    originalRoot->parent = 0;
-
-    struct RecalibrateLevels {
-        RecalibrateLevels(int rootLevel_)
-            : rootLevel(rootLevel_)
-        { }
-        void operator()(OctreeNode<DataT>* node)
-        {
-            if (node->parent) {
-                node->level = node->parent->level + 1;
-            } else {
-                node->level = rootLevel;
-            }
-        }
-        int rootLevel;
-    };
-
-    RecalibrateLevels recalibrateLevels(newRootLevel);
-    processOctreePreOrder(originalRoot, recalibrateLevels);
-}
-
-template<typename DataT>
-void OctreePeriodicExtension<DataT>::restoreOriginalRootAndDestroyPeriodicExtension()
-{
-    if (periodicExtensionRoot) {
-        for (int i = 0; i < 8; i++) {
-            periodicExtensionRoot->child[0]->child[i] = 0;
-        }
-        periodicExtensionRoot->child[0]->isLeaf = true;
-
-        delete periodicExtensionRoot->child[0];
-        delete periodicExtensionRoot;
-        periodicExtensionRoot = 0;
-
-        // Restore originalRoot to its state before the periodic extension.
-        recalibrateOriginalRootLevels(levelOfOriginalRoot);
-        originalRoot->parent = parentOfOriginalRoot;
-    }
 }
 
 } // namespace plb

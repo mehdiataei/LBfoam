@@ -45,7 +45,7 @@ template< typename T,template<typename U> class Descriptor>
 void FreeSurfaceComputeNormals3D<T,Descriptor>::processGenericBlocks (
         Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     // Smooth the volume fraction twice. (At the end include also a 1-cell layer around "domain".)
@@ -149,7 +149,7 @@ template<typename T,template<typename U> class Descriptor>
 ScalarField3D<int> *FreeSurfaceGeometry3D<T,Descriptor>::getInterfaceFlags(Box3D domain,
         FreeSurfaceProcessorParam3D<T,Descriptor>& param)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     // Define a temporary scalar field for local use in this function. This scalar field will contain 1 extra
     // layer of cells around "domain".
@@ -302,7 +302,7 @@ template<typename T,template<typename U> class Descriptor>
 void FreeSurfaceGeometry3D<T,Descriptor>::computeHeights3D(FreeSurfaceProcessorParam3D<T,Descriptor>& param,
         int integrationDirection, plint iX, plint iY, plint iZ, T h[3][3])
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     // Compute the vector parallel to the integration direction.
     Array<int,3> integrationVector;
@@ -409,7 +409,7 @@ void FreeSurfaceGeometry3D<T,Descriptor>::computeHeights2D(FreeSurfaceProcessorP
         Array<int,3>& wallTangent0, Array<int,3>& wallTangent1, int integrationDirection, plint iX, plint iY,
         plint iZ, T h[3])
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     // Compute the vector parallel to the integration direction.
     Array<int,3> integrationVector;
@@ -496,7 +496,7 @@ void FreeSurfaceGeometry3D<T,Descriptor>::processGenericBlocks(Box3D domain, std
 {
     static T degToRad = (T) 3.14159265358979323844L / (T) 180;
 
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     Array<T,3> zeroVector((T) 0, (T) 0, (T) 0);
@@ -1015,7 +1015,7 @@ void FreeSurfaceComputeCurvature3D<T,Descriptor>::processGenericBlocks(Box3D dom
 {
     static T degToRad = (T) 3.14159265358979323844L / (T) 180;
 
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     Dot3D location = param.absOffset();
@@ -1292,7 +1292,7 @@ void FreeSurfaceMassChange3D<T,Descriptor>::processGenericBlocks (
         Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks )
 {
     typedef Descriptor<T> D;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     // This loop updates the mass, summarizing  Eq. 6/7, and Eq.8, in
@@ -1307,7 +1307,7 @@ void FreeSurfaceMassChange3D<T,Descriptor>::processGenericBlocks (
                     freeSurfaceTemplates<T,Descriptor>::massExchangeFluidCell(param, iX,iY,iZ);
                 }
                 else if(flag==interface) {
-                    for(plint iPop=1; iPop < D::q; ++iPop) {
+                    for(plint iPop=0; iPop < D::q; ++iPop) {
                         plint nextX = iX + D::c[iPop][0];
                         plint nextY = iY + D::c[iPop][1];
                         plint nextZ = iZ + D::c[iPop][2];
@@ -1337,8 +1337,8 @@ void FreeSurfaceCompletion3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
     typedef Descriptor<T> D;
-    using namespace freeSurfaceFlag;
-    typedef typename InterfaceLists<T,Descriptor>::Node Node;
+    using namespace freeSurfaceFlag3D;
+    typedef typename InterfaceLists3D<T,Descriptor>::Node Node;
 
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
@@ -1487,7 +1487,7 @@ template< typename T,template<typename U> class Descriptor>
 void FreeSurfaceMacroscopic3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     T lostMass = param.getSumLostMass();
@@ -1529,46 +1529,6 @@ void FreeSurfaceMacroscopic3D<T,Descriptor>
     }   
 }
 
-/* *************** Class FreeSurfaceMacroscopicWithoutLostMassReDistribution3D ******************************** */
-
-template< typename T,template<typename U> class Descriptor>
-void FreeSurfaceMacroscopicWithoutLostMassReDistribution3D<T,Descriptor>
-        ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
-{
-    using namespace freeSurfaceFlag;
-    FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
-
-    // Save macroscopic fields in external scalars and update the mass and the volume-fraction.
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {         
-                if (isWet(param.flag(iX,iY,iZ))) {
-                    T rhoBar; 
-                    Array<T,3> j;
-                    momentTemplates<T,Descriptor>::get_rhoBar_j(param.cell(iX,iY,iZ), rhoBar, j);
-                    T density = Descriptor<T>::fullRho(rhoBar);
-                    param.setDensity(iX,iY,iZ, density);
-
-                    if (param.flag(iX,iY,iZ)==interface) {
-                        T newDensity = param.outsideDensity(iX,iY,iZ);
-                        param.volumeFraction(iX,iY,iZ) = param.mass(iX,iY,iZ)/newDensity;
-                        // On interface cells, adjust the pressure to the ambient pressure.
-                        param.setDensity(iX,iY,iZ, newDensity);
-                        if (!incompressibleModel) {
-                            j *= newDensity/density;
-                        }
-                    }
-                    else if(isFullWet(param.flag(iX,iY,iZ))) {
-                        param.volumeFraction(iX,iY,iZ) = T(1);
-                    }
-                    
-                    param.setMomentum(iX,iY,iZ, j);
-                }
-            }
-        }
-    }   
-}
-
 /* *************** Class FreeSurfaceAddSurfaceTension3D ******************************** */
 
 template< typename T,template<typename U> class Descriptor>
@@ -1576,7 +1536,7 @@ void FreeSurfaceAddSurfaceTension3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
     typedef Descriptor<T> D;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     // Save macroscopic fields in external scalars and add the surface tension effect.
@@ -1602,62 +1562,6 @@ void FreeSurfaceAddSurfaceTension3D<T,Descriptor>
     }   
 }
 
-/* *************** Class FreeSurfaceAddSurfaceTensionWeberModel3D ******************************** */
-
-template< typename T,template<typename U> class Descriptor>
-void FreeSurfaceAddSurfaceTensionWeberModel3D<T,Descriptor>
-        ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
-{
-    typedef Descriptor<T> D;
-    using namespace freeSurfaceFlag;
-    FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
-
-    // Save macroscopic fields in external scalars and add the surface tension effect.
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {         
-                if (param.flag(iX,iY,iZ)==interface) {
-                    Cell<T,Descriptor>& cell = param.cell(iX,iY,iZ);
-                    Array<T,3> jTmp;
-                    T rhoBarTmp;
-                    cell.getDynamics().computeRhoBarJ(cell, rhoBarTmp, jTmp); // This does not include the free-surface BC.
-                    T jTmpSqr = normSqr(jTmp);
-                    T C = (T) 0;
-                    for (plint iPop=0; iPop<Descriptor<T>::q; ++iPop) {
-                        T f = cell[iPop];
-                        T feq = cell.getDynamics().computeEquilibrium(iPop,rhoBarTmp,jTmp,jTmpSqr);
-                        T fneq = f - feq;
-                        C += std::fabs(fneq / fullF<T,Descriptor>(feq, iPop));
-                    }
-                    C /= (T) Descriptor<T>::q;
-
-                    T density = param.getDensity(iX,iY,iZ); // These include the free-surface BC.
-                    Array<T,3> j = param.getMomentum(iX,iY,iZ);
-                    T newSurfaceTension = surfaceTension;
-                    if (C <= criticalKn) {
-                        T uSqr = incompressibleModel ? normSqr(j) : normSqr(j) / (density * density);
-                        T We = rhoDefault * uSqr * characteristicLength / surfaceTension;
-                        if (We > criticalWe) {
-                            newSurfaceTension *= We / criticalWe;
-                        }
-                    }
-
-                    T newDensity = density;
-                    // Stored curvature is computed to be twice the mean curvature.
-                    newDensity += newSurfaceTension * param.curvature(iX,iY,iZ) * D::invCs2;
-                    param.volumeFraction(iX,iY,iZ) = param.mass(iX,iY,iZ) / newDensity;
-                    // On interface cells, adjust the pressure to incorporate surface tension.
-                    param.setDensity(iX,iY,iZ, newDensity);
-                    if (!incompressibleModel) {
-                        Array<T,3> newJ = j*newDensity/density;
-                        param.setMomentum(iX,iY,iZ, newJ);
-                    }
-                }
-            }
-        }
-    }   
-}
-
 /* *************** Class FreeSurfaceAddSurfaceTensionFromScalarField3D ******************************** */
 
 template< typename T,template<typename U> class Descriptor>
@@ -1665,7 +1569,7 @@ void FreeSurfaceAddSurfaceTensionFromScalarField3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
     typedef Descriptor<T> D;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     std::vector<AtomicBlock3D*> freeSurfaceBlocks(atomicBlocks.begin(), atomicBlocks.end() - 1);
     FreeSurfaceProcessorParam3D<T,Descriptor> param(freeSurfaceBlocks);
@@ -1705,7 +1609,7 @@ template< typename T,template<typename U> class Descriptor>
 void FreeSurfaceStabilize3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
@@ -1742,9 +1646,9 @@ void FreeSurfaceComputeInterfaceLists3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
     typedef Descriptor<T> D;
-    typedef typename InterfaceLists<T,Descriptor>::Node Node;
+    typedef typename InterfaceLists3D<T,Descriptor>::Node Node;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     param.massExcess().clear();
     param.interfaceToFluid().clear();
@@ -1806,12 +1710,17 @@ void FreeSurfaceComputeInterfaceLists3D<T,Descriptor>
 /* *************** Class FreeSurfaceIniInterfaceToAnyNodes3D ******************************************* */
 
 template< typename T,template<typename U> class Descriptor>
+FreeSurfaceIniInterfaceToAnyNodes3D<T,Descriptor>::FreeSurfaceIniInterfaceToAnyNodes3D(T rhoDefault_)
+    : rhoDefault(rhoDefault_)
+{ }
+
+template< typename T,template<typename U> class Descriptor>
 void FreeSurfaceIniInterfaceToAnyNodes3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
     typedef Descriptor<T> D;
-    typedef typename InterfaceLists<T,Descriptor>::Node Node;
-    using namespace freeSurfaceFlag;
+    typedef typename InterfaceLists3D<T,Descriptor>::Node Node;
+    using namespace freeSurfaceFlag3D;
 
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
     
@@ -1861,7 +1770,7 @@ void FreeSurfaceIniInterfaceToAnyNodes3D<T,Descriptor>
             }
             if (!isAdjacentToProtected) {
                 param.flag(iX,iY,iZ) = empty;
-                param.attributeDynamics(iX,iY,iZ, emptyNodeDynamicsTemplate->clone());
+                param.attributeDynamics(iX,iY,iZ, new NoDynamics<T,Descriptor>(rhoDefault));
 
                 T massExcess = param.mass(iX,iY,iZ);
                 param.massExcess().insert(std::pair<Node,T>(node,massExcess));
@@ -1894,8 +1803,8 @@ void FreeSurfaceIniEmptyToInterfaceNodes3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
     typedef Descriptor<T> D;
-    typedef typename InterfaceLists<T,Descriptor>::Node Node;
-    using namespace freeSurfaceFlag;
+    typedef typename InterfaceLists3D<T,Descriptor>::Node Node;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     // In this data processor, density and momentum are potentially read and written
@@ -1989,8 +1898,8 @@ void FreeSurfaceRemoveFalseInterfaceCells3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
     typedef Descriptor<T> D;
-    typedef typename InterfaceLists<T,Descriptor>::Node Node;
-    using namespace freeSurfaceFlag;
+    typedef typename InterfaceLists3D<T,Descriptor>::Node Node;
+    using namespace freeSurfaceFlag3D;
 
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
@@ -2035,7 +1944,7 @@ void FreeSurfaceRemoveFalseInterfaceCells3D<T,Descriptor>
                         T massExcess = param.mass(iX,iY,iZ);
                         param.massExcess().insert(std::pair<Node,T>(node,massExcess));
                         
-                        param.attributeDynamics(iX,iY,iZ, emptyNodeDynamicsTemplate->clone());
+                        param.attributeDynamics(iX,iY,iZ,new NoDynamics<T,Descriptor>(rhoDefault));
                         param.mass(iX,iY,iZ) = T();
                         param.setDensity(iX,iY,iZ, rhoDefault);
                         param.volumeFraction(iX,iY,iZ) = T();
@@ -2064,8 +1973,8 @@ void FreeSurfaceEqualMassExcessReDistribution3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
     typedef Descriptor<T> D;
-    typedef typename InterfaceLists<T,Descriptor>::Node Node;
-    using namespace freeSurfaceFlag;
+    typedef typename InterfaceLists3D<T,Descriptor>::Node Node;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     Box3D originalDomain(domain);
@@ -2120,76 +2029,13 @@ void FreeSurfaceEqualMassExcessReDistribution3D<T,Descriptor>
     }
 }
 
-/* *************** Class FreeSurfaceEqualMassExcessReDistributionAndComputationOfLostMass3D ********************************** */
-
-template< typename T,template<typename U> class Descriptor>
-void FreeSurfaceEqualMassExcessReDistributionAndComputationOfLostMass3D<T,Descriptor>
-        ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
-{
-    typedef Descriptor<T> D;
-    typedef typename InterfaceLists<T,Descriptor>::Node Node;
-    using namespace freeSurfaceFlag;
-    FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
-
-    Box3D originalDomain(domain);
-        
-    typename std::map<Node,T>::iterator iEle = param.massExcess().begin();
-    for (; iEle != param.massExcess().end(); ++iEle) {
-        Array<plint,3> node = iEle->first;
-        plint iX = node[0];
-        plint iY = node[1];
-        plint iZ = node[2];
-
-        // Check for valid interface neighbors to re-distribute mass
-        if (contained(iX,iY,iZ,domain.enlarge(1)))  {
-            std::vector<int> indX, indY, indZ;
-            plint numValidNeighbors = 0;
-
-            // Check for interface neighbors in the LB directions.
-            for (plint iPop=1; iPop<D::q; iPop++) {
-                plint nextX = iX + D::c[iPop][0];
-                plint nextY = iY + D::c[iPop][1];
-                plint nextZ = iZ + D::c[iPop][2];
-                if (param.flag(nextX,nextY,nextZ) == interface) {
-                    if (contained(nextX,nextY,nextZ,domain)) {
-                        indX.push_back(nextX);
-                        indY.push_back(nextY);
-                        indZ.push_back(nextZ);
-                    }
-                    numValidNeighbors++;
-                }
-            }
-
-            // Mass re-distribution
-            if (numValidNeighbors != 0) {
-                int indSize = (int) indX.size();
-                T massToRedistribute = iEle->second/(T)numValidNeighbors;
-
-                for (int i = 0; i < indSize; i++) {
-                    int nextX = indX[i];
-                    int nextY = indY[i];
-                    int nextZ = indZ[i];
-
-                    param.mass(nextX,nextY,nextZ) += massToRedistribute;
-                    param.volumeFraction(nextX,nextY,nextZ) = 
-                        param.mass(nextX,nextY,nextZ) / param.getDensity(nextX,nextY,nextZ);
-                }
-            } else {
-                if (contained(iX,iY,iZ,originalDomain))  {
-                    reductionData.localLostMass += iEle->second;
-                }
-            }
-        }
-    }
-}
-
 /* *************** Class FreeSurfaceComputeStatistics3D ******************************************* */
 
 template< typename T,template<typename U> class Descriptor>
 void FreeSurfaceComputeStatistics3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
@@ -2207,43 +2053,13 @@ void FreeSurfaceComputeStatistics3D<T,Descriptor>
     }
 }
 
-/* *************** Class FreeSurfaceComputeReductionsPerProcess3D ******************************************* */
-
-template<typename T>
-void FreeSurfaceComputeReductionsPerProcess3D<T>::processGenericBlocks (
-        Box3D domain, std::vector<AtomicBlock3D*> blocks )
-{
-    using namespace freeSurfaceFlag;
-
-    PLB_ASSERT(blocks.size() == 2);
-    ScalarField3D<int>* flag = dynamic_cast<ScalarField3D<int>*>(blocks[0]);
-    PLB_ASSERT(flag);
-    ScalarField3D<T>* mass = dynamic_cast<ScalarField3D<T>*>(blocks[1]);
-    PLB_ASSERT(mass);
-
-    Dot3D ofs = computeRelativeDisplacement(*flag, *mass);
-
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {    
-                if (isWet(flag->get(iX, iY, iZ))) {
-                    reductionData.localTotalMass += mass->get(iX + ofs.x, iY + ofs.y, iZ + ofs.z);
-                    if (flag->get(iX, iY, iZ) == interface) {
-                        reductionData.localNumInterfaceCells += 1;
-                    }
-                }
-            }
-        }
-    }
-}
-
 /* *************** Class FreeSurfaceAddExternalForce3D ******************************** */
 
 template< typename T,template<typename U> class Descriptor>
 void FreeSurfaceAddExternalForce3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     if (Descriptor<T>::ExternalField::sizeOfForce == 0) {
@@ -2283,42 +2099,13 @@ void FreeSurfaceAddExternalForce3D<T,Descriptor>
     }   
 }
 
-/* *************** Class FreeSurfaceLostMassReDistribution3D ******************************** */
-
-template< typename T,template<typename U> class Descriptor>
-void FreeSurfaceLostMassReDistribution3D<T,Descriptor>
-        ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
-{
-    using namespace freeSurfaceFlag;
-    FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
-
-    T lostMass = reductionData.lostMass;
-    plint numInterfaceCells = reductionData.numInterfaceCells;
-    T massPerCell = T();
-    if (numInterfaceCells>0) {
-        massPerCell = lostMass / (T)numInterfaceCells;
-    }
-
-    if (massPerCell != (T) 0) {
-        for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-            for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-                for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {         
-                    if (param.flag(iX,iY,iZ)==interface) {
-                        param.mass(iX,iY,iZ) += massPerCell;
-                    }
-                }
-            }
-        }   
-    }
-}
-
 /* *************** Class RepelInterfaceFromImmersedWalls3D ******************************** */
 
 template<typename T, class VelFunction>
 void RepelInterfaceFromImmersedWalls3D<T,VelFunction>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     PLB_PRECONDITION( atomicBlocks.size()==4 );
     ScalarField3D<T>* rhoBar = dynamic_cast<ScalarField3D<T>*>(atomicBlocks[0]);
@@ -2329,9 +2116,10 @@ void RepelInterfaceFromImmersedWalls3D<T,VelFunction>::processGenericBlocks (
     PLB_ASSERT( j );
     PLB_ASSERT( flag );
     PLB_ASSERT( container );
-    Dot3D location = rhoBar->getLocation();
+
     Dot3D ofsJ = computeRelativeDisplacement(*rhoBar, *j);
     Dot3D ofsF = computeRelativeDisplacement(*rhoBar, *flag);
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
@@ -2353,14 +2141,12 @@ void RepelInterfaceFromImmersedWalls3D<T,VelFunction>::processGenericBlocks (
 
         for (pluint i=0; i<vertices.size(); ++i) {
             Array<T,3> const& vertex = vertices[i];
-            Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-            const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
+            Array<plint,3> intPos (
+                    (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
             // x   x . x   x
-            for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-                for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                    for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+            for (plint dx=-1; dx<=+2; ++dx) {
+                for (plint dy=-1; dy<=+2; ++dy) {
+                    for (plint dz=-1; dz<=+2; ++dz) {
                         Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                         if (contained(pos[0], pos[1], pos[2], domain)) {
                             if (flag->get(pos[0]+ofsF.x, pos[1]+ofsF.y, pos[2]+ofsF.z) == interface) {
@@ -2401,14 +2187,12 @@ void RepelInterfaceFromImmersedWalls3D<T,VelFunction>::processGenericBlocks (
 
         for (pluint i=0; i<vertices.size(); ++i) {
             Array<T,3> const& vertex = vertices[i];
-            Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-            const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
+            Array<plint,3> intPos (
+                    (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
             // x   x . x   x
-            for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-                for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                    for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+            for (plint dx=-1; dx<=+2; ++dx) {
+                for (plint dy=-1; dy<=+2; ++dy) {
+                    for (plint dz=-1; dz<=+2; ++dz) {
                         Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                         if (contained(pos[0], pos[1], pos[2], domain)) {
                             if (flag->get(pos[0]+ofsF.x, pos[1]+ofsF.y, pos[2]+ofsF.z) == interface) {
@@ -2440,9 +2224,7 @@ void RepelInterfaceFromImmersedWalls3D<T,VelFunction>::processGenericBlocks (
                                 for (plint dz=-2; dz<=+2; ++dz) {
                                     plint z = iZ + dz;
                                     if (isEmpty(flag->get(x+ofsF.x, y+ofsF.y, z+ofsF.z))) {
-                                        meanPositionEmpty += Array<T,3>((T) (x + location.x),
-                                                                        (T) (y + location.y),
-                                                                        (T) (z + location.z));
+                                        meanPositionEmpty += Array<T,3>((T) x, (T) y, (T) z);
                                         numEmpty++;
                                     }
                                 }
@@ -2476,14 +2258,14 @@ template<typename T>
 void TemporarilyProtectImmersedWalls3D<T>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     PLB_PRECONDITION( atomicBlocks.size()==2 );
     ScalarField3D<int>* flag = dynamic_cast<ScalarField3D<int>*>(atomicBlocks[0]);
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(atomicBlocks[1]);
     PLB_ASSERT( flag );
     PLB_ASSERT( container );
-    Dot3D location = flag->getLocation();
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
@@ -2492,14 +2274,12 @@ void TemporarilyProtectImmersedWalls3D<T>::processGenericBlocks (
 
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     if (contained(pos[0], pos[1], pos[2], domain)) {
                         if (flag->get(pos[0], pos[1], pos[2]) == fluid) {
@@ -2518,7 +2298,7 @@ template<typename T>
 void RemoveProtectionFromImmersedWalls3D<T>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     PLB_PRECONDITION( atomicBlocks.size()==1 );
     ScalarField3D<int>* flag = dynamic_cast<ScalarField3D<int>*>(atomicBlocks[0]);

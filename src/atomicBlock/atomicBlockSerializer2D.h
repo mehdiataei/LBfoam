@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,45 +33,48 @@
 #include "atomicBlock/atomicBlock2D.h"
 #include "core/serializer.h"
 
-namespace plb {
+namespace plb
+{
 
-class AtomicBlockSerializer2D : public DataSerializer {
+class AtomicBlockSerializer2D : public DataSerializer
+{
 public:
-    AtomicBlockSerializer2D(AtomicBlock2D const& block_,
-                            IndexOrdering::OrderingT ordering_);
-    AtomicBlockSerializer2D(AtomicBlock2D const& block_,
-                            Box2D domain_,
-                            IndexOrdering::OrderingT ordering_);
-    virtual AtomicBlockSerializer2D* clone() const;
-    virtual pluint getSize() const;
-    virtual const char* getNextDataBuffer(pluint& bufferSize) const;
-    virtual bool isEmpty() const;
+	AtomicBlockSerializer2D(AtomicBlock2D const& block_,
+	                        IndexOrdering::OrderingT ordering_);
+	AtomicBlockSerializer2D(AtomicBlock2D const& block_,
+	                        Box2D domain_,
+	                        IndexOrdering::OrderingT ordering_);
+	virtual AtomicBlockSerializer2D* clone() const;
+	virtual pluint getSize() const;
+	virtual const char* getNextDataBuffer(pluint& bufferSize) const;
+	virtual bool isEmpty() const;
 private:
-    AtomicBlock2D const& block;
-    IndexOrdering::OrderingT ordering;
-    Box2D domain;
-    mutable std::vector<char> buffer;
-    mutable plint iX, iY;
+	AtomicBlock2D const& block;
+	IndexOrdering::OrderingT ordering;
+	Box2D domain;
+	mutable std::vector<char> buffer;
+	mutable plint iX, iY;
 };
 
-class AtomicBlockUnSerializer2D : public DataUnSerializer {
+class AtomicBlockUnSerializer2D : public DataUnSerializer
+{
 public:
-    AtomicBlockUnSerializer2D(AtomicBlock2D& block_,
-                              IndexOrdering::OrderingT ordering_);
-    AtomicBlockUnSerializer2D(AtomicBlock2D& block_,
-                              Box2D domain_,
-                              IndexOrdering::OrderingT ordering_);
-    virtual AtomicBlockUnSerializer2D* clone() const;
-    virtual pluint getSize() const;
-    virtual char* getNextDataBuffer(pluint& bufferSize);
-    virtual void commitData();
-    virtual bool isFull() const;
+	AtomicBlockUnSerializer2D(AtomicBlock2D& block_,
+	                          IndexOrdering::OrderingT ordering_);
+	AtomicBlockUnSerializer2D(AtomicBlock2D& block_,
+	                          Box2D domain_,
+	                          IndexOrdering::OrderingT ordering_);
+	virtual AtomicBlockUnSerializer2D* clone() const;
+	virtual pluint getSize() const;
+	virtual char* getNextDataBuffer(pluint& bufferSize);
+	virtual void commitData();
+	virtual bool isFull() const;
 private:
-    AtomicBlock2D& block;
-    IndexOrdering::OrderingT ordering;
-    Box2D domain;
-    mutable std::vector<char> buffer;
-    mutable plint iX, iY;
+	AtomicBlock2D& block;
+	IndexOrdering::OrderingT ordering;
+	Box2D domain;
+	mutable std::vector<char> buffer;
+	mutable plint iX, iY;
 };
 
 }  //  namespace plb

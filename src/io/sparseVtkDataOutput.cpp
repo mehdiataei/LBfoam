@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,7 +28,8 @@
 #include "io/imageWriter.h"
 #include "io/parallelIO.h"
 
-namespace plb {
+namespace plb
+{
 
 SparseVtkImageOutput3D::SparseVtkImageOutput3D(FileName fName_)
     : fName( fName_.defaultPath(global::directories().getVtkOutDir()).defaultExt("vtm") ),
@@ -65,8 +66,8 @@ SparseVtkImageOutput3D::~SparseVtkImageOutput3D()
 }
 
 void SparseVtkImageOutput3D::writeField (
-        MultiBlock3D const& multiBlock, plint atomicBlockId, Box3D bulk,
-        std::string fieldName, VtkDataWriter3D& vtkOut )
+    MultiBlock3D const& multiBlock, plint atomicBlockId, Box3D bulk,
+    std::string fieldName, VtkDataWriter3D& vtkOut )
 {
     AtomicBlock3D const& atomicBlock = multiBlock.getComponent(atomicBlockId);
     Dot3D location = atomicBlock.getLocation();
@@ -80,37 +81,41 @@ void SparseVtkImageOutput3D::writeField (
     bool isTensorFieldName = (blockName.find("TensorField3D_") != std::string::npos);
 #endif
     PLB_ASSERT (
-            blockName == "ScalarField3D" ||
-            isTensorFieldName ||
-            blockName == "NTensorField3D" );
+        blockName == "ScalarField3D" ||
+        isTensorFieldName ||
+        blockName == "NTensorField3D" );
     plint nDim = multiBlock.getCellDim();
-    if (scalarType=="float") {
+    if (scalarType=="float")
+    {
         vtkOut.writeDataField<float>( atomicBlock.getBlockSerializer(localBulk, IndexOrdering::backward),
                                       fieldName, nDim );
     }
-    else if (scalarType=="double") {
+    else if (scalarType=="double")
+    {
         vtkOut.writeDataField<double>( atomicBlock.getBlockSerializer(localBulk, IndexOrdering::backward),
                                        fieldName, nDim );
     }
-    else if (scalarType=="int") {
+    else if (scalarType=="int")
+    {
         vtkOut.writeDataField<int>( atomicBlock.getBlockSerializer( localBulk, IndexOrdering::backward),
                                     fieldName, nDim );
     }
-    else {
+    else
+    {
         pcout << "Error: type \"" << scalarType << "\" not available for VTK output." << std::endl;
         PLB_ASSERT( false );
     }
 }
 
 std::string SparseVtkImageOutput3D::writeAtomicBlock (
-        Group3D& group, plint partId, plint vtkBlockId,
-        plint atomicBlockId, Box3D bulk, bool pointData, bool isLocal,
-        double deltaX, Array<double,3> offset )
+    Group3D& group, plint partId, plint vtkBlockId,
+    plint atomicBlockId, Box3D bulk, bool pointData, bool isLocal,
+    double deltaX, Array<double,3> offset )
 {
     plint numFields = group.getNumBlocks();
     std::string partName (
-            fName.getName() + createFileName("-g", vtkBlockId, 3)
-                            + createFileName("-", partId, 8) );
+        fName.getName() + createFileName("-g", vtkBlockId, 3)
+        + createFileName("-", partId, 8) );
     FileName fullName(fName);
 #ifdef PLB_USE_POSIX
     fullName.setPath(dName);
@@ -121,24 +126,30 @@ std::string SparseVtkImageOutput3D::writeAtomicBlock (
 #endif
     fullName.setName(partName);
     fullName.setExt("vti");
-    if (isLocal) {
+    if (isLocal)
+    {
         bool mainProcOnly = false;
         VtkDataWriter3D vtkOut(fullName, pointData, mainProcOnly);
-        if (pointData) {
+        if (pointData)
+        {
             Box3D bbox(group.getBoundingBox());
-            if (bulk.x1 < bbox.x1) {
+            if (bulk.x1 < bbox.x1)
+            {
                 ++bulk.x1;
             }
-            if (bulk.y1 < bbox.y1) {
+            if (bulk.y1 < bbox.y1)
+            {
                 ++bulk.y1;
             }
-            if (bulk.z1 < bbox.z1) {
+            if (bulk.z1 < bbox.z1)
+            {
                 ++bulk.z1;
             }
         }
         vtkOut.writeHeader(bulk, offset, deltaX);
         vtkOut.startPiece(bulk);
-        for (plint i=0; i<numFields; ++i) {
+        for (plint i=0; i<numFields; ++i)
+        {
             MultiBlock3D const& multiBlock = group.get(i);
             std::string fieldName = group.getName(i);
             writeField(multiBlock, atomicBlockId, bulk, fieldName, vtkOut);
@@ -159,8 +170,8 @@ std::string SparseVtkImageOutput3D::writeAtomicBlock (
 }
 
 void SparseVtkImageOutput3D::writeVtkBlock (
-        Group3D& group, double deltaX, Array<double,3> const& offset,
-        plint vtkBlockId, bool pointData )
+    Group3D& group, double deltaX, Array<double,3> const& offset,
+    plint vtkBlockId, bool pointData )
 {
     vtmFile << "<Block index=\"" << vtkBlockId << "\" "
             << "name=\""
@@ -172,11 +183,12 @@ void SparseVtkImageOutput3D::writeVtkBlock (
     std::map<plint,Box3D> const& domains = sparseBlock.getBulks();
     std::map<plint,Box3D>::const_iterator it = domains.begin();
     plint partId = 0;
-    for (; it != domains.end(); ++it, ++partId) {
+    for (; it != domains.end(); ++it, ++partId)
+    {
         std::string partName = writeAtomicBlock (
-                group, partId, vtkBlockId,
-                it->first, it->second, pointData, threadAttribution.isLocal(it->first),
-                deltaX, offset );
+                                   group, partId, vtkBlockId,
+                                   it->first, it->second, pointData, threadAttribution.isLocal(it->first),
+                                   deltaX, offset );
         vtmFile << "<DataSet index=\"" << partId << "\" "
                 << "file=\"" << partName << "\">\n"
                 << "</DataSet>\n";
@@ -185,11 +197,10 @@ void SparseVtkImageOutput3D::writeVtkBlock (
 }
 
 void SparseVtkImageOutput3D::writeVtkBlock (
-        Group3D& group, double deltaX, plint vtkBlockId, bool pointData )
+    Group3D& group, double deltaX, plint vtkBlockId, bool pointData )
 {
     Array<double,3> offset(0.0, 0.0, 0.0);
     writeVtkBlock(group, deltaX, offset, vtkBlockId, pointData);
 }
 
 } // namespace plb
-

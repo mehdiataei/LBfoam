@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -165,7 +165,7 @@ void writeGifs(BlockLatticeT& lattice,
                                 imSize, imSize );
     imageWriter.writeScaledGif( createFileName("omega", iter, 6),
                                 *computeNorm(*computeVorticity (
-                                        *computeVelocity(lattice) ), slice ),
+                                            *computeVelocity(lattice) ), slice ),
                                 imSize, imSize );
 }
 
@@ -185,19 +185,20 @@ void writeVTK(BlockLatticeT& lattice,
 }
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
     //defaultMultiBlockPolicy3D().toggleBlockingCommunication(true);
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 10.,   // Re
-            100,        // N
-            1.,        // lx
-            1.,        // ly
-            1.         // lz
+        (T) 1e-2,  // uMax
+        (T) 10.,   // Re
+        100,        // N
+        1.,        // lx
+        1.,        // ly
+        1.         // lz
     );
     const T logT     = (T)1/(T)10;
     const T imSave   = (T)1/(T)10;
@@ -210,12 +211,12 @@ int main(int argc, char* argv[]) {
     T omega = parameters.getOmega();
 
     MultiBlockLattice3D<T, DESCRIPTOR> lattice (
-            parameters.getNx(), parameters.getNy(), parameters.getNz(),
-            new BGKdynamics<T,DESCRIPTOR>(omega) );
+        parameters.getNx(), parameters.getNy(), parameters.getNz(),
+        new BGKdynamics<T,DESCRIPTOR>(omega) );
 
 
     OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* boundaryCondition
-        //= createInterpBoundaryCondition3D<T,DESCRIPTOR>();
+    //= createInterpBoundaryCondition3D<T,DESCRIPTOR>();
         = createLocalBoundaryCondition3D<T,DESCRIPTOR>();
 
     cavitySetup(lattice, parameters, *boundaryCondition);
@@ -235,15 +236,18 @@ int main(int argc, char* argv[]) {
 
     T previousIterationTime = T();
     // Loop over main time iteration.
-    for (plint iT=0; iT<parameters.nStep(maxT); ++iT) {
+    for (plint iT=0; iT<parameters.nStep(maxT); ++iT)
+    {
         global::timer("mainLoop").restart();
 
-        if (iT%parameters.nStep(imSave)==0) {
+        if (iT%parameters.nStep(imSave)==0)
+        {
             pcout << "Writing Gif ..." << endl;
             writeGifs(lattice, parameters, iT);
         }
 
-        if (iT%parameters.nStep(vtkSave)==0 && iT>0) {
+        if (iT%parameters.nStep(vtkSave)==0 && iT>0)
+        {
             pcout << "Saving VTK file ..." << endl;
             writeVTK(lattice, parameters, iT);
 
@@ -252,15 +256,17 @@ int main(int argc, char* argv[]) {
             string path("");
             string domainName("slice_x");
             plint namePadding = 6;
-            Array<T,3> physicalLocation; physicalLocation.resetToZero();
+            Array<T,3> physicalLocation;
+            physicalLocation.resetToZero();
             T rhoFluid = 1.0;
             T pressureOffset = 1.0e5;
             T rhoLB = 1.0;
             transientStatistics.output(path, domainName, iT, namePadding, parameters.getDeltaX(), parameters.getDeltaT(),
-                    physicalLocation, rhoFluid, pressureOffset, rhoLB);
+                                       physicalLocation, rhoFluid, pressureOffset, rhoLB);
         }
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "step " << iT
                   << "; t=" << iT*parameters.getDeltaT();
         }
@@ -270,7 +276,8 @@ int main(int argc, char* argv[]) {
 
         // Access averages from internal statistics ( their value is defined
         //   only after the call to lattice.collideAndStream() )
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "; av energy="
                   << setprecision(10) << getStoredAverageEnergy<T>(lattice)
                   << "; av rho="
@@ -284,4 +291,3 @@ int main(int argc, char* argv[]) {
 
     delete boundaryCondition;
 }
-

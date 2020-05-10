@@ -1,4 +1,3 @@
-
 /* This file is part of the Palabos library.
  *
  * Copyright (C) 2011-2017 FlowKit Sarl
@@ -6,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -38,7 +37,7 @@
  * Parallel I/O.
  * */
 
-/* 
+/*
  * Description and usage:
  *
  * This code solves the flow with heat transfer around a 3D object inside a
@@ -86,7 +85,7 @@ typedef Array<T,3> Velocity;
 static plint xDirection = 0;
 
 static plint borderWidth           = 1;  // Because Guo acts in a one-cell layer.
-                                         // Requirement: margin>=borderWidth.
+// Requirement: margin>=borderWidth.
 static plint margin                = 1;  // Extra margin of allocated cells around the object.
 static plint blockSize             = 0;  // Size of blocks in the sparse/parallel representation.
 static plint envelopeWidth         = 1;
@@ -99,7 +98,8 @@ static std::string outDir("./tmp/");
 
 // This structure holds all the user-defined parameters, and some
 // derived values needed for the simulation.
-struct Param {
+struct Param
+{
     std::string file;               // STL file with the object geometry.
     T inflationParameter;           // Parameter to inflate the geometry before voxelization.
     Precision precision;            // Precision for geometric operations.
@@ -139,7 +139,7 @@ struct Param {
 
     Param()
     { }
-    
+
     Param(std::string xmlFname)
     {
         XMLreader document(xmlFname);
@@ -149,13 +149,20 @@ struct Param {
         std::string precisionStr;
         document["geometry"]["precision"].read(precisionStr);
         PLB_ASSERT(precisionStr == "FLT" || precisionStr == "DBL" || precisionStr == "LDBL" || precisionStr == "INF");
-        if (precisionStr == "FLT") {
+        if (precisionStr == "FLT")
+        {
             precision = FLT;
-        } else if (precisionStr == "DBL") {
+        }
+        else if (precisionStr == "DBL")
+        {
             precision = DBL;
-        } else if (precisionStr == "LDBL") {
+        }
+        else if (precisionStr == "LDBL")
+        {
             precision = LDBL;
-        } else {
+        }
+        else
+        {
             precision = INF;
         }
         document["geometry"]["center"]["x"].read(cx);
@@ -269,11 +276,13 @@ static T poiseuillePressure(plint maxN)
     T uMax = param.uLB;
 
     T sum = T();
-    for (plint iN = 0; iN < maxN; iN += 2) {
+    for (plint iN = 0; iN < maxN; iN += 2)
+    {
         T twoNplusOne = (T) 2 * (T) iN + (T) 1;
         sum += ((T) 1 / (std::pow(twoNplusOne, (T) 3) * std::cosh(twoNplusOne * pi * b / ((T) 2 * a))));
     }
-    for (plint iN = 1; iN < maxN; iN += 2) {
+    for (plint iN = 1; iN < maxN; iN += 2)
+    {
         T twoNplusOne = (T) 2 * (T) iN + (T) 1;
         sum -= ((T) 1 / (std::pow(twoNplusOne, (T) 3) * std::cosh(twoNplusOne * pi * b / ((T) 2 * a))));
     }
@@ -296,17 +305,19 @@ T poiseuilleVelocity(plint iY, plint iZ, plint maxN)
     T alpha = - poiseuillePressure(maxN) / param.nuLB;
 
     T sum = T();
-    for (plint iN = 0; iN < maxN; iN += 2) {
+    for (plint iN = 0; iN < maxN; iN += 2)
+    {
         T twoNplusOne = (T) 2 * (T) iN + (T) 1;
 
         sum += (std::cos(twoNplusOne * pi * y / a) * std::cosh(twoNplusOne * pi * z / a) /
-               (std::pow(twoNplusOne, (T) 3)       * std::cosh(twoNplusOne * pi * b / ((T) 2 * a))));
+                (std::pow(twoNplusOne, (T) 3)       * std::cosh(twoNplusOne * pi * b / ((T) 2 * a))));
     }
-    for (plint iN = 1; iN < maxN; iN += 2) {
+    for (plint iN = 1; iN < maxN; iN += 2)
+    {
         T twoNplusOne = (T) 2 * (T) iN + (T) 1;
 
         sum -= (std::cos(twoNplusOne * pi * y / a) * std::cosh(twoNplusOne * pi * z / a) /
-               (std::pow(twoNplusOne, (T) 3)       * std::cosh(twoNplusOne * pi * b / ((T) 2 * a))));
+                (std::pow(twoNplusOne, (T) 3)       * std::cosh(twoNplusOne * pi * b / ((T) 2 * a))));
     }
 
     sum *= ((T) 4 * alpha * a *a / std::pow(pi, (T) 3));
@@ -316,7 +327,8 @@ T poiseuilleVelocity(plint iY, plint iZ, plint maxN)
 }
 
 template <typename T>
-class SquarePoiseuilleDensityAndVelocity {
+class SquarePoiseuilleDensityAndVelocity
+{
 public:
     SquarePoiseuilleDensityAndVelocity(T C_, plint maxN_)
         : C(C_),
@@ -335,7 +347,8 @@ private:
 };
 
 template <typename T>
-class SquarePoiseuilleVelocity {
+class SquarePoiseuilleVelocity
+{
 public:
     SquarePoiseuilleVelocity(T C_, plint maxN_)
         : C(C_),
@@ -354,7 +367,7 @@ private:
 
 // Instantiate the boundary conditions for the outer domain, for the fluid.
 void outerDomainBoundaries(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
-        OnLatticeBoundaryCondition3D<T,DESCRIPTOR>& boundaryCondition)
+                           OnLatticeBoundaryCondition3D<T,DESCRIPTOR>& boundaryCondition)
 {
     Array<T,3> zero((T) 0, (T) 0, (T) 0);
     T C = util::sinIncreasingFunction<T>(0, param.startIter);
@@ -397,28 +410,28 @@ void outerTemperatureBoundaries(MultiBlockLattice3D<T,TEMPERATURE_DESCRIPTOR>& l
 
 // Write VTK file for the flow around the object, to be viewed with Paraview.
 void writeVTK(OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>& fbc,
-        OffLatticeBoundaryCondition3D<T,TEMPERATURE_DESCRIPTOR,Array<T,2> >& tbc,
-        plint iT, std::string appStr="")
+              OffLatticeBoundaryCondition3D<T,TEMPERATURE_DESCRIPTOR,Array<T,2> >& tbc,
+              plint iT, std::string appStr="")
 {
     VtkImageOutput3D<T> vtkOut_x(createFileName(appStr+"x_slice_", iT, PADD), param.dx);
     vtkOut_x.writeData<float>(*fbc.computeVelocityNorm(param.vtkSliceX()), "velocityNorm", param.dx / param.dt);
     vtkOut_x.writeData<3,float>(*fbc.computeVelocity(param.vtkSliceX()), "velocity", param.dx / param.dt);
     vtkOut_x.writeData<float>(*fbc.computePressure(param.vtkSliceX()), "pressure",
-            param.dx * param.dx / (param.dt * param.dt));
+                              param.dx * param.dx / (param.dt * param.dt));
     vtkOut_x.writeData<float>(*tbc.computeDensity(param.vtkSliceX(), param.T_wall), "temperature", 1.0);
 
     VtkImageOutput3D<T> vtkOut_y(createFileName(appStr+"y_slice_", iT, PADD), param.dx);
     vtkOut_y.writeData<float>(*fbc.computeVelocityNorm(param.vtkSliceY()), "velocityNorm", param.dx / param.dt);
     vtkOut_y.writeData<3,float>(*fbc.computeVelocity(param.vtkSliceY()), "velocity", param.dx / param.dt);
     vtkOut_y.writeData<float>(*fbc.computePressure(param.vtkSliceY()), "pressure",
-            param.dx * param.dx / (param.dt * param.dt));
+                              param.dx * param.dx / (param.dt * param.dt));
     vtkOut_y.writeData<float>(*tbc.computeDensity(param.vtkSliceY(), param.T_wall), "temperature", 1.0);
 
     VtkImageOutput3D<T> vtkOut_z(createFileName(appStr+"z_slice_", iT, PADD), param.dx);
     vtkOut_z.writeData<float>(*fbc.computeVelocityNorm(param.vtkSliceZ()), "velocityNorm", param.dx / param.dt);
     vtkOut_z.writeData<3,float>(*fbc.computeVelocity(param.vtkSliceZ()), "velocity", param.dx / param.dt);
     vtkOut_z.writeData<float>(*fbc.computePressure(param.vtkSliceZ()), "pressure",
-            param.dx * param.dx / (param.dt * param.dt));
+                              param.dx * param.dx / (param.dt * param.dt));
     vtkOut_z.writeData<float>(*tbc.computeDensity(param.vtkSliceZ(), param.T_wall), "temperature", 1.0);
 }
 
@@ -461,7 +474,7 @@ void run(std::string continueFileName)
     pcout << std::endl << "Voxelizing the simulation domain." << std::endl;
     int flowType = voxelFlag::outside;
     VoxelizedDomain3D<T> voxelizedDomain(triangleBoundary, flowType, param.bbox(), borderWidth,
-            extendedEnvelopeWidth, blockSize);
+                                         extendedEnvelopeWidth, blockSize);
     pcout << getMultiBlockInfo(voxelizedDomain.getVoxelMatrix()) << std::endl;
     {
         VtkImageOutput3D<T> vtkOut(outDir + "voxels_full_domain", param.dx);
@@ -477,14 +490,17 @@ void run(std::string continueFileName)
     // Fluid lattice.
     Dynamics<T,DESCRIPTOR>* dynamics = 0;
     bool velIsJ = false;
-    if (!util::isZero(param.cSmago)) {
+    if (!util::isZero(param.cSmago))
+    {
         //dynamics = new SmagorinskyBGKdynamics<T,DESCRIPTOR>(param.omega, param.cSmago);
         //velIsJ = false;
         //dynamics = new SmagorinskyRegularizedDynamics<T,DESCRIPTOR>(param.omega, param.cSmago);
         //velIsJ = false;
         dynamics = new SmagorinskyIncBGKdynamics<T,DESCRIPTOR>(param.omega, param.cSmago);
         velIsJ = true;
-    } else {
+    }
+    else
+    {
         //dynamics = new BGKdynamics<T,DESCRIPTOR>(param.omega);
         //velIsJ = false;
         //dynamics = new RegularizedBGKdynamics<T,DESCRIPTOR>(param.omega);
@@ -494,23 +510,27 @@ void run(std::string continueFileName)
     }
 
     MultiBlockLattice3D<T,DESCRIPTOR>* lattice = 0;
-    if (param.useRhoBarJ) {
+    if (param.useRhoBarJ)
+    {
         lattice = generateMultiBlockLattice<T,DESCRIPTOR>(voxelizedDomain.getVoxelMatrix(),
-                envelopeWidth, new NoDynamics<T,DESCRIPTOR>((T) 1)).release();
-    } else {
+                  envelopeWidth, new NoDynamics<T,DESCRIPTOR>((T) 1)).release();
+    }
+    else
+    {
         lattice = new MultiBlockLattice3D<T,DESCRIPTOR>((MultiBlock3D&) voxelizedDomain.getVoxelMatrix());
     }
     defineDynamics(*lattice, lattice->getBoundingBox(), dynamics->clone());
     delete dynamics;
     dynamics = 0;
     defineDynamics(*lattice, voxelizedDomain.getVoxelMatrix(), lattice->getBoundingBox(),
-            new NoDynamics<T,DESCRIPTOR>((T) 1), voxelFlag::inside);
+                   new NoDynamics<T,DESCRIPTOR>((T) 1), voxelFlag::inside);
     lattice->toggleInternalStatistics(false);
     lattice->periodicity().toggleAll(false);
 
     MultiNTensorField3D<T>* rhoBarJfield = 0;
     std::vector<MultiBlock3D*> rhoBarJarg;
-    if (param.useRhoBarJ) {
+    if (param.useRhoBarJ)
+    {
         // Here we assume that the object is far from the outlet. This is why we can compute
         // the rhoBarJ field to be used with the off-lattice BC, before the FluidPressureOutlet3D
         // is executed.
@@ -518,7 +538,7 @@ void run(std::string continueFileName)
         rhoBarJfield = generateMultiNTensorField3D<T>(*lattice, extendedEnvelopeWidth, numScalars);
         rhoBarJarg.push_back(rhoBarJfield);
         integrateProcessingFunctional(new PackedRhoBarJfunctional3D<T,DESCRIPTOR>(),
-                lattice->getBoundingBox(), *lattice, *rhoBarJfield, 0);
+                                      lattice->getBoundingBox(), *lattice, *rhoBarJfield, 0);
     }
 
     // The boundary condition algorithm for the object.
@@ -526,17 +546,20 @@ void run(std::string continueFileName)
     profiles.setWallProfile(new NoSlipProfile3D<T>());
     bool useAllDirections = true;
     GuoOffLatticeModel3D<T,DESCRIPTOR>* offLatticeModel = new GuoOffLatticeModel3D<T,DESCRIPTOR>(
-            new TriangleFlowShape3D<T,Array<T,3> >(voxelizedDomain.getBoundary(), profiles),
-            flowType, useAllDirections);
+        new TriangleFlowShape3D<T,Array<T,3> >(voxelizedDomain.getBoundary(), profiles),
+        flowType, useAllDirections);
     offLatticeModel->selectSecondOrder(true);
     offLatticeModel->selectUseRegularizedModel(true);
     offLatticeModel->selectComputeStat(false);  // No force computation on object required.
     offLatticeModel->setVelIsJ(velIsJ);
-    OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>* boundaryCondition = 
+    OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>* boundaryCondition =
         new OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>(offLatticeModel, voxelizedDomain, *lattice);
-    if (param.useRhoBarJ) {
+    if (param.useRhoBarJ)
+    {
         boundaryCondition->insert(rhoBarJarg);
-    } else {
+    }
+    else
+    {
         boundaryCondition->insert();
     }
 
@@ -552,12 +575,12 @@ void run(std::string continueFileName)
     pcout << "Generating temperature lattice and boundary conditions." << std::endl;
 
     // Temperature lattice.
-    MultiBlockLattice3D<T,TEMPERATURE_DESCRIPTOR>* temperatureLattice = 
+    MultiBlockLattice3D<T,TEMPERATURE_DESCRIPTOR>* temperatureLattice =
         new MultiBlockLattice3D<T,TEMPERATURE_DESCRIPTOR>((MultiBlock3D&) voxelizedDomain.getVoxelMatrix());
     defineDynamics(*temperatureLattice, temperatureLattice->getBoundingBox(),
-            new AdvectionDiffusionRLBdynamics<T,TEMPERATURE_DESCRIPTOR>(param.omega_temperature));
+                   new AdvectionDiffusionRLBdynamics<T,TEMPERATURE_DESCRIPTOR>(param.omega_temperature));
     defineDynamics(*temperatureLattice, voxelizedDomain.getVoxelMatrix(), temperatureLattice->getBoundingBox(),
-            new NoDynamics<T,TEMPERATURE_DESCRIPTOR>(param.T_wall), voxelFlag::inside);
+                   new NoDynamics<T,TEMPERATURE_DESCRIPTOR>(param.T_wall), voxelFlag::inside);
     temperatureLattice->toggleInternalStatistics(false);
     temperatureLattice->periodicity().toggleAll(false);
 
@@ -566,12 +589,12 @@ void run(std::string continueFileName)
     temperatureProfiles.setWallProfile(new ScalarDirichletProfile3D<T>(param.T_wall));
     GuoAdvDiffOffLatticeModel3D<T,TEMPERATURE_DESCRIPTOR>* advDiffOffLatticeModel =
         new GuoAdvDiffOffLatticeModel3D<T,TEMPERATURE_DESCRIPTOR>(
-                new TriangleFlowShape3D<T,Array<T,2> >(
-                    voxelizedDomain.getBoundary(), temperatureProfiles), flowType);
+        new TriangleFlowShape3D<T,Array<T,2> >(
+            voxelizedDomain.getBoundary(), temperatureProfiles), flowType);
     advDiffOffLatticeModel->selectSecondOrder(true);
     OffLatticeBoundaryCondition3D<T,TEMPERATURE_DESCRIPTOR,Array<T,2> >* temperatureBoundaryCondition =
         new OffLatticeBoundaryCondition3D<T,TEMPERATURE_DESCRIPTOR,Array<T,2> >(
-                advDiffOffLatticeModel, voxelizedDomain, *temperatureLattice);
+        advDiffOffLatticeModel, voxelizedDomain, *temperatureLattice);
     temperatureBoundaryCondition->insert();
 
     // The boundary condition algorithm or the outer domain.
@@ -579,8 +602,8 @@ void run(std::string continueFileName)
 
     // Include coupling between fluid and temperature.
     integrateProcessingFunctional(
-            new LatticeToPassiveAdvDiff3D<T,DESCRIPTOR,TEMPERATURE_DESCRIPTOR>((T) param.temperatureTimeFactor),
-            lattice->getBoundingBox(), *lattice, *temperatureLattice, 1);
+        new LatticeToPassiveAdvDiff3D<T,DESCRIPTOR,TEMPERATURE_DESCRIPTOR>((T) param.temperatureTimeFactor),
+        lattice->getBoundingBox(), *lattice, *temperatureLattice, 1);
 
     // Minimal output.
     T Re = std::fabs(param.uInf) * param.characteristicLength / param.nu;
@@ -600,23 +623,27 @@ void run(std::string continueFileName)
     checkpointBlocks.push_back(temperatureLattice);
 
     bool continueSimulation = false;
-    if (continueFileName != "") {
+    if (continueFileName != "")
+    {
         continueSimulation = true;
     }
 
     plint iter = 0;
-    if (continueSimulation) {
+    if (continueSimulation)
+    {
         pcout << "Reading state of the simulation from file: " << continueFileName << std::endl;
         loadState(checkpointBlocks, iter, param.saveDynamicContent, continueFileName);
         lattice->resetTime(iter);
         temperatureLattice->resetTime(iter);
-    } else {
+    }
+    else
+    {
         T C = util::sinIncreasingFunction<T>(iter, param.startIter);
         initializeAtEquilibrium(*lattice, lattice->getBoundingBox(),
-                SquarePoiseuilleDensityAndVelocity<T>(C, NMAX));
+                                SquarePoiseuilleDensityAndVelocity<T>(C, NMAX));
         lattice->initialize();
         initializeAtEquilibrium(*temperatureLattice, temperatureLattice->getBoundingBox(),
-                param.T_inf, Array<T,3>((T) 0, (T) 0, (T) 0));
+                                param.T_inf, Array<T,3>((T) 0, (T) 0, (T) 0));
         temperatureLattice->initialize();
     }
 
@@ -625,31 +652,40 @@ void run(std::string continueFileName)
      */
 
     plb_ofstream energyFile;
-    if (continueSimulation) {
+    if (continueSimulation)
+    {
         energyFile.open((outDir+"average_energy.dat").c_str(), std::ostream::app);
-    } else {
+    }
+    else
+    {
         energyFile.open((outDir+"average_energy.dat").c_str());
     }
 
     plb_ofstream temperatureFile;
-    if (continueSimulation) {
+    if (continueSimulation)
+    {
         temperatureFile.open((outDir+"average_temperature.dat").c_str(), std::ostream::app);
-    } else {
+    }
+    else
+    {
         temperatureFile.open((outDir+"average_temperature.dat").c_str());
     }
 
     pcout << "Starting simulation." << std::endl;
     bool checkForErrors = true;
     bool stopProgram = false;
-    for (plint i = iter; i < param.maxIter && !stopProgram; ++i) {
+    for (plint i = iter; i < param.maxIter && !stopProgram; ++i)
+    {
         bool output = (i == param.maxIter - 1) || stopProgram;
 
-        if (i <= param.startIter) {
+        if (i <= param.startIter)
+        {
             T C = util::sinIncreasingFunction<T>(i, param.startIter);
             setBoundaryVelocity(*lattice, param.inlet(), SquarePoiseuilleVelocity<T>(C, NMAX));
         }
 
-        if (i % param.statIter == 0 || output) {
+        if (i % param.statIter == 0 || output)
+        {
             pcout << "At iteration: " << i << ", time: " << i * param.dt << std::endl;
             T avEnergy = boundaryCondition->computeAverageEnergy() * util::sqr(param.dx / param.dt);
             T avTemp = temperatureBoundaryCondition->computeAverageDensity();
@@ -657,40 +693,47 @@ void run(std::string continueFileName)
             pcout << "Average temperature = " << avTemp << std::endl;
             energyFile << i * param.dt << " " << avEnergy << std::endl;
             temperatureFile << i * param.dt << " " << avTemp << std::endl;
-            if (i != 0) {
+            if (i != 0)
+            {
                 pcout << "Time per lattice Boltzmann cycle: " << global::timer("cycle").getTime() / (T) i << std::endl;
             }
             pcout << std::endl;
         }
-        if (i % param.vtkIter == 0 || output) {
+        if (i % param.vtkIter == 0 || output)
+        {
             pcout << "Writing VTK at iteration: " << i << std::endl;
             writeVTK(*boundaryCondition, *temperatureBoundaryCondition, i, outDir);
             pcout << std::endl;
         }
-        if ((param.cpIter > 0 && i % param.cpIter == 0 && i != iter) || output) {
+        if ((param.cpIter > 0 && i % param.cpIter == 0 && i != iter) || output)
+        {
             pcout << "Saving the state of the simulation at iteration: " << i << std::endl;
             saveState(checkpointBlocks, i, param.saveDynamicContent, param.continueFile,
-                    param.checkpointFile, PADD);
+                      param.checkpointFile, PADD);
             pcout << std::endl;
         }
-        if (i % param.abIter == 0) {
+        if (i % param.abIter == 0)
+        {
             stopProgram = abortExecution(param.abortFile, checkpointBlocks, i, param.saveDynamicContent,
-                    param.continueFile, param.checkpointFile, PADD);
+                                         param.continueFile, param.checkpointFile, PADD);
 
-            if (stopProgram) {
+            if (stopProgram)
+            {
                 pcout << "Aborting execution at iteration: " << i << std::endl;
                 pcout << std::endl;
             }
         }
 
         global::timer("cycle").start();
-        if (i >= param.startIter && i % param.temperatureTimeFactor == 0) {
+        if (i >= param.startIter && i % param.temperatureTimeFactor == 0)
+        {
             temperatureLattice->collideAndStream();
         }
         lattice->collideAndStream();
         global::timer("cycle").stop();
 
-        if (checkForErrors) {
+        if (checkForErrors)
+        {
             abortIfErrorsOccurred();
             checkForErrors = false;
         }
@@ -721,20 +764,24 @@ int main(int argc, char* argv[])
 
     // 1. Read command-line parameter: the input file name.
     std::string xmlFileName;
-    try {
+    try
+    {
         global::argv(1).read(xmlFileName);
     }
-    catch (PlbIOException& exception) {
-        pcout << "Wrong parameters; the syntax is: " 
+    catch (PlbIOException& exception)
+    {
+        pcout << "Wrong parameters; the syntax is: "
               << (std::string)global::argv(0) << " input-file.xml" << std::endl;
         return -1;
     }
 
     // 2. Read input parameters from the XML file.
-    try {
+    try
+    {
         param = Param(xmlFileName);
     }
-    catch (PlbIOException& exception) {
+    catch (PlbIOException& exception)
+    {
         pcout << exception.what() << std::endl;
         return -1;
     }
@@ -744,16 +791,19 @@ int main(int argc, char* argv[])
     global::IOpolicy().activateParallelIO(param.useParallelIO);
 
     std::string continueFileName = "";
-    try {
+    try
+    {
         global::argv(2).read(continueFileName);
     }
     catch (PlbIOException& exception) { }
 
     // 3. Execute the main program.
-    try {
+    try
+    {
         run(continueFileName);
     }
-    catch (PlbIOException& exception) {
+    catch (PlbIOException& exception)
+    {
         pcout << exception.what() << std::endl;
         return -1;
     }

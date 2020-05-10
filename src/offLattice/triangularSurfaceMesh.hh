@@ -1087,7 +1087,7 @@ int TriangularSurfaceMesh<T>::pointOnTriangle (
     a[1][0] = a[0][1];
     a[1][1] = dot(e1, e1);
 
-    Array<T,3> tmp((T) 0.0, (T) 0.0, (T) 0.0);
+    T tmp[3];
     tmp[0] = intersection[0] - v0[0];
     tmp[1] = intersection[1] - v0[1];
     tmp[2] = intersection[2] - v0[2];

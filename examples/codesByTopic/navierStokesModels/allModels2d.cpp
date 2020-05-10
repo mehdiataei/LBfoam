@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -41,24 +41,24 @@ using namespace std;
 typedef double T;
 
 // Uncomment the two following lines for BGK dynamics
-    //#define DESCRIPTOR D2Q9Descriptor
-    //typedef BGKdynamics<T,DESCRIPTOR> BackgroundDynamics;
+//#define DESCRIPTOR D2Q9Descriptor
+//typedef BGKdynamics<T,DESCRIPTOR> BackgroundDynamics;
 
 // Uncomment the two following lines for so-called incompressible BGK dynamics
-    //#define DESCRIPTOR D2Q9Descriptor
-    //typedef IncBGKdynamics<T,DESCRIPTOR> BackgroundDynamics;
+//#define DESCRIPTOR D2Q9Descriptor
+//typedef IncBGKdynamics<T,DESCRIPTOR> BackgroundDynamics;
 
 // Uncomment the two following lines for Regularized BGK dynamics
-    //#define DESCRIPTOR D2Q9Descriptor
-    //typedef RegularizedBGKdynamics<T,DESCRIPTOR> BackgroundDynamics;
+//#define DESCRIPTOR D2Q9Descriptor
+//typedef RegularizedBGKdynamics<T,DESCRIPTOR> BackgroundDynamics;
 
 // Uncomment the two following lines for MRT dynamics
-     #define DESCRIPTOR MRTD2Q9Descriptor
-     typedef MRTdynamics<T,DESCRIPTOR> BackgroundDynamics;
+#define DESCRIPTOR MRTD2Q9Descriptor
+typedef MRTdynamics<T,DESCRIPTOR> BackgroundDynamics;
 
 // Uncomment the two following lines for Entropic dynamics
-    //#define DESCRIPTOR D2Q9Descriptor
-    //typedef EntropicDynamics<T,DESCRIPTOR> BackgroundDynamics;
+//#define DESCRIPTOR D2Q9Descriptor
+//typedef EntropicDynamics<T,DESCRIPTOR> BackgroundDynamics;
 
 
 void defineCylinderGeometry( MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
@@ -85,17 +85,18 @@ void writeGifs(MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint iter)
                                imSize, imSize );
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 300.,  // Re
-            100,       // N
-            5.,        // lx
-            1.         // ly 
+        (T) 1e-2,  // uMax
+        (T) 300.,  // Re
+        100,       // N
+        5.,        // lx
+        1.         // ly
     );
     const T logT     = (T)0.02;
     const T imSave   = (T)0.1;
@@ -104,11 +105,11 @@ int main(int argc, char* argv[]) {
     writeLogFile(parameters, "Poiseuille flow");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-            parameters.getNx(), parameters.getNy(),
-            new BackgroundDynamics(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(),
+        new BackgroundDynamics(parameters.getOmega()) );
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     defineCylinderGeometry(lattice, parameters);
 
@@ -116,8 +117,10 @@ int main(int argc, char* argv[]) {
     createPoiseuilleInitialValues(lattice, parameters);
 
     // Main loop over time iterations.
-    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT) {
-        if (iT%parameters.nStep(logT)==0) {
+    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT)
+    {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "step " << iT
                   << "; lattice time=" << lattice.getTimeCounter().getTime()
                   << "; t=" << iT*parameters.getDeltaT()
@@ -127,7 +130,8 @@ int main(int argc, char* argv[]) {
                   << getStoredAverageDensity<T>(lattice) << endl;
         }
 
-        if (iT%parameters.nStep(imSave)==0) {
+        if (iT%parameters.nStep(imSave)==0)
+        {
             pcout << "Saving Gif ..." << endl;
             writeGifs(lattice, iT);
         }

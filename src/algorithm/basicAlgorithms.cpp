@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -24,33 +24,42 @@
 
 #include "algorithm/basicAlgorithms.h"
 
-namespace plb {
+namespace plb
+{
 
-namespace algorithm {
+namespace algorithm
+{
 
-std::vector<plint> primeFactor(plint value) {
+std::vector<plint> primeFactor(plint value)
+{
     std::vector<plint> primeFactors;
     plint testFactor = 2;
-    while (testFactor <= value) {
-        if (value%testFactor==0) {
+    while (testFactor <= value)
+    {
+        if (value%testFactor==0)
+        {
             value /= testFactor;
             primeFactors.push_back(testFactor);
         }
-        else {
+        else
+        {
             ++testFactor;
         }
     }
     return primeFactors;
 }
 
-std::vector<plint> evenRepartition(plint value, plint d) {
+std::vector<plint> evenRepartition(plint value, plint d)
+{
     std::vector<plint> primeFactors = primeFactor(value);
     std::vector<plint> repartition(d);
-    for (plint iRep=0; iRep<d; ++iRep) {
+    for (plint iRep=0; iRep<d; ++iRep)
+    {
         repartition[iRep] = 1;
     }
     plint iDim=0;
-    for (plint iPrime=(int)(primeFactors.size()-1); iPrime>=0; --iPrime) {
+    for (plint iPrime=(int)(primeFactors.size()-1); iPrime>=0; --iPrime)
+    {
         repartition[iDim] *= primeFactors[iPrime];
         iDim = (iDim+1)%d;
     }

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -25,244 +25,245 @@
 #include "multiBlock/multiDataProcessorWrapper3D.h"
 #include "multiBlock/multiDataProcessorWrapper3D.hh"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Boxed Data Processor functionals ****************** */
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        BoxProcessingFunctional3D_N<PRECOMP_T>* functional,
-        Box3D domain, MultiNTensorField3D<PRECOMP_T>& field );
+    BoxProcessingFunctional3D_N<PRECOMP_T>* functional,
+    Box3D domain, MultiNTensorField3D<PRECOMP_T>& field );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        BoxProcessingFunctional3D_N<PRECOMP_T>* functional,
-        Box3D domain, MultiNTensorField3D<PRECOMP_T>& field, plint level );
+    BoxProcessingFunctional3D_N<PRECOMP_T>* functional,
+    Box3D domain, MultiNTensorField3D<PRECOMP_T>& field, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        BoxProcessingFunctional3D_S<PRECOMP_T>* functional,
-        Box3D domain, MultiScalarField3D<PRECOMP_T>& field );
+    BoxProcessingFunctional3D_S<PRECOMP_T>* functional,
+    Box3D domain, MultiScalarField3D<PRECOMP_T>& field );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        BoxProcessingFunctional3D_S<PRECOMP_T>* functional,
-        Box3D domain, MultiScalarField3D<PRECOMP_T>& field, plint level );
+    BoxProcessingFunctional3D_S<PRECOMP_T>* functional,
+    Box3D domain, MultiScalarField3D<PRECOMP_T>& field, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        MaskedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field,
-        MultiNTensorField3D<int>& mask );
+    MaskedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field,
+    MultiNTensorField3D<int>& mask );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        MaskedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field,
-        MultiNTensorField3D<int>& mask,
-        plint level );
+    MaskedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field,
+    MultiNTensorField3D<int>& mask,
+    plint level );
 template
 void applyProcessingFunctional<PRECOMP_T,int> (
-        BoxProcessingFunctional3D_NN<PRECOMP_T,int>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<int>& field2 );
+    BoxProcessingFunctional3D_NN<PRECOMP_T,int>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<int>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,int> (
-        BoxProcessingFunctional3D_NN<PRECOMP_T,int>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<int>& field2, plint level );
+    BoxProcessingFunctional3D_NN<PRECOMP_T,int>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<int>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,int> (
-        BoxProcessingFunctional3D_SS<PRECOMP_T,int>* functional,
-        Box3D domain,
-        MultiScalarField3D<PRECOMP_T>& field1,
-        MultiScalarField3D<int>& field2 );
+    BoxProcessingFunctional3D_SS<PRECOMP_T,int>* functional,
+    Box3D domain,
+    MultiScalarField3D<PRECOMP_T>& field1,
+    MultiScalarField3D<int>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,int> (
-        BoxProcessingFunctional3D_SS<PRECOMP_T,int>* functional,
-        Box3D domain,
-        MultiScalarField3D<PRECOMP_T>& field1,
-        MultiScalarField3D<int>& field2, plint level );
+    BoxProcessingFunctional3D_SS<PRECOMP_T,int>* functional,
+    Box3D domain,
+    MultiScalarField3D<PRECOMP_T>& field1,
+    MultiScalarField3D<int>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,float> (
-        BoxProcessingFunctional3D_NN<PRECOMP_T,float>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<float>& field2 );
+    BoxProcessingFunctional3D_NN<PRECOMP_T,float>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<float>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,float> (
-        BoxProcessingFunctional3D_NN<PRECOMP_T,float>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<float>& field2, plint level );
+    BoxProcessingFunctional3D_NN<PRECOMP_T,float>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<float>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,float> (
-        BoxProcessingFunctional3D_SS<PRECOMP_T,float>* functional,
-        Box3D domain,
-        MultiScalarField3D<PRECOMP_T>& field1,
-        MultiScalarField3D<float>& field2 );
+    BoxProcessingFunctional3D_SS<PRECOMP_T,float>* functional,
+    Box3D domain,
+    MultiScalarField3D<PRECOMP_T>& field1,
+    MultiScalarField3D<float>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,float> (
-        BoxProcessingFunctional3D_SS<PRECOMP_T,float>* functional,
-        Box3D domain,
-        MultiScalarField3D<PRECOMP_T>& field1,
-        MultiScalarField3D<float>& field2, plint level );
+    BoxProcessingFunctional3D_SS<PRECOMP_T,float>* functional,
+    Box3D domain,
+    MultiScalarField3D<PRECOMP_T>& field1,
+    MultiScalarField3D<float>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,double> (
-        BoxProcessingFunctional3D_NN<PRECOMP_T,double>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<double>& field2 );
+    BoxProcessingFunctional3D_NN<PRECOMP_T,double>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<double>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,double> (
-        BoxProcessingFunctional3D_NN<PRECOMP_T,double>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<double>& field2, plint level );
+    BoxProcessingFunctional3D_NN<PRECOMP_T,double>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<double>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,double> (
-        BoxProcessingFunctional3D_SS<PRECOMP_T,double>* functional,
-        Box3D domain,
-        MultiScalarField3D<PRECOMP_T>& field1,
-        MultiScalarField3D<double>& field2 );
+    BoxProcessingFunctional3D_SS<PRECOMP_T,double>* functional,
+    Box3D domain,
+    MultiScalarField3D<PRECOMP_T>& field1,
+    MultiScalarField3D<double>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,double> (
-        BoxProcessingFunctional3D_SS<PRECOMP_T,double>* functional,
-        Box3D domain,
-        MultiScalarField3D<PRECOMP_T>& field1,
-        MultiScalarField3D<double>& field2, plint level );
+    BoxProcessingFunctional3D_SS<PRECOMP_T,double>* functional,
+    Box3D domain,
+    MultiScalarField3D<PRECOMP_T>& field1,
+    MultiScalarField3D<double>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,float> (
-        MaskedBoxProcessingFunctional3D_NN<PRECOMP_T,float>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<float>& field2,
-        MultiNTensorField3D<int>& mask );
+    MaskedBoxProcessingFunctional3D_NN<PRECOMP_T,float>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<float>& field2,
+    MultiNTensorField3D<int>& mask );
 template
 void applyProcessingFunctional<PRECOMP_T,double> (
-        MaskedBoxProcessingFunctional3D_NN<PRECOMP_T,double>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<double>& field2,
-        MultiNTensorField3D<int>& mask );
+    MaskedBoxProcessingFunctional3D_NN<PRECOMP_T,double>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<double>& field2,
+    MultiNTensorField3D<int>& mask );
 template
 void applyProcessingFunctional<PRECOMP_T,int> (
-        MaskedBoxProcessingFunctional3D_NN<PRECOMP_T,int>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<int>& field2,
-        MultiNTensorField3D<int>& mask );
+    MaskedBoxProcessingFunctional3D_NN<PRECOMP_T,int>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<int>& field2,
+    MultiNTensorField3D<int>& mask );
 template
 void integrateProcessingFunctional<PRECOMP_T,PRECOMP_T> (
-        MaskedBoxProcessingFunctional3D_NN<PRECOMP_T,PRECOMP_T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<PRECOMP_T>& field2,
-        MultiNTensorField3D<int>& mask,
-        plint level );
+    MaskedBoxProcessingFunctional3D_NN<PRECOMP_T,PRECOMP_T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<PRECOMP_T>& field2,
+    MultiNTensorField3D<int>& mask,
+    plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        NTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
-        Box3D domain, std::vector<MultiNTensorField3D<PRECOMP_T>*> fields );
+    NTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
+    Box3D domain, std::vector<MultiNTensorField3D<PRECOMP_T>*> fields );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        NTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
-        Box3D domain, std::vector<MultiNTensorField3D<PRECOMP_T>*> fields, plint level );
+    NTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
+    Box3D domain, std::vector<MultiNTensorField3D<PRECOMP_T>*> fields, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        ScalarFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
-        Box3D domain, std::vector<MultiScalarField3D<PRECOMP_T>*> fields );
+    ScalarFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
+    Box3D domain, std::vector<MultiScalarField3D<PRECOMP_T>*> fields );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        ScalarFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
-        Box3D domain, std::vector<MultiScalarField3D<PRECOMP_T>*> fields, plint level );
+    ScalarFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
+    Box3D domain, std::vector<MultiScalarField3D<PRECOMP_T>*> fields, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        MaskedNTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
-        Box3D domain,
-        std::vector<MultiNTensorField3D<PRECOMP_T>*> fields,
-        MultiNTensorField3D<int>& mask);
+    MaskedNTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
+    Box3D domain,
+    std::vector<MultiNTensorField3D<PRECOMP_T>*> fields,
+    MultiNTensorField3D<int>& mask);
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        MaskedNTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
-        Box3D domain, std::vector<MultiNTensorField3D<PRECOMP_T>*> fields,
-        MultiNTensorField3D<int>& mask, plint level );
+    MaskedNTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
+    Box3D domain, std::vector<MultiNTensorField3D<PRECOMP_T>*> fields,
+    MultiNTensorField3D<int>& mask, plint level );
 
 /* *************** Bounded Boxed Data Processor functionals ****************** */
 
 template void applyProcessingFunctional<PRECOMP_T> (
-        BoundedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
-        Box3D domain, MultiNTensorField3D<PRECOMP_T>& field, plint boundaryWidth );
+    BoundedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
+    Box3D domain, MultiNTensorField3D<PRECOMP_T>& field, plint boundaryWidth );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        BoundedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field, plint boundaryWidth, plint level );
+    BoundedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field, plint boundaryWidth, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        BoundedMaskedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field,
-        MultiNTensorField3D<int>& mask,
-        plint boundaryWidth );
+    BoundedMaskedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field,
+    MultiNTensorField3D<int>& mask,
+    plint boundaryWidth );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        BoundedMaskedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field,
-        MultiNTensorField3D<int>& mask,
-        plint boundaryWidth, plint level );
+    BoundedMaskedBoxProcessingFunctional3D_N<PRECOMP_T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field,
+    MultiNTensorField3D<int>& mask,
+    plint boundaryWidth, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,PRECOMP_T> (
-        BoundedBoxProcessingFunctional3D_NN<PRECOMP_T,PRECOMP_T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<PRECOMP_T>& field2,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional3D_NN<PRECOMP_T,PRECOMP_T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<PRECOMP_T>& field2,
+    plint boundaryWidth );
 template
 void integrateProcessingFunctional<PRECOMP_T,PRECOMP_T> (
-        BoundedBoxProcessingFunctional3D_NN<PRECOMP_T,PRECOMP_T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<PRECOMP_T>& field2,
-        plint boundaryWidth, plint level );
+    BoundedBoxProcessingFunctional3D_NN<PRECOMP_T,PRECOMP_T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<PRECOMP_T>& field2,
+    plint boundaryWidth, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,PRECOMP_T> (
-        BoundedMaskedBoxProcessingFunctional3D_NN<PRECOMP_T,PRECOMP_T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<PRECOMP_T>& field2,
-        MultiNTensorField3D<int>& mask,
-        plint boundaryWidth );
+    BoundedMaskedBoxProcessingFunctional3D_NN<PRECOMP_T,PRECOMP_T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<PRECOMP_T>& field2,
+    MultiNTensorField3D<int>& mask,
+    plint boundaryWidth );
 template
 void integrateProcessingFunctional<PRECOMP_T,PRECOMP_T> (
-        BoundedMaskedBoxProcessingFunctional3D_NN<PRECOMP_T,PRECOMP_T>* functional,
-        Box3D domain,
-        MultiNTensorField3D<PRECOMP_T>& field1,
-        MultiNTensorField3D<PRECOMP_T>& field2,
-        MultiNTensorField3D<int>& mask,
-        plint boundaryWidth, plint level );
+    BoundedMaskedBoxProcessingFunctional3D_NN<PRECOMP_T,PRECOMP_T>* functional,
+    Box3D domain,
+    MultiNTensorField3D<PRECOMP_T>& field1,
+    MultiNTensorField3D<PRECOMP_T>& field2,
+    MultiNTensorField3D<int>& mask,
+    plint boundaryWidth, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        BoundedNTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
-        Box3D domain, std::vector<MultiNTensorField3D<PRECOMP_T>*> fields, plint boundaryWidth );
+    BoundedNTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
+    Box3D domain, std::vector<MultiNTensorField3D<PRECOMP_T>*> fields, plint boundaryWidth );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        BoundedNTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
-        Box3D domain, std::vector<MultiNTensorField3D<PRECOMP_T>*> fields, plint boundaryWidth, plint level );
+    BoundedNTensorFieldBoxProcessingFunctional3D<PRECOMP_T>* functional,
+    Box3D domain, std::vector<MultiNTensorField3D<PRECOMP_T>*> fields, plint boundaryWidth, plint level );
 
 }  // namespace plb

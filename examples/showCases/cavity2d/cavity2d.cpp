@@ -31,7 +31,9 @@
   **/
 
 #include "palabos2D.h"
+#ifndef PLB_PRECOMPILED // Unless precompiled version is used,
 #include "palabos2D.hh"   // include full template code
+#endif
 #include <vector>
 #include <cmath>
 #include <iostream>
@@ -90,53 +92,58 @@ void writeVTK(BlockLatticeT& lattice,
     vtkOut.writeData<2,float>(*computeVelocity(lattice), "velocity", dx/dt);
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 100.,  // Re
-            128,       // N
-            1.,        // lx
-            1.         // ly
+        (T) 1e-2,  // uMax
+        (T) 100.,  // Re
+        128,       // N
+        1.,        // lx
+        1.        // ly
     );
     const T logT     = (T)0.1;
-    const T imSave   = (T)0.2;
-    const T vtkSave  = (T)1.;
-    const T maxT     = (T)10.1;
+    const T imSave   = (T)5.0;
+    const T vtkSave  = (T)5.;
+    const T maxT     = (T)1.1;
 
     writeLogFile(parameters, "2D cavity");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-              parameters.getNx(), parameters.getNy(),
-              new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        //boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
-        boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
+    //boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
 
     cavitySetup(lattice, parameters, *boundaryCondition);
 
     T previousIterationTime = T();
 
     // Main loop over time iterations.
-    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT) {
+    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT)
+    {
         global::timer("mainLoop").restart();
 
-        if (iT%parameters.nStep(imSave)==0 && iT>0) {
+        if (iT%parameters.nStep(imSave)==0 && iT>0)
+        {
             pcout << "Saving Gif ..." << endl;
             writeGif(lattice, iT);
             pcout << endl;
         }
 
-        if (iT%parameters.nStep(vtkSave)==0 && iT>0) {
+        if (iT%parameters.nStep(vtkSave)==0 && iT>0)
+        {
             pcout << "Saving VTK file ..." << endl;
             writeVTK(lattice, parameters, iT);
         }
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "step " << iT
                   << "; t=" << iT*parameters.getDeltaT();
         }
@@ -144,7 +151,8 @@ int main(int argc, char* argv[]) {
         // Lattice Boltzmann iteration step.
         lattice.collideAndStream();
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "; av energy="
                   << setprecision(10) << getStoredAverageEnergy(lattice)
                   << "; av rho="

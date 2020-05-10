@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -67,17 +67,18 @@ void writeGifs(BlockLatticeT& lattice, plint iter)
                                imSize, imSize );
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 100.,  // Re
-            128,        // N
-            1.,        // lx
-            1.         // ly 
+        (T) 1e-2,  // uMax
+        (T) 100.,  // Re
+        128,        // N
+        1.,        // lx
+        1.         // ly
     );
     const plint logIt  =   100;
     const plint imSave =  1000;
@@ -91,8 +92,8 @@ int main(int argc, char* argv[]) {
     plint envelopeWidth = 1;
     MultiBlockLattice2D<T, DESCRIPTOR> lattice1 (
         MultiBlockManagement2D( createRegularDistribution2D (
-                                  parameters.getNx(),parameters.getNy(), 3, 4),
-                                  defaultMultiBlockPolicy2D().getThreadAttribution(), envelopeWidth ),
+                                    parameters.getNx(),parameters.getNy(), 3, 4),
+                                defaultMultiBlockPolicy2D().getThreadAttribution(), envelopeWidth ),
         defaultMultiBlockPolicy2D().getBlockCommunicator(),
         defaultMultiBlockPolicy2D().getCombinedStatistics(),
         defaultMultiBlockPolicy2D().getMultiCellAccess<T,DESCRIPTOR>(),
@@ -100,8 +101,8 @@ int main(int argc, char* argv[]) {
     );
     MultiBlockLattice2D<T, DESCRIPTOR> lattice2 (
         MultiBlockManagement2D( createRegularDistribution2D (
-                                  parameters.getNx(),parameters.getNy(), 1, 2),
-                                  defaultMultiBlockPolicy2D().getThreadAttribution(), envelopeWidth ),
+                                    parameters.getNx(),parameters.getNy(), 1, 2),
+                                defaultMultiBlockPolicy2D().getThreadAttribution(), envelopeWidth ),
         defaultMultiBlockPolicy2D().getBlockCommunicator(),
         defaultMultiBlockPolicy2D().getCombinedStatistics(),
         defaultMultiBlockPolicy2D().getMultiCellAccess<T,DESCRIPTOR>(),
@@ -110,15 +111,17 @@ int main(int argc, char* argv[]) {
 
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
-        //boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
+    //boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     cavitySetup(lattice1, parameters, *boundaryCondition);
     cavitySetup(lattice2, parameters, *boundaryCondition);
 
     // Main loop over time iterations.
-    for (plint iT=0; iT<maxIt; ++iT) {
-        if (iT%logIt==0) {
+    for (plint iT=0; iT<maxIt; ++iT)
+    {
+        if (iT%logIt==0)
+        {
             T storedAverageDensity1 = getStoredAverageDensity<T>(lattice1);
             T storedAverageDensity2 = getStoredAverageDensity<T>(lattice2);
             T storedAverageEnergy1 = getStoredAverageEnergy<T>(lattice1);
@@ -138,7 +141,8 @@ int main(int argc, char* argv[]) {
                   << storedAverageDensity2 << endl;
         }
 
-        if (iT%imSave==0) {
+        if (iT%imSave==0)
+        {
             pcout << "Saving Gif ..." << endl;
             writeGifs(lattice1, iT);
         }

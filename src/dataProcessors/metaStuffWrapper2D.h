@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,70 +36,71 @@
 #include "dataProcessors/metaStuffFunctional2D.h"
 #include <memory>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
 void extractTopMostDynamics(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarField2D<int>& dynamicsId,
                             Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractTopMostDynamics (
-                                             MultiBlockLattice2D<T,Descriptor>& lattice );
+std::auto_ptr< MultiScalarField2D<int> > extractTopMostDynamics (
+    MultiBlockLattice2D<T,Descriptor>& lattice );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractTopMostDynamics (
-                                             MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain );
+std::auto_ptr< MultiScalarField2D<int> > extractTopMostDynamics (
+    MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain );
 
 
 template<typename T, template<typename U> class Descriptor>
 void extractBottomMostDynamics(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarField2D<int>& dynamicsId,
-                            Box2D domain );
+                               Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractBottomMostDynamics (
-                                             MultiBlockLattice2D<T,Descriptor>& lattice );
+std::auto_ptr< MultiScalarField2D<int> > extractBottomMostDynamics (
+    MultiBlockLattice2D<T,Descriptor>& lattice );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractBottomMostDynamics (
-                                             MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain );
+std::auto_ptr< MultiScalarField2D<int> > extractBottomMostDynamics (
+    MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain );
 
 
 template<typename T, template<typename U> class Descriptor>
 void uniqueDynamicsChains (
-        MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain,
-        std::vector<std::vector<int> >& chains, pluint& maxChainLength );
+    MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain,
+    std::vector<std::vector<int> >& chains, pluint& maxChainLength );
 
 template<typename T, template<typename U> class Descriptor>
 void uniqueDynamicsIds (
-        MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain, std::vector<int>& ids );
+    MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain, std::vector<int>& ids );
 
 template<typename T, template<typename U> class Descriptor>
 void extractDynamicsChain(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarField2D<int>& dynamicsId,
                           std::map<int,std::string>& nameOfDynamics, Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractDynamicsChain (
-            MultiBlockLattice2D<T,Descriptor>& lattice,
-            std::map<int,std::string>& nameOfDynamics );
+std::auto_ptr< MultiScalarField2D<int> > extractDynamicsChain (
+    MultiBlockLattice2D<T,Descriptor>& lattice,
+    std::map<int,std::string>& nameOfDynamics );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiScalarField2D<int> > extractDynamicsChain (
-            MultiBlockLattice2D<T,Descriptor>& lattice,
-            std::map<int,std::string>& nameOfDynamics, Box2D domain );
+std::auto_ptr< MultiScalarField2D<int> > extractDynamicsChain (
+    MultiBlockLattice2D<T,Descriptor>& lattice,
+    std::map<int,std::string>& nameOfDynamics, Box2D domain );
 
 
 template<typename T, template<typename U> class Descriptor>
 void copyEntireCells( MultiBlockLattice2D<T,Descriptor>& sourceLattice,
-                        MultiBlockLattice2D<T,Descriptor>& destinationLattice,
-                        Box2D domain );
+                      MultiBlockLattice2D<T,Descriptor>& destinationLattice,
+                      Box2D domain );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiBlockLattice2D<T,Descriptor> > copyEntireCells (
-            MultiBlockLattice2D<T,Descriptor>& lattice );
+std::auto_ptr< MultiBlockLattice2D<T,Descriptor> > copyEntireCells (
+    MultiBlockLattice2D<T,Descriptor>& lattice );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiBlockLattice2D<T,Descriptor> > copyEntireCells (
-            MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain );
+std::auto_ptr< MultiBlockLattice2D<T,Descriptor> > copyEntireCells (
+    MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain );
 
 bool allFlagsTrue(MultiBlock2D* multiBlock);
 

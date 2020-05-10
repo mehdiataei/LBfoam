@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,34 +29,35 @@
 #include "latticeBoltzmann/nearestNeighborLattices2D.h"
 #include "latticeBoltzmann/nearestNeighborLattices2D.hh"
 
-namespace plb {
+namespace plb
+{
 
 template
 void copyNonLocal<FLOAT_T,descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& from,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& to, Box2D const& domain,
-        modif::ModifT whichContent );
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& from,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& to, Box2D const& domain,
+    modif::ModifT whichContent );
 
 template
 void copy<FLOAT_T,descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& from, Box2D const& fromDomain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& to, Box2D const& toDomain,
-        modif::ModifT typeOfModif );
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& from, Box2D const& fromDomain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& to, Box2D const& toDomain,
+    modif::ModifT typeOfModif );
 
 template
 void copyPopulations<FLOAT_T,descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& from, Box2D const& fromDomain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& to, Box2D const& toDomain );
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& from, Box2D const& fromDomain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& to, Box2D const& toDomain );
 
 template
 void copyAll<FLOAT_T,descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& from, Box2D const& fromDomain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& to, Box2D const& toDomain );
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& from, Box2D const& fromDomain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& to, Box2D const& toDomain );
 
 template
 void copyRegenerate<FLOAT_T,descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& from, Box2D const& fromDomain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& to, Box2D const& toDomain );
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> const& from, Box2D const& fromDomain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& to, Box2D const& toDomain );
 
 }
 

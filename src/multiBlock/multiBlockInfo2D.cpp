@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -27,7 +27,8 @@
  */
 #include "multiBlock/multiBlockInfo2D.h"
 
-namespace plb {
+namespace plb
+{
 
 bool getMultiBlockInfo(MultiBlock2D const& multiBlock,
                        plint& nx, plint& ny, plint& numBlocks,
@@ -39,7 +40,8 @@ bool getMultiBlockInfo(MultiBlock2D const& multiBlock,
 
     MultiBlockManagement2D const& management = multiBlock.getMultiBlockManagement();
     SparseBlockStructure2D const& sparseBlock = management.getSparseBlockStructure();
-    if (sparseBlock.getNumBlocks()==0) {
+    if (sparseBlock.getNumBlocks()==0)
+    {
         return false;
     }
     plint firstBulk = sparseBlock.getBulks().begin()->first;
@@ -50,14 +52,17 @@ bool getMultiBlockInfo(MultiBlock2D const& multiBlock,
     plint largestBlock = it->first;
     plint smallestBlock = it->first;
     numAllocatedCells = 0;
-    for (; it != sparseBlock.getBulks().end(); ++it) {
+    for (; it != sparseBlock.getBulks().end(); ++it)
+    {
         plint numCells = it->second.nCells();
         numAllocatedCells += numCells;
-        if (numCells>maxNumCells) {
+        if (numCells>maxNumCells)
+        {
             maxNumCells = numCells;
             largestBlock = it->first;
         }
-        if (numCells<minNumCells) {
+        if (numCells<minNumCells)
+        {
             minNumCells = numCells;
             smallestBlock = it->first;
         }
@@ -68,21 +73,23 @@ bool getMultiBlockInfo(MultiBlock2D const& multiBlock,
     return true;
 }
 
-std::string getMultiBlockInfo(MultiBlock2D const& multiBlock) {
+std::string getMultiBlockInfo(MultiBlock2D const& multiBlock)
+{
     plint nx, ny;
     plint numBlocks;
     plint numAllocatedCells;
     Box2D smallest, largest;
-    if (!getMultiBlockInfo(multiBlock, nx, ny, numBlocks, smallest, largest, numAllocatedCells)) {
+    if (!getMultiBlockInfo(multiBlock, nx, ny, numBlocks, smallest, largest, numAllocatedCells))
+    {
         return std::string("Empty multi-block\n");
     }
     std::stringstream blockInfo;
     blockInfo << "Size of the multi-block:     "  << nx << "-by-" << ny << "\n";
     blockInfo << "Number of atomic-blocks:     "  << numBlocks << "\n";
     blockInfo << "Smallest atomic-block:       "  << smallest.getNx() << "-by-"
-                                                  << smallest.getNy() << "\n";
+              << smallest.getNy() << "\n";
     blockInfo << "Largest atomic-block:        "  << largest.getNx() << "-by-"
-                                                  << largest.getNy() << "\n";
+              << largest.getNy() << "\n";
     blockInfo << "Number of allocated cells:   "  << (double)numAllocatedCells/1.e6 << " million\n";
     blockInfo << "Fraction of allocated domain: " << (double)numAllocatedCells/(double)(nx*ny)*100 << " percent\n";
 

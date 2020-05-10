@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,45 +34,46 @@
 #include "atomicBlock/atomicContainerBlock3D.h"
 #include "multiBlock/multiBlock3D.h"
 
-namespace plb {
+namespace plb
+{
 
-class MultiContainerBlock3D : public MultiBlock3D {
+class MultiContainerBlock3D : public MultiBlock3D
+{
 public:
-    typedef std::map<plint,AtomicContainerBlock3D*> BlockMap;
+	typedef std::map<plint,AtomicContainerBlock3D*> BlockMap;
 public:
-    MultiContainerBlock3D (
-            MultiBlockManagement3D const& multiBlockManagement_,
-            CombinedStatistics* combinedStatistics_ );
-    MultiContainerBlock3D(plint nx_, plint ny_, plint nz_);
-    MultiContainerBlock3D(MultiBlock3D const& rhs);
-    MultiContainerBlock3D(MultiBlock3D const& rhs, Box3D subDomain, bool crop);
-    ~MultiContainerBlock3D();
-    MultiContainerBlock3D& operator=(MultiContainerBlock3D const& rhs);
-    MultiContainerBlock3D(MultiContainerBlock3D const& rhs);
-    MultiContainerBlock3D* clone() const;
-    MultiContainerBlock3D* clone(MultiBlockManagement3D const& multiBlockManagement) const;
-    void swap(MultiContainerBlock3D& rhs);
+	MultiContainerBlock3D (
+	    MultiBlockManagement3D const& multiBlockManagement_,
+	    CombinedStatistics* combinedStatistics_ );
+	MultiContainerBlock3D(plint nx_, plint ny_, plint nz_);
+	MultiContainerBlock3D(MultiBlock3D const& rhs);
+	MultiContainerBlock3D(MultiBlock3D const& rhs, Box3D subDomain, bool crop);
+	~MultiContainerBlock3D();
+	MultiContainerBlock3D& operator=(MultiContainerBlock3D const& rhs);
+	MultiContainerBlock3D(MultiContainerBlock3D const& rhs);
+	MultiContainerBlock3D* clone() const;
+	MultiContainerBlock3D* clone(MultiBlockManagement3D const& multiBlockManagement) const;
+	void swap(MultiContainerBlock3D& rhs);
 public:
-    virtual AtomicContainerBlock3D& getComponent(plint iBlock);
-    virtual AtomicContainerBlock3D const& getComponent(plint iBlock) const;
-    virtual plint sizeOfCell() const;
-    virtual plint getCellDim() const;
-    virtual int getStaticId() const;
-    virtual void copyReceive (
-                MultiBlock3D const& fromBlock, Box3D const& fromDomain,
-                Box3D const& toDomain, modif::ModifT whichData=modif::dataStructure );
-    std::string getBlockName() const;
-    std::vector<std::string> getTypeInfo() const;
+	virtual AtomicContainerBlock3D& getComponent(plint iBlock);
+	virtual AtomicContainerBlock3D const& getComponent(plint iBlock) const;
+	virtual plint sizeOfCell() const;
+	virtual plint getCellDim() const;
+	virtual int getStaticId() const;
+	virtual void copyReceive (
+	    MultiBlock3D const& fromBlock, Box3D const& fromDomain,
+	    Box3D const& toDomain, modif::ModifT whichData=modif::dataStructure );
+	std::string getBlockName() const;
+	std::vector<std::string> getTypeInfo() const;
 private:
-    void allocateBlocks();
-    void allocateBlocks(MultiContainerBlock3D const& rhs);
-    void deAllocateBlocks();
+	void allocateBlocks();
+	void allocateBlocks(MultiContainerBlock3D const& rhs);
+	void deAllocateBlocks();
 private:
-    BlockMap blocks;
+	BlockMap blocks;
 };
 
 MultiContainerBlock3D* createContainerBlock(MultiBlock3D& templ, ContainerBlockData* data);
-MultiContainerBlock3D* createContainerBlock(MultiBlock3D& templ, ContainerBlockData* data, plint envelopeWidth);
 
 }  // namespace plb
 

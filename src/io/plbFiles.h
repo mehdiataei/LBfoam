@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,28 +30,42 @@
 
 #include <string>
 
-namespace plb {
+namespace plb
+{
 
-class FileName {
+class FileName
+{
 public:
-    FileName() { }
-    FileName(const char* file);
-    FileName(std::string file);
-    std::string get() const;
-    FileName& setPath(std::string path_);
-    FileName& setName(std::string name_);
-    FileName& setExt(std::string ext_);
-    FileName& defaultPath(std::string path_);
-    FileName& defaultName(std::string name_);
-    FileName& defaultExt(std::string ext_);
-    std::string getPath() const { return path; }
-    std::string getName() const { return name; }
-    std::string getExt() const { return ext; }
-    operator std::string() const { return get(); }
+	FileName() { }
+	FileName(const char* file);
+	FileName(std::string file);
+	std::string get() const;
+	FileName& setPath(std::string path_);
+	FileName& setName(std::string name_);
+	FileName& setExt(std::string ext_);
+	FileName& defaultPath(std::string path_);
+	FileName& defaultName(std::string name_);
+	FileName& defaultExt(std::string ext_);
+	std::string getPath() const
+	{
+		return path;
+	}
+	std::string getName() const
+	{
+		return name;
+	}
+	std::string getExt() const
+	{
+		return ext;
+	}
+	operator std::string() const
+	{
+		return get();
+	}
 private:
-    void initialize(std::string file);
+	void initialize(std::string file);
 private:
-    std::string path, name, ext;
+	std::string path, name, ext;
 };
 
 }  // namespace plb

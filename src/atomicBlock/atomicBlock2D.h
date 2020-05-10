@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,126 +36,136 @@
 #include <algorithm>
 #include <map>
 
-namespace plb {
+namespace plb
+{
 
 // Forward declarations
 class AtomicBlock2D;
-    
+
 /// Handles statistics subscriptions for the BlockLattice2D
-class StatSubscriber2D : public StatSubscriber {
+class StatSubscriber2D : public StatSubscriber
+{
 public:
-    StatSubscriber2D(AtomicBlock2D& block_);
-    /// Subscribe a new observable for which the average value is computed.
-    virtual plint subscribeAverage();
-    /// Subscribe a new observable for which the sum is computed.
-    virtual plint subscribeSum();
-    /// Subscribe a new observable for which the maximum is computed.
-    virtual plint subscribeMax();
-    /// Subscribe a new integer observable for which the sum is computed.
-    virtual plint subscribeIntSum();
+	StatSubscriber2D(AtomicBlock2D& block_);
+	/// Subscribe a new observable for which the average value is computed.
+	virtual plint subscribeAverage();
+	/// Subscribe a new observable for which the sum is computed.
+	virtual plint subscribeSum();
+	/// Subscribe a new observable for which the maximum is computed.
+	virtual plint subscribeMax();
+	/// Subscribe a new integer observable for which the sum is computed.
+	virtual plint subscribeIntSum();
 private:
-    AtomicBlock2D& block;
+	AtomicBlock2D& block;
 };
 
 struct BlockDataTransfer2D {
-    virtual ~BlockDataTransfer2D() { }
-    virtual plint staticCellSize() const =0;
-    virtual void send(Box2D domain, std::vector<char>& buffer, modif::ModifT kind) const =0;
-    virtual void receive(Box2D domain, std::vector<char> const& buffer, modif::ModifT kind) =0;
-    /// Receive data from a byte-stream into the block, and adjust coordinates if the block contains abolute coordinate data.
-    /** By default, offset information is ignored. **/
-    virtual void receive(Box2D domain, std::vector<char> const& buffer, modif::ModifT kind, Dot2D offset) {
-        receive(domain, buffer, kind);
-    }
-    /// Receive data from a byte-stream into the block, and re-map IDs for dynamics if exist.
-    virtual void receive( Box2D domain, std::vector<char> const& buffer,
-                          modif::ModifT kind, std::map<int,std::string> const& foreignIds ) =0;
-    virtual void attribute(Box2D toDomain, plint deltaX, plint deltaY,
-                           AtomicBlock2D const& from, modif::ModifT kind) =0;
-    /// Attribute data between two blocks, and adjust coordinates if the block contains absolute coordinate data.
-    virtual void attribute(Box2D toDomain, plint deltaX, plint deltaY,
-                           AtomicBlock2D const& from, modif::ModifT kind, Dot2D absoluteOffset)
-    {
-        attribute(toDomain, deltaX, deltaY, from, kind);
-    }
+	virtual ~BlockDataTransfer2D() { }
+	virtual plint staticCellSize() const =0;
+	virtual void send(Box2D domain, std::vector<char>& buffer, modif::ModifT kind) const =0;
+	virtual void receive(Box2D domain, std::vector<char> const& buffer, modif::ModifT kind) =0;
+	/// Receive data from a byte-stream into the block, and adjust coordinates if the block contains abolute coordinate data.
+	/** By default, offset information is ignored. **/
+	virtual void receive(Box2D domain, std::vector<char> const& buffer, modif::ModifT kind, Dot2D offset)
+	{
+		receive(domain, buffer, kind);
+	}
+	/// Receive data from a byte-stream into the block, and re-map IDs for dynamics if exist.
+	virtual void receive( Box2D domain, std::vector<char> const& buffer,
+	                      modif::ModifT kind, std::map<int,std::string> const& foreignIds ) =0;
+	virtual void attribute(Box2D toDomain, plint deltaX, plint deltaY,
+	                       AtomicBlock2D const& from, modif::ModifT kind) =0;
+	/// Attribute data between two blocks, and adjust coordinates if the block contains absolute coordinate data.
+	virtual void attribute(Box2D toDomain, plint deltaX, plint deltaY,
+	                       AtomicBlock2D const& from, modif::ModifT kind, Dot2D absoluteOffset)
+	{
+		attribute(toDomain, deltaX, deltaY, from, kind);
+	}
 };
 
-class AtomicBlock2D : public Block2D {
+class AtomicBlock2D : public Block2D
+{
 public:
-    AtomicBlock2D(plint nx_, plint ny_);
-    AtomicBlock2D(AtomicBlock2D const& rhs);
-    virtual ~AtomicBlock2D();
-    void swap(AtomicBlock2D& rhs);
-    /// Initialize block content by executing internal processors once.
-    void initialize();
+	AtomicBlock2D(plint nx_, plint ny_);
+	AtomicBlock2D(AtomicBlock2D const& rhs);
+	virtual ~AtomicBlock2D();
+	void swap(AtomicBlock2D& rhs);
+	/// Initialize block content by executing internal processors once.
+	void initialize();
 public:
-    /// Get bounding box of the lattice.
-    virtual Box2D getBoundingBox() const;
-    /// Get number of cells in x-direction.
-    plint getNx() const { return nx; }
-    /// Get number of cells in y-direction.
-    plint getNy() const { return ny; }
-    /// Execute all internal dataProcessors at positive or zero level.
-    void executeInternalProcessors();
-    /// Execute all internal dataProcessors at a given level.
-    void executeInternalProcessors(plint level);
-    /// Add a dataProcessor, which is executed after each iteration.
-    void integrateDataProcessor(DataProcessor2D* processor, plint level);
-    /// Remove all data processors.
-    void clearDataProcessors();
-    /// Remove all data processors with a given ID.
-    void removeDataProcessors(int staticId);
-    /// Get access to data transfer between blocks.
-    virtual BlockDataTransfer2D& getDataTransfer() =0;
-    /// Get access to data transfer between blocks (const version)
-    virtual BlockDataTransfer2D const& getDataTransfer() const =0;
-    /// Get an object through which the atomic block can be serialized
-    virtual DataSerializer* getBlockSerializer (
-            Box2D const& domain, IndexOrdering::OrderingT ordering ) const;
-    /// Get an object through which the atomic block can be un-serialized
-    virtual DataUnSerializer* getBlockUnSerializer (
-            Box2D const& domain, IndexOrdering::OrderingT ordering );
+	/// Get bounding box of the lattice.
+	virtual Box2D getBoundingBox() const;
+	/// Get number of cells in x-direction.
+	plint getNx() const
+	{
+		return nx;
+	}
+	/// Get number of cells in y-direction.
+	plint getNy() const
+	{
+		return ny;
+	}
+	/// Execute all internal dataProcessors at positive or zero level.
+	void executeInternalProcessors();
+	/// Execute all internal dataProcessors at a given level.
+	void executeInternalProcessors(plint level);
+	/// Add a dataProcessor, which is executed after each iteration.
+	void integrateDataProcessor(DataProcessor2D* processor, plint level);
+	/// Remove all data processors.
+	void clearDataProcessors();
+	/// Remove all data processors with a given ID.
+	void removeDataProcessors(int staticId);
+	/// Get access to data transfer between blocks.
+	virtual BlockDataTransfer2D& getDataTransfer() =0;
+	/// Get access to data transfer between blocks (const version)
+	virtual BlockDataTransfer2D const& getDataTransfer() const =0;
+	/// Get an object through which the atomic block can be serialized
+	virtual DataSerializer* getBlockSerializer (
+	    Box2D const& domain, IndexOrdering::OrderingT ordering ) const;
+	/// Get an object through which the atomic block can be un-serialized
+	virtual DataUnSerializer* getBlockUnSerializer (
+	    Box2D const& domain, IndexOrdering::OrderingT ordering );
 public:
-    /// Get object to subscribe new internal statistics.
-    StatSubscriber& internalStatSubscription();
-    /// Copy running statistics to public statistics, and reset running stats.
-    void evaluateStatistics();
-    /// Get a handle to internal statistics. Don't use this to subscribe new
-    /// statistics. Use the method internalStatSubscription() instead.
-    BlockStatistics& getInternalStatistics();
-    /// Get a constant handle to internal statistics.
-    BlockStatistics const& getInternalStatistics() const;
+	/// Get object to subscribe new internal statistics.
+	StatSubscriber& internalStatSubscription();
+	/// Copy running statistics to public statistics, and reset running stats.
+	void evaluateStatistics();
+	/// Get a handle to internal statistics. Don't use this to subscribe new
+	/// statistics. Use the method internalStatSubscription() instead.
+	BlockStatistics& getInternalStatistics();
+	/// Get a constant handle to internal statistics.
+	BlockStatistics const& getInternalStatistics() const;
 public:
-    /// Specify the relative location of the atomic-block in a
-    /// global coordinate system.
-    void setLocation(Dot2D const& location_);
-    /// Get the relative location of the atomic-block in a
-    /// global coordinate system.
-    Dot2D getLocation() const;
-    /// Set the flag value (to be exploited internally by data processors).
-    void setFlag(bool value);
-    /// Get the flag value (to be exploited internally by data processors).
-    bool getFlag() const;
+	/// Specify the relative location of the atomic-block in a
+	/// global coordinate system.
+	void setLocation(Dot2D const& location_);
+	/// Get the relative location of the atomic-block in a
+	/// global coordinate system.
+	Dot2D getLocation() const;
+	/// Set the flag value (to be exploited internally by data processors).
+	void setFlag(bool value);
+	/// Get the flag value (to be exploited internally by data processors).
+	bool getFlag() const;
 private:
-    typedef std::vector<std::vector<DataProcessor2D*> > DataProcessorVector;
+	typedef std::vector<std::vector<DataProcessor2D*> > DataProcessorVector;
 private:
-    /// Common implementation for explicit/automatic processors.
-    void integrateDataProcessor (
-                     DataProcessor2D* processor, plint level, DataProcessorVector& processors );
-    /// Common implementation for explicit/automatic processors.
-    void executeInternalProcessors(plint level, DataProcessorVector& processors);
-    /// Copy processors from one vector to another.
-    void copyDataProcessors(DataProcessorVector const& from, DataProcessorVector& to);
-    /// Release memory for a given species of lattice processors.
-    void clearDataProcessors(DataProcessorVector& processors);
+	/// Common implementation for explicit/automatic processors.
+	void integrateDataProcessor (
+	    DataProcessor2D* processor, plint level, DataProcessorVector& processors );
+	/// Common implementation for explicit/automatic processors.
+	void executeInternalProcessors(plint level, DataProcessorVector& processors);
+	/// Copy processors from one vector to another.
+	void copyDataProcessors(DataProcessorVector const& from, DataProcessorVector& to);
+	/// Release memory for a given species of lattice processors.
+	void clearDataProcessors(DataProcessorVector& processors);
 private:
-    plint nx, ny;    /// Dimensions of the lattice.
-    Dot2D location;  /// Absolute, real-space coordinate of the local (0,0) position.
-    bool  flag;      /// Flag for internal use by data processors.
-    BlockStatistics internalStatistics;
-    StatSubscriber2D statisticsSubscriber;
-    DataProcessorVector explicitInternalProcessors;
-    DataProcessorVector automaticInternalProcessors;
+	plint nx, ny;    /// Dimensions of the lattice.
+	Dot2D location;  /// Absolute, real-space coordinate of the local (0,0) position.
+	bool  flag;      /// Flag for internal use by data processors.
+	BlockStatistics internalStatistics;
+	StatSubscriber2D statisticsSubscriber;
+	DataProcessorVector explicitInternalProcessors;
+	DataProcessorVector automaticInternalProcessors;
 };
 
 Dot2D computeRelativeDisplacement(AtomicBlock2D const& block1, AtomicBlock2D const& block2);

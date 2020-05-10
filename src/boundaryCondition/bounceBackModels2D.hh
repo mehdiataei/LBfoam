@@ -249,61 +249,6 @@ void initializeMomentumExchange (
         new InitializeDotMomentumExchangeFunctional2D<T,Descriptor>(), dotList, lattice );
 }
 
-
-template<typename T, template<typename U> class Descriptor> 
-void SetAverageWallDensityOnVelocityBounceBack2D<T,Descriptor>::process (
-        Box2D domain, BlockLattice2D<T,Descriptor>& lattice )
-{
-    static const int velocityBounceBackId = VelocityBounceBack<T,Descriptor>().getId();
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            Dynamics<T,Descriptor>& dynamics = lattice.get(iX, iY).getDynamics();
-            if (dynamics.getId() == velocityBounceBackId) {
-                VelocityBounceBack<T,Descriptor>* vbbDynamics = dynamic_cast<VelocityBounceBack<T,Descriptor>*>(&dynamics);
-                PLB_ASSERT(vbbDynamics);
-                T sum = (T) 0;
-                T sumWeights = (T) 0;
-                plint numValidNeighbours = 0;
-                for (plint iPop=1; iPop<Descriptor<T>::q; ++iPop) {
-                    plint nextX = iX + Descriptor<T>::c[iPop][0];
-                    plint nextY = iY + Descriptor<T>::c[iPop][1];
-                    Cell<T,Descriptor>& nextCell = lattice.get(nextX, nextY);
-                    if (nextCell.getDynamics().hasMoments()) {
-                        T weight = Descriptor<T>::t[iPop];
-                        sum += weight * nextCell.computeDensity();
-                        sumWeights += weight;
-                        numValidNeighbours++;
-                    }
-                }
-                if (numValidNeighbours != 0) {
-                    T rhoWall = sum / sumWeights;
-                    vbbDynamics->setRhoWall(rhoWall);
-                }
-            }
-        }
-    }
-}
-
-template<typename T, template<typename U> class Descriptor> 
-SetAverageWallDensityOnVelocityBounceBack2D<T,Descriptor>*
-SetAverageWallDensityOnVelocityBounceBack2D<T,Descriptor>::clone() const
-{
-    return new SetAverageWallDensityOnVelocityBounceBack2D<T,Descriptor>(*this);
-}
-
-template<typename T, template<typename U> class Descriptor> 
-void SetAverageWallDensityOnVelocityBounceBack2D<T,Descriptor>::getTypeOfModification(
-        std::vector<modif::ModifT>& modified) const
-{
-    modified[0] = modif::dynamicVariables;
-}
-
-template<typename T, template<typename U> class Descriptor> 
-BlockDomain::DomainT SetAverageWallDensityOnVelocityBounceBack2D<T,Descriptor>::appliesTo() const
-{
-    return BlockDomain::bulk;
-}
-
 }  // namespace plb
 
 #endif  // BOUNCE_BACK_MODELS_2D_HH

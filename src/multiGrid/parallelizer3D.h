@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,81 +30,88 @@
 
 #include "core/geometry3D.h"
 
-namespace plb {
-    
+namespace plb
+{
+
 class Parallelizer3D
 {
-    public:
-        virtual ~Parallelizer3D(){}
-        
-        /// Method that will choose the parallelizing approach
-        virtual void parallelize()=0;
-        
-        virtual std::vector<std::vector<Box3D> >& getRecomputedBlocks(){
-            return recomputedBlocks;
-        }
-        virtual std::vector<std::vector<Box3D> > const& getRecomputedBlocks() const {
-            return recomputedBlocks;
-        }
-        
-        virtual std::vector<std::vector<plint> >& getMpiDistribution(){
-            return finalMpiDistribution;
-        }
-        virtual std::vector<std::vector<plint> > const& getMpiDistribution() const{
-            return finalMpiDistribution;
-        }
-        
-        /// Computes the "cost" of the domain delimited by b
-        virtual plint computeCost(std::vector<std::vector<Box3D> > const& originalBlocks, Box3D b);
-        
-        virtual Parallelizer3D* clone()=0;
-        
-        virtual void parallelizeLevel(plint whichLevel, std::vector<std::vector<Box3D> > const& originalBlocks,
-                                      std::vector<Box3D> const& parallelRegions,
-                                      std::vector<plint> const& regionIDs);
-        
-    protected:
-        // the results produced by the parallelizer
-        std::vector<std::vector<Box3D> > recomputedBlocks;
-        std::vector<std::vector<plint> > finalMpiDistribution;
+public:
+	virtual ~Parallelizer3D() {}
+
+	/// Method that will choose the parallelizing approach
+	virtual void parallelize()=0;
+
+	virtual std::vector<std::vector<Box3D> >& getRecomputedBlocks()
+	{
+		return recomputedBlocks;
+	}
+	virtual std::vector<std::vector<Box3D> > const& getRecomputedBlocks() const
+	{
+		return recomputedBlocks;
+	}
+
+	virtual std::vector<std::vector<plint> >& getMpiDistribution()
+	{
+		return finalMpiDistribution;
+	}
+	virtual std::vector<std::vector<plint> > const& getMpiDistribution() const
+	{
+		return finalMpiDistribution;
+	}
+
+	/// Computes the "cost" of the domain delimited by b
+	virtual plint computeCost(std::vector<std::vector<Box3D> > const& originalBlocks, Box3D b);
+
+	virtual Parallelizer3D* clone()=0;
+
+	virtual void parallelizeLevel(plint whichLevel, std::vector<std::vector<Box3D> > const& originalBlocks,
+	                              std::vector<Box3D> const& parallelRegions,
+	                              std::vector<plint> const& regionIDs);
+
+protected:
+	// the results produced by the parallelizer
+	std::vector<std::vector<Box3D> > recomputedBlocks;
+	std::vector<std::vector<plint> > finalMpiDistribution;
 };
 
 
 /// Parallelize by cubes
-class ParallellizeByCubes3D : public Parallelizer3D {
-    public:
-        ParallellizeByCubes3D(std::vector<std::vector<Box3D> > const& originalBlocks_, Box3D finestBoundingBox_,
-                                plint xTiles_, plint yTiles_, plint zTiles_,
-                                bool optimiseDivision=false);
-                                
-        virtual ~ParallellizeByCubes3D(){}
-        
-        /// Compute the new distribution of the blocks in the management
-        virtual void parallelize();
-        
-        virtual Parallelizer3D* clone(){
-            return new ParallellizeByCubes3D(originalBlocks,finestBoundingBox,
-                                             xTiles, yTiles,zTiles);
-        }
-        
-    private:
-        /// Create a regular division of the finest Box3D in nx x ny squares
-        void computeFinestDivision();
-        void computeDivision();
-        
-    private:
-        std::vector<std::vector<Box3D> > const& originalBlocks;
-        Box3D finestBoundingBox;
-        
-        plint processorNumber;
-        plint xTiles;
-        plint yTiles;
-        plint zTiles;
-        
-        // division the finest level in a number or regular squares
-        std::vector<Box3D> finestDivision;
-        // distribution w.r.t. finest division (same structure)
-        std::vector<plint> mpiDistribution;
+class ParallellizeByCubes3D : public Parallelizer3D
+{
+public:
+	ParallellizeByCubes3D(std::vector<std::vector<Box3D> > const& originalBlocks_, Box3D finestBoundingBox_,
+	                      plint xTiles_, plint yTiles_, plint zTiles_,
+	                      bool optimiseDivision=false);
+
+	virtual ~ParallellizeByCubes3D() {}
+
+	/// Compute the new distribution of the blocks in the management
+	virtual void parallelize();
+
+	virtual Parallelizer3D* clone()
+	{
+		return new ParallellizeByCubes3D(originalBlocks,finestBoundingBox,
+		                                 xTiles, yTiles,zTiles);
+	}
+
+private:
+	/// Create a regular division of the finest Box3D in nx x ny squares
+	void computeFinestDivision();
+	void computeDivision();
+
+private:
+	std::vector<std::vector<Box3D> > const& originalBlocks;
+	Box3D finestBoundingBox;
+
+	plint processorNumber;
+	plint xTiles;
+	plint yTiles;
+	plint zTiles;
+
+	// division the finest level in a number or regular squares
+	std::vector<Box3D> finestDivision;
+	// distribution w.r.t. finest division (same structure)
+	std::vector<plint> mpiDistribution;
 };
 
 /// Parallelize by making an approximative load balancing

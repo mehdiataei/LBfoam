@@ -41,162 +41,188 @@
   * \sa class Map, class Block
   */
 template<typename Derived> class MapBase
-  : public MatrixBase<Derived>
+	: public MatrixBase<Derived>
 {
-  public:
+public:
 
-    typedef MatrixBase<Derived> Base;
-    enum {
-      IsRowMajor = (int(ei_traits<Derived>::Flags) & RowMajorBit) ? 1 : 0,
-      PacketAccess = ei_traits<Derived>::PacketAccess,
-      RowsAtCompileTime = ei_traits<Derived>::RowsAtCompileTime,
-      ColsAtCompileTime = ei_traits<Derived>::ColsAtCompileTime,
-      SizeAtCompileTime = Base::SizeAtCompileTime
-    };
+	typedef MatrixBase<Derived> Base;
+	enum {
+		IsRowMajor = (int(ei_traits<Derived>::Flags) & RowMajorBit) ? 1 : 0,
+		PacketAccess = ei_traits<Derived>::PacketAccess,
+		RowsAtCompileTime = ei_traits<Derived>::RowsAtCompileTime,
+		ColsAtCompileTime = ei_traits<Derived>::ColsAtCompileTime,
+		SizeAtCompileTime = Base::SizeAtCompileTime
+	};
 
-    typedef typename ei_traits<Derived>::AlignedDerivedType AlignedDerivedType;
-    typedef typename ei_traits<Derived>::Scalar Scalar;
-    typedef typename Base::PacketScalar PacketScalar;
-    using Base::derived;
+	typedef typename ei_traits<Derived>::AlignedDerivedType AlignedDerivedType;
+	typedef typename ei_traits<Derived>::Scalar Scalar;
+	typedef typename Base::PacketScalar PacketScalar;
+	using Base::derived;
 
-    inline int rows() const { return m_rows.value(); }
-    inline int cols() const { return m_cols.value(); }
+	inline int rows() const
+	{
+		return m_rows.value();
+	}
+	inline int cols() const
+	{
+		return m_cols.value();
+	}
 
-    inline int stride() const { return derived().stride(); }
-    inline const Scalar* data() const { return m_data; }
+	inline int stride() const
+	{
+		return derived().stride();
+	}
+	inline const Scalar* data() const
+	{
+		return m_data;
+	}
 
-    template<bool IsForceAligned,typename Dummy> struct force_aligned_impl {
-      static AlignedDerivedType run(MapBase& a) { return a.derived(); }
-    };
+	template<bool IsForceAligned,typename Dummy> struct force_aligned_impl {
+		static AlignedDerivedType run(MapBase& a)
+		{
+			return a.derived();
+		}
+	};
 
-    template<typename Dummy> struct force_aligned_impl<false,Dummy> {
-      static AlignedDerivedType run(MapBase& a) { return a.derived()._convertToForceAligned(); }
-    };
+	template<typename Dummy> struct force_aligned_impl<false,Dummy> {
+		static AlignedDerivedType run(MapBase& a)
+		{
+			return a.derived()._convertToForceAligned();
+		}
+	};
 
-    /** \returns an expression equivalent to \c *this but having the \c PacketAccess constant
-      * set to \c ForceAligned. Must be reimplemented by the derived class. */
-    AlignedDerivedType forceAligned()
-    {
-      return force_aligned_impl<int(PacketAccess)==int(ForceAligned),Derived>::run(*this);
-    }
+	/** \returns an expression equivalent to \c *this but having the \c PacketAccess constant
+	  * set to \c ForceAligned. Must be reimplemented by the derived class. */
+	AlignedDerivedType forceAligned()
+	{
+		return force_aligned_impl<int(PacketAccess)==int(ForceAligned),Derived>::run(*this);
+	}
 
-    inline const Scalar& coeff(int row, int col) const
-    {
-      if(IsRowMajor)
-        return m_data[col + row * stride()];
-      else // column-major
-        return m_data[row + col * stride()];
-    }
+	inline const Scalar& coeff(int row, int col) const
+	{
+		if(IsRowMajor)
+			return m_data[col + row * stride()];
+		else // column-major
+			return m_data[row + col * stride()];
+	}
 
-    inline Scalar& coeffRef(int row, int col)
-    {
-      if(IsRowMajor)
-        return const_cast<Scalar*>(m_data)[col + row * stride()];
-      else // column-major
-        return const_cast<Scalar*>(m_data)[row + col * stride()];
-    }
+	inline Scalar& coeffRef(int row, int col)
+	{
+		if(IsRowMajor)
+			return const_cast<Scalar*>(m_data)[col + row * stride()];
+		else // column-major
+			return const_cast<Scalar*>(m_data)[row + col * stride()];
+	}
 
-    inline const Scalar coeff(int index) const
-    {
-      ei_assert(Derived::IsVectorAtCompileTime || (ei_traits<Derived>::Flags & LinearAccessBit));
-      if ( ((RowsAtCompileTime == 1) == IsRowMajor) || !int(Derived::IsVectorAtCompileTime) )
-        return m_data[index];
-      else
-        return m_data[index*stride()];
-    }
+	inline const Scalar coeff(int index) const
+	{
+		ei_assert(Derived::IsVectorAtCompileTime || (ei_traits<Derived>::Flags & LinearAccessBit));
+		if ( ((RowsAtCompileTime == 1) == IsRowMajor) || !int(Derived::IsVectorAtCompileTime) )
+			return m_data[index];
+		else
+			return m_data[index*stride()];
+	}
 
-    inline Scalar& coeffRef(int index)
-    {
-      ei_assert(Derived::IsVectorAtCompileTime || (ei_traits<Derived>::Flags & LinearAccessBit));
-      if ( ((RowsAtCompileTime == 1) == IsRowMajor)  || !int(Derived::IsVectorAtCompileTime) )
-        return const_cast<Scalar*>(m_data)[index];
-      else
-        return const_cast<Scalar*>(m_data)[index*stride()];
-    }
+	inline Scalar& coeffRef(int index)
+	{
+		ei_assert(Derived::IsVectorAtCompileTime || (ei_traits<Derived>::Flags & LinearAccessBit));
+		if ( ((RowsAtCompileTime == 1) == IsRowMajor)  || !int(Derived::IsVectorAtCompileTime) )
+			return const_cast<Scalar*>(m_data)[index];
+		else
+			return const_cast<Scalar*>(m_data)[index*stride()];
+	}
 
-    template<int LoadMode>
-    inline PacketScalar packet(int row, int col) const
-    {
-      return ei_ploadt<Scalar, int(PacketAccess) == ForceAligned ? Aligned : LoadMode>
-               (m_data + (IsRowMajor ? col + row * stride()
-                                     : row + col * stride()));
-    }
+	template<int LoadMode>
+	inline PacketScalar packet(int row, int col) const
+	{
+		return ei_ploadt<Scalar, int(PacketAccess) == ForceAligned ? Aligned : LoadMode>
+		       (m_data + (IsRowMajor ? col + row * stride()
+		                  : row + col * stride()));
+	}
 
-    template<int LoadMode>
-    inline PacketScalar packet(int index) const
-    {
-      return ei_ploadt<Scalar, int(PacketAccess) == ForceAligned ? Aligned : LoadMode>(m_data + index);
-    }
+	template<int LoadMode>
+	inline PacketScalar packet(int index) const
+	{
+		return ei_ploadt<Scalar, int(PacketAccess) == ForceAligned ? Aligned : LoadMode>(m_data + index);
+	}
 
-    template<int StoreMode>
-    inline void writePacket(int row, int col, const PacketScalar& x)
-    {
-      ei_pstoret<Scalar, PacketScalar, int(PacketAccess) == ForceAligned ? Aligned : StoreMode>
-               (const_cast<Scalar*>(m_data) + (IsRowMajor ? col + row * stride()
-                                                          : row + col * stride()), x);
-    }
+	template<int StoreMode>
+	inline void writePacket(int row, int col, const PacketScalar& x)
+	{
+		ei_pstoret<Scalar, PacketScalar, int(PacketAccess) == ForceAligned ? Aligned : StoreMode>
+		(const_cast<Scalar*>(m_data) + (IsRowMajor ? col + row * stride()
+		                                : row + col * stride()), x);
+	}
 
-    template<int StoreMode>
-    inline void writePacket(int index, const PacketScalar& x)
-    {
-      ei_pstoret<Scalar, PacketScalar, int(PacketAccess) == ForceAligned ? Aligned : StoreMode>
-        (const_cast<Scalar*>(m_data) + index, x);
-    }
+	template<int StoreMode>
+	inline void writePacket(int index, const PacketScalar& x)
+	{
+		ei_pstoret<Scalar, PacketScalar, int(PacketAccess) == ForceAligned ? Aligned : StoreMode>
+		(const_cast<Scalar*>(m_data) + index, x);
+	}
 
-    inline MapBase(const Scalar* data) : m_data(data), m_rows(RowsAtCompileTime), m_cols(ColsAtCompileTime)
-    {
-      EIGEN_STATIC_ASSERT_FIXED_SIZE(Derived)
-    }
+	inline MapBase(const Scalar* data) : m_data(data), m_rows(RowsAtCompileTime), m_cols(ColsAtCompileTime)
+	{
+		EIGEN_STATIC_ASSERT_FIXED_SIZE(Derived)
+	}
 
-    inline MapBase(const Scalar* data, int size)
-            : m_data(data),
-              m_rows(RowsAtCompileTime == Dynamic ? size : RowsAtCompileTime),
-              m_cols(ColsAtCompileTime == Dynamic ? size : ColsAtCompileTime)
-    {
-      EIGEN_STATIC_ASSERT_VECTOR_ONLY(Derived)
-      ei_assert(size > 0 || data == 0);
-      ei_assert(SizeAtCompileTime == Dynamic || SizeAtCompileTime == size);
-    }
+	inline MapBase(const Scalar* data, int size)
+		: m_data(data),
+		  m_rows(RowsAtCompileTime == Dynamic ? size : RowsAtCompileTime),
+		  m_cols(ColsAtCompileTime == Dynamic ? size : ColsAtCompileTime)
+	{
+		EIGEN_STATIC_ASSERT_VECTOR_ONLY(Derived)
+		ei_assert(size > 0 || data == 0);
+		ei_assert(SizeAtCompileTime == Dynamic || SizeAtCompileTime == size);
+	}
 
-    inline MapBase(const Scalar* data, int rows, int cols)
-            : m_data(data), m_rows(rows), m_cols(cols)
-    {
-      ei_assert( (data == 0)
-              || (   rows > 0 && (RowsAtCompileTime == Dynamic || RowsAtCompileTime == rows)
-                  && cols > 0 && (ColsAtCompileTime == Dynamic || ColsAtCompileTime == cols)));
-    }
+	inline MapBase(const Scalar* data, int rows, int cols)
+		: m_data(data), m_rows(rows), m_cols(cols)
+	{
+		ei_assert( (data == 0)
+		           || (   rows > 0 && (RowsAtCompileTime == Dynamic || RowsAtCompileTime == rows)
+		                  && cols > 0 && (ColsAtCompileTime == Dynamic || ColsAtCompileTime == cols)));
+	}
 
-    Derived& operator=(const MapBase& other)
-    {
-      return Base::operator=(other);
-    }
+	Derived& operator=(const MapBase& other)
+	{
+		return Base::operator=(other);
+	}
 
-    template<typename OtherDerived>
-    Derived& operator=(const MatrixBase<OtherDerived>& other)
-    {
-      return Base::operator=(other);
-    }
-    
-    using Base::operator*=;
+	template<typename OtherDerived>
+	Derived& operator=(const MatrixBase<OtherDerived>& other)
+	{
+		return Base::operator=(other);
+	}
 
-    template<typename OtherDerived>
-    Derived& operator+=(const MatrixBase<OtherDerived>& other)
-    { return derived() = forceAligned() + other; }
+	using Base::operator*=;
 
-    template<typename OtherDerived>
-    Derived& operator-=(const MatrixBase<OtherDerived>& other)
-    { return derived() = forceAligned() - other; }
+	template<typename OtherDerived>
+	Derived& operator+=(const MatrixBase<OtherDerived>& other)
+	{
+		return derived() = forceAligned() + other;
+	}
 
-    Derived& operator*=(const Scalar& other)
-    { return derived() = forceAligned() * other; }
+	template<typename OtherDerived>
+	Derived& operator-=(const MatrixBase<OtherDerived>& other)
+	{
+		return derived() = forceAligned() - other;
+	}
 
-    Derived& operator/=(const Scalar& other)
-    { return derived() = forceAligned() / other; }
+	Derived& operator*=(const Scalar& other)
+	{
+		return derived() = forceAligned() * other;
+	}
 
-  protected:
-    const Scalar* EIGEN_RESTRICT m_data;
-    const ei_int_if_dynamic<RowsAtCompileTime> m_rows;
-    const ei_int_if_dynamic<ColsAtCompileTime> m_cols;
+	Derived& operator/=(const Scalar& other)
+	{
+		return derived() = forceAligned() / other;
+	}
+
+protected:
+	const Scalar* EIGEN_RESTRICT m_data;
+	const ei_int_if_dynamic<RowsAtCompileTime> m_rows;
+	const ei_int_if_dynamic<ColsAtCompileTime> m_cols;
 };
 
 #endif // EIGEN_MAPBASE_H

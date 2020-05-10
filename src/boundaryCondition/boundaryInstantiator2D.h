@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -39,116 +39,118 @@
 #include "multiBlock/multiBlockLattice2D.h"
 #include "multiBlock/multiBlockOperations2D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
-class BoundaryConditionInstantiator2D : public OnLatticeBoundaryCondition2D<T,Descriptor> {
+class BoundaryConditionInstantiator2D : public OnLatticeBoundaryCondition2D<T,Descriptor>
+{
 public:
-    virtual BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>* clone() const;
+	virtual BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>* clone() const;
 
-    // PART I: Atomic-block version.
-    
-    void addVelocityBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addVelocityBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addVelocityBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addVelocityBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                               boundary::BcType bcType );
+	// PART I: Atomic-block version.
 
-    void addPressureBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addPressureBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addPressureBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addPressureBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
+	void addVelocityBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addVelocityBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addVelocityBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addVelocityBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
 
-    void addExternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addExternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addExternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addExternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
+	void addPressureBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addPressureBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addPressureBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addPressureBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
 
-    void addInternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addInternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addInternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addInternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    // PART II: Multi-block version.
-    
-    void addVelocityBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addVelocityBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addVelocityBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addVelocityBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                               boundary::BcType bcType );
+	void addExternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addExternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addExternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addExternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
 
-    void addPressureBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addPressureBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addPressureBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
-    void addPressureBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                boundary::BcType bcType );
+	void addInternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addInternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addInternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addInternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	// PART II: Multi-block version.
 
-    void addExternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addExternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addExternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addExternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
+	void addVelocityBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addVelocityBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addVelocityBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addVelocityBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
 
-    void addInternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addInternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addInternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
-    void addInternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                      boundary::BcType bcType );
+	void addPressureBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addPressureBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addPressureBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+	void addPressureBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                            boundary::BcType bcType );
+
+	void addExternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addExternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addExternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addExternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+
+	void addInternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addInternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addInternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
+	void addInternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                  boundary::BcType bcType );
 private:
-    // PART I: Atomic-block version.
-    template<int direction, int orientation>
-        void addVelocityBoundary( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                  boundary::BcType bcType );
-    template<int direction, int orientation>
-        void addPressureBoundary( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                                  boundary::BcType bcType );
-    template<int normalX, int normalY>
-        void addExternalVelocityCorner( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType );
-    template<int normalX, int normalY>
-        void addInternalVelocityCorner( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType );
-    
-    // PART II: Multi-block version.
+	// PART I: Atomic-block version.
+	template<int direction, int orientation>
+	void addVelocityBoundary( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                          boundary::BcType bcType );
+	template<int direction, int orientation>
+	void addPressureBoundary( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+	                          boundary::BcType bcType );
+	template<int normalX, int normalY>
+	void addExternalVelocityCorner( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	                                boundary::BcType bcType );
+	template<int normalX, int normalY>
+	void addInternalVelocityCorner( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+	                                boundary::BcType bcType );
 
-    template<int direction, int orientation>
-        void addVelocityBoundary( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                  boundary::BcType bcType );
-    template<int direction, int orientation>
-        void addPressureBoundary( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                  boundary::BcType bcType );
-    template<int normalX, int normalY>
-        void addExternalVelocityCorner( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType );
-    template<int normalX, int normalY>
-        void addInternalVelocityCorner( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                        boundary::BcType bcType );
+	// PART II: Multi-block version.
+
+	template<int direction, int orientation>
+	void addVelocityBoundary( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                          boundary::BcType bcType );
+	template<int direction, int orientation>
+	void addPressureBoundary( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                          boundary::BcType bcType );
+	template<int normalX, int normalY>
+	void addExternalVelocityCorner( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                boundary::BcType bcType );
+	template<int normalX, int normalY>
+	void addInternalVelocityCorner( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+	                                boundary::BcType bcType );
 
 };
 
@@ -156,9 +158,9 @@ private:
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>*
-    BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::clone() const
+BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::clone() const
 {
-    return new BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>(*this);
+	return new BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>(*this);
 }
 
 // PART I: Atomic-block version.
@@ -166,290 +168,281 @@ BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>*
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int direction, int orientation>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addVelocityBoundary(Box2D domain, BlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
+addVelocityBoundary(Box2D domain, BlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
 {
-    PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
+	PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
 
-    // Convert (direction,orientation) description of the normal vector into a (normalX,normalY)
-    //   description, as it is requried by the data processor for Neumann boundaries.
-    enum {
-        normalX = (direction==0) ? orientation : 0,
-        normalY = (direction==1) ? orientation : 0
-    };
+	// Convert (direction,orientation) description of the normal vector into a (normalX,normalY)
+	//   description, as it is requried by the data processor for Neumann boundaries.
+	enum {
+		normalX = (direction==0) ? orientation : 0,
+		normalY = (direction==1) ? orientation : 0
+	};
 
-    // Instantiate the dynamics of the boundary as a composite dynamics, based on the one currently
-    //   residing on the lattice.
-    setCompositeDynamics (
-            lattice, domain,
-            BoundaryManager::template
-                getVelocityBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
+	// Instantiate the dynamics of the boundary as a composite dynamics, based on the one currently
+	//   residing on the lattice.
+	setCompositeDynamics (
+	    lattice, domain,
+	    BoundaryManager::template
+	    getVelocityBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
 
-    // In case an outflow condition is used, start by instantiating a data processor which copies
-    //   all velocity value from the previous lattice cell.
-    if (bcType==boundary::outflow || bcType==boundary::neumann) {
-        integrateProcessingFunctional (
-                new CopyVelocityFunctional2D<T,Descriptor, normalX, normalY>,
-                domain, lattice );
-    }
-    // In case a normal outflow condition is used, start by instantiating a data processor which copies
-    //   the normal velocity value from the previous lattice cell, and sets the other components to zero.
-    if (bcType==boundary::normalOutflow) {
-        integrateProcessingFunctional (
-                new CopyNormalVelocityFunctional2D<T,Descriptor, normalX, normalY>,
-                domain, lattice );
-    }
-    else
-    // In case a freeslip condition is used, start by instantiating a data processor which copies
-    //   the tangential velocity values from the previous lattice cell.
-    if (bcType==boundary::freeslip) {
-        integrateProcessingFunctional (
-                new CopyTangentialVelocityFunctional2D<T,Descriptor, normalX, normalY>,
-                domain, lattice );
-    }
+	// In case an outflow condition is used, start by instantiating a data processor which copies
+	//   all velocity value from the previous lattice cell.
+	if (bcType==boundary::outflow || bcType==boundary::neumann) {
+		integrateProcessingFunctional (
+		    new CopyVelocityFunctional2D<T,Descriptor, normalX, normalY>,
+		    domain, lattice );
+	}
+	// In case a normal outflow condition is used, start by instantiating a data processor which copies
+	//   the normal velocity value from the previous lattice cell, and sets the other components to zero.
+	if (bcType==boundary::normalOutflow) {
+		integrateProcessingFunctional (
+		    new CopyNormalVelocityFunctional2D<T,Descriptor, normalX, normalY>,
+		    domain, lattice );
+	} else
+		// In case a freeslip condition is used, start by instantiating a data processor which copies
+		//   the tangential velocity values from the previous lattice cell.
+		if (bcType==boundary::freeslip) {
+			integrateProcessingFunctional (
+			    new CopyTangentialVelocityFunctional2D<T,Descriptor, normalX, normalY>,
+			    domain, lattice );
+		}
 
-    // If the boundary condition has a non-local component, instantiate a corresponding data processor.
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getVelocityBoundaryFunctional<direction,orientation>();
-    if (functional) {
-        integrateProcessingFunctional(functional, domain, lattice);
-    }
+	// If the boundary condition has a non-local component, instantiate a corresponding data processor.
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getVelocityBoundaryFunctional<direction,orientation>();
+	if (functional) {
+		integrateProcessingFunctional(functional, domain, lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int direction, int orientation>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addPressureBoundary(Box2D domain, BlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
+addPressureBoundary(Box2D domain, BlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
 {
-    PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
+	PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
 
-    // Convert (direction,orientation) description of the normal vector into a (normalX,normalY)
-    //   description, as it is requried by the data processor for Neumann boundaries.
-    enum {
-        normalX = (direction==0) ? orientation : 0,
-        normalY = (direction==1) ? orientation : 0
-    };
+	// Convert (direction,orientation) description of the normal vector into a (normalX,normalY)
+	//   description, as it is requried by the data processor for Neumann boundaries.
+	enum {
+		normalX = (direction==0) ? orientation : 0,
+		normalY = (direction==1) ? orientation : 0
+	};
 
-    // Instantiate the dynamics of the boundary as a composite dynamics, based on the one currently
-    //   residing on the lattice.
-    setCompositeDynamics (
-            lattice, domain,
-            BoundaryManager::template
-                getPressureBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
+	// Instantiate the dynamics of the boundary as a composite dynamics, based on the one currently
+	//   residing on the lattice.
+	setCompositeDynamics (
+	    lattice, domain,
+	    BoundaryManager::template
+	    getPressureBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
 
-    // In case a Neumann condition is used, start by instantiating a data processor which copies
-    //   the density value from the previous lattice cell.
-    if (bcType==boundary::neumann) {
-        integrateProcessingFunctional (
-                new CopyDensityFunctional2D<T,Descriptor, normalX, normalY>,
-                domain, lattice );
-    }
+	// In case a Neumann condition is used, start by instantiating a data processor which copies
+	//   the density value from the previous lattice cell.
+	if (bcType==boundary::neumann) {
+		integrateProcessingFunctional (
+		    new CopyDensityFunctional2D<T,Descriptor, normalX, normalY>,
+		    domain, lattice );
+	}
 
-    // If the boundary condition has a non-local component, instantiate a corresponding data processor.
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getPressureBoundaryFunctional<direction,orientation>();
-    if (functional) {
-        integrateProcessingFunctional(functional, domain, lattice);
-    }
+	// If the boundary condition has a non-local component, instantiate a corresponding data processor.
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getPressureBoundaryFunctional<direction,orientation>();
+	if (functional) {
+		integrateProcessingFunctional(functional, domain, lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int xNormal, int yNormal>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addExternalVelocityCorner(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
+addExternalVelocityCorner(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
 {
-    setCompositeDynamics (
-            lattice, Box2D(x,x,y,y),
-            BoundaryManager::template
-                getExternalVelocityCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, Box2D(x,x,y,y),
+	    BoundaryManager::template
+	    getExternalVelocityCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
 
-    if (bcType==boundary::neumann || bcType==boundary::outflow) {
-        integrateProcessingFunctional (
-                new CopyVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }
-    else
-    if (bcType==boundary::freeslip) {
-        integrateProcessingFunctional (
-                new CopyTangentialVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }
-    else
-    if (bcType==boundary::normalOutflow) {
-        integrateProcessingFunctional (
-                new CopyNormalVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }
+	if (bcType==boundary::neumann || bcType==boundary::outflow) {
+		integrateProcessingFunctional (
+		    new CopyVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	} else if (bcType==boundary::freeslip) {
+		integrateProcessingFunctional (
+		    new CopyTangentialVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	} else if (bcType==boundary::normalOutflow) {
+		integrateProcessingFunctional (
+		    new CopyNormalVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	}
 
 
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getExternalVelocityCornerFunctional<xNormal,yNormal>();
-    if (functional) {
-        integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice );
-    }
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getExternalVelocityCornerFunctional<xNormal,yNormal>();
+	if (functional) {
+		integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice );
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int xNormal, int yNormal>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addInternalVelocityCorner(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
+addInternalVelocityCorner(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
 {
-    setCompositeDynamics (
-            lattice, Box2D(x,x,y,y),
-            BoundaryManager::template
-                getInternalVelocityCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, Box2D(x,x,y,y),
+	    BoundaryManager::template
+	    getInternalVelocityCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
 
-    if (bcType==boundary::neumann || bcType==boundary::outflow) {
-        integrateProcessingFunctional (
-                new CopyVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }
-    else
-    if (bcType==boundary::freeslip) {
-        integrateProcessingFunctional (
-                new CopyTangentialVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }
-    else
-    if (bcType==boundary::normalOutflow) {
-        integrateProcessingFunctional (
-                new CopyNormalVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }
+	if (bcType==boundary::neumann || bcType==boundary::outflow) {
+		integrateProcessingFunctional (
+		    new CopyVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	} else if (bcType==boundary::freeslip) {
+		integrateProcessingFunctional (
+		    new CopyTangentialVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	} else if (bcType==boundary::normalOutflow) {
+		integrateProcessingFunctional (
+		    new CopyNormalVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	}
 
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getInternalVelocityCornerFunctional<xNormal,yNormal>();
-    if (functional) {
-        integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice );
-    }
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getInternalVelocityCornerFunctional<xNormal,yNormal>();
+	if (functional) {
+		integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice );
+	}
 }
 
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addVelocityBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addVelocityBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addVelocityBoundary<0,-1>(domain, lattice, bcType);
+	addVelocityBoundary<0,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addVelocityBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addVelocityBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addVelocityBoundary<0,1>(domain, lattice, bcType);
+	addVelocityBoundary<0,1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addVelocityBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addVelocityBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addVelocityBoundary<1,-1>(domain, lattice, bcType);
+	addVelocityBoundary<1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addVelocityBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addVelocityBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addVelocityBoundary<1,1>(domain, lattice, bcType);
+	addVelocityBoundary<1,1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addPressureBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addPressureBoundary0N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addPressureBoundary<0,-1>(domain, lattice, bcType);
+	addPressureBoundary<0,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addPressureBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addPressureBoundary0P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addPressureBoundary<0,1>(domain, lattice, bcType);
+	addPressureBoundary<0,1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addPressureBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addPressureBoundary1N( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addPressureBoundary<1,-1>(domain, lattice, bcType);
+	addPressureBoundary<1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addPressureBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addPressureBoundary1P( Box2D domain, BlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addPressureBoundary<1,1>(domain, lattice, bcType);
+	addPressureBoundary<1,1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addExternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addExternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addExternalVelocityCorner<-1,-1>(x,y, lattice, bcType);
+	addExternalVelocityCorner<-1,-1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addExternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addExternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addExternalVelocityCorner<-1,1>(x,y, lattice, bcType);
+	addExternalVelocityCorner<-1,1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addExternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addExternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addExternalVelocityCorner<1,-1>(x,y, lattice, bcType);
+	addExternalVelocityCorner<1,-1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addExternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addExternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addExternalVelocityCorner<1,1>(x,y, lattice, bcType);
+	addExternalVelocityCorner<1,1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addInternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addInternalVelocityCornerNN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addInternalVelocityCorner<-1,-1>(x,y, lattice, bcType);
+	addInternalVelocityCorner<-1,-1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addInternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addInternalVelocityCornerNP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addInternalVelocityCorner<-1,1>(x,y, lattice, bcType);
+	addInternalVelocityCorner<-1,1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addInternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addInternalVelocityCornerPN( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addInternalVelocityCorner<1,-1>(x,y, lattice, bcType);
+	addInternalVelocityCorner<1,-1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addInternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addInternalVelocityCornerPP( plint x, plint y, BlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addInternalVelocityCorner<1,1>(x,y, lattice, bcType);
+	addInternalVelocityCorner<1,1>(x,y, lattice, bcType);
 }
 
 // PART II: Multi-block version.
@@ -457,289 +450,280 @@ void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int direction, int orientation>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addVelocityBoundary(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
+addVelocityBoundary(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
 {
-    PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
+	PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
 
-    // Convert (direction,orientation) description of the normal vector into a (normalX,normalY)
-    //   description, as it is requried by the data processor for Neumann boundaries.
-    enum {
-        normalX = (direction==0) ? orientation : 0,
-        normalY = (direction==1) ? orientation : 0
-    };
+	// Convert (direction,orientation) description of the normal vector into a (normalX,normalY)
+	//   description, as it is requried by the data processor for Neumann boundaries.
+	enum {
+		normalX = (direction==0) ? orientation : 0,
+		normalY = (direction==1) ? orientation : 0
+	};
 
-    // Instantiate the dynamics of the boundary as a composite dynamics, based on the one currently
-    //   residing on the lattice.
-    setCompositeDynamics (
-            lattice, domain,
-            BoundaryManager::template
-                getVelocityBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
+	// Instantiate the dynamics of the boundary as a composite dynamics, based on the one currently
+	//   residing on the lattice.
+	setCompositeDynamics (
+	    lattice, domain,
+	    BoundaryManager::template
+	    getVelocityBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
 
-    // In case an outflow condition is used, start by instantiating a data processor which copies
-    //   all velocity value from the previous lattice cell.
-    if (bcType==boundary::outflow || bcType==boundary::neumann) {
-        integrateProcessingFunctional (
-                new CopyVelocityFunctional2D<T,Descriptor, normalX, normalY>,
-                domain, lattice );
-    }
-    // In case a normal outflow condition is used, start by instantiating a data processor which copies
-    //   the normal velocity value from the previous lattice cell, and sets the other components to zero.
-    if (bcType==boundary::normalOutflow) {
-        integrateProcessingFunctional (
-                new CopyNormalVelocityFunctional2D<T,Descriptor, normalX, normalY>,
-                domain, lattice );
-    }
-    else
-    // In case a freeslip condition is used, start by instantiating a data processor which copies
-    //   the tangential velocity values from the previous lattice cell.
-    if (bcType==boundary::freeslip) {
-        integrateProcessingFunctional (
-                new CopyTangentialVelocityFunctional2D<T,Descriptor, normalX, normalY>,
-                domain, lattice );
-    }
+	// In case an outflow condition is used, start by instantiating a data processor which copies
+	//   all velocity value from the previous lattice cell.
+	if (bcType==boundary::outflow || bcType==boundary::neumann) {
+		integrateProcessingFunctional (
+		    new CopyVelocityFunctional2D<T,Descriptor, normalX, normalY>,
+		    domain, lattice );
+	}
+	// In case a normal outflow condition is used, start by instantiating a data processor which copies
+	//   the normal velocity value from the previous lattice cell, and sets the other components to zero.
+	if (bcType==boundary::normalOutflow) {
+		integrateProcessingFunctional (
+		    new CopyNormalVelocityFunctional2D<T,Descriptor, normalX, normalY>,
+		    domain, lattice );
+	} else
+		// In case a freeslip condition is used, start by instantiating a data processor which copies
+		//   the tangential velocity values from the previous lattice cell.
+		if (bcType==boundary::freeslip) {
+			integrateProcessingFunctional (
+			    new CopyTangentialVelocityFunctional2D<T,Descriptor, normalX, normalY>,
+			    domain, lattice );
+		}
 
-    // If the boundary condition has a non-local component, instantiate a corresponding data processor.
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getVelocityBoundaryFunctional<direction,orientation>();
-    if (functional) {
-        integrateProcessingFunctional(functional, domain, lattice);
-    }
+	// If the boundary condition has a non-local component, instantiate a corresponding data processor.
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getVelocityBoundaryFunctional<direction,orientation>();
+	if (functional) {
+		integrateProcessingFunctional(functional, domain, lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int direction, int orientation>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addPressureBoundary(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
+addPressureBoundary(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
 {
-    PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
+	PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
 
-    // Convert (direction,orientation) description of the normal vector into a (normalX,normalY)
-    //   description, as it is requried by the data processor for Neumann boundaries.
-    enum {
-        normalX = (direction==0) ? orientation : 0,
-        normalY = (direction==1) ? orientation : 0
-    };
+	// Convert (direction,orientation) description of the normal vector into a (normalX,normalY)
+	//   description, as it is requried by the data processor for Neumann boundaries.
+	enum {
+		normalX = (direction==0) ? orientation : 0,
+		normalY = (direction==1) ? orientation : 0
+	};
 
-    // Instantiate the dynamics of the boundary as a composite dynamics, based on the one currently
-    //   residing on the lattice.
-    setCompositeDynamics (
-            lattice, domain,
-            BoundaryManager::template
-                getPressureBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
+	// Instantiate the dynamics of the boundary as a composite dynamics, based on the one currently
+	//   residing on the lattice.
+	setCompositeDynamics (
+	    lattice, domain,
+	    BoundaryManager::template
+	    getPressureBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
 
-    // In case a Neumann condition is used, start by instantiating a data processor which copies
-    //   the density value from the previous lattice cell.
-    if (bcType==boundary::neumann) {
-        integrateProcessingFunctional (
-                new CopyDensityFunctional2D<T,Descriptor, normalX, normalY>,
-                domain, lattice );
-    }
+	// In case a Neumann condition is used, start by instantiating a data processor which copies
+	//   the density value from the previous lattice cell.
+	if (bcType==boundary::neumann) {
+		integrateProcessingFunctional (
+		    new CopyDensityFunctional2D<T,Descriptor, normalX, normalY>,
+		    domain, lattice );
+	}
 
-    // If the boundary condition has a non-local component, instantiate a corresponding data processor.
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getPressureBoundaryFunctional<direction,orientation>();
-    if (functional) {
-        integrateProcessingFunctional(functional, domain, lattice);
-    }
+	// If the boundary condition has a non-local component, instantiate a corresponding data processor.
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getPressureBoundaryFunctional<direction,orientation>();
+	if (functional) {
+		integrateProcessingFunctional(functional, domain, lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int xNormal, int yNormal>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addExternalVelocityCorner(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
+addExternalVelocityCorner(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
 {
-    setCompositeDynamics (
-            lattice, Box2D(x,x,y,y),
-            BoundaryManager::template
-                getExternalVelocityCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, Box2D(x,x,y,y),
+	    BoundaryManager::template
+	    getExternalVelocityCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
 
-    if (bcType==boundary::neumann || bcType==boundary::outflow) {
-        integrateProcessingFunctional (
-                new CopyVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }
-    else
-    if (bcType==boundary::freeslip) {
-        integrateProcessingFunctional (
-                new CopyTangentialVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }
-    else
-    if (bcType==boundary::normalOutflow) {
-        integrateProcessingFunctional (
-                new CopyNormalVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }
+	if (bcType==boundary::neumann || bcType==boundary::outflow) {
+		integrateProcessingFunctional (
+		    new CopyVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	} else if (bcType==boundary::freeslip) {
+		integrateProcessingFunctional (
+		    new CopyTangentialVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	} else if (bcType==boundary::normalOutflow) {
+		integrateProcessingFunctional (
+		    new CopyNormalVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	}
 
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getExternalVelocityCornerFunctional<xNormal,yNormal>();
-    if (functional) {
-        integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice );
-    }
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getExternalVelocityCornerFunctional<xNormal,yNormal>();
+	if (functional) {
+		integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice );
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int xNormal, int yNormal>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addInternalVelocityCorner(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
+addInternalVelocityCorner(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice, boundary::BcType bcType)
 {
-    setCompositeDynamics (
-            lattice, Box2D(x,x,y,y),
-            BoundaryManager::template
-                getInternalVelocityCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, Box2D(x,x,y,y),
+	    BoundaryManager::template
+	    getInternalVelocityCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
 
-    if (bcType==boundary::neumann || bcType==boundary::outflow) {
-        integrateProcessingFunctional (
-                new CopyVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }
-    else
-    if (bcType==boundary::freeslip) {
-        integrateProcessingFunctional (
-                new CopyTangentialVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }
-    else
-    if (bcType==boundary::normalOutflow) {
-        integrateProcessingFunctional (
-                new CopyNormalVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
-                Box2D(x,x,y,y), lattice );
-    }    
+	if (bcType==boundary::neumann || bcType==boundary::outflow) {
+		integrateProcessingFunctional (
+		    new CopyVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	} else if (bcType==boundary::freeslip) {
+		integrateProcessingFunctional (
+		    new CopyTangentialVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	} else if (bcType==boundary::normalOutflow) {
+		integrateProcessingFunctional (
+		    new CopyNormalVelocityFunctional2D<T,Descriptor, xNormal,yNormal>,
+		    Box2D(x,x,y,y), lattice );
+	}
 
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getInternalVelocityCornerFunctional<xNormal,yNormal>();
-    if (functional) {
-        integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice );
-    }
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getInternalVelocityCornerFunctional<xNormal,yNormal>();
+	if (functional) {
+		integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice );
+	}
 }
 
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addVelocityBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addVelocityBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addVelocityBoundary<0,-1>(domain, lattice, bcType);
+	addVelocityBoundary<0,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addVelocityBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addVelocityBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addVelocityBoundary<0,1>(domain, lattice, bcType);
+	addVelocityBoundary<0,1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addVelocityBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addVelocityBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addVelocityBoundary<1,-1>(domain, lattice, bcType);
+	addVelocityBoundary<1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addVelocityBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addVelocityBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addVelocityBoundary<1,1>(domain, lattice, bcType);
+	addVelocityBoundary<1,1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addPressureBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addPressureBoundary0N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addPressureBoundary<0,-1>(domain, lattice, bcType);
+	addPressureBoundary<0,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addPressureBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addPressureBoundary0P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addPressureBoundary<0,1>(domain, lattice, bcType);
+	addPressureBoundary<0,1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addPressureBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addPressureBoundary1N( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addPressureBoundary<1,-1>(domain, lattice, bcType);
+	addPressureBoundary<1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addPressureBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
-                           boundary::BcType bcType )
+addPressureBoundary1P( Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice,
+                       boundary::BcType bcType )
 {
-    addPressureBoundary<1,1>(domain, lattice, bcType);
+	addPressureBoundary<1,1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addExternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addExternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addExternalVelocityCorner<-1,-1>(x,y, lattice, bcType);
+	addExternalVelocityCorner<-1,-1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addExternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addExternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addExternalVelocityCorner<-1,1>(x,y, lattice, bcType);
+	addExternalVelocityCorner<-1,1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addExternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addExternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addExternalVelocityCorner<1,-1>(x,y, lattice, bcType);
+	addExternalVelocityCorner<1,-1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addExternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addExternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addExternalVelocityCorner<1,1>(x,y, lattice, bcType);
+	addExternalVelocityCorner<1,1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addInternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addInternalVelocityCornerNN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addInternalVelocityCorner<-1,-1>(x,y, lattice, bcType);
+	addInternalVelocityCorner<-1,-1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addInternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addInternalVelocityCornerNP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addInternalVelocityCorner<-1,1>(x,y, lattice, bcType);
+	addInternalVelocityCorner<-1,1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addInternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addInternalVelocityCornerPN( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addInternalVelocityCorner<1,-1>(x,y, lattice, bcType);
+	addInternalVelocityCorner<1,-1>(x,y, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void BoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addInternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
-                                 boundary::BcType bcType )
+addInternalVelocityCornerPP( plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice,
+                             boundary::BcType bcType )
 {
-    addInternalVelocityCorner<1,1>(x,y, lattice, bcType);
+	addInternalVelocityCorner<1,1>(x,y, lattice, bcType);
 }
 
 }  // namespace plb

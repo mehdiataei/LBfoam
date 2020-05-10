@@ -38,85 +38,93 @@
   * \sa MatrixBase::transpose(), MatrixBase::adjoint()
   */
 template<typename MatrixType>
-struct ei_traits<Transpose<MatrixType> >
-{
-  typedef typename MatrixType::Scalar Scalar;
-  typedef typename ei_nested<MatrixType>::type MatrixTypeNested;
-  typedef typename ei_unref<MatrixTypeNested>::type _MatrixTypeNested;
-  enum {
-    RowsAtCompileTime = MatrixType::ColsAtCompileTime,
-    ColsAtCompileTime = MatrixType::RowsAtCompileTime,
-    MaxRowsAtCompileTime = MatrixType::MaxColsAtCompileTime,
-    MaxColsAtCompileTime = MatrixType::MaxRowsAtCompileTime,
-    Flags = ((int(_MatrixTypeNested::Flags) ^ RowMajorBit)
-          & ~(LowerTriangularBit | UpperTriangularBit))
-          | (int(_MatrixTypeNested::Flags)&UpperTriangularBit ? LowerTriangularBit : 0)
-          | (int(_MatrixTypeNested::Flags)&LowerTriangularBit ? UpperTriangularBit : 0),
-    CoeffReadCost = _MatrixTypeNested::CoeffReadCost
-  };
+struct ei_traits<Transpose<MatrixType> > {
+	typedef typename MatrixType::Scalar Scalar;
+	typedef typename ei_nested<MatrixType>::type MatrixTypeNested;
+	typedef typename ei_unref<MatrixTypeNested>::type _MatrixTypeNested;
+	enum {
+		RowsAtCompileTime = MatrixType::ColsAtCompileTime,
+		ColsAtCompileTime = MatrixType::RowsAtCompileTime,
+		MaxRowsAtCompileTime = MatrixType::MaxColsAtCompileTime,
+		MaxColsAtCompileTime = MatrixType::MaxRowsAtCompileTime,
+		Flags = ((int(_MatrixTypeNested::Flags) ^ RowMajorBit)
+		         & ~(LowerTriangularBit | UpperTriangularBit))
+		        | (int(_MatrixTypeNested::Flags)&UpperTriangularBit ? LowerTriangularBit : 0)
+		        | (int(_MatrixTypeNested::Flags)&LowerTriangularBit ? UpperTriangularBit : 0),
+		CoeffReadCost = _MatrixTypeNested::CoeffReadCost
+	};
 };
 
 template<typename MatrixType> class Transpose
-  : public MatrixBase<Transpose<MatrixType> >
+	: public MatrixBase<Transpose<MatrixType> >
 {
-  public:
+public:
 
-    EIGEN_GENERIC_PUBLIC_INTERFACE(Transpose)
+	EIGEN_GENERIC_PUBLIC_INTERFACE(Transpose)
 
-    inline Transpose(const MatrixType& matrix) : m_matrix(matrix) {}
+	inline Transpose(const MatrixType& matrix) : m_matrix(matrix) {}
 
-    EIGEN_INHERIT_ASSIGNMENT_OPERATORS(Transpose)
+	EIGEN_INHERIT_ASSIGNMENT_OPERATORS(Transpose)
 
-    inline int rows() const { return m_matrix.cols(); }
-    inline int cols() const { return m_matrix.rows(); }
-    inline int stride(void) const { return m_matrix.stride(); }
+	inline int rows() const
+	{
+		return m_matrix.cols();
+	}
+	inline int cols() const
+	{
+		return m_matrix.rows();
+	}
+	inline int stride(void) const
+	{
+		return m_matrix.stride();
+	}
 
-    inline Scalar& coeffRef(int row, int col)
-    {
-      return m_matrix.const_cast_derived().coeffRef(col, row);
-    }
+	inline Scalar& coeffRef(int row, int col)
+	{
+		return m_matrix.const_cast_derived().coeffRef(col, row);
+	}
 
-    inline const Scalar coeff(int row, int col) const
-    {
-      return m_matrix.coeff(col, row);
-    }
+	inline const Scalar coeff(int row, int col) const
+	{
+		return m_matrix.coeff(col, row);
+	}
 
-    inline const Scalar coeff(int index) const
-    {
-      return m_matrix.coeff(index);
-    }
+	inline const Scalar coeff(int index) const
+	{
+		return m_matrix.coeff(index);
+	}
 
-    inline Scalar& coeffRef(int index)
-    {
-      return m_matrix.const_cast_derived().coeffRef(index);
-    }
+	inline Scalar& coeffRef(int index)
+	{
+		return m_matrix.const_cast_derived().coeffRef(index);
+	}
 
-    template<int LoadMode>
-    inline const PacketScalar packet(int row, int col) const
-    {
-      return m_matrix.template packet<LoadMode>(col, row);
-    }
+	template<int LoadMode>
+	inline const PacketScalar packet(int row, int col) const
+	{
+		return m_matrix.template packet<LoadMode>(col, row);
+	}
 
-    template<int LoadMode>
-    inline void writePacket(int row, int col, const PacketScalar& x)
-    {
-      m_matrix.const_cast_derived().template writePacket<LoadMode>(col, row, x);
-    }
+	template<int LoadMode>
+	inline void writePacket(int row, int col, const PacketScalar& x)
+	{
+		m_matrix.const_cast_derived().template writePacket<LoadMode>(col, row, x);
+	}
 
-    template<int LoadMode>
-    inline const PacketScalar packet(int index) const
-    {
-      return m_matrix.template packet<LoadMode>(index);
-    }
+	template<int LoadMode>
+	inline const PacketScalar packet(int index) const
+	{
+		return m_matrix.template packet<LoadMode>(index);
+	}
 
-    template<int LoadMode>
-    inline void writePacket(int index, const PacketScalar& x)
-    {
-      m_matrix.const_cast_derived().template writePacket<LoadMode>(index, x);
-    }
+	template<int LoadMode>
+	inline void writePacket(int index, const PacketScalar& x)
+	{
+		m_matrix.const_cast_derived().template writePacket<LoadMode>(index, x);
+	}
 
-  protected:
-    const typename MatrixType::Nested m_matrix;
+protected:
+	const typename MatrixType::Nested m_matrix;
 };
 
 /** \returns an expression of the transpose of *this.
@@ -142,7 +150,7 @@ template<typename Derived>
 inline Transpose<Derived>
 MatrixBase<Derived>::transpose()
 {
-  return derived();
+	return derived();
 }
 
 /** This is the const version of transpose().
@@ -154,7 +162,7 @@ template<typename Derived>
 inline const Transpose<Derived>
 MatrixBase<Derived>::transpose() const
 {
-  return derived();
+	return derived();
 }
 
 /** \returns an expression of the adjoint (i.e. conjugate transpose) of *this.
@@ -176,7 +184,7 @@ template<typename Derived>
 inline const typename MatrixBase<Derived>::AdjointReturnType
 MatrixBase<Derived>::adjoint() const
 {
-  return conjugate().nestByValue();
+	return conjugate().nestByValue();
 }
 
 /***************************************************************************
@@ -184,24 +192,26 @@ MatrixBase<Derived>::adjoint() const
 ***************************************************************************/
 
 template<typename MatrixType,
-  bool IsSquare = (MatrixType::RowsAtCompileTime == MatrixType::ColsAtCompileTime) && MatrixType::RowsAtCompileTime!=Dynamic>
+         bool IsSquare = (MatrixType::RowsAtCompileTime == MatrixType::ColsAtCompileTime) && MatrixType::RowsAtCompileTime!=Dynamic>
 struct ei_inplace_transpose_selector;
 
 template<typename MatrixType>
 struct ei_inplace_transpose_selector<MatrixType,true> { // square matrix
-  static void run(MatrixType& m) {
-    m.template part<StrictlyUpperTriangular>().swap(m.transpose());
-  }
+	static void run(MatrixType& m)
+	{
+		m.template part<StrictlyUpperTriangular>().swap(m.transpose());
+	}
 };
 
 template<typename MatrixType>
 struct ei_inplace_transpose_selector<MatrixType,false> { // non square matrix
-  static void run(MatrixType& m) {
-    if (m.rows()==m.cols())
-      m.template part<StrictlyUpperTriangular>().swap(m.transpose());
-    else
-      m = m.transpose().eval();
-  }
+	static void run(MatrixType& m)
+	{
+		if (m.rows()==m.cols())
+			m.template part<StrictlyUpperTriangular>().swap(m.transpose());
+		else
+			m = m.transpose().eval();
+	}
 };
 
 /** This is the "in place" version of transpose: it transposes \c *this.
@@ -221,7 +231,7 @@ struct ei_inplace_transpose_selector<MatrixType,false> { // non square matrix
 template<typename Derived>
 inline void MatrixBase<Derived>::transposeInPlace()
 {
-  ei_inplace_transpose_selector<Derived>::run(derived());
+	ei_inplace_transpose_selector<Derived>::run(derived());
 }
 
 #endif // EIGEN_TRANSPOSE_H

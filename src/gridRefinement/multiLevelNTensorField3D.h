@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -38,74 +38,85 @@
 #include <map>
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class MultiLevelNTensorField3D : public MultiLevel3D {
+class MultiLevelNTensorField3D : public MultiLevel3D
+{
 public:
-    // The dynamics dyn must be right for the coarsest instantiated level.
-    MultiLevelNTensorField3D(OctreeGridStructure& ogs_);
-    MultiLevelNTensorField3D(OctreeGridStructure& ogs_, Box3D domain, plint domainLevel);
-    MultiLevelNTensorField3D(MultiLevelNTensorField3D<T> const& rhs);
-    MultiLevelNTensorField3D<T>& operator=(MultiLevelNTensorField3D<T> const& rhs);
-    void swap(MultiLevelNTensorField3D<T>& rhs);
-    ~MultiLevelNTensorField3D();
+	// The dynamics dyn must be right for the coarsest instantiated level.
+	MultiLevelNTensorField3D(OctreeGridStructure& ogs_);
+	MultiLevelNTensorField3D(OctreeGridStructure& ogs_, Box3D domain, plint domainLevel);
+	MultiLevelNTensorField3D(MultiLevelNTensorField3D<T> const& rhs);
+	MultiLevelNTensorField3D<T>& operator=(MultiLevelNTensorField3D<T> const& rhs);
+	void swap(MultiLevelNTensorField3D<T>& rhs);
+	~MultiLevelNTensorField3D();
 
-    virtual MultiNTensorField3D<T> const &getLevel(plint iL) const {
-        PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
-        return *gridLevels[iL];
-    }
-    
-    virtual MultiNTensorField3D<T> &getLevel(plint iL) {
-        PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
-        return *gridLevels[iL];
-    }
-    
-    plint getNumLevels() const { 
-        return ogs.getNumLevels();
-    }
-    
-    OctreeGridStructure const& getOgs() const {
-        return ogs;
-    }
+	virtual MultiNTensorField3D<T> const &getLevel(plint iL) const
+	{
+		PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
+		return *gridLevels[iL];
+	}
+
+	virtual MultiNTensorField3D<T> &getLevel(plint iL)
+	{
+		PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
+		return *gridLevels[iL];
+	}
+
+	plint const getNumLevels() const
+	{
+		return ogs.getNumLevels();
+	}
+
+	OctreeGridStructure const& getOgs() const
+	{
+		return ogs;
+	}
 private:
-    OctreeGridStructure ogs;
+	OctreeGridStructure ogs;
 private:
-    std::vector<MultiNTensorField3D<T> *> gridLevels;
+	std::vector<MultiNTensorField3D<T> *> gridLevels;
 };
 
 template<typename T>
-class MultiLevelNTensorFieldForOutput3D : public MultiLevel3D {
+class MultiLevelNTensorFieldForOutput3D : public MultiLevel3D
+{
 public:
-    // The dynamics dyn must be right for the coarsest instantiated level.
-    MultiLevelNTensorFieldForOutput3D(OctreeGridStructure& ogs_, bool crop);
-    MultiLevelNTensorFieldForOutput3D(OctreeGridStructure& ogs_, Box3D domain, plint domainLevel, bool crop);
-    MultiLevelNTensorFieldForOutput3D(MultiLevelNTensorFieldForOutput3D<T> const& rhs);
-    MultiLevelNTensorFieldForOutput3D<T>& operator=(MultiLevelNTensorFieldForOutput3D<T> const& rhs);
-    void swap(MultiLevelNTensorFieldForOutput3D<T>& rhs);
-    ~MultiLevelNTensorFieldForOutput3D();
+	// The dynamics dyn must be right for the coarsest instantiated level.
+	MultiLevelNTensorFieldForOutput3D(OctreeGridStructure& ogs_, bool crop);
+	MultiLevelNTensorFieldForOutput3D(OctreeGridStructure& ogs_, Box3D domain, plint domainLevel, bool crop);
+	MultiLevelNTensorFieldForOutput3D(MultiLevelNTensorFieldForOutput3D<T> const& rhs);
+	MultiLevelNTensorFieldForOutput3D<T>& operator=(MultiLevelNTensorFieldForOutput3D<T> const& rhs);
+	void swap(MultiLevelNTensorFieldForOutput3D<T>& rhs);
+	~MultiLevelNTensorFieldForOutput3D();
 
-    virtual MultiNTensorField3D<T> const &geLevel(plint iL) const {
-        PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
-        return *gridLevels[iL];
-    }
-    
-    virtual MultiNTensorField3D<T> &getLevel(plint iL) {
-        PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
-        return *gridLevels[iL];
-    }
-    
-    plint getNumLevels() const { 
-        return ogs.getNumLevels();
-    }
-    
-    OctreeGridStructure const& getOgs() const {
-        return ogs;
-    }
+	virtual MultiNTensorField3D<T> const &geLevel(plint iL) const
+	{
+		PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
+		return *gridLevels[iL];
+	}
+
+	virtual MultiNTensorField3D<T> &getLevel(plint iL)
+	{
+		PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
+		return *gridLevels[iL];
+	}
+
+	plint const getNumLevels() const
+	{
+		return ogs.getNumLevels();
+	}
+
+	OctreeGridStructure const& getOgs() const
+	{
+		return ogs;
+	}
 private:
-    OctreeGridStructure ogs;
+	OctreeGridStructure ogs;
 private:
-    std::vector<MultiNTensorField3D<T> *> gridLevels;
+	std::vector<MultiNTensorField3D<T> *> gridLevels;
 };
 
 }  // namespace plb

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -39,7 +39,8 @@ using namespace std;
 typedef double T;
 #define DESCRIPTOR descriptors::D2Q9Descriptor
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
 
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]) {
         (T) 10.,   // Re
         30,        // N
         2.,        // lx
-        1.         // ly 
+        1.         // ly
     );
 
     plint nx = parameters.getNx();
@@ -57,10 +58,10 @@ int main(int argc, char* argv[]) {
     writeLogFile(parameters, "Poiseuille flow");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-              nx, ny,
-              new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        nx, ny,
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
     createPoiseuilleBoundaries(lattice, parameters, *boundaryCondition);
     lattice.initialize();
 
@@ -72,8 +73,10 @@ int main(int argc, char* argv[]) {
     plb_ofstream successiveProfiles("velocityProfiles.dat");
 
     // Main loop over time steps.
-    for (plint iT=0; iT<10000; ++iT) {
-        if (iT%1000==0) {
+    for (plint iT=0; iT<10000; ++iT)
+    {
+        if (iT%1000==0)
+        {
             pcout << "At iteration step " << iT
                   << ", the density along the channel is " << endl;
             pcout << setprecision(7)
@@ -82,13 +85,13 @@ int main(int argc, char* argv[]) {
 
             Box2D profileSection(nx/2, nx/2, 0, ny-1);
             successiveProfiles
-                << setprecision(4)
-                  // (2) Convert from lattice to physical units.
-                << *multiply (
-                       parameters.getDeltaX() / parameters.getDeltaT(),
-                  // (1) Compute velocity norm along the chosen section.
-                       *computeVelocityNorm (lattice, profileSection) )
-                << endl;
+                    << setprecision(4)
+                    // (2) Convert from lattice to physical units.
+                    << *multiply (
+                        parameters.getDeltaX() / parameters.getDeltaT(),
+                        // (1) Compute velocity norm along the chosen section.
+                        *computeVelocityNorm (lattice, profileSection) )
+                    << endl;
 
         }
 

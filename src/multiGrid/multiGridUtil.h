@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,16 +36,19 @@
 #include "core/plbDebug.h"
 #include "core/util.h"
 
-namespace plb {
+namespace plb
+{
 
 /// dxScale is positive if the system is coarser than the reference.
-inline double scaleToReference(int dxScale, int dimDx, int dtScale, int dimDt) {
-    return util::twoToThePower(dimDx*dxScale+dimDt*dtScale);
+inline double scaleToReference(int dxScale, int dimDx, int dtScale, int dimDt)
+{
+	return util::twoToThePower(dimDx*dxScale+dimDt*dtScale);
 }
 
 /// dxScale is positive if the system is coarser than the reference.
-inline double scaleFromReference(int dxScale, int dimDx, int dtScale, int dimDt) {
-    return util::twoToThePower(-dimDx*dxScale-dimDt*dtScale);
+inline double scaleFromReference(int dxScale, int dimDx, int dtScale, int dimDt)
+{
+	return util::twoToThePower(-dimDx*dxScale-dimDt*dtScale);
 }
 
 }  // namespace plb

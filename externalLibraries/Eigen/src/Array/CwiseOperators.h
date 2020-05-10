@@ -28,7 +28,7 @@
 // -- unary operators --
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise square root of *this.
   *
   * Example: \include Cwise_sqrt.cpp
@@ -40,11 +40,11 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_sqrt_op)
 Cwise<ExpressionType>::sqrt() const
 {
-  return _expression();
+	return _expression();
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise exponential of *this.
   *
   * Example: \include Cwise_exp.cpp
@@ -56,11 +56,11 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_exp_op)
 Cwise<ExpressionType>::exp() const
 {
-  return _expression();
+	return _expression();
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise logarithm of *this.
   *
   * Example: \include Cwise_log.cpp
@@ -72,11 +72,11 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_log_op)
 Cwise<ExpressionType>::log() const
 {
-  return _expression();
+	return _expression();
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise cosine of *this.
   *
   * Example: \include Cwise_cos.cpp
@@ -88,12 +88,12 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_cos_op)
 Cwise<ExpressionType>::cos() const
 {
-  return _expression();
+	return _expression();
 }
 
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise sine of *this.
   *
   * Example: \include Cwise_sin.cpp
@@ -105,12 +105,12 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_sin_op)
 Cwise<ExpressionType>::sin() const
 {
-  return _expression();
+	return _expression();
 }
 
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise power of *this to the given exponent.
   *
   * Example: \include Cwise_pow.cpp
@@ -122,12 +122,12 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_pow_op)
 Cwise<ExpressionType>::pow(const Scalar& exponent) const
 {
-  return EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_pow_op)(_expression(), ei_scalar_pow_op<Scalar>(exponent));
+	return EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_pow_op)(_expression(), ei_scalar_pow_op<Scalar>(exponent));
 }
 
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise inverse of *this.
   *
   * Example: \include Cwise_inverse.cpp
@@ -139,7 +139,7 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_inverse_op)
 Cwise<ExpressionType>::inverse() const
 {
-  return _expression();
+	return _expression();
 }
 
 /** \array_module
@@ -155,7 +155,7 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_square_op)
 Cwise<ExpressionType>::square() const
 {
-  return _expression();
+	return _expression();
 }
 
 /** \array_module
@@ -171,14 +171,14 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_UNOP_RETURN_TYPE(ei_scalar_cube_op)
 Cwise<ExpressionType>::cube() const
 {
-  return _expression();
+	return _expression();
 }
 
 
 // -- binary operators --
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise \< operator of *this and \a other
   *
   * Example: \include Cwise_less.cpp
@@ -191,11 +191,11 @@ template<typename OtherDerived>
 inline const EIGEN_CWISE_BINOP_RETURN_TYPE(std::less)
 Cwise<ExpressionType>::operator<(const MatrixBase<OtherDerived> &other) const
 {
-  return EIGEN_CWISE_BINOP_RETURN_TYPE(std::less)(_expression(), other.derived());
+	return EIGEN_CWISE_BINOP_RETURN_TYPE(std::less)(_expression(), other.derived());
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise \<= operator of *this and \a other
   *
   * Example: \include Cwise_less_equal.cpp
@@ -208,11 +208,11 @@ template<typename OtherDerived>
 inline const EIGEN_CWISE_BINOP_RETURN_TYPE(std::less_equal)
 Cwise<ExpressionType>::operator<=(const MatrixBase<OtherDerived> &other) const
 {
-  return EIGEN_CWISE_BINOP_RETURN_TYPE(std::less_equal)(_expression(), other.derived());
+	return EIGEN_CWISE_BINOP_RETURN_TYPE(std::less_equal)(_expression(), other.derived());
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise \> operator of *this and \a other
   *
   * Example: \include Cwise_greater.cpp
@@ -225,11 +225,11 @@ template<typename OtherDerived>
 inline const EIGEN_CWISE_BINOP_RETURN_TYPE(std::greater)
 Cwise<ExpressionType>::operator>(const MatrixBase<OtherDerived> &other) const
 {
-  return EIGEN_CWISE_BINOP_RETURN_TYPE(std::greater)(_expression(), other.derived());
+	return EIGEN_CWISE_BINOP_RETURN_TYPE(std::greater)(_expression(), other.derived());
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise \>= operator of *this and \a other
   *
   * Example: \include Cwise_greater_equal.cpp
@@ -242,11 +242,11 @@ template<typename OtherDerived>
 inline const EIGEN_CWISE_BINOP_RETURN_TYPE(std::greater_equal)
 Cwise<ExpressionType>::operator>=(const MatrixBase<OtherDerived> &other) const
 {
-  return EIGEN_CWISE_BINOP_RETURN_TYPE(std::greater_equal)(_expression(), other.derived());
+	return EIGEN_CWISE_BINOP_RETURN_TYPE(std::greater_equal)(_expression(), other.derived());
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise == operator of *this and \a other
   *
   * \warning this performs an exact comparison, which is generally a bad idea with floating-point types.
@@ -264,11 +264,11 @@ template<typename OtherDerived>
 inline const EIGEN_CWISE_BINOP_RETURN_TYPE(std::equal_to)
 Cwise<ExpressionType>::operator==(const MatrixBase<OtherDerived> &other) const
 {
-  return EIGEN_CWISE_BINOP_RETURN_TYPE(std::equal_to)(_expression(), other.derived());
+	return EIGEN_CWISE_BINOP_RETURN_TYPE(std::equal_to)(_expression(), other.derived());
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise != operator of *this and \a other
   *
   * \warning this performs an exact comparison, which is generally a bad idea with floating-point types.
@@ -286,13 +286,13 @@ template<typename OtherDerived>
 inline const EIGEN_CWISE_BINOP_RETURN_TYPE(std::not_equal_to)
 Cwise<ExpressionType>::operator!=(const MatrixBase<OtherDerived> &other) const
 {
-  return EIGEN_CWISE_BINOP_RETURN_TYPE(std::not_equal_to)(_expression(), other.derived());
+	return EIGEN_CWISE_BINOP_RETURN_TYPE(std::not_equal_to)(_expression(), other.derived());
 }
 
 // comparisons to scalar value
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise \< operator of *this and a scalar \a s
   *
   * \sa operator<(const MatrixBase<OtherDerived> &) const
@@ -301,12 +301,12 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::less)
 Cwise<ExpressionType>::operator<(Scalar s) const
 {
-  return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::less)(_expression(),
-            typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
+	return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::less)(_expression(),
+	        typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise \<= operator of *this and a scalar \a s
   *
   * \sa operator<=(const MatrixBase<OtherDerived> &) const
@@ -315,12 +315,12 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::less_equal)
 Cwise<ExpressionType>::operator<=(Scalar s) const
 {
-  return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::less_equal)(_expression(),
-            typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
+	return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::less_equal)(_expression(),
+	        typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise \> operator of *this and a scalar \a s
   *
   * \sa operator>(const MatrixBase<OtherDerived> &) const
@@ -329,12 +329,12 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::greater)
 Cwise<ExpressionType>::operator>(Scalar s) const
 {
-  return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::greater)(_expression(),
-            typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
+	return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::greater)(_expression(),
+	        typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise \>= operator of *this and a scalar \a s
   *
   * \sa operator>=(const MatrixBase<OtherDerived> &) const
@@ -343,12 +343,12 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::greater_equal)
 Cwise<ExpressionType>::operator>=(Scalar s) const
 {
-  return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::greater_equal)(_expression(),
-            typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
+	return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::greater_equal)(_expression(),
+	        typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise == operator of *this and a scalar \a s
   *
   * \warning this performs an exact comparison, which is generally a bad idea with floating-point types.
@@ -362,12 +362,12 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::equal_to)
 Cwise<ExpressionType>::operator==(Scalar s) const
 {
-  return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::equal_to)(_expression(),
-            typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
+	return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::equal_to)(_expression(),
+	        typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
 }
 
 /** \array_module
-  * 
+  *
   * \returns an expression of the coefficient-wise != operator of *this and a scalar \a s
   *
   * \warning this performs an exact comparison, which is generally a bad idea with floating-point types.
@@ -381,8 +381,8 @@ template<typename ExpressionType>
 inline const EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::not_equal_to)
 Cwise<ExpressionType>::operator!=(Scalar s) const
 {
-  return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::not_equal_to)(_expression(),
-            typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
+	return EIGEN_CWISE_COMP_TO_SCALAR_RETURN_TYPE(std::not_equal_to)(_expression(),
+	        typename ExpressionType::ConstantReturnType(_expression().rows(), _expression().cols(), s));
 }
 
 // scalar addition
@@ -400,7 +400,7 @@ template<typename ExpressionType>
 inline const typename Cwise<ExpressionType>::ScalarAddReturnType
 Cwise<ExpressionType>::operator+(const Scalar& scalar) const
 {
-  return typename Cwise<ExpressionType>::ScalarAddReturnType(m_matrix, ei_scalar_add_op<Scalar>(scalar));
+	return typename Cwise<ExpressionType>::ScalarAddReturnType(m_matrix, ei_scalar_add_op<Scalar>(scalar));
 }
 
 /** \array_module
@@ -415,7 +415,7 @@ Cwise<ExpressionType>::operator+(const Scalar& scalar) const
 template<typename ExpressionType>
 inline ExpressionType& Cwise<ExpressionType>::operator+=(const Scalar& scalar)
 {
-  return m_matrix.const_cast_derived() = *this + scalar;
+	return m_matrix.const_cast_derived() = *this + scalar;
 }
 
 /** \array_module
@@ -431,7 +431,7 @@ template<typename ExpressionType>
 inline const typename Cwise<ExpressionType>::ScalarAddReturnType
 Cwise<ExpressionType>::operator-(const Scalar& scalar) const
 {
-  return *this + (-scalar);
+	return *this + (-scalar);
 }
 
 /** \array_module
@@ -447,7 +447,7 @@ Cwise<ExpressionType>::operator-(const Scalar& scalar) const
 template<typename ExpressionType>
 inline ExpressionType& Cwise<ExpressionType>::operator-=(const Scalar& scalar)
 {
-  return m_matrix.const_cast_derived() = *this - scalar;
+	return m_matrix.const_cast_derived() = *this - scalar;
 }
 
 #endif // EIGEN_ARRAY_CWISE_OPERATORS_H

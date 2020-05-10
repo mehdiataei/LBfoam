@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,35 +36,36 @@
 #include "multiPhysics/shanChenLattices2D.h"
 #include "multiPhysics/shanChenLattices3D.h"
 
-namespace plb {
+namespace plb
+{
 #ifdef COMPILE_2D
 
-    template class Cell<FLOAT_T, descriptors::DESCRIPTOR_2D>;
+template class Cell<FLOAT_T, descriptors::DESCRIPTOR_2D>;
 
-    void iniCellAtEquilibrium(
-            Cell<FLOAT_T, descriptors::DESCRIPTOR_2D>& cell, FLOAT_T density, const FLOAT_T velocity[2] );
-    
+void iniCellAtEquilibrium(
+    Cell<FLOAT_T, descriptors::DESCRIPTOR_2D>& cell, FLOAT_T density, const FLOAT_T velocity[2] );
+
 #if NUMBIT_2D == 9
-    template class Cell<FLOAT_T, descriptors::ShanChenD2Q9Descriptor>;
-    template class Cell<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
-    template class Cell<FLOAT_T, descriptors::ForcedShanChenD2Q9Descriptor>;
+template class Cell<FLOAT_T, descriptors::ShanChenD2Q9Descriptor>;
+template class Cell<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
+template class Cell<FLOAT_T, descriptors::ForcedShanChenD2Q9Descriptor>;
 #endif
 
 #endif  // COMPILE_2D
 
 #ifdef COMPILE_3D
 
-    template class Cell<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class Cell<FLOAT_T, descriptors::DESCRIPTOR_3D>;
 
-    void iniCellAtEquilibrium (
-            Cell<FLOAT_T, descriptors::DESCRIPTOR_3D>& cell, FLOAT_T density, const FLOAT_T velocity[3] );
+void iniCellAtEquilibrium (
+    Cell<FLOAT_T, descriptors::DESCRIPTOR_3D>& cell, FLOAT_T density, const FLOAT_T velocity[3] );
 
 #if NUMBIT_3D == 19
-    template class Cell<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
-    template class Cell<FLOAT_T, descriptors::ShanChenD3Q19Descriptor>;
-    template class Cell<FLOAT_T, descriptors::ForcedShanChenD3Q19Descriptor>;
+template class Cell<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
+template class Cell<FLOAT_T, descriptors::ShanChenD3Q19Descriptor>;
+template class Cell<FLOAT_T, descriptors::ForcedShanChenD3Q19Descriptor>;
 #endif
 
 #endif  // COMPILE_3D
-    
+
 }

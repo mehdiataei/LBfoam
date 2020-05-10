@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,33 +30,37 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.hh"
 
-namespace plb {
+namespace plb
+{
 
 #if NUMBIT_3D == 15
-    namespace descriptors {
-        template class D3Q15Constants<FLOAT_T>;
-        template class D3Q15DescriptorBase<FLOAT_T>;
-        template class D3Q15Descriptor<FLOAT_T>;
-    }
+namespace descriptors
+{
+template class D3Q15Constants<FLOAT_T>;
+template class D3Q15DescriptorBase<FLOAT_T>;
+template class D3Q15Descriptor<FLOAT_T>;
+}
 #endif
 
 #if NUMBIT_3D == 19
-    namespace descriptors {
-        template class D3Q19Constants<FLOAT_T>;
-        template class D3Q19DescriptorBase<FLOAT_T>;
-        template class D3Q19Descriptor<FLOAT_T>;
-    }
+namespace descriptors
+{
+template class D3Q19Constants<FLOAT_T>;
+template class D3Q19DescriptorBase<FLOAT_T>;
+template class D3Q19Descriptor<FLOAT_T>;
+}
 #endif
 
 #if NUMBIT_3D == 27
-    namespace descriptors {
-        template class D3Q27Constants<FLOAT_T>;
-        template class D3Q27DescriptorBase<FLOAT_T>;
-        template class D3Q27Descriptor<FLOAT_T>;
-    }
+namespace descriptors
+{
+template class D3Q27Constants<FLOAT_T>;
+template class D3Q27DescriptorBase<FLOAT_T>;
+template class D3Q27Descriptor<FLOAT_T>;
+}
 #endif
 
 }
- 
+
 
 #endif  // COMPILE_3D

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -22,21 +22,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "gridRefinement/gridRefinementUtil3D.h"
-#include "gridRefinement/couplingInterfaceGenerator3D.h"
-#include "gridRefinement/couplingActionsGenerator3D.h"
-#include "gridRefinement/octree.h"
-#include "gridRefinement/octreeGridStructure.h"
-#include "gridRefinement/octreeGridGenerator.h"
-#include "gridRefinement/refinementCriteria3D.h"
-#include "gridRefinement/rescaleEngine.h"
-#include "gridRefinement/boxLogic3D.h"
-#include "gridRefinement/multiLevel3D.h"
-#include "gridRefinement/multiLevelScalarField3D.h"
-#include "gridRefinement/multiLevelTensorField3D.h"
-#include "gridRefinement/multiLevelNTensorField3D.h"
-#include "gridRefinement/multiLevelWrapper3D.h"
-#include "gridRefinement/multiLevelFieldGenerator3D.h"
-#include "gridRefinement/gridRefinementFunctional3D.h"
-#include "gridRefinement/dataAnalysisWrapper3D.h"
-
+#include "gridRefinementUtil3D.h"
+#include "couplingInterfaceGenerator3D.h"
+#include "couplingActionsGenerator3D.h"
+#include "octree.h"
+#include "octreeGridStructure.h"
+#include "octreeGridGenerator.h"
+#include "refinementCriteria3D.h"
+#include "rescaleEngine.h"
+#include "boxLogic3D.h"
+#include "multiLevel3D.h"
+#include "multiLevelScalarField3D.h"
+#include "multiLevelTensorField3D.h"
+#include "multiLevelNTensorField3D.h"
+#include "multiLevelWrapper3D.h"
+#include "multiLevelFieldGenerator3D.h"
+#include "gridRefinementFunctional3D.h"
+#include "dataAnalysisWrapper3D.h"

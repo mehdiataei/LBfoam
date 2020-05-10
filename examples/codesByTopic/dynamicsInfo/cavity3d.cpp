@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -69,8 +69,10 @@ void cavitySetup( MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
     lattice.initialize();
 }
 
-void printDynamics(std::vector<Dynamics<T,DESCRIPTOR>*> const& dynamics) {
-    for (pluint iDyn=0; iDyn<dynamics.size(); ++iDyn) {
+void printDynamics(std::vector<Dynamics<T,DESCRIPTOR>*> const& dynamics)
+{
+    for (pluint iDyn=0; iDyn<dynamics.size(); ++iDyn)
+    {
         std::vector<int> chain;
         constructIdChain(*dynamics[iDyn], chain);
         pcout << "Structure is: "
@@ -79,7 +81,8 @@ void printDynamics(std::vector<Dynamics<T,DESCRIPTOR>*> const& dynamics) {
     }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
@@ -106,12 +109,12 @@ int main(int argc, char* argv[]) {
     pcout << "After unserialization, BGK clone has omega " << bgkClone.getOmega() << std::endl;
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 400.,  // Re
-            100,        // N
-            1.,        // lx
-            1.,        // ly 
-            1.         // lz 
+        (T) 1e-2,  // uMax
+        (T) 400.,  // Re
+        100,        // N
+        1.,        // lx
+        1.,        // ly
+        1.         // lz
     );
     const T logT     = (T)0.02;
     const T maxT     = (T)20.1;
@@ -121,46 +124,48 @@ int main(int argc, char* argv[]) {
     plint nz = parameters.getNz();
 
     MultiBlockLattice3D<T, DESCRIPTOR> lattice (
-            nx, ny, nz,
-            new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        nx, ny, nz,
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     OnLatticeBoundaryCondition3D<T,DESCRIPTOR>*
-        boundaryCondition = createLocalBoundaryCondition3D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition3D<T,DESCRIPTOR>();
 
     cavitySetup(lattice, parameters, *boundaryCondition);
 
     std::map<int,std::string> nameOfDynamics;
     ImageWriter<int>("earth").writeScaledGif(
-            "dynamics",
-            *extractDynamicsChain(lattice,nameOfDynamics,Box3D(nx/2,nx/2,0,ny-1,0,nz-1)), 600,600 );
+        "dynamics",
+        *extractDynamicsChain(lattice,nameOfDynamics,Box3D(nx/2,nx/2,0,ny-1,0,nz-1)), 600,600 );
     //ImageWriter<int>("air").writeScaledGif("dynamics",
     //                                       *extractTopMostDynamics(lattice), 600,600 );
     for (std::map<int,std::string>::const_iterator it = nameOfDynamics.begin();
-         it != nameOfDynamics.end();
-         ++it)
-    { 
+            it != nameOfDynamics.end();
+            ++it)
+    {
         pcout << it->first << " --> " << it->second << std::endl;
     }
     pcout << std::endl;
 
-    std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > newLattice = copyEntireCells(lattice);
+    std::auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > newLattice = copyEntireCells(lattice);
     copyEntireCells(*newLattice, lattice, lattice.getBoundingBox());
 
     // Main loop over time iterations.
-    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT) {
+    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT)
+    {
 
         // Lattice Boltzmann iteration step.
         lattice.collideAndStream();
 
         // At this point, the state of the lattice corresponds to the
         //   discrete time iT+1, and the stored averages are upgraded to time iT.
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "; av energy ="
                   << setprecision(10) << getStoredAverageEnergy<T>(lattice)
                   << "; av rho ="
                   << getStoredAverageDensity<T>(lattice) << endl;
         }
     }
-    
+
     delete boundaryCondition;
 }

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,348 +32,349 @@
 #include "atomicBlock/dataProcessingFunctional3D.h"
 #include "atomicBlock/reductiveDataProcessingFunctional3D.h"
 
-namespace plb {
+namespace plb
+{
 
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class N_BoxDensityFunctional3D : public BoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& scalarField);
-    virtual N_BoxDensityFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& scalarField);
+	virtual N_BoxDensityFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_N_BoxDensityFunctional3D : public MaskedBoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& scalarField,
-                                       NTensorField3D<int>& mask );
-    virtual Masked_N_BoxDensityFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& scalarField,
+	                     NTensorField3D<int>& mask );
+	virtual Masked_N_BoxDensityFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class N_BoxKineticEnergyFunctional3D : public BoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& scalarField);
-    virtual N_BoxKineticEnergyFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& scalarField);
+	virtual N_BoxKineticEnergyFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_N_BoxKineticEnergyFunctional3D : public MaskedBoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& scalarField,
-                                       NTensorField3D<int>& mask );
-    virtual Masked_N_BoxKineticEnergyFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& scalarField,
+	                     NTensorField3D<int>& mask );
+	virtual Masked_N_BoxKineticEnergyFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class N_BoxVelocityNormFunctional3D : public BoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& scalarField);
-    virtual N_BoxVelocityNormFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& scalarField);
+	virtual N_BoxVelocityNormFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_N_BoxVelocityNormFunctional3D : public MaskedBoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& scalarField,
-                                       NTensorField3D<int>& mask );
-    virtual Masked_N_BoxVelocityNormFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& scalarField,
+	                     NTensorField3D<int>& mask );
+	virtual Masked_N_BoxVelocityNormFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class N_BoxVelocityComponentFunctional3D :
-        public BoxProcessingFunctional3D_LN<T,Descriptor,T>
+	public BoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    N_BoxVelocityComponentFunctional3D(int iComponent_);
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& scalarField);
-    virtual N_BoxVelocityComponentFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	N_BoxVelocityComponentFunctional3D(int iComponent_);
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& scalarField);
+	virtual N_BoxVelocityComponentFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    int iComponent;
+	int iComponent;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_N_BoxVelocityComponentFunctional3D :
-        public MaskedBoxProcessingFunctional3D_LN<T,Descriptor,T>
+	public MaskedBoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    Masked_N_BoxVelocityComponentFunctional3D(int iComponent_);
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& scalarField,
-                                       NTensorField3D<int>& mask );
-    virtual Masked_N_BoxVelocityComponentFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	Masked_N_BoxVelocityComponentFunctional3D(int iComponent_);
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& scalarField,
+	                     NTensorField3D<int>& mask );
+	virtual Masked_N_BoxVelocityComponentFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    int iComponent;
+	int iComponent;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class N_BoxVelocityFunctional3D :
-    public BoxProcessingFunctional3D_LN<T,Descriptor, T>
+	public BoxProcessingFunctional3D_LN<T,Descriptor, T>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& tensorField);
-    virtual N_BoxVelocityFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& tensorField);
+	virtual N_BoxVelocityFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_N_BoxVelocityFunctional3D :
-    public MaskedBoxProcessingFunctional3D_LN<T,Descriptor, T>
+	public MaskedBoxProcessingFunctional3D_LN<T,Descriptor, T>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& tensorField,
-                                       NTensorField3D<int>& mask );
-    virtual Masked_N_BoxVelocityFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& tensorField,
+	                     NTensorField3D<int>& mask );
+	virtual Masked_N_BoxVelocityFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class N_BoxPiNeqFunctional3D :
-    public BoxProcessingFunctional3D_LN<T,Descriptor, T>
+	public BoxProcessingFunctional3D_LN<T,Descriptor, T>
 {
 public:
-    virtual void process(Box3D domain,
-                         BlockLattice3D<T,Descriptor>& lattice,
-                         NTensorField3D<T>& PiNeq);
-    virtual N_BoxPiNeqFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain,
+	                     BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& PiNeq);
+	virtual N_BoxPiNeqFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_N_BoxPiNeqFunctional3D :
-    public MaskedBoxProcessingFunctional3D_LN<T,Descriptor, T>
+	public MaskedBoxProcessingFunctional3D_LN<T,Descriptor, T>
 {
 public:
-    virtual void process(Box3D domain,
-                         BlockLattice3D<T,Descriptor>& lattice,
-                         NTensorField3D<T>& PiNeq,
-                         NTensorField3D<int>& mask);
-    virtual Masked_N_BoxPiNeqFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain,
+	                     BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& PiNeq,
+	                     NTensorField3D<int>& mask);
+	virtual Masked_N_BoxPiNeqFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class N_BoxShearStressFunctional3D :
-    public BoxProcessingFunctional3D_LN<T,Descriptor, T>
+	public BoxProcessingFunctional3D_LN<T,Descriptor, T>
 {
 public:
-    virtual void process(Box3D domain,
-                         BlockLattice3D<T,Descriptor>& lattice,
-                         NTensorField3D<T>& ShearStress);
-    virtual N_BoxShearStressFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain,
+	                     BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& ShearStress);
+	virtual N_BoxShearStressFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_N_BoxShearStressFunctional3D :
-    public MaskedBoxProcessingFunctional3D_LN<T,Descriptor, T>
+	public MaskedBoxProcessingFunctional3D_LN<T,Descriptor, T>
 {
 public:
-    virtual void process(Box3D domain,
-                         BlockLattice3D<T,Descriptor>& lattice,
-                         NTensorField3D<T>& ShearStress,
-                         NTensorField3D<int>& mask);
-    virtual Masked_N_BoxShearStressFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain,
+	                     BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& ShearStress,
+	                     NTensorField3D<int>& mask);
+	virtual Masked_N_BoxShearStressFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class N_BoxStrainRateFromStressFunctional3D :
-    public BoxProcessingFunctional3D_LN<T,Descriptor, T>
+	public BoxProcessingFunctional3D_LN<T,Descriptor, T>
 {
 public:
-    virtual void process(Box3D domain,
-                         BlockLattice3D<T,Descriptor>& lattice,
-                         NTensorField3D<T>& S);
-    virtual N_BoxStrainRateFromStressFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain,
+	                     BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& S);
+	virtual N_BoxStrainRateFromStressFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_N_BoxStrainRateFromStressFunctional3D :
-    public MaskedBoxProcessingFunctional3D_LN<T,Descriptor, T>
+	public MaskedBoxProcessingFunctional3D_LN<T,Descriptor, T>
 {
 public:
-    virtual void process(Box3D domain,
-                         BlockLattice3D<T,Descriptor>& lattice,
-                         NTensorField3D<T>& S,
-                         NTensorField3D<int>& mask );
-    virtual Masked_N_BoxStrainRateFromStressFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain,
+	                     BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& S,
+	                     NTensorField3D<int>& mask );
+	virtual Masked_N_BoxStrainRateFromStressFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class N_BoxPopulationFunctional3D : public BoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    N_BoxPopulationFunctional3D(plint iComponent_);
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& populations);
-    virtual N_BoxPopulationFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	N_BoxPopulationFunctional3D(plint iComponent_);
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& populations);
+	virtual N_BoxPopulationFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    plint iComponent;
+	plint iComponent;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_N_BoxPopulationFunctional3D : public MaskedBoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    Masked_N_BoxPopulationFunctional3D(plint iComponent_);
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& populations,
-                                       NTensorField3D<int>& mask);
-    virtual Masked_N_BoxPopulationFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	Masked_N_BoxPopulationFunctional3D(plint iComponent_);
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& populations,
+	                     NTensorField3D<int>& mask);
+	virtual Masked_N_BoxPopulationFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    plint iComponent;
+	plint iComponent;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class N_BoxPopulationsFunctional3D : public BoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& population);
-    virtual N_BoxPopulationsFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& population);
+	virtual N_BoxPopulationsFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_N_BoxPopulationsFunctional3D : public MaskedBoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-                                       NTensorField3D<T>& population,
-                                       NTensorField3D<int>& mask);
-    virtual Masked_N_BoxPopulationsFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	                     NTensorField3D<T>& population,
+	                     NTensorField3D<int>& mask);
+	virtual Masked_N_BoxPopulationsFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class UPO_Rhs_Functional3D : public BoxProcessingFunctional3D_NN<T,T>
 {
 public:
-    UPO_Rhs_Functional3D(T omega_);
-    virtual void process(Box3D domain, NTensorField3D<T>& lattice,
-                                       NTensorField3D<T>& result);
-    virtual UPO_Rhs_Functional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	UPO_Rhs_Functional3D(T omega_);
+	virtual void process(Box3D domain, NTensorField3D<T>& lattice,
+	                     NTensorField3D<T>& result);
+	virtual UPO_Rhs_Functional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    T omega;
+	T omega;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_UPO_Rhs_Functional3D : public MaskedBoxProcessingFunctional3D_NN<T,T>
 {
 public:
-    Masked_UPO_Rhs_Functional3D(T omega_);
-    virtual void process(Box3D domain, NTensorField3D<T>& lattice,
-                                       NTensorField3D<T>& result,
-                                       NTensorField3D<int>& mask);
-    virtual Masked_UPO_Rhs_Functional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	Masked_UPO_Rhs_Functional3D(T omega_);
+	virtual void process(Box3D domain, NTensorField3D<T>& lattice,
+	                     NTensorField3D<T>& result,
+	                     NTensorField3D<int>& mask);
+	virtual Masked_UPO_Rhs_Functional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    T omega;
+	T omega;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class UPO_ApplyJ_Functional3D : public NTensorFieldBoxProcessingFunctional3D<T>
 {
 public:
-    UPO_ApplyJ_Functional3D(T omega_);
-    virtual void process(Box3D domain, std::vector<NTensorField3D<T>*> lattices);
-    virtual UPO_ApplyJ_Functional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	UPO_ApplyJ_Functional3D(T omega_);
+	virtual void process(Box3D domain, std::vector<NTensorField3D<T>*> lattices);
+	virtual UPO_ApplyJ_Functional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    T omega;
+	T omega;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_UPO_ApplyJ_Functional3D : public MaskedNTensorFieldBoxProcessingFunctional3D<T>
 {
 public:
-    Masked_UPO_ApplyJ_Functional3D(T omega_);
-    virtual void process( Box3D domain,
-                          std::vector<NTensorField3D<T>*> lattices,
-                          NTensorField3D<int>& mask );
-    virtual Masked_UPO_ApplyJ_Functional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	Masked_UPO_ApplyJ_Functional3D(T omega_);
+	virtual void process( Box3D domain,
+	                      std::vector<NTensorField3D<T>*> lattices,
+	                      NTensorField3D<int>& mask );
+	virtual Masked_UPO_ApplyJ_Functional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    T omega;
+	T omega;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class UPO_EnergyDerivative_Functional3D : public BoxProcessingFunctional3D_NN<T,T>
 {
 public:
-    virtual void process( Box3D domain,
-                          NTensorField3D<T>& lattice,
-                          NTensorField3D<T>& derivative );
-    virtual UPO_EnergyDerivative_Functional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process( Box3D domain,
+	                      NTensorField3D<T>& lattice,
+	                      NTensorField3D<T>& derivative );
+	virtual UPO_EnergyDerivative_Functional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class Masked_UPO_EnergyDerivative_Functional3D : public MaskedBoxProcessingFunctional3D_NN<T,T>
 {
 public:
-    virtual void process( Box3D domain,
-                          NTensorField3D<T>& lattice,
-                          NTensorField3D<T>& derivative,
-                          NTensorField3D<int>& mask );
-    virtual Masked_UPO_EnergyDerivative_Functional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process( Box3D domain,
+	                      NTensorField3D<T>& lattice,
+	                      NTensorField3D<T>& derivative,
+	                      NTensorField3D<int>& mask );
+	virtual Masked_UPO_EnergyDerivative_Functional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 }  // namespace plb

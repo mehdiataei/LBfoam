@@ -908,49 +908,6 @@ void BoxRhoBarJfunctional3D<T,Descriptor>::getTypeOfModification(std::vector<mod
     modified[2] = modif::staticVariables;   // j
 }
 
-
-template<typename T, template<typename U> class Descriptor> 
-void MaskedBoxRhoBarJfunctional3D<T,Descriptor>::processGenericBlocks (
-        Box3D domain, std::vector<AtomicBlock3D*> fields )
-{
-    PLB_ASSERT(fields.size() == 4);
-    BlockLattice3D<T,Descriptor>& lattice = *dynamic_cast<BlockLattice3D<T,Descriptor>*>(fields[0]);
-    ScalarField3D<T>& rhoBarField = *dynamic_cast<ScalarField3D<T>*>(fields[1]);
-    TensorField3D<T,3>& jField = *dynamic_cast<TensorField3D<T,3>*>(fields[2]);
-    ScalarField3D<int>& maskField = *dynamic_cast<ScalarField3D<int>*>(fields[3]);
-    Dot3D offset1 = computeRelativeDisplacement(lattice, rhoBarField);
-    Dot3D offset2 = computeRelativeDisplacement(lattice, jField);
-    Dot3D offset3 = computeRelativeDisplacement(lattice, maskField);
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-       for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
-                if (maskField.get(iX+offset3.x,iY+offset3.y,iZ+offset3.z) == flag) {
-                    Cell<T,Descriptor> const& cell = lattice.get(iX,iY,iZ);
-                    cell.getDynamics().computeRhoBarJ (
-                            cell, 
-                            rhoBarField.get(iX+offset1.x,iY+offset1.y,iZ+offset1.z),
-                            jField.get(iX+offset2.x,iY+offset2.y,iZ+offset2.z) );
-                }
-            }
-        }
-    }
-}
-
-template<typename T, template<typename U> class Descriptor> 
-MaskedBoxRhoBarJfunctional3D<T,Descriptor>* MaskedBoxRhoBarJfunctional3D<T,Descriptor>::clone() const
-{
-    return new MaskedBoxRhoBarJfunctional3D<T,Descriptor>(*this);
-}
-
-template<typename T, template<typename U> class Descriptor> 
-void MaskedBoxRhoBarJfunctional3D<T,Descriptor>::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-    modified[0] = modif::nothing;  // lattice
-    modified[1] = modif::staticVariables;   // rhoBar
-    modified[2] = modif::staticVariables;   // j
-    modified[3] = modif::nothing;  // mask
-}
-
-
 template<typename T, template<typename U> class Descriptor>
 void BoxJfunctional3D<T,Descriptor>::process (
         Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
@@ -1963,12 +1920,6 @@ void BoxStrainRateFromStressFunctional3D<T,Descriptor>::process (
                     = S.get(iX+offset.x,iY+offset.y,iZ+offset.z);
                 cell.computePiNeq(element);
                 T omega     = cell.getDynamics().getOmega();
-                if (cell.getDynamics().hasMoments()) {
-                    T dynamicOmega = cell.getDynamics().getDynamicParameter(dynamicParams::dynamicOmega, cell);
-                    if (!util::isZero(dynamicOmega)) {
-                        omega = dynamicOmega;
-                    } 
-                }
                 T rhoBar    = cell.getDynamics().computeRhoBar(cell);
                 T prefactor = - omega * Descriptor<T>::invCs2 *
                                 Descriptor<T>::invRho(rhoBar) / (T)2;
@@ -2664,95 +2615,6 @@ template<typename T, template<typename U> class Descriptor>
 BlockDomain::DomainT BoxNTensorKinematicViscosityFunctional3D<T,Descriptor>::appliesTo() const {
     return BlockDomain::bulk;
 }
-
-
-template<typename T, template<typename U> class Descriptor>
-void BoxKinematicEddyViscosityFunctional3D<T,Descriptor>::process (
-    Box3D domain, BlockLattice3D<T,Descriptor>& lattice, ScalarField3D<T>& scalarField)
-{
-    Dot3D offset = computeRelativeDisplacement(lattice, scalarField);
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
-                Cell<T,Descriptor>& cell = lattice.get(iX, iY, iZ);
-                if (cell.getDynamics().hasMoments()) {
-                    T dynamicOmega = cell.getDynamics().getDynamicParameter(dynamicParams::dynamicOmega, cell);
-                    T omega = cell.getDynamics().getOmega();
-                    if (!util::isZero(dynamicOmega) && !util::isZero(omega)) {
-                        scalarField.get(iX+offset.x, iY+offset.y, iZ+offset.z) = 
-                            Descriptor<T>::cs2*((T) 1 / dynamicOmega - (T) 1 / omega);
-                    } else {
-                        scalarField.get(iX+offset.x, iY+offset.y, iZ+offset.z) = (T) 0;
-                    }
-                } else {
-                    scalarField.get(iX+offset.x, iY+offset.y, iZ+offset.z) = (T) 0;
-                }
-            }
-        }
-    }
-}
-
-template<typename T, template<typename U> class Descriptor>
-BoxKinematicEddyViscosityFunctional3D<T,Descriptor>* BoxKinematicEddyViscosityFunctional3D<T,Descriptor>::clone() const
-{
-    return new BoxKinematicEddyViscosityFunctional3D<T,Descriptor>(*this);
-}
-
-template<typename T, template<typename U> class Descriptor>
-void BoxKinematicEddyViscosityFunctional3D<T,Descriptor>::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-    modified[0] = modif::nothing;
-    modified[1] = modif::staticVariables;
-}
-
-template<typename T, template<typename U> class Descriptor>
-BlockDomain::DomainT BoxKinematicEddyViscosityFunctional3D<T,Descriptor>::appliesTo() const {
-    return BlockDomain::bulk;
-}
-
-template<typename T, template<typename U> class Descriptor>
-void BoxNTensorKinematicEddyViscosityFunctional3D<T,Descriptor>::process (
-    Box3D domain, BlockLattice3D<T,Descriptor>& lattice, NTensorField3D<T>& nu)
-{
-    PLB_PRECONDITION( nu.getNdim()==1 );
-    Dot3D offset = computeRelativeDisplacement(lattice, nu);
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
-                Cell<T,Descriptor>& cell = lattice.get(iX, iY, iZ);
-                if (cell.getDynamics().hasMoments()) {
-                    T dynamicOmega = cell.getDynamics().getDynamicParameter(dynamicParams::dynamicOmega, cell);
-                    T omega = cell.getDynamics().getOmega();
-                    if (!util::isZero(dynamicOmega) && !util::isZero(omega)) {
-                        *nu.get(iX+offset.x, iY+offset.y, iZ+offset.z) = 
-                            Descriptor<T>::cs2*((T) 1 / dynamicOmega - (T) 1 / omega);
-                    } else {
-                        *nu.get(iX+offset.x, iY+offset.y, iZ+offset.z) = (T) 0;
-                    }
-                } else {
-                    *nu.get(iX+offset.x, iY+offset.y, iZ+offset.z) = (T) 0;
-                }
-            }
-        }
-    }
-}
-
-template<typename T, template<typename U> class Descriptor>
-BoxNTensorKinematicEddyViscosityFunctional3D<T,Descriptor>* BoxNTensorKinematicEddyViscosityFunctional3D<T,Descriptor>::clone() const
-{
-    return new BoxNTensorKinematicEddyViscosityFunctional3D<T,Descriptor>(*this);
-}
-
-template<typename T, template<typename U> class Descriptor>
-void BoxNTensorKinematicEddyViscosityFunctional3D<T,Descriptor>::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-    modified[0] = modif::nothing;
-    modified[1] = modif::staticVariables;
-}
-
-template<typename T, template<typename U> class Descriptor>
-BlockDomain::DomainT BoxNTensorKinematicEddyViscosityFunctional3D<T,Descriptor>::appliesTo() const {
-    return BlockDomain::bulk;
-}
-
 
 template<typename T, template<typename U> class Descriptor>
 void BoxExternalForceFunctional3D<T,Descriptor>::process (
@@ -4971,58 +4833,6 @@ Array<T,nDim> BoxTensorSumFunctional3D<T,nDim>::getSumTensor() const
 }
 
 template<typename T, int nDim>
-MaskedBoxTensorSumFunctional3D<T,nDim>::MaskedBoxTensorSumFunctional3D(int flag_)
-    : flag(flag_)
-{
-    for (plint i = 0; i < nDim; i++) {
-        sumTensorId[i] = this->getStatistics().subscribeSum();
-    }
-}
-
-template<typename T, int nDim>
-void MaskedBoxTensorSumFunctional3D<T,nDim>::process (
-        Box3D domain,
-        ScalarField3D<int>& mask,
-        TensorField3D<T,nDim>& tensorField )
-{
-    Dot3D offset = computeRelativeDisplacement(mask, tensorField);
-    BlockStatistics& statistics = this->getStatistics();
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
-                if (mask.get(iX, iY, iZ)==flag) {
-                    for (plint i = 0; i < nDim; i++) {
-                        statistics.gatherSum(sumTensorId[i], (double) tensorField.get(iX+offset.x, iY+offset.y, iZ+offset.z)[i]);
-                    }
-                }
-            }
-        }
-    }
-}
-
-template<typename T, int nDim>
-MaskedBoxTensorSumFunctional3D<T,nDim>* MaskedBoxTensorSumFunctional3D<T,nDim>::clone() const
-{
-    return new MaskedBoxTensorSumFunctional3D<T,nDim>(*this);
-}
-
-template<typename T, int nDim>
-Array<T,nDim> MaskedBoxTensorSumFunctional3D<T,nDim>::getSumTensor() const
-{
-    Array<T,nDim> sum;
-    for (plint i = 0; i < nDim; i++) {
-        double doubleSum = this->getStatistics().getSum(sumTensorId[i]);
-        // The sum is internally computed on floating-point values. If T is
-        //   integer, the value must be rounded at the end.
-        if (std::numeric_limits<T>::is_integer) {
-            doubleSum = util::roundToInt(doubleSum);
-        }
-        sum[i] = doubleSum;
-    }
-    return sum;
-}
-
-template<typename T, int nDim>
 MaskedBoxTensorAverageFunctional3D<T,nDim>::MaskedBoxTensorAverageFunctional3D(int flag_)
     : flag(flag_)
 {
@@ -6961,59 +6771,6 @@ void LBMsmoothenTensor3D<T,nDim,Descriptor>::getTypeOfModification (
 {
     modified[0] = modif::nothing;
     modified[1] = modif::staticVariables;
-}
-
-
-/* ************* Class LBMsmoothenTensorInPlace3D ******************* */
-
-template<typename T, int nDim, template<typename U> class Descriptor>
-void LBMsmoothenTensorInPlace3D<T,nDim,Descriptor>::process (
-        Box3D domain, TensorField3D<T,nDim>& data )
-{
-    typedef Descriptor<T> D;
-
-    TensorField3D<T,nDim> smoothData(domain.getNx(), domain.getNy(), domain.getNz());
-    Dot3D offset(-domain.x0, -domain.y0, -domain.z0);
-
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
-                smoothData.get(iX+offset.x,iY+offset.y,iZ+offset.z).resetToZero();
-                T sum = (T) 0;
-                for (plint iPop=1; iPop<D::q; ++iPop) {
-                    plint nextX = iX+D::c[iPop][0];
-                    plint nextY = iY+D::c[iPop][1];
-                    plint nextZ = iZ+D::c[iPop][2];
-                    sum += D::t[iPop];
-                    smoothData.get(iX+offset.x,iY+offset.y,iZ+offset.z) +=
-                        D::t[iPop] * data.get(nextX,nextY,nextZ);
-                }
-                smoothData.get(iX+offset.x,iY+offset.y,iZ+offset.z) /= sum;
-            }
-        }
-    }
-
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
-                data.get(iX,iY,iZ) = smoothData.get(iX+offset.x,iY+offset.y,iZ+offset.z);
-            }
-        }
-    }
-}
-
-template<typename T, int nDim, template<typename U> class Descriptor>
-LBMsmoothenTensorInPlace3D<T,nDim,Descriptor>*
-    LBMsmoothenTensorInPlace3D<T,nDim,Descriptor>::clone() const
-{
-    return new LBMsmoothenTensorInPlace3D<T,nDim,Descriptor>(*this);
-}
-
-template<typename T, int nDim, template<typename U> class Descriptor>
-void LBMsmoothenTensorInPlace3D<T,nDim,Descriptor>::getTypeOfModification (
-        std::vector<modif::ModifT>& modified) const
-{
-    modified[0] = modif::staticVariables;
 }
 
 

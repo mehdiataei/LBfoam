@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,7 +29,8 @@
 #include "multiPhysics/freeSurfaceUtil3D.h"
 #include "multiPhysics/freeSurfaceAnalysis3D.h"
 
-namespace plb {
+namespace plb
+{
 
 /* ************** class FreeSurfaceCountWallCells3D ********************************** */
 
@@ -40,10 +41,14 @@ FreeSurfaceCountWallCells3D::FreeSurfaceCountWallCells3D()
 void FreeSurfaceCountWallCells3D::process(Box3D domain, ScalarField3D<int>& flag)
 {
     BlockStatistics& statistics = this->getStatistics();
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
-                if (freeSurfaceFlag::isAnyWall(flag.get(iX, iY, iZ))) {
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX)
+    {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+        {
+            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ)
+            {
+                if (freeSurfaceFlag3D::isAnyWall(flag.get(iX, iY, iZ)))
+                {
                     statistics.gatherIntSum(sumScalarId, (plint) 1);
                 }
             }
@@ -83,13 +88,17 @@ void FreeSurfaceComputeFluidBoundingBox3D::process(Box3D domain, ScalarField3D<i
 {
     Dot3D absOfs = flag.getLocation();
     BlockStatistics& statistics = this->getStatistics();
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX)
+    {
         plint x = iX + absOfs.x;
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+        {
             plint y = iY + absOfs.y;
-            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
+            for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ)
+            {
                 plint z = iZ + absOfs.z;
-                if (freeSurfaceFlag::isWet(flag.get(iX, iY, iZ))) {
+                if (freeSurfaceFlag3D::isWet(flag.get(iX, iY, iZ)))
+                {
                     // BlockStatistics computes only maximum, no minimum. Therefore,
                     //   the relation min(x) = -max(-x) is used.
                     statistics.gatherMax(minIdX, (double) -x);
@@ -142,4 +151,3 @@ Box3D freeSurfaceComputeFluidBoundingBox(MultiScalarField3D<int>& flag)
 }
 
 }  // namespace plb
-

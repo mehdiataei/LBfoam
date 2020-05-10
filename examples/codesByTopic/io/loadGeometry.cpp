@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -41,7 +41,8 @@ typedef double T;
 #define DESCRIPTOR descriptors::D2Q9Descriptor
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
 
@@ -51,17 +52,17 @@ int main(int argc, char* argv[]) {
         (T) 300.,  // Re
         40,        // N
         6.,        // lx
-        1.         // ly 
+        1.         // ly
     );
 
     writeLogFile(parameters, "Poiseuille flow");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-              parameters.getNx(), parameters.getNy(),
-              new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     MultiScalarField2D<bool> boolMask(parameters.getNx(), parameters.getNy());
 
@@ -74,13 +75,15 @@ int main(int argc, char* argv[]) {
     lattice.initialize();
 
     // Main loop over time iterations.
-    for (plint iT=0; iT<80000; ++iT) {
-        if (iT%1000==0) {
+    for (plint iT=0; iT<80000; ++iT)
+    {
+        if (iT%1000==0)
+        {
             pcout << "Writing image at dimensionless time " << iT*parameters.getDeltaT() << endl;
             ImageWriter<T> imageWriter("leeloo");
             imageWriter.writeScaledGif (
-                    createFileName("velocity", iT, 6),
-                    *computeVelocityNorm(lattice) );
+                createFileName("velocity", iT, 6),
+                *computeVelocityNorm(lattice) );
             pcout << computeAverageEnergy(lattice) << endl;
         }
 

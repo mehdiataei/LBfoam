@@ -22,7 +22,7 @@ projectFiles = womersley.cpp
 # Set optimization flags on/off
 optimize     = true
 # Set debug mode and debug flags on/off
-debug        = true
+debug        = false
 # Set profiling flags on/off
 profile      = false
 # Set MPI-parallel mode on/off (parallelism in cluster-like environment)
@@ -48,7 +48,7 @@ serialCXX    = g++
 # Compiler to use with MPI parallelism
 parallelCXX  = mpicxx
 # General compiler flags (e.g. -Wall to turn on all warnings on g++)
-compileFlags = -Wall -Wnon-virtual-dtor -std=c++11 #-DPLB_MAC_OS_X
+compileFlags = -Wall -Wnon-virtual-dtor -Wno-deprecated-declarations
 # General linker flags (don't put library includes into this flag)
 linkFlags    =
 # Compiler flags to use when optimization mode is on
@@ -87,8 +87,8 @@ SConsArgs = palabosRoot=$(palabosRoot) \
             libraries="$(libraries)"
 
 compile:
-	python2 $(SCons) $(SConsArgs)
+	python $(SCons) $(SConsArgs)
 
 clean:
-	python2 $(SCons) -c $(SConsArgs)
+	python $(SCons) -c $(SConsArgs)
 	/bin/rm -vf `find $(palabosRoot) -name '*~'`

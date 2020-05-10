@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,17 +28,20 @@
 #include "palabos2D.h"
 
 template<typename T>
-class CylinderShapeDomain2D : public plb::DomainFunctional2D {
+class CylinderShapeDomain2D : public plb::DomainFunctional2D
+{
 public:
     CylinderShapeDomain2D(plb::plint cx_, plb::plint cy_, plb::plint radius)
         : cx(cx_),
           cy(cy_),
           radiusSqr(plb::util::sqr(radius))
     { }
-    virtual bool operator() (plb::plint iX, plb::plint iY) const {
+    virtual bool operator() (plb::plint iX, plb::plint iY) const
+    {
         return plb::util::sqr(iX-cx) + plb::util::sqr(iY-cy) <= radiusSqr;
     }
-    virtual CylinderShapeDomain2D<T>* clone() const {
+    virtual CylinderShapeDomain2D<T>* clone() const
+    {
         return new CylinderShapeDomain2D<T>(*this);
     }
 private:

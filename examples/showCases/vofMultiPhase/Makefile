@@ -17,7 +17,7 @@
 # Leading directory of the Palabos source code
 palabosRoot  = ../../..
 # Name of source files in current directory to compile and link with Palabos
-projectFiles = damBreak3d.cpp
+projectFiles = damBreak2d.cpp
 #projectFiles = fallingDroplet.cpp
 
 # Set optimization flags on/off
@@ -49,7 +49,7 @@ serialCXX    = g++
 # Compiler to use with MPI parallelism
 parallelCXX  = mpicxx
 # General compiler flags (e.g. -Wall to turn on all warnings on g++)
-compileFlags = -Wall -Wnon-virtual-dtor -std=c++11 #-DPLB_MAC_OS_X
+compileFlags = -Wall -Wnon-virtual-dtor -Wno-deprecated-declarations #-DPLB_BSD
 # General linker flags (don't put library includes into this flag)
 linkFlags    =
 # Compiler flags to use when optimization mode is on
@@ -88,8 +88,8 @@ SConsArgs = palabosRoot=$(palabosRoot) \
             libraries="$(libraries)"
 
 compile:
-	python2 $(SCons) $(SConsArgs)
+	python2.7 $(SCons) $(SConsArgs)
 
 clean:
-	python2 $(SCons) -c $(SConsArgs)
+	python2.7 $(SCons) -c $(SConsArgs)
 	/bin/rm -vf `find $(palabosRoot) -name '*~'`

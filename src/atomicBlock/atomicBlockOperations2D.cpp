@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,7 +29,8 @@
 #include "atomicBlock/atomicBlockOperations2D.h"
 #include "core/plbDebug.h"
 
-namespace plb {
+namespace plb
+{
 
 void executeDataProcessor( DataProcessorGenerator2D const& generator,
                            std::vector<AtomicBlock2D*> objects )
@@ -97,6 +98,14 @@ void addInternalProcessor( DataProcessorGenerator2D const& generator,
     objects[0] = &object;
     addInternalProcessor(generator, objects, level);
 }
+// Added by Mehdi Ataei as part of LBfoam project
+void addInternalProcessor( DataProcessorGenerator2D const& generator, AtomicBlock2D& actor,
+                           std::vector<AtomicBlock2D*> objects, plint level )
+{
+    PLB_PRECONDITION( !objects.empty() );
+    actor.integrateDataProcessor(generator.generate(objects), level);
+}
+
 
 void addInternalProcessor( DataProcessorGenerator2D const& generator,
                            AtomicBlock2D& object1, AtomicBlock2D& object2,

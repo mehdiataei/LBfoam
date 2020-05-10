@@ -34,27 +34,27 @@
 #define EIGEN_MKL_SUPPORT_H
 
 #ifdef EIGEN_USE_MKL_ALL
-  #ifndef EIGEN_USE_BLAS
-    #define EIGEN_USE_BLAS
-  #endif
-  #ifndef EIGEN_USE_LAPACKE
-    #define EIGEN_USE_LAPACKE
-  #endif
-  #ifndef EIGEN_USE_MKL_VML
-    #define EIGEN_USE_MKL_VML
-  #endif
+#ifndef EIGEN_USE_BLAS
+#define EIGEN_USE_BLAS
+#endif
+#ifndef EIGEN_USE_LAPACKE
+#define EIGEN_USE_LAPACKE
+#endif
+#ifndef EIGEN_USE_MKL_VML
+#define EIGEN_USE_MKL_VML
+#endif
 #endif
 
 #ifdef EIGEN_USE_LAPACKE_STRICT
-  #define EIGEN_USE_LAPACKE
+#define EIGEN_USE_LAPACKE
 #endif
 
 #if defined(EIGEN_USE_MKL_VML)
-  #define EIGEN_USE_MKL
+#define EIGEN_USE_MKL
 #endif
 
 #if defined EIGEN_USE_MKL
-#   include <mkl.h> 
+#   include <mkl.h>
 /*Check IMKL version for compatibility: < 10.3 is not usable with Eigen*/
 #   ifndef INTEL_MKL_VERSION
 #       undef EIGEN_USE_MKL /* INTEL_MKL_VERSION is not even defined on older versions */
@@ -62,7 +62,7 @@
 #       undef EIGEN_USE_MKL
 #   endif
 #   ifndef EIGEN_USE_MKL
-    /*If the MKL version is too old, undef everything*/
+/*If the MKL version is too old, undef everything*/
 #       undef   EIGEN_USE_MKL_ALL
 #       undef   EIGEN_USE_LAPACKE
 #       undef   EIGEN_USE_MKL_VML
@@ -108,7 +108,8 @@
 #endif
 #endif
 
-namespace Eigen {
+namespace Eigen
+{
 
 typedef std::complex<double> dcomplex;
 typedef std::complex<float>  scomplex;

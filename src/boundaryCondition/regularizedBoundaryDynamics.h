@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,52 +32,53 @@
 #include "core/globalDefs.h"
 #include "boundaryCondition/boundaryDynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 /// Regularized velocity boundary dynamics for a straight wall
 template<typename T, template<typename U> class Descriptor,
          int direction, int orientation>
 class RegularizedVelocityBoundaryDynamics :
-    public VelocityDirichletBoundaryDynamics<T,Descriptor,direction,orientation>
+	public VelocityDirichletBoundaryDynamics<T,Descriptor,direction,orientation>
 {
 public:
-    RegularizedVelocityBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics_,
-                                        bool automaticPrepareCollision_=true);
-    RegularizedVelocityBoundaryDynamics(HierarchicUnserializer& unserializer);
+	RegularizedVelocityBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics_,
+	                                    bool automaticPrepareCollision_=true);
+	RegularizedVelocityBoundaryDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object, based on its dynamic type
-    virtual RegularizedVelocityBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
+	/// Clone the object, based on its dynamic type
+	virtual RegularizedVelocityBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Execute completion scheme before base collision
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	/// Execute completion scheme before base collision
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// Regularized velocity boundary dynamics for a straight wall
 template<typename T, template<typename U> class Descriptor,
          int direction, int orientation>
 class RegularizedVelocityConstRhoBoundaryDynamics :
-    public VelocityDirichletConstRhoBoundaryDynamics<T,Descriptor,direction,orientation>
+	public VelocityDirichletConstRhoBoundaryDynamics<T,Descriptor,direction,orientation>
 {
 public:
-    RegularizedVelocityConstRhoBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics_,
-                                        bool automaticPrepareCollision_=true);
-    RegularizedVelocityConstRhoBoundaryDynamics(HierarchicUnserializer& unserializer);
+	RegularizedVelocityConstRhoBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics_,
+	        bool automaticPrepareCollision_=true);
+	RegularizedVelocityConstRhoBoundaryDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object, based on its dynamic type
-    virtual RegularizedVelocityConstRhoBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
+	/// Clone the object, based on its dynamic type
+	virtual RegularizedVelocityConstRhoBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Execute completion scheme before base collision
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	/// Execute completion scheme before base collision
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// Regularized density Dirichlet boundary dynamics for a straight wall
@@ -86,20 +87,20 @@ template<typename T, template<typename U> class Descriptor,
 class RegularizedDensityBoundaryDynamics : public DensityDirichletBoundaryDynamics<T,Descriptor,direction,orientation>
 {
 public:
-    RegularizedDensityBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics_,
-                                       bool automaticPrepareCollision_=true);
-    RegularizedDensityBoundaryDynamics(HierarchicUnserializer& unserializer);
+	RegularizedDensityBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics_,
+	                                   bool automaticPrepareCollision_=true);
+	RegularizedDensityBoundaryDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object, based on its dynamic type
-    virtual RegularizedDensityBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
+	/// Clone the object, based on its dynamic type
+	virtual RegularizedDensityBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Execute completion scheme before base collision
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	/// Execute completion scheme before base collision
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
 private:
-    static int id;
+	static int id;
 };
 
 }  // namespace plb

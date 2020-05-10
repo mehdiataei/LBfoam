@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,61 +31,65 @@
 #include "core/globalDefs.h"
 #include "multiBlock/multiDataField2D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class SerialScalarAccess2D : public MultiScalarAccess2D<T> {
+class SerialScalarAccess2D : public MultiScalarAccess2D<T>
+{
 public:
-    SerialScalarAccess2D();
-    virtual T& getDistributedScalar (
-            plint iX, plint iY,
-            MultiBlockManagement2D const& multiBlockManagement,
-            std::map<plint,ScalarField2D<T>*>& fields );
-    virtual T const& getDistributedScalar (
-            plint iX, plint iY,
-            MultiBlockManagement2D const& multiBlockManagement,
-            std::map<plint,ScalarField2D<T>*> const& fields ) const;
-    virtual SerialScalarAccess2D<T>* clone() const;
+	SerialScalarAccess2D();
+	virtual T& getDistributedScalar (
+	    plint iX, plint iY,
+	    MultiBlockManagement2D const& multiBlockManagement,
+	    std::map<plint,ScalarField2D<T>*>& fields );
+	virtual T const& getDistributedScalar (
+	    plint iX, plint iY,
+	    MultiBlockManagement2D const& multiBlockManagement,
+	    std::map<plint,ScalarField2D<T>*> const& fields ) const;
+	virtual SerialScalarAccess2D<T>* clone() const;
 private:
-    mutable plint locatedBlock;
+	mutable plint locatedBlock;
 };
 
 
 template<typename T, int nDim>
-class SerialTensorAccess2D : public MultiTensorAccess2D<T,nDim> {
+class SerialTensorAccess2D : public MultiTensorAccess2D<T,nDim>
+{
 public:
-    SerialTensorAccess2D();
-    virtual Array<T,nDim>& getDistributedTensor (
-            plint iX, plint iY,
-            MultiBlockManagement2D const& multiBlockManagement,
-            std::map<plint,TensorField2D<T,nDim>*>& fields );
-    virtual Array<T,nDim> const& getDistributedTensor (
-            plint iX, plint iY,
-            MultiBlockManagement2D const& multiBlockManagement,
-            std::map<plint,TensorField2D<T,nDim>*> const& fields ) const;
-    virtual SerialTensorAccess2D<T,nDim>* clone() const;
+	SerialTensorAccess2D();
+	virtual Array<T,nDim>& getDistributedTensor (
+	    plint iX, plint iY,
+	    MultiBlockManagement2D const& multiBlockManagement,
+	    std::map<plint,TensorField2D<T,nDim>*>& fields );
+	virtual Array<T,nDim> const& getDistributedTensor (
+	    plint iX, plint iY,
+	    MultiBlockManagement2D const& multiBlockManagement,
+	    std::map<plint,TensorField2D<T,nDim>*> const& fields ) const;
+	virtual SerialTensorAccess2D<T,nDim>* clone() const;
 private:
-    mutable plint locatedBlock;
+	mutable plint locatedBlock;
 };
 
 
 template<typename T>
-class SerialNTensorAccess2D : public MultiNTensorAccess2D<T> {
+class SerialNTensorAccess2D : public MultiNTensorAccess2D<T>
+{
 public:
-    SerialNTensorAccess2D();
-    virtual T* getDistributedNTensor (
-            plint iX, plint iY,
-            MultiBlockManagement2D const& multiBlockManagement,
-            std::map<plint,NTensorField2D<T>*>& fields );
-    virtual T const* getDistributedNTensor (
-            plint iX, plint iY,
-            MultiBlockManagement2D const& multiBlockManagement,
-            std::map<plint,NTensorField2D<T>*> const& fields ) const;
-    virtual SerialNTensorAccess2D<T>* clone() const;
+	SerialNTensorAccess2D();
+	virtual T* getDistributedNTensor (
+	    plint iX, plint iY,
+	    MultiBlockManagement2D const& multiBlockManagement,
+	    std::map<plint,NTensorField2D<T>*>& fields );
+	virtual T const* getDistributedNTensor (
+	    plint iX, plint iY,
+	    MultiBlockManagement2D const& multiBlockManagement,
+	    std::map<plint,NTensorField2D<T>*> const& fields ) const;
+	virtual SerialNTensorAccess2D<T>* clone() const;
 private:
-    mutable plint locatedBlock;
+	mutable plint locatedBlock;
 };
- 
+
 }  // namespace plb
 
 #endif  // SERIAL_MULTI_DATA_FIELD_2D_H

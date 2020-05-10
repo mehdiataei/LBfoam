@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,110 +32,115 @@
 #include "core/globalDefs.h"
 #include "core/dynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 /// Implementation of O(Ma^2) BGK dynamics with adjustable speed of sound
 template<typename T, template<typename U> class Descriptor>
-class WaveDynamics : public IsoThermalBulkDynamics<T,Descriptor> {
+class WaveDynamics : public IsoThermalBulkDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    WaveDynamics(T vs2_);
-    WaveDynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	WaveDynamics(T vs2_);
+	WaveDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual WaveDynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual WaveDynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Serialize the dynamics object.
-    virtual void serialize(HierarchicSerializer& serializer) const;
+	/// Serialize the dynamics object.
+	virtual void serialize(HierarchicSerializer& serializer) const;
 
-    /// Un-Serialize the dynamics object.
-    virtual void unserialize(HierarchicUnserializer& unserializer);
+	/// Un-Serialize the dynamics object.
+	virtual void unserialize(HierarchicUnserializer& unserializer);
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Implementation of the collision step, with imposed macroscopic variables
-    virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
-                         Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
+	/// Implementation of the collision step, with imposed macroscopic variables
+	virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
+	                             Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
-    
-/* *************** Configurable parameters *************************** */
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 
-    /// Set local value of any generic parameter
-    virtual void setParameter(plint whichParameter, T value);
-    /// Get local value of any generic parameter
-    virtual T getParameter(plint whichParameter) const;
-    /// Set local speed of sound
-    void setVs2(T vs2_);
-    /// Get local speed of sound
-    T    getVs2() const;
+	/* *************** Configurable parameters *************************** */
+
+	/// Set local value of any generic parameter
+	virtual void setParameter(plint whichParameter, T value);
+	/// Get local value of any generic parameter
+	virtual T getParameter(plint whichParameter) const;
+	/// Set local speed of sound
+	void setVs2(T vs2_);
+	/// Get local speed of sound
+	T    getVs2() const;
 
 private:
-/* *************** Static implementation methods********************** */
+	/* *************** Static implementation methods********************** */
 
-    /// Implementation of collision operator
-    static T waveCollision (
-        Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j, T vs2);
-    /// Implementation of equilibrium
-    static T waveEquilibrium (
-        plint iPop, T rhoBar, T invRho, Array<T,Descriptor<T>::d> const& j, T jSqr, T vs2);
+	/// Implementation of collision operator
+	static T waveCollision (
+	    Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j, T vs2);
+	/// Implementation of equilibrium
+	static T waveEquilibrium (
+	    plint iPop, T rhoBar, T invRho, Array<T,Descriptor<T>::d> const& j, T jSqr, T vs2);
 private:
-    T vs2;    ///< speed of sound
+	T vs2;    ///< speed of sound
 private:
-    static int id;
+	static int id;
 };
 
 
-/// This class implements the absorbing condition of H. Xu 
+/// This class implements the absorbing condition of H. Xu
 template<typename T, template<typename U> class Descriptor>
-class WaveAbsorptionDynamics : public CompositeDynamics<T,Descriptor> {
+class WaveAbsorptionDynamics : public CompositeDynamics<T,Descriptor>
+{
 public:
-    WaveAbsorptionDynamics(Dynamics<T,Descriptor>* baseDynamics_);
-    WaveAbsorptionDynamics(HierarchicUnserializer& unserializer);
-    virtual void collide(Cell<T,Descriptor>& cell, BlockStatistics& statistics_);
-    virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
-                         Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
-    virtual WaveAbsorptionDynamics<T,Descriptor>* clone() const {
-        return new WaveAbsorptionDynamics<T,Descriptor>(*this);
-    }
-    virtual void prepareCollision(Cell<T,Descriptor>& cell);
-        /// Return a unique ID for this class.
+	WaveAbsorptionDynamics(Dynamics<T,Descriptor>* baseDynamics_);
+	WaveAbsorptionDynamics(HierarchicUnserializer& unserializer);
+	virtual void collide(Cell<T,Descriptor>& cell, BlockStatistics& statistics_);
+	virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
+	                             Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
+	virtual WaveAbsorptionDynamics<T,Descriptor>* clone() const
+	{
+		return new WaveAbsorptionDynamics<T,Descriptor>(*this);
+	}
+	virtual void prepareCollision(Cell<T,Descriptor>& cell);
+	/// Return a unique ID for this class.
 
-    /// Recompose from moment representation to population representation.
-    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;
-    virtual void recomposeOrder0(Cell<T,Descriptor>& cell, std::vector<T> const& rawData) const;
-    virtual void recomposeOrder1(Cell<T,Descriptor>& cell, std::vector<T> const& rawData) const;
+	/// Recompose from moment representation to population representation.
+	virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;
+	virtual void recomposeOrder0(Cell<T,Descriptor>& cell, std::vector<T> const& rawData) const;
+	virtual void recomposeOrder1(Cell<T,Descriptor>& cell, std::vector<T> const& rawData) const;
 
-    virtual int getId() const;
+	virtual int getId() const;
 private:
-    static int id;
+	static int id;
 };
 
 // Declaration of a specific "sigma" function for WaveAbsorptionDynamics.
 
 template<typename T>
-class WaveAbsorptionSigmaFunction3D {
+class WaveAbsorptionSigmaFunction3D
+{
 public:
-    WaveAbsorptionSigmaFunction3D(Box3D domain_, Array<plint,6> const& numCells_, T omega_);
-    T operator()(plint iX, plint iY, plint iZ) const;
+	WaveAbsorptionSigmaFunction3D(Box3D domain_, Array<plint,6> const& numCells_, T omega_);
+	T operator()(plint iX, plint iY, plint iZ) const;
 
 private:
-    void addDistance(plint from, plint pos, std::vector<plint>& distances, plint i) const;
-    T sigma(T x0, T x1, T x) const;
+	void addDistance(plint from, plint pos, std::vector<plint>& distances, plint i) const;
+	T sigma(T x0, T x1, T x) const;
 
 private:
-    Box3D domain;
-    Array<plint,6> numCells;
-    T xi;
+	Box3D domain;
+	Array<plint,6> numCells;
+	T xi;
 };
 
 }  // namespace plb

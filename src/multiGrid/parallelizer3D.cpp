@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,8 +33,9 @@
 #include "multiGrid/multiScale.h"
 #include "io/parallelIO.h"
 
-namespace plb {
-    
+namespace plb
+{
+
 void Parallelizer3D::parallelizeLevel(plint whichLevel,
                                       std::vector<std::vector<Box3D> > const& originalBlocks,
                                       std::vector<Box3D> const& parallelRegions,
@@ -44,12 +45,15 @@ void Parallelizer3D::parallelizeLevel(plint whichLevel,
     PLB_PRECONDITION( whichLevel < (plint)originalBlocks.size() );
     std::vector<Box3D> newBlocks;
     // IDs are going to be reattributed at the level whichLevel.
-    if (finalMpiDistribution.size() <= (pluint)whichLevel) {
+    if (finalMpiDistribution.size() <= (pluint)whichLevel)
+    {
         finalMpiDistribution.resize(whichLevel+1);
     }
-    for (pluint iRegion=0; iRegion<parallelRegions.size(); ++iRegion) {
+    for (pluint iRegion=0; iRegion<parallelRegions.size(); ++iRegion)
+    {
         plint currentId = regionIDs[iRegion];
-        for (pluint iBlock=0; iBlock<originalBlocks[whichLevel].size(); ++iBlock) {
+        for (pluint iBlock=0; iBlock<originalBlocks[whichLevel].size(); ++iBlock)
+        {
             Box3D intersection;
             if ( intersect( originalBlocks[whichLevel][iBlock],
                             parallelRegions[iRegion], intersection ) )
@@ -63,45 +67,53 @@ void Parallelizer3D::parallelizeLevel(plint whichLevel,
     recomputedBlocks[whichLevel].insert( recomputedBlocks[whichLevel].end(),newBlocks.begin(),newBlocks.end() );
 }
 
-plint Parallelizer3D::computeCost(std::vector<std::vector<Box3D> > const& originalBlocks, Box3D box){
+plint Parallelizer3D::computeCost(std::vector<std::vector<Box3D> > const& originalBlocks, Box3D box)
+{
     plint totalCost = 0;
     plint numLevels = originalBlocks.size();
-    
-    for (plint iLevel=(plint)originalBlocks.size()-1; iLevel>=0; --iLevel){
+
+    for (plint iLevel=(plint)originalBlocks.size()-1; iLevel>=0; --iLevel)
+    {
         // convert the box to the current level
         Box3D levelBox = global::getDefaultMultiScaleManager().scaleBox(box,iLevel-(numLevels-1));
-        for (pluint iComp=0; iComp<originalBlocks[iLevel].size(); ++iComp){
+        for (pluint iComp=0; iComp<originalBlocks[iLevel].size(); ++iComp)
+        {
             Box3D currentBox;
-            if (intersect(originalBlocks[iLevel][iComp], levelBox, currentBox)){
+            if (intersect(originalBlocks[iLevel][iComp], levelBox, currentBox))
+            {
                 plint volume = currentBox.getNx()*currentBox.getNy()*currentBox.getNz();
                 totalCost += (plint) util::twoToThePower(iLevel) * volume;
             }
         }
     }
-    
+
     return totalCost;
 }
 
 /* ************* ParallellizeByCubes3D ************************************** */
 ParallellizeByCubes3D::ParallellizeByCubes3D(std::vector<std::vector<Box3D> > const& originalBlocks_,
-                                     Box3D finestBoundingBox_, plint xTiles_, plint yTiles_, plint zTiles_,
-                                     bool optimiseDivision)
+        Box3D finestBoundingBox_, plint xTiles_, plint yTiles_, plint zTiles_,
+        bool optimiseDivision)
     : originalBlocks(originalBlocks_), finestBoundingBox(finestBoundingBox_),
-      processorNumber(global::mpi().getSize()),xTiles(xTiles_),yTiles(yTiles_),zTiles(zTiles_) 
+      processorNumber(global::mpi().getSize()),xTiles(xTiles_),yTiles(yTiles_),zTiles(zTiles_)
 {
     // divide the finest bounding box in xTiles by yTiles by zTiles cubes
-    if(!optimiseDivision){
+    if(!optimiseDivision)
+    {
         computeFinestDivision();
-    } else{
+    }
+    else
+    {
         computeDivision();
     }
 }
 
-void ParallellizeByCubes3D::computeFinestDivision(){
+void ParallellizeByCubes3D::computeFinestDivision()
+{
     std::vector<std::pair<plint,plint> > rangesX;
     std::vector<std::pair<plint,plint> > rangesY;
     std::vector<std::pair<plint,plint> > rangesZ;
-    
+
     plint nx = finestBoundingBox.x1;
     plint ny = finestBoundingBox.y1;
     plint nz = finestBoundingBox.z1;
@@ -112,13 +124,16 @@ void ParallellizeByCubes3D::computeFinestDivision(){
 
     finestDivision.resize(0);
     mpiDistribution.resize(xTiles*yTiles*zTiles);
-    
-    for (plint iX=0; iX<(plint)rangesX.size(); ++iX){
-        for (plint iY=0; iY<(plint)rangesY.size(); ++iY){
-            for (plint iZ=0; iZ<(plint)rangesZ.size(); ++iZ){
+
+    for (plint iX=0; iX<(plint)rangesX.size(); ++iX)
+    {
+        for (plint iY=0; iY<(plint)rangesY.size(); ++iY)
+        {
+            for (plint iZ=0; iZ<(plint)rangesZ.size(); ++iZ)
+            {
                 // create a Box3D with coordinates for the new sector
                 Box3D box(rangesX[iX].first,rangesX[iX].second,rangesY[iY].first,rangesY[iY].second,
-                      rangesZ[iZ].first,rangesZ[iZ].second);
+                          rangesZ[iZ].first,rangesZ[iZ].second);
                 // put it in the finestDivision
                 finestDivision.push_back(box);
             }
@@ -126,7 +141,8 @@ void ParallellizeByCubes3D::computeFinestDivision(){
     }
 }
 
-void ParallellizeByCubes3D::computeDivision(){
+void ParallellizeByCubes3D::computeDivision()
+{
     // compute a simple linear Repartition
     std::vector<std::pair<plint,plint> > rangesX;
     std::vector<std::pair<plint,plint> > rangesY;
@@ -149,9 +165,11 @@ void ParallellizeByCubes3D::computeDivision(){
     bool notDoneYet = true;
 
     // xrange
-    while(notDoneYet){
+    while(notDoneYet)
+    {
         notDoneYet = false;
-        for (plint iX=0; iX<(plint)rangesX.size()-1; ++iX){
+        for (plint iX=0; iX<(plint)rangesX.size()-1; ++iX)
+        {
             box1 = Box3D(rangesX[iX].first,rangesX[iX].second,
                          0, finestBoundingBox.y1,
                          0, finestBoundingBox.z1);
@@ -161,14 +179,18 @@ void ParallellizeByCubes3D::computeDivision(){
             cost1 = computeCost(originalBlocks,box1);
             cost2 = computeCost(originalBlocks,box2);
 
-            if(cost1 <= 1.05*cost2 && cost1 >= 0.95*cost2){ //allow a tolerance of 10%
+            if(cost1 <= 1.05*cost2 && cost1 >= 0.95*cost2)   //allow a tolerance of 10%
+            {
                 // do nothing
-            } else if(cost1<cost2){
+            }
+            else if(cost1<cost2)
+            {
                 ++rangesX[iX].second;
                 ++rangesX[iX+1].first;
                 notDoneYet = true;
             }
-            else{
+            else
+            {
                 --rangesX[iX].second;
                 --rangesX[iX+1].first;
                 notDoneYet = true;
@@ -177,9 +199,11 @@ void ParallellizeByCubes3D::computeDivision(){
     }
     // yrange
     notDoneYet = true;
-    while(notDoneYet){
+    while(notDoneYet)
+    {
         notDoneYet = false;
-        for (plint iY=0; iY<(plint)rangesY.size()-1; ++iY){
+        for (plint iY=0; iY<(plint)rangesY.size()-1; ++iY)
+        {
             box1 = Box3D(0, finestBoundingBox.x1,
                          rangesY[iY].first,rangesY[iY].second,
                          0, finestBoundingBox.z1);
@@ -189,14 +213,18 @@ void ParallellizeByCubes3D::computeDivision(){
             cost1 = computeCost(originalBlocks,box1);
             cost2 = computeCost(originalBlocks,box2);
 
-            if(cost1 <= 1.05*cost2 && cost1 >= 0.95*cost2){ //allow a tolerance of 10%
+            if(cost1 <= 1.05*cost2 && cost1 >= 0.95*cost2)   //allow a tolerance of 10%
+            {
                 // do nothing
-            } else if(cost1<cost2){
+            }
+            else if(cost1<cost2)
+            {
                 ++rangesY[iY].second;
                 ++rangesY[iY+1].first;
                 notDoneYet = true;
             }
-            else{
+            else
+            {
                 --rangesY[iY].second;
                 --rangesY[iY+1].first;
                 notDoneYet = true;
@@ -205,9 +233,11 @@ void ParallellizeByCubes3D::computeDivision(){
     }
     // zrange
     notDoneYet = true;
-    while(notDoneYet){
+    while(notDoneYet)
+    {
         notDoneYet = false;
-        for (plint iZ=0; iZ<(plint)rangesZ.size()-1; ++iZ){
+        for (plint iZ=0; iZ<(plint)rangesZ.size()-1; ++iZ)
+        {
             box1 = Box3D(0, finestBoundingBox.x1,
                          0, finestBoundingBox.y1,
                          rangesZ[iZ].first,rangesZ[iZ].second);
@@ -217,14 +247,18 @@ void ParallellizeByCubes3D::computeDivision(){
             cost1 = computeCost(originalBlocks,box1);
             cost2 = computeCost(originalBlocks,box2);
 
-            if(cost1 <= 1.05*cost2 && cost1 >= 0.95*cost2){ //allow a tolerance of 10%
+            if(cost1 <= 1.05*cost2 && cost1 >= 0.95*cost2)   //allow a tolerance of 10%
+            {
                 // do nothing
-            } else if(cost1<cost2){
+            }
+            else if(cost1<cost2)
+            {
                 ++rangesZ[iZ].second;
                 ++rangesZ[iZ+1].first;
                 notDoneYet = true;
             }
-            else{
+            else
+            {
                 --rangesZ[iZ].second;
                 --rangesZ[iZ+1].first;
                 notDoneYet = true;
@@ -234,39 +268,51 @@ void ParallellizeByCubes3D::computeDivision(){
 
     // check that we're not dividing the fineGridBoundaryDynamics
     // (because this causes problems)...
-    for(plint iX=0; iX<(plint)rangesX.size()-1; ++iX){
-        for(pluint iLevel=0; iLevel < originalBlocks.size(); ++iLevel){
-            for(pluint iBox=0; iBox < originalBlocks[iLevel].size(); ++iBox){
+    for(plint iX=0; iX<(plint)rangesX.size()-1; ++iX)
+    {
+        for(pluint iLevel=0; iLevel < originalBlocks.size(); ++iLevel)
+        {
+            for(pluint iBox=0; iBox < originalBlocks[iLevel].size(); ++iBox)
+            {
                 plint x0 = originalBlocks[iLevel][iBox].x0;
                 plint x1 = originalBlocks[iLevel][iBox].x1;
                 if((rangesX[iX].second > x0-5 && rangesX[iX].second < x0+5) ||
-                   (rangesX[iX].second > x1-5 && rangesX[iX].second < x1+5)){
+                        (rangesX[iX].second > x1-5 && rangesX[iX].second < x1+5))
+                {
                     rangesX[iX].second -= 10;
                     rangesX[iX+1].first -= 10;
                 }
             }
         }
     }
-    for(plint iY=0; iY<(plint)rangesY.size()-1; ++iY){
-        for(pluint iLevel=0; iLevel < originalBlocks.size(); ++iLevel){
-            for(pluint iBox=0; iBox < originalBlocks[iLevel].size(); ++iBox){
+    for(plint iY=0; iY<(plint)rangesY.size()-1; ++iY)
+    {
+        for(pluint iLevel=0; iLevel < originalBlocks.size(); ++iLevel)
+        {
+            for(pluint iBox=0; iBox < originalBlocks[iLevel].size(); ++iBox)
+            {
                 plint y0 = originalBlocks[iLevel][iBox].y0;
                 plint y1 = originalBlocks[iLevel][iBox].y1;
                 if((rangesY[iY].second > y0-5 && rangesY[iY].second < y0+5) ||
-                   (rangesY[iY].second > y1-5 && rangesY[iY].second < y1+5)){
+                        (rangesY[iY].second > y1-5 && rangesY[iY].second < y1+5))
+                {
                     rangesY[iY].second -= 10;
                     rangesY[iY+1].first -= 10;
                 }
             }
         }
     }
-    for(plint iZ=0; iZ<(plint)rangesZ.size()-1; ++iZ){
-        for(pluint iLevel=0; iLevel < originalBlocks.size(); ++iLevel){
-            for(pluint iBox=0; iBox < originalBlocks[iLevel].size(); ++iBox){
+    for(plint iZ=0; iZ<(plint)rangesZ.size()-1; ++iZ)
+    {
+        for(pluint iLevel=0; iLevel < originalBlocks.size(); ++iLevel)
+        {
+            for(pluint iBox=0; iBox < originalBlocks[iLevel].size(); ++iBox)
+            {
                 plint z0 = originalBlocks[iLevel][iBox].z0;
                 plint z1 = originalBlocks[iLevel][iBox].z1;
                 if((rangesZ[iZ].second > z0-5 && rangesZ[iZ].second < z0+5) ||
-                   (rangesZ[iZ].second > z1-5 && rangesZ[iZ].second < z1+5)){
+                        (rangesZ[iZ].second > z1-5 && rangesZ[iZ].second < z1+5))
+                {
                     rangesZ[iZ].second -= 10;
                     rangesZ[iZ+1].first -= 10;
                 }
@@ -278,12 +324,15 @@ void ParallellizeByCubes3D::computeDivision(){
     finestDivision.resize(0);
     mpiDistribution.resize(xTiles*yTiles*zTiles);
 
-    for (plint iX=0; iX<(plint)rangesX.size(); ++iX){
-        for (plint iY=0; iY<(plint)rangesY.size(); ++iY){
-            for (plint iZ=0; iZ<(plint)rangesZ.size(); ++iZ){
+    for (plint iX=0; iX<(plint)rangesX.size(); ++iX)
+    {
+        for (plint iY=0; iY<(plint)rangesY.size(); ++iY)
+        {
+            for (plint iZ=0; iZ<(plint)rangesZ.size(); ++iZ)
+            {
                 // create a Box3D with coordinates for the new sector
                 Box3D box(rangesX[iX].first,rangesX[iX].second,rangesY[iY].first,rangesY[iY].second,
-                      rangesZ[iZ].first,rangesZ[iZ].second);
+                          rangesZ[iZ].first,rangesZ[iZ].second);
                 // put it in the finestDivision
                 finestDivision.push_back(box);
             }
@@ -292,18 +341,19 @@ void ParallellizeByCubes3D::computeDivision(){
 }
 
 
-void ParallellizeByCubes3D::parallelize(){
+void ParallellizeByCubes3D::parallelize()
+{
     // we must have the same number of blocks as processors
     PLB_PRECONDITION(xTiles*yTiles*zTiles == processorNumber);
     plint totalCost = computeCost(originalBlocks, finestBoundingBox);
     plint idealCostPerProcessor = totalCost/processorNumber;
-    
+
     pcout << "Total cost of computations = " << totalCost << std::endl;
     pcout << "We are using " << processorNumber << " processors...\n";
     pcout << "Ideal cost per processor = " << idealCostPerProcessor << std::endl;
-    
+
     std::vector<plint> totalCosts(processorNumber);
-    
+
     // greedy load balancing part
 //     plint currentProcessor = 0;
 //     bool allAssigned = false;
@@ -327,14 +377,15 @@ void ParallellizeByCubes3D::parallelize(){
 //             allAssigned = true;
 //         }
 //     }
-//     
+//
 //     if (maxBlockCost > idealCostPerProcessor){
 //         pcout << "There is a problem : maxBlockCost=" << maxBlockCost << " and ideal cost=" << idealCostPerProcessor
 //               << std::endl;
 //     }
 
     plint total = 0;
-    for (plint iProc=0; iProc<processorNumber; ++iProc){
+    for (plint iProc=0; iProc<processorNumber; ++iProc)
+    {
         plint blockCost = computeCost(originalBlocks,finestDivision[iProc]);
         totalCosts[iProc] += blockCost;
         mpiDistribution[iProc] = iProc;
@@ -342,28 +393,32 @@ void ParallellizeByCubes3D::parallelize(){
     }
 
     pcout << "---- Costs Per Processor ----\n";
-    for (pluint i=0; i<totalCosts.size(); ++i){
+    for (pluint i=0; i<totalCosts.size(); ++i)
+    {
         pcout << i << " : " << totalCosts[i] << std::endl;
         // check if everyone is doing something
-        if (totalCosts[i] == 0){
+        if (totalCosts[i] == 0)
+        {
             pcout << "\t >> processor " << i << " does not have work to do. Exiting.....\n";
             std::exit(1);
         }
     }
-    
+
     pcout << "*******************************\n";
     pcout << "Sum of all costs = " << total << std::endl;
     pcout << "*******************************\n";
-    
+
     // convert the original blocks to the new blocks
     recomputedBlocks.resize(originalBlocks.size());
     finalMpiDistribution.resize(originalBlocks.size());
-    
+
     plint finestLevel= (plint)originalBlocks.size()-1;
-    for (plint iLevel=finestLevel; iLevel>=0; --iLevel) {
+    for (plint iLevel=finestLevel; iLevel>=0; --iLevel)
+    {
         parallelizeLevel(iLevel, originalBlocks,finestDivision, mpiDistribution);
         // Adapt the regions to the next-coarser level.
-        for (pluint iRegion=0; iRegion<finestDivision.size(); ++iRegion) {
+        for (pluint iRegion=0; iRegion<finestDivision.size(); ++iRegion)
+        {
             finestDivision[iRegion] = finestDivision[iRegion].divideAndFitSmaller(2);
         }
     }

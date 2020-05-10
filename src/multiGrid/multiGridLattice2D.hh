@@ -446,17 +446,17 @@ void MultiGridLattice2D<T,Descriptor>::eliminateStatisticsInOverlap(){
  *   performing a union of multi blocks.
  */
 template <typename T, template <typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > MultiGridLattice2D<T,Descriptor>::convertToLevel(plint level) const
+std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > MultiGridLattice2D<T,Descriptor>::convertToLevel(plint level) const
 {
     // create the resulting multiBlock
-    std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > result = 
+    std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > result = 
         generateMultiBlockLattice<T,Descriptor>(
                                 lattices[level]->getBoundingBox(),
                                 lattices[level]->getBackgroundDynamics().clone(),
                                 lattices[level]->getMultiBlockManagement().getEnvelopeWidth() );
                                 
     // create the first lattice to start looping
-    std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > refined = 
+    std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > refined = 
         generateMultiBlockLattice<T,Descriptor>(
                                 lattices[0]->getBoundingBox(),
                                 lattices[0]->getBackgroundDynamics().clone(),
@@ -469,7 +469,7 @@ std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > MultiGridLattice2D<T,Descrip
     for (plint iLevel=0; iLevel<(plint)level; ++iLevel){
         plint envelopeWidth = lattices[iLevel+1]->getMultiBlockManagement().getEnvelopeWidth();
         // interpolate lattice at iLevel
-        std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > tmp = 
+        std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > tmp = 
             refine(*refined,-1,-1,refined->getBackgroundDynamics().clone());
         
         refined = generateMultiBlockLattice<T,Descriptor>(lattices[iLevel+1]->getBoundingBox(),
@@ -484,8 +484,8 @@ std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > MultiGridLattice2D<T,Descrip
     
     // create the last lattice to start looping in the other orientation
     plint lastLevel = getNumLevels()-1;
-    std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > coarsened = 
-        std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > ( 
+    std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > coarsened = 
+        std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > ( 
                     new MultiBlockLattice2D<T,Descriptor>(*lattices[lastLevel]));
                     
     defineDynamics<T,Descriptor>( *coarsened, coarsened->getBoundingBox(),
@@ -497,7 +497,7 @@ std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > MultiGridLattice2D<T,Descrip
     // loop to decimate the blocks until level+1
     for (plint iLevel=getNumLevels()-1; iLevel>=(plint)level+1; --iLevel){
         // interpolate lattice at iLevel
-        std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > tmp = 
+        std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > tmp = 
             coarsen(*coarsened,1,1, lattices[iLevel]->getBackgroundDynamics().clone() );
         
         coarsened = generateJoinMultiBlockLattice<T,Descriptor>(*tmp, *lattices[iLevel-1]);

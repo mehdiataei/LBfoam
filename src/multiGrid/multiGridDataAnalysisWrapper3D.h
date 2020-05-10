@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,36 +33,37 @@
 #include "multiGrid/multiGridLattice3D.h"
 #include "multiGrid/multiGridDataField3D.h"
 
-namespace plb {
+namespace plb
+{
 
 
 /* *************** Reductive functions ******************************* */
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 T computeAverageDensity(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 T computeAverageDensity(MultiGridLattice3D<T,Descriptor>& lattice);
 
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 T computeAverageRhoBar(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 T computeAverageRhoBar(MultiGridLattice3D<T,Descriptor>& lattice);
 
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 T computeAverageEnergy(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 T computeAverageEnergy(MultiGridLattice3D<T,Descriptor>& lattice);
 
 
-template<typename T, template<typename U> class Descriptor, class BoolMask> 
+template<typename T, template<typename U> class Descriptor, class BoolMask>
 plint count(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain, BoolMask boolMask);
 
-template<typename T, template<typename U> class Descriptor, class BoolMask> 
+template<typename T, template<typename U> class Descriptor, class BoolMask>
 plint count(MultiGridLattice3D<T,Descriptor>& lattice, BoolMask boolMask);
 
 
@@ -74,8 +75,8 @@ void extractSubDomain( MultiGridLattice3D<T,Descriptor>& lattice,
                        Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridLattice3D<T,Descriptor> > extractSubDomain(MultiGridLattice3D<T,Descriptor>& lattice, Box3D
-domain);
+std::auto_ptr<MultiGridLattice3D<T,Descriptor> > extractSubDomain(MultiGridLattice3D<T,Descriptor>& lattice, Box3D
+        domain);
 
 
 /* *************** Density ******************************************* */
@@ -84,10 +85,10 @@ template<typename T, template<typename U> class Descriptor>
 void computeDensity(MultiGridLattice3D<T,Descriptor>& lattice, MultiGridScalarField3D<T>& density, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeDensity(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeDensity(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeDensity(MultiGridLattice3D<T,Descriptor>& lattice);
+std::auto_ptr<MultiGridScalarField3D<T> > computeDensity(MultiGridLattice3D<T,Descriptor>& lattice);
 
 
 /* *************** RhoBar ******************************************** */
@@ -96,10 +97,10 @@ template<typename T, template<typename U> class Descriptor>
 void computeRhoBar(MultiGridLattice3D<T,Descriptor>& lattice, MultiGridScalarField3D<T>& rhoBar, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeRhoBar(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeRhoBar(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeRhoBar(MultiGridLattice3D<T,Descriptor>& lattice);
+std::auto_ptr<MultiGridScalarField3D<T> > computeRhoBar(MultiGridLattice3D<T,Descriptor>& lattice);
 
 
 /* *************** Kinetic Energy ************************************ */
@@ -108,23 +109,23 @@ template<typename T, template<typename U> class Descriptor>
 void computeKineticEnergy(MultiGridLattice3D<T,Descriptor>& lattice, MultiGridScalarField3D<T>& energy, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeKineticEnergy(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeKineticEnergy(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeKineticEnergy(MultiGridLattice3D<T,Descriptor>& lattice);
+std::auto_ptr<MultiGridScalarField3D<T> > computeKineticEnergy(MultiGridLattice3D<T,Descriptor>& lattice);
 
 
 /* *************** Velocity Norm ************************************* */
 
 template<typename T, template<typename U> class Descriptor>
 void computeVelocityNorm(MultiGridLattice3D<T,Descriptor>& lattice, MultiGridScalarField3D<T>& velocityNorm, Box3D
-domain);
+                         domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeVelocityNorm(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeVelocityNorm(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeVelocityNorm(MultiGridLattice3D<T,Descriptor>& lattice);
+std::auto_ptr<MultiGridScalarField3D<T> > computeVelocityNorm(MultiGridLattice3D<T,Descriptor>& lattice);
 
 
 /* *************** Velocity Component ******************************** */
@@ -134,12 +135,12 @@ void computeVelocityComponent(MultiGridLattice3D<T,Descriptor>& lattice, MultiGr
                               Box3D domain, plint iComponent);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeVelocityComponent(MultiGridLattice3D<T,Descriptor>& lattice,
-                                                               Box3D domain, plint iComponent);
+std::auto_ptr<MultiGridScalarField3D<T> > computeVelocityComponent(MultiGridLattice3D<T,Descriptor>& lattice,
+        Box3D domain, plint iComponent);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeVelocityComponent(MultiGridLattice3D<T,Descriptor>& lattice, plint
-iComponent);
+std::auto_ptr<MultiGridScalarField3D<T> > computeVelocityComponent(MultiGridLattice3D<T,Descriptor>& lattice, plint
+        iComponent);
 
 
 /* *************** Velocity ****************************************** */
@@ -149,42 +150,42 @@ void computeVelocity(MultiGridLattice3D<T,Descriptor>& lattice,
                      MultiGridTensorField3D<T,Descriptor<T>::d>& velocity, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField3D<T,Descriptor<T>::d> >
-   computeVelocity(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T,Descriptor<T>::d> >
+computeVelocity(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField3D<T,Descriptor<T>::d> >
-    computeVelocity(MultiGridLattice3D<T,Descriptor>& lattice);
+std::auto_ptr<MultiGridTensorField3D<T,Descriptor<T>::d> >
+computeVelocity(MultiGridLattice3D<T,Descriptor>& lattice);
 
 
 /* *************** Pi Neq ********************************* */
 
 template<typename T, template<typename U> class Descriptor>
 void computePiNeq(MultiGridLattice3D<T,Descriptor>& lattice,
-                             MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n>& PiNeq, Box3D domain);
+                  MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n>& PiNeq, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
-   computePiNeq(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+computePiNeq(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
-    computePiNeq(MultiGridLattice3D<T,Descriptor>& lattice);
-    
-    
+std::auto_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+computePiNeq(MultiGridLattice3D<T,Descriptor>& lattice);
+
+
 /* *************** Shear Stress ********************************* */
 
 template<typename T, template<typename U> class Descriptor>
 void computeShearStress(MultiGridLattice3D<T,Descriptor>& lattice,
-                             MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n>& PiNeq, Box3D domain);
+                        MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n>& PiNeq, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
-   computeShearStress(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+computeShearStress(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
-    computeShearStress(MultiGridLattice3D<T,Descriptor>& lattice);
+std::auto_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+computeShearStress(MultiGridLattice3D<T,Descriptor>& lattice);
 
 
 /* *************** Strain Rate from Stress *************************** */
@@ -194,13 +195,13 @@ void computeStrainRateFromStress(MultiGridLattice3D<T,Descriptor>& lattice,
                                  MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n>& S, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
-   computeStrainRateFromStress(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+computeStrainRateFromStress(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
-    computeStrainRateFromStress(MultiGridLattice3D<T,Descriptor>& lattice);
-    
+std::auto_ptr<MultiGridTensorField3D<T,SymmetricTensor<T,Descriptor>::n> >
+computeStrainRateFromStress(MultiGridLattice3D<T,Descriptor>& lattice);
+
 /* *************** Temperature ******************************************* */
 //TODO
 
@@ -215,25 +216,25 @@ void computePopulation(MultiGridLattice3D<T,Descriptor>& lattice, MultiGridScala
                        Box3D domain, plint iPop);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computePopulation(MultiGridLattice3D<T,Descriptor>& lattice,
-                                                        Box3D domain, plint iPop);
+std::auto_ptr<MultiGridScalarField3D<T> > computePopulation(MultiGridLattice3D<T,Descriptor>& lattice,
+        Box3D domain, plint iPop);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computePopulation(MultiGridLattice3D<T,Descriptor>& lattice, plint iPop);
+std::auto_ptr<MultiGridScalarField3D<T> > computePopulation(MultiGridLattice3D<T,Descriptor>& lattice, plint iPop);
 
 template<typename T, template<typename U> class Descriptor>
 void computeAllPopulations(MultiGridLattice3D<T,Descriptor>& lattice,
                            MultiGridTensorField3D<T,Descriptor<T>::q>& populations);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField3D<T,Descriptor<T>::q> > computeAllPopulations(MultiGridLattice3D<T,Descriptor>&
-lattice);
-    
+std::auto_ptr<MultiGridTensorField3D<T,Descriptor<T>::q> > computeAllPopulations(MultiGridLattice3D<T,Descriptor>&
+        lattice);
+
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField3D<T,Descriptor<T>::q> > computeAllPopulations(MultiGridLattice3D<T,Descriptor>&
-lattice, 
-                                                                             Box3D domain);
-                                                        
+std::auto_ptr<MultiGridTensorField3D<T,Descriptor<T>::q> > computeAllPopulations(MultiGridLattice3D<T,Descriptor>&
+        lattice,
+        Box3D domain);
+
 template<typename T, template<typename U> class Descriptor>
 void copyPopulations( MultiGridLattice3D<T,Descriptor>& latticeFrom,
                       MultiGridLattice3D<T,Descriptor>& latticeTo,
@@ -246,10 +247,10 @@ void computeOmega(MultiGridLattice3D<T,Descriptor>& lattice,
                   MultiGridScalarField3D<T>& omega, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeOmega(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeOmega(MultiGridLattice3D<T,Descriptor>& lattice, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField3D<T> > computeOmega(MultiGridLattice3D<T,Descriptor>& lattice);
+std::auto_ptr<MultiGridScalarField3D<T> > computeOmega(MultiGridLattice3D<T,Descriptor>& lattice);
 
 
 
@@ -283,42 +284,47 @@ template<typename T>
 T computeBoundedAverage(MultiGridScalarField3D<T>& scalarField);
 
 
-template<typename T, class BoolMask> 
+template<typename T, class BoolMask>
 plint count(MultiGridScalarField3D<T>& field, Box3D domain, BoolMask boolMask);
 
-template<typename T, class BoolMask> 
+template<typename T, class BoolMask>
 plint count(MultiGridScalarField3D<T>& field, BoolMask boolMask);
 
 /* *************** Generic operations *************** */
 
 template<typename T, class Function>
-void apply(Function f, MultiGridScalarField3D<T>& field, Box3D domain) {
-    applyProcessingFunctional (
-            new ApplyScalarFunctional3D<T,Function>(f), domain, field);
+void apply(Function f, MultiGridScalarField3D<T>& field, Box3D domain)
+{
+	applyProcessingFunctional (
+	    new ApplyScalarFunctional3D<T,Function>(f), domain, field);
 }
 
 template<typename T, class Function>
-void apply(Function f, MultiGridScalarField3D<T>& field) {
-    apply(f, field, field.getBoundingBox());
+void apply(Function f, MultiGridScalarField3D<T>& field)
+{
+	apply(f, field, field.getBoundingBox());
 }
 
 
 template<typename T, class Function>
-void evaluate(Function f, MultiGridScalarField3D<T>& field, MultiGridScalarField3D<T>& result, Box3D domain) {
-    applyProcessingFunctional (
-            new EvaluateScalarFunctional3D<T,Function>(f), domain, field, result);
+void evaluate(Function f, MultiGridScalarField3D<T>& field, MultiGridScalarField3D<T>& result, Box3D domain)
+{
+	applyProcessingFunctional (
+	    new EvaluateScalarFunctional3D<T,Function>(f), domain, field, result);
 }
 
 template<typename T, class Function>
-std::unique_ptr<MultiGridScalarField3D<T> > evaluate(Function f, MultiGridScalarField3D<T>& field, Box3D domain) {
-    MultiGridScalarField3D<T>* result = new MultiGridScalarField3D<T>(field, domain);
-    evaluate(f, field, *result, domain);
-    return std::unique_ptr<MultiGridScalarField3D<T> >(result);
+std::auto_ptr<MultiGridScalarField3D<T> > evaluate(Function f, MultiGridScalarField3D<T>& field, Box3D domain)
+{
+	MultiGridScalarField3D<T>* result = new MultiGridScalarField3D<T>(field, domain);
+	evaluate(f, field, *result, domain);
+	return std::auto_ptr<MultiGridScalarField3D<T> >(result);
 }
 
 template<typename T, class Function>
-std::unique_ptr<MultiGridScalarField3D<T> > evaluate(Function f, MultiGridScalarField3D<T>& field) {
-    return evaluate(f, field, field.getBoundingBox());
+std::auto_ptr<MultiGridScalarField3D<T> > evaluate(Function f, MultiGridScalarField3D<T>& field)
+{
+	return evaluate(f, field, field.getBoundingBox());
 }
 
 
@@ -330,7 +336,7 @@ void extractSubDomain( MultiGridScalarField3D<T>& field,
                        Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > extractSubDomain(MultiGridScalarField3D<T>& field, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > extractSubDomain(MultiGridScalarField3D<T>& field, Box3D domain);
 
 
 /* *************** Copy and Convert ScalarField *************************** */
@@ -341,10 +347,10 @@ void copyConvert( MultiGridScalarField3D<T1>& field,
                   Box3D domain);
 
 template<typename T1, typename T2>
-std::unique_ptr<MultiGridScalarField3D<T2> > copyConvert(MultiGridScalarField3D<T1>& field, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T2> > copyConvert(MultiGridScalarField3D<T1>& field, Box3D domain);
 
 template<typename T1, typename T2>
-std::unique_ptr<MultiGridScalarField3D<T2> > copyConvert(MultiGridScalarField3D<T1>& field);
+std::auto_ptr<MultiGridScalarField3D<T2> > copyConvert(MultiGridScalarField3D<T1>& field);
 
 
 /* *************** MultiScalarField - Scalar operations *************** */
@@ -353,80 +359,80 @@ template<typename T>
 void add(T scalar, MultiGridScalarField3D<T>& field, MultiGridScalarField3D<T>& result, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > add(T scalar, MultiGridScalarField3D<T>& field, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > add(T scalar, MultiGridScalarField3D<T>& field, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > add(T scalar, MultiGridScalarField3D<T>& field);
+std::auto_ptr<MultiGridScalarField3D<T> > add(T scalar, MultiGridScalarField3D<T>& field);
 
 
 template<typename T>
 void add(MultiGridScalarField3D<T>& field, T scalar, MultiGridScalarField3D<T>& result, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > add(MultiGridScalarField3D<T>& field, T scalar, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > add(MultiGridScalarField3D<T>& field, T scalar, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > add(MultiGridScalarField3D<T>& field, T scalar);
+std::auto_ptr<MultiGridScalarField3D<T> > add(MultiGridScalarField3D<T>& field, T scalar);
 
 
 template<typename T>
 void subtract(T scalar, MultiGridScalarField3D<T>& field, MultiGridScalarField3D<T>& result, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > subtract(T scalar, MultiGridScalarField3D<T>& field, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > subtract(T scalar, MultiGridScalarField3D<T>& field, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > subtract(T scalar, MultiGridScalarField3D<T>& field);
+std::auto_ptr<MultiGridScalarField3D<T> > subtract(T scalar, MultiGridScalarField3D<T>& field);
 
 
 template<typename T>
 void subtract(MultiGridScalarField3D<T>& field, T scalar, MultiGridScalarField3D<T>& result, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > subtract(MultiGridScalarField3D<T>& field, T scalar, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > subtract(MultiGridScalarField3D<T>& field, T scalar, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > subtract(MultiGridScalarField3D<T>& field, T scalar);
+std::auto_ptr<MultiGridScalarField3D<T> > subtract(MultiGridScalarField3D<T>& field, T scalar);
 
 
 template<typename T>
 void multiply(T scalar, MultiGridScalarField3D<T>& field, MultiGridScalarField3D<T>& result, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > multiply(T scalar, MultiGridScalarField3D<T>& field, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > multiply(T scalar, MultiGridScalarField3D<T>& field, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > multiply(T scalar, MultiGridScalarField3D<T>& field);
+std::auto_ptr<MultiGridScalarField3D<T> > multiply(T scalar, MultiGridScalarField3D<T>& field);
 
 
 template<typename T>
 void multiply(MultiGridScalarField3D<T>& field, T scalar, MultiGridScalarField3D<T>& result, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > multiply(MultiGridScalarField3D<T>& field, T scalar, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > multiply(MultiGridScalarField3D<T>& field, T scalar, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > multiply(MultiGridScalarField3D<T>& field, T scalar);
+std::auto_ptr<MultiGridScalarField3D<T> > multiply(MultiGridScalarField3D<T>& field, T scalar);
 
 
 template<typename T>
 void divide(T scalar, MultiGridScalarField3D<T>& field, MultiGridScalarField3D<T>& result, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > divide(T scalar, MultiGridScalarField3D<T>& field, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > divide(T scalar, MultiGridScalarField3D<T>& field, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > divide(T scalar, MultiGridScalarField3D<T>& field);
+std::auto_ptr<MultiGridScalarField3D<T> > divide(T scalar, MultiGridScalarField3D<T>& field);
 
 
 template<typename T>
 void divide(MultiGridScalarField3D<T>& field, T scalar, MultiGridScalarField3D<T>& result, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > divide(MultiGridScalarField3D<T>& field, T scalar, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > divide(MultiGridScalarField3D<T>& field, T scalar, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > divide(MultiGridScalarField3D<T>& field, T scalar);
+std::auto_ptr<MultiGridScalarField3D<T> > divide(MultiGridScalarField3D<T>& field, T scalar);
 
 
 /* *************** MultiScalarField - Scalar inplace operations *************** */
@@ -462,46 +468,46 @@ template<typename T>
 void add(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, MultiGridScalarField3D<T>& result, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > add(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > add(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > add(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B);
+std::auto_ptr<MultiGridScalarField3D<T> > add(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B);
 
 
 template<typename T>
 void subtract(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, MultiGridScalarField3D<T>& result, Box3D
-domain);
+              domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > subtract(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, Box3D
-domain);
+std::auto_ptr<MultiGridScalarField3D<T> > subtract(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, Box3D
+        domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > subtract(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B);
+std::auto_ptr<MultiGridScalarField3D<T> > subtract(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B);
 
 
 template<typename T>
 void multiply(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, MultiGridScalarField3D<T>& result, Box3D
-domain);
+              domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > multiply(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, Box3D
-domain);
+std::auto_ptr<MultiGridScalarField3D<T> > multiply(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, Box3D
+        domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > multiply(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B);
+std::auto_ptr<MultiGridScalarField3D<T> > multiply(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B);
 
 
 template<typename T>
 void divide(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, MultiGridScalarField3D<T>& result, Box3D
-domain);
+            domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > divide(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, Box3D
-domain);
+std::auto_ptr<MultiGridScalarField3D<T> > divide(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B, Box3D
+        domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > divide(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B);
+std::auto_ptr<MultiGridScalarField3D<T> > divide(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B);
 
 
 /* *************** MultiScalarField - MultiScalarField inplace operations *************** */
@@ -539,10 +545,10 @@ void divideInPlace(MultiGridScalarField3D<T>& A, MultiGridScalarField3D<T>& B);
 
 /* *************** Reductive functions ******************************* */
 
-template<typename T, int nDim, class BoolMask> 
+template<typename T, int nDim, class BoolMask>
 plint count(MultiGridTensorField3D<T,nDim>& field, Box3D domain, BoolMask boolMask);
 
-template<typename T, int nDim, class BoolMask> 
+template<typename T, int nDim, class BoolMask>
 plint count(MultiGridTensorField3D<T,nDim>& field, BoolMask boolMask);
 
 
@@ -554,10 +560,10 @@ void copyConvert( MultiGridTensorField3D<T1,nDim>& field,
                   Box3D domain);
 
 template<typename T1, typename T2, int nDim>
-std::unique_ptr<MultiGridTensorField3D<T2,nDim> > copyConvert(MultiGridTensorField3D<T1,nDim>& field, Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T2,nDim> > copyConvert(MultiGridTensorField3D<T1,nDim>& field, Box3D domain);
 
 template<typename T1, typename T2, int nDim>
-std::unique_ptr<MultiGridTensorField3D<T2,nDim> > copyConvert(MultiGridTensorField3D<T1,nDim>& field);
+std::auto_ptr<MultiGridTensorField3D<T2,nDim> > copyConvert(MultiGridTensorField3D<T1,nDim>& field);
 
 
 /* *************** Extract Sub-TensorField *************************** */
@@ -568,21 +574,21 @@ void extractSubDomain( MultiGridTensorField3D<T,nDim>& field,
                        Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField3D<T,nDim> > extractSubDomain(MultiGridTensorField3D<T,nDim>& field, Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T,nDim> > extractSubDomain(MultiGridTensorField3D<T,nDim>& field, Box3D domain);
 
 
 /* *************** Component (scalar-field) out of a tensor-field ****** */
 
 template<typename T, int nDim>
 void extractComponent(MultiGridTensorField3D<T,nDim>& tensorField, MultiGridScalarField3D<T>& component, Box3D domain,
-int iComponent);
+                      int iComponent);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField3D<T> > extractComponent(MultiGridTensorField3D<T,nDim>& tensorField, Box3D domain,
-int iComponent);
+std::auto_ptr<MultiGridScalarField3D<T> > extractComponent(MultiGridTensorField3D<T,nDim>& tensorField, Box3D domain,
+        int iComponent);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField3D<T> > extractComponent(MultiGridTensorField3D<T,nDim>& tensorField, int iComponent);
+std::auto_ptr<MultiGridScalarField3D<T> > extractComponent(MultiGridTensorField3D<T,nDim>& tensorField, int iComponent);
 
 
 /* *************** Vector-norm of each cell in the field *************** */
@@ -591,10 +597,10 @@ template<typename T, int nDim>
 void computeNorm(MultiGridTensorField3D<T,nDim>& tensorField, MultiGridScalarField3D<T>& norm, Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField3D<T> > computeNorm(MultiGridTensorField3D<T,nDim>& tensorField, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeNorm(MultiGridTensorField3D<T,nDim>& tensorField, Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField3D<T> > computeNorm(MultiGridTensorField3D<T,nDim>& tensorField);
+std::auto_ptr<MultiGridScalarField3D<T> > computeNorm(MultiGridTensorField3D<T,nDim>& tensorField);
 
 
 /* *************** Squared vector-norm of each cell in the field ******** */
@@ -603,52 +609,52 @@ template<typename T, int nDim>
 void computeNormSqr(MultiGridTensorField3D<T,nDim>& tensorField, MultiGridScalarField3D<T>& normSqr, Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField3D<T> > computeNormSqr(MultiGridTensorField3D<T,nDim>& tensorField, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeNormSqr(MultiGridTensorField3D<T,nDim>& tensorField, Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField3D<T> > computeNormSqr(MultiGridTensorField3D<T,nDim>& tensorField);
+std::auto_ptr<MultiGridScalarField3D<T> > computeNormSqr(MultiGridTensorField3D<T,nDim>& tensorField);
 
 
 /* *************** Tensor-norm of each symmetric tensor of a field ***** */
 
 template<typename T>
 void computeSymmetricTensorNorm(MultiGridTensorField3D<T,3>& tensorField, MultiGridScalarField3D<T>& norm, Box3D
-domain);
+                                domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorNorm(MultiGridTensorField3D<T,3>& tensorField, Box3D
-domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorNorm(MultiGridTensorField3D<T,3>& tensorField, Box3D
+        domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorNorm(MultiGridTensorField3D<T,3>& tensorField);
+std::auto_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorNorm(MultiGridTensorField3D<T,3>& tensorField);
 
 
 /* *************** Squared Tensor-norm of each symmetric tensor of a field*/
 
 template<typename T>
 void computeSymmetricTensorNormSqr(MultiGridTensorField3D<T,3>& tensorField, MultiGridScalarField3D<T>& normSqr, Box3D
-domain);
+                                   domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorNormSqr(MultiGridTensorField3D<T,3>& tensorField, Box3D
-domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorNormSqr(MultiGridTensorField3D<T,3>& tensorField, Box3D
+        domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorNormSqr(MultiGridTensorField3D<T,3>& tensorField);
+std::auto_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorNormSqr(MultiGridTensorField3D<T,3>& tensorField);
 
 
 /* *************** Trace of each symmetric tensor of a field ************ */
 
 template<typename T>
 void computeSymmetricTensorTrace(MultiGridTensorField3D<T,3>& tensorField, MultiGridScalarField3D<T>& trace, Box3D
-domain);
+                                 domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorTrace(MultiGridTensorField3D<T,3>& tensorField, Box3D
-domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorTrace(MultiGridTensorField3D<T,3>& tensorField, Box3D
+        domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorTrace(MultiGridTensorField3D<T,3>& tensorField);
+std::auto_ptr<MultiGridScalarField3D<T> > computeSymmetricTensorTrace(MultiGridTensorField3D<T,3>& tensorField);
 
 
 /* *************** Vorticity from Velocity field *********************** */
@@ -657,10 +663,10 @@ template<typename T>
 void computeVorticity(MultiGridTensorField3D<T,2>& velocity, MultiGridScalarField3D<T>& vorticity, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > computeVorticity(MultiGridTensorField3D<T,2>& velocity, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeVorticity(MultiGridTensorField3D<T,2>& velocity, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > computeVorticity(MultiGridTensorField3D<T,2>& velocity);
+std::auto_ptr<MultiGridScalarField3D<T> > computeVorticity(MultiGridTensorField3D<T,2>& velocity);
 
 
 /* *************** Vorticity, witout boundary treatment, from Velocity field  */
@@ -669,10 +675,10 @@ template<typename T>
 void computeBulkVorticity(MultiGridTensorField3D<T,2>& velocity, MultiGridScalarField3D<T>& vorticity, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > computeBulkVorticity(MultiGridTensorField3D<T,2>& velocity, Box3D domain);
+std::auto_ptr<MultiGridScalarField3D<T> > computeBulkVorticity(MultiGridTensorField3D<T,2>& velocity, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField3D<T> > computeBulkVorticity(MultiGridTensorField3D<T,2>& velocity);
+std::auto_ptr<MultiGridScalarField3D<T> > computeBulkVorticity(MultiGridTensorField3D<T,2>& velocity);
 
 
 /* *************** Strain rate from Velocity field ********************* */
@@ -681,10 +687,10 @@ template<typename T>
 void computeStrainRate(MultiGridTensorField3D<T,2>& velocity, MultiGridTensorField3D<T,3>& S, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridTensorField3D<T,3> > computeStrainRate(MultiGridTensorField3D<T,2>& velocity, Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T,3> > computeStrainRate(MultiGridTensorField3D<T,2>& velocity, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridTensorField3D<T,3> > computeStrainRate(MultiGridTensorField3D<T,2>& velocity);
+std::auto_ptr<MultiGridTensorField3D<T,3> > computeStrainRate(MultiGridTensorField3D<T,2>& velocity);
 
 
 /* *************** Str. rate, witout boundary treatment, from Velocity field  */
@@ -693,64 +699,64 @@ template<typename T>
 void computeBulkStrainRate(MultiGridTensorField3D<T,2>& velocity, MultiGridTensorField3D<T,3>& S, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridTensorField3D<T,3> > computeBulkStrainRate(MultiGridTensorField3D<T,2>& velocity, Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T,3> > computeBulkStrainRate(MultiGridTensorField3D<T,2>& velocity, Box3D domain);
 
 template<typename T>
-std::unique_ptr<MultiGridTensorField3D<T,3> > computeBulkStrainRate(MultiGridTensorField3D<T,2>& velocity);
+std::auto_ptr<MultiGridTensorField3D<T,3> > computeBulkStrainRate(MultiGridTensorField3D<T,2>& velocity);
 
 
 /* *************** MultiTensorField - MultiTensorField operations *************** */
 
 template<typename T, int nDim>
 void add(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>& B, MultiGridTensorField3D<T,nDim>& result,
-Box3D domain);
+         Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField3D<T,nDim> > add(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>& B,
-Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T,nDim> > add(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>& B,
+        Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField3D<T,nDim> > add(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>&
-B);
+std::auto_ptr<MultiGridTensorField3D<T,nDim> > add(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>&
+        B);
 
 
 template<typename T, int nDim>
 void subtract(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>& B, MultiGridTensorField3D<T,nDim>&
-result, Box3D domain);
+              result, Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField3D<T,nDim> > subtract(MultiGridTensorField3D<T,nDim>& A,
-MultiGridTensorField3D<T,nDim>& B, Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T,nDim> > subtract(MultiGridTensorField3D<T,nDim>& A,
+        MultiGridTensorField3D<T,nDim>& B, Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField3D<T,nDim> > subtract(MultiGridTensorField3D<T,nDim>& A,
-MultiGridTensorField3D<T,nDim>& B);
+std::auto_ptr<MultiGridTensorField3D<T,nDim> > subtract(MultiGridTensorField3D<T,nDim>& A,
+        MultiGridTensorField3D<T,nDim>& B);
 
 
 template<typename T, int nDim>
 void multiply(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>& B, MultiGridTensorField3D<T,nDim>&
-result, Box3D domain);
+              result, Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField3D<T,nDim> > multiply(MultiGridTensorField3D<T,nDim>& A,
-MultiGridTensorField3D<T,nDim>& B, Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T,nDim> > multiply(MultiGridTensorField3D<T,nDim>& A,
+        MultiGridTensorField3D<T,nDim>& B, Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField3D<T,nDim> > multiply(MultiGridTensorField3D<T,nDim>& A,
-MultiGridTensorField3D<T,nDim>& B);
+std::auto_ptr<MultiGridTensorField3D<T,nDim> > multiply(MultiGridTensorField3D<T,nDim>& A,
+        MultiGridTensorField3D<T,nDim>& B);
 
 
 template<typename T, int nDim>
 void divide(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>& B, MultiGridTensorField3D<T,nDim>&
-result, Box3D domain);
+            result, Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField3D<T,nDim> > divide(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>&
-B, Box3D domain);
+std::auto_ptr<MultiGridTensorField3D<T,nDim> > divide(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>&
+        B, Box3D domain);
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField3D<T,nDim> > divide(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>&
-B);
+std::auto_ptr<MultiGridTensorField3D<T,nDim> > divide(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,nDim>&
+        B);
 
 
 /* *************** MultiTensorField - MultiTensorField inplace operations *************** */
@@ -792,4 +798,3 @@ void divideInPlace(MultiGridTensorField3D<T,nDim>& A, MultiGridTensorField3D<T,n
 }  // namespace plb
 
 #endif // MULTI_GRID_DATA_ANALYSIS_WRAPPER_3D_H
-

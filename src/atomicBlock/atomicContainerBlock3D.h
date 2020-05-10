@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,47 +34,55 @@
 #include "atomicBlock/atomicBlock3D.h"
 #include "atomicBlock/atomicContainerBlock2D.h"
 
-namespace plb {
+namespace plb
+{
 
-class AtomicContainerDataTransfer3D : public BlockDataTransfer3D {
+class AtomicContainerDataTransfer3D : public BlockDataTransfer3D
+{
 public:
-    AtomicContainerDataTransfer3D() { }
-    virtual void setBlock(AtomicBlock3D& block_) { }
-    virtual void setConstBlock(AtomicBlock3D const& block_) { }
-    virtual AtomicContainerDataTransfer3D* clone() const {
-        return new AtomicContainerDataTransfer3D(*this);
-    }
-    virtual plint staticCellSize() const { return 0; }
-    virtual void send(Box3D domain, std::vector<char>& buffer, modif::ModifT kind) const { }
-    virtual void receive(Box3D domain, std::vector<char> const& buffer, modif::ModifT kind) { }
-    virtual void receive( Box3D domain, std::vector<char> const& buffer,
-                          modif::ModifT kind, std::map<int,std::string> const& foreignIds ) { }
-    virtual void receive(Box3D domain, std::vector<char> const& buffer, modif::ModifT kind, Dot3D absoluteOffset) {
-        receive(domain, buffer, kind);
-    }
-    virtual void attribute(Box3D toDomain, plint deltaX, plint deltaY, plint deltaZ,
-                           AtomicBlock3D const& from, modif::ModifT kind) { }
-    virtual void attribute(Box3D toDomain, plint deltaX, plint deltaY, plint deltaZ,
-                           AtomicBlock3D const& from, modif::ModifT kind, Dot3D absoluteOffset)
-    {
-        attribute(toDomain, deltaX, deltaY, deltaZ, from, kind);
-    }
+	AtomicContainerDataTransfer3D() { }
+	virtual void setBlock(AtomicBlock3D& block_) { }
+	virtual void setConstBlock(AtomicBlock3D const& block_) { }
+	virtual AtomicContainerDataTransfer3D* clone() const
+	{
+		return new AtomicContainerDataTransfer3D(*this);
+	}
+	virtual plint staticCellSize() const
+	{
+		return 0;
+	}
+	virtual void send(Box3D domain, std::vector<char>& buffer, modif::ModifT kind) const { }
+	virtual void receive(Box3D domain, std::vector<char> const& buffer, modif::ModifT kind) { }
+	virtual void receive( Box3D domain, std::vector<char> const& buffer,
+	                      modif::ModifT kind, std::map<int,std::string> const& foreignIds ) { }
+	virtual void receive(Box3D domain, std::vector<char> const& buffer, modif::ModifT kind, Dot3D absoluteOffset)
+	{
+		receive(domain, buffer, kind);
+	}
+	virtual void attribute(Box3D toDomain, plint deltaX, plint deltaY, plint deltaZ,
+	                       AtomicBlock3D const& from, modif::ModifT kind) { }
+	virtual void attribute(Box3D toDomain, plint deltaX, plint deltaY, plint deltaZ,
+	                       AtomicBlock3D const& from, modif::ModifT kind, Dot3D absoluteOffset)
+	{
+		attribute(toDomain, deltaX, deltaY, deltaZ, from, kind);
+	}
 };
 
-class AtomicContainerBlock3D : public AtomicBlock3D {
+class AtomicContainerBlock3D : public AtomicBlock3D
+{
 public:
-    AtomicContainerBlock3D(plint nx_, plint ny_, plint nz_);
-    ~AtomicContainerBlock3D();
-    AtomicContainerBlock3D& operator=(AtomicContainerBlock3D const& rhs);
-    AtomicContainerBlock3D(AtomicContainerBlock3D const& rhs);
-    void swap(AtomicContainerBlock3D& rhs);
+	AtomicContainerBlock3D(plint nx_, plint ny_, plint nz_);
+	~AtomicContainerBlock3D();
+	AtomicContainerBlock3D& operator=(AtomicContainerBlock3D const& rhs);
+	AtomicContainerBlock3D(AtomicContainerBlock3D const& rhs);
+	void swap(AtomicContainerBlock3D& rhs);
 public:
-    void setData(ContainerBlockData* data_);
-    ContainerBlockData* getData();
-    ContainerBlockData const* getData() const;
-    virtual identifiers::BlockId getBlockId() const;
+	void setData(ContainerBlockData* data_);
+	ContainerBlockData* getData();
+	ContainerBlockData const* getData() const;
+	virtual identifiers::BlockId getBlockId() const;
 private:
-    ContainerBlockData* data;
+	ContainerBlockData* data;
 };
 
 }  // namespace plb

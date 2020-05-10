@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,35 +32,38 @@
 #include "multiBlock/multiDataField2D.h"
 #include "multiBlock/multiBlockInfo2D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class MultiNTensorInfo2D {
+class MultiNTensorInfo2D
+{
 public:
-    MultiNTensorInfo2D(MultiNTensorField2D<T> const& multiBlock);
-    plint getNx() const;
-    plint getNy() const;
-    plint getNumBlocks() const;
-    Box2D getSmallestBlock() const;
-    Box2D getLargestBlock() const;
-    plint getNumAllocatedCells() const;
+	MultiNTensorInfo2D(MultiNTensorField2D<T> const& multiBlock);
+	plint getNx() const;
+	plint getNy() const;
+	plint getNumBlocks() const;
+	Box2D getSmallestBlock() const;
+	Box2D getLargestBlock() const;
+	plint getNumAllocatedCells() const;
 private:
-    plint nx, ny, numBlocks, numAllocatedCells;
-    Box2D smallest, largest;
+	plint nx, ny, numBlocks, numAllocatedCells;
+	Box2D smallest, largest;
 };
 
-class MultiBlockInfo2D {
+class MultiBlockInfo2D
+{
 public:
-    MultiBlockInfo2D(MultiBlock2D const& multiBlock);
-    plint getNx() const;
-    plint getNy() const;
-    plint getNumBlocks() const;
-    Box2D getSmallestBlock() const;
-    Box2D getLargestBlock() const;
-    plint getNumAllocatedCells() const;
+	MultiBlockInfo2D(MultiBlock2D const& multiBlock);
+	plint getNx() const;
+	plint getNy() const;
+	plint getNumBlocks() const;
+	Box2D getSmallestBlock() const;
+	Box2D getLargestBlock() const;
+	plint getNumAllocatedCells() const;
 private:
-    plint nx, ny, numBlocks, numAllocatedCells;
-    Box2D smallest, largest;
+	plint nx, ny, numBlocks, numAllocatedCells;
+	Box2D smallest, largest;
 };
 
 

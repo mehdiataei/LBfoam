@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,42 +32,44 @@
 #include "core/plbDebug.h"
 #include "core/geometry3D.h"
 
-namespace plb {
+namespace plb
+{
 
 /// Fragmentation of the surface of a block into bulk, surfaces, edges, and corners.
-class BlockSurface3D {
+class BlockSurface3D
+{
 public:
-    BlockSurface3D(Box3D const& domain_, plint boundaryWidth);
-    Box3D bulk() const;
-    Box3D surface0N() const;
-    Box3D surface0P() const;
-    Box3D surface1N() const;
-    Box3D surface1P() const;
-    Box3D surface2N() const;
-    Box3D surface2P() const;
-    Box3D edge0NN() const;
-    Box3D edge0NP() const;
-    Box3D edge0PN() const;
-    Box3D edge0PP() const;
-    Box3D edge1NN() const;
-    Box3D edge1NP() const;
-    Box3D edge1PN() const;
-    Box3D edge1PP() const;
-    Box3D edge2NN() const;
-    Box3D edge2NP() const;
-    Box3D edge2PN() const;
-    Box3D edge2PP() const;
-    Box3D cornerNNN() const;
-    Box3D cornerNNP() const;
-    Box3D cornerNPN() const;
-    Box3D cornerNPP() const;
-    Box3D cornerPNN() const;
-    Box3D cornerPNP() const;
-    Box3D cornerPPN() const;
-    Box3D cornerPPP() const;
+	BlockSurface3D(Box3D const& domain_, plint boundaryWidth);
+	Box3D bulk() const;
+	Box3D surface0N() const;
+	Box3D surface0P() const;
+	Box3D surface1N() const;
+	Box3D surface1P() const;
+	Box3D surface2N() const;
+	Box3D surface2P() const;
+	Box3D edge0NN() const;
+	Box3D edge0NP() const;
+	Box3D edge0PN() const;
+	Box3D edge0PP() const;
+	Box3D edge1NN() const;
+	Box3D edge1NP() const;
+	Box3D edge1PN() const;
+	Box3D edge1PP() const;
+	Box3D edge2NN() const;
+	Box3D edge2NP() const;
+	Box3D edge2PN() const;
+	Box3D edge2PP() const;
+	Box3D cornerNNN() const;
+	Box3D cornerNNP() const;
+	Box3D cornerNPN() const;
+	Box3D cornerNPP() const;
+	Box3D cornerPNN() const;
+	Box3D cornerPNP() const;
+	Box3D cornerPPN() const;
+	Box3D cornerPPP() const;
 private:
-    Box3D domain;
-    plint bw;
+	Box3D domain;
+	plint bw;
 };
 
 }  // namespace plb

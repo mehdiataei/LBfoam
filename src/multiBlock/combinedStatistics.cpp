@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,60 +30,69 @@
 #include <numeric>
 #include <limits>
 
-namespace plb {
+namespace plb
+{
 
 CombinedStatistics::~CombinedStatistics()
 { }
 
 void CombinedStatistics::computeLocalAverage (
-            std::vector<BlockStatistics const*> const& individualStatistics,
-            std::vector<double>& averageObservables,
-            std::vector<double>& sumWeights ) const
+    std::vector<BlockStatistics const*> const& individualStatistics,
+    std::vector<double>& averageObservables,
+    std::vector<double>& sumWeights ) const
 {
     // For each "average observable"
-    for (pluint iAverage=0; iAverage<averageObservables.size(); ++iAverage) {
+    for (pluint iAverage=0; iAverage<averageObservables.size(); ++iAverage)
+    {
         averageObservables[iAverage] = 0.;
         sumWeights[iAverage] = 0.;
         // Compute local average
-        for (pluint iStat=0; iStat<individualStatistics.size(); ++iStat) {
+        for (pluint iStat=0; iStat<individualStatistics.size(); ++iStat)
+        {
             double newElement = individualStatistics[iStat]->getAverage(iAverage);
             double newWeight  = individualStatistics[iStat]->getNumCells();
             averageObservables[iAverage] += newWeight * newElement;
             sumWeights[iAverage] += newWeight;
         }
         // Avoid division by zero
-        if (std::fabs(sumWeights[iAverage]) > 0.5) {
+        if (std::fabs(sumWeights[iAverage]) > 0.5)
+        {
             averageObservables[iAverage] /= sumWeights[iAverage];
         }
     }
 }
 
 void CombinedStatistics::computeLocalSum (
-        std::vector<BlockStatistics const*> const& individualStatistics,
-        std::vector<double>& sumObservables ) const
+    std::vector<BlockStatistics const*> const& individualStatistics,
+    std::vector<double>& sumObservables ) const
 {
     // For each "sum observable"
-    for (pluint iSum=0; iSum<sumObservables.size(); ++iSum) {
+    for (pluint iSum=0; iSum<sumObservables.size(); ++iSum)
+    {
         sumObservables[iSum] = 0.;
         // Compute local sum
-        for (pluint iStat=0; iStat<individualStatistics.size(); ++iStat) {
+        for (pluint iStat=0; iStat<individualStatistics.size(); ++iStat)
+        {
             sumObservables[iSum] += individualStatistics[iStat]->getSum(iSum);
         }
     }
 }
 
 void CombinedStatistics::computeLocalMax (
-            std::vector<BlockStatistics const*> const& individualStatistics,
-            std::vector<double>& maxObservables ) const
+    std::vector<BlockStatistics const*> const& individualStatistics,
+    std::vector<double>& maxObservables ) const
 {
     // For each "max observable"
-    for (pluint iMax=0; iMax<maxObservables.size(); ++iMax) {
+    for (pluint iMax=0; iMax<maxObservables.size(); ++iMax)
+    {
         // Use -max() instead of min(), because min<float> yields a positive value close to zero.
         maxObservables[iMax] = -std::numeric_limits<double>::max();
         // Compute local max
-        for (pluint iStat=0; iStat<individualStatistics.size(); ++iStat) {
+        for (pluint iStat=0; iStat<individualStatistics.size(); ++iStat)
+        {
             double newMax = individualStatistics[iStat]->getMax(iMax);
-            if (newMax > maxObservables[iMax]) {
+            if (newMax > maxObservables[iMax])
+            {
                 maxObservables[iMax] = newMax;
             }
         }
@@ -91,14 +100,16 @@ void CombinedStatistics::computeLocalMax (
 }
 
 void CombinedStatistics::computeLocalIntSum (
-        std::vector<BlockStatistics const*> const& individualStatistics,
-        std::vector<plint>& intSumObservables ) const
+    std::vector<BlockStatistics const*> const& individualStatistics,
+    std::vector<plint>& intSumObservables ) const
 {
     // For each integer "sum observable"
-    for (pluint iSum=0; iSum<intSumObservables.size(); ++iSum) {
+    for (pluint iSum=0; iSum<intSumObservables.size(); ++iSum)
+    {
         intSumObservables[iSum] = 0;
         // Compute local sum
-        for (pluint iStat=0; iStat<individualStatistics.size(); ++iStat) {
+        for (pluint iStat=0; iStat<individualStatistics.size(); ++iStat)
+        {
             intSumObservables[iSum] += individualStatistics[iStat]->getIntSum(iSum);
         }
     }
@@ -106,8 +117,8 @@ void CombinedStatistics::computeLocalIntSum (
 
 
 void CombinedStatistics::combine (
-            std::vector<BlockStatistics const*>& individualStatistics,
-            BlockStatistics& result ) const
+    std::vector<BlockStatistics const*>& individualStatistics,
+    BlockStatistics& result ) const
 {
     // Local averages
     std::vector<double> averageObservables(result.getAverageVect().size());
@@ -128,10 +139,10 @@ void CombinedStatistics::combine (
 
     // Compute global, cross-core statistics
     this->reduceStatistics (
-            averageObservables, sumWeights,
-            sumObservables,
-            maxObservables,
-            intSumObservables );
+        averageObservables, sumWeights,
+        sumObservables,
+        maxObservables,
+        intSumObservables );
 
     // Update public statistics in resulting block
     result.evaluate (
@@ -139,18 +150,19 @@ void CombinedStatistics::combine (
 }
 
 
-SerialCombinedStatistics* SerialCombinedStatistics::clone() const {
+SerialCombinedStatistics* SerialCombinedStatistics::clone() const
+{
     return new SerialCombinedStatistics(*this);
 }
 
 void SerialCombinedStatistics::reduceStatistics (
-            std::vector<double>& averageObservables,
-            std::vector<double>& sumWeights,
-            std::vector<double>& sumObservables,
-            std::vector<double>& maxObservables,
-            std::vector<plint>& intSumObservables ) const
+    std::vector<double>& averageObservables,
+    std::vector<double>& sumWeights,
+    std::vector<double>& sumObservables,
+    std::vector<double>& maxObservables,
+    std::vector<plint>& intSumObservables ) const
 {
     // Do nothing in serial case
-}
+};
 
 }  // namespace plb

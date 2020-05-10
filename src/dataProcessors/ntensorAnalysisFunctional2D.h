@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,19 +33,19 @@
 #include "atomicBlock/reductiveDataProcessingFunctional2D.h"
 #include "latticeBoltzmann/geometricOperationTemplates.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T1, typename T2>
 class CopyConvertNTensorFunctional2D : public BoxProcessingFunctional2D_NN<T1,T2>
 {
 public:
-    virtual void process(Box2D domain, NTensorField2D<T1>& field1, NTensorField2D<T2>& field2);
-    virtual CopyConvertNTensorFunctional2D<T1,T2>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void process(Box2D domain, NTensorField2D<T1>& field1, NTensorField2D<T2>& field2);
+	virtual CopyConvertNTensorFunctional2D<T1,T2>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 }  // namespace plb
 
 #endif  // NTENSOR_ANALYSIS_FUNCTIONAL_2D_H
-

@@ -26,44 +26,40 @@
 #define EIGEN_ARRAY_NORMS_H
 
 template<typename Derived, int p>
-struct ei_lpNorm_selector
-{
-  typedef typename NumTraits<typename ei_traits<Derived>::Scalar>::Real RealScalar;
-  inline static RealScalar run(const MatrixBase<Derived>& m)
-  {
-    return ei_pow(m.cwise().abs().cwise().pow(p).sum(), RealScalar(1)/p);
-  }
+struct ei_lpNorm_selector {
+	typedef typename NumTraits<typename ei_traits<Derived>::Scalar>::Real RealScalar;
+	inline static RealScalar run(const MatrixBase<Derived>& m)
+	{
+		return ei_pow(m.cwise().abs().cwise().pow(p).sum(), RealScalar(1)/p);
+	}
 };
 
 template<typename Derived>
-struct ei_lpNorm_selector<Derived, 1>
-{
-  inline static typename NumTraits<typename ei_traits<Derived>::Scalar>::Real run(const MatrixBase<Derived>& m)
-  {
-    return m.cwise().abs().sum();
-  }
+struct ei_lpNorm_selector<Derived, 1> {
+	inline static typename NumTraits<typename ei_traits<Derived>::Scalar>::Real run(const MatrixBase<Derived>& m)
+	{
+		return m.cwise().abs().sum();
+	}
 };
 
 template<typename Derived>
-struct ei_lpNorm_selector<Derived, 2>
-{
-  inline static typename NumTraits<typename ei_traits<Derived>::Scalar>::Real run(const MatrixBase<Derived>& m)
-  {
-    return m.norm();
-  }
+struct ei_lpNorm_selector<Derived, 2> {
+	inline static typename NumTraits<typename ei_traits<Derived>::Scalar>::Real run(const MatrixBase<Derived>& m)
+	{
+		return m.norm();
+	}
 };
 
 template<typename Derived>
-struct ei_lpNorm_selector<Derived, Infinity>
-{
-  inline static typename NumTraits<typename ei_traits<Derived>::Scalar>::Real run(const MatrixBase<Derived>& m)
-  {
-    return m.cwise().abs().maxCoeff();
-  }
+struct ei_lpNorm_selector<Derived, Infinity> {
+	inline static typename NumTraits<typename ei_traits<Derived>::Scalar>::Real run(const MatrixBase<Derived>& m)
+	{
+		return m.cwise().abs().maxCoeff();
+	}
 };
 
 /** \array_module
-  * 
+  *
   * \returns the \f$ \ell^p \f$ norm of *this, that is, returns the p-th root of the sum of the p-th powers of the absolute values
   *          of the coefficients of *this. If \a p is the special value \a Eigen::Infinity, this function returns the \f$ \ell^p\infty \f$
   *          norm, that is the maximum of the absolute values of the coefficients of *this.
@@ -74,7 +70,7 @@ template<typename Derived>
 template<int p>
 inline typename NumTraits<typename ei_traits<Derived>::Scalar>::Real MatrixBase<Derived>::lpNorm() const
 {
-  return ei_lpNorm_selector<Derived, p>::run(*this);
+	return ei_lpNorm_selector<Derived, p>::run(*this);
 }
 
 #endif // EIGEN_ARRAY_NORMS_H

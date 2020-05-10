@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -40,46 +40,54 @@
 #include "multiBlock/multiContainerBlock3D.h"
 
 
-namespace plb {
+namespace plb
+{
 
-bool allFlagsTrue(MultiBlock3D* multiBlock) {
+bool allFlagsTrue(MultiBlock3D* multiBlock)
+{
     std::vector<MultiBlock3D*> singleBlockVector;
     singleBlockVector.push_back(multiBlock);
     AllFlagsTrueFunctional3D functional;
     applyProcessingFunctional (
-            functional, multiBlock->getBoundingBox(),
-            singleBlockVector );
+        functional, multiBlock->getBoundingBox(),
+        singleBlockVector );
     return functional.allTrue();
 }
 
-void getThreadNum(MultiScalarField3D<int>& threadNum) {
+void getThreadNum(MultiScalarField3D<int>& threadNum)
+{
     applyProcessingFunctional(new GetThreadNumFunctional3D(), threadNum.getBoundingBox(), threadNum);
 }
 
-void getBlockNum(MultiScalarField3D<plint>& blockNum) {
+void getBlockNum(MultiScalarField3D<plint>& blockNum)
+{
     std::vector<plint> const& blocks = blockNum.getLocalInfo().getBlocks();
-    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock)
+    {
         plint blockId = blocks[iBlock];
         ScalarField3D<plint>& component =
             dynamic_cast<ScalarField3D<plint>&>(blockNum.getComponent(blockId));
         setToConstant(component, component.getBoundingBox(), blockId);
-    }   
+    }
 }
 
-void getRandomBlockNum(MultiScalarField3D<plint>& blockNum) {
+void getRandomBlockNum(MultiScalarField3D<plint>& blockNum)
+{
     std::vector<plint> const& blocks = blockNum.getLocalInfo().getBlocks();
     plint numIds = blockNum.getSparseBlockStructure().nextIncrementalId();
     std::vector<plint> ids(numIds);
-    for (plint i=0; i<numIds; ++i) {
+    for (plint i=0; i<numIds; ++i)
+    {
         ids[i] = i;
     }
     std::random_shuffle(ids.begin(), ids.end());
-    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock)
+    {
         plint blockId = blocks[iBlock];
         ScalarField3D<plint>& component =
             dynamic_cast<ScalarField3D<plint>&>(blockNum.getComponent(blockId));
         setToConstant(component, component.getBoundingBox(), ids[blockId]);
-    }   
+    }
 }
 
 }  // namespace plb

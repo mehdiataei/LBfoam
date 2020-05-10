@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -48,74 +48,76 @@
 
 #include <memory>
 
-namespace plb {
+namespace plb
+{
 
 /// Main class when dealing with grid refinement
 template <typename T, template <typename U> class Descriptor>
-class MultiGridLattice2D : public BlockLatticeBase2D< T,Descriptor >, public MultiGrid2D {
+class MultiGridLattice2D : public BlockLatticeBase2D< T,Descriptor >, public MultiGrid2D
+{
 
-  public:
-    MultiGridLattice2D(MultiGridManagement2D management,
-                       std::vector<BlockCommunicator2D* > communicators_,
-                       std::vector<CombinedStatistics*> combinedStatistics_, 
-                       Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel,
-                       FineGridInterfaceInstantiator<T,Descriptor> *fineGridInstantiator_,
-                       CoarseGridInterfaceInstantiator<T,Descriptor> *coarseGridInstantiator_
-                        );
+public:
+	MultiGridLattice2D(MultiGridManagement2D management,
+	                   std::vector<BlockCommunicator2D* > communicators_,
+	                   std::vector<CombinedStatistics*> combinedStatistics_,
+	                   Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel,
+	                   FineGridInterfaceInstantiator<T,Descriptor> *fineGridInstantiator_,
+	                   CoarseGridInterfaceInstantiator<T,Descriptor> *coarseGridInstantiator_
+	                  );
 
-    MultiGridLattice2D( MultiGridManagement2D management,
-                       Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel,
-                       FineGridInterfaceInstantiator<T,Descriptor> *fineGridInstantiator_,
-                       CoarseGridInterfaceInstantiator<T,Descriptor> *coarseGridInstantiator_ 
-                        );
+	MultiGridLattice2D( MultiGridManagement2D management,
+	                    Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel,
+	                    FineGridInterfaceInstantiator<T,Descriptor> *fineGridInstantiator_,
+	                    CoarseGridInterfaceInstantiator<T,Descriptor> *coarseGridInstantiator_
+	                  );
 
-    /// Copy constructor for the whole multi grid
-    MultiGridLattice2D(MultiGridLattice2D<T,Descriptor> const& rhs);
-    /// Copy constructor for a subdomain of the multi grid
-    MultiGridLattice2D(MultiGridLattice2D<T,Descriptor> const& rhs, Box2D subDomain, bool crop=true);
-    
-    MultiGridLattice2D(MultiGrid2D const& rhs);
-    MultiGridLattice2D(MultiGrid2D const& rhs, Box2D subDomain, bool crop=true);
-    
-    MultiGridLattice2D<T,Descriptor>& operator=(MultiGridLattice2D<T,Descriptor> const& rhs);
-    ~MultiGridLattice2D();
-    
-    /// Create the couplings between lattices
-    void initialize();
-    
-    /// Create a single multiBlock that represents the multiGrid. 
-    std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > convertToLevel(plint level) const;
-    
-    /* *** MultiGrid2D methods *** */
-    int getBlockId () const;
-    
-    /// Retrieve the lattices representing each a refinement level
-    MultiBlockLattice2D<T,Descriptor>& getComponent(plint iBlock);
-    const MultiBlockLattice2D<T,Descriptor>& getComponent(plint iBlock) const;
-    
-    /* **** BlockLatticeBase2D methods **** */
-    
-    virtual Cell<T,Descriptor>& get(plint iX, plint iY);
-    virtual Cell<T,Descriptor> const& get(plint iX, plint iY) const;
-    virtual void specifyStatisticsStatus (Box2D domain, bool status);
-    virtual void collide(Box2D domain);
-    virtual void collide();
-    virtual void stream(Box2D domain);
-    virtual void stream();              
-    virtual void collideAndStream(Box2D domain);
-    virtual void collideAndStream();    
-    virtual void incrementTime();
-    TimeCounter& getTimeCounter();
-    TimeCounter const& getTimeCounter() const;
-  private:
-    void createInterfaces();
-    void iterateMultiGrid(plint level);
-    void eliminateStatisticsInOverlap();
-  private:
-    std::vector<MultiBlockLattice2D<T,Descriptor>*> lattices;
-    // the objects to create the interfaces
-    FineGridInterfaceInstantiator<T,Descriptor> *fineGridInstantiator;
-    CoarseGridInterfaceInstantiator<T,Descriptor> *coarseGridInstantiator;
+	/// Copy constructor for the whole multi grid
+	MultiGridLattice2D(MultiGridLattice2D<T,Descriptor> const& rhs);
+	/// Copy constructor for a subdomain of the multi grid
+	MultiGridLattice2D(MultiGridLattice2D<T,Descriptor> const& rhs, Box2D subDomain, bool crop=true);
+
+	MultiGridLattice2D(MultiGrid2D const& rhs);
+	MultiGridLattice2D(MultiGrid2D const& rhs, Box2D subDomain, bool crop=true);
+
+	MultiGridLattice2D<T,Descriptor>& operator=(MultiGridLattice2D<T,Descriptor> const& rhs);
+	~MultiGridLattice2D();
+
+	/// Create the couplings between lattices
+	void initialize();
+
+	/// Create a single multiBlock that represents the multiGrid.
+	std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > convertToLevel(plint level) const;
+
+	/* *** MultiGrid2D methods *** */
+	int getBlockId () const;
+
+	/// Retrieve the lattices representing each a refinement level
+	MultiBlockLattice2D<T,Descriptor>& getComponent(plint iBlock);
+	const MultiBlockLattice2D<T,Descriptor>& getComponent(plint iBlock) const;
+
+	/* **** BlockLatticeBase2D methods **** */
+
+	virtual Cell<T,Descriptor>& get(plint iX, plint iY);
+	virtual Cell<T,Descriptor> const& get(plint iX, plint iY) const;
+	virtual void specifyStatisticsStatus (Box2D domain, bool status);
+	virtual void collide(Box2D domain);
+	virtual void collide();
+	virtual void stream(Box2D domain);
+	virtual void stream();
+	virtual void collideAndStream(Box2D domain);
+	virtual void collideAndStream();
+	virtual void incrementTime();
+	TimeCounter& getTimeCounter();
+	TimeCounter const& getTimeCounter() const;
+private:
+	void createInterfaces();
+	void iterateMultiGrid(plint level);
+	void eliminateStatisticsInOverlap();
+private:
+	std::vector<MultiBlockLattice2D<T,Descriptor>*> lattices;
+	// the objects to create the interfaces
+	FineGridInterfaceInstantiator<T,Descriptor> *fineGridInstantiator;
+	CoarseGridInterfaceInstantiator<T,Descriptor> *coarseGridInstantiator;
 };
 
 template<typename T, template<typename U> class Descriptor>

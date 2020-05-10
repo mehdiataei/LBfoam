@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,25 +28,25 @@
 #include "core/globalDefs.h"
 #include "atomicBlock/dataProcessorWrapper3D.h"
 
-namespace plb {
+namespace plb
+{
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 class ComputeSmagoViscosityFunctional3D : public BoxProcessingFunctional3D_L<T,Descriptor>
 {
 public:
-    ComputeSmagoViscosityFunctional3D(T omega0_, T cSmago_);
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
-    virtual ComputeSmagoViscosityFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	ComputeSmagoViscosityFunctional3D(T omega0_, T cSmago_);
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
+	virtual ComputeSmagoViscosityFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    static T computePreFactor(T omega0, T cSmago);
+	static T computePreFactor(T omega0, T cSmago);
 private:
-    T omega0;    //< "Laminar" relaxation parameter, used when the strain-rate is zero.
-    T preFactor; //< A factor depending on the Smagorinky constant, used to compute the effective viscosity.
+	T omega0;    //< "Laminar" relaxation parameter, used when the strain-rate is zero.
+	T preFactor; //< A factor depending on the Smagorinky constant, used to compute the effective viscosity.
 };
 
 } // namespace plb
 
 #endif  // DYNAMIC_SMAGORINSKY_PROCESSOR_3D_H
-

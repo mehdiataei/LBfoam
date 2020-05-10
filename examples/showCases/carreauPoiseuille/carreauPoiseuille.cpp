@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -23,7 +23,9 @@
 */
 
 #include "palabos2D.h"
+#ifndef PLB_PRECOMPILED // Unless precompiled version is used,
 #include "palabos2D.hh"   // include full template code
+#endif
 
 #include <vector>
 #include <cmath>
@@ -52,30 +54,33 @@ T computePressureGradient(CarreauFlowParam<T> parameters, T tol, plint maxIter)
     for (plint iPop = 0; iPop < maxIter; ++iPop)
     {
         TrapeziumIntegration<T> ti0(new NewtonRaphson<T>(
-                                           new CarreauFunction_2<T>(parameters.getLatticeNu0()/
-                                         (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
-                                          parameters.getLatticeLambda()*parameters.getDeltaT(),
-                                          parameters.getExponent(),
-                                           kappa0,parameters.getLy()),tol,maxIter) , 0.0,
-                                          (parameters.getNy()-1)*maxIter);
+                                        new CarreauFunction_2<T>(parameters.getLatticeNu0()/
+                                                (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
+                                                parameters.getLatticeLambda()*parameters.getDeltaT(),
+                                                parameters.getExponent(),
+                                                kappa0,parameters.getLy()),tol,maxIter), 0.0,
+                                    (parameters.getNy()-1)*maxIter);
         T uMaxTmp0 = ti0(parameters.getLy()/(T)2);
 
         TrapeziumIntegration<T> ti(new NewtonRaphson<T>(
-                                           new CarreauFunction_2<T>(parameters.getLatticeNu0()/
-                                         (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
-                                          parameters.getLatticeLambda()*parameters.getDeltaT(),
-                                          parameters.getExponent(),
-                                           kappa,parameters.getLy()),tol,maxIter) , 0.0,
-                                          (parameters.getNy()-1)*maxIter);
+                                       new CarreauFunction_2<T>(parameters.getLatticeNu0()/
+                                               (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
+                                               parameters.getLatticeLambda()*parameters.getDeltaT(),
+                                               parameters.getExponent(),
+                                               kappa,parameters.getLy()),tol,maxIter), 0.0,
+                                   (parameters.getNy()-1)*maxIter);
         T uMaxTmp = ti(parameters.getLy()/(T)2);
 
-        if ( ((uMaxTmp - uMax) > 0 && (uMaxTmp0 - uMax) < 0) || ((uMaxTmp - uMax) < 0 && (uMaxTmp0 - uMax) > 0)) {
+        if ( ((uMaxTmp - uMax) > 0 && (uMaxTmp0 - uMax) < 0) || ((uMaxTmp - uMax) < 0 && (uMaxTmp0 - uMax) > 0))
+        {
             break;
         }
-        else if ((uMaxTmp - uMax) > 0 && (uMaxTmp0 - uMax) > 0) {
+        else if ((uMaxTmp - uMax) > 0 && (uMaxTmp0 - uMax) > 0)
+        {
             kappa = kappa / (T)10;
         }
-        else if ((uMaxTmp - uMax) < 0 && (uMaxTmp0 - uMax) < 0) {
+        else if ((uMaxTmp - uMax) < 0 && (uMaxTmp0 - uMax) < 0)
+        {
             kappa = kappa * (T)10;
         }
     }
@@ -84,44 +89,50 @@ T computePressureGradient(CarreauFlowParam<T> parameters, T tol, plint maxIter)
     {
         TrapeziumIntegration<T> ti(new NewtonRaphson<T>(
                                        new CarreauFunction_2<T>(parameters.getLatticeNu0()/
-                                         (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
-                                          parameters.getLatticeLambda()*parameters.getDeltaT(),
-                                          parameters.getExponent(),
-                                       kappa,parameters.getLy()),tol,maxIter) , 0.0,
-                                          (parameters.getNy()-1)*maxIter);
+                                               (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
+                                               parameters.getLatticeLambda()*parameters.getDeltaT(),
+                                               parameters.getExponent(),
+                                               kappa,parameters.getLy()),tol,maxIter), 0.0,
+                                   (parameters.getNy()-1)*maxIter);
 
         T uMaxTmp = ti(parameters.getLy()/(T)2);
-        if (std::fabs(uMaxTmp - uMax) < tol) {
+        if (std::fabs(uMaxTmp - uMax) < tol)
+        {
             return kappa;
         }
-        else {
-            if (uMaxTmp > uMax) {
+        else
+        {
+            if (uMaxTmp > uMax)
+            {
                 T kappaTmp = kappa;
                 kappa -= (kappa - kappa0)/(T)2;
                 TrapeziumIntegration<T> ti0(new NewtonRaphson<T>(
-                                       new CarreauFunction_2<T>(parameters.getLatticeNu0()/
-                                         (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
-                                          parameters.getLatticeLambda()*parameters.getDeltaT(),
-                                          parameters.getExponent(),
-                                          kappa,parameters.getLy()),tol,maxIter) , 0.0,
-                                          (parameters.getNy()-1)*maxIter);
+                                                new CarreauFunction_2<T>(parameters.getLatticeNu0()/
+                                                        (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
+                                                        parameters.getLatticeLambda()*parameters.getDeltaT(),
+                                                        parameters.getExponent(),
+                                                        kappa,parameters.getLy()),tol,maxIter), 0.0,
+                                            (parameters.getNy()-1)*maxIter);
                 T uMaxTmp0 = ti0(parameters.getLy()/(T)2);
-                if (uMaxTmp0 < uMax) {
+                if (uMaxTmp0 < uMax)
+                {
                     kappa0 = kappaTmp;
                 }
             }
-            else {
+            else
+            {
                 T kappaTmp = kappa0;
                 kappa += (kappa - kappa0)/(T)2;
                 TrapeziumIntegration<T> ti0(new NewtonRaphson<T>(
-                                       new CarreauFunction_2<T>(parameters.getLatticeNu0()/
-                                         (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
-                                          parameters.getLatticeLambda()*parameters.getDeltaT(),
-                                          parameters.getExponent(),
-                                       kappa,parameters.getLy()),tol,maxIter) , 0.0,
-                                        (parameters.getNy()-1)*maxIter);
+                                                new CarreauFunction_2<T>(parameters.getLatticeNu0()/
+                                                        (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
+                                                        parameters.getLatticeLambda()*parameters.getDeltaT(),
+                                                        parameters.getExponent(),
+                                                        kappa,parameters.getLy()),tol,maxIter), 0.0,
+                                            (parameters.getNy()-1)*maxIter);
                 T uMaxTmp0 = ti0(parameters.getLy()/(T)2);
-                if (uMaxTmp0 < uMax) {
+                if (uMaxTmp0 < uMax)
+                {
                     kappa0 = kappa;
                     kappa = kappaTmp;
                 }
@@ -146,11 +157,11 @@ public :
     void operator()(int iX, int iY, Array<T,nDim> &u)
     {
         TrapeziumIntegration<T> ti(new NewtonRaphson<T>(
-                                   new CarreauFunction_2<T>(parameters.getLatticeNu0()/
-                                        (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
-                                        parameters.getLatticeLambda()*parameters.getDeltaT(),
-                                        parameters.getExponent(),
-                                        kappa,parameters.getLy()),tol,maxIter) , 0.0, iY *maxIter);
+                                       new CarreauFunction_2<T>(parameters.getLatticeNu0()/
+                                               (parameters.getDeltaT()/(parameters.getDeltaX()*parameters.getDeltaX())),
+                                               parameters.getLatticeLambda()*parameters.getDeltaT(),
+                                               parameters.getExponent(),
+                                               kappa,parameters.getLy()),tol,maxIter), 0.0, iY *maxIter);
 
         u[0] = ti((T)iY/(T)(parameters.getNy()-1))*parameters.getLatticeU();
         u[1] = T();
@@ -165,28 +176,28 @@ template<typename T, int nDim>
 struct IniCarreauVelocityProcessor2D : public BoxProcessingFunctional2D_T<T,nDim>
 {
     IniCarreauVelocityProcessor2D(CarreauFlowParam<T> parameters_,T kappa_, T tol_, plint maxIter_);
-    
+
     virtual void process(Box2D domain,TensorField2D<T,nDim>& field);
     virtual IniCarreauVelocityProcessor2D<T,nDim>* clone() const;
-    
+
     virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    
+
 private :
     CarreauFlowParam<T> parameters;
-    
+
     T kappa, tol;
     plint maxIter;
 };
 
 template<typename T, int nDim>
 IniCarreauVelocityProcessor2D<T,nDim>::IniCarreauVelocityProcessor2D(
-        CarreauFlowParam<T> parameters_,T kappa_, T tol_, plint maxIter_) :
-            parameters(parameters_), kappa(kappa_), tol(tol_), maxIter(maxIter_)
+    CarreauFlowParam<T> parameters_,T kappa_, T tol_, plint maxIter_) :
+    parameters(parameters_), kappa(kappa_), tol(tol_), maxIter(maxIter_)
 { }
 
 template<typename T, int nDim>
 void IniCarreauVelocityProcessor2D<T,nDim>::
-        process(Box2D domain, TensorField2D<T,nDim>& field)
+process(Box2D domain, TensorField2D<T,nDim>& field)
 {
     enum {x,y}; //spatial coordinates
 
@@ -222,7 +233,7 @@ void IniCarreauVelocityProcessor2D<T,nDim>::
 
 template<typename T, int nDim>
 IniCarreauVelocityProcessor2D<T,nDim>*
-    IniCarreauVelocityProcessor2D<T,nDim>::clone() const
+IniCarreauVelocityProcessor2D<T,nDim>::clone() const
 {
     return new IniCarreauVelocityProcessor2D<T,nDim>(*this);
 }
@@ -253,13 +264,13 @@ private :
 
 template<typename T, template<typename U> class Descriptor, int nDim>
 IniCarreauProcessor2D<T,Descriptor,nDim>::IniCarreauProcessor2D(
-        CarreauFlowParam<T> parameters_,T kappa_, T tol_, plint maxIter_) :
-            parameters(parameters_), kappa(kappa_), tol(tol_), maxIter(maxIter_)
+    CarreauFlowParam<T> parameters_,T kappa_, T tol_, plint maxIter_) :
+    parameters(parameters_), kappa(kappa_), tol(tol_), maxIter(maxIter_)
 {  }
 
 template<typename T, template<typename U> class Descriptor, int nDim>
 void IniCarreauProcessor2D<T,Descriptor,nDim>::
-        process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice,TensorField2D<T,nDim>& field)
+process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice,TensorField2D<T,nDim>& field)
 {
     enum {x,y}; //spatial coordinates
 
@@ -286,7 +297,7 @@ void IniCarreauProcessor2D<T,Descriptor,nDim>::
 
 template<typename T, template<typename U> class Descriptor, int nDim>
 IniCarreauProcessor2D<T,Descriptor,nDim>*
-    IniCarreauProcessor2D<T,Descriptor,nDim>::clone() const
+IniCarreauProcessor2D<T,Descriptor,nDim>::clone() const
 {
     return new IniCarreauProcessor2D<T,Descriptor,nDim>(*this);
 }
@@ -305,9 +316,9 @@ void definePoiseuilleGeometry( MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
                                T tol, plint maxIter)
 {
     setCompositeDynamics (
-            lattice,
-            lattice.getBoundingBox(),
-            new CarreauDynamics<T,DESCRIPTOR,1>(new NoDynamics<T,DESCRIPTOR>) );
+        lattice,
+        lattice.getBoundingBox(),
+        new CarreauDynamics<T,DESCRIPTOR,1>(new NoDynamics<T,DESCRIPTOR>) );
 
     // Create Velocity boundary conditions
     boundaryCondition.setVelocityConditionOnBlockBoundaries(lattice);
@@ -317,10 +328,10 @@ void definePoiseuilleGeometry( MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
     pcout << "gradP = " << kappa << endl;
 
     applyProcessingFunctional(new IniCarreauVelocityProcessor2D<T,2>(parameters,kappa, tol, maxIter),
-                            velField.getBoundingBox(),velField);
+                              velField.getBoundingBox(),velField);
 
     applyProcessingFunctional(new IniCarreauProcessor2D<T,DESCRIPTOR,2>(parameters,kappa, tol, maxIter),
-                            lattice.getBoundingBox(),lattice,velField);
+                              lattice.getBoundingBox(),lattice,velField);
 
     lattice.initialize();
 
@@ -333,18 +344,18 @@ T computeRMSerror ( MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
 {
     MultiTensorField2D<T,2> numericalVelocity(lattice);
     computeVelocity(lattice, numericalVelocity, lattice.getBoundingBox());
-    
+
     // Divide by lattice velocity to normalize the error
     return 1./parameters.getLatticeU() *
-    // Compute RMS difference between analytical and numerical solution
-    std::sqrt( computeAverage( *computeNormSqr(
-        *subtract(analyticalVelocity, numericalVelocity)
-    ) ) );
+           // Compute RMS difference between analytical and numerical solution
+           std::sqrt( computeAverage( *computeNormSqr(
+                                          *subtract(analyticalVelocity, numericalVelocity)
+                                      ) ) );
 }
 
 void writeVTK(MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
-            MultiTensorField2D<T,2> &field,
-            CarreauFlowParam<T> const& parameters, plint iter)
+              MultiTensorField2D<T,2> &field,
+              CarreauFlowParam<T> const& parameters, plint iter)
 {
     T dx = parameters.getDeltaX();
     T dt = parameters.getDeltaT();
@@ -374,16 +385,16 @@ int main(int argc, char *argv[])
     const T uMax = uMaxRef * (T)Nref / (T)N;
 
     CarreauFlowParam<T> parameters(
-            (T) uMax,    // uMax
-            (T) 1.e0,    // Re
-            (T)10.0,     // Cu
-            (T)0.0,      // NuInf (Only the case nuInf = 0 has been implemented for the velocity inlet bc)
-            (T)0.5,      // n
-             N,          // N
-             1.,         // lx
-             1.          // ly
+        (T) uMax,    // uMax
+        (T) 1.e0,    // Re
+        (T)10.0,     // Cu
+        (T)0.0,      // NuInf (Only the case nuInf = 0 has been implemented for the velocity inlet bc)
+        (T)0.5,      // n
+        N,          // N
+        1.,         // lx
+        1.          // ly
     );
-    
+
     pcout << "nu0 = " << parameters.getLatticeNu0() << ", nuInf = " << parameters.getLatticeNuInf() << std::endl;
     const plint maxT     = 10000000;
 
@@ -395,13 +406,13 @@ int main(int argc, char *argv[])
     global::CarreauParameters().setExponent(parameters.getExponent());
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-            parameters.getNx(), parameters.getNy(),
-            new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega0()) );
-    
+        parameters.getNx(), parameters.getNy(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega0()) );
+
     defineDynamics(lattice, lattice.getBoundingBox(), new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega0()) );
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     T tolAll = 1.0e-11;
     plint maxIterAll = 100;
@@ -425,7 +436,7 @@ int main(int argc, char *argv[])
             pcout << iT << " : Writing image." << endl;
             writeVTK(lattice,velField, parameters,iT);
         }
-        
+
         if (converge.hasConverged())
         {
             pcout << "Simulation converged." << endl;
@@ -445,7 +456,7 @@ int main(int argc, char *argv[])
     pcout << "total time: " << tEnd << endl;
     pcout << "total iterations: " << iT << endl;
     pcout << "Msus: " << N1000*N1000*(T)iT/totalTime << endl;
-    
+
     plb_ofstream fout("tmp/vel.dat");
     fout << *computeVelocity(lattice);
     fout.close();

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,17 +34,18 @@
 #include "multiBlock/multiDataField3D.h"
 
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
 MultiBlockLattice3D<T,Descriptor>*
-    generateMultiBlockLattice3D(Box3D const& domain, Dynamics<T,Descriptor> const* backgroundDynamics);
+generateMultiBlockLattice3D(Box3D const& domain, Dynamics<T,Descriptor> const* backgroundDynamics);
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 MultiNTensorField3D<T2>*
-    generateNTensorFieldFromLattice3D (
-            MultiBlockLattice3D<T1,Descriptor> const& lattice,
-            Box3D const& domain, plint ndim );
+generateNTensorFieldFromLattice3D (
+    MultiBlockLattice3D<T1,Descriptor> const& lattice,
+    Box3D const& domain, plint ndim );
 
 }  // namespace plb
 

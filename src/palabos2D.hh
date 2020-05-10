@@ -39,3 +39,4 @@
 #include <finiteDifference/headers2D.hh>
 #include <offLattice/headers2D.hh>
 #include <libraryInterfaces/headers2D.hh>
+#include <lbfoam/lbfoam2D.hh>

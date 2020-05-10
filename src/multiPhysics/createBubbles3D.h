@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,7 +33,8 @@
 #include <limits>
 
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
 void punchSphere( FreeSurfaceFields3D<T,Descriptor>& fields, Array<T,3> const& center, T radius,
@@ -47,28 +48,16 @@ template<typename T, template<typename U> class Descriptor>
 T computeAverageSphereDensity(FreeSurfaceFields3D<T,Descriptor>& fields, Array<T,3> const& center, T radius);
 
 template<typename T, template<typename U> class Descriptor>
-void punchSphere( FreeSurfaceSetup<T,Descriptor>& setup, Array<T,3> const& center, T radius,
+void punchSphere( FreeSurfaceSetup3D<T,Descriptor>& setup, Array<T,3> const& center, T radius,
                   T rhoEmpty, T rho0, Dynamics<T,Descriptor>& dynamics );
 
 template<typename T, template<typename U> class Descriptor>
-void analyticalPunchSphere( FreeSurfaceSetup<T,Descriptor>& setup, Array<T,3> const& center, T radius,
+void analyticalPunchSphere( FreeSurfaceSetup3D<T,Descriptor>& setup, Array<T,3> const& center, T radius,
                             T rhoEmpty, T rho0, plint subDivision, Dynamics<T,Descriptor>& dynamics );
 
 template<typename T, template<typename U> class Descriptor>
-T computeAverageSphereDensity(FreeSurfaceSetup<T,Descriptor>& setup, Array<T,3> const& center, T radius);
-
-template<typename T, template<typename U> class Descriptor>
-void punchSphere( FreeSurfaceWrapper<T,Descriptor>& wrapper, Array<T,3> const& center, T radius,
-                  T rhoEmpty, T rho0, Dynamics<T,Descriptor>& dynamics );
-
-template<typename T, template<typename U> class Descriptor>
-void analyticalPunchSphere( FreeSurfaceWrapper<T,Descriptor>& wrapper, Array<T,3> const& center, T radius,
-                            T rhoEmpty, T rho0, plint subDivision, Dynamics<T,Descriptor>& dynamics );
-
-template<typename T, template<typename U> class Descriptor>
-T computeAverageSphereDensity(FreeSurfaceWrapper<T,Descriptor>& wrapper, Array<T,3> const& center, T radius);
+T computeAverageSphereDensity(FreeSurfaceSetup3D<T,Descriptor>& setup, Array<T,3> const& center, T radius);
 
 }  // namespace plb
 
 #endif  // CREATE_BUBBLES_3D_H
-

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,57 +29,67 @@
 #include "atomicBlock/dataProcessor2D.h"
 #include "core/plbDebug.h"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Class BoxProcessingFunctional2D ************************* */
 
 BoxProcessingFunctional2D::BoxProcessingFunctional2D()
     : dxScale(0),
       dtScale(0)
-{ } 
+{ }
 
 /** Operations are not executed on envelope by default. **/
-BlockDomain::DomainT BoxProcessingFunctional2D::appliesTo() const {
+BlockDomain::DomainT BoxProcessingFunctional2D::appliesTo() const
+{
     return BlockDomain::bulk;
 }
 
 void BoxProcessingFunctional2D::rescale(double dxScale, double dtScale)
 { }
 
-void BoxProcessingFunctional2D::setscale(int dxScale_, int dtScale_) {
+void BoxProcessingFunctional2D::setscale(int dxScale_, int dtScale_)
+{
     dxScale = dxScale_;
     dtScale = dtScale_;
 }
 
-int BoxProcessingFunctional2D::getDxScale() const {
+int BoxProcessingFunctional2D::getDxScale() const
+{
     return dxScale;
 }
 
-int BoxProcessingFunctional2D::getDtScale() const {
+int BoxProcessingFunctional2D::getDtScale() const
+{
     return dtScale;
 }
 
-void BoxProcessingFunctional2D::serialize(std::string& data) const {
+void BoxProcessingFunctional2D::serialize(std::string& data) const
+{
     std::string newData = util::val2str(dxScale, dtScale);
     data += newData + " ";
 }
 
-void BoxProcessingFunctional2D::unserialize(std::string& data) {
+void BoxProcessingFunctional2D::unserialize(std::string& data)
+{
     data = util::consume(data, dxScale, dtScale);
 }
 
 /** Return a default value of -1. This is to help transition for legacy
  *  code that has not yet implemented this method.
  ***/
-int BoxProcessingFunctional2D::getStaticId() const {
+int BoxProcessingFunctional2D::getStaticId() const
+{
     return -1;
 }
 
-void BoxProcessingFunctional2D::getModificationPattern(std::vector<bool>& isWritten) const {
+void BoxProcessingFunctional2D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     std::vector<modif::ModifT> modified(isWritten.size());
     getTypeOfModification(modified);
     PLB_ASSERT(modified.size()==isWritten.size());
-    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock)
+    {
         isWritten[iBlock] = modified[iBlock]==modif::nothing ? false:true;
     }
 }
@@ -88,7 +98,7 @@ void BoxProcessingFunctional2D::getModificationPattern(std::vector<bool>& isWrit
 /* *************** Class BoxProcessor2D ************************************ */
 
 BoxProcessor2D::BoxProcessor2D(BoxProcessingFunctional2D* functional_,
-               Box2D domain_, std::vector<AtomicBlock2D*> atomicBlocks_)
+                               Box2D domain_, std::vector<AtomicBlock2D*> atomicBlocks_)
     : functional(functional_), domain(domain_), atomicBlocks(atomicBlocks_)
 { }
 
@@ -97,30 +107,37 @@ BoxProcessor2D::BoxProcessor2D(BoxProcessor2D const& rhs)
       domain(rhs.domain), atomicBlocks(rhs.atomicBlocks)
 { }
 
-BoxProcessor2D& BoxProcessor2D::operator=(BoxProcessor2D const& rhs) {
-    delete functional; functional = rhs.functional->clone();
+BoxProcessor2D& BoxProcessor2D::operator=(BoxProcessor2D const& rhs)
+{
+    delete functional;
+    functional = rhs.functional->clone();
     domain = rhs.domain;
     atomicBlocks = rhs.atomicBlocks;
     return *this;
 }
 
-BoxProcessor2D::~BoxProcessor2D() {
+BoxProcessor2D::~BoxProcessor2D()
+{
     delete functional;
 }
 
-Box2D BoxProcessor2D::getDomain() const {
+Box2D BoxProcessor2D::getDomain() const
+{
     return domain;
 }
 
-void BoxProcessor2D::process() {
+void BoxProcessor2D::process()
+{
     functional -> processGenericBlocks(domain, atomicBlocks);
 }
 
-BoxProcessor2D* BoxProcessor2D::clone() const {
+BoxProcessor2D* BoxProcessor2D::clone() const
+{
     return new BoxProcessor2D(*this);
 }
 
-int BoxProcessor2D::getStaticId() const {
+int BoxProcessor2D::getStaticId() const
+{
     return functional->getStaticId();
 }
 
@@ -132,7 +149,8 @@ BoxProcessorGenerator2D::BoxProcessorGenerator2D(BoxProcessingFunctional2D* func
       functional(functional_)
 { }
 
-BoxProcessorGenerator2D::~BoxProcessorGenerator2D() {
+BoxProcessorGenerator2D::~BoxProcessorGenerator2D()
+{
     delete functional;
 }
 
@@ -141,45 +159,56 @@ BoxProcessorGenerator2D::BoxProcessorGenerator2D(BoxProcessorGenerator2D const& 
       functional(rhs.functional->clone())
 { }
 
-BoxProcessorGenerator2D& BoxProcessorGenerator2D::operator=(BoxProcessorGenerator2D const& rhs) {
-    delete functional; functional = rhs.functional->clone();
+BoxProcessorGenerator2D& BoxProcessorGenerator2D::operator=(BoxProcessorGenerator2D const& rhs)
+{
+    delete functional;
+    functional = rhs.functional->clone();
     return *this;
 }
 
-BlockDomain::DomainT BoxProcessorGenerator2D::appliesTo() const {
+BlockDomain::DomainT BoxProcessorGenerator2D::appliesTo() const
+{
     return functional->appliesTo();
 }
 
-void BoxProcessorGenerator2D::rescale(double dxScale, double dtScale) {
+void BoxProcessorGenerator2D::rescale(double dxScale, double dtScale)
+{
     functional->rescale(dxScale, dtScale);
 }
 
-void BoxProcessorGenerator2D::setscale(int dxScale, int dtScale) {
+void BoxProcessorGenerator2D::setscale(int dxScale, int dtScale)
+{
     functional->setscale(dxScale, dtScale);
 }
 
-void BoxProcessorGenerator2D::getModificationPattern(std::vector<bool>& isWritten) const {
+void BoxProcessorGenerator2D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     functional->getModificationPattern(isWritten);
 }
 
-void BoxProcessorGenerator2D::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void BoxProcessorGenerator2D::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
     functional->getTypeOfModification(modified);
 }
 
-DataProcessor2D* BoxProcessorGenerator2D::generate(std::vector<AtomicBlock2D*> atomicBlocks) const {
+DataProcessor2D* BoxProcessorGenerator2D::generate(std::vector<AtomicBlock2D*> atomicBlocks) const
+{
     return new BoxProcessor2D(functional->clone(), this->getDomain(), atomicBlocks);
 }
 
-BoxProcessorGenerator2D* BoxProcessorGenerator2D::clone() const {
+BoxProcessorGenerator2D* BoxProcessorGenerator2D::clone() const
+{
     return new BoxProcessorGenerator2D(*this);
 }
 
-void BoxProcessorGenerator2D::serialize(Box2D& domain, std::string& data) const {
+void BoxProcessorGenerator2D::serialize(Box2D& domain, std::string& data) const
+{
     BoxedDataProcessorGenerator2D::serialize(domain, data);
     functional->serialize(data);
 }
 
-int BoxProcessorGenerator2D::getStaticId() const {
+int BoxProcessorGenerator2D::getStaticId() const
+{
     return functional->getStaticId();
 }
 
@@ -187,7 +216,7 @@ int BoxProcessorGenerator2D::getStaticId() const {
 /* *************** Class DotProcessor2D ************************************ */
 
 DotProcessor2D::DotProcessor2D(DotProcessingFunctional2D* functional_,
-               DotList2D const& dotList_, std::vector<AtomicBlock2D*> atomicBlocks_)
+                               DotList2D const& dotList_, std::vector<AtomicBlock2D*> atomicBlocks_)
     : functional(functional_), dotList(dotList_), atomicBlocks(atomicBlocks_)
 { }
 
@@ -196,26 +225,32 @@ DotProcessor2D::DotProcessor2D(DotProcessor2D const& rhs)
       dotList(rhs.dotList), atomicBlocks(rhs.atomicBlocks)
 { }
 
-DotProcessor2D& DotProcessor2D::operator=(DotProcessor2D const& rhs) {
-    delete functional; functional = rhs.functional->clone();
+DotProcessor2D& DotProcessor2D::operator=(DotProcessor2D const& rhs)
+{
+    delete functional;
+    functional = rhs.functional->clone();
     dotList = rhs.dotList;
     atomicBlocks = rhs.atomicBlocks;
     return *this;
 }
 
-DotProcessor2D::~DotProcessor2D() {
+DotProcessor2D::~DotProcessor2D()
+{
     delete functional;
 }
 
-void DotProcessor2D::process() {
+void DotProcessor2D::process()
+{
     functional -> processGenericBlocks(dotList, atomicBlocks);
 }
 
-DotProcessor2D* DotProcessor2D::clone() const {
+DotProcessor2D* DotProcessor2D::clone() const
+{
     return new DotProcessor2D(*this);
 }
 
-DotList2D const& DotProcessor2D::getDotList() const {
+DotList2D const& DotProcessor2D::getDotList() const
+{
     return dotList;
 }
 
@@ -227,7 +262,8 @@ DotProcessorGenerator2D::DotProcessorGenerator2D(DotProcessingFunctional2D* func
       functional(functional_)
 { }
 
-DotProcessorGenerator2D::~DotProcessorGenerator2D() {
+DotProcessorGenerator2D::~DotProcessorGenerator2D()
+{
     delete functional;
 }
 
@@ -236,20 +272,25 @@ DotProcessorGenerator2D::DotProcessorGenerator2D(DotProcessorGenerator2D const& 
       functional(rhs.functional->clone())
 { }
 
-DotProcessorGenerator2D& DotProcessorGenerator2D::operator=(DotProcessorGenerator2D const& rhs) {
-    delete functional; functional = rhs.functional->clone();
+DotProcessorGenerator2D& DotProcessorGenerator2D::operator=(DotProcessorGenerator2D const& rhs)
+{
+    delete functional;
+    functional = rhs.functional->clone();
     return *this;
 }
 
-BlockDomain::DomainT DotProcessorGenerator2D::appliesTo() const {
+BlockDomain::DomainT DotProcessorGenerator2D::appliesTo() const
+{
     return functional->appliesTo();
 }
 
-void DotProcessorGenerator2D::rescale(double dxScale, double dtScale) {
+void DotProcessorGenerator2D::rescale(double dxScale, double dtScale)
+{
     functional->rescale(dxScale, dtScale);
 }
 
-void DotProcessorGenerator2D::setscale(int dxScale, int dtScale) {
+void DotProcessorGenerator2D::setscale(int dxScale, int dtScale)
+{
     functional->setscale(dxScale, dtScale);
 }
 
@@ -259,15 +300,18 @@ void DotProcessorGenerator2D::getModificationPattern(std::vector<bool>& isWritte
 }
 
 
-void DotProcessorGenerator2D::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void DotProcessorGenerator2D::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
     functional->getTypeOfModification(modified);
 }
 
-DataProcessor2D* DotProcessorGenerator2D::generate(std::vector<AtomicBlock2D*> atomicBlocks) const {
+DataProcessor2D* DotProcessorGenerator2D::generate(std::vector<AtomicBlock2D*> atomicBlocks) const
+{
     return new DotProcessor2D(functional->clone(), this->getDotList(), atomicBlocks);
 }
 
-DotProcessorGenerator2D* DotProcessorGenerator2D::clone() const {
+DotProcessorGenerator2D* DotProcessorGenerator2D::clone() const
+{
     return new DotProcessorGenerator2D(*this);
 }
 
@@ -289,11 +333,13 @@ void DotProcessingFunctional2D::setscale(int dxScale, int dtScale)
 
 /** The default assumption is conservative: all blocks have potentially been modified.
  */
-void DotProcessingFunctional2D::getModificationPattern(std::vector<bool>& isWritten) const {
+void DotProcessingFunctional2D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     std::vector<modif::ModifT> modified(isWritten.size());
     getTypeOfModification(modified);
     PLB_ASSERT(modified.size()==isWritten.size());
-    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock)
+    {
         isWritten[iBlock] = modified[iBlock]==modif::nothing ? false:true;
     }
 }
@@ -306,7 +352,8 @@ BoundedBoxProcessingFunctional2D::BoundedBoxProcessingFunctional2D()
 { }
 
 /** Operation is not executed on envelope by default. **/
-BlockDomain::DomainT BoundedBoxProcessingFunctional2D::appliesTo() const {
+BlockDomain::DomainT BoundedBoxProcessingFunctional2D::appliesTo() const
+{
     return BlockDomain::bulk;
 }
 
@@ -320,35 +367,40 @@ void BoundedBoxProcessingFunctional2D::setscale(int dxScale_, int dtScale_)
     dtScale = dtScale_;
 }
 
-int BoundedBoxProcessingFunctional2D::getDxScale() const {
+int BoundedBoxProcessingFunctional2D::getDxScale() const
+{
     return dxScale;
 }
 
-int BoundedBoxProcessingFunctional2D::getDtScale() const {
+int BoundedBoxProcessingFunctional2D::getDtScale() const
+{
     return dtScale;
 }
 
-void BoundedBoxProcessingFunctional2D::getModificationPattern(std::vector<bool>& isWritten) const {
+void BoundedBoxProcessingFunctional2D::getModificationPattern(std::vector<bool>& isWritten) const
+{
     std::vector<modif::ModifT> modified(isWritten.size());
     getTypeOfModification(modified);
     PLB_ASSERT(modified.size()==isWritten.size());
-    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<isWritten.size(); ++iBlock)
+    {
         isWritten[iBlock] = modified[iBlock]==modif::nothing ? false:true;
     }
 }
 
-BoxProcessingFunctional2D* BoundedBoxProcessingFunctional2D::getBulkProcessor() const {
+BoxProcessingFunctional2D* BoundedBoxProcessingFunctional2D::getBulkProcessor() const
+{
     return new BulkWrapperFunctional(this->clone());
 }
 
 BoxProcessingFunctional2D* BoundedBoxProcessingFunctional2D::getEdgeProcessor (
-                                  int direction, int orientation ) const
+    int direction, int orientation ) const
 {
     return new EdgeWrapperFunctional(this->clone(), direction, orientation);
 }
 
 BoxProcessingFunctional2D* BoundedBoxProcessingFunctional2D::getCornerProcessor (
-                                  int normalX, int normalY ) const
+    int normalX, int normalY ) const
 {
     return new CornerWrapperFunctional(this->clone(), normalX, normalY);
 }
@@ -356,22 +408,23 @@ BoxProcessingFunctional2D* BoundedBoxProcessingFunctional2D::getCornerProcessor 
 /* *************** Class BoundedBoxProcessingFunctional2D::BulkWrapperFunctional ** */
 
 BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::BulkWrapperFunctional (
-        BoundedBoxProcessingFunctional2D* boundedFunctional_ )
+    BoundedBoxProcessingFunctional2D* boundedFunctional_ )
     : boundedFunctional(boundedFunctional_)
 { }
 
 BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::BulkWrapperFunctional (
-        BulkWrapperFunctional const& rhs )
+    BulkWrapperFunctional const& rhs )
     : boundedFunctional(rhs.boundedFunctional->clone())
 { }
 
-BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::~BulkWrapperFunctional() {
+BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::~BulkWrapperFunctional()
+{
     delete boundedFunctional;
 }
 
 BoundedBoxProcessingFunctional2D::BulkWrapperFunctional&
-    BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::operator= (
-            BulkWrapperFunctional const& rhs )
+BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::operator= (
+    BulkWrapperFunctional const& rhs )
 {
     delete boundedFunctional;
     boundedFunctional = rhs.boundedFunctional->clone();
@@ -379,7 +432,7 @@ BoundedBoxProcessingFunctional2D::BulkWrapperFunctional&
 }
 
 void BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::processGenericBlocks (
-        Box2D domain, std::vector<AtomicBlock2D*> atomicBlocks )
+    Box2D domain, std::vector<AtomicBlock2D*> atomicBlocks )
 {
     boundedFunctional->processBulkGeneric(domain, atomicBlocks);
 }
@@ -390,31 +443,31 @@ BlockDomain::DomainT BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::ap
 }
 
 void BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::rescale (
-        double dxScale, double dtScale )
+    double dxScale, double dtScale )
 {
     boundedFunctional->rescale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::setscale (
-        int dxScale, int dtScale )
+    int dxScale, int dtScale )
 {
     boundedFunctional->setscale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::getModificationPattern (
-        std::vector<bool>& isWritten ) const
+    std::vector<bool>& isWritten ) const
 {
     boundedFunctional->getModificationPattern(isWritten);
 }
 
 void BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::getTypeOfModification (
-        std::vector<modif::ModifT>& modified) const
+    std::vector<modif::ModifT>& modified) const
 {
     boundedFunctional->getTypeOfModification(modified);
 }
 
 BoundedBoxProcessingFunctional2D::BulkWrapperFunctional*
-    BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::clone() const
+BoundedBoxProcessingFunctional2D::BulkWrapperFunctional::clone() const
 {
     return new BulkWrapperFunctional(*this);
 }
@@ -422,27 +475,28 @@ BoundedBoxProcessingFunctional2D::BulkWrapperFunctional*
 /* *************** Class BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional ** */
 
 BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::EdgeWrapperFunctional (
-        BoundedBoxProcessingFunctional2D* boundedFunctional_,
-        int direction_, int orientation_)
+    BoundedBoxProcessingFunctional2D* boundedFunctional_,
+    int direction_, int orientation_)
     : boundedFunctional(boundedFunctional_),
       direction(direction_),
       orientation(orientation_)
 { }
 
 BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::EdgeWrapperFunctional (
-        EdgeWrapperFunctional const& rhs )
+    EdgeWrapperFunctional const& rhs )
     : boundedFunctional(rhs.boundedFunctional->clone()),
       direction(rhs.direction),
       orientation(rhs.orientation)
 { }
 
-BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::~EdgeWrapperFunctional() {
+BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::~EdgeWrapperFunctional()
+{
     delete boundedFunctional;
 }
 
 BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional&
-    BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::operator= (
-            EdgeWrapperFunctional const& rhs )
+BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::operator= (
+    EdgeWrapperFunctional const& rhs )
 {
     delete boundedFunctional;
     boundedFunctional = rhs.boundedFunctional->clone();
@@ -452,7 +506,7 @@ BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional&
 }
 
 void BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::processGenericBlocks (
-        Box2D domain, std::vector<AtomicBlock2D*> atomicBlocks )
+    Box2D domain, std::vector<AtomicBlock2D*> atomicBlocks )
 {
     boundedFunctional->processEdgeGeneric(direction, orientation, domain, atomicBlocks);
 }
@@ -463,31 +517,31 @@ BlockDomain::DomainT BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::ap
 }
 
 void BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::rescale (
-        double dxScale, double dtScale )
+    double dxScale, double dtScale )
 {
     boundedFunctional->rescale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::setscale (
-        int dxScale, int dtScale )
+    int dxScale, int dtScale )
 {
     boundedFunctional->setscale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::getModificationPattern (
-        std::vector<bool>& isWritten ) const
+    std::vector<bool>& isWritten ) const
 {
     boundedFunctional->getModificationPattern(isWritten);
 }
 
 void BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::getTypeOfModification (
-        std::vector<modif::ModifT>& modified) const
+    std::vector<modif::ModifT>& modified) const
 {
     boundedFunctional->getTypeOfModification(modified);
 }
 
 BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional*
-    BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::clone() const
+BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional::clone() const
 {
     return new EdgeWrapperFunctional(*this);
 }
@@ -495,28 +549,29 @@ BoundedBoxProcessingFunctional2D::EdgeWrapperFunctional*
 /* *************** Class BoundedBoxProcessingFunctional2D::CornerWrapperFunctional ** */
 
 BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::CornerWrapperFunctional (
-        BoundedBoxProcessingFunctional2D* boundedFunctional_,
-        int normalX_,
-        int normalY_ )
+    BoundedBoxProcessingFunctional2D* boundedFunctional_,
+    int normalX_,
+    int normalY_ )
     : boundedFunctional(boundedFunctional_),
       normalX(normalX_),
       normalY(normalY_)
 { }
 
 BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::CornerWrapperFunctional (
-        CornerWrapperFunctional const& rhs )
+    CornerWrapperFunctional const& rhs )
     : boundedFunctional(rhs.boundedFunctional->clone()),
       normalX(rhs.normalX),
       normalY(rhs.normalY)
 { }
 
-BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::~CornerWrapperFunctional() {
+BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::~CornerWrapperFunctional()
+{
     delete boundedFunctional;
 }
 
 BoundedBoxProcessingFunctional2D::CornerWrapperFunctional&
-    BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::operator= (
-            CornerWrapperFunctional const& rhs )
+BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::operator= (
+    CornerWrapperFunctional const& rhs )
 {
     delete boundedFunctional;
     boundedFunctional = rhs.boundedFunctional->clone();
@@ -526,7 +581,7 @@ BoundedBoxProcessingFunctional2D::CornerWrapperFunctional&
 }
 
 void BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::processGenericBlocks (
-        Box2D domain, std::vector<AtomicBlock2D*> atomicBlocks )
+    Box2D domain, std::vector<AtomicBlock2D*> atomicBlocks )
 {
     boundedFunctional->processCornerGeneric(normalX, normalY, domain, atomicBlocks);
 }
@@ -537,38 +592,38 @@ BlockDomain::DomainT BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::
 }
 
 void BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::rescale (
-        double dxScale, double dtScale )
+    double dxScale, double dtScale )
 {
     boundedFunctional->rescale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::setscale (
-        int dxScale, int dtScale )
+    int dxScale, int dtScale )
 {
     boundedFunctional->setscale(dxScale, dtScale);
 }
 
 void BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::getModificationPattern (
-        std::vector<bool>& isWritten ) const
+    std::vector<bool>& isWritten ) const
 {
     boundedFunctional->getModificationPattern(isWritten);
 }
 
 void BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::getTypeOfModification (
-        std::vector<modif::ModifT>& modified) const
+    std::vector<modif::ModifT>& modified) const
 {
     boundedFunctional->getTypeOfModification(modified);
 }
 
 BoundedBoxProcessingFunctional2D::CornerWrapperFunctional*
-    BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::clone() const
+BoundedBoxProcessingFunctional2D::CornerWrapperFunctional::clone() const
 {
     return new CornerWrapperFunctional(*this);
 }
 
 void BoundedBoxProcessingFunctional2D::getGenerators (
-        Box2D const& fullDomain, plint boundaryWidth,
-        std::vector<BoxProcessorGenerator2D*>& generators )
+    Box2D const& fullDomain, plint boundaryWidth,
+    std::vector<BoxProcessorGenerator2D*>& generators )
 {
     generators.resize(9);
     BlockSurface2D surf(fullDomain, boundaryWidth);

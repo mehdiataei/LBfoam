@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -76,12 +76,12 @@ void writeGifs(BlockLatticeT& lattice,
     Box3D slice(0, nx-1, 0, ny-1, nz/2, nz/2);
     ImageWriter<T> imageWriter("leeloo");
 
-    std::unique_ptr<MultiScalarField3D<T> > velNorm(computeVelocityNorm(lattice));
-    std::unique_ptr<MultiScalarField3D<T> > velNorm2 = redistribute (
-            *velNorm, createRegularDistribution3D (
-                        lattice.getBoundingBox(),
-                        // Re-parallelize in z-direction.
-                        1, 1, global::mpi().getSize() ) );
+    auto_ptr<MultiScalarField3D<T> > velNorm(computeVelocityNorm(lattice));
+    auto_ptr<MultiScalarField3D<T> > velNorm2 = redistribute (
+                *velNorm, createRegularDistribution3D (
+                    lattice.getBoundingBox(),
+                    // Re-parallelize in z-direction.
+                    1, 1, global::mpi().getSize() ) );
 
     /*
     imageWriter.writeScaledGif( createFileName("uz", iter, 6),
@@ -114,7 +114,8 @@ void writeVTK(BlockLatticeT& lattice,
 }
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
@@ -122,12 +123,12 @@ int main(int argc, char* argv[]) {
     //defaultMultiBlockPolicy3D().setNumProcesses(8);
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 100.,  // Re
-            100,        // N
-            1.,        // lx
-            1.,        // ly
-            1.         // lz
+        (T) 1e-2,  // uMax
+        (T) 100.,  // Re
+        100,        // N
+        1.,        // lx
+        1.,        // ly
+        1.         // lz
     );
     const T logT     = (T)1/(T)100;
     //const T imSave   = (T)1/(T)40;
@@ -140,7 +141,7 @@ int main(int argc, char* argv[]) {
     plint ny = parameters.getNy();
     plint nz = parameters.getNz();
 
-    std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > originLattice (
+    std::auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > originLattice (
         new MultiBlockLattice3D<T,DESCRIPTOR> (
             MultiBlockManagement3D (
                 // Parallelize in x-direction
@@ -159,46 +160,50 @@ int main(int argc, char* argv[]) {
 
     OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* boundaryCondition
         = createInterpBoundaryCondition3D<T,DESCRIPTOR>();
-        //= createLocalBoundaryCondition3D<T,DESCRIPTOR>();
+    //= createLocalBoundaryCondition3D<T,DESCRIPTOR>();
 
     cavitySetup(*originLattice, parameters, *boundaryCondition);
     Box3D centerBox(nx/3, 2*nx/3, ny/3, 2*ny/3, nz/3, 2*nz/3);
-    std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > intermediateLattice
-     /*
-        = redistribute (
-                *originLattice,
-                createRegularDistribution3D (
-                    originLattice->getBoundingBox(),
-                    // Re-parallelize in y-direction.
-                    1, global::mpi().getSize(), 1 )
-          );
-          */
+    auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > intermediateLattice
+    /*
+       = redistribute (
+               *originLattice,
+               createRegularDistribution3D (
+                   originLattice->getBoundingBox(),
+                   // Re-parallelize in y-direction.
+                   1, global::mpi().getSize(), 1 )
+         );
+         */
         = except(*originLattice, centerBox);
-    //std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > lattice
+    //auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > lattice
     //    = extend(*intermediateLattice, Box3D(nx/3+nx/12, 2*nx/3-nx/12, 0, ny-1, 0, nz-1));
 
     defineDynamics(*intermediateLattice, centerBox.enlarge(1), new BounceBack<T,DESCRIPTOR>(1.));
-    //std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > lattice = reparallelize(*intermediateLattice);
+    //auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > lattice = reparallelize(*intermediateLattice);
     MultiBlockLattice3D<T,DESCRIPTOR> dummyLattice(nx/2, ny/2, nz/2, new BounceBack<T,DESCRIPTOR>(1.));
-    std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > lattice = align(*intermediateLattice, dummyLattice);
+    auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > lattice = align(*intermediateLattice, dummyLattice);
 
     T previousIterationTime = T();
     // Loop over main time iteration.
-    for (plint iT=0; iT<parameters.nStep(maxT); ++iT) {
+    for (plint iT=0; iT<parameters.nStep(maxT); ++iT)
+    {
         global::timer("mainLoop").restart();
 
-        if (iT%100==0) {
-        //if (iT%parameters.nStep(imSave)==0) {
+        if (iT%100==0)
+        {
+            //if (iT%parameters.nStep(imSave)==0) {
             pcout << "Writing Gif ..." << endl;
             writeGifs(*lattice, parameters, iT);
         }
 
-        if (iT%parameters.nStep(vtkSave)==0 && iT>0) {
+        if (iT%parameters.nStep(vtkSave)==0 && iT>0)
+        {
             pcout << "Saving VTK file ..." << endl;
             writeVTK(*lattice, parameters, iT);
         }
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "step " << iT
                   << "; t=" << iT*parameters.getDeltaT();
         }
@@ -208,7 +213,8 @@ int main(int argc, char* argv[]) {
 
         // Access averages from internal statistics ( their value is defined
         //   only after the call to lattice.collideAndStream() )
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "; av energy="
                   << setprecision(10) << getStoredAverageEnergy<T>(*lattice)
                   << "; av rho="

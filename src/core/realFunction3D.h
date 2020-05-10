@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,88 +36,92 @@
 
 #include <cmath>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
 struct RealFunction3D {
-    virtual ~RealFunction3D() { }
-    virtual T operator()(Array<T,3> const& position) const = 0;
-    virtual RealFunction3D<T>* clone() const = 0;
+	virtual ~RealFunction3D() { }
+	virtual T operator()(Array<T,3> const& position) const = 0;
+	virtual RealFunction3D<T>* clone() const = 0;
 };
 
 template<typename T>
-class ConstantRealFunction3D : public RealFunction3D<T> {
+class ConstantRealFunction3D : public RealFunction3D<T>
+{
 public:
-    ConstantRealFunction3D(T constantValue_)
-        : constantValue(constantValue_)
-    { }
+	ConstantRealFunction3D(T constantValue_)
+		: constantValue(constantValue_)
+	{ }
 
-    virtual T operator()(Array<T,3> const& position) const
-    {
-        return constantValue;
-    }
+	virtual T operator()(Array<T,3> const& position) const
+	{
+		return constantValue;
+	}
 
-    virtual ConstantRealFunction3D<T>* clone() const
-    {
-        return new ConstantRealFunction3D<T>(*this);
-    }
+	virtual ConstantRealFunction3D<T>* clone() const
+	{
+		return new ConstantRealFunction3D<T>(*this);
+	}
 private:
-    T constantValue;
+	T constantValue;
 };
 
-template<typename T, template<typename U> class Descriptor> 
-class IncreasingRealFunction3D : public RealFunction3D<T> {
+template<typename T, template<typename U> class Descriptor>
+class IncreasingRealFunction3D : public RealFunction3D<T>
+{
 public:
-    IncreasingRealFunction3D(T maxValue_, MultiBlockLattice3D<T,Descriptor> const& lattice_, T tOffset_, T maxT_)
-        : maxValue(maxValue_),
-          lattice(lattice_),
-          tOffset(tOffset_),
-          maxT(maxT_)
-    { }
+	IncreasingRealFunction3D(T maxValue_, MultiBlockLattice3D<T,Descriptor> const& lattice_, T tOffset_, T maxT_)
+		: maxValue(maxValue_),
+		  lattice(lattice_),
+		  tOffset(tOffset_),
+		  maxT(maxT_)
+	{ }
 
-    virtual T operator()(Array<T,3> const& position) const
-    {
-        T t = (T) lattice.getTimeCounter().getTime() + tOffset;
-        T value = util::sinIncreasingFunction<T>(t, maxT) * maxValue;
-        return value;
-    }
+	virtual T operator()(Array<T,3> const& position) const
+	{
+		T t = (T) lattice.getTimeCounter().getTime() + tOffset;
+		T value = util::sinIncreasingFunction<T>(t, maxT) * maxValue;
+		return value;
+	}
 
-    virtual IncreasingRealFunction3D<T,Descriptor>* clone() const
-    {
-        return new IncreasingRealFunction3D<T,Descriptor>(*this);
-    }
+	virtual IncreasingRealFunction3D<T,Descriptor>* clone() const
+	{
+		return new IncreasingRealFunction3D<T,Descriptor>(*this);
+	}
 private:
-    T maxValue;
-    MultiBlockLattice3D<T,Descriptor> const& lattice;
-    T tOffset, maxT;
+	T maxValue;
+	MultiBlockLattice3D<T,Descriptor> const& lattice;
+	T tOffset, maxT;
 };
 
-template<typename T, template<typename U> class Descriptor> 
-class HarmonicRealFunction3D : public RealFunction3D<T> {
+template<typename T, template<typename U> class Descriptor>
+class HarmonicRealFunction3D : public RealFunction3D<T>
+{
 public:
-    HarmonicRealFunction3D(T amplitude_, T angularFrequency_, T phase_, MultiBlockLattice3D<T,Descriptor> const& lattice_,
-            T tOffset_)
-        : amplitude(amplitude_),
-          angularFrequency(angularFrequency_),
-          phase(phase_),
-          lattice(lattice_),
-          tOffset(tOffset_)
-    { }
+	HarmonicRealFunction3D(T amplitude_, T angularFrequency_, T phase_, MultiBlockLattice3D<T,Descriptor> const& lattice_,
+	                       T tOffset_)
+		: amplitude(amplitude_),
+		  angularFrequency(angularFrequency_),
+		  phase(phase_),
+		  lattice(lattice_),
+		  tOffset(tOffset_)
+	{ }
 
-    virtual T operator()(Array<T,3> const& position) const
-    {
-        T t = (T) lattice.getTimeCounter().getTime() + tOffset;
-        return amplitude * std::cos(angularFrequency * t + phase);
-    }
+	virtual T operator()(Array<T,3> const& position) const
+	{
+		T t = (T) lattice.getTimeCounter().getTime() + tOffset;
+		return amplitude * std::cos(angularFrequency * t + phase);
+	}
 
-    virtual HarmonicRealFunction3D<T,Descriptor>* clone() const
-    {
-        return new HarmonicRealFunction3D<T,Descriptor>(*this);
-    }
+	virtual HarmonicRealFunction3D<T,Descriptor>* clone() const
+	{
+		return new HarmonicRealFunction3D<T,Descriptor>(*this);
+	}
 private:
-    T amplitude, angularFrequency, phase;
-    MultiBlockLattice3D<T,Descriptor> const& lattice;
-    T tOffset;
+	T amplitude, angularFrequency, phase;
+	MultiBlockLattice3D<T,Descriptor> const& lattice;
+	T tOffset;
 };
 
 } // namespace plb

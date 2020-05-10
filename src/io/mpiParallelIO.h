@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,9 +33,11 @@
 #include <string>
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
-namespace parallelIO {
+namespace parallelIO
+{
 
 void writeRawData( FileName fName, std::vector<plint> const& myBlockIds,
                    std::vector<plint> const& offset, std::vector<std::vector<char> >& data,

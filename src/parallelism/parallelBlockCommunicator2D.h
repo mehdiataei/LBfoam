@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -37,50 +37,51 @@
 #include "parallelism/communicationPackage2D.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 #ifdef PLB_MPI_PARALLEL
 
-struct CommunicationStructure2D
-{
-    CommunicationStructure2D (
-            std::vector<Overlap2D> const& overlaps,
-            MultiBlockManagement2D const& originManagement,
-            MultiBlockManagement2D const& destinationManagement,
-            plint sizeOfCell );
-    CommunicationPackage2D sendPackage;
-    CommunicationPackage2D recvPackage;
-    CommunicationPackage2D sendRecvPackage;
-    SendPoolCommunicator sendComm;
-    RecvPoolCommunicator recvComm;
+struct CommunicationStructure2D {
+	CommunicationStructure2D (
+	    std::vector<Overlap2D> const& overlaps,
+	    MultiBlockManagement2D const& originManagement,
+	    MultiBlockManagement2D const& destinationManagement,
+	    plint sizeOfCell );
+	CommunicationPackage2D sendPackage;
+	CommunicationPackage2D recvPackage;
+	CommunicationPackage2D sendRecvPackage;
+	SendPoolCommunicator sendComm;
+	RecvPoolCommunicator recvComm;
 };
 
 
-class ParallelBlockCommunicator2D : public BlockCommunicator2D {
+class ParallelBlockCommunicator2D : public BlockCommunicator2D
+{
 public:
-    ParallelBlockCommunicator2D();
-    ~ParallelBlockCommunicator2D();
-    ParallelBlockCommunicator2D(ParallelBlockCommunicator2D const& rhs);
-    ParallelBlockCommunicator2D& operator= (
-            ParallelBlockCommunicator2D const& rhs );
-    void swap(ParallelBlockCommunicator2D& rhs);
-    virtual ParallelBlockCommunicator2D* clone() const;
-    virtual void duplicateOverlaps(MultiBlock2D& multiBlock, modif::ModifT whichData) const;
-    virtual void communicate( std::vector<Overlap2D> const& overlaps,
-                              MultiBlock2D const& originMultiBlock,
-                              MultiBlock2D& destinationMultiBlock,
-                              modif::ModifT whichData ) const;
-    virtual void signalPeriodicity() const;
+	ParallelBlockCommunicator2D();
+	~ParallelBlockCommunicator2D();
+	ParallelBlockCommunicator2D(ParallelBlockCommunicator2D const& rhs);
+	ParallelBlockCommunicator2D& operator= (
+	    ParallelBlockCommunicator2D const& rhs );
+	void swap(ParallelBlockCommunicator2D& rhs);
+	virtual ParallelBlockCommunicator2D* clone() const;
+	virtual void duplicateOverlaps(MultiBlock2D& multiBlock, modif::ModifT whichData) const;
+	virtual void communicate( std::vector<Overlap2D> const& overlaps,
+	                          MultiBlock2D const& originMultiBlock,
+	                          MultiBlock2D& destinationMultiBlock,
+	                          modif::ModifT whichData ) const;
+	virtual void signalPeriodicity() const;
 private:
-    void communicate( CommunicationStructure2D& communication,
-                      MultiBlock2D const& originMultiBlock,
-                      MultiBlock2D& destinationMultiBlock, modif::ModifT whichData ) const;
-    void subscribeOverlap (
-        Overlap2D const& overlap, MultiBlockManagement2D const& multiBlockManagement,
-        SendRecvPool& sendPool, SendRecvPool& recvPool, plint sizeOfCell ) const;
+	void communicate( CommunicationStructure2D& communication,
+	                  MultiBlock2D const& originMultiBlock,
+	                  MultiBlock2D& destinationMultiBlock, modif::ModifT whichData ) const;
+	void subscribeOverlap (
+	    Overlap2D const& overlap, MultiBlockManagement2D const& multiBlockManagement,
+	    SendRecvPool& sendPool, SendRecvPool& recvPool, plint sizeOfCell ) const;
 private:
-    mutable bool overlapsModified;
-    mutable CommunicationStructure2D* communication;
+	mutable bool overlapsModified;
+	mutable CommunicationStructure2D* communication;
 };
 
 #endif  // PLB_MPI_PARALLEL

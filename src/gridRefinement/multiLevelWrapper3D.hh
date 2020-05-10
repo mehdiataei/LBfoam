@@ -292,53 +292,6 @@ void integrateProcessingFunctional(
 
 }
 
-// ====================== BoxProcessingFunctional3D_LS For Output ====================== //
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T2>
-void applyProcessingFunctional(BoxProcessingFunctional3D_LS<T,Descriptor,T2>* functional, 
-  Box3D domain, plint levelOfDomain, 
-  MultiLevelCoupling3D<T,Descriptor,Engine>& lattices,
-  MultiLevelScalarFieldForOutput3D<T2>& scalarFields) 
-{
-    PLB_ASSERT(lattices.getNumLevels() == scalarFields.getNumLevels() 
-        && "MultiLevelScalarFieldForOutput3D must have the save number of levels as the MultiLevelCoupling3D");
-    for (plint iA = 0; iA < lattices.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-        applyProcessingFunctional (
-                functional->clone(), 
-                currentDomain, lattices.getLevel(iA), scalarFields.getLevel(iA) );
-    }
-    delete functional;
-}
-
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T2>
-void integrateProcessingFunctional(
-    BoxProcessingFunctional3D_LS<T,Descriptor,T2>* functional, 
-    Box3D domain, plint levelOfDomain, 
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices,
-    MultiLevelScalarFieldForOutput3D<T2>& scalarFields,
-    plint levelOfIntegration)
-{
-    PLB_ASSERT(lattices.getNumLevels() == scalarFields.getNumLevels() && 
-        "MultiLevelScalarFieldForOutput3D must have the save number of levels as the MultiLevelCoupling3D");
-
-    for (plint iA = 0; iA < lattices.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-        integrateProcessingFunctional (
-                functional->clone(), currentDomain, 
-                lattices.getLevel(iA), scalarFields.getLevel(iA), levelOfIntegration );
-    }   
-    delete functional;
-
-}
-
 // ====================== BoxProcessingFunctional3D_LT ====================== //
 template<typename T, template<typename U> class Descriptor,
     template<typename T2, template<typename U2> class Descriptor2> class Engine, 
@@ -386,53 +339,6 @@ void integrateProcessingFunctional(
     delete functional;
 }
 
-// ====================== BoxProcessingFunctional3D_LT For Output ====================== //
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T2, int nDim>
-void applyProcessingFunctional(BoxProcessingFunctional3D_LT<T,Descriptor,T2,nDim>* functional, 
-  Box3D domain, plint levelOfDomain, 
-  MultiLevelCoupling3D<T,Descriptor,Engine>& lattices,
-  MultiLevelTensorFieldForOutput3D<T2,nDim>& tensorFields) 
-{
-    PLB_ASSERT(lattices.getNumLevels() == tensorFields.getNumLevels() && 
-        "MultiLevelTensorFieldForOutput3D must have the save number of levels as the MultiLevelCoupling3D");
-    for (plint iA = 0; iA < lattices.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-
-        applyProcessingFunctional (
-                functional->clone(), currentDomain, 
-                lattices.getLevel(iA), tensorFields.getLevel(iA) );
-    }   
-    delete functional;
-}
-
-template<typename T, template<typename U> class Descriptor,
-    template<typename T2, template<typename U2> class Descriptor2> class Engine, 
-    typename T2, int nDim>
-void integrateProcessingFunctional(
-    BoxProcessingFunctional3D_LT<T,Descriptor,T2,nDim>* functional, 
-    Box3D domain, plint levelOfDomain, 
-    MultiLevelCoupling3D<T,Descriptor,Engine>& lattices,
-    MultiLevelTensorFieldForOutput3D<T2,nDim>& tensorFields,
-    plint levelOfIntegration)
-{
-    PLB_ASSERT(lattices.getNumLevels() == tensorFields.getNumLevels() && 
-        "MultiLevelTensorFieldForOutput3D must have the save number of levels as the MultiLevelCoupling3D");
-
-    for (plint iA = 0; iA < lattices.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-        integrateProcessingFunctional (
-                functional->clone(), currentDomain, lattices.getLevel(iA), tensorFields.getLevel(iA), 
-                levelOfIntegration );
-    }   
-    delete functional;
-}
-
 // ======================================================================= //
 // ======================== SCALAR FIELD WRAPPERS ======================== //
 // ======================================================================= //
@@ -461,43 +367,6 @@ void integrateProcessingFunctional(
     BoxProcessingFunctional3D_S<T>* functional, 
     Box3D domain, plint levelOfDomain, 
     MultiLevelScalarField3D<T>& scalarField,
-    plint levelOfIntegration)
-{
-    for (plint iA = 0; iA < scalarField.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-        integrateProcessingFunctional (
-                functional->clone(), currentDomain, scalarField.getLevel(iA), 
-                levelOfIntegration );
-    }   
-    delete functional;
-}
-
-// ================ BoxProcessingFunctional3D_S For Output ================ //
-template<typename T>
-void applyProcessingFunctional(
-  BoxProcessingFunctional3D_S<T>* functional, 
-  Box3D domain, plint levelOfDomain, 
-  MultiLevelScalarFieldForOutput3D<T>& scalarField)
-{
-    for (plint iA = 0; iA < scalarField.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-
-        applyProcessingFunctional (
-                functional->clone(), currentDomain, 
-                scalarField.getLevel(iA) );
-    }   
-    delete functional;
-}
-
-template<typename T>
-void integrateProcessingFunctional(
-    BoxProcessingFunctional3D_S<T>* functional, 
-    Box3D domain, plint levelOfDomain, 
-    MultiLevelScalarFieldForOutput3D<T>& scalarField,
     plint levelOfIntegration)
 {
     for (plint iA = 0; iA < scalarField.getNumLevels(); ++iA) {
@@ -555,50 +424,6 @@ void integrateProcessingFunctional(
     delete functional;
 }
 
-// ================ BoxProcessingFunctional3D_SS For Output ================== //
-template<typename T1, typename T2>
-void applyProcessingFunctional(
-  BoxProcessingFunctional3D_SS<T1,T2>* functional, 
-  Box3D domain, plint levelOfDomain, 
-  MultiLevelScalarFieldForOutput3D<T1>& scalarField1,
-  MultiLevelScalarFieldForOutput3D<T2>& scalarField2)
-{
-    PLB_ASSERT(scalarField1.getNumLevels() == scalarField2.getNumLevels() && 
-        "MultiLevelScalarFieldForOutput3D must have the save number of levels as the other MultiLevelScalarFieldForOutput3D");
-    for (plint iA = 0; iA < scalarField1.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-
-        applyProcessingFunctional (
-                functional->clone(), currentDomain, 
-                scalarField1.getLevel(iA), scalarField2.getLevel(iA) );
-    }   
-    delete functional;
-}
-
-template<typename T1, typename T2>
-void integrateProcessingFunctional(
-    BoxProcessingFunctional3D_SS<T1,T2>* functional, 
-    Box3D domain, plint levelOfDomain, 
-    MultiLevelScalarFieldForOutput3D<T1>& scalarField1,
-    MultiLevelScalarFieldForOutput3D<T2>& scalarField2,
-    plint levelOfIntegration)
-{
-    PLB_ASSERT(scalarField1.getNumLevels() == scalarField2.getNumLevels() && 
-        "MultiLevelScalarFieldForOutput3D must have the save number of levels as the other MultiLevelScalarFieldForOutput3D");
-
-    for (plint iA = 0; iA < scalarField1.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-        integrateProcessingFunctional (
-                functional->clone(), currentDomain, scalarField1.getLevel(iA), scalarField2.getLevel(iA), 
-                levelOfIntegration );
-    }   
-    delete functional;
-}
-
 // ====================== BoxProcessingFunctional3D_ST ====================== //
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional(
@@ -644,78 +469,12 @@ void integrateProcessingFunctional(
     delete functional;
 }
 
-// ====================== BoxProcessingFunctional3D_ST For Output ====================== //
-template<typename T1, typename T2, int nDim>
-void applyProcessingFunctional(
-  BoxProcessingFunctional3D_ST<T1,T2,nDim>* functional, 
-  Box3D domain, plint levelOfDomain, 
-  MultiLevelScalarFieldForOutput3D<T1>& scalar,
-  MultiLevelTensorFieldForOutput3D<T2,nDim>& tensor)
-{
-    PLB_ASSERT(scalar.getNumLevels() == tensor.getNumLevels() && 
-        "MultiLevelScalarFieldForOutput3D must have the save number of levels as the MultiLevelTensorFieldForOutput3D");
-
-    for (plint iA = 0; iA < scalar.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-
-        applyProcessingFunctional (
-                functional->clone(), currentDomain, 
-                scalar.getLevel(iA), tensor.getLevel(iA) );
-    }   
-    delete functional;
-}
-
-template<typename T1, typename T2, int nDim>
-void integrateProcessingFunctional(
-    BoxProcessingFunctional3D_ST<T1,T2,nDim>* functional, 
-    Box3D domain, plint levelOfDomain, 
-    MultiLevelScalarFieldForOutput3D<T1>& scalar,
-    MultiLevelTensorFieldForOutput3D<T2,nDim>& tensor,
-    plint levelOfIntegration)
-{
-    PLB_ASSERT(scalar.getNumLevels() == tensor.getNumLevels() && 
-        "MultiLevelScalarFieldForOutput3D must have the save number of levels as the MultiLevelTensorFieldForOutput3D");
-
-    for (plint iA = 0; iA < scalar.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-        integrateProcessingFunctional (
-                functional->clone(), currentDomain, scalar.getLevel(iA), tensor.getLevel(iA), 
-                levelOfIntegration );
-    }   
-    delete functional;
-}
-
 // ====================== ScalarFieldBoxProcessingFunctional3D ====================== //
 template<typename T>
 void applyProcessingFunctional(
   ScalarFieldBoxProcessingFunctional3D<T>* functional, 
   Box3D domain, plint levelOfDomain, 
   std::vector<MultiLevelScalarField3D<T> *> fields)
-{
-    plint numLevels = getNumLevels(fields);
-    for (plint iA = 0; iA < numLevels; ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-
-        applyProcessingFunctional (
-                functional->clone(), currentDomain, 
-                extractLevel<MultiScalarField3D<T>,
-                             MultiLevelScalarField3D<T> > (fields,iA) );
-    }   
-    delete functional;
-}
-
-// ================= ScalarFieldBoxProcessingFunctional3D For Output ================ //
-template<typename T>
-void applyProcessingFunctional(
-  ScalarFieldBoxProcessingFunctional3D<T>* functional, 
-  Box3D domain, plint levelOfDomain, 
-  std::vector<MultiLevelScalarFieldForOutput3D<T> *> fields)
 {
     plint numLevels = getNumLevels(fields);
     for (plint iA = 0; iA < numLevels; ++iA) {
@@ -801,49 +560,6 @@ void integrateProcessingFunctional(
     delete functional;
 }
 
-// ====================== BoxProcessingFunctional3D_TT For Output ====================== //
-template<typename T1, int nDim1, typename T2, int nDim2>
-void applyProcessingFunctional(BoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional, 
-  Box3D domain, plint levelOfDomain, 
-  MultiLevelTensorFieldForOutput3D<T1,nDim1>& tensorFields1,
-  MultiLevelTensorFieldForOutput3D<T2,nDim2>& tensorFields2) 
-{
-    PLB_ASSERT(tensorFields1.getNumLevels() == tensorFields2.getNumLevels() && 
-        "MultiLevelTensorFieldForOutput3D must have the save number of levels as the other MultiLevelTensorFieldForOutput3D");
-    for (plint iA = 0; iA < tensorFields1.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-
-        applyProcessingFunctional (
-                functional->clone(), currentDomain, 
-                tensorFields1.getLevel(iA), tensorFields2.getLevel(iA) );
-    }   
-    delete functional;
-}
-
-template<typename T1, int nDim1, typename T2, int nDim2>
-void integrateProcessingFunctional(
-    BoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional, 
-    Box3D domain, plint levelOfDomain, 
-    MultiLevelTensorFieldForOutput3D<T1,nDim1>& tensorFields1,
-    MultiLevelTensorFieldForOutput3D<T2,nDim2>& tensorFields2,
-    plint levelOfIntegration)
-{
-    PLB_ASSERT(tensorFields1.getNumLevels() == tensorFields2.getNumLevels() && 
-        "MultiLevelTensorFieldForOutput3D must have the save number of levels as the other MultiLevelTensorFieldForOutput3D");
-
-    for (plint iA = 0; iA < tensorFields1.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-        integrateProcessingFunctional (
-                functional->clone(), currentDomain, tensorFields1.getLevel(iA), tensorFields2.getLevel(iA), 
-                levelOfIntegration );
-    }   
-    delete functional;
-}
-
 // ====================== BoundedBoxProcessingFunctional3D_TT ====================== //
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional(BoundedBoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional, 
@@ -877,51 +593,6 @@ void integrateProcessingFunctional(
 {
     PLB_ASSERT(tensorFields1.getNumLevels() == tensorFields2.getNumLevels() && 
         "MultiLevelTensorField3D must have the save number of levels as the other MultiLevelTensorField3D");
-
-    for (plint iA = 0; iA < tensorFields1.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-        integrateProcessingFunctional (
-                functional->clone(), currentDomain, tensorFields1.getLevel(iA), tensorFields2.getLevel(iA), 
-                boundaryWidth, levelOfIntegration );
-    }   
-    delete functional;
-}
-
-// ====================== BoundedBoxProcessingFunctional3D_TT For Output ====================== //
-template<typename T1, int nDim1, typename T2, int nDim2>
-void applyProcessingFunctional(BoundedBoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional, 
-  Box3D domain, plint levelOfDomain, 
-  MultiLevelTensorFieldForOutput3D<T1,nDim1>& tensorFields1,
-  MultiLevelTensorFieldForOutput3D<T2,nDim2>& tensorFields2,
-  plint boundaryWidth) 
-{
-    PLB_ASSERT(tensorFields1.getNumLevels() == tensorFields2.getNumLevels() && 
-        "MultiLevelTensorFieldForOutput3D must have the save number of levels as the other MultiLevelTensorFieldForOutput3D");
-    for (plint iA = 0; iA < tensorFields1.getNumLevels(); ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-
-        applyProcessingFunctional (
-                functional->clone(), currentDomain, 
-                tensorFields1.getLevel(iA), tensorFields2.getLevel(iA), boundaryWidth );
-    }   
-    delete functional;
-}
-
-template<typename T1, int nDim1, typename T2, int nDim2>
-void integrateProcessingFunctional(
-    BoundedBoxProcessingFunctional3D_TT<T1,nDim1,T2,nDim2>* functional, 
-    Box3D domain, plint levelOfDomain, 
-    MultiLevelTensorFieldForOutput3D<T1,nDim1>& tensorFields1,
-    MultiLevelTensorFieldForOutput3D<T2,nDim2>& tensorFields2,
-    plint boundaryWidth,
-    plint levelOfIntegration)
-{
-    PLB_ASSERT(tensorFields1.getNumLevels() == tensorFields2.getNumLevels() && 
-        "MultiLevelTensorFieldForOutput3D must have the save number of levels as the other MultiLevelTensorFieldForOutput3D");
 
     for (plint iA = 0; iA < tensorFields1.getNumLevels(); ++iA) {
         Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
@@ -970,47 +641,6 @@ void integrateProcessingFunctional(
                 functional->clone(), currentDomain, 
                 extractLevel<MultiTensorField3D<T,nDim>,
                              MultiLevelTensorField3D<T,nDim> > (fields,iA),
-                levelOfIntegration );
-    }   
-    delete functional;
-}
-
-// ====================== TensorFieldBoxProcessingFunctional3D for output ====================== //
-template<typename T, int nDim>
-void applyProcessingFunctional(TensorFieldBoxProcessingFunctional3D<T,nDim>* functional, 
-  const Box3D &domain, plint levelOfDomain, 
-  std::vector<MultiLevelTensorFieldForOutput3D<T,nDim> *> fields) 
-{
-    plint numLevels = getNumLevels<MultiLevelTensorFieldForOutput3D<T,nDim> >(fields);
-    for (plint iA = 0; iA < numLevels; ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-
-        applyProcessingFunctional (
-                functional->clone(), currentDomain, 
-                extractLevel<MultiTensorField3D<T,nDim>,
-                             MultiLevelTensorFieldForOutput3D<T,nDim> > (fields,iA) );
-    }   
-    delete functional;
-}
-
-template<typename T, int nDim>
-void integrateProcessingFunctional(
-    TensorFieldBoxProcessingFunctional3D<T,nDim>* functional, 
-    const Box3D &domain, plint levelOfDomain, 
-    std::vector<MultiLevelTensorFieldForOutput3D<T,nDim> *> fields,
-    plint levelOfIntegration)
-{
-    plint numLevels = getNumLevels(fields);
-    for (plint iA = 0; iA < numLevels; ++iA) {
-        Box3D currentDomain = (iA - levelOfDomain >= 0) ? 
-            domain.multiply(util::intTwoToThePower(iA - levelOfDomain)) : 
-            domain.divide(util::intTwoToThePower(levelOfDomain-iA));
-        integrateProcessingFunctional (
-                functional->clone(), currentDomain, 
-                extractLevel<MultiTensorField3D<T,nDim>,
-                             MultiLevelTensorFieldForOutput3D<T,nDim> > (fields,iA),
                 levelOfIntegration );
     }   
     delete functional;

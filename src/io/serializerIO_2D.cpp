@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,38 +31,42 @@
 #include <ostream>
 #include <fstream>
 
-namespace plb {
+namespace plb
+{
 
-void saveBinaryBlock(Block2D const& block, std::string fName, bool enforceUint) {
+void saveBinaryBlock(Block2D const& block, std::string fName, bool enforceUint)
+{
     std::ofstream* ostr = 0;
     bool isOK = true;
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         ostr = new std::ofstream(fName.c_str());
         isOK = (bool)(*ostr);
     }
     plbMainProcIOError( !isOK, std::string("Could not open binary file ")+
-                               fName+std::string(" for saving") );
+                        fName+std::string(" for saving") );
     serializerToBase64Stream( block.getBlockSerializer(block.getBoundingBox(),
                               global::IOpolicy().getIndexOrderingForStreams()), ostr, enforceUint );
     delete ostr;
 }
 
-void loadBinaryBlock(Block2D& block, std::string fName, bool enforceUint) {
+void loadBinaryBlock(Block2D& block, std::string fName, bool enforceUint)
+{
     std::ifstream* istr = 0;
     bool isOK = true;
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         istr = new std::ifstream(fName.c_str());
         isOK = (bool)(*istr);
     }
     plbMainProcIOError( !isOK, std::string("Could not open binary file ")+
-                               fName+std::string(" for reading") );
+                        fName+std::string(" for reading") );
     base64StreamToUnSerializer (
-            istr, block.getBlockUnSerializer (
-                block.getBoundingBox(),
-                global::IOpolicy().getIndexOrderingForStreams()),
-            enforceUint );
+        istr, block.getBlockUnSerializer (
+            block.getBoundingBox(),
+            global::IOpolicy().getIndexOrderingForStreams()),
+        enforceUint );
     delete istr;
 }
 
 } // namespace plb
-

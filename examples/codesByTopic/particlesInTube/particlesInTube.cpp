@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -41,10 +41,10 @@ typedef Array<T,3> Velocity;
 plint xDirection  = 0;
 plint yDirection  = 1;
 plint borderWidth = 1;  // Because the Guo boundary condition acts in a one-cell layer.
-                        // Requirement: margin>=borderWidth.
+// Requirement: margin>=borderWidth.
 plint margin      = 1;  // Extra margin of allocated cells around the obstacle.
 plint extraLayer  = 0;  // Make the bounding box larger; for visualization purposes
-                        //   only. For the simulation, it is OK to have extraLayer=0.
+//   only. For the simulation, it is OK to have extraLayer=0.
 const plint blockSize = 20; // Zero means: no sparse representation.
 const plint extendedEnvelopeWidth = 2; // Because the Guo boundary condition needs 2-cell neighbor access.
 
@@ -70,22 +70,24 @@ plint saveIter = 100; // Number of iterations for saving data in the disk.
 
 bool useAllDirections = true; // Extrapolation scheme for the off lattice boundary condition.
 bool useRegularized = true; // Use an off lattice boundary condition which is closer in spirit to
-                            //   regularized boundary conditions.
+//   regularized boundary conditions.
 
 plint particleTimeFactor = 1;  // If this variable has value 2, this means that the particles have
-                               //   a time step two times bigger than the fluid.
+//   a time step two times bigger than the fluid.
 T particleProbabilityPerCell = 2.5e-3;   // Probability of injecting a particle into an injection cell at each time step.
 T cutOffSpeedSqr = 1.e-8; // Criterion to eliminate particles with very small velocity.
 
 // This function object is a domain functional which is used for injecting particles from
 //   an area close to the inlet of the tube.
-class CircularInjection {
+class CircularInjection
+{
 public:
     CircularInjection ( T radius_, Array<T,3> center_ )
         : radius(radius_),
           center(center_)
     { }
-    bool operator()(Array<T,3> const& pos) const {
+    bool operator()(Array<T,3> const& pos) const
+    {
         return (util::sqr(pos[1]-center[1]) + util::sqr(pos[2]-center[2]))
                < util::sqr(radius);
     }
@@ -144,28 +146,28 @@ int main(int argc, char* argv[])
     pcout << std::endl << "Voxelizing the domain." << std::endl;
     const int flowType = voxelFlag::inside;
     VoxelizedDomain3D<T> voxelizedDomain (
-            boundary, flowType, extraLayer, borderWidth, extendedEnvelopeWidth, blockSize);
+        boundary, flowType, extraLayer, borderWidth, extendedEnvelopeWidth, blockSize);
     pcout << getMultiBlockInfo(voxelizedDomain.getVoxelMatrix()) << std::endl;
 
-    std::unique_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > lattice 
+    std::auto_ptr<MultiBlockLattice3D<T,DESCRIPTOR> > lattice
         = generateMultiBlockLattice<T,DESCRIPTOR> (
-                voxelizedDomain.getVoxelMatrix(), extendedEnvelopeWidth, new BGKdynamics<T,DESCRIPTOR>(omega) );
+              voxelizedDomain.getVoxelMatrix(), extendedEnvelopeWidth, new BGKdynamics<T,DESCRIPTOR>(omega) );
 
     // The Guo off lattice boundary condition is set up.
     pcout << "Creating boundary condition." << std::endl;
     BoundaryProfiles3D<T,Velocity> profiles;
     profiles.defineInletOutletTags(boundary, xDirection);
     profiles.setInletOutlet (
-            new PoiseuilleProfile3D<T>(uAverage),
-            new PoiseuilleProfile3D<T>(-uAverage) );
+        new PoiseuilleProfile3D<T>(uAverage),
+        new PoiseuilleProfile3D<T>(-uAverage) );
     GuoOffLatticeModel3D<T,DESCRIPTOR>* model =
-            new GuoOffLatticeModel3D<T,DESCRIPTOR> (
-                new TriangleFlowShape3D<T,Array<T,3> > (
-                    voxelizedDomain.getBoundary(), profiles),
-                flowType, useAllDirections );
+        new GuoOffLatticeModel3D<T,DESCRIPTOR> (
+        new TriangleFlowShape3D<T,Array<T,3> > (
+            voxelizedDomain.getBoundary(), profiles),
+        flowType, useAllDirections );
     model->selectUseRegularizedModel(useRegularized);
     OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity> boundaryCondition (
-            model, voxelizedDomain, *lattice);
+        model, voxelizedDomain, *lattice);
     boundaryCondition.insert();
 
     pcout << std::endl << "Initializing lattice." << std::endl;
@@ -189,13 +191,13 @@ int main(int argc, char* argv[])
     // Functional that advances the particles to their new position at each
     //   predefined time step.
     integrateProcessingFunctional (
-            new AdvanceParticlesEveryWhereFunctional3D<T,DESCRIPTOR>(cutOffSpeedSqr),
-            lattice->getBoundingBox(), particleArg, 0);
+        new AdvanceParticlesEveryWhereFunctional3D<T,DESCRIPTOR>(cutOffSpeedSqr),
+        lattice->getBoundingBox(), particleArg, 0);
     // Functional that assigns the particle velocity according to the particle's
     //   position in the fluid.
     integrateProcessingFunctional (
-            new FluidToParticleCoupling3D<T,DESCRIPTOR>((T)particleTimeFactor),
-            lattice->getBoundingBox(), particleFluidArg, 1 );
+        new FluidToParticleCoupling3D<T,DESCRIPTOR>((T)particleTimeFactor),
+        lattice->getBoundingBox(), particleFluidArg, 1 );
 
     // Definition of a domain from which particles will be injected in the flow field.
     //   The specific domain is close to the inlet of the tube.
@@ -212,9 +214,9 @@ int main(int argc, char* argv[])
     T injectionRadius = radius/4.;
     // Functional which injects particles with predefined probability from the specified injection domain.
     integrateProcessingFunctional (
-            new AnalyticalInjectRandomParticlesFunctional3D<T,DESCRIPTOR,CircularInjection> (
-                particleTemplate, particleProbabilityPerCell, CircularInjection(injectionRadius, inletCenter) ),
-            injectionDomain, particleArg, 0 );
+        new AnalyticalInjectRandomParticlesFunctional3D<T,DESCRIPTOR,CircularInjection> (
+            particleTemplate, particleProbabilityPerCell, CircularInjection(injectionRadius, inletCenter) ),
+        injectionDomain, particleArg, 0 );
 
     // Definition of an absorbtion domain for the particles. The specific domain is very close to the
     //   exit of the tube.
@@ -224,25 +226,28 @@ int main(int argc, char* argv[])
 
     // Functional which absorbs the particles which reach the specified absorbtion domain.
     integrateProcessingFunctional (
-            new AbsorbParticlesFunctional3D<T,DESCRIPTOR>,
-            absorbtionDomain, particleArg, 0 );
+        new AbsorbParticlesFunctional3D<T,DESCRIPTOR>,
+        absorbtionDomain, particleArg, 0 );
 
     particles->executeInternalProcessors();
 
     bool checkForErrors = true;
     pcout << std::endl << "Starting simulation." << std::endl;
-    for (plint i=0; i<maxIter; ++i) {
-        if (i%outIter==0) {
+    for (plint i=0; i<maxIter; ++i)
+    {
+        if (i%outIter==0)
+        {
             pcout << "Iteration= " << i << "; "
                   << "Average energy: "
                   << boundaryCondition.computeAverageEnergy() << std::endl;
             pcout << "Number of particles in the tube: "
                   << countParticles(*particles, particles->getBoundingBox()) << std::endl;
-                  
+
         }
-        if (i%saveIter==0 && i>0) {
+        if (i%saveIter==0 && i>0)
+        {
             pcout << "Write visualization files." << std::endl;
-            VtkImageOutput3D<T> vtkOut("volume", 1.); 
+            VtkImageOutput3D<T> vtkOut("volume", 1.);
             vtkOut.writeData<float>(*boundaryCondition.computePressure(), "p", 1.);
             vtkOut.writeData<float>(*boundaryCondition.computeVelocityNorm(), "u", 1.);
 
@@ -253,11 +258,13 @@ int main(int argc, char* argv[])
 
         lattice->collideAndStream();
 
-        if (i%particleTimeFactor==0) {
+        if (i%particleTimeFactor==0)
+        {
             particles->executeInternalProcessors();
         }
 
-        if (checkForErrors) {
+        if (checkForErrors)
+        {
             abortIfErrorsOccurred();
             checkForErrors = false;
         }

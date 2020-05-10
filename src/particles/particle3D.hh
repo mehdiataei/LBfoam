@@ -540,8 +540,8 @@ void VerletParticle3D<T,Descriptor>::velocityToParticle(NTensorField3D<T>& veloc
     for (plint iCell=0; iCell<8; ++iCell) {
         T* data = velocityField.get(pos[iCell].x,pos[iCell].y,pos[iCell].z);
         fluidVelocity[0] += weights[iCell]*scaling * data[0];
-        fluidVelocity[1] += weights[iCell]*scaling * data[1];
-        fluidVelocity[2] += weights[iCell]*scaling * data[2];
+        fluidVelocity[1] += weights[iCell]*scaling * data[0];
+        fluidVelocity[2] += weights[iCell]*scaling * data[0];
     }
 
     Array<T,3> force( (fluidVelocity-this->get_v()) *fluidCompliance);

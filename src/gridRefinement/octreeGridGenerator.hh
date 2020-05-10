@@ -1150,24 +1150,6 @@ OctreeGridGenerator<T>::OctreeGridGenerator(std::string xmlFileName)
 
     document["gridDensityFunctionFile"].read(gridDensityFunctionFile);
 
-    xPeriodic = false;
-    try {
-        document["xPeriodic"].read(xPeriodic);
-    } catch (PlbIOException& exception) {
-    }
-
-    yPeriodic = false;
-    try {
-        document["yPeriodic"].read(yPeriodic);
-    } catch (PlbIOException& exception) {
-    }
-
-    zPeriodic = false;
-    try {
-        document["zPeriodic"].read(zPeriodic);
-    } catch (PlbIOException& exception) {
-    }
-
     gridDensityScaleFactor = (T) 1;
     try {
         document["gridDensityScaleFactor"].read(gridDensityScaleFactor);
@@ -1282,15 +1264,12 @@ OctreeGridGenerator<T>::OctreeGridGenerator(std::string xmlFileName)
 
 template<typename T>
 OctreeGridGenerator<T>::OctreeGridGenerator(Cuboid<T> const& fullDomain_, std::string gridDensityFunctionFile_,
-        int minLeafLevel_, int maxLeafLevel_, plint n_, plint numProcesses_, bool xPeriodic_, bool yPeriodic_,
-        bool zPeriodic_, T gridDensityScaleFactor_, bool useSamples_, plint numSamples_, plint maxIter_,
-        bool removeBlocks_, bool fineToCoarse_, int numLevelsToGroupBlocks_, int numLevelsToGroupOverlaps_,
-        bool strongGrouping_, std::string outDir_, bool verbose_, bool stlOutput_, std::string stlBaseName_)
+        int minLeafLevel_, int maxLeafLevel_, plint n_, plint numProcesses_, T gridDensityScaleFactor_,
+        bool useSamples_, plint numSamples_, plint maxIter_, bool removeBlocks_, bool fineToCoarse_,
+        int numLevelsToGroupBlocks_, int numLevelsToGroupOverlaps_, bool strongGrouping_, std::string outDir_,
+        bool verbose_, bool stlOutput_, std::string stlBaseName_)
     : fullDomain(fullDomain_),
       gridDensityFunctionFile(gridDensityFunctionFile_),
-      xPeriodic(xPeriodic_),
-      yPeriodic(yPeriodic_),
-      zPeriodic(zPeriodic_),
       gridDensityScaleFactor(gridDensityScaleFactor_),
       minLeafLevel(minLeafLevel_),
       maxLeafLevel(maxLeafLevel_),
@@ -1428,9 +1407,6 @@ OctreeGridStructure OctreeGridGenerator<T>::generateOctreeGridStructure()
         (*outS) << "Calibrating the octree." << std::endl;
     }
     CalibrateOctree<T> calibrateOctree;
-    OctreePeriodicExtension<OctreeData<T> >* octreePeriodicExtension = new OctreePeriodicExtension<OctreeData<T> >(
-            root, xPeriodic, yPeriodic, zPeriodic);
-    root = octreePeriodicExtension->get();
     iter = 0;
     do {
         if (verbose) {
@@ -1440,8 +1416,6 @@ OctreeGridStructure OctreeGridGenerator<T>::generateOctreeGridStructure()
         processOctreePostOrder(root, calibrateOctree);
         iter++;
     } while (calibrateOctree.calibratedOctree() && iter < maxIter);
-    root = octreePeriodicExtension->release();
-    delete octreePeriodicExtension; octreePeriodicExtension = 0;
 
     if (calibrateOctree.calibratedOctree()) {
         (*errS) << std::endl;
@@ -1644,18 +1618,10 @@ OctreeGridStructure OctreeGridGenerator<T>::generateOctreeGridStructure()
     processOctreePostOrder(root, touchAllOctreeNodes);
 
     AssignOctreeOverlapNodes<T> assignOctreeOverlapNodes;
-    octreePeriodicExtension = new OctreePeriodicExtension<OctreeData<T> >(root, xPeriodic, yPeriodic, zPeriodic);
-    root = octreePeriodicExtension->get();
     processOctreePostOrder(root, assignOctreeOverlapNodes);
-    root = octreePeriodicExtension->release();
-    delete octreePeriodicExtension; octreePeriodicExtension = 0;
 
     CheckOctreeOverlapNodes<T> checkOctreeOverlapNodes;
-    octreePeriodicExtension = new OctreePeriodicExtension<OctreeData<T> >(root, xPeriodic, yPeriodic, zPeriodic);
-    root = octreePeriodicExtension->get();
     processOctreePreOrder(root, checkOctreeOverlapNodes);
-    root = octreePeriodicExtension->release();
-    delete octreePeriodicExtension; octreePeriodicExtension = 0;
     if (verbose) {
         (*outS) << "done." << std::endl;
     }
@@ -1665,7 +1631,8 @@ OctreeGridStructure OctreeGridGenerator<T>::generateOctreeGridStructure()
     if (verbose) {
         (*outS) << "Computing bulks... " << std::flush;
     }
-    ComputeOctreeBulks<T> computeOctreeBulks(dxFinest, maxLeafLevel, fullDomain, nx, ny, nz);
+    ComputeOctreeBulks<T> computeOctreeBulks(dxFinest, maxLeafLevel, fullDomain,
+            nx, ny, nz);
     processOctreePostOrder(root, computeOctreeBulks);
     if (verbose) {
         (*outS) << "done." << std::endl;
@@ -1718,11 +1685,7 @@ OctreeGridStructure OctreeGridGenerator<T>::generateOctreeGridStructure()
         (*outS) << "Enforcing process assignment constraints... " << std::flush;
     }
     EnforceOctreeProcessAssignmentConstraints<T> enforceOctreeProcessAssignmentConstraints(octreeProcessLoads);
-    octreePeriodicExtension = new OctreePeriodicExtension<OctreeData<T> >(root, xPeriodic, yPeriodic, zPeriodic);
-    root = octreePeriodicExtension->get();
     processOctreePreOrder(root, enforceOctreeProcessAssignmentConstraints);
-    root = octreePeriodicExtension->release();
-    delete octreePeriodicExtension; octreePeriodicExtension = 0;
     if (verbose) {
         (*outS) << "done." << std::endl;
     }
@@ -1953,11 +1916,7 @@ OctreeGridStructure OctreeGridGenerator<T>::generateOctreeGridStructure()
     }
     OctreeGridStructure octreeGridStructure;
     ConstructOctreeGridStructure<T> constructOctreeGridStructure(octreeGridStructure, minLeafLevel);
-    octreePeriodicExtension = new OctreePeriodicExtension<OctreeData<T> >(root, xPeriodic, yPeriodic, zPeriodic);
-    root = octreePeriodicExtension->get();
     processOctreePostOrder(root, constructOctreeGridStructure);
-    root = octreePeriodicExtension->release();
-    delete octreePeriodicExtension; octreePeriodicExtension = 0;
     if (verbose) {
         (*outS) << "done." << std::endl;
         (*outS) << std::endl;

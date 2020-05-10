@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,29 +31,30 @@
 #include "core/globalDefs.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 class MultiBlock2D;
 class MultiBlockManagement2D;
 class Overlap2D;
 
 struct BlockCommunicator2D {
-    virtual ~BlockCommunicator2D() { }
-    virtual BlockCommunicator2D* clone() const =0;
-    /// Fill the overlaps (the "envelopes") with data from the corresponding bulks.
-    /** The variable whichData specifies which type of content (static/dynamic/full dynamics object)
-     *  is being transmitted.
-     **/
-    virtual void duplicateOverlaps(MultiBlock2D& multiBlock, modif::ModifT whichData) const =0;
-    /// Transmit data between two multi-blocks, according to a user-defined pattern.
-    /** The variable whichData specifies which type of content (static/dynamic/full dynamics object)
-     *  is being transmitted.
-     **/
-    virtual void communicate( std::vector<Overlap2D> const& overlaps,
-                              MultiBlock2D const& originMultiBlock,
-                              MultiBlock2D& destinationMultiBlock,
-                              modif::ModifT whichData ) const =0;
-    virtual void signalPeriodicity() const =0;
+	virtual ~BlockCommunicator2D() { }
+	virtual BlockCommunicator2D* clone() const =0;
+	/// Fill the overlaps (the "envelopes") with data from the corresponding bulks.
+	/** The variable whichData specifies which type of content (static/dynamic/full dynamics object)
+	 *  is being transmitted.
+	 **/
+	virtual void duplicateOverlaps(MultiBlock2D& multiBlock, modif::ModifT whichData) const =0;
+	/// Transmit data between two multi-blocks, according to a user-defined pattern.
+	/** The variable whichData specifies which type of content (static/dynamic/full dynamics object)
+	 *  is being transmitted.
+	 **/
+	virtual void communicate( std::vector<Overlap2D> const& overlaps,
+	                          MultiBlock2D const& originMultiBlock,
+	                          MultiBlock2D& destinationMultiBlock,
+	                          modif::ModifT whichData ) const =0;
+	virtual void signalPeriodicity() const =0;
 };
 
 }  // namespace plb

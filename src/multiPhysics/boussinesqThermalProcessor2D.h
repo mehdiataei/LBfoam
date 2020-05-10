@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,36 +33,38 @@
 #include "atomicBlock/dataProcessor2D.h"
 #include "atomicBlock/blockLattice2D.h"
 
-namespace plb {
+namespace plb
+{
 
 /**
 * Class for the coupling between a Navier-Stokes (NS) lattice and an
 * Advection-Diffusion (AD) lattice in the boussinesq approximation.
 */
 template< typename T,
-          template<typename U1> class FluidDescriptor, 
+          template<typename U1> class FluidDescriptor,
           template<typename U2> class TemperatureDescriptor
-        >
+          >
 class BoussinesqThermalProcessor2D :
-    public BoxProcessingFunctional2D_LL<T,FluidDescriptor,T,TemperatureDescriptor>
+	public BoxProcessingFunctional2D_LL<T,FluidDescriptor,T,TemperatureDescriptor>
 {
 public:
-    
-    BoussinesqThermalProcessor2D(T gravity_, T T0_, T deltaTemp_,
-                                 Array<T,FluidDescriptor<T>::d> dir_);
-    
-    virtual void process( Box2D domain,
-                          BlockLattice2D<T,FluidDescriptor>& fluid,
-                          BlockLattice2D<T,TemperatureDescriptor>& temperature );
-    virtual BoussinesqThermalProcessor2D<T,FluidDescriptor,TemperatureDescriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-        modified[1] = modif::staticVariables;
-    }
-    
+
+	BoussinesqThermalProcessor2D(T gravity_, T T0_, T deltaTemp_,
+	                             Array<T,FluidDescriptor<T>::d> dir_);
+
+	virtual void process( Box2D domain,
+	                      BlockLattice2D<T,FluidDescriptor>& fluid,
+	                      BlockLattice2D<T,TemperatureDescriptor>& temperature );
+	virtual BoussinesqThermalProcessor2D<T,FluidDescriptor,TemperatureDescriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+		modified[1] = modif::staticVariables;
+	}
+
 private:
-    T gravity, T0, deltaTemp;
-    Array<T,FluidDescriptor<T>::d> dir;
+	T gravity, T0, deltaTemp;
+	Array<T,FluidDescriptor<T>::d> dir;
 };
 
 /**
@@ -70,32 +72,32 @@ private:
 * Advection-Diffusion (AD) lattice in the boussinesq approximation.
 */
 template< typename T,
-          template<typename U1> class FluidDescriptor, 
+          template<typename U1> class FluidDescriptor,
           template<typename U2> class TemperatureDescriptor
-        >
+          >
 class CompleteBoussinesqThermalProcessor2D :
-    public BoxProcessingFunctional2D_LL<T,FluidDescriptor,T,TemperatureDescriptor>
+	public BoxProcessingFunctional2D_LL<T,FluidDescriptor,T,TemperatureDescriptor>
 {
 public:
-    
-    CompleteBoussinesqThermalProcessor2D(T gravity_, T T0_, T deltaTemp_,
-                                 Array<T,FluidDescriptor<T>::d> dir_);
-    
-    virtual void process( Box2D domain,
-                          BlockLattice2D<T,FluidDescriptor>& fluid,
-                          BlockLattice2D<T,TemperatureDescriptor>& temperature );
-    virtual CompleteBoussinesqThermalProcessor2D<T,FluidDescriptor,TemperatureDescriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-        modified[1] = modif::staticVariables;
-    }
-    
+
+	CompleteBoussinesqThermalProcessor2D(T gravity_, T T0_, T deltaTemp_,
+	                                     Array<T,FluidDescriptor<T>::d> dir_);
+
+	virtual void process( Box2D domain,
+	                      BlockLattice2D<T,FluidDescriptor>& fluid,
+	                      BlockLattice2D<T,TemperatureDescriptor>& temperature );
+	virtual CompleteBoussinesqThermalProcessor2D<T,FluidDescriptor,TemperatureDescriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+		modified[1] = modif::staticVariables;
+	}
+
 private:
-    T gravity, T0, deltaTemp;
-    Array<T,FluidDescriptor<T>::d> dir;
+	T gravity, T0, deltaTemp;
+	Array<T,FluidDescriptor<T>::d> dir;
 };
 
 }  // namespace plb
 
 #endif  // BOUSSINESQ_THERMAL_PROCESSOR_2D_H
-

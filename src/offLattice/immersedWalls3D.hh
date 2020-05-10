@@ -34,12 +34,13 @@
 
 namespace plb {
 
-/* ******** ReduceImmersedTorque3D ************************************ */
+/* ******** ReduceAxialTorqueImmersed3D ************************************ */
 
 template<typename T>
-ReduceImmersedTorque3D<T>::ReduceImmersedTorque3D (
-        Array<T,3> const& center_, int reductionFlag_ )
+ReduceAxialTorqueImmersed3D<T>::ReduceAxialTorqueImmersed3D (
+        Array<T,3> const& center_, Array<T,3> const& unitaryAxis_, int reductionFlag_ )
     : center(center_),
+      unitaryAxis(unitaryAxis_),
       sum_torque_ids (
             Array<plint,3> (
                 this->getStatistics().subscribeSum(),
@@ -49,28 +50,31 @@ ReduceImmersedTorque3D<T>::ReduceImmersedTorque3D (
 { }
 
 template<typename T>
-void ReduceImmersedTorque3D<T>::processGenericBlocks (
+void ReduceAxialTorqueImmersed3D<T>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> blocks )
 {
     PLB_PRECONDITION( blocks.size()==1 );
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[0]);
     PLB_ASSERT( container );
-    Dot3D location = container->getLocation();
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
     std::vector< Array<T,3> > const& vertices = wallData->vertices;
     std::vector< Array<T,3> > const& g = wallData->g;
     std::vector<int> const& flags = wallData->flags;
+    Array<T,3> offset = wallData->offset;
     PLB_ASSERT( vertices.size()==g.size() );
     PLB_ASSERT( vertices.size()==flags.size() );
 
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> vertex = vertices[i];
         if ( flags[i]==reductionFlag &&
-             closedOpenContained(vertex, domain.shift(location.x, location.y, location.z)) )
+             closedOpenContained(vertex, domain) )
         {
-            Array<T,3> r(vertex-center);
+            Array<T,3> physVertex = vertex+offset;
+            Array<T,3> r(physVertex-center);
+            r -= dot(r,unitaryAxis)*unitaryAxis;
             Array<T,3> torque(crossProduct(r,g[i]));
             this->getStatistics().gatherSum(sum_torque_ids[0], torque[0]);
             this->getStatistics().gatherSum(sum_torque_ids[1], torque[1]);
@@ -80,22 +84,22 @@ void ReduceImmersedTorque3D<T>::processGenericBlocks (
 }
 
 template<typename T>
-ReduceImmersedTorque3D<T>* ReduceImmersedTorque3D<T>::clone() const {
-    return new ReduceImmersedTorque3D<T>(*this);
+ReduceAxialTorqueImmersed3D<T>* ReduceAxialTorqueImmersed3D<T>::clone() const {
+    return new ReduceAxialTorqueImmersed3D<T>(*this);
 }
 
 template<typename T>
-void ReduceImmersedTorque3D<T>::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void ReduceAxialTorqueImmersed3D<T>::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
     modified[0] = modif::nothing; // Container Block.
 }
 
 template<typename T>
-BlockDomain::DomainT ReduceImmersedTorque3D<T>::appliesTo() const {
+BlockDomain::DomainT ReduceAxialTorqueImmersed3D<T>::appliesTo() const {
     return BlockDomain::bulk;
 }
 
 template<typename T>
-Array<T,3> ReduceImmersedTorque3D<T>::getSumTorque() const {
+Array<T,3> ReduceAxialTorqueImmersed3D<T>::getSumTorque() const {
     return Array<T,3> (
             this->getStatistics().getSum(sum_torque_ids[0]),
             this->getStatistics().getSum(sum_torque_ids[1]),
@@ -121,7 +125,7 @@ void ReduceImmersedForce3D<T>::processGenericBlocks (
     PLB_PRECONDITION( blocks.size()==1 );
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[0]);
     PLB_ASSERT( container );
-    Dot3D location = container->getLocation();
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
@@ -134,7 +138,7 @@ void ReduceImmersedForce3D<T>::processGenericBlocks (
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> vertex = vertices[i];
         if ( flags[i]==reductionFlag &&
-             closedOpenContained(vertex, domain.shift(location.x, location.y, location.z)) )
+             closedOpenContained(vertex, domain) )
         {
             this->getStatistics().gatherSum(sum_g_ids[0], g[i][0]);
             this->getStatistics().gatherSum(sum_g_ids[1], g[i][1]);
@@ -181,7 +185,7 @@ void ReduceImmersedArea3D<T>::processGenericBlocks (
     PLB_PRECONDITION( blocks.size()==1 );
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[0]);
     PLB_ASSERT( container );
-    Dot3D location = container->getLocation();
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
@@ -194,7 +198,7 @@ void ReduceImmersedArea3D<T>::processGenericBlocks (
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> vertex = vertices[i];
         if ( flags[i]==reductionFlag &&
-             closedOpenContained(vertex, domain.shift(location.x, location.y, location.z)) )
+             closedOpenContained(vertex, domain) )
         {
             this->getStatistics().gatherSum(sum_area_id, areas[i]);
         }
@@ -241,11 +245,13 @@ void InamuroIteration3D<T,VelFunction>::processGenericBlocks (
     PLB_ASSERT( rhoBar );
     PLB_ASSERT( j );
     PLB_ASSERT( container );
-    Dot3D location = rhoBar->getLocation();
+
     Dot3D ofsJ = computeRelativeDisplacement(*rhoBar, *j);
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
+    Array<T,3> absOffset = wallData->offset;
 
     std::vector< Array<T,3> > const& vertices = wallData->vertices;
     std::vector<T> const& areas = wallData->areas;
@@ -258,51 +264,45 @@ void InamuroIteration3D<T,VelFunction>::processGenericBlocks (
     if (incompressibleModel) {
         for (pluint i=0; i<vertices.size(); ++i) {
             Array<T,3> const& vertex = vertices[i];
-            Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-            const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+            Array<plint,3> intPos (
+                    (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
             Array<T,3> averageJ; averageJ.resetToZero();
             // Use the weighting function to compute the average momentum
             // and the average density on the surface vertex.
             // x   x . x   x
-            for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-                for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                    for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+            for (plint dx=-1; dx<=+2; ++dx) {
+                for (plint dy=-1; dy<=+2; ++dy) {
+                    for (plint dz=-1; dz<=+2; ++dz) {
                         Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                         Array<T,3> nextJ = j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z);
-                        Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                        Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                         T W = inamuroDeltaFunction<T>().W(r);
                         averageJ += W*nextJ;
                     }
                 }
             }
             //averageJ += (T)0.5*g[i];
-            Array<T,3> wallVelocity = velFunction(vertex);
+            Array<T,3> wallVelocity = velFunction(vertex+absOffset);
             deltaG[i] = areas[i]*(wallVelocity-averageJ);
             g[i] += deltaG[i];
         }
     } else { // Compressible model.
         for (pluint i=0; i<vertices.size(); ++i) {
             Array<T,3> const& vertex = vertices[i];
-            Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-            const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+            Array<plint,3> intPos (
+                    (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
             Array<T,3> averageJ; averageJ.resetToZero();
             T averageRhoBar = T();
             // Use the weighting function to compute the average momentum
             // and the average density on the surface vertex.
             // x   x . x   x
-            for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-                for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                    for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+            for (plint dx=-1; dx<=+2; ++dx) {
+                for (plint dy=-1; dy<=+2; ++dy) {
+                    for (plint dz=-1; dz<=+2; ++dz) {
                         Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                         T nextRhoBar = rhoBar->get(pos[0], pos[1], pos[2]);
                         Array<T,3> nextJ = j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z);
-                        Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                        Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                         T W = inamuroDeltaFunction<T>().W(r);
                         averageJ += W*nextJ;
                         averageRhoBar += W*nextRhoBar;
@@ -310,7 +310,7 @@ void InamuroIteration3D<T,VelFunction>::processGenericBlocks (
                 }
             }
             //averageJ += (T)0.5*g[i];
-            Array<T,3> wallVelocity = velFunction(vertex);
+            Array<T,3> wallVelocity = velFunction(vertex+absOffset);
             deltaG[i] = areas[i]*((averageRhoBar+(T)1.)*wallVelocity-averageJ);
             //g[i] += deltaG[i];
             g[i] += deltaG[i]/((T)1.0+averageRhoBar);
@@ -320,17 +320,14 @@ void InamuroIteration3D<T,VelFunction>::processGenericBlocks (
     // In this iteration, the force is applied from every vertex to the grid nodes.
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     Array<T,3> nextJ = j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     nextJ += tau*W*deltaG[i];
                     j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z) = nextJ;
@@ -377,8 +374,9 @@ void IndexedInamuroIteration3D<T,VelFunction>::processGenericBlocks (
     PLB_ASSERT( rhoBar );
     PLB_ASSERT( j );
     PLB_ASSERT( container );
-    Dot3D location = rhoBar->getLocation();
+
     Dot3D ofsJ = computeRelativeDisplacement(*rhoBar, *j);
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
@@ -395,19 +393,16 @@ void IndexedInamuroIteration3D<T,VelFunction>::processGenericBlocks (
     if (incompressibleModel) {
         for (pluint i=0; i<vertices.size(); ++i) {
             Array<T,3> const& vertex = vertices[i];
-            Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-            const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+            Array<plint,3> intPos (
+                    (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
             Array<T,3> averageJ; averageJ.resetToZero();
             // x   x . x   x
-            for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-                for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                    for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+            for (plint dx=-1; dx<=+2; ++dx) {
+                for (plint dy=-1; dy<=+2; ++dy) {
+                    for (plint dz=-1; dz<=+2; ++dz) {
                         Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                         Array<T,3> nextJ = j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z);
-                        Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                        Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                         T W = inamuroDeltaFunction<T>().W(r);
                         averageJ += W*nextJ;
                     }
@@ -421,21 +416,18 @@ void IndexedInamuroIteration3D<T,VelFunction>::processGenericBlocks (
     } else { // Compressible model.
         for (pluint i=0; i<vertices.size(); ++i) {
             Array<T,3> const& vertex = vertices[i];
-            Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-            const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+            Array<plint,3> intPos (
+                    (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
             Array<T,3> averageJ; averageJ.resetToZero();
             T averageRhoBar = T();
             // x   x . x   x
-            for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-                for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                    for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+            for (plint dx=-1; dx<=+2; ++dx) {
+                for (plint dy=-1; dy<=+2; ++dy) {
+                    for (plint dz=-1; dz<=+2; ++dz) {
                         Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                         T nextRhoBar = rhoBar->get(pos[0], pos[1], pos[2]);
                         Array<T,3> nextJ = j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z);
-                        Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                        Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                         T W = inamuroDeltaFunction<T>().W(r);
                         averageJ += W*nextJ;
                         averageRhoBar += W*nextRhoBar;
@@ -452,17 +444,14 @@ void IndexedInamuroIteration3D<T,VelFunction>::processGenericBlocks (
     
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     Array<T,3> nextJ = j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     nextJ += tau*W*deltaG[i];
                     j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z) = nextJ;
@@ -489,103 +478,6 @@ BlockDomain::DomainT IndexedInamuroIteration3D<T,VelFunction>::appliesTo() const
     return BlockDomain::bulk;
 }
 
-/* ******** IndexedImmersedBoundaryIteration3D ************************************ */
-
-template<typename T, class VelFunction>
-IndexedImmersedBoundaryIteration3D<T,VelFunction>::IndexedImmersedBoundaryIteration3D(VelFunction velFunction_)
-    : velFunction(velFunction_)
-{ }
-
-template<typename T, class VelFunction>
-void IndexedImmersedBoundaryIteration3D<T,VelFunction>::processGenericBlocks (
-        Box3D domain, std::vector<AtomicBlock3D*> blocks )
-{
-    PLB_PRECONDITION( blocks.size()==2 );
-    TensorField3D<T,3>* u = dynamic_cast<TensorField3D<T,3>*>(blocks[0]);
-    AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[1]);
-    PLB_ASSERT( u );
-    PLB_ASSERT( container );
-    Dot3D location = u->getLocation();
-    ImmersedWallData3D<T>* wallData = 
-        dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
-    PLB_ASSERT(wallData);
-
-    std::vector< Array<T,3> > const& vertices = wallData->vertices;
-    std::vector<T> const& areas = wallData->areas;
-    PLB_ASSERT( vertices.size()==areas.size() );
-    std::vector<Array<T,3> > deltaG(vertices.size());
-    std::vector<Array<T,3> >& g = wallData->g;
-    PLB_ASSERT( vertices.size()==g.size() );
-    std::vector<pluint> const& globalVertexIds = wallData->globalVertexIds;
-    PLB_ASSERT( vertices.size()==globalVertexIds.size() );
-
-    for (pluint i=0; i<vertices.size(); ++i) {
-        Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        Array<T,3> averageU; averageU.resetToZero();
-        // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
-                    Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
-                    Array<T,3> nextU = u->get(pos[0], pos[1], pos[2]);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
-                    T W = inamuroDeltaFunction<T>().W(r);
-                    averageU += W*nextU;
-                }
-            }
-        }
-        //averageU += (T)0.5*g[i];
-        Array<T,3> wallVelocity = velFunction(globalVertexIds[i]);
-        deltaG[i] = areas[i]*(wallVelocity-averageU);
-        g[i] += (T) 2 * deltaG[i];
-    }
-
-    for (pluint i=0; i<vertices.size(); ++i) {
-        Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
-                    Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
-                    Array<T,3> nextU = u->get(pos[0], pos[1], pos[2]);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
-                    T W = inamuroDeltaFunction<T>().W(r);
-                    nextU += W*deltaG[i];
-                    u->get(pos[0], pos[1], pos[2]) = nextU;
-                }
-            }
-        }
-    }
-}
-
-template<typename T, class VelFunction>
-IndexedImmersedBoundaryIteration3D<T,VelFunction>* IndexedImmersedBoundaryIteration3D<T,VelFunction>::clone() const
-{
-    return new IndexedImmersedBoundaryIteration3D<T,VelFunction>(*this);
-}
-
-template<typename T, class VelFunction>
-void IndexedImmersedBoundaryIteration3D<T,VelFunction>::getTypeOfModification(std::vector<modif::ModifT>& modified) const
-{
-    modified[0] = modif::staticVariables;  // Velocity
-    modified[1] = modif::nothing;          // Container Block with triangle data.
-}
-
-template<typename T, class VelFunction>
-BlockDomain::DomainT IndexedImmersedBoundaryIteration3D<T,VelFunction>::appliesTo() const
-{
-    return BlockDomain::bulk;
-}
-
 /* ******** ConstVelInamuroIteration3D ************************************ */
 
 template<typename T>
@@ -606,8 +498,9 @@ void ConstVelInamuroIteration3D<T>::processGenericBlocks (
     PLB_ASSERT( rhoBar );
     PLB_ASSERT( j );
     PLB_ASSERT( container );
-    Dot3D location = rhoBar->getLocation();
+
     Dot3D ofsJ = computeRelativeDisplacement(*rhoBar, *j);
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
@@ -621,19 +514,16 @@ void ConstVelInamuroIteration3D<T>::processGenericBlocks (
     if (incompressibleModel) {
         for (pluint i=0; i<vertices.size(); ++i) {
             Array<T,3> const& vertex = vertices[i];
-            Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-            const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+            Array<plint,3> intPos (
+                    (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
             Array<T,3> averageJ; averageJ.resetToZero();
             // x   x . x   x
-            for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-                for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                    for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+            for (plint dx=-1; dx<=+2; ++dx) {
+                for (plint dy=-1; dy<=+2; ++dy) {
+                    for (plint dz=-1; dz<=+2; ++dz) {
                         Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                         Array<T,3> nextJ = j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z);
-                        Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                        Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                         T W = inamuroDeltaFunction<T>().W(r);
                         averageJ += W*nextJ;
                     }
@@ -646,21 +536,18 @@ void ConstVelInamuroIteration3D<T>::processGenericBlocks (
     } else { // Compressible model.
         for (pluint i=0; i<vertices.size(); ++i) {
             Array<T,3> const& vertex = vertices[i];
-            Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-            const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+            Array<plint,3> intPos (
+                    (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
             Array<T,3> averageJ; averageJ.resetToZero();
             T averageRhoBar = T();
             // x   x . x   x
-            for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-                for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                    for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+            for (plint dx=-1; dx<=+2; ++dx) {
+                for (plint dy=-1; dy<=+2; ++dy) {
+                    for (plint dz=-1; dz<=+2; ++dz) {
                         Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                         T nextRhoBar = rhoBar->get(pos[0], pos[1], pos[2]);
                         Array<T,3> nextJ = j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z);
-                        Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                        Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                         T W = inamuroDeltaFunction<T>().W(r);
                         averageJ += W*nextJ;
                         averageRhoBar += W*nextRhoBar;
@@ -676,17 +563,14 @@ void ConstVelInamuroIteration3D<T>::processGenericBlocks (
     
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     Array<T,3> nextJ = j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     nextJ += tau*W*deltaG[i];
                     j->get(pos[0]+ofsJ.x, pos[1]+ofsJ.y, pos[2]+ofsJ.z) = nextJ;
@@ -724,7 +608,7 @@ void ComputeImmersedBoundaryForce3D<T>::processGenericBlocks (
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[1]);
     PLB_ASSERT(force);
     PLB_ASSERT(container);
-    Dot3D location = force->getLocation();
+
     ImmersedWallData3D<T>* wallData = 
         dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
@@ -742,16 +626,13 @@ void ComputeImmersedBoundaryForce3D<T>::processGenericBlocks (
 
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     force->get(pos[0], pos[1], pos[2]) += W*g[i];
                 }
@@ -801,10 +682,12 @@ void InstantiateImmersedWallData3D<T>::processGenericBlocks (
     PLB_ASSERT( container );
     bool useNormals = normals.size()>0;
     Dot3D location = container->getLocation();
+    Array<T,3> offset(location.x,location.y,location.z);
     ImmersedWallData3D<T>* wallData = new ImmersedWallData3D<T>;
-    Box3D extendedEnvelope(domain.enlarge(2).shift(location.x, location.y, location.z));
+    Box3D extendedEnvelope(domain.enlarge(2));
 
     for (pluint i=0; i<vertices.size(); ++i) {
+        Array<T,3> vertex = vertices[i]-offset;
         // Vertices which are close to the boundaries of the extendedEnvelope
         // are irrelevant, because they will act upon the bulk of the computational
         // domain through an Inamuro kernel, which at this distance is close to zero.
@@ -813,8 +696,8 @@ void InstantiateImmersedWallData3D<T>::processGenericBlocks (
         // later on we pass across the boundaries of the extendedEnvelope because
         // of roundoff errors, the code will crash.
         static const T epsilon = 1.e-4;
-        if (contained(vertices[i], extendedEnvelope, epsilon)) {
-            wallData->vertices.push_back(vertices[i]);
+        if (contained(vertex, extendedEnvelope, epsilon)) {
+            wallData->vertices.push_back(vertex);
             wallData->areas.push_back(areas[i]);
             if (useNormals) {
                 wallData->normals.push_back(normals[i]);
@@ -824,6 +707,7 @@ void InstantiateImmersedWallData3D<T>::processGenericBlocks (
         }
     }
     wallData->flags = std::vector<int>(wallData->vertices.size(), 0);
+    wallData->offset = offset;
     container->setData(wallData);
 }
 
@@ -864,6 +748,7 @@ void InstantiateImmersedWallDataWithTagging3D<T>::processGenericBlocks (
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[0]);
     PLB_ASSERT( container );
     Dot3D location = container->getLocation();
+    Array<T,3> offset(location.x,location.y,location.z);
 
     ScalarField3D<int>* flagMatrix = dynamic_cast<ScalarField3D<int>*>(blocks[1]);
     PLB_ASSERT(flagMatrix);
@@ -871,10 +756,10 @@ void InstantiateImmersedWallDataWithTagging3D<T>::processGenericBlocks (
     Array<plint,3> flagDispl(ofsFlag.x,ofsFlag.y,ofsFlag.z);
 
     ImmersedWallData3D<T>* wallData = new ImmersedWallData3D<T>;
-    Box3D extendedEnvelope(domain.enlarge(2).shift(location.x, location.y, location.z));
+    Box3D extendedEnvelope(domain.enlarge(2));
 
     for (pluint i=0; i<vertices.size(); ++i) {
-        Array<T,3> vertex = vertices[i];
+        Array<T,3> vertex = vertices[i]-offset;
         // Vertices which are close to the boundaries of the extendedEnvelope
         // are irrelevant, because they will act upon the bulk of the computational
         // domain through an Inamuro kernel, which at this distance is close to zero.
@@ -888,14 +773,12 @@ void InstantiateImmersedWallDataWithTagging3D<T>::processGenericBlocks (
             wallData->areas.push_back(areas[i]);
             wallData->g.push_back(Array<T,3>((T)0.,(T)0.,(T)0.));
             wallData->globalVertexIds.push_back(i);
-            Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-            const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-            const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
+            Array<plint,3> intPos (
+                    (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
             bool hasFluidNeighbor=false;
-            for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-                for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                    for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+            for (plint dx=-1; dx<=+2; ++dx) {
+                for (plint dy=-1; dy<=+2; ++dy) {
+                    for (plint dz=-1; dz<=+2; ++dz) {
                         Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz)+flagDispl);
                         if(flagMatrix->get(pos[0],pos[1],pos[2])==fluidFlag) {
                             hasFluidNeighbor=true;
@@ -911,6 +794,7 @@ void InstantiateImmersedWallDataWithTagging3D<T>::processGenericBlocks (
             }
         }
     }
+    wallData->offset = offset;
     container->setData(wallData);
 }
 
@@ -952,11 +836,13 @@ void InstantiateImmersedWallDataWithIndexedTagging3D<T>::processGenericBlocks (
     AtomicContainerBlock3D* container = dynamic_cast<AtomicContainerBlock3D*>(blocks[0]);
     PLB_ASSERT( container );
     Dot3D location = container->getLocation();
+    Array<T,3> offset(location.x,location.y,location.z);
 
     ImmersedWallData3D<T>* wallData = new ImmersedWallData3D<T>;
-    Box3D extendedEnvelope(domain.enlarge(2).shift(location.x, location.y, location.z));
+    Box3D extendedEnvelope(domain.enlarge(2));
 
     for (pluint i=0; i<vertices.size(); ++i) {
+        Array<T,3> vertex = vertices[i]-offset;
         // Vertices which are close to the boundaries of the extendedEnvelope
         // are irrelevant, because they will act upon the bulk of the computational
         // domain through an Inamuro kernel, which at this distance is close to zero.
@@ -965,14 +851,15 @@ void InstantiateImmersedWallDataWithIndexedTagging3D<T>::processGenericBlocks (
         // later on we pass across the boundaries of the extendedEnvelope because
         // of roundoff errors, the code will crash.
         static const T epsilon = 1.e-4;
-        if (contained(vertices[i], extendedEnvelope, epsilon)) {
-            wallData->vertices.push_back(vertices[i]);
+        if (contained(vertex, extendedEnvelope, epsilon)) {
+            wallData->vertices.push_back(vertex);
             wallData->areas.push_back(areas[i]);
             wallData->g.push_back(Array<T,3>((T)0.,(T)0.,(T)0.));
             wallData->flags.push_back(flags[i]);
             wallData->globalVertexIds.push_back(i);
         }
     }
+    wallData->offset = offset;
     container->setData(wallData);
 }
 
@@ -1010,15 +897,18 @@ void InstantiateSurfaceBlockData3D<T>::processGenericBlocks(Box3D domain, std::v
     PLB_ASSERT(container);
 
     Dot3D location = container->getLocation();
+    Array<T,3> offset(location.x, location.y, location.z);
 
     SurfaceBlockData3D<T> *surfaceData = new SurfaceBlockData3D<T>;
-    Box3D extendedEnvelope(domain.enlarge(envelopeWidth).shift(location.x, location.y, location.z));
+    Box3D extendedEnvelope(domain.enlarge(envelopeWidth));
 
     for (pluint i=0; i<vertices.size(); ++i) {
-        if (containedInclusive(vertices[i], extendedEnvelope)) {
-            surfaceData->vertices.push_back(vertices[i]);
+        Array<T,3> vertex = vertices[i]-offset;
+        if (containedInclusive(vertex, extendedEnvelope)) {
+            surfaceData->vertices.push_back(vertex);
         }
     }
+    surfaceData->offset = offset;
     container->setData(surfaceData);
 }
 
@@ -1064,21 +954,17 @@ void SurfaceOnLattice3D<T,U>::processGenericBlocks (
     SurfaceBlockData3D<T> *surfaceData = dynamic_cast<SurfaceBlockData3D<T>*>(container->getData());
     PLB_ASSERT(surfaceData);
 
-    Dot3D location = surfaceOnLattice->getLocation();
-
     std::vector< Array<T,3> > const& vertices = surfaceData->vertices;
 
     plint w = envelopeWidth;
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-(w - 1) - 1, w - 1) : Array<plint,2>(-(w - 1), w)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-(w - 1) - 1, w - 1) : Array<plint,2>(-(w - 1), w)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-(w - 1) - 1, w - 1) : Array<plint,2>(-(w - 1), w)));
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
         // x  x  x . x  x  x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-(w-1); dx<=+w; ++dx) {
+            for (plint dy=-(w-1); dy<=+w; ++dy) {
+                for (plint dz=-(w-1); dz<=+w; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     if (contained(pos[0], pos[1], pos[2], domain)) {
                         surfaceOnLattice->get(pos[0], pos[1], pos[2]) = value;
@@ -1132,21 +1018,17 @@ void SurfaceOnLattice3D_N<T,U>::processGenericBlocks (
     SurfaceBlockData3D<T> *surfaceData = dynamic_cast<SurfaceBlockData3D<T>*>(container->getData());
     PLB_ASSERT(surfaceData);
 
-    Dot3D location = surfaceOnLattice->getLocation();
-
     std::vector< Array<T,3> > const& vertices = surfaceData->vertices;
 
     plint w = envelopeWidth;
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-(w - 1) - 1, w - 1) : Array<plint,2>(-(w - 1), w)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-(w - 1) - 1, w - 1) : Array<plint,2>(-(w - 1), w)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-(w - 1) - 1, w - 1) : Array<plint,2>(-(w - 1), w)));
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
         // x  x  x . x  x  x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-(w-1); dx<=+w; ++dx) {
+            for (plint dy=-(w-1); dy<=+w; ++dy) {
+                for (plint dz=-(w-1); dz<=+w; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     if (contained(pos[0], pos[1], pos[2], domain)) {
                         *surfaceOnLattice->get(pos[0], pos[1], pos[2]) = value;
@@ -1242,7 +1124,7 @@ void RecomputeImmersedForce3D<T,Descriptor,NormalFunction>::processGenericBlocks
     PLB_ASSERT(rhoBar);
     PLB_ASSERT(PiNeq);
     PLB_ASSERT(container);
-    Dot3D location = rhoBar->getLocation();
+
     Dot3D ofsPN = computeRelativeDisplacement(*rhoBar, *PiNeq);
 
     ImmersedWallData3D<T>* wallData = 
@@ -1263,24 +1145,21 @@ void RecomputeImmersedForce3D<T,Descriptor,NormalFunction>::processGenericBlocks
         // Interpolate rhoBar and PiNeq on the vertex position.
 
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
 
         T averageRhoBar = 0.0;
         Array<T,SymmetricTensorImpl<T,3>::n> averagePiNeq;
         averagePiNeq.resetToZero();
 
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextRhoBar = rhoBar->get(pos[0], pos[1], pos[2]);
                     Array<T,SymmetricTensorImpl<T,3>::n>& nextPiNeq = PiNeq->get(pos[0]+ofsPN.x, pos[1]+ofsPN.y, pos[2]+ofsPN.z);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     averageRhoBar += W * nextRhoBar;
                     averagePiNeq += W * nextPiNeq;
@@ -1354,7 +1233,7 @@ void OpenSurfaceImmersedForce3D<T,Descriptor,NormalFunction>::processGenericBloc
     PLB_ASSERT(rhoBar);
     PLB_ASSERT(PiNeq);
     PLB_ASSERT(container);
-    Dot3D location = rhoBar->getLocation();
+
     Dot3D ofsPN = computeRelativeDisplacement(*rhoBar, *PiNeq);
 
     ImmersedWallData3D<T>* wallData = 
@@ -1372,13 +1251,12 @@ void OpenSurfaceImmersedForce3D<T,Descriptor,NormalFunction>::processGenericBloc
     for (pluint i=0; i<vertices.size(); ++i) {
         Array<T,3> normal = normalFunction(globalVertexIds[i]);
 
-        // Interpolate rhoBar and PiNeq on the vertex position.
+
         Array<T,3> const& vertex = vertices[i];
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+
+        // Interpolate rhoBar and PiNeq on the vertex position.
+        Array<plint,3> intPos (
+                (plint)vertex[0], (plint)vertex[1], (plint)vertex[2] );
 
         T averageRhoBar1 = 0.0, averageRhoBar2 = 0.0;
         Array<T,SymmetricTensorImpl<T,3>::n> averagePiNeq1, averagePiNeq2;
@@ -1388,13 +1266,13 @@ void OpenSurfaceImmersedForce3D<T,Descriptor,NormalFunction>::processGenericBloc
         T w1=T(), w2=T();
 
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextRhoBar = rhoBar->get(pos[0], pos[1], pos[2]);
                     Array<T,SymmetricTensorImpl<T,3>::n>& nextPiNeq = PiNeq->get(pos[0]+ofsPN.x, pos[1]+ofsPN.y, pos[2]+ofsPN.z);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     if (dot(r, normal)>0) {
                         averageRhoBar1 += W * nextRhoBar;
@@ -1488,9 +1366,22 @@ Array<T,3> TwoPhaseInamuroParam3D<T>::vertex(plint i) const {
 }
 
 template<typename T>
+Array<T,3> TwoPhaseInamuroParam3D<T>::absoluteVertex(plint i) const {
+    PLB_ASSERT((pluint)i < numVertices);
+    return wallData->vertices[i] + absOffset;
+}
+
+template<typename T>
+Array<plint,3> TwoPhaseInamuroParam3D<T>::intVertex(plint i) const {
+    PLB_ASSERT((pluint)i < numVertices);
+    Array<T,3> vertex = wallData->vertices[i];
+    return Array<plint,3>((plint)vertex[0], (plint)vertex[1], (plint)vertex[2]);
+}
+
+template<typename T>
 T TwoPhaseInamuroParam3D<T>::rhoBar(plint iX, plint iY, plint iZ) const {
     int flag = getFlag(iX,iY,iZ);
-    if (flag==freeSurfaceFlag::empty) {
+    if (flag==freeSurfaceFlag3D::empty) {
         return rhoBar2_->get(iX+ofsRhoBar2.x,iY+ofsRhoBar2.y,iZ+ofsRhoBar2.z);
     }
     else {
@@ -1501,7 +1392,7 @@ T TwoPhaseInamuroParam3D<T>::rhoBar(plint iX, plint iY, plint iZ) const {
 template<typename T>
 Array<T,3> TwoPhaseInamuroParam3D<T>::j(plint iX, plint iY, plint iZ) const {
     int flag = getFlag(iX,iY,iZ);
-    if (flag==freeSurfaceFlag::empty) {
+    if (flag==freeSurfaceFlag3D::empty) {
         return j2_->get(iX+ofsJ2.x,iY+ofsJ2.y,iZ+ofsJ2.z);
     }
     else {
@@ -1513,11 +1404,11 @@ template<typename T>
 void TwoPhaseInamuroParam3D<T>::addToJ(plint iX, plint iY, plint iZ, Array<T,3> deltaJ)
 {
     int flag = getFlag(iX,iY,iZ);
-    if (flag==freeSurfaceFlag::interface) {
+    if (flag==freeSurfaceFlag3D::interface) {
         j_->get(iX+ofsJ.x,iY+ofsJ.y,iZ+ofsJ.z) += deltaJ;
         j2_->get(iX+ofsJ2.x,iY+ofsJ2.y,iZ+ofsJ2.z) += deltaJ;
     }
-    else if (flag==freeSurfaceFlag::empty) {
+    else if (flag==freeSurfaceFlag3D::empty) {
         j2_->get(iX+ofsJ2.x,iY+ofsJ2.y,iZ+ofsJ2.z) += deltaJ;
     }
     else {
@@ -1543,12 +1434,6 @@ T TwoPhaseInamuroParam3D<T>::getTau(plint iX, plint iY, plint iZ) const {
 }
 
 template<typename T>
-Dot3D TwoPhaseInamuroParam3D<T>::getLocation() const
-{
-    return location;
-}
-
-template<typename T>
 TwoPhaseInamuroParam3D<T>::TwoPhaseInamuroParam3D(std::vector<AtomicBlock3D*>& blocks, T tau_, T tau2_)
     : tau(tau_), tau2(tau2_)
 {
@@ -1569,7 +1454,6 @@ TwoPhaseInamuroParam3D<T>::TwoPhaseInamuroParam3D(std::vector<AtomicBlock3D*>& b
     PLB_ASSERT( volumeFraction_ );
     PLB_ASSERT( container );
 
-    location = rhoBar_->getLocation();
     ofsRhoBar2 = computeRelativeDisplacement(*rhoBar_, *rhoBar2_);
     ofsJ = computeRelativeDisplacement(*rhoBar_, *j_);
     ofsJ2 = computeRelativeDisplacement(*rhoBar_, *j2_);
@@ -1578,6 +1462,7 @@ TwoPhaseInamuroParam3D<T>::TwoPhaseInamuroParam3D(std::vector<AtomicBlock3D*>& b
 
     wallData = dynamic_cast<ImmersedWallData3D<T>*>( container->getData() );
     PLB_ASSERT(wallData);
+    absOffset = wallData->offset;
 
     numVertices = wallData->vertices.size();
     PLB_ASSERT( numVertices == wallData->areas.size() );
@@ -1599,25 +1484,21 @@ void TwoPhaseInamuroIteration3D<T,VelFunction>::processGenericBlocks (
 {
     TwoPhaseInamuroParam3D<T> param(blocks, tau, tau2);
     std::vector<Array<T,3> > deltaG(param.getNumVertices());
-    Dot3D location(param.getLocation());
 
     for (pluint i=0; i<param.getNumVertices(); ++i) {
         Array<T,3> vertex(param.vertex(i));
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+        Array<plint,3> intPos(param.intVertex(i));
+
         Array<T,3> averageJ; averageJ.resetToZero();
         T averageRhoBar = T();
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextRhoBar = param.rhoBar(pos[0], pos[1], pos[2]);
                     Array<T,3> nextJ = param.j(pos[0], pos[1], pos[2]);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     averageJ += W*nextJ;
                     averageRhoBar += W*nextRhoBar;
@@ -1625,7 +1506,7 @@ void TwoPhaseInamuroIteration3D<T,VelFunction>::processGenericBlocks (
             }
         }
         //averageJ += (T)0.5*param.g(i);
-        Array<T,3> wallVelocity = velFunction(vertex);
+        Array<T,3> wallVelocity = velFunction(param.absoluteVertex(i));
         deltaG[i] = param.area(i)*((averageRhoBar+(T)1.)*wallVelocity-averageJ);
         //param.g(i) += deltaG[i];
         param.g(i) += deltaG[i]/((T)1.0+averageRhoBar);
@@ -1633,16 +1514,13 @@ void TwoPhaseInamuroIteration3D<T,VelFunction>::processGenericBlocks (
     
     for (pluint i=0; i<param.getNumVertices(); ++i) {
         Array<T,3> vertex(param.vertex(i));
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        Array<plint,3> intPos(param.intVertex(i));
+
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     param.addToJ(pos[0],pos[1],pos[2], param.getTau(pos[0],pos[1],pos[2])*W*deltaG[i]);
                 }
@@ -1687,25 +1565,21 @@ void TwoPhaseIndexedInamuroIteration3D<T,VelFunction>::processGenericBlocks (
 {
     TwoPhaseInamuroParam3D<T> param(blocks, tau, tau2);
     std::vector<Array<T,3> > deltaG(param.getNumVertices());
-    Dot3D location(param.getLocation());
 
     for (pluint i=0; i<param.getNumVertices(); ++i) {
         Array<T,3> vertex(param.vertex(i));
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+        Array<plint,3> intPos(param.intVertex(i));
+
         Array<T,3> averageJ; averageJ.resetToZero();
         T averageRhoBar = T();
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextRhoBar = param.rhoBar(pos[0], pos[1], pos[2]);
                     Array<T,3> nextJ = param.j(pos[0], pos[1], pos[2]);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     averageJ += W*nextJ;
                     averageRhoBar += W*nextRhoBar;
@@ -1721,16 +1595,13 @@ void TwoPhaseIndexedInamuroIteration3D<T,VelFunction>::processGenericBlocks (
     
     for (pluint i=0; i<param.getNumVertices(); ++i) {
         Array<T,3> vertex(param.vertex(i));
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        Array<plint,3> intPos(param.intVertex(i));
+
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     param.addToJ(pos[0],pos[1],pos[2], param.getTau(pos[0],pos[1],pos[2])*W*deltaG[i]);
                 }
@@ -1775,25 +1646,21 @@ void TwoPhaseConstVelInamuroIteration3D<T>::processGenericBlocks (
 {
     TwoPhaseInamuroParam3D<T> param(blocks, tau, tau2);
     std::vector<Array<T,3> > deltaG(param.getNumVertices());
-    Dot3D location(param.getLocation());
 
     for (pluint i=0; i<param.getNumVertices(); ++i) {
         Array<T,3> vertex(param.vertex(i));
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
+        Array<plint,3> intPos(param.intVertex(i));
+
         Array<T,3> averageJ; averageJ.resetToZero();
         T averageRhoBar = T();
         // x   x . x   x
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
                     T nextRhoBar = param.rhoBar(pos[0], pos[1], pos[2]);
                     Array<T,3> nextJ = param.j(pos[0], pos[1], pos[2]);
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     averageJ += W*nextJ;
                     averageRhoBar += W*nextRhoBar;
@@ -1808,16 +1675,13 @@ void TwoPhaseConstVelInamuroIteration3D<T>::processGenericBlocks (
     
     for (pluint i=0; i<param.getNumVertices(); ++i) {
         Array<T,3> vertex(param.vertex(i));
-        Array<plint,3> intPos((plint) vertex[0] - location.x, (plint) vertex[1] - location.y, (plint) vertex[2] - location.z);
-        const Array<plint,2> xLim((vertex[0] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> yLim((vertex[1] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<plint,2> zLim((vertex[2] < (T) 0 ? Array<plint,2>(-2, 1) : Array<plint,2>(-1, 2)));
-        const Array<T,3> fracPos(util::frac(vertex[0]), util::frac(vertex[1]), util::frac(vertex[2]));
-        for (plint dx = xLim[0]; dx <= xLim[1]; dx++) {
-            for (plint dy = yLim[0]; dy <= yLim[1]; dy++) {
-                for (plint dz = zLim[0]; dz <= zLim[1]; dz++) {
+        Array<plint,3> intPos(param.intVertex(i));
+
+        for (plint dx=-1; dx<=+2; ++dx) {
+            for (plint dy=-1; dy<=+2; ++dy) {
+                for (plint dz=-1; dz<=+2; ++dz) {
                     Array<plint,3> pos(intPos+Array<plint,3>(dx,dy,dz));
-                    Array<T,3> r((T)dx-fracPos[0],(T)dy-fracPos[1],(T)dz-fracPos[2]);
+                    Array<T,3> r(pos[0]-vertex[0],pos[1]-vertex[1],pos[2]-vertex[2]);
                     T W = inamuroDeltaFunction<T>().W(r);
                     param.addToJ(pos[0],pos[1],pos[2], param.getTau(pos[0],pos[1],pos[2])*W*deltaG[i]);
                 }

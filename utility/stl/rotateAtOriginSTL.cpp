@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,59 +32,55 @@ typedef double T;
 
 int main(int argc, char* argv[])
 {
-    plbInit(&argc, &argv);
-    global::directories().setOutputDir("./");
-    global::IOpolicy().activateParallelIO(false);
+	plbInit(&argc, &argv);
+	global::directories().setOutputDir("./");
+	global::IOpolicy().activateParallelIO(false);
 
-    string stlFileName, outFileName;
-    Array<T,3> normedAxis;
-    T theta;
-    try {
-        global::argv(1).read(stlFileName);
-        global::argv(2).read(normedAxis[0]);
-        global::argv(3).read(normedAxis[1]);
-        global::argv(4).read(normedAxis[2]);
-        global::argv(5).read(theta);
-        global::argv(6).read(outFileName);
-    }
-    catch (PlbIOException& exception) {
-        pcout << "Wrong parameters; the syntax is: " 
-              << (std::string)global::argv(0) << " inputSTL.stl normedAxis_x normedAxis_y normedAxis_z angle outputSTL.stl"
-              << std::endl;
-        pcout << "If for example, you want your STL to be rotated around the y-axis for an angle of 12 degrees, you should write"
-              << std::endl;
-        pcout << (std::string)global::argv(0) << " inputSTL.stl 0.0 1.0 0.0 12.0 outputSTL.stl" << std::endl;
-        exit(-1);
-    }
+	string stlFileName, outFileName;
+	Array<T,3> normedAxis;
+	T theta;
+	try {
+		global::argv(1).read(stlFileName);
+		global::argv(2).read(normedAxis[0]);
+		global::argv(3).read(normedAxis[1]);
+		global::argv(4).read(normedAxis[2]);
+		global::argv(5).read(theta);
+		global::argv(6).read(outFileName);
+	} catch (PlbIOException& exception) {
+		pcout << "Wrong parameters; the syntax is: "
+		      << (std::string)global::argv(0) << " inputSTL.stl normedAxis_x normedAxis_y normedAxis_z angle outputSTL.stl"
+		      << std::endl;
+		pcout << "If for example, you want your STL to be rotated around the y-axis for an angle of 12 degrees, you should write"
+		      << std::endl;
+		pcout << (std::string)global::argv(0) << " inputSTL.stl 0.0 1.0 0.0 12.0 outputSTL.stl" << std::endl;
+		exit(-1);
+	}
 
-    T normNormedAxis = norm(normedAxis);
-    if (util::isZero(normNormedAxis)) {
-        pcout << "The normedAxis should be a vector of magnitude 1." << std::endl;
-        return -1;
-    }
-    normedAxis /= norm(normedAxis);
+	T normNormedAxis = norm(normedAxis);
+	if (util::isZero(normNormedAxis)) {
+		pcout << "The normedAxis should be a vector of magnitude 1." << std::endl;
+		return -1;
+	}
+	normedAxis /= norm(normedAxis);
 
-    TriangleSet<T>* triangleSet = 0;
-    try {
-        triangleSet = new TriangleSet<T>(stlFileName, DBL);
-    }
-    catch (PlbIOException& exception) {
-        pcout << "Error, could not read STL file " << stlFileName
-              << ": " << exception.what() << std::endl;
-        return -1;
-    }
-    try {
-        T pi = std::acos((T) -1);
-        theta *= (pi/(T)180.0);
-        triangleSet->rotateAtOrigin(normedAxis, theta);
-        triangleSet->writeAsciiSTL(outFileName);
-    }
-    catch (PlbIOException& exception) {
-            pcout << "Error in STL file " << stlFileName
-                  << ": " << exception.what() << std::endl;
-            exit(-1);
-    }
+	TriangleSet<T>* triangleSet = 0;
+	try {
+		triangleSet = new TriangleSet<T>(stlFileName, DBL);
+	} catch (PlbIOException& exception) {
+		pcout << "Error, could not read STL file " << stlFileName
+		      << ": " << exception.what() << std::endl;
+		return -1;
+	}
+	try {
+		T pi = std::acos((T) -1);
+		theta *= (pi/(T)180.0);
+		triangleSet->rotateAtOrigin(normedAxis, theta);
+		triangleSet->writeAsciiSTL(outFileName);
+	} catch (PlbIOException& exception) {
+		pcout << "Error in STL file " << stlFileName
+		      << ": " << exception.what() << std::endl;
+		exit(-1);
+	}
 
-    return 0;
+	return 0;
 }
-

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,27 +35,28 @@ typedef double T;
 #define DESCRIPTOR descriptors::ShanChenD2Q9Descriptor
 
 template<typename T, template<typename U> class Descriptor>
-class RandomInitializer : public BoxProcessingFunctional2D_L<T,Descriptor> 
+class RandomInitializer : public BoxProcessingFunctional2D_L<T,Descriptor>
 {
 public :
     RandomInitializer(T rho0_, T maxRho_) : rho0(rho0_), maxRho(maxRho_)
     { };
     virtual void process(Box2D domain,BlockLattice2D<T,Descriptor>& lattice)
     {
-        for (plint iX = domain.x0; iX <= domain.x1; ++iX) {
+        for (plint iX = domain.x0; iX <= domain.x1; ++iX)
+        {
             for (plint iY = domain.y0; iY <= domain.y1; ++iY)
             {
                 T rho = rho0 + ((T)rand()/(T)RAND_MAX)*maxRho;
                 Array<T,2> zeroVelocity (0.,0.);
-                
+
                 iniCellAtEquilibrium(lattice.get(iX,iY), rho, zeroVelocity);
-                
+
                 lattice.get(iX,iY).setExternalField (
-                        Descriptor<T>::ExternalField::densityBeginsAt,
-                        Descriptor<T>::ExternalField::sizeOfDensity, &rho );
+                    Descriptor<T>::ExternalField::densityBeginsAt,
+                    Descriptor<T>::ExternalField::sizeOfDensity, &rho );
                 lattice.get(iX,iY).setExternalField (
-                        Descriptor<T>::ExternalField::momentumBeginsAt,
-                        Descriptor<T>::ExternalField::sizeOfMomentum, &zeroVelocity[0] );
+                    Descriptor<T>::ExternalField::momentumBeginsAt,
+                    Descriptor<T>::ExternalField::sizeOfMomentum, &zeroVelocity[0] );
             }
         }
     };
@@ -67,7 +68,7 @@ public :
     {
         modified[0] = modif::staticVariables;
     };
-    
+
 private :
     T rho0, maxRho;
 };
@@ -81,10 +82,10 @@ int main(int argc, char *argv[])
     srand(global::mpi().getRank() + 3);
 
     // For the choice of the parameters G, rho0, and psi0, we refer to the book
-    //   Michael C. Sukop and Daniel T. Thorne (2006), 
+    //   Michael C. Sukop and Daniel T. Thorne (2006),
     //   Lattice Boltzmann Modeling; an Introduction for Geoscientists and Engineers.
     //   Springer-Verlag Berlin/Heidelberg.
-    
+
     const T omega = 1.0;
     const int nx   = 400;
     const int ny   = 400;
@@ -92,43 +93,45 @@ int main(int argc, char *argv[])
     const int maxIter  = 100001;
     const int saveIter = 100;
     const int statIter = 100;
-    
+
     const T rho0 = 200.0;
     const T deltaRho = 1.0;
     const T psi0 = 4.0;
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-            nx,ny, new ExternalMomentBGKdynamics<T, DESCRIPTOR>(omega) );
-            
+        nx,ny, new ExternalMomentBGKdynamics<T, DESCRIPTOR>(omega) );
+
     lattice.periodicity().toggleAll(true);
 
     // Use a random initial condition, to activate the phase separation.
-    applyProcessingFunctional(new RandomInitializer<T,DESCRIPTOR>(rho0,deltaRho), 
+    applyProcessingFunctional(new RandomInitializer<T,DESCRIPTOR>(rho0,deltaRho),
                               lattice.getBoundingBox(),lattice);
 
     // Add the data processor which implements the Shan/Chen interaction potential.
     plint processorLevel = 1;
     integrateProcessingFunctional (
-            new ShanChenSingleComponentProcessor2D<T,DESCRIPTOR> (
-                G, new interparticlePotential::PsiShanChen94<T>(psi0,rho0) ),
-            lattice.getBoundingBox(), lattice, processorLevel );
+        new ShanChenSingleComponentProcessor2D<T,DESCRIPTOR> (
+            G, new interparticlePotential::PsiShanChen94<T>(psi0,rho0) ),
+        lattice.getBoundingBox(), lattice, processorLevel );
 
     lattice.initialize();
-    
+
     pcout << "Starting simulation" << endl;
-    for (int iT=0; iT<maxIter; ++iT) {
-        if (iT%statIter==0) {
-            std::unique_ptr<MultiScalarField2D<T> > rho( computeDensity(lattice) );
+    for (int iT=0; iT<maxIter; ++iT)
+    {
+        if (iT%statIter==0)
+        {
+            auto_ptr<MultiScalarField2D<T> > rho( computeDensity(lattice) );
             pcout << iT << ": Average rho fluid one = " << computeAverage(*rho) << endl;
             pcout << "Minimum density: " << computeMin(*rho) << endl;
             pcout << "Maximum density: " << computeMax(*rho) << endl;
         }
-        if (iT%saveIter == 0) {
+        if (iT%saveIter == 0)
+        {
             ImageWriter<T>("leeloo").writeScaledGif (
-                    createFileName("rho", iT, 6), *computeDensity(lattice) );
+                createFileName("rho", iT, 6), *computeDensity(lattice) );
         }
 
         lattice.collideAndStream();
     }
 }
-

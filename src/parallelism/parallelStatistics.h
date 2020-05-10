@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,22 +32,24 @@
 #include "multiBlock/combinedStatistics.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 #ifdef PLB_MPI_PARALLEL
 
-class ParallelCombinedStatistics : public CombinedStatistics {
+class ParallelCombinedStatistics : public CombinedStatistics
+{
 public:
-    virtual ParallelCombinedStatistics* clone() const;
+	virtual ParallelCombinedStatistics* clone() const;
 protected:
-    virtual void reduceStatistics (
-            std::vector<double>& averageObservables,
-            std::vector<double>& sumWeights,
-            std::vector<double>& sumObservables,
-            std::vector<double>& maxObservables,
-            std::vector<plint>& intSumObservables ) const;
+	virtual void reduceStatistics (
+	    std::vector<double>& averageObservables,
+	    std::vector<double>& sumWeights,
+	    std::vector<double>& sumObservables,
+	    std::vector<double>& maxObservables,
+	    std::vector<plint>& intSumObservables ) const;
 };
- 
+
 #endif  // PLB_MPI_PARALLEL
 
 }  // namespace plb

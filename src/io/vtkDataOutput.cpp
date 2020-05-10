@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,8 +34,9 @@
 #include "io/base64.hh"
 #include <fstream>
 
-namespace plb {
-    
+namespace plb
+{
+
 ////////// class VtkDataWriter3D ////////////////////////////////////////
 
 VtkDataWriter3D::VtkDataWriter3D(std::string const& fileName_, bool pointData_, bool mainProcOnly_)
@@ -44,29 +45,34 @@ VtkDataWriter3D::VtkDataWriter3D(std::string const& fileName_, bool pointData_, 
       pointData(pointData_),
       mainProcOnly(mainProcOnly_)
 {
-    if (!mainProcOnly || global::mpi().isMainProcessor()) {
+    if (!mainProcOnly || global::mpi().isMainProcessor())
+    {
         ostr = new std::ofstream(fileName.c_str());
-        if (!(*ostr)) {
+        if (!(*ostr))
+        {
             std::cerr << "could not open file " <<  fileName << "\n";
             return;
         }
     }
 }
 
-VtkDataWriter3D::~VtkDataWriter3D() {
+VtkDataWriter3D::~VtkDataWriter3D()
+{
     delete ostr;
 }
 
 void VtkDataWriter3D::writeHeader(Box3D domain, Array<double,3> origin, double deltaX)
 {
-    if (!mainProcOnly || global::mpi().isMainProcessor()) {
+    if (!mainProcOnly || global::mpi().isMainProcessor())
+    {
         (*ostr) << "<?xml version=\"1.0\"?>\n";
 #ifdef PLB_BIG_ENDIAN
         (*ostr) << "<VTKFile type=\"ImageData\" version=\"0.1\" byte_order=\"BigEndian\">\n";
 #else
         (*ostr) << "<VTKFile type=\"ImageData\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
 #endif
-        if (!pointData) {
+        if (!pointData)
+        {
             origin -= Array<double,3>(deltaX/2.,deltaX/2.,deltaX/2.);
             domain.x1++;
             domain.y1++;
@@ -83,9 +89,12 @@ void VtkDataWriter3D::writeHeader(Box3D domain, Array<double,3> origin, double d
     }
 }
 
-void VtkDataWriter3D::startPiece(Box3D domain) {
-    if (!mainProcOnly || global::mpi().isMainProcessor()) {
-        if (!pointData) {
+void VtkDataWriter3D::startPiece(Box3D domain)
+{
+    if (!mainProcOnly || global::mpi().isMainProcessor())
+    {
+        if (!pointData)
+        {
             domain.x1++;
             domain.y1++;
             domain.z1++;
@@ -94,29 +103,37 @@ void VtkDataWriter3D::startPiece(Box3D domain) {
                 << domain.x0 << " " << domain.x1 << " "
                 << domain.y0 << " " << domain.y1 << " "
                 << domain.z0 << " " << domain.z1 << "\">\n";
-        if (pointData) {
+        if (pointData)
+        {
             (*ostr) << "<PointData>\n";
         }
-        else {
+        else
+        {
             (*ostr) << "<CellData>\n";
         }
     }
 }
 
-void VtkDataWriter3D::endPiece() {
-    if (!mainProcOnly || global::mpi().isMainProcessor()) {
-        if (pointData) {
+void VtkDataWriter3D::endPiece()
+{
+    if (!mainProcOnly || global::mpi().isMainProcessor())
+    {
+        if (pointData)
+        {
             (*ostr) << "</PointData>\n";
         }
-        else {
+        else
+        {
             (*ostr) << "</CellData>\n";
         }
         (*ostr) << "</Piece>\n";
     }
 }
 
-void VtkDataWriter3D::writeFooter() {
-    if (!mainProcOnly || global::mpi().isMainProcessor()) {
+void VtkDataWriter3D::writeFooter()
+{
+    if (!mainProcOnly || global::mpi().isMainProcessor())
+    {
         (*ostr) << "</ImageData>\n";
         (*ostr) << "</VTKFile>\n";
     }
@@ -134,9 +151,10 @@ ParallelVtkDataWriter3D::ParallelVtkDataWriter3D(std::string const& fileName_)
 ParallelVtkDataWriter3D::~ParallelVtkDataWriter3D() { }
 
 void ParallelVtkDataWriter3D::writeDataField( MultiBlock3D& block, IndexOrdering::OrderingT ordering, plint sizeOfScalar,
-                                              plint dataSize)
+        plint dataSize)
 {
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         ostr = new std::ofstream(fileName.c_str(), std::ios_base::app|std::ios_base::binary);
         ostr->write((char const*)&dataSize, sizeof(dataSize));
         delete ostr;
@@ -148,9 +166,11 @@ void ParallelVtkDataWriter3D::writeDataField( MultiBlock3D& block, IndexOrdering
 
 void ParallelVtkDataWriter3D::writeHeader(Box3D domain, Array<double,3> origin, double deltaX)
 {
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         ostr = new std::ofstream(fileName.c_str(), std::ios_base::binary);
-        if (!(*ostr)) {
+        if (!(*ostr))
+        {
             std::cerr << "could not open file " <<  fileName << "\n";
             return;
         }
@@ -172,10 +192,13 @@ void ParallelVtkDataWriter3D::writeHeader(Box3D domain, Array<double,3> origin, 
     }
 }
 
-void ParallelVtkDataWriter3D::startPiece(Box3D domain) {
-    if (global::mpi().isMainProcessor()) {
+void ParallelVtkDataWriter3D::startPiece(Box3D domain)
+{
+    if (global::mpi().isMainProcessor())
+    {
         ostr = new std::ofstream(fileName.c_str(), std::ios_base::app|std::ios_base::binary);
-        if (!(*ostr)) {
+        if (!(*ostr))
+        {
             std::cerr << "could not open file " <<  fileName << "\n";
             return;
         }
@@ -189,10 +212,13 @@ void ParallelVtkDataWriter3D::startPiece(Box3D domain) {
     }
 }
 
-void ParallelVtkDataWriter3D::endPiece() {
-    if (global::mpi().isMainProcessor()) {
+void ParallelVtkDataWriter3D::endPiece()
+{
+    if (global::mpi().isMainProcessor())
+    {
         ostr = new std::ofstream(fileName.c_str(), std::ios_base::app|std::ios_base::binary);
-        if (!(*ostr)) {
+        if (!(*ostr))
+        {
             std::cerr << "could not open file " <<  fileName << "\n";
             return;
         }
@@ -202,10 +228,13 @@ void ParallelVtkDataWriter3D::endPiece() {
     }
 }
 
-void ParallelVtkDataWriter3D::writeFooter1() {
-    if (global::mpi().isMainProcessor()) {
+void ParallelVtkDataWriter3D::writeFooter1()
+{
+    if (global::mpi().isMainProcessor())
+    {
         ostr = new std::ofstream(fileName.c_str(), std::ios_base::app|std::ios_base::binary);
-        if (!(*ostr)) {
+        if (!(*ostr))
+        {
             std::cerr << "could not open file " <<  fileName << "\n";
         }
         (*ostr) << "</ImageData>\n";
@@ -215,10 +244,13 @@ void ParallelVtkDataWriter3D::writeFooter1() {
     }
 }
 
-void ParallelVtkDataWriter3D::writeFooter2() {
-    if (global::mpi().isMainProcessor()) {
+void ParallelVtkDataWriter3D::writeFooter2()
+{
+    if (global::mpi().isMainProcessor())
+    {
         ostr = new std::ofstream(fileName.c_str(), std::ios_base::app|std::ios_base::binary);
-        if (!(*ostr)) {
+        if (!(*ostr))
+        {
             std::cerr << "could not open file " <<  fileName << "\n";
             return;
         }
@@ -228,10 +260,13 @@ void ParallelVtkDataWriter3D::writeFooter2() {
     }
 }
 
-void ParallelVtkDataWriter3D::appendFillerSpace(plint fillerSpace) {
-    if (global::mpi().isMainProcessor()) {
+void ParallelVtkDataWriter3D::appendFillerSpace(plint fillerSpace)
+{
+    if (global::mpi().isMainProcessor())
+    {
         ostr = new std::ofstream(fileName.c_str(), std::ios_base::app|std::ios_base::binary);
-        if (!(*ostr)) {
+        if (!(*ostr))
+        {
             std::cerr << "could not open file " <<  fileName << "\n";
             return;
         }
@@ -245,62 +280,74 @@ void ParallelVtkDataWriter3D::appendFillerSpace(plint fillerSpace) {
 
 
 template<>
-std::string VtkTypeNames<bool>::getBaseName() {
+std::string VtkTypeNames<bool>::getBaseName()
+{
     return "Int";
 }
 
 template<>
-std::string VtkTypeNames<char>::getBaseName() {
+std::string VtkTypeNames<char>::getBaseName()
+{
     return "Int";
 }
 
 template<>
-std::string VtkTypeNames<unsigned char>::getBaseName() {
+std::string VtkTypeNames<unsigned char>::getBaseName()
+{
     return "UInt";
 }
 
 template<>
-std::string VtkTypeNames<short int>::getBaseName() {
+std::string VtkTypeNames<short int>::getBaseName()
+{
     return "Int";
 }
 
 template<>
-std::string VtkTypeNames<unsigned short int>::getBaseName() {
+std::string VtkTypeNames<unsigned short int>::getBaseName()
+{
     return "UInt";
 }
 
 template<>
-std::string VtkTypeNames<int>::getBaseName() {
+std::string VtkTypeNames<int>::getBaseName()
+{
     return "Int";
 }
 
 template<>
-std::string VtkTypeNames<unsigned int>::getBaseName() {
+std::string VtkTypeNames<unsigned int>::getBaseName()
+{
     return "UInt";
 }
 
 template<>
-std::string VtkTypeNames<long int>::getBaseName() {
+std::string VtkTypeNames<long int>::getBaseName()
+{
     return "Int";
 }
 
 template<>
-std::string VtkTypeNames<unsigned long int>::getBaseName() {
+std::string VtkTypeNames<unsigned long int>::getBaseName()
+{
     return "UInt";
 }
 
 template<>
-std::string VtkTypeNames<float>::getBaseName() {
+std::string VtkTypeNames<float>::getBaseName()
+{
     return "Float";
 }
 
 template<>
-std::string VtkTypeNames<double>::getBaseName() {
+std::string VtkTypeNames<double>::getBaseName()
+{
     return "Float";
 }
 
 template<>
-std::string VtkTypeNames<long double>::getBaseName() {
+std::string VtkTypeNames<long double>::getBaseName()
+{
     return "Float";
 }
 

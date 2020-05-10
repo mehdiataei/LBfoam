@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -38,7 +38,8 @@ typedef double T;
 
 // This function object returns a zero velocity, and a pressure which decreases
 //   linearly in x-direction. It is used to initialize the particle populations.
-class PressureGradient {
+class PressureGradient
+{
 public:
     PressureGradient(T deltaP_, plint nx_) : deltaP(deltaP_), nx(nx_)
     { }
@@ -60,10 +61,12 @@ void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<
     const plint nz = geometry.getNz();
 
     Box3D sliceBox(0,0, 0,ny-1, 0,nz-1);
-    std::unique_ptr<MultiScalarField3D<int> > slice = generateMultiScalarField<int>(geometry, sliceBox);
+    std::auto_ptr<MultiScalarField3D<int> > slice = generateMultiScalarField<int>(geometry, sliceBox);
     plb_ifstream geometryFile(fNameIn.c_str());
-    for (plint iX=0; iX<nx-1; ++iX) {
-        if (!geometryFile.is_open()) {
+    for (plint iX=0; iX<nx-1; ++iX)
+    {
+        if (!geometryFile.is_open())
+        {
             pcout << "Error: could not open geometry file " << fNameIn << std::endl;
             exit(EXIT_FAILURE);
         }
@@ -77,7 +80,7 @@ void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<
     }
 
     {
-        std::unique_ptr<MultiScalarField3D<T> > floatTags = copyConvert<int,T>(geometry, geometry.getBoundingBox());
+        std::auto_ptr<MultiScalarField3D<T> > floatTags = copyConvert<int,T>(geometry, geometry.getBoundingBox());
         std::vector<T> isoLevels;
         isoLevels.push_back(0.5);
         typedef TriangleSet<T>::Triangle Triangle;
@@ -93,8 +96,8 @@ void readGeometry(std::string fNameIn, std::string fNameOut, MultiScalarField3D<
 }
 
 void porousMediaSetup(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
-        OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* boundaryCondition,
-        MultiScalarField3D<int>& geometry, T deltaP)
+                      OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* boundaryCondition,
+                      MultiScalarField3D<int>& geometry, T deltaP)
 {
     const plint nx = lattice.getNx();
     const plint ny = lattice.getNy();
@@ -133,13 +136,13 @@ void writeGifs(MultiBlockLattice3D<T,DESCRIPTOR>& lattice, plint iter)
 
     // Write velocity-norm at x=0.
     imageWriter.writeScaledGif(createFileName("ux_inlet", iter, 6),
-            *computeVelocityNorm(lattice, Box3D(0,0, 0,ny-1, 0,nz-1)),
-            imSize, imSize );
+                               *computeVelocityNorm(lattice, Box3D(0,0, 0,ny-1, 0,nz-1)),
+                               imSize, imSize );
 
     // Write velocity-norm at x=nx/2.
     imageWriter.writeScaledGif(createFileName("ux_half", iter, 6),
-            *computeVelocityNorm(lattice, Box3D(nx/2,nx/2, 0,ny-1, 0,nz-1)),
-            imSize, imSize );
+                               *computeVelocityNorm(lattice, Box3D(nx/2,nx/2, 0,ny-1, 0,nz-1)),
+                               imSize, imSize );
 }
 
 void writeVTK(MultiBlockLattice3D<T,DESCRIPTOR>& lattice, plint iter)
@@ -171,7 +174,8 @@ int main(int argc, char **argv)
 {
     plbInit(&argc, &argv);
 
-    if (argc!=7) {
+    if (argc!=7)
+    {
         pcout << "Error missing some input parameter\n";
         pcout << "The structure is :\n";
         pcout << "1. Input file name.\n";
@@ -225,18 +229,22 @@ int main(int argc, char **argv)
     plint iT=0;
 
     const plint maxT = 30000;
-    for (;iT<maxT; ++iT) {
-        if (iT % 20 == 0) {
+    for (; iT<maxT; ++iT)
+    {
+        if (iT % 20 == 0)
+        {
             pcout << "Iteration " << iT << std::endl;
         }
-        if (iT % 500 == 0 && iT>0) {
+        if (iT % 500 == 0 && iT>0)
+        {
             writeGifs(lattice,iT);
         }
 
         lattice.collideAndStream();
         converge.takeValue(getStoredAverageEnergy(lattice),true);
 
-        if (converge.hasConverged()) {
+        if (converge.hasConverged())
+        {
             break;
         }
     }

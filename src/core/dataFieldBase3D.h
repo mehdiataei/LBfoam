@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,28 +35,31 @@
 #include "core/geometry3D.h"
 #include "core/array.h"
 
-namespace plb {
+namespace plb
+{
 
 /// Interface for the variants of 3D scalar fields.
 template<typename T>
-class ScalarFieldBase3D {
+class ScalarFieldBase3D
+{
 public:
-    virtual ~ScalarFieldBase3D() { }
+	virtual ~ScalarFieldBase3D() { }
 public:
-    virtual void reset() =0;
-    virtual T& get(plint iX, plint iY, plint iZ) =0;
-    virtual T const& get(plint iX, plint iY, plint iZ) const =0;
+	virtual void reset() =0;
+	virtual T& get(plint iX, plint iY, plint iZ) =0;
+	virtual T const& get(plint iX, plint iY, plint iZ) const =0;
 };
 
 /// Interface for the variants of 3D vector and tensor fields.
 template<typename T, int nDim>
-class TensorFieldBase3D {
+class TensorFieldBase3D
+{
 public:
-    virtual ~TensorFieldBase3D() { }
+	virtual ~TensorFieldBase3D() { }
 public:
-    virtual void reset() =0;
-    virtual Array<T,nDim>& get(plint iX, plint iY, plint iZ) =0;
-    virtual Array<T,nDim> const& get(plint iX, plint iY, plint iZ) const =0;
+	virtual void reset() =0;
+	virtual Array<T,nDim>& get(plint iX, plint iY, plint iZ) =0;
+	virtual Array<T,nDim> const& get(plint iX, plint iY, plint iZ) const =0;
 };
 
 /// Interface for the variants of generic-sized 2D vector and tensor fields.
@@ -65,19 +68,26 @@ public:
  *  TensorField to guarantee type safety.
  */
 template<typename T>
-class NTensorFieldBase3D {
+class NTensorFieldBase3D
+{
 public:
-    NTensorFieldBase3D(int ndim_) : ndim(ndim_) { }
-    NTensorFieldBase3D(NTensorFieldBase3D<T> const& rhs) : ndim(rhs.ndim) { }
-    void swap(NTensorFieldBase3D& rhs) { std::swap(ndim, rhs.ndim); }
-    virtual ~NTensorFieldBase3D() { }
+	NTensorFieldBase3D(int ndim_) : ndim(ndim_) { }
+	NTensorFieldBase3D(NTensorFieldBase3D<T> const& rhs) : ndim(rhs.ndim) { }
+	void swap(NTensorFieldBase3D& rhs)
+	{
+		std::swap(ndim, rhs.ndim);
+	}
+	virtual ~NTensorFieldBase3D() { }
 public:
-    virtual void reset() =0;
-    virtual T* get(plint iX, plint iY, plint iZ) =0;
-    virtual T const* get(plint iX, plint iY, plint iZ) const =0;
-    plint getNdim() const { return ndim; }
+	virtual void reset() =0;
+	virtual T* get(plint iX, plint iY, plint iZ) =0;
+	virtual T const* get(plint iX, plint iY, plint iZ) const =0;
+	plint getNdim() const
+	{
+		return ndim;
+	}
 private:
-    plint ndim;
+	plint ndim;
 };
 
 }  // namespace plb

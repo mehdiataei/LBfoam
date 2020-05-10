@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,47 +31,51 @@
 #include <string>
 #include <map>
 
-namespace plb {
+namespace plb
+{
 
-namespace global {
+namespace global
+{
 
 /// A globally accessible log file.
-class PlbLogFile {
+class PlbLogFile
+{
 public:
-    PlbLogFile(std::string fName, bool parallel_);
-    ~PlbLogFile();
-    /// Start a new section, with corresponding indentation.
-    void push(std::string sectionName);
-    /// End section, and unindent.
-    void pop();
-    /// Write a log entry (endline is automatic).
-    void entry(std::string entryText);
-    /// Write a log entry (endline is automatic) and flush the file buffer.
-    void flushEntry(std::string entryText);
+	PlbLogFile(std::string fName, bool parallel_);
+	~PlbLogFile();
+	/// Start a new section, with corresponding indentation.
+	void push(std::string sectionName);
+	/// End section, and unindent.
+	void pop();
+	/// Write a log entry (endline is automatic).
+	void entry(std::string entryText);
+	/// Write a log entry (endline is automatic) and flush the file buffer.
+	void flushEntry(std::string entryText);
 private:
-    PlbLogFile(PlbLogFile const& rhs);
-    PlbLogFile& operator=(PlbLogFile const& rhs);
+	PlbLogFile(PlbLogFile const& rhs);
+	PlbLogFile& operator=(PlbLogFile const& rhs);
 private:
-    bool parallel;
-    std::ofstream* ofile;
-    int indentation;
-    std::string indentSpaces;
+	bool parallel;
+	std::ofstream* ofile;
+	int indentation;
+	std::string indentSpaces;
 private:
-friend PlbLogFile& logfile(std::string nameOfLogFile);
-friend PlbLogFile& logfile_nonparallel(std::string nameOfLogFile);
+	friend PlbLogFile& logfile(std::string nameOfLogFile);
+	friend PlbLogFile& logfile_nonparallel(std::string nameOfLogFile);
 };
 
-class LogFileCollection {
+class LogFileCollection
+{
 public:
-    LogFileCollection(bool parallel_);
-    ~LogFileCollection();
-    PlbLogFile& get(std::string nameOfLogFile);
+	LogFileCollection(bool parallel_);
+	~LogFileCollection();
+	PlbLogFile& get(std::string nameOfLogFile);
 private:
-    LogFileCollection(LogFileCollection const& rhs);
-    LogFileCollection& operator=(LogFileCollection const& rhs);
+	LogFileCollection(LogFileCollection const& rhs);
+	LogFileCollection& operator=(LogFileCollection const& rhs);
 private:
-    std::map<std::string, PlbLogFile*> collection;
-    bool parallel;
+	std::map<std::string, PlbLogFile*> collection;
+	bool parallel;
 };
 
 PlbLogFile& logfile(std::string nameOfLogFile);

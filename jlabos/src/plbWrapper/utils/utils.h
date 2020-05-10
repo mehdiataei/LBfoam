@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -27,18 +27,19 @@
  * header file.
  */
 #ifndef SWIG_DATA_ANALYSIS_WRAPPER_2D_H
-#define SWIG_DATA_ANALYSIS_WRAPPER_2D_H 
+#define SWIG_DATA_ANALYSIS_WRAPPER_2D_H
 
 
-class Mpi {
+class Mpi
+{
 	int MPISIZE;
-        char **MPIRANK;
-      public:
-        char* loadMpi(void);
+	char **MPIRANK;
+public:
+	char* loadMpi(void);
 
-        int finalizeMpi(void);
+	int finalizeMpi(void);
 
-        int getRankMpi(void);
-      private:
+	int getRankMpi(void);
+private:
 };
 #endif

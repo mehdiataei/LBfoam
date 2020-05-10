@@ -49,6 +49,8 @@ BubbleHistory3D<T>::BubbleHistory3D(MultiBlock3D& templ)
           nextBubbleID(0)
 {
     setToConstant(*oldTagMatrix, oldTagMatrix->getBoundingBox(), (plint)-1);
+    oldTagMatrix->setMultiBlockManagement().changeEnvelopeWidth((plint) 4);
+
 }
 
 template<typename T>
@@ -61,12 +63,14 @@ BubbleHistory3D<T>::~BubbleHistory3D()
 }
 
 template<typename T>
-void BubbleHistory3D<T>::transition(BubbleMatch3D& bubbleMatch, plint iterationStep, T newBubbleVolumeCorrection,
+void BubbleHistory3D<T>::transition(BubbleMatch3D& bubbleMatch, plint iterationStep, T temperature, T R_s, T p_sat, T dx, T fluidRho, T newBubbleVolumeCorrection,
         bool entrapBubbles, plint numRememberedVolumes)
 {
 
     matchAndRemapBubbles(bubbleMatch, *oldTagMatrix, *bubbleMatch.getTagMatrix(), newBubbleVolumeCorrection, iterationStep,
             entrapBubbles, numRememberedVolumes);
+
+    scaleAndIncreaseDensity(temperature, R_s, p_sat, dx, fluidRho);
 
     // Get the tag-matrix from bubbleMatch, and store it as internal oldTagMatrix for next iteration.
     MultiScalarField3D<plint>* newTagMatrix = bubbleMatch.getTagMatrix();
@@ -83,13 +87,21 @@ void BubbleHistory3D<T>::updateBubblePressure(MultiScalarField3D<T>& outsideDens
 }
 
 template<typename T>
+void BubbleHistory3D<T>::updateBubbleGrowth(MultiScalarField3D<T>& outsideDensity, T rhoEmpty, T alpha, T beta, T gamma)
+{
+    applyProcessingFunctional (
+                new UpdateBubbleGrowth3D<T>(bubbles, rhoEmpty, alpha, beta, gamma),
+                oldTagMatrix->getBoundingBox(), *oldTagMatrix, outsideDensity);
+}
+
+template<typename T>
 void BubbleHistory3D<T>::freeze() {
     typename std::map<plint,BubbleInfo3D>::iterator it = bubbles.begin();
     for (; it!=bubbles.end(); ++it) {
         plint bubbleID = it->first;
         it->second.freeze();
-        PLB_ASSERT( (plint)fullBubbleRecord.size()>bubbleID );
-        fullBubbleRecord[bubbleID].frozen = true;
+        PLB_ASSERT( (plint)FullBubbleRecord.size()>bubbleID );
+        FullBubbleRecord[bubbleID].frozen = true;
     }
 }
 
@@ -110,8 +122,8 @@ void BubbleHistory3D<T>::freezeLargestBubble() {
 
     if (largestBubbleID != -1) {
         bubbles[largestBubbleID].freeze();
-        PLB_ASSERT( (plint)fullBubbleRecord.size()>largestBubbleID );
-        fullBubbleRecord[largestBubbleID].frozen = true;
+        PLB_ASSERT( (plint)FullBubbleRecord.size()>largestBubbleID );
+        FullBubbleRecord[largestBubbleID].frozen = true;
     }
 }
 
@@ -145,8 +157,8 @@ void BubbleHistory3D<T>::timeHistoryLog(std::string fName) {
 template<typename T>
 void BubbleHistory3D<T>::fullBubbleLog(std::string fName) {
     plb_ofstream ofile(fName.c_str());
-    for (pluint i=0; i<fullBubbleRecord.size(); ++i) {
-        ofile << fullBubbleRecord[i].description(i);
+    for (pluint i=0; i<FullBubbleRecord.size(); ++i) {
+        ofile << FullBubbleRecord[i].description(i);
         ofile << std::endl;
     }
 }
@@ -197,7 +209,7 @@ void BubbleHistory3D<T>::matchAndRemapBubbles (
         bubbleFinalRemap[i] = minTag;
     }
 
-    updateBubbleInformation(bubbleTransitions, bubbleMatch.getBubbleVolume(), newBubbleVolumeCorrection, iterationStep,
+    updateBubbleInformation(bubbleTransitions, bubbleMatch.getBubbleVolume(), bubbleMatch.getBubbleDensity(), bubbleMatch.getBubbleDisjoiningPressure(), newBubbleVolumeCorrection, iterationStep,
             entrapBubbles, numRememberedVolumes);
 
     std::vector<MultiBlock3D*> args2;
@@ -210,7 +222,7 @@ void BubbleHistory3D<T>::matchAndRemapBubbles (
 template<typename T>
 void BubbleHistory3D<T>::updateBubbleInformation (
         std::vector<BubbleTransition3D>& bubbleTransitions,
-        std::vector<double> const& bubbleVolume, T newBubbleVolumeCorrection, plint iterationStep,
+        std::vector<double> const& bubbleVolume, std::vector<double> const& bubbleDensity, std::vector<double> const& bubbleDisjoiningPressure,  T newBubbleVolumeCorrection, plint iterationStep,
         bool entrapBubbles, plint numRememberedVolumes )
 {
     std::map<plint,BubbleInfo3D> newBubbles;
@@ -218,7 +230,7 @@ void BubbleHistory3D<T>::updateBubbleInformation (
     for (pluint i=0; i<bubbleTransitions.size(); ++i) {
         std::set<plint>& oldIDs = bubbleTransitions[i].oldIDs;
         std::set<plint>& newIDs = bubbleTransitions[i].newIDs;
-        computeNewBubbles(oldIDs, newIDs, bubbleVolume, newBubbleVolumeCorrection, newBubbles, newToFinal,
+        computeNewBubbles(oldIDs, newIDs, bubbleVolume, bubbleDensity, bubbleDisjoiningPressure, newBubbleVolumeCorrection, newBubbles, newToFinal,
                 entrapBubbles, numRememberedVolumes);
         updateBubbleLog(bubbleTransitions[i], bubbleVolume, iterationStep, newBubbles, newToFinal);
     }
@@ -237,9 +249,26 @@ void BubbleHistory3D<T>::updateBubbleInformation (
 }
 
 template<typename T>
+void BubbleHistory3D<T>::scaleAndIncreaseDensity (T temperature, T R_s, T p_sat, T dx, T fluidRho) {
+
+    // info.incrimDensity((incrim-gasCell1.computeDensity()*delta_vof)*R_s*temperature*fluidRho/(p_ini*info.getReferenceVolume()));
+
+    typename std::map<plint,BubbleInfo3D>::iterator it;
+    for (it = bubbles.begin(); it != bubbles.end(); it++)
+    {
+        BubbleInfo3D& info = it->second;
+        T scaledIncrease = info.getIncrim()*R_s*temperature*fluidRho/(p_sat*info.getReferenceVolume());
+
+            info.increaseDensity(scaledIncrease);
+        
+    }
+}
+
+
+template<typename T>
 void BubbleHistory3D<T>::computeNewBubbles (
         std::set<plint>& oldIDs, std::set<plint>& newIDs,
-        std::vector<double> const& bubbleVolume, T newBubbleVolumeCorrection,
+        std::vector<double> const& bubbleVolume, std::vector<double> const& bubbleDensity, std::vector<double> const& bubbleDisjoiningPressure, T newBubbleVolumeCorrection,
         std::map<plint,BubbleInfo3D>& newBubbles, std::map<plint,plint>& newToFinal,
         bool entrapBubbles, plint numRememberedVolumes )
 {
@@ -255,10 +284,12 @@ void BubbleHistory3D<T>::computeNewBubbles (
 
     // A bubble is created from nothing.
     if (oldIDs.empty()) {
+
         // Create a new bubble.
         PLB_ASSERT( newIDs.size()==1 );
         plint newID = *newIDs.begin();
-        newBubbles[nextBubbleID] = BubbleInfo3D(bubbleVolume[newID]*newBubbleVolumeCorrection, numRememberedVolumes);
+
+        newBubbles[nextBubbleID] = BubbleInfo3D(bubbleVolume[newID]*newBubbleVolumeCorrection, numRememberedVolumes, (double) 1.);
         // If a newly created bubble is smaller than the cutoff value, it gets automatically frozen.
         if (newBubbles[nextBubbleID].getVolume() < cutoffVolume) {
             newBubbles[nextBubbleID].freeze();
@@ -269,10 +300,12 @@ void BubbleHistory3D<T>::computeNewBubbles (
     // A bubble vanishes into nothing.
     else if (newIDs.empty())
     {
+
         PLB_ASSERT(oldIDs.size()==1);
     }
     // All other cases: normal transition, splitting, merging.
     else {
+
         PLB_ASSERT( oldIDs.size()>=1 && newIDs.size()>=1 );
 
         // First check the old bubbles: their total initial volume will be distributed
@@ -308,6 +341,105 @@ void BubbleHistory3D<T>::computeNewBubbles (
             newTotalVolume += bubbleVolume[newID];
         }
 
+        std::map<plint, T> density;
+
+        if (oldIDs.size()==1) {
+            if (newIDs.size()==1) {
+                // Straight transition
+                //pcout << "Straight transition" << std::endl;
+                std::set<plint>::const_iterator itOld = oldIDs.begin();
+                std::set<plint>::const_iterator itNew = newIDs.begin();
+
+                plint oldID = *itOld;
+                plint newID = *itNew;
+
+                typename std::map<plint,BubbleInfo3D>::const_iterator it = bubbles.find(oldID);
+                density.insert(std::pair<plint,T >(newID, it->second.getCurrentDensity()));
+
+            }
+            else {
+
+                // Splitting
+                std::set<plint>::const_iterator itOld = oldIDs.begin();
+                std::set<plint>::const_iterator itNew = newIDs.begin();                
+
+                plint oldID = *itOld;
+
+                typename std::map<plint,BubbleInfo3D>::const_iterator it = bubbles.find(oldID);
+
+                T splitDensity = it->second.getCurrentDensity();
+
+                for (; itNew!=newIDs.end(); ++itNew) {
+
+                    plint newID = *itNew;
+
+                    density.insert(std::pair<plint,T> (newID, splitDensity));
+
+                }
+                
+            }
+        } else if (newIDs.size()==1) {
+
+            // Merging
+            std::set<plint>::const_iterator itOld = oldIDs.begin();
+            std::set<plint>::const_iterator itNew = newIDs.begin();
+
+            T totalDensityTimesRefVolume = 0.;
+
+            for (; itOld!=oldIDs.end(); ++itOld) {
+
+                plint oldID = *itOld;
+
+                typename std::map<plint,BubbleInfo3D>::const_iterator it = bubbles.find(oldID);
+
+                totalDensityTimesRefVolume += it->second.getCurrentDensity() * it->second.getReferenceVolume();
+
+            }
+
+            plint newID = *itNew;
+
+            T newDensity = totalDensityTimesRefVolume / totalReferenceVolume;         
+
+            density.insert(std::pair<plint,T >(newID, newDensity));
+           
+        } else {
+            // Transition
+            
+            std::set<plint>::const_iterator itOld = oldIDs.begin();
+            std::set<plint>::const_iterator itNew = newIDs.begin();
+
+            std::map<int, T> mapDensity;
+
+            int i = 0;
+
+            for (; itOld!=oldIDs.end(); ++itOld) {
+
+                plint oldID = *itOld;
+
+                typename std::map<plint,BubbleInfo3D>::const_iterator it = bubbles.find(oldID);
+
+                mapDensity[i] = it->second.getCurrentDensity();
+
+                i++;
+            }
+
+            int j = 0;
+
+            for (; itNew!=newIDs.end(); ++itNew) {
+
+                plint newID = *itNew;
+
+                T newDensity = mapDensity.find(j)->second;
+
+                density.insert(std::pair<plint,T >(newID, newDensity));
+
+                j++;
+
+            }
+        }
+
+
+
         // Finally, put into place all information of the new bubbles.
         static const T epsilon = std::numeric_limits<T>::epsilon()*1.e4;
         itNew = newIDs.begin();
@@ -315,6 +447,10 @@ void BubbleHistory3D<T>::computeNewBubbles (
             plint newID = *itNew;
             PLB_ASSERT(newID<=(plint)bubbleVolume.size());
             T newInitialVolume = bubbleVolume[newID];
+            T newDensityIncrim = bubbleDensity[newID];
+            T newDisjoiningPressure = bubbleDisjoiningPressure[newID];
+            T newDensity = density[newID];
+           
             if (std::fabs(newTotalVolume)>epsilon) {
                 newInitialVolume *= totalReferenceVolume/newTotalVolume;
             }
@@ -331,8 +467,10 @@ void BubbleHistory3D<T>::computeNewBubbles (
                 ++nextBubbleID;
             }
 
-            BubbleInfo3D nextBubble(newInitialVolume, numRememberedVolumes);
+            BubbleInfo3D nextBubble(newInitialVolume, numRememberedVolumes, newDensity);            
+            nextBubble.setIncrim(newDensityIncrim);
             nextBubble.setVolume(bubbleVolume[newID]);
+            nextBubble.setDisjoiningPressure(newDisjoiningPressure);
 
             // If a bubble created through splitting/merging is smaller than
             // the cutoff value, it gets automatically frozen.
@@ -353,6 +491,7 @@ void BubbleHistory3D<T>::computeNewBubbles (
 
             newToFinal[newID] = finalID;
             newBubbles[finalID] = nextBubble;
+
         }
     }
 }
@@ -380,19 +519,19 @@ void BubbleHistory3D<T>::updateBubbleLog (
     if (oldIDs.empty()) {
         PLB_ASSERT( newIDs.size()==1 );
         plint newID = *save_newIDs.begin();
-        FullBubbleRecord nextBubbleRecord(bubbleVolume[newID], iterationStep);
+        FullBubbleRecord3D nextBubbleRecord(bubbleVolume[newID], iterationStep);
         nextBubbleRecord.beginTransition = bubbleTransition;
-        fullBubbleRecord.push_back(nextBubbleRecord);
+        FullBubbleRecord.push_back(nextBubbleRecord);
         timeHistory[iterationStep].first.push_back(newToFinal[newID]);
     }
     // A bubble vanishes into nothing.
     else if (newIDs.empty()) {
         PLB_ASSERT(oldIDs.size()==1);
         plint vanishedID = *oldIDs.begin();
-        PLB_ASSERT( (plint)fullBubbleRecord.size()>vanishedID );
-        fullBubbleRecord[vanishedID].endIteration = iterationStep;
-        fullBubbleRecord[vanishedID].finalVolume = 0.;
-        fullBubbleRecord[vanishedID].endTransition = bubbleTransition;
+        PLB_ASSERT( (plint)FullBubbleRecord.size()>vanishedID );
+        FullBubbleRecord[vanishedID].endIteration = iterationStep;
+        FullBubbleRecord[vanishedID].finalVolume = 0.;
+        FullBubbleRecord[vanishedID].endTransition = bubbleTransition;
         timeHistory[iterationStep].second.push_back(vanishedID);
     }
     // Splitting or merging. Exclude the case of normal transitions.
@@ -403,20 +542,20 @@ void BubbleHistory3D<T>::updateBubbleLog (
             plint oldID = *itOld;
             typename std::map<plint,BubbleInfo3D>::const_iterator it = bubbles.find(oldID);
             PLB_ASSERT( it!=bubbles.end() );
-            PLB_ASSERT( (plint)fullBubbleRecord.size()>oldID );
-            fullBubbleRecord[oldID].endIteration = iterationStep;
-            fullBubbleRecord[oldID].finalVolume = it->second.getVolume();
-            fullBubbleRecord[oldID].endTransition = bubbleTransition;
+            PLB_ASSERT( (plint)FullBubbleRecord.size()>oldID );
+            FullBubbleRecord[oldID].endIteration = iterationStep;
+            FullBubbleRecord[oldID].finalVolume = it->second.getVolume();
+            FullBubbleRecord[oldID].endTransition = bubbleTransition;
             timeHistory[iterationStep].second.push_back(oldID);
         }
         // Introduce a record for all newly created bubbles.
         std::set<plint>::const_iterator itNew = save_newIDs.begin();
         for (; itNew!=save_newIDs.end(); ++itNew) {
             plint newID = *itNew;
-            FullBubbleRecord nextBubbleRecord(bubbleVolume[newID], iterationStep);
+            FullBubbleRecord3D nextBubbleRecord(bubbleVolume[newID], iterationStep);
             nextBubbleRecord.beginTransition = bubbleTransition;
             nextBubbleRecord.frozen = newBubbles[newToFinal[newID]].isFrozen();
-            fullBubbleRecord.push_back(nextBubbleRecord);
+            FullBubbleRecord.push_back(nextBubbleRecord);
             timeHistory[iterationStep].first.push_back(newToFinal[newID]);
         }
     }
@@ -693,6 +832,62 @@ void BubbleHistory3D<T>::computeBubbleTransitions (
         }
     }
 }
+
+
+/************ Class UpdateBubbleGrowth3D ******************************** */
+
+template<typename T>
+UpdateBubbleGrowth3D<T>::UpdateBubbleGrowth3D(std::map<plint,BubbleInfo3D> const& bubbles_, T rho0_, T alpha_, T beta_, T gamma_)
+    : bubbles(bubbles_),
+      rho0(rho0_),
+      alpha(alpha_),
+      beta(beta_),
+      gamma(gamma_)
+
+{ }
+
+template<typename T>
+UpdateBubbleGrowth3D<T>* UpdateBubbleGrowth3D<T>::clone() const {
+    return new UpdateBubbleGrowth3D<T>(*this);
+}
+
+template<typename T>
+void UpdateBubbleGrowth3D<T>::process(Box3D domain, ScalarField3D<plint>& tags, ScalarField3D<T>& density)
+{
+
+    Dot3D ofs = computeRelativeDisplacement(tags, density);
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+             for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
+            plint tag = tags.get(iX,iY,iZ);
+            if (tag>=0) {
+                typename std::map<plint,BubbleInfo3D>::const_iterator it = bubbles.find(tag);
+                PLB_ASSERT( it!=bubbles.end() );
+                BubbleInfo3D const& info = it->second;
+                T rho = rho0;
+                if (!info.isFrozen()) {
+                    T volumeRatio = info.getVolumeRatio();
+                    if (alpha < (T) 0 || beta < (T) 0) {
+                        // Model: rho = rho0 * (V0/V)^gamma
+
+                        rho = info.getCurrentDensity() * std::pow(volumeRatio, gamma);
+                        //pcout << "from getCurrentDensity: " << info.getCurrentDensity() << " id:  " << tag << std::endl;
+                    } else {
+                        // Model: rho = rho0 * [1 + alpha * (1 - V/V0)^beta]
+                        rho = info.getCurrentDensity() * (1.0 + alpha * std::pow((T)(1.0 - 1.0/volumeRatio), beta));
+                    }
+
+                }
+                density.get(iX+ofs.x,iY+ofs.y, iZ + ofs.z) = rho;
+            }
+            else {
+                density.get(iX+ofs.x,iY+ofs.y, iZ + ofs.z) = rho0;
+            }
+        }
+    }
+}
+
+
 
 }  // namespace plb
 

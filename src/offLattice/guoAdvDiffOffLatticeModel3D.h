@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,65 +28,92 @@
 #include "core/globalDefs.h"
 #include "offLattice/offLatticeModel3D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
 class GuoAdvDiffOffLatticeModel3D : public OffLatticeModel3D<T,Array<T,2> >
 {
 public:
-    GuoAdvDiffOffLatticeModel3D(BoundaryShape3D<T,Array<T,2> >* shape_, int flowType_);
-    GuoAdvDiffOffLatticeModel3D(GuoAdvDiffOffLatticeModel3D<T,Descriptor> const& rhs);
-    GuoAdvDiffOffLatticeModel3D<T,Descriptor>& operator=(GuoAdvDiffOffLatticeModel3D<T,Descriptor> const& rhs);
-    virtual GuoAdvDiffOffLatticeModel3D<T,Descriptor>* clone() const;
-    virtual plint getNumNeighbors() const;
-    virtual bool isExtrapolated() const { return true; }
-    virtual void prepareCell (
-            Dot3D const& cellLocation, AtomicContainerBlock3D& container );
-    virtual void boundaryCompletion (
-            AtomicBlock3D& lattice, AtomicContainerBlock3D& container,
-            std::vector<AtomicBlock3D *> const& args );
-    virtual ContainerBlockData* generateOffLatticeInfo() const;
-    virtual Array<T,3> getLocalForce(AtomicContainerBlock3D& container) const { return Array<T,3>(T(),T(),T()); }
-    void selectSecondOrder(bool flag) { secondOrderFlag = flag; }
-    bool usesSecondOrder() const { return secondOrderFlag; }
+	GuoAdvDiffOffLatticeModel3D(BoundaryShape3D<T,Array<T,2> >* shape_, int flowType_);
+	GuoAdvDiffOffLatticeModel3D(GuoAdvDiffOffLatticeModel3D<T,Descriptor> const& rhs);
+	GuoAdvDiffOffLatticeModel3D<T,Descriptor>& operator=(GuoAdvDiffOffLatticeModel3D<T,Descriptor> const& rhs);
+	virtual GuoAdvDiffOffLatticeModel3D<T,Descriptor>* clone() const;
+	virtual plint getNumNeighbors() const;
+	virtual bool isExtrapolated() const
+	{
+		return true;
+	}
+	virtual void prepareCell (
+	    Dot3D const& cellLocation, AtomicContainerBlock3D& container );
+	virtual void boundaryCompletion (
+	    AtomicBlock3D& lattice, AtomicContainerBlock3D& container,
+	    std::vector<AtomicBlock3D *> const& args );
+	virtual ContainerBlockData* generateOffLatticeInfo() const;
+	virtual Array<T,3> getLocalForce(AtomicContainerBlock3D& container) const
+	{
+		return Array<T,3>(T(),T(),T());
+	}
+	void selectSecondOrder(bool flag)
+	{
+		secondOrderFlag = flag;
+	}
+	bool usesSecondOrder() const
+	{
+		return secondOrderFlag;
+	}
 private:
-    void cellCompletion (
-            BlockLattice3D<T,Descriptor>& lattice,
-            Dot3D const& guoNode,
-            std::vector<std::pair<int,int> > const& dryNodeFluidDirections,
-            std::vector<plint> const& dryNodeIds, Dot3D const& absoluteOffset );
-    void computeRhoBarJNeq (
-              BlockLattice3D<T,Descriptor> const& lattice, Dot3D const& guoNode,
-              Dot3D const& fluidDirection, int depth, Array<T,3> const& wallNode, T delta,
-              Array<T,2> wallData, OffBoundary::Type bdType, Array<T,3> const& wallNormal,
-              T& rhoBar, Array<T,Descriptor<T>::d>& jNeq ) const;
+	void cellCompletion (
+	    BlockLattice3D<T,Descriptor>& lattice,
+	    Dot3D const& guoNode,
+	    std::vector<std::pair<int,int> > const& dryNodeFluidDirections,
+	    std::vector<plint> const& dryNodeIds, Dot3D const& absoluteOffset );
+	void computeRhoBarJNeq (
+	    BlockLattice3D<T,Descriptor> const& lattice, Dot3D const& guoNode,
+	    Dot3D const& fluidDirection, int depth, Array<T,3> const& wallNode, T delta,
+	    Array<T,2> wallData, OffBoundary::Type bdType, Array<T,3> const& wallNormal,
+	    T& rhoBar, Array<T,Descriptor<T>::d>& jNeq ) const;
 private:
-    bool secondOrderFlag;
+	bool secondOrderFlag;
 private:
-    /// Store the location of wall nodes, as well as the pattern of missing vs. known
-    ///   populations.
-    class GuoAdvDiffOffLatticeInfo3D : public ContainerBlockData {
-    public:
-        std::vector<Dot3D> const&                               getDryNodes() const
-        { return dryNodes; }
-        std::vector<Dot3D>&                                     getDryNodes()
-        { return dryNodes; }
-        std::vector<std::vector<std::pair<int,int> > > const&   getDryNodeFluidDirections() const
-        { return dryNodeFluidDirections; }
-        std::vector<std::vector<std::pair<int,int> > >&         getDryNodeFluidDirections()
-        { return dryNodeFluidDirections; }
-        std::vector<std::vector<plint> > const&                 getDryNodeIds() const
-        { return dryNodeIds; }
-        std::vector<std::vector<plint> >&                       getDryNodeIds()
-        { return dryNodeIds; }
-        virtual GuoAdvDiffOffLatticeInfo3D* clone() const {
-            return new GuoAdvDiffOffLatticeInfo3D(*this);
-        }
-    private:
-        std::vector<Dot3D> dryNodes;
-        std::vector<std::vector<std::pair<int,int> > >   dryNodeFluidDirections;
-        std::vector<std::vector<plint> >                 dryNodeIds;
-    };
+	/// Store the location of wall nodes, as well as the pattern of missing vs. known
+	///   populations.
+	class GuoAdvDiffOffLatticeInfo3D : public ContainerBlockData
+	{
+	public:
+		std::vector<Dot3D> const&                               getDryNodes() const
+		{
+			return dryNodes;
+		}
+		std::vector<Dot3D>&                                     getDryNodes()
+		{
+			return dryNodes;
+		}
+		std::vector<std::vector<std::pair<int,int> > > const&   getDryNodeFluidDirections() const
+		{
+			return dryNodeFluidDirections;
+		}
+		std::vector<std::vector<std::pair<int,int> > >&         getDryNodeFluidDirections()
+		{
+			return dryNodeFluidDirections;
+		}
+		std::vector<std::vector<plint> > const&                 getDryNodeIds() const
+		{
+			return dryNodeIds;
+		}
+		std::vector<std::vector<plint> >&                       getDryNodeIds()
+		{
+			return dryNodeIds;
+		}
+		virtual GuoAdvDiffOffLatticeInfo3D* clone() const
+		{
+			return new GuoAdvDiffOffLatticeInfo3D(*this);
+		}
+	private:
+		std::vector<Dot3D> dryNodes;
+		std::vector<std::vector<std::pair<int,int> > >   dryNodeFluidDirections;
+		std::vector<std::vector<plint> >                 dryNodeIds;
+	};
 };
 
 }  // namespace plb

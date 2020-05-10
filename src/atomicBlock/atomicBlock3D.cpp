@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,7 +28,8 @@
 #include "atomicBlock/atomicBlock3D.h"
 #include "atomicBlock/atomicBlockSerializer3D.h"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Class StatSubscriber3D *********************************** */
 
@@ -36,19 +37,23 @@ StatSubscriber3D::StatSubscriber3D(AtomicBlock3D& block_)
     : block(block_)
 { }
 
-plint StatSubscriber3D::subscribeAverage() {
+plint StatSubscriber3D::subscribeAverage()
+{
     return block.getInternalStatistics().subscribeAverage();
 }
 
-plint StatSubscriber3D::subscribeSum() {
+plint StatSubscriber3D::subscribeSum()
+{
     return block.getInternalStatistics().subscribeSum();
 }
 
-plint StatSubscriber3D::subscribeMax() {
+plint StatSubscriber3D::subscribeMax()
+{
     return block.getInternalStatistics().subscribeMax();
 }
 
-plint StatSubscriber3D::subscribeIntSum() {
+plint StatSubscriber3D::subscribeIntSum()
+{
     return block.getInternalStatistics().subscribeIntSum();
 }
 
@@ -73,9 +78,9 @@ AtomicBlock3D::AtomicBlock3D(AtomicBlock3D const& rhs)
       dataTransfer(rhs.dataTransfer->clone())
 {
     copyDataProcessors (
-            rhs.explicitInternalProcessors, explicitInternalProcessors );
+        rhs.explicitInternalProcessors, explicitInternalProcessors );
     copyDataProcessors (
-            rhs.automaticInternalProcessors, automaticInternalProcessors );
+        rhs.automaticInternalProcessors, automaticInternalProcessors );
 }
 
 AtomicBlock3D::AtomicBlock3D(AtomicBlock3D const& rhs, BlockDataTransfer3D* defaultDataTransfer)
@@ -87,9 +92,9 @@ AtomicBlock3D::AtomicBlock3D(AtomicBlock3D const& rhs, BlockDataTransfer3D* defa
       dataTransfer(defaultDataTransfer)
 {
     copyDataProcessors (
-            rhs.explicitInternalProcessors, explicitInternalProcessors );
+        rhs.explicitInternalProcessors, explicitInternalProcessors );
     copyDataProcessors (
-            rhs.automaticInternalProcessors, automaticInternalProcessors );
+        rhs.automaticInternalProcessors, automaticInternalProcessors );
 }
 
 AtomicBlock3D::~AtomicBlock3D()
@@ -98,7 +103,8 @@ AtomicBlock3D::~AtomicBlock3D()
     delete dataTransfer;
 }
 
-void AtomicBlock3D::swap(AtomicBlock3D& rhs) {
+void AtomicBlock3D::swap(AtomicBlock3D& rhs)
+{
     std::swap(nx, rhs.nx);
     std::swap(ny, rhs.ny);
     std::swap(nz, rhs.nz);
@@ -110,35 +116,43 @@ void AtomicBlock3D::swap(AtomicBlock3D& rhs) {
     std::swap(dataTransfer, rhs.dataTransfer);
 }
 
-void AtomicBlock3D::initialize() {
+void AtomicBlock3D::initialize()
+{
     executeInternalProcessors();
 }
 
-BlockStatistics& AtomicBlock3D::getInternalStatistics() {
+BlockStatistics& AtomicBlock3D::getInternalStatistics()
+{
     return internalStatistics;
 }
 
-BlockStatistics const& AtomicBlock3D::getInternalStatistics() const {
+BlockStatistics const& AtomicBlock3D::getInternalStatistics() const
+{
     return internalStatistics;
 }
 
-void AtomicBlock3D::setLocation(Dot3D const& location_) {
+void AtomicBlock3D::setLocation(Dot3D const& location_)
+{
     location = location_;
 }
 
-Dot3D AtomicBlock3D::getLocation() const {
+Dot3D AtomicBlock3D::getLocation() const
+{
     return location;
 }
 
-void AtomicBlock3D::setFlag(bool value) {
+void AtomicBlock3D::setFlag(bool value)
+{
     flag = value;
 }
 
-bool AtomicBlock3D::getFlag() const {
+bool AtomicBlock3D::getFlag() const
+{
     return flag;
 }
 
-Box3D AtomicBlock3D::getBoundingBox() const {
+Box3D AtomicBlock3D::getBoundingBox() const
+{
     return Box3D(0, getNx()-1, 0, getNy()-1, 0, getNz()-1);
 }
 
@@ -146,11 +160,13 @@ void AtomicBlock3D::integrateDataProcessor (
     DataProcessor3D* processor, plint level )
 {
     // Negative level numbers account for explicit internal BlockProcessors
-    if (level<0) {
+    if (level<0)
+    {
         integrateDataProcessor(processor, -level-1, explicitInternalProcessors);
     }
     // Positive-or-zero level numbers account for automatic internal BlockProcessors
-    else {
+    else
+    {
         integrateDataProcessor(processor, level, automaticInternalProcessors);
     }
 }
@@ -158,42 +174,54 @@ void AtomicBlock3D::integrateDataProcessor (
 void AtomicBlock3D::integrateDataProcessor (
     DataProcessor3D* processor, plint level, DataProcessorVector& processors )
 {
-    if (level >= (plint)processors.size()) {
+    if (level >= (plint)processors.size())
+    {
         processors.resize(level+1);
     }
     processors[level].push_back(processor);
 }
 
-void AtomicBlock3D::copyDataProcessors(DataProcessorVector const& from, DataProcessorVector& to) {
+void AtomicBlock3D::copyDataProcessors(DataProcessorVector const& from, DataProcessorVector& to)
+{
     clearDataProcessors(to);
     to.resize(from.size());
-    for (pluint iLevel=0; iLevel<from.size(); ++iLevel) {
+    for (pluint iLevel=0; iLevel<from.size(); ++iLevel)
+    {
         to[iLevel].resize(from[iLevel].size());
-        for (pluint iProc=0; iProc<from[iLevel].size(); ++iProc) {
+        for (pluint iProc=0; iProc<from[iLevel].size(); ++iProc)
+        {
             to[iLevel][iProc] = from[iLevel][iProc]->clone();
         }
     }
 }
 
-void AtomicBlock3D::clearDataProcessors() {
+void AtomicBlock3D::clearDataProcessors()
+{
     clearDataProcessors(explicitInternalProcessors);
     clearDataProcessors(automaticInternalProcessors);
 }
 
-void AtomicBlock3D::removeDataProcessors(int staticId) {
-    for (pluint iLevel=0; iLevel<explicitInternalProcessors.size(); ++iLevel) {
+void AtomicBlock3D::removeDataProcessors(int staticId)
+{
+    for (pluint iLevel=0; iLevel<explicitInternalProcessors.size(); ++iLevel)
+    {
         std::vector<DataProcessor3D*>::iterator it = explicitInternalProcessors[iLevel].begin();
-        for (;  it != explicitInternalProcessors[iLevel].end(); ++it) {
-            if ((*it)->getStaticId()==staticId) {
+        for (;  it != explicitInternalProcessors[iLevel].end(); ++it)
+        {
+            if ((*it)->getStaticId()==staticId)
+            {
                 delete *it;
                 it = explicitInternalProcessors[iLevel].erase(it);
             }
         }
     }
-    for (pluint iLevel=0; iLevel<automaticInternalProcessors.size(); ++iLevel) {
+    for (pluint iLevel=0; iLevel<automaticInternalProcessors.size(); ++iLevel)
+    {
         std::vector<DataProcessor3D*>::iterator it = automaticInternalProcessors[iLevel].begin();
-        for (;  it != automaticInternalProcessors[iLevel].end(); ++it) {
-            if ((*it)->getStaticId()==staticId) {
+        for (;  it != automaticInternalProcessors[iLevel].end(); ++it)
+        {
+            if ((*it)->getStaticId()==staticId)
+            {
                 delete *it;
                 it = automaticInternalProcessors[iLevel].erase(it);
             }
@@ -201,36 +229,44 @@ void AtomicBlock3D::removeDataProcessors(int staticId) {
     }
 }
 
-void AtomicBlock3D::setDataTransfer(BlockDataTransfer3D* newDataTransfer) {
+void AtomicBlock3D::setDataTransfer(BlockDataTransfer3D* newDataTransfer)
+{
     PLB_ASSERT( newDataTransfer );
     delete dataTransfer;
     dataTransfer = newDataTransfer;
     dataTransfer->setBlock(*this);
 }
 
-BlockDataTransfer3D& AtomicBlock3D::getDataTransfer() {
+BlockDataTransfer3D& AtomicBlock3D::getDataTransfer()
+{
     PLB_ASSERT( dataTransfer );
     dataTransfer->setBlock(*this);
     return *dataTransfer;
 }
 
-BlockDataTransfer3D const& AtomicBlock3D::getDataTransfer() const {
+BlockDataTransfer3D const& AtomicBlock3D::getDataTransfer() const
+{
     PLB_ASSERT( dataTransfer );
     dataTransfer->setConstBlock(*this);
     return *dataTransfer;
 }
 
-void AtomicBlock3D::clearDataProcessors(DataProcessorVector& processors) {
-    for (pluint iLevel=0; iLevel<processors.size(); ++iLevel) {
-        for (pluint iProc=0; iProc<processors[iLevel].size(); ++iProc) {
+void AtomicBlock3D::clearDataProcessors(DataProcessorVector& processors)
+{
+    for (pluint iLevel=0; iLevel<processors.size(); ++iLevel)
+    {
+        for (pluint iProc=0; iProc<processors[iLevel].size(); ++iProc)
+        {
             delete processors[iLevel][iProc];
         }
     }
     processors.clear();
 }
 
-void AtomicBlock3D::executeInternalProcessors() {
-    for (pluint iLevel=0; iLevel<automaticInternalProcessors.size(); ++iLevel) {
+void AtomicBlock3D::executeInternalProcessors()
+{
+    for (pluint iLevel=0; iLevel<automaticInternalProcessors.size(); ++iLevel)
+    {
         executeInternalProcessors(iLevel, automaticInternalProcessors);
     }
 }
@@ -238,50 +274,56 @@ void AtomicBlock3D::executeInternalProcessors() {
 void AtomicBlock3D::executeInternalProcessors(plint level)
 {
     // Negative level numbers account for explicit internal BlockProcessors
-    if (level<0) {
+    if (level<0)
+    {
         executeInternalProcessors(-level-1, explicitInternalProcessors);
     }
     // Positive-or-zero level numbers account for automatic internal BlockProcessors
-    else {
+    else
+    {
         executeInternalProcessors(level, automaticInternalProcessors);
     }
 }
 
 void AtomicBlock3D::executeInternalProcessors(plint level, DataProcessorVector& processors)
 {
-    if (level<(plint)processors.size()) {
-        for (pluint iProc=0; iProc<processors[level].size(); ++iProc) {
+    if (level<(plint)processors.size())
+    {
+        for (pluint iProc=0; iProc<processors[level].size(); ++iProc)
+        {
             processors[level][iProc] -> process();
         }
     }
 }
 
 DataSerializer* AtomicBlock3D::getBlockSerializer (
-            Box3D const& domain, IndexOrdering::OrderingT ordering ) const
+    Box3D const& domain, IndexOrdering::OrderingT ordering ) const
 {
     return new AtomicBlockSerializer3D(*this, domain, ordering);
 }
 
 DataUnSerializer* AtomicBlock3D::getBlockUnSerializer (
-            Box3D const& domain, IndexOrdering::OrderingT ordering )
+    Box3D const& domain, IndexOrdering::OrderingT ordering )
 {
     return new AtomicBlockUnSerializer3D(*this, domain, ordering);
 }
 
-StatSubscriber& AtomicBlock3D::internalStatSubscription() {
+StatSubscriber& AtomicBlock3D::internalStatSubscription()
+{
     return statisticsSubscriber;
 }
 
-void AtomicBlock3D::evaluateStatistics() {
+void AtomicBlock3D::evaluateStatistics()
+{
     getInternalStatistics().evaluate();
 }
 
 
-Dot3D computeRelativeDisplacement(AtomicBlock3D const& block1, AtomicBlock3D const& block2) {
+Dot3D computeRelativeDisplacement(AtomicBlock3D const& block1, AtomicBlock3D const& block2)
+{
     return Dot3D(block1.getLocation().x-block2.getLocation().x,
                  block1.getLocation().y-block2.getLocation().y,
                  block1.getLocation().z-block2.getLocation().z);
 }
 
 }  // namespace plb
-

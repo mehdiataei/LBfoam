@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,30 +32,33 @@
 
 // http://blog.dhananjaynene.com/2009/03/constructor-method-overloading-in-python/
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-class Lattice2NumPy2D {
+class Lattice2NumPy2D
+{
 public:
-    Lattice2NumPy2D(MultiBlockLattice2D<T,Descriptor>& lattice_);
-    Lattice2NumPy2D(MultiBlockLattice2D<T,Descriptor>& lattice_, Box2D const& domain_);
-    void execute(T* array, int size);
-    int getSize() const;
+	Lattice2NumPy2D(MultiBlockLattice2D<T,Descriptor>& lattice_);
+	Lattice2NumPy2D(MultiBlockLattice2D<T,Descriptor>& lattice_, Box2D const& domain_);
+	void execute(T* array, int size);
+	int getSize() const;
 private:
-    MultiBlockLattice2D<T,Descriptor>& lattice;
-    Box2D domain;
+	MultiBlockLattice2D<T,Descriptor>& lattice;
+	Box2D domain;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class NumPy2Lattice2D {
+class NumPy2Lattice2D
+{
 public:
-    NumPy2Lattice2D(MultiBlockLattice2D<T,Descriptor>& lattice_);
-    NumPy2Lattice2D(MultiBlockLattice2D<T,Descriptor>& lattice_, Box2D const& domain_);
-    void execute(T* array, int size);
-    int getSize() const;
+	NumPy2Lattice2D(MultiBlockLattice2D<T,Descriptor>& lattice_);
+	NumPy2Lattice2D(MultiBlockLattice2D<T,Descriptor>& lattice_, Box2D const& domain_);
+	void execute(T* array, int size);
+	int getSize() const;
 private:
-    MultiBlockLattice2D<T,Descriptor>& lattice;
-    Box2D domain;
+	MultiBlockLattice2D<T,Descriptor>& lattice;
+	Box2D domain;
 };
 
 }  // namespace plb

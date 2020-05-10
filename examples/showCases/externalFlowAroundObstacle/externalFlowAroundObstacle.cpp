@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -74,7 +74,7 @@ struct Param
     plint imageIter, vtkIter;
     bool useParticles;                  // Simulate particles or not.
     int particleTimeFactor;             // If the particle time factor is 2, then the integration time step
-                                        //   for the particles is twice that of the fluid.
+    //   for the particles is twice that of the fluid.
     T particleProbabilityPerCell;       // Probability of injection of a particle at an injection cell at each time step.
     T cutOffSpeedSqr;                   // Criterion to eliminate particles with very small velocity.
     int maxNumParticlesToWrite;         // Maximum number of particles in the output VTK files.
@@ -111,12 +111,14 @@ struct Param
         document["numerics"]["resolution"].read(resolution);
         document["numerics"]["uLB"].read(uLB);
         document["numerics"]["useSmago"].read(useSmago);
-        if (useSmago) {
+        if (useSmago)
+        {
             document["numerics"]["cSmago"].read(cSmago);
         }
 
         document["numerics"]["useParticles"].read(useParticles);
-        if (useParticles) {
+        if (useParticles)
+        {
             document["numerics"]["particleTimeFactor"].read(particleTimeFactor);
             document["numerics"]["particleProbabilityPerCell"].read(particleProbabilityPerCell);
             document["numerics"]["cutOffSpeedSqr"].read(cutOffSpeedSqr);
@@ -126,11 +128,16 @@ struct Param
         document["numerics"]["outletSpongeZoneWidth"].read(outletSpongeZoneWidth);
         std::string zoneType;
         document["numerics"]["outletSpongeZoneType"].read(zoneType);
-        if ((util::tolower(zoneType)).compare("viscosity") == 0) {
+        if ((util::tolower(zoneType)).compare("viscosity") == 0)
+        {
             outletSpongeZoneType = 0;
-        } else if ((util::tolower(zoneType)).compare("smagorinsky") == 0) {
+        }
+        else if ((util::tolower(zoneType)).compare("smagorinsky") == 0)
+        {
             outletSpongeZoneType = 1;
-        } else {
+        }
+        else
+        {
             pcout << "The sponge zone type must be either \"Viscosity\" or \"Smagorinsky\"." << std::endl;
             exit(-1);
         }
@@ -152,11 +159,14 @@ struct Param
         dt = (uLB/inletVelocity) * dx;
         T nuLB = nu * dt/(dx*dx);
         omega = 1.0/(DESCRIPTOR<T>::invCs2*nuLB+0.5);
-        if (lateralFreeSlip) {
+        if (lateralFreeSlip)
+        {
             nx = util::roundToInt(lx/dx) + 1;
             ny = util::roundToInt(ly/dx) + 1;
             nz = util::roundToInt(lz/dx) + 1;
-        } else {
+        }
+        else
+        {
             nx = util::roundToInt(lx/dx) + 1;
             ny = util::roundToInt(ly/dx);
             nz = util::roundToInt(lz/dx);
@@ -187,11 +197,13 @@ struct Param
     {
         static T pi = std::acos((T) -1.0);
 
-        if (iIter >= initialIter) {
+        if (iIter >= initialIter)
+        {
             return uLB;
         }
 
-        if (iIter < 0) {
+        if (iIter < 0)
+        {
             iIter = 0;
         }
 
@@ -209,7 +221,8 @@ void outerDomainBoundaries(MultiBlockLattice3D<T,DESCRIPTOR> *lattice,
 {
     Array<T,3> uBoundary(param.getInletVelocity(0), 0.0, 0.0);
 
-    if (param.lateralFreeSlip) {
+    if (param.lateralFreeSlip)
+    {
         pcout << "Free-slip lateral boundaries." << std::endl;
 
         lattice->periodicity().toggleAll(false);
@@ -237,9 +250,11 @@ void outerDomainBoundaries(MultiBlockLattice3D<T,DESCRIPTOR> *lattice,
         T outsideDensity = 1.0;
         int bcType = 1;
         integrateProcessingFunctional(new VirtualOutlet<T,DESCRIPTOR>(outsideDensity, globalDomain, bcType),
-                param.outlet, bcargs, 2);
+                                      param.outlet, bcargs, 2);
         setBoundaryVelocity(*lattice, param.outlet, uBoundary);
-    } else {
+    }
+    else
+    {
         pcout << "Periodic lateral boundaries." << std::endl;
 
         lattice->periodicity().toggleAll(true);
@@ -269,7 +284,7 @@ void outerDomainBoundaries(MultiBlockLattice3D<T,DESCRIPTOR> *lattice,
         T outsideDensity = 1.0;
         int bcType = 1;
         integrateProcessingFunctional(new VirtualOutlet<T,DESCRIPTOR>(outsideDensity, globalDomain, bcType),
-                param.outlet, bcargs, 2);
+                                      param.outlet, bcargs, 2);
         setBoundaryVelocity(*lattice, param.outlet, uBoundary);
     }
 }
@@ -327,10 +342,10 @@ void runProgram()
     // structures used internally by Palabos to treat the boundary.
     plint xDirection = 0;
     plint borderWidth = 1;      // Because Guo acts in a one-cell layer.
-                                // Requirement: margin>=borderWidth.
+    // Requirement: margin>=borderWidth.
     plint margin = 1;           // Extra margin of allocated cells around the obstacle, for the case of moving walls.
     plint blockSize = 0;        // Size of blocks in the sparse/parallel representation.
-                                // Zero means: don't use sparse representation.
+    // Zero means: don't use sparse representation.
     DEFscaledMesh<T> defMesh(triangleSet, 0, xDirection, margin, Dot3D(0, 0, 0));
     TriangleBoundary3D<T> boundary(defMesh);
     //boundary.getMesh().inflate();
@@ -349,7 +364,7 @@ void runProgram()
     plint extendedEnvelopeWidth = 2;   // Extrapolated off-lattice BCs.
     const int flowType = voxelFlag::outside;
     VoxelizedDomain3D<T> voxelizedDomain (
-            boundary, flowType, param.boundingBox(), borderWidth, extendedEnvelopeWidth, blockSize );
+        boundary, flowType, param.boundingBox(), borderWidth, extendedEnvelopeWidth, blockSize );
     pcout << getMultiBlockInfo(voxelizedDomain.getVoxelMatrix()) << std::endl;
 
     /*
@@ -358,18 +373,21 @@ void runProgram()
 
     pcout << "Generating the lattice, the rhoBar and j fields." << std::endl;
     MultiBlockLattice3D<T,DESCRIPTOR> *lattice = new MultiBlockLattice3D<T,DESCRIPTOR>(voxelizedDomain.getVoxelMatrix());
-    if (param.useSmago) {
+    if (param.useSmago)
+    {
         defineDynamics(*lattice, lattice->getBoundingBox(),
-                new SmagorinskyBGKdynamics<T,DESCRIPTOR>(param.omega, param.cSmago));
+                       new SmagorinskyBGKdynamics<T,DESCRIPTOR>(param.omega, param.cSmago));
         pcout << "Using Smagorinsky BGK dynamics." << std::endl;
-    } else {
+    }
+    else
+    {
         defineDynamics(*lattice, lattice->getBoundingBox(),
-                new BGKdynamics<T,DESCRIPTOR>(param.omega));
+                       new BGKdynamics<T,DESCRIPTOR>(param.omega));
         pcout << "Using BGK dynamics." << std::endl;
     }
     bool velIsJ = false;
     defineDynamics(*lattice, voxelizedDomain.getVoxelMatrix(), lattice->getBoundingBox(),
-            new NoDynamics<T,DESCRIPTOR>(), voxelFlag::inside);
+                   new NoDynamics<T,DESCRIPTOR>(), voxelFlag::inside);
     lattice->toggleInternalStatistics(false);
 
     // The rhoBar and j fields are used at both the collision and at the implementation of the
@@ -386,12 +404,12 @@ void runProgram()
     lattice_rho_bar_j_arg.push_back(rhoBar);
     lattice_rho_bar_j_arg.push_back(j);
     integrateProcessingFunctional(
-            new ExternalRhoJcollideAndStream3D<T,DESCRIPTOR>(),
-            lattice->getBoundingBox(), lattice_rho_bar_j_arg, 0);
+        new ExternalRhoJcollideAndStream3D<T,DESCRIPTOR>(),
+        lattice->getBoundingBox(), lattice_rho_bar_j_arg, 0);
     integrateProcessingFunctional(
-            new BoxRhoBarJfunctional3D<T,DESCRIPTOR>(),
-            lattice->getBoundingBox(), lattice_rho_bar_j_arg, 3); // rhoBar and j are computed at level 3 because
-                                                                  // the boundary conditions are on levels 0, 1 and 2.
+        new BoxRhoBarJfunctional3D<T,DESCRIPTOR>(),
+        lattice->getBoundingBox(), lattice_rho_bar_j_arg, 3); // rhoBar and j are computed at level 3 because
+    // the boundary conditions are on levels 0, 1 and 2.
 
     /*
      * Generate the off-lattice boundary condition on the obstacle and the outer-domain boundary conditions.
@@ -400,24 +418,26 @@ void runProgram()
     pcout << "Generating boundary conditions." << std::endl;
 
     OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity> *boundaryCondition;
-    
+
     BoundaryProfiles3D<T,Velocity> profiles;
     bool useAllDirections=true;
     OffLatticeModel3D<T,Velocity>* offLatticeModel=0;
-    if (param.freeSlipWall) {
+    if (param.freeSlipWall)
+    {
         profiles.setWallProfile(new FreeSlipProfile3D<T>);
     }
-    else {
+    else
+    {
         profiles.setWallProfile(new NoSlipProfile3D<T>);
     }
     offLatticeModel =
-         new GuoOffLatticeModel3D<T,DESCRIPTOR> (
-            new TriangleFlowShape3D<T,Array<T,3> >(voxelizedDomain.getBoundary(), profiles),
-            flowType, useAllDirections );
+        new GuoOffLatticeModel3D<T,DESCRIPTOR> (
+        new TriangleFlowShape3D<T,Array<T,3> >(voxelizedDomain.getBoundary(), profiles),
+        flowType, useAllDirections );
     offLatticeModel->setVelIsJ(velIsJ);
     boundaryCondition = new OffLatticeBoundaryCondition3D<T,DESCRIPTOR,Velocity>(
-            offLatticeModel, voxelizedDomain, *lattice);
-    
+        offLatticeModel, voxelizedDomain, *lattice);
+
     boundaryCondition->insert();
 
     // The boundary condition algorithm or the outer domain.
@@ -429,17 +449,23 @@ void runProgram()
      * Implement the outlet sponge zone.
      */
 
-    if (param.numOutletSpongeCells > 0) {
+    if (param.numOutletSpongeCells > 0)
+    {
         T bulkValue;
         Array<plint,6> numSpongeCells;
 
-        if (param.outletSpongeZoneType == 0) {
+        if (param.outletSpongeZoneType == 0)
+        {
             pcout << "Generating an outlet viscosity sponge zone." << std::endl;
             bulkValue = param.omega;
-        } else if (param.outletSpongeZoneType == 1) {
+        }
+        else if (param.outletSpongeZoneType == 1)
+        {
             pcout << "Generating an outlet Smagorinsky sponge zone." << std::endl;
             bulkValue = param.cSmago;
-        } else {
+        }
+        else
+        {
             pcout << "Error: unknown type of sponge zone." << std::endl;
             exit(-1);
         }
@@ -459,14 +485,17 @@ void runProgram()
         std::vector<MultiBlock3D*> args;
         args.push_back(lattice);
 
-        if (param.outletSpongeZoneType == 0) {
+        if (param.outletSpongeZoneType == 0)
+        {
             applyProcessingFunctional(new ViscositySpongeZone3D<T,DESCRIPTOR>(
-                        param.nx, param.ny, param.nz, bulkValue, numSpongeCells),
-                    lattice->getBoundingBox(), args);
-        } else {
+                                          param.nx, param.ny, param.nz, bulkValue, numSpongeCells),
+                                      lattice->getBoundingBox(), args);
+        }
+        else
+        {
             applyProcessingFunctional(new SmagorinskySpongeZone3D<T,DESCRIPTOR>(
-                        param.nx, param.ny, param.nz, bulkValue, param.targetSpongeCSmago, numSpongeCells),
-                    lattice->getBoundingBox(), args);
+                                          param.nx, param.ny, param.nz, bulkValue, param.targetSpongeCSmago, numSpongeCells),
+                                      lattice->getBoundingBox(), args);
         }
     }
 
@@ -478,8 +507,8 @@ void runProgram()
     Array<T,3> uBoundary(param.getInletVelocity(0), (T)0.0, (T)0.0);
     initializeAtEquilibrium(*lattice, lattice->getBoundingBox(), (T)1.0, uBoundary);
     applyProcessingFunctional(
-            new BoxRhoBarJfunctional3D<T,DESCRIPTOR>(),
-            lattice->getBoundingBox(), lattice_rho_bar_j_arg); // Compute rhoBar and j before VirtualOutlet is executed.
+        new BoxRhoBarJfunctional3D<T,DESCRIPTOR>(),
+        lattice->getBoundingBox(), lattice_rho_bar_j_arg); // Compute rhoBar and j before VirtualOutlet is executed.
     //lattice->executeInternalProcessors(1); // Execute all processors except the ones at level 0.
     //lattice->executeInternalProcessors(2);
     //lattice->executeInternalProcessors(3);
@@ -494,7 +523,8 @@ void runProgram()
     // Definition of a particle field.
     MultiParticleField3D<ParticleFieldT>* particles = 0;
 
-    if (param.useParticles) {
+    if (param.useParticles)
+    {
         particles = new MultiParticleField3D<ParticleFieldT> (
             lattice->getMultiBlockManagement(),
             defaultMultiBlockPolicy3D().getCombinedStatistics() );
@@ -508,16 +538,16 @@ void runProgram()
 
         // Functional that advances the particles to their new position at each predefined time step.
         integrateProcessingFunctional (
-                new AdvanceParticlesEveryWhereFunctional3D<T,DESCRIPTOR>(param.cutOffSpeedSqr),
-                lattice->getBoundingBox(), particleArg, 0);
+            new AdvanceParticlesEveryWhereFunctional3D<T,DESCRIPTOR>(param.cutOffSpeedSqr),
+            lattice->getBoundingBox(), particleArg, 0);
         // Functional that assigns the particle velocity according to the particle's position in the fluid.
         integrateProcessingFunctional (
-                new FluidToParticleCoupling3D<T,DESCRIPTOR>((T) param.particleTimeFactor),
-                lattice->getBoundingBox(), particleFluidArg, 1 );
+            new FluidToParticleCoupling3D<T,DESCRIPTOR>((T) param.particleTimeFactor),
+            lattice->getBoundingBox(), particleFluidArg, 1 );
 
         // Definition of a domain from which particles will be injected in the flow field.
         Box3D injectionDomain(0, 0, centerLB[1]-0.25*param.ny, centerLB[1]+0.25*param.ny,
-                centerLB[2]-0.25*param.nz, centerLB[2]+0.25*param.nz);
+                              centerLB[2]-0.25*param.nz, centerLB[2]+0.25*param.nz);
 
         // Definition of simple mass-less particles.
         Particle3D<T,DESCRIPTOR>* particleTemplate=0;
@@ -528,15 +558,15 @@ void runProgram()
         particleInjectionArg.push_back(particles);
 
         integrateProcessingFunctional (
-                new InjectRandomParticlesFunctional3D<T,DESCRIPTOR>(particleTemplate, param.particleProbabilityPerCell),
-                injectionDomain, particleInjectionArg, 0 );
+            new InjectRandomParticlesFunctional3D<T,DESCRIPTOR>(particleTemplate, param.particleProbabilityPerCell),
+            injectionDomain, particleInjectionArg, 0 );
 
         // Definition of an absorbtion domain for the particles.
         Box3D absorbtionDomain(param.outlet);
 
         // Functional which absorbs the particles which reach the specified absorbtion domain.
         integrateProcessingFunctional (
-                new AbsorbParticlesFunctional3D<T,DESCRIPTOR>, absorbtionDomain, particleArg, 0 );
+            new AbsorbParticlesFunctional3D<T,DESCRIPTOR>, absorbtionDomain, particleArg, 0 );
 
         particles->executeInternalProcessors();
     }
@@ -550,62 +580,72 @@ void runProgram()
     pcout << std::endl;
     pcout << "Starting simulation." << std::endl;
     bool checkForErrors = true;
-    for (plint i = 0; i < param.maxIter; ++i) {
-        if (i <= param.initialIter) {
+    for (plint i = 0; i < param.maxIter; ++i)
+    {
+        if (i <= param.initialIter)
+        {
             Array<T,3> uBoundary(param.getInletVelocity(i), 0.0, 0.0);
             setBoundaryVelocity(*lattice, param.inlet, uBoundary);
         }
 
-        if (i % param.statIter == 0) {
-             pcout << "At iteration " << i << ", t = " << i*param.dt << std::endl;
-             if (i != 0) {
-                 Array<T,3> force(boundaryCondition->getForceOnObject());
-                 T factor = util::sqr(util::sqr(param.dx)) / util::sqr(param.dt);
-                 pcout << "Force on object over fluid density: F[x] = " << force[0]*factor << ", F[y] = "
-                       << force[1]*factor << ", F[z] = " << force[2]*factor << std::endl;
-             }
-             T avEnergy = boundaryCondition->computeAverageEnergy() * util::sqr(param.dx) / util::sqr(param.dt);
-             pcout << "Average kinetic energy over fluid density: E = " << avEnergy << std::endl;
-             energyFile << i*param.dt << "  " << avEnergy << std::endl;
-             pcout << std::endl;
+        if (i % param.statIter == 0)
+        {
+            pcout << "At iteration " << i << ", t = " << i*param.dt << std::endl;
+            if (i != 0)
+            {
+                Array<T,3> force(boundaryCondition->getForceOnObject());
+                T factor = util::sqr(util::sqr(param.dx)) / util::sqr(param.dt);
+                pcout << "Force on object over fluid density: F[x] = " << force[0]*factor << ", F[y] = "
+                      << force[1]*factor << ", F[z] = " << force[2]*factor << std::endl;
+            }
+            T avEnergy = boundaryCondition->computeAverageEnergy() * util::sqr(param.dx) / util::sqr(param.dt);
+            pcout << "Average kinetic energy over fluid density: E = " << avEnergy << std::endl;
+            energyFile << i*param.dt << "  " << avEnergy << std::endl;
+            pcout << std::endl;
         }
 
-        if (i % param.vtkIter == 0) {
+        if (i % param.vtkIter == 0)
+        {
             pcout << "Writing VTK at time t = " << i*param.dt << endl;
             writeVTK(*boundaryCondition, i);
-            if (param.useParticles) {
+            if (param.useParticles)
+            {
                 writeParticleVtk<T,DESCRIPTOR> (
-                        *particles, createFileName(outputDir+"particles_", i, PADDING) + ".vtk",
-                        param.maxNumParticlesToWrite );
+                    *particles, createFileName(outputDir+"particles_", i, PADDING) + ".vtk",
+                    param.maxNumParticlesToWrite );
             }
         }
 
-        if (i % param.imageIter == 0) {
+        if (i % param.imageIter == 0)
+        {
             pcout << "Writing PPM image at time t = " << i*param.dt << endl;
             writePPM(*boundaryCondition, i);
         }
 
         lattice->executeInternalProcessors();
         lattice->incrementTime();
-        if (param.useParticles && i % param.particleTimeFactor == 0) {
+        if (param.useParticles && i % param.particleTimeFactor == 0)
+        {
             particles->executeInternalProcessors();
         }
-        if (checkForErrors) {
+        if (checkForErrors)
+        {
             abortIfErrorsOccurred();
             checkForErrors = false;
         }
     }
-    
+
     energyFile.close();
     delete outerBoundaryCondition;
     delete boundaryCondition;
-    if (param.useParticles) {
+    if (param.useParticles)
+    {
         delete particles;
     }
     delete j;
     delete rhoBar;
     delete lattice;
-} 
+}
 
 int main(int argc, char* argv[])
 {
@@ -617,31 +657,36 @@ int main(int argc, char* argv[])
 
     // 1. Read command-line parameter: the input file name.
     string xmlFileName;
-    try {
+    try
+    {
         global::argv(1).read(xmlFileName);
     }
-    catch (PlbIOException& exception) {
-        pcout << "Wrong parameters; the syntax is: " 
+    catch (PlbIOException& exception)
+    {
+        pcout << "Wrong parameters; the syntax is: "
               << (std::string)global::argv(0) << " input-file.xml" << std::endl;
         return -1;
     }
 
     // 2. Read input parameters from the XML file.
-    try {
+    try
+    {
         param = Param(xmlFileName);
     }
-    catch (PlbIOException& exception) {
+    catch (PlbIOException& exception)
+    {
         pcout << exception.what() << std::endl;
         return -1;
     }
 
     // 3. Execute the main program.
-    try {
+    try
+    {
         runProgram();
     }
-    catch (PlbIOException& exception) {
+    catch (PlbIOException& exception)
+    {
         pcout << exception.what() << std::endl;
         return -1;
     }
 }
-

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -47,20 +47,24 @@ T rho0 = 1.; // All cells have initially density rho ...
 T deltaRho = 1.e-4;
 Array<T,2> u0(0,0);
 
-void initializeConstRho(plint iX, plint iY, T& rho, Array<T,2>& u) {
+void initializeConstRho(plint iX, plint iY, T& rho, Array<T,2>& u)
+{
     u = u0;
     rho = rho0 + deltaRho;
 }
 
-void initializeRhoOnDisk(plint iX, plint iY, T& rho, Array<T,2>& u) {
+void initializeRhoOnDisk(plint iX, plint iY, T& rho, Array<T,2>& u)
+{
     plint radius = nx/6;
     plint centerX = nx/3;
     plint centerY = ny/4;
     u = u0;
-    if( (iX-centerX)*(iX-centerX) + (iY-centerY)*(iY-centerY) < radius*radius) {
+    if( (iX-centerX)*(iX-centerX) + (iY-centerY)*(iY-centerY) < radius*radius)
+    {
         rho = rho0 + deltaRho;
     }
-    else {
+    else
+    {
         rho = rho0;
     }
 }
@@ -71,37 +75,40 @@ void defineInitialDensityAtCenter(MultiBlockLattice2D<T,DESCRIPTOR>& lattice)
 {
     // Initialize constant density everywhere.
     initializeAtEquilibrium (
-           lattice, lattice.getBoundingBox(), rho0, u0 );
+        lattice, lattice.getBoundingBox(), rho0, u0 );
 
     // And slightly higher density in the central box.
     initializeAtEquilibrium (
-           lattice, lattice.getBoundingBox(), initializeRhoOnDisk );
+        lattice, lattice.getBoundingBox(), initializeRhoOnDisk );
 
     lattice.initialize();
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-           nx, ny, new BGKdynamics<T,DESCRIPTOR>(omega) );
+        nx, ny, new BGKdynamics<T,DESCRIPTOR>(omega) );
 
     lattice.periodicity().toggleAll(true); // Set periodic boundaries.
 
     defineInitialDensityAtCenter(lattice);
 
     // Main loop over time iterations.
-    for (plint iT=0; iT<maxIter; ++iT) {
-        if (iT%40==0) {  // Write an image every 40th time step.
+    for (plint iT=0; iT<maxIter; ++iT)
+    {
+        if (iT%40==0)    // Write an image every 40th time step.
+        {
             pcout << "Writing GIF file at iT=" << iT << endl;
             // Instantiate an image writer with the color map "leeloo".
             ImageWriter<T> imageWriter("leeloo");
             // Write a GIF file with colors rescaled to the range of values
             //   in the matrix
             imageWriter.writeScaledGif (
-                    createFileName("u", iT, 6),
-                    *computeVelocityNorm(lattice) );
+                createFileName("u", iT, 6),
+                *computeVelocityNorm(lattice) );
         }
         // Execute lattice Boltzmann iteration.
         lattice.collideAndStream();

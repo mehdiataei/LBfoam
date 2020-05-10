@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,230 +29,231 @@
 #include "latticeBoltzmann/nearestNeighborLattices2D.h"
 #include "latticeBoltzmann/nearestNeighborLattices2D.hh"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Boxed Data Processor functionals ****************** */
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        BoxProcessingFunctional2D_L<FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain, MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice );
+    BoxProcessingFunctional2D_L<FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
+    Box2D domain, MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice );
 template
 void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        BoxProcessingFunctional2D_L<FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain, MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, plint level );
+    BoxProcessingFunctional2D_L<FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
+    Box2D domain, MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, plint level );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MaskedBoxProcessingFunctional2D_L<FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<int>& mask );
+    MaskedBoxProcessingFunctional2D_L<FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<int>& mask );
 template
 void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MaskedBoxProcessingFunctional2D_L<FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<int>& mask, plint level );
+    MaskedBoxProcessingFunctional2D_L<FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<int>& mask, plint level );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D,
                                FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        BoxProcessingFunctional2D_LL<FLOAT_T,descriptors::DESCRIPTOR_2D,
-                                     FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice1,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice2 );
+                                   BoxProcessingFunctional2D_LL<FLOAT_T,descriptors::DESCRIPTOR_2D,
+                                   FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
+                                   Box2D domain,
+                                   MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice1,
+                                   MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice2 );
 template
 void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D,
                                    FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        BoxProcessingFunctional2D_LL<FLOAT_T, descriptors::DESCRIPTOR_2D,
-                                     FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice1,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice2, plint level );
+                                       BoxProcessingFunctional2D_LL<FLOAT_T, descriptors::DESCRIPTOR_2D,
+                                       FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
+                                       Box2D domain,
+                                       MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice1,
+                                       MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice2, plint level );
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
-        BoxProcessingFunctional2D_LN< FLOAT_T,descriptors::DESCRIPTOR_2D,
-                                      FLOAT_T >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<FLOAT_T>& field );
+    BoxProcessingFunctional2D_LN< FLOAT_T,descriptors::DESCRIPTOR_2D,
+    FLOAT_T >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<FLOAT_T>& field );
 template
 void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
-        BoxProcessingFunctional2D_LN< FLOAT_T, descriptors::DESCRIPTOR_2D,
-                                      FLOAT_T >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<FLOAT_T>& field, plint level );
-
-template
-void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
-        BoxProcessingFunctional2D_LS< FLOAT_T,descriptors::DESCRIPTOR_2D,
-                                      FLOAT_T >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
-        MultiScalarField2D<FLOAT_T>& field );
-template
-void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
-        BoxProcessingFunctional2D_LS< FLOAT_T, descriptors::DESCRIPTOR_2D,
-                                      FLOAT_T >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
-        MultiScalarField2D<FLOAT_T>& field, plint level );
-
-template
-void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, int> (
-        BoxProcessingFunctional2D_LN< FLOAT_T,descriptors::DESCRIPTOR_2D,
-                                      int >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<int>& field );
-template
-void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, int> (
-        BoxProcessingFunctional2D_LN< FLOAT_T, descriptors::DESCRIPTOR_2D,
-                                      int >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<int>& field, plint level );
-
-template
-void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, int> (
-        BoxProcessingFunctional2D_LS< FLOAT_T,descriptors::DESCRIPTOR_2D,
-                                      int >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
-        MultiScalarField2D<int>& field );
-template
-void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, int> (
-        BoxProcessingFunctional2D_LS< FLOAT_T, descriptors::DESCRIPTOR_2D,
-                                      int >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
-        MultiScalarField2D<int>& field, plint level );
+    BoxProcessingFunctional2D_LN< FLOAT_T, descriptors::DESCRIPTOR_2D,
+    FLOAT_T >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<FLOAT_T>& field, plint level );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
-        MaskedBoxProcessingFunctional2D_LN< FLOAT_T,descriptors::DESCRIPTOR_2D,
-                                            FLOAT_T >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<FLOAT_T>& field,
-        MultiNTensorField2D<int>& mask );
+    BoxProcessingFunctional2D_LS< FLOAT_T,descriptors::DESCRIPTOR_2D,
+    FLOAT_T >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
+    MultiScalarField2D<FLOAT_T>& field );
 template
 void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
-        MaskedBoxProcessingFunctional2D_LN< FLOAT_T, descriptors::DESCRIPTOR_2D,
-                                            FLOAT_T >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<FLOAT_T>& field,
-        MultiNTensorField2D<int>& mask,
-        plint level );
+    BoxProcessingFunctional2D_LS< FLOAT_T, descriptors::DESCRIPTOR_2D,
+    FLOAT_T >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
+    MultiScalarField2D<FLOAT_T>& field, plint level );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, int> (
-        MaskedBoxProcessingFunctional2D_LN< FLOAT_T,descriptors::DESCRIPTOR_2D,
-                                            int >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<int>& field,
-        MultiNTensorField2D<int>& mask );
+    BoxProcessingFunctional2D_LN< FLOAT_T,descriptors::DESCRIPTOR_2D,
+    int >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<int>& field );
 template
 void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, int> (
-        MaskedBoxProcessingFunctional2D_LN< FLOAT_T, descriptors::DESCRIPTOR_2D,
-                                            int >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<int>& field,
-        MultiNTensorField2D<int>& mask,
-        plint level );
+    BoxProcessingFunctional2D_LN< FLOAT_T, descriptors::DESCRIPTOR_2D,
+    int >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<int>& field, plint level );
+
+template
+void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, int> (
+    BoxProcessingFunctional2D_LS< FLOAT_T,descriptors::DESCRIPTOR_2D,
+    int >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
+    MultiScalarField2D<int>& field );
+template
+void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, int> (
+    BoxProcessingFunctional2D_LS< FLOAT_T, descriptors::DESCRIPTOR_2D,
+    int >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
+    MultiScalarField2D<int>& field, plint level );
+
+template
+void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
+    MaskedBoxProcessingFunctional2D_LN< FLOAT_T,descriptors::DESCRIPTOR_2D,
+    FLOAT_T >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<FLOAT_T>& field,
+    MultiNTensorField2D<int>& mask );
+template
+void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
+    MaskedBoxProcessingFunctional2D_LN< FLOAT_T, descriptors::DESCRIPTOR_2D,
+    FLOAT_T >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<FLOAT_T>& field,
+    MultiNTensorField2D<int>& mask,
+    plint level );
+
+template
+void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, int> (
+    MaskedBoxProcessingFunctional2D_LN< FLOAT_T,descriptors::DESCRIPTOR_2D,
+    int >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<int>& field,
+    MultiNTensorField2D<int>& mask );
+template
+void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, int> (
+    MaskedBoxProcessingFunctional2D_LN< FLOAT_T, descriptors::DESCRIPTOR_2D,
+    int >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<int>& field,
+    MultiNTensorField2D<int>& mask,
+    plint level );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        LatticeBoxProcessingFunctional2D<FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain, std::vector<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>*> lattices );
+    LatticeBoxProcessingFunctional2D<FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
+    Box2D domain, std::vector<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>*> lattices );
 template
 void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        LatticeBoxProcessingFunctional2D<FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain, std::vector<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>*> lattices, plint level );
+    LatticeBoxProcessingFunctional2D<FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
+    Box2D domain, std::vector<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>*> lattices, plint level );
 
 /* *************** Bounded Boxed Data Processor functionals ****************** */
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        BoundedBoxProcessingFunctional2D_L<FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain, MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice, plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_L<FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
+    Box2D domain, MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice, plint boundaryWidth );
 template
 void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        BoundedBoxProcessingFunctional2D_L<FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain, MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, plint boundaryWidth, plint level );
+    BoundedBoxProcessingFunctional2D_L<FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
+    Box2D domain, MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice, plint boundaryWidth, plint level );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D,
                                FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        BoundedBoxProcessingFunctional2D_LL <
-            FLOAT_T,descriptors::DESCRIPTOR_2D,
-            FLOAT_T,descriptors::DESCRIPTOR_2D >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice1,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice2,
-        plint boundaryWidth );
+                                   BoundedBoxProcessingFunctional2D_LL <
+                                   FLOAT_T,descriptors::DESCRIPTOR_2D,
+                                   FLOAT_T,descriptors::DESCRIPTOR_2D >* functional,
+                                   Box2D domain,
+                                   MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice1,
+                                   MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice2,
+                                   plint boundaryWidth );
 template
 void integrateProcessingFunctional< FLOAT_T, descriptors::DESCRIPTOR_2D,
                                     FLOAT_T, descriptors::DESCRIPTOR_2D > (
-        BoundedBoxProcessingFunctional2D_LL <
-            FLOAT_T, descriptors::DESCRIPTOR_2D,
-            FLOAT_T, descriptors::DESCRIPTOR_2D >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice1,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice2,
-        plint boundaryWidth, plint level );
+                                        BoundedBoxProcessingFunctional2D_LL <
+                                        FLOAT_T, descriptors::DESCRIPTOR_2D,
+                                        FLOAT_T, descriptors::DESCRIPTOR_2D >* functional,
+                                        Box2D domain,
+                                        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice1,
+                                        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice2,
+                                        plint boundaryWidth, plint level );
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
-        BoundedBoxProcessingFunctional2D_LN <
-            FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<FLOAT_T>& field,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_LN <
+    FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<FLOAT_T>& field,
+    plint boundaryWidth );
 template
 void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
-        BoundedBoxProcessingFunctional2D_LN <
-            FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<FLOAT_T>& field,
-        plint boundaryWidth, plint level );
+    BoundedBoxProcessingFunctional2D_LN <
+    FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<FLOAT_T>& field,
+    plint boundaryWidth, plint level );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
-        BoundedMaskedBoxProcessingFunctional2D_LN <
-            FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<FLOAT_T>& field,
-        MultiNTensorField2D<int>& mask,
-        plint boundaryWidth );
+    BoundedMaskedBoxProcessingFunctional2D_LN <
+    FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<FLOAT_T>& field,
+    MultiNTensorField2D<int>& mask,
+    plint boundaryWidth );
 template
 void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T> (
-        BoundedMaskedBoxProcessingFunctional2D_LN <
-            FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T >* functional,
-        Box2D domain,
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
-        MultiNTensorField2D<FLOAT_T>& field,
-        MultiNTensorField2D<int>& mask,
-        plint boundaryWidth, plint level );
+    BoundedMaskedBoxProcessingFunctional2D_LN <
+    FLOAT_T, descriptors::DESCRIPTOR_2D, FLOAT_T >* functional,
+    Box2D domain,
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>& lattice,
+    MultiNTensorField2D<FLOAT_T>& field,
+    MultiNTensorField2D<int>& mask,
+    plint boundaryWidth, plint level );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        BoundedLatticeBoxProcessingFunctional2D<FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain, std::vector<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>*> lattices,
-        plint boundaryWidth);
+    BoundedLatticeBoxProcessingFunctional2D<FLOAT_T,descriptors::DESCRIPTOR_2D>* functional,
+    Box2D domain, std::vector<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>*> lattices,
+    plint boundaryWidth);
 template
 void integrateProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        BoundedLatticeBoxProcessingFunctional2D<FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
-        Box2D domain, std::vector<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>*> lattices,
-        plint boundaryWidth, plint level );
+    BoundedLatticeBoxProcessingFunctional2D<FLOAT_T, descriptors::DESCRIPTOR_2D>* functional,
+    Box2D domain, std::vector<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D>*> lattices,
+    plint boundaryWidth, plint level );
 
 }  // namespace plb
 

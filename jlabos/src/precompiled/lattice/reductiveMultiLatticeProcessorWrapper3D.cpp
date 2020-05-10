@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,97 +29,98 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.hh"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Boxed Data Processor functionals ****************** */
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        ReductiveBoxProcessingFunctional3D_L<FLOAT_T,descriptors::DESCRIPTOR_3D>& functional,
-        Box3D domain, MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice );
+    ReductiveBoxProcessingFunctional3D_L<FLOAT_T,descriptors::DESCRIPTOR_3D>& functional,
+    Box3D domain, MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_3D,
                                FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        ReductiveBoxProcessingFunctional3D_LL<FLOAT_T,descriptors::DESCRIPTOR_3D,
-                                              FLOAT_T,descriptors::DESCRIPTOR_3D>& functional,
-        Box3D domain,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice1,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice2 );
+                                   ReductiveBoxProcessingFunctional3D_LL<FLOAT_T,descriptors::DESCRIPTOR_3D,
+                                   FLOAT_T,descriptors::DESCRIPTOR_3D>& functional,
+                                   Box3D domain,
+                                   MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice1,
+                                   MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice2 );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_3D, FLOAT_T> (
-        ReductiveBoxProcessingFunctional3D_LN< FLOAT_T,descriptors::DESCRIPTOR_3D,
-                                               FLOAT_T >& functional,
-        Box3D domain,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& field );
+    ReductiveBoxProcessingFunctional3D_LN< FLOAT_T,descriptors::DESCRIPTOR_3D,
+    FLOAT_T >& functional,
+    Box3D domain,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& field );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_3D, FLOAT_T> (
-        ReductiveBoxProcessingFunctional3D_LS< FLOAT_T,descriptors::DESCRIPTOR_3D,
-                                               FLOAT_T >& functional,
-        Box3D domain,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiScalarField3D<FLOAT_T>& field );
+    ReductiveBoxProcessingFunctional3D_LS< FLOAT_T,descriptors::DESCRIPTOR_3D,
+    FLOAT_T >& functional,
+    Box3D domain,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiScalarField3D<FLOAT_T>& field );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_3D, FLOAT_T> (
-        MaskedReductiveBoxProcessingFunctional3D_LN< FLOAT_T,descriptors::DESCRIPTOR_3D,
-                                                     FLOAT_T >& functional,
-        Box3D domain,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& field,
-        MultiNTensorField3D<int>& mask );
+    MaskedReductiveBoxProcessingFunctional3D_LN< FLOAT_T,descriptors::DESCRIPTOR_3D,
+    FLOAT_T >& functional,
+    Box3D domain,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& field,
+    MultiNTensorField3D<int>& mask );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        ReductiveLatticeBoxProcessingFunctional3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& functional,
-        Box3D domain, std::vector<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>*> lattices );
+    ReductiveLatticeBoxProcessingFunctional3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& functional,
+    Box3D domain, std::vector<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>*> lattices );
 
 
 /* *************** Bounded Boxed Data Processor functionals ****************** */
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        BoundedReductiveBoxProcessingFunctional3D_L<FLOAT_T,descriptors::DESCRIPTOR_3D>& functional,
-        Box3D domain, MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, plint boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional3D_L<FLOAT_T,descriptors::DESCRIPTOR_3D>& functional,
+    Box3D domain, MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice, plint boundaryWidth );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_3D,
                                FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        BoundedReductiveBoxProcessingFunctional3D_LL <
-            FLOAT_T,descriptors::DESCRIPTOR_3D,
-            FLOAT_T,descriptors::DESCRIPTOR_3D >& functional,
-        Box3D domain,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice1,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice2,
-        plint boundaryWidth );
+                                   BoundedReductiveBoxProcessingFunctional3D_LL <
+                                   FLOAT_T,descriptors::DESCRIPTOR_3D,
+                                   FLOAT_T,descriptors::DESCRIPTOR_3D >& functional,
+                                   Box3D domain,
+                                   MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice1,
+                                   MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice2,
+                                   plint boundaryWidth );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_3D, FLOAT_T> (
-        BoundedReductiveBoxProcessingFunctional3D_LN <
-            FLOAT_T, descriptors::DESCRIPTOR_3D, FLOAT_T >& functional,
-        Box3D domain,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& field,
-        plint boundaryWidth );
+    BoundedReductiveBoxProcessingFunctional3D_LN <
+    FLOAT_T, descriptors::DESCRIPTOR_3D, FLOAT_T >& functional,
+    Box3D domain,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& field,
+    plint boundaryWidth );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_3D, FLOAT_T> (
-        BoundedMaskedReductiveBoxProcessingFunctional3D_LN <
-            FLOAT_T, descriptors::DESCRIPTOR_3D, FLOAT_T >& functional,
-        Box3D domain,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
-        MultiNTensorField3D<FLOAT_T>& field,
-        MultiNTensorField3D<int>& mask,
-        plint boundaryWidth );
+    BoundedMaskedReductiveBoxProcessingFunctional3D_LN <
+    FLOAT_T, descriptors::DESCRIPTOR_3D, FLOAT_T >& functional,
+    Box3D domain,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& lattice,
+    MultiNTensorField3D<FLOAT_T>& field,
+    MultiNTensorField3D<int>& mask,
+    plint boundaryWidth );
 
 template
 void applyProcessingFunctional<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-        BoundedReductiveLatticeBoxProcessingFunctional3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& functional,
-        Box3D domain, std::vector<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>*> lattices,
-        plint boundaryWidth);
+    BoundedReductiveLatticeBoxProcessingFunctional3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& functional,
+    Box3D domain, std::vector<MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>*> lattices,
+    plint boundaryWidth);
 
 }  // namespace plb
 

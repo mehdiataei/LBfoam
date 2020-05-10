@@ -85,6 +85,46 @@ namespace descriptors {
     template<typename T>
     const char ForcedD2Q37Descriptor<T>::name[] = "ForcedD2Q37";
 
+    // Added by Mehdi Ataei as part of LBfoam project
+
+    // Extended D2Q9 ////////////////////////////////////////////////////////////
+
+    template<typename T>
+    const T ExtendedD2Q9Constants<T>::invD = (T)1 / (T) d;
+
+    template<typename T>
+    const int ExtendedD2Q9Constants<T>::vicinity = 3;
+
+    template<typename T>
+    const int ExtendedD2Q9Constants<T>::c
+        [ExtendedD2Q9Constants<T>::q][ExtendedD2Q9Constants<T>::d] =
+        {
+            { 0, 0},
+            {-1, 1}, {-1, 0}, {-1,-1}, { 0,-1},
+            { 1,-1}, { 1, 0}, { 1, 1}, { 0, 1}
+        };
+
+    template<typename T>
+    const int ExtendedD2Q9Constants<T>::cNormSqr[ExtendedD2Q9Constants<T>::q] =
+        { 0, 2, 1, 2, 1, 2, 1, 2, 1 };
+
+    template<typename T>
+    const T ExtendedD2Q9Constants<T>::t[ExtendedD2Q9Constants<T>::q] =
+        {
+            (T)4/(T)9, (T)1/(T)36, (T)1/(T)9, (T)1/(T)36, (T)1/(T)9,
+                       (T)1/(T)36, (T)1/(T)9, (T)1/(T)36, (T)1/(T)9
+        };
+
+    template<typename T>
+    const T ExtendedD2Q9Constants<T>::cs2 = (T)1 / (T)3;
+
+    template<typename T>
+    const T ExtendedD2Q9Constants<T>::invCs2 = (T)3;
+
+    template<typename T>
+    const char ExtendedForcedD2Q9Descriptor<T>::name[] = "ExtendedForcedD2Q9";
+
+
 }  // namespace descriptors
 
 }  // namespace plb

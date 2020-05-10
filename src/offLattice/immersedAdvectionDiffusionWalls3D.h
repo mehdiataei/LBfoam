@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,7 +34,8 @@
 
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 /* ******** InamuroAdvectionDiffusionIteration3D ************************************ */
 
@@ -42,14 +43,14 @@ template<typename T, class ScalarFunction>
 class InamuroAdvectionDiffusionIteration3D : public BoxProcessingFunctional3D
 {
 public:
-    InamuroAdvectionDiffusionIteration3D(ScalarFunction scalarFunction_, T tau_);
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
-    virtual InamuroAdvectionDiffusionIteration3D<T,ScalarFunction>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	InamuroAdvectionDiffusionIteration3D(ScalarFunction scalarFunction_, T tau_);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
+	virtual InamuroAdvectionDiffusionIteration3D<T,ScalarFunction>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    ScalarFunction scalarFunction;
-    T tau;
+	ScalarFunction scalarFunction;
+	T tau;
 };
 
 template<typename T, class ScalarFunction>
@@ -58,11 +59,11 @@ void inamuroAdvectionDiffusionIteration (
     MultiScalarField3D<T>& rhoBar,
     MultiContainerBlock3D& container, T tau )
 {
-    std::vector<MultiBlock3D*> args;
-    args.push_back(&rhoBar);
-    args.push_back(&container);
-    applyProcessingFunctional (
-        new InamuroAdvectionDiffusionIteration3D<T,ScalarFunction>(scalarFunction, tau), rhoBar.getBoundingBox(), args );
+	std::vector<MultiBlock3D*> args;
+	args.push_back(&rhoBar);
+	args.push_back(&container);
+	applyProcessingFunctional (
+	    new InamuroAdvectionDiffusionIteration3D<T,ScalarFunction>(scalarFunction, tau), rhoBar.getBoundingBox(), args );
 }
 
 /* ******** IndexedInamuroAdvectionDiffusionIteration3D ************************************ */
@@ -74,14 +75,14 @@ template<typename T, class ScalarFunction>
 class IndexedInamuroAdvectionDiffusionIteration3D : public BoxProcessingFunctional3D
 {
 public:
-    IndexedInamuroAdvectionDiffusionIteration3D(ScalarFunction scalarFunction_, T tau_);
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
-    virtual IndexedInamuroAdvectionDiffusionIteration3D<T,ScalarFunction>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	IndexedInamuroAdvectionDiffusionIteration3D(ScalarFunction scalarFunction_, T tau_);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
+	virtual IndexedInamuroAdvectionDiffusionIteration3D<T,ScalarFunction>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    ScalarFunction scalarFunction;
-    T tau;
+	ScalarFunction scalarFunction;
+	T tau;
 };
 
 template<typename T, class ScalarFunction>
@@ -90,11 +91,11 @@ void indexedInamuroAdvectionDiffusionIteration (
     MultiScalarField3D<T>& rhoBar,
     MultiContainerBlock3D& container, T tau )
 {
-    std::vector<MultiBlock3D*> args;
-    args.push_back(&rhoBar);
-    args.push_back(&container);
-    applyProcessingFunctional (
-        new IndexedInamuroAdvectionDiffusionIteration3D<T,ScalarFunction>(scalarFunction, tau), rhoBar.getBoundingBox(), args );
+	std::vector<MultiBlock3D*> args;
+	args.push_back(&rhoBar);
+	args.push_back(&container);
+	applyProcessingFunctional (
+	    new IndexedInamuroAdvectionDiffusionIteration3D<T,ScalarFunction>(scalarFunction, tau), rhoBar.getBoundingBox(), args );
 }
 
 /* ******** ConstScalarInamuroAdvectionDiffusionIteration3D ************************************ */
@@ -103,14 +104,14 @@ template<typename T>
 class ConstScalarInamuroAdvectionDiffusionIteration3D : public BoxProcessingFunctional3D
 {
 public:
-    ConstScalarInamuroAdvectionDiffusionIteration3D(T wallScalar_, T tau_);
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
-    virtual ConstScalarInamuroAdvectionDiffusionIteration3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	ConstScalarInamuroAdvectionDiffusionIteration3D(T wallScalar_, T tau_);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
+	virtual ConstScalarInamuroAdvectionDiffusionIteration3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    T wallScalar;
-    T tau;
+	T wallScalar;
+	T tau;
 };
 
 template<typename T>
@@ -118,11 +119,11 @@ void constScalarInamuroAdvectionDiffusionIteration (
     T wallScalar, MultiScalarField3D<T>& rhoBar,
     MultiContainerBlock3D& container, T tau )
 {
-    std::vector<MultiBlock3D*> args;
-    args.push_back(&rhoBar);
-    args.push_back(&container);
-    applyProcessingFunctional (
-        new ConstScalarInamuroAdvectionDiffusionIteration3D<T>(wallScalar, tau), rhoBar.getBoundingBox(), args );
+	std::vector<MultiBlock3D*> args;
+	args.push_back(&rhoBar);
+	args.push_back(&container);
+	applyProcessingFunctional (
+	    new ConstScalarInamuroAdvectionDiffusionIteration3D<T>(wallScalar, tau), rhoBar.getBoundingBox(), args );
 }
 
 
@@ -132,41 +133,41 @@ template<typename T>
 class InstantiateImmersedAdvectionDiffusionWallData3D : public BoxProcessingFunctional3D
 {
 public:
-    InstantiateImmersedAdvectionDiffusionWallData3D (
-            std::vector< Array<T,3> > const& vertices_,
-            std::vector<T> const& areas_,
-            std::vector< Array<T,3> > const& normals_);
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
-    virtual InstantiateImmersedAdvectionDiffusionWallData3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	InstantiateImmersedAdvectionDiffusionWallData3D (
+	    std::vector< Array<T,3> > const& vertices_,
+	    std::vector<T> const& areas_,
+	    std::vector< Array<T,3> > const& normals_);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
+	virtual InstantiateImmersedAdvectionDiffusionWallData3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    std::vector< Array<T,3> > const& vertices;
-    std::vector<T> const& areas;
-    std::vector< Array<T,3> > const& normals;
+	std::vector< Array<T,3> > const& vertices;
+	std::vector<T> const& areas;
+	std::vector< Array<T,3> > const& normals;
 };
 
 template<typename T>
 void instantiateImmersedAdvectionDiffusionWallData (
-            std::vector< Array<T,3> > const& vertices, std::vector<T> const& areas,
-            MultiContainerBlock3D& container )
-{ 
-    static std::vector< Array<T,3> > dummyNormals;
-    std::vector<MultiBlock3D*> args;
-    args.push_back(&container);
-    applyProcessingFunctional (
-            new InstantiateImmersedAdvectionDiffusionWallData3D<T>(vertices,areas,dummyNormals), container.getBoundingBox(), args );
+    std::vector< Array<T,3> > const& vertices, std::vector<T> const& areas,
+    MultiContainerBlock3D& container )
+{
+	static std::vector< Array<T,3> > dummyNormals;
+	std::vector<MultiBlock3D*> args;
+	args.push_back(&container);
+	applyProcessingFunctional (
+	    new InstantiateImmersedAdvectionDiffusionWallData3D<T>(vertices,areas,dummyNormals), container.getBoundingBox(), args );
 }
 
 template<typename T>
 void instantiateImmersedAdvectionDiffusionWallData (
-            std::vector< Array<T,3> > const& vertices, std::vector<T> const& areas,
-            std::vector< Array<T,3> > const& normals, MultiContainerBlock3D& container )
-{ 
-    std::vector<MultiBlock3D*> args;
-    args.push_back(&container);
-    applyProcessingFunctional (
-            new InstantiateImmersedAdvectionDiffusionWallData3D<T>(vertices,areas,normals), container.getBoundingBox(), args );
+    std::vector< Array<T,3> > const& vertices, std::vector<T> const& areas,
+    std::vector< Array<T,3> > const& normals, MultiContainerBlock3D& container )
+{
+	std::vector<MultiBlock3D*> args;
+	args.push_back(&container);
+	applyProcessingFunctional (
+	    new InstantiateImmersedAdvectionDiffusionWallData3D<T>(vertices,areas,normals), container.getBoundingBox(), args );
 }
 
 /* ******** InstantiateImmersedAdvectionDiffusionWallDataWithTagging3D ************************************ */
@@ -175,30 +176,30 @@ template<typename T>
 class InstantiateImmersedAdvectionDiffusionWallDataWithTagging3D : public BoxProcessingFunctional3D
 {
 public:
-    InstantiateImmersedAdvectionDiffusionWallDataWithTagging3D (
-            std::vector< Array<T,3> > const& vertices_,
-            std::vector<T> const& areas_, int solutionDomainFlag_ );
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
-    virtual InstantiateImmersedAdvectionDiffusionWallDataWithTagging3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	InstantiateImmersedAdvectionDiffusionWallDataWithTagging3D (
+	    std::vector< Array<T,3> > const& vertices_,
+	    std::vector<T> const& areas_, int solutionDomainFlag_ );
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
+	virtual InstantiateImmersedAdvectionDiffusionWallDataWithTagging3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    std::vector< Array<T,3> > const& vertices;
-    std::vector<T> const& areas;
-    int solutionDomainFlag;
+	std::vector< Array<T,3> > const& vertices;
+	std::vector<T> const& areas;
+	int solutionDomainFlag;
 };
 
 template<typename T>
 void instantiateImmersedAdvectionDiffusionWallDataWithTagging (
-            std::vector< Array<T,3> > const& vertices, std::vector<T> const& areas,
-            MultiContainerBlock3D& container, MultiScalarField3D<int>& flags, int solutionDomainFlag )
+    std::vector< Array<T,3> > const& vertices, std::vector<T> const& areas,
+    MultiContainerBlock3D& container, MultiScalarField3D<int>& flags, int solutionDomainFlag )
 {
-    std::vector<MultiBlock3D*> args;
-    args.push_back(&container);
-    args.push_back(&flags);
-    applyProcessingFunctional (
-            new InstantiateImmersedAdvectionDiffusionWallDataWithTagging3D<T>(vertices,areas,solutionDomainFlag),
-            container.getBoundingBox(), args );
+	std::vector<MultiBlock3D*> args;
+	args.push_back(&container);
+	args.push_back(&flags);
+	applyProcessingFunctional (
+	    new InstantiateImmersedAdvectionDiffusionWallDataWithTagging3D<T>(vertices,areas,solutionDomainFlag),
+	    container.getBoundingBox(), args );
 }
 
 /* ******** InstantiateImmersedAdvectionDiffusionWallDataWithIndexedTagging3D ************************************ */
@@ -210,43 +211,43 @@ template<typename T>
 class InstantiateImmersedAdvectionDiffusionWallDataWithIndexedTagging3D : public BoxProcessingFunctional3D
 {
 public:
-    InstantiateImmersedAdvectionDiffusionWallDataWithIndexedTagging3D (
-            std::vector< Array<T,3> > const& vertices_,
-            std::vector<T> const& areas_,
-            std::vector<int> const& flags_ );
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
-    virtual InstantiateImmersedAdvectionDiffusionWallDataWithIndexedTagging3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	InstantiateImmersedAdvectionDiffusionWallDataWithIndexedTagging3D (
+	    std::vector< Array<T,3> > const& vertices_,
+	    std::vector<T> const& areas_,
+	    std::vector<int> const& flags_ );
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
+	virtual InstantiateImmersedAdvectionDiffusionWallDataWithIndexedTagging3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    std::vector< Array<T,3> > const& vertices;
-    std::vector<T> const& areas;
-    std::vector<int> const& flags;
+	std::vector< Array<T,3> > const& vertices;
+	std::vector<T> const& areas;
+	std::vector<int> const& flags;
 };
 
 template<typename T>
 void instantiateImmersedAdvectionDiffusionWallDataWithIndexedTagging (
-            std::vector< Array<T,3> > const& vertices, std::vector<T> const& areas,
-            std::vector<int> const& flags, MultiContainerBlock3D& container )
+    std::vector< Array<T,3> > const& vertices, std::vector<T> const& areas,
+    std::vector<int> const& flags, MultiContainerBlock3D& container )
 {
-    std::vector<MultiBlock3D*> args;
-    args.push_back(&container);
-    applyProcessingFunctional (
-            new InstantiateImmersedAdvectionDiffusionWallDataWithIndexedTagging3D<T>(vertices, areas, flags),
-            container.getBoundingBox(), args );
+	std::vector<MultiBlock3D*> args;
+	args.push_back(&container);
+	applyProcessingFunctional (
+	    new InstantiateImmersedAdvectionDiffusionWallDataWithIndexedTagging3D<T>(vertices, areas, flags),
+	    container.getBoundingBox(), args );
 }
 
 /* ******** BoxAdvectionDiffusionRhoBarJfunctional3D ************************************ */
 
-template<typename T, template<typename U> class Descriptor, template<typename V> class AD_Descriptor> 
-class BoxAdvectionDiffusionRhoBarJfunctional3D : public BoxProcessingFunctional3D {
+template<typename T, template<typename U> class Descriptor, template<typename V> class AD_Descriptor>
+class BoxAdvectionDiffusionRhoBarJfunctional3D : public BoxProcessingFunctional3D
+{
 public:
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
-    virtual BoxAdvectionDiffusionRhoBarJfunctional3D<T,Descriptor,AD_Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> fields);
+	virtual BoxAdvectionDiffusionRhoBarJfunctional3D<T,Descriptor,AD_Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 };
 
 }  // namespace plb
 
 #endif  // IMMERSED_ADVECTION_DIFFUSION_WALLS_3D_H
-

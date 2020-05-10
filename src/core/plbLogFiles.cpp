@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,9 +28,11 @@
 #include <utility>
 #include <fstream>
 
-namespace plb {
+namespace plb
+{
 
-namespace global {
+namespace global
+{
 
 PlbLogFile::PlbLogFile(std::string fName, bool parallel_)
     : parallel(parallel_),
@@ -38,20 +40,24 @@ PlbLogFile::PlbLogFile(std::string fName, bool parallel_)
       indentation(0),
       indentSpaces("")
 {
-    if (parallel) {
-        if (global::mpi().isMainProcessor()) {
+    if (parallel)
+    {
+        if (global::mpi().isMainProcessor())
+        {
             ofile = new std::ofstream (
-                    (global::directories().getLogOutDir()+fName ).c_str() );
+                (global::directories().getLogOutDir()+fName ).c_str() );
         }
     }
-    else {
+    else
+    {
         ofile = new std::ofstream (
-                ( global::directories().getLogOutDir() +
-                  util::val2str(global::mpi().getRank())+"_"+fName ).c_str() );
+            ( global::directories().getLogOutDir() +
+              util::val2str(global::mpi().getRank())+"_"+fName ).c_str() );
     }
 }
 
-PlbLogFile::~PlbLogFile() {
+PlbLogFile::~PlbLogFile()
+{
     delete ofile;
 }
 
@@ -76,14 +82,18 @@ void PlbLogFile::pop()
     indentSpaces = std::string(indentation, ' ');
 }
 
-void PlbLogFile::entry(std::string entryText) {
-    if (ofile) {
+void PlbLogFile::entry(std::string entryText)
+{
+    if (ofile)
+    {
         (*ofile) << indentSpaces << entryText << "\n";
     }
 }
 
-void PlbLogFile::flushEntry(std::string entryText) {
-    if (ofile) {
+void PlbLogFile::flushEntry(std::string entryText)
+{
+    if (ofile)
+    {
         // Using std::endl enforces file-buffer flush.
         (*ofile) << indentSpaces << entryText << std::endl;
     }
@@ -93,9 +103,11 @@ LogFileCollection::LogFileCollection(bool parallel_)
     : parallel(parallel_)
 { }
 
-LogFileCollection::~LogFileCollection() {
+LogFileCollection::~LogFileCollection()
+{
     std::map<std::string, PlbLogFile*>::iterator it=collection.begin();
-    for (; it != collection.end(); ++it) {
+    for (; it != collection.end(); ++it)
+    {
         delete it->second;
     }
 }
@@ -103,28 +115,34 @@ LogFileCollection::~LogFileCollection() {
 LogFileCollection::LogFileCollection(LogFileCollection const& rhs)
 { }
 
-LogFileCollection& LogFileCollection::operator=(LogFileCollection const& rhs) {
+LogFileCollection& LogFileCollection::operator=(LogFileCollection const& rhs)
+{
     return *this;
 }
 
-PlbLogFile& LogFileCollection::get(std::string nameOfLogFile) {
+PlbLogFile& LogFileCollection::get(std::string nameOfLogFile)
+{
     std::map<std::string, PlbLogFile*>::iterator it=collection.find(nameOfLogFile);
-    if (it == collection.end()) {
+    if (it == collection.end())
+    {
         PlbLogFile* logfile = new PlbLogFile(nameOfLogFile, parallel);
         collection.insert(make_pair(nameOfLogFile, logfile));
         return *logfile;
     }
-    else {
+    else
+    {
         return *it->second;
     }
 }
 
-PlbLogFile& logfile(std::string nameOfLogFile) {
+PlbLogFile& logfile(std::string nameOfLogFile)
+{
     static LogFileCollection collection(true);
     return collection.get(nameOfLogFile);
 }
 
-PlbLogFile& logfile_nonparallel(std::string nameOfLogFile) {
+PlbLogFile& logfile_nonparallel(std::string nameOfLogFile)
+{
     static LogFileCollection collection(false);
     return collection.get(nameOfLogFile);
 }

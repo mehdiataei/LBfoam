@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,21 +28,23 @@
 #include "core/globalDefs.h"
 #include "atomicBlock/dataProcessingFunctional3D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-class ComputeRefinementRvalueFunctional3D : public BoxProcessingFunctional3D_LS<T, Descriptor, T> {
+class ComputeRefinementRvalueFunctional3D : public BoxProcessingFunctional3D_LS<T, Descriptor, T>
+{
 public:
-    ComputeRefinementRvalueFunctional3D(T knudsen_);
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice, ScalarField3D<T>& scalarField);
-    virtual ComputeRefinementRvalueFunctional3D* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	ComputeRefinementRvalueFunctional3D(T knudsen_);
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice, ScalarField3D<T>& scalarField);
+	virtual ComputeRefinementRvalueFunctional3D* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 private:
-    T knudsen;
+	T knudsen;
 };
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField3D<T> > computeRvalues(MultiBlockLattice3D<T,Descriptor>& lattice, T knudsen, Box3D const& domain);
+std::auto_ptr<MultiScalarField3D<T> > computeRvalues(MultiBlockLattice3D<T,Descriptor>& lattice, T knudsen, Box3D const& domain);
 
 } // namespace plb
 

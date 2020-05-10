@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,7 +35,8 @@ using namespace std;
 typedef double T;
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
@@ -48,9 +49,12 @@ int main(int argc, char* argv[]) {
     MultiScalarField3D<T> zCoord(N+1,N+1,N+1);
 
     const T pi = (T)4.*std::atan((T)1.);
-    setToCoordinate(xCoord, xCoord.getBoundingBox(), 0); multiplyInPlace(xCoord, (T)2.*pi/(T)N);
-    setToCoordinate(yCoord, yCoord.getBoundingBox(), 1); multiplyInPlace(yCoord, (T)2.*pi/(T)N);
-    setToCoordinate(zCoord, zCoord.getBoundingBox(), 2); multiplyInPlace(zCoord, (T)2.*pi/(T)N);
+    setToCoordinate(xCoord, xCoord.getBoundingBox(), 0);
+    multiplyInPlace(xCoord, (T)2.*pi/(T)N);
+    setToCoordinate(yCoord, yCoord.getBoundingBox(), 1);
+    multiplyInPlace(yCoord, (T)2.*pi/(T)N);
+    setToCoordinate(zCoord, zCoord.getBoundingBox(), 2);
+    multiplyInPlace(zCoord, (T)2.*pi/(T)N);
 
     MultiScalarField3D<T> wave(N+1,N+1,N+1);
 

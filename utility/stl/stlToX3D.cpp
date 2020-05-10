@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,43 +32,39 @@ typedef double T;
 
 int main(int argc, char* argv[])
 {
-    plbInit(&argc, &argv);
-    global::directories().setOutputDir("./");
-    global::IOpolicy().activateParallelIO(false);
-    plint numSmooth=0;
+	plbInit(&argc, &argv);
+	global::directories().setOutputDir("./");
+	global::IOpolicy().activateParallelIO(false);
+	plint numSmooth=0;
 
-    string stlFileName, outFileName;
-    try {
-        global::argv(1).read(stlFileName);
-        global::argv(2).read(outFileName);
-        try {
-            global::argv(3).read(numSmooth);
-        }
-        catch (PlbIOException& exception) {
-            numSmooth=0;
-        }
-    }
-    catch (PlbIOException& exception) {
-        pcout << "Wrong parameters; the syntax is: " 
-              << (std::string)global::argv(0) << " inputSTL.stl outputX3D.x3d [number_of_smoothing]" << std::endl;
-        exit(-1);
-    }
+	string stlFileName, outFileName;
+	try {
+		global::argv(1).read(stlFileName);
+		global::argv(2).read(outFileName);
+		try {
+			global::argv(3).read(numSmooth);
+		} catch (PlbIOException& exception) {
+			numSmooth=0;
+		}
+	} catch (PlbIOException& exception) {
+		pcout << "Wrong parameters; the syntax is: "
+		      << (std::string)global::argv(0) << " inputSTL.stl outputX3D.x3d [number_of_smoothing]" << std::endl;
+		exit(-1);
+	}
 
-    TriangleSet<T>* triangleSet = 0;
-    try {
-        triangleSet = new TriangleSet<T>(stlFileName, DBL);
-    }
-    catch (PlbIOException& exception) {
-        pcout << "Error, could not read STL file " << stlFileName
-              << ": " << exception.what() << std::endl;
-        exit(-1);
-    }
-    DEFscaledMesh<T> mesh(*triangleSet);
-    if (numSmooth>0) {
-        mesh.getMesh().smooth(numSmooth);
-    }
-    mesh.getMesh().writeX3D(outFileName);
+	TriangleSet<T>* triangleSet = 0;
+	try {
+		triangleSet = new TriangleSet<T>(stlFileName, DBL);
+	} catch (PlbIOException& exception) {
+		pcout << "Error, could not read STL file " << stlFileName
+		      << ": " << exception.what() << std::endl;
+		exit(-1);
+	}
+	DEFscaledMesh<T> mesh(*triangleSet);
+	if (numSmooth>0) {
+		mesh.getMesh().smooth(numSmooth);
+	}
+	mesh.getMesh().writeX3D(outFileName);
 
-    return 0;
+	return 0;
 }
-

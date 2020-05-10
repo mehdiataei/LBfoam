@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,29 +34,31 @@
 
 #ifdef PLB_MPI_PARALLEL
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
-class ParallelCellAccess3D : public MultiCellAccess3D<T,Descriptor> {
+class ParallelCellAccess3D : public MultiCellAccess3D<T,Descriptor>
+{
 public:
-    ParallelCellAccess3D();
-    virtual ~ParallelCellAccess3D();
-    virtual Cell<T,Descriptor>& getDistributedCell (
-            plint iX, plint iY, plint iZ,
-            MultiBlockManagement3D const& multiBlockManagement,
-            std::map<plint,BlockLattice3D<T,Descriptor>*>& lattices );
-    virtual Cell<T,Descriptor> const& getDistributedCell (
-            plint iX, plint iY, plint iZ,
-            MultiBlockManagement3D const& multiBlockManagement,
-            std::map<plint,BlockLattice3D<T,Descriptor>*> const& lattices ) const;
-    virtual void broadCastCell(Cell<T,Descriptor>& cell, plint fromBlock,
-                               MultiBlockManagement3D const& multiBlockManagement) const;
-    ParallelCellAccess3D<T,Descriptor>* clone() const;
+	ParallelCellAccess3D();
+	virtual ~ParallelCellAccess3D();
+	virtual Cell<T,Descriptor>& getDistributedCell (
+	    plint iX, plint iY, plint iZ,
+	    MultiBlockManagement3D const& multiBlockManagement,
+	    std::map<plint,BlockLattice3D<T,Descriptor>*>& lattices );
+	virtual Cell<T,Descriptor> const& getDistributedCell (
+	    plint iX, plint iY, plint iZ,
+	    MultiBlockManagement3D const& multiBlockManagement,
+	    std::map<plint,BlockLattice3D<T,Descriptor>*> const& lattices ) const;
+	virtual void broadCastCell(Cell<T,Descriptor>& cell, plint fromBlock,
+	                           MultiBlockManagement3D const& multiBlockManagement) const;
+	ParallelCellAccess3D<T,Descriptor>* clone() const;
 private:
-    mutable Cell<T,Descriptor> distributedCell;
-    mutable std::vector<Cell<T,Descriptor>*> baseCells;
-    mutable std::vector<Cell<T,Descriptor> const*> constBaseCells;
-    mutable Dynamics<T,Descriptor>* parallelDynamics;
+	mutable Cell<T,Descriptor> distributedCell;
+	mutable std::vector<Cell<T,Descriptor>*> baseCells;
+	mutable std::vector<Cell<T,Descriptor> const*> constBaseCells;
+	mutable Dynamics<T,Descriptor>* parallelDynamics;
 };
 
 }  // namespace plb

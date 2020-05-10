@@ -37,15 +37,17 @@ namespace plb {
 /* *************** Class TRTdynamics *********************************************** */
 
 template<typename T, template<typename U> class Descriptor>
+const T TRTdynamics<T,Descriptor>::sMinus = 1.1;
+
+template<typename T, template<typename U> class Descriptor>
 int TRTdynamics<T,Descriptor>::id =
     meta::registerGeneralDynamics<T,Descriptor,TRTdynamics<T,Descriptor> >("TRT");
 
 /** \param omega_ relaxation parameter, related to the dynamic viscosity
  */
 template<typename T, template<typename U> class Descriptor>
-TRTdynamics<T,Descriptor>::TRTdynamics(T omega_, T sMinus_ )
-    : IsoThermalBulkDynamics<T,Descriptor>(omega_),
-      sMinus(sMinus_)
+TRTdynamics<T,Descriptor>::TRTdynamics(T omega_ )
+    : IsoThermalBulkDynamics<T,Descriptor>(omega_)
 { }
 
 template<typename T, template<typename U> class Descriptor>
@@ -59,18 +61,6 @@ template<typename T, template<typename U> class Descriptor>
 TRTdynamics<T,Descriptor>* TRTdynamics<T,Descriptor>::clone() const {
     return new TRTdynamics<T,Descriptor>(*this);
 }
-
-template<typename T, template<typename U> class Descriptor>
-void TRTdynamics<T,Descriptor>::serialize(HierarchicSerializer& serializer) const {
-    IsoThermalBulkDynamics<T,Descriptor>::serialize(serializer);
-    serializer.addValue(sMinus);
-}
-
-template<typename T, template<typename U> class Descriptor>
-void TRTdynamics<T,Descriptor>::unserialize(HierarchicUnserializer& unserializer) {
-    IsoThermalBulkDynamics<T,Descriptor>::unserialize(unserializer);
-    sMinus = unserializer.readValue<T>();
-}
  
 template<typename T, template<typename U> class Descriptor>
 int TRTdynamics<T,Descriptor>::getId() const {
@@ -82,9 +72,6 @@ void TRTdynamics<T,Descriptor>::collide (
         Cell<T,Descriptor>& cell, BlockStatistics& statistics )
 {
     const T sPlus = this->getOmega();
-    if (sMinus == T()) {
-        sMinus = (T)8*((T)2-sPlus)/((T)8-sPlus);
-    }
 
     Array<T,Descriptor<T>::q> eq;
     // In the following, we number the plus/minus variables from 1 to (Q-1)/2.
@@ -124,7 +111,6 @@ void TRTdynamics<T,Descriptor>::collideExternal (
         T thetaBar, BlockStatistics& statistics )
 {
     const T sPlus = this->getOmega();
-    const T sMinus = (T)8*((T)2-sPlus)/((T)8-sPlus);
 
     Array<T,Descriptor<T>::q> eq;
     // In the following, we number the plus/minus variables from 1 to (Q-1)/2.

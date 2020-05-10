@@ -85,7 +85,7 @@ namespace voxelFlag {
 }  // namespace voxelFlag
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<int> > voxelize (
+std::auto_ptr<MultiScalarField3D<int> > voxelize (
         TriangularSurfaceMesh<T> const& mesh,
         plint symmetricLayer, plint borderWidth )
 {
@@ -101,14 +101,14 @@ std::unique_ptr<MultiScalarField3D<int> > voxelize (
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<int> > voxelize (
+std::auto_ptr<MultiScalarField3D<int> > voxelize (
         TriangularSurfaceMesh<T> const& mesh,
         Box3D const& domain, plint borderWidth )
 {
     // As initial seed, a one-cell layer around the outer boundary is tagged
     //   as ouside cells.
     plint envelopeWidth=1;
-    std::unique_ptr<MultiScalarField3D<int> > voxelMatrix
+    std::auto_ptr<MultiScalarField3D<int> > voxelMatrix
         = generateMultiScalarField<int>(domain, voxelFlag::outside, envelopeWidth);
     setToConstant(*voxelMatrix, voxelMatrix->getBoundingBox().enlarge(-1),
                   voxelFlag::undetermined);
@@ -139,11 +139,11 @@ std::unique_ptr<MultiScalarField3D<int> > voxelize (
 
     detectBorderLine(*voxelMatrix, voxelMatrix->getBoundingBox(), borderWidth);
 
-    return voxelMatrix;
+    return std::auto_ptr<MultiScalarField3D<int> >(voxelMatrix);
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<int> > voxelize (
+std::auto_ptr<MultiScalarField3D<int> > voxelize (
         TriangularSurfaceMesh<T> const& mesh,
         Box3D const& domain, plint borderWidth, Box3D seed )
 {
@@ -151,7 +151,7 @@ std::unique_ptr<MultiScalarField3D<int> > voxelize (
     //   as ouside cells.
     plint envelopeWidth=1;
 
-    std::unique_ptr<MultiScalarField3D<int> > voxelMatrix
+    std::auto_ptr<MultiScalarField3D<int> > voxelMatrix
         = generateMultiScalarField<int>(domain, voxelFlag::undetermined, envelopeWidth);
     setToConstant(*voxelMatrix, seed, voxelFlag::outside);
 
@@ -182,18 +182,18 @@ std::unique_ptr<MultiScalarField3D<int> > voxelize (
 
     detectBorderLine(*voxelMatrix, voxelMatrix->getBoundingBox(), borderWidth);
 
-    return voxelMatrix;
+    return std::auto_ptr<MultiScalarField3D<int> >(voxelMatrix);
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<int> > voxelize (
+std::auto_ptr<MultiScalarField3D<int> > voxelize (
         TriangularSurfaceMesh<T> const& mesh,
         MultiBlockManagement3D const& management,
         plint borderWidth, Box3D seed )
 {
     // As initial seed, a one-cell layer around the outer boundary is tagged
     //   as ouside cells.
-    std::unique_ptr<MultiScalarField3D<int> > voxelMatrix
+    std::auto_ptr<MultiScalarField3D<int> > voxelMatrix
         = defaultGenerateMultiScalarField3D<int>(management, voxelFlag::undetermined);
     setToConstant(*voxelMatrix, seed, voxelFlag::outside);
 
@@ -224,11 +224,11 @@ std::unique_ptr<MultiScalarField3D<int> > voxelize (
 
     detectBorderLine(*voxelMatrix, voxelMatrix->getBoundingBox(), borderWidth);
 
-    return voxelMatrix;
+    return std::auto_ptr<MultiScalarField3D<int> >(voxelMatrix);
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<int> > revoxelize (
+std::auto_ptr<MultiScalarField3D<int> > revoxelize (
         TriangularSurfaceMesh<T> const& mesh,
         MultiScalarField3D<int>& oldVoxelMatrix,
         MultiContainerBlock3D& hashContainer, plint borderWidth )
@@ -236,7 +236,7 @@ std::unique_ptr<MultiScalarField3D<int> > revoxelize (
     // As initial seed, a one-cell layer around the outer boundary is tagged
     //   as ouside cells.
     Box3D domain(oldVoxelMatrix.getBoundingBox());
-    std::unique_ptr<MultiScalarField3D<int> > voxelMatrix (
+    std::auto_ptr<MultiScalarField3D<int> > voxelMatrix (
             new MultiScalarField3D<int>((MultiBlock3D&)oldVoxelMatrix) );
     setToConstant(*voxelMatrix, domain, voxelFlag::outside);
     setToConstant(*voxelMatrix, voxelMatrix->getBoundingBox().enlarge(-1),
@@ -261,7 +261,7 @@ std::unique_ptr<MultiScalarField3D<int> > revoxelize (
 
     detectBorderLine(*voxelMatrix, voxelMatrix->getBoundingBox(), borderWidth);
 
-    return voxelMatrix;
+    return std::auto_ptr<MultiScalarField3D<int> >(voxelMatrix);
 }
 
 

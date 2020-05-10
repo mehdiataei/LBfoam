@@ -16,36 +16,36 @@ template <typename T>
 class TrapeziumIntegration
 {
 public :
-	TrapeziumIntegration(Function<T> *function_, T y0_, int numberSteps_)
-		: function(function_), y0(y0_), numberSteps(numberSteps_)
-	{   }
-	
-	T operator()(T y) const 
-	{	
-		T dy = (y-y0)/(T)numberSteps;
-		
-		if (dy <= T() || y==y0)
-		{
-			return T();
-		}
-		T integral = ((*(function))(y0)+(*(function))(y))/(T)2;
+    TrapeziumIntegration(Function<T> *function_, T y0_, int numberSteps_)
+        : function(function_), y0(y0_), numberSteps(numberSteps_)
+    {   }
+
+    T operator()(T y) const
+    {
+        T dy = (y-y0)/(T)numberSteps;
+
+        if (dy <= T() || y==y0)
+        {
+            return T();
+        }
+        T integral = ((*(function))(y0)+(*(function))(y))/(T)2;
 // 		std::cout << y << ", " << integral << std::endl;
-		for (int iS = 1; iS < numberSteps; ++iS)
-		{
+        for (int iS = 1; iS < numberSteps; ++iS)
+        {
 // 			std::cout << integral << std::endl;
-			T ty = y0+(T)iS*dy;
-			integral += (*(function))(ty);
-		}
-		integral *= dy;
-        
+            T ty = y0+(T)iS*dy;
+            integral += (*(function))(ty);
+        }
+        integral *= dy;
+
 // 		std::cout << y << ", " << integral << std::endl;
-		return integral;
+        return integral;
     }
-	
+
 private :
-	Function<T> *function;
-	T y0;
-	int numberSteps;
+    Function<T> *function;
+    T y0;
+    int numberSteps;
 };
 
 #endif

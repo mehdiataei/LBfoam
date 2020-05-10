@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,20 +35,21 @@
 #include "io/plbFiles.h"
 #include "multiBlock/group3D.h"
 
-namespace plb {
+namespace plb
+{
 
 /* Save the current state of the simulation for restarting. */
 void saveState(std::vector<MultiBlock3D*> blocks, plint iteration, bool saveDynamicContent,
-        FileName xmlFileName, FileName baseFileName, plint fileNamePadding = 8);
+               FileName xmlFileName, FileName baseFileName, plint fileNamePadding = 8);
 
 /* Load the state of the simulation from checkpoint files for restarting. */
 void loadState(std::vector<MultiBlock3D*> blocks, plint& iteration, bool saveDynamicContent,
-        FileName xmlFileName);
+               FileName xmlFileName);
 
 /* Check for user-driven execution abortion, and save the state of the simulation. */
 bool abortExecution(FileName abortFileName, std::vector<MultiBlock3D*> blocks, plint iteration,
-        bool saveDynamicContent, FileName xmlFileName, FileName baseFileName,
-        plint fileNamePadding = 8);
+                    bool saveDynamicContent, FileName xmlFileName, FileName baseFileName,
+                    plint fileNamePadding = 8);
 
 /* Save all multi-blocks of the group with a filename that contains the actual
  * name of the block. The baseFileName consists of a directory, in which the data
@@ -64,4 +65,3 @@ void loadBlocks(Group3D& blocks, bool saveDynamicContent, FileName fileName);
 }  // namespace plb
 
 #endif  // UTIL_IO_3D_H
-

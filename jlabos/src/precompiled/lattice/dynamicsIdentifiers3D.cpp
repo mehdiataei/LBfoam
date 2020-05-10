@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,38 +36,40 @@
 #include "latticeBoltzmann/mrtLattices.hh"
 #include "multiPhysics/shanChenLattices3D.h"
 
-namespace plb {
+namespace plb
+{
 
-    namespace meta {
+namespace meta
+{
 
-    template class DynamicsRegistration<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    template DynamicsRegistration<FLOAT_T, descriptors::DESCRIPTOR_3D>&
-        dynamicsRegistration<FLOAT_T, descriptors::DESCRIPTOR_3D>();
-    template std::string
-        constructIdNameChain<FLOAT_T, descriptors::DESCRIPTOR_3D>
-            (std::vector<int> const& ids, std::string separator);
+template class DynamicsRegistration<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template DynamicsRegistration<FLOAT_T, descriptors::DESCRIPTOR_3D>&
+dynamicsRegistration<FLOAT_T, descriptors::DESCRIPTOR_3D>();
+template std::string
+constructIdNameChain<FLOAT_T, descriptors::DESCRIPTOR_3D>
+(std::vector<int> const& ids, std::string separator);
 
-    template
-        void createIdIndirection<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                  std::map<int,std::string> const& foreignIdToName,
-                  std::map<int,int>& idIndirect );
+template
+void createIdIndirection<FLOAT_T, descriptors::DESCRIPTOR_3D> (
+    std::map<int,std::string> const& foreignIdToName,
+    std::map<int,int>& idIndirect );
 
 
 #if NUMBIT_3D == 19
-    template class DynamicsRegistration<FLOAT_T, descriptors::ShanChenD3Q19Descriptor>;
-    template DynamicsRegistration<FLOAT_T, descriptors::ShanChenD3Q19Descriptor>&
-        dynamicsRegistration<FLOAT_T, descriptors::ShanChenD3Q19Descriptor>();
+template class DynamicsRegistration<FLOAT_T, descriptors::ShanChenD3Q19Descriptor>;
+template DynamicsRegistration<FLOAT_T, descriptors::ShanChenD3Q19Descriptor>&
+dynamicsRegistration<FLOAT_T, descriptors::ShanChenD3Q19Descriptor>();
 
-    template class DynamicsRegistration<FLOAT_T, descriptors::ForcedShanChenD3Q19Descriptor>;
-    template DynamicsRegistration<FLOAT_T, descriptors::ForcedShanChenD3Q19Descriptor>&
-        dynamicsRegistration<FLOAT_T, descriptors::ForcedShanChenD3Q19Descriptor>();
+template class DynamicsRegistration<FLOAT_T, descriptors::ForcedShanChenD3Q19Descriptor>;
+template DynamicsRegistration<FLOAT_T, descriptors::ForcedShanChenD3Q19Descriptor>&
+dynamicsRegistration<FLOAT_T, descriptors::ForcedShanChenD3Q19Descriptor>();
 
-    template class DynamicsRegistration<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
-    template DynamicsRegistration<FLOAT_T, descriptors::MRTD3Q19Descriptor>&
-        dynamicsRegistration<FLOAT_T, descriptors::MRTD3Q19Descriptor>();
+template class DynamicsRegistration<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
+template DynamicsRegistration<FLOAT_T, descriptors::MRTD3Q19Descriptor>&
+dynamicsRegistration<FLOAT_T, descriptors::MRTD3Q19Descriptor>();
 #endif
 
-    }  // namespace meta
+}  // namespace meta
 
 }
 

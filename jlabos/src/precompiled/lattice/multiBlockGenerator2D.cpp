@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,66 +33,67 @@
 #include "latticeBoltzmann/nearestNeighborLattices2D.h"
 #include "latticeBoltzmann/nearestNeighborLattices2D.hh"
 
-namespace plb {
+namespace plb
+{
 
-template std::unique_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > 
- defaultGenerateMultiBlockLattice2D< FLOAT_T,descriptors::DESCRIPTOR_2D > (
-        MultiBlockManagement2D const& management, plint unnamedDummyArg );
-
-template
-std::unique_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > clone<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& originalLattice,
-        Box2D const& subDomain, bool crop );
+template std::auto_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> >
+defaultGenerateMultiBlockLattice2D< FLOAT_T,descriptors::DESCRIPTOR_2D > (
+    MultiBlockManagement2D const& management, plint unnamedDummyArg );
 
 template
-std::unique_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > generateMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlock2D const& originalBlock, Box2D const& intersection,
-        bool crop );
+std::auto_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > clone<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& originalLattice,
+    Box2D const& subDomain, bool crop );
 
 template
-std::unique_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > generateIntersectMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlock2D const& originalBlock1,
-        MultiBlock2D const& originalBlock2, bool crop );
+std::auto_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > generateMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    MultiBlock2D const& originalBlock, Box2D const& intersection,
+    bool crop );
 
 template
-std::unique_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > generateIntersectMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlock2D const& originalBlock1,
-        MultiBlock2D const& originalBlock2,
-        Box2D const& intersection, bool crop );
+std::auto_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > generateIntersectMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    MultiBlock2D const& originalBlock1,
+    MultiBlock2D const& originalBlock2, bool crop );
 
 template
-std::unique_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > generateJoinMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlock2D const& originalBlock1,
-        MultiBlock2D const& originalBlock2 );
+std::auto_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > generateIntersectMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    MultiBlock2D const& originalBlock1,
+    MultiBlock2D const& originalBlock2,
+    Box2D const& intersection, bool crop );
 
 template
-std::unique_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > extend<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& originalBlock, Box2D const& addedBlock );
+std::auto_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > generateJoinMultiBlockLattice<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    MultiBlock2D const& originalBlock1,
+    MultiBlock2D const& originalBlock2 );
 
 template
-std::unique_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > except<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& originalBlock,
-        Box2D const& exceptedBlock );
+std::auto_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > extend<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& originalBlock, Box2D const& addedBlock );
 
 template
-std::unique_ptr<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> > redistribute<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> const& originalBlock,
-        SparseBlockStructure2D const& newBlockStructure );
+std::auto_ptr<MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D> > except<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    MultiBlockLattice2D<FLOAT_T,descriptors::DESCRIPTOR_2D>& originalBlock,
+    Box2D const& exceptedBlock );
 
 template
-std::unique_ptr<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> > redistribute<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> const& originalBlock,
-        SparseBlockStructure2D const& newBlockStructure,
-        Box2D const& intersection, bool crop );
+std::auto_ptr<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> > redistribute<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> const& originalBlock,
+    SparseBlockStructure2D const& newBlockStructure );
 
 template
-std::unique_ptr<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> > align<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> const& originalBlock,
-        MultiBlock2D const& partnerBlock );
+std::auto_ptr<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> > redistribute<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> const& originalBlock,
+    SparseBlockStructure2D const& newBlockStructure,
+    Box2D const& intersection, bool crop );
 
 template
-std::unique_ptr<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> > reparallelize<FLOAT_T, descriptors::DESCRIPTOR_2D> (
-        MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> const& originalBlock );
+std::auto_ptr<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> > align<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> const& originalBlock,
+    MultiBlock2D const& partnerBlock );
+
+template
+std::auto_ptr<MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> > reparallelize<FLOAT_T, descriptors::DESCRIPTOR_2D> (
+    MultiBlockLattice2D<FLOAT_T, descriptors::DESCRIPTOR_2D> const& originalBlock );
 
 }
 

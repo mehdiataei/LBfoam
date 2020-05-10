@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -37,19 +37,22 @@
 #include "core/plbDebug.h"
 
 
-namespace plb {
+namespace plb
+{
 
 void executeDataProcessor( DataProcessorGenerator2D const& generator,
                            std::vector<MultiBlock2D*> multiBlocks )
 {
     MultiProcessing2D<DataProcessorGenerator2D const, DataProcessorGenerator2D >
-        multiProcessing(generator, multiBlocks);
+    multiProcessing(generator, multiBlocks);
     std::vector<DataProcessorGenerator2D*> const& retainedGenerators = multiProcessing.getRetainedGenerators();
     std::vector<std::vector<plint> > const& atomicBlockNumbers = multiProcessing.getAtomicBlockNumbers();
 
-    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator) {
+    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator)
+    {
         std::vector<AtomicBlock2D*> extractedAtomicBlocks(multiBlocks.size());
-        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock) {
+        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock)
+        {
             extractedAtomicBlocks[iBlock]
                 = &multiBlocks[iBlock]->getComponent(atomicBlockNumbers[iGenerator][iBlock]);
         }
@@ -83,14 +86,16 @@ void executeDataProcessor( ReductiveDataProcessorGenerator2D& generator,
                            std::vector<MultiBlock2D*> multiBlocks )
 {
     MultiProcessing2D<ReductiveDataProcessorGenerator2D, ReductiveDataProcessorGenerator2D >
-        multiProcessing(generator, multiBlocks);
+    multiProcessing(generator, multiBlocks);
     std::vector<ReductiveDataProcessorGenerator2D*> const& retainedGenerators = multiProcessing.getRetainedGenerators();
     std::vector<std::vector<plint> > const& atomicBlockNumbers = multiProcessing.getAtomicBlockNumbers();
 
     std::vector<BlockStatistics const*> individualStatistics(retainedGenerators.size());
-    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator) {
+    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator)
+    {
         std::vector<AtomicBlock2D*> extractedAtomicBlocks(multiBlocks.size());
-        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock) {
+        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock)
+        {
             extractedAtomicBlocks[iBlock] = &multiBlocks[iBlock]->getComponent(atomicBlockNumbers[iGenerator][iBlock]);
         }
         // Delegate to the "AtomicBlock Reductive version" of executeDataProcessor.
@@ -121,18 +126,19 @@ void executeDataProcessor( ReductiveDataProcessorGenerator2D& generator,
     executeDataProcessor(generator, objects);
 }
 
-
 void addInternalProcessor( DataProcessorGenerator2D const& generator,
                            std::vector<MultiBlock2D*> multiBlocks, plint level )
 {
     MultiProcessing2D<DataProcessorGenerator2D const, DataProcessorGenerator2D >
-        multiProcessing(generator, multiBlocks);
+    multiProcessing(generator, multiBlocks);
     std::vector<DataProcessorGenerator2D*> const& retainedGenerators = multiProcessing.getRetainedGenerators();
     std::vector<std::vector<plint> > const& atomicBlockNumbers = multiProcessing.getAtomicBlockNumbers();
 
-    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator) {
+    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator)
+    {
         std::vector<AtomicBlock2D*> extractedAtomicBlocks(multiBlocks.size());
-        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock) {
+        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock)
+        {
             extractedAtomicBlocks[iBlock] =
                 &multiBlocks[iBlock]->getComponent(atomicBlockNumbers[iGenerator][iBlock]);
         }
@@ -146,11 +152,50 @@ void addInternalProcessor( DataProcessorGenerator2D const& generator,
     std::vector<modif::ModifT> typeOfModification;
     multiProcessing.multiBlocksWhichRequireUpdate(updatedMultiBlocks, typeOfModification);
     multiBlocks[0]->subscribeProcessor (
-            level,
-            updatedMultiBlocks, typeOfModification,
-            BlockDomain::usesEnvelope(generator.appliesTo()) );
+        level,
+        updatedMultiBlocks, typeOfModification,
+        BlockDomain::usesEnvelope(generator.appliesTo()) );
     multiBlocks[0]->storeProcessor(generator, multiBlocks, level);
 }
+
+// Mehdi
+
+void addInternalProcessor( DataProcessorGenerator2D const& generator, MultiBlock2D& actor,
+                           std::vector<MultiBlock2D*> multiBlockArgs, plint level )
+{
+    MultiProcessing2D<DataProcessorGenerator2D const, DataProcessorGenerator2D >
+    multiProcessing(generator, multiBlockArgs);
+    std::vector<DataProcessorGenerator2D*> const& retainedGenerators = multiProcessing.getRetainedGenerators();
+    std::vector<std::vector<plint> > const& atomicBlockNumbers = multiProcessing.getAtomicBlockNumbers();
+
+    for (pluint iGenerator=0; iGenerator<retainedGenerators.size(); ++iGenerator)
+    {
+        std::vector<AtomicBlock2D*> extractedAtomicBlocks(multiBlockArgs.size());
+        for (pluint iBlock=0; iBlock<extractedAtomicBlocks.size(); ++iBlock)
+        {
+            extractedAtomicBlocks[iBlock] =
+                &multiBlockArgs[iBlock]->getComponent(atomicBlockNumbers[iGenerator][iBlock]);
+        }
+        // It is assumed that the actor has the same distribution as block 0.
+        PLB_ASSERT(!atomicBlockNumbers[iGenerator].empty());
+        AtomicBlock2D& atomicActor = actor.getComponent(atomicBlockNumbers[iGenerator][0]);
+        // Delegate to the "AtomicBlock version" of addInternal.
+        plb::addInternalProcessor(*retainedGenerators[iGenerator], atomicActor, extractedAtomicBlocks, level);
+    }
+    // Subscribe the processor in the multi-block. This guarantees that the multi-block is aware
+    //   of the maximal current processor level, and it instantiates the communication pattern
+    //   for an update of envelopes after processor execution.
+    std::vector<MultiBlock2D*> updatedMultiBlocks;
+    std::vector<modif::ModifT> typeOfModification;
+    multiProcessing.multiBlocksWhichRequireUpdate(updatedMultiBlocks, typeOfModification);
+    actor.subscribeProcessor (
+        level,
+        updatedMultiBlocks, typeOfModification,
+        BlockDomain::usesEnvelope(generator.appliesTo()) );
+    actor.storeProcessor(generator, multiBlockArgs, level);
+}
+
+
 
 void addInternalProcessor( DataProcessorGenerator2D const& generator,
                            MultiBlock2D& object, plint level )

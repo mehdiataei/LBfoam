@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,12 +33,13 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.hh"
 
-namespace plb {
+namespace plb
+{
 
 #ifdef COMPILE_2D
 
 #if NUMBIT_2D == 9
-    template class EntropicDynamics<FLOAT_T, descriptors::D2Q9Descriptor>;
+template class EntropicDynamics<FLOAT_T, descriptors::D2Q9Descriptor>;
 #endif
 
 #endif  // COMPILE_2D
@@ -46,9 +47,9 @@ namespace plb {
 #ifdef COMPILE_3D
 
 #if NUMBIT_3D == 19
-    template class EntropicDynamics<FLOAT_T, descriptors::D3Q19Descriptor>;
+template class EntropicDynamics<FLOAT_T, descriptors::D3Q19Descriptor>;
 #endif
 
 #endif  // COMPILE_3D
-    
+
 }

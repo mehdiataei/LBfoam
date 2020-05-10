@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -25,17 +25,20 @@
 #include "io/colormaps.h"
 #include <cmath>
 
-namespace plb {
+namespace plb
+{
 
 LinearFunction::LinearFunction(double x1_, double x2_, double y1_, double y2_)
     : x1(x1_), x2(x2_), y1(y1_), y2(y2_)
 { }
 
-double LinearFunction::operator() (double x) const {
+double LinearFunction::operator() (double x) const
+{
     return ( (y2-y1) * x + x2*y1-x1*y2 )/(x2-x1);
 }
 
-LinearFunction* LinearFunction::clone() const {
+LinearFunction* LinearFunction::clone() const
+{
     return new LinearFunction(*this);
 }
 
@@ -43,11 +46,13 @@ PowerLawFunction::PowerLawFunction(double x1_, double x2_, double y1_, double y2
     : x1(std::pow(x1_,b_)), x2(std::pow(x2_,b_)), y1(y1_), y2(y2_), b(b_)
 { }
 
-double PowerLawFunction::operator() (double x) const {
+double PowerLawFunction::operator() (double x) const
+{
     return ( (y2-y1) * std::pow(x,b) + x2*y1-x1*y2 )/(x2-x1);
 }
 
-PowerLawFunction* PowerLawFunction::clone() const {
+PowerLawFunction* PowerLawFunction::clone() const
+{
     return new PowerLawFunction(*this);
 }
 
@@ -56,31 +61,38 @@ PiecewiseFunction::PiecewiseFunction(PiecewiseFunction const& rhs)
     : pieces(rhs.pieces),
       functions(rhs.functions.size())
 {
-    for (pluint iF=0; iF<functions.size(); ++iF) {
+    for (pluint iF=0; iF<functions.size(); ++iF)
+    {
         functions[iF] = rhs.functions[iF]->clone();
     }
 }
 
-PiecewiseFunction& PiecewiseFunction::operator=(PiecewiseFunction const& rhs) {
+PiecewiseFunction& PiecewiseFunction::operator=(PiecewiseFunction const& rhs)
+{
     PiecewiseFunction(rhs).swap(*this);
     return *this;
 }
 
-PiecewiseFunction::~PiecewiseFunction() {
-    for (pluint iF=0; iF<functions.size(); ++iF) {
+PiecewiseFunction::~PiecewiseFunction()
+{
+    for (pluint iF=0; iF<functions.size(); ++iF)
+    {
         delete functions[iF];
     }
 }
 
-void PiecewiseFunction::swap(PiecewiseFunction& rhs) {
+void PiecewiseFunction::swap(PiecewiseFunction& rhs)
+{
     pieces.swap(rhs.pieces);
     functions.swap(rhs.functions);
 }
 
-void PiecewiseFunction::addPiece(Piece piece, ScalarFunction* f) {
+void PiecewiseFunction::addPiece(Piece piece, ScalarFunction* f)
+{
     std::vector<Piece >::iterator pieceIt = pieces.begin();
     std::vector<ScalarFunction*>::iterator fIt = functions.begin();
-    while (pieceIt != pieces.end() && piece.closedBegin >= pieceIt->closedBegin) {
+    while (pieceIt != pieces.end() && piece.closedBegin >= pieceIt->closedBegin)
+    {
         ++pieceIt;
         ++fIt;
     }
@@ -88,37 +100,45 @@ void PiecewiseFunction::addPiece(Piece piece, ScalarFunction* f) {
     functions.insert(fIt, f);
 }
 
-double PiecewiseFunction::operator() (double x) const {
-    if (pieces.empty() || x<pieces[0].closedBegin) {
+double PiecewiseFunction::operator() (double x) const
+{
+    if (pieces.empty() || x<pieces[0].closedBegin)
+    {
         return double();
     }
     pluint iPiece=0;
-    while (iPiece != pieces.size() && x >= pieces[iPiece].openEnd) {
+    while (iPiece != pieces.size() && x >= pieces[iPiece].openEnd)
+    {
         ++iPiece;
     }
-    if (iPiece == pieces.size() || x < pieces[iPiece].closedBegin) {
+    if (iPiece == pieces.size() || x < pieces[iPiece].closedBegin)
+    {
         return double();
     }
     return (*functions[iPiece])(x);
 }
 
-PiecewiseFunction* PiecewiseFunction::clone() const {
+PiecewiseFunction* PiecewiseFunction::clone() const
+{
     return new PiecewiseFunction(*this);
 }
 
 ColorMap::ColorMap(PiecewiseFunction const& red_,
-                      PiecewiseFunction const& green_,
-                      PiecewiseFunction const& blue_)
+                   PiecewiseFunction const& green_,
+                   PiecewiseFunction const& blue_)
     : red(red_), green(green_), blue(blue_)
 { }
 
-rgb ColorMap::get(double x) const {
+rgb ColorMap::get(double x) const
+{
     return rgb( red(x), green(x), blue(x) );
 }
 
-namespace mapGenerators {
+namespace mapGenerators
+{
 
-PiecewiseFunction generateEarthRed() {
+PiecewiseFunction generateEarthRed()
+{
     double p0  =  0.;
     double p1  =  3./8.;
     double p2  =  6./8.;
@@ -132,7 +152,8 @@ PiecewiseFunction generateEarthRed() {
     return earthRed;
 }
 
-PiecewiseFunction generateEarthGreen() {
+PiecewiseFunction generateEarthGreen()
+{
     double p0  =  0.;
     double p1  =  3./8.;
     double p2  =  6./8.;
@@ -146,7 +167,8 @@ PiecewiseFunction generateEarthGreen() {
     return earthGreen;
 }
 
-PiecewiseFunction generateEarthBlue() {
+PiecewiseFunction generateEarthBlue()
+{
     double p0  =  0.;
     double p1  =  3./8.;
     double p2  =  6./8.;
@@ -160,7 +182,8 @@ PiecewiseFunction generateEarthBlue() {
     return earthBlue;
 }
 
-PiecewiseFunction generateWaterRed() {
+PiecewiseFunction generateWaterRed()
+{
     double p0  =  0.;
     double p1  =  3./8.;
     double p2  =  6./8.;
@@ -174,7 +197,8 @@ PiecewiseFunction generateWaterRed() {
     return waterRed;
 }
 
-PiecewiseFunction generateWaterGreen() {
+PiecewiseFunction generateWaterGreen()
+{
     double p0  =  0.;
     double p1  =  3./8.;
     double p2  =  6./8.;
@@ -188,7 +212,8 @@ PiecewiseFunction generateWaterGreen() {
     return waterGreen;
 }
 
-PiecewiseFunction generateWaterBlue() {
+PiecewiseFunction generateWaterBlue()
+{
     double p0  =  0.;
     double p1  =  3./8.;
     double p2  =  6./8.;
@@ -202,7 +227,8 @@ PiecewiseFunction generateWaterBlue() {
     return waterBlue;
 }
 
-PiecewiseFunction generateAirRed() {
+PiecewiseFunction generateAirRed()
+{
     double p0  =  0.;
     double p1  =  1.;
 
@@ -212,7 +238,8 @@ PiecewiseFunction generateAirRed() {
     return airRed;
 }
 
-PiecewiseFunction generateAirGreen() {
+PiecewiseFunction generateAirGreen()
+{
     double p0  =  0.;
     double p1  =  1.;
 
@@ -222,7 +249,8 @@ PiecewiseFunction generateAirGreen() {
     return airGreen;
 }
 
-PiecewiseFunction generateAirBlue() {
+PiecewiseFunction generateAirBlue()
+{
     double p0  =  0.;
     double p1  =  1.;
 
@@ -233,7 +261,8 @@ PiecewiseFunction generateAirBlue() {
 }
 
 
-PiecewiseFunction generateFireRed() {
+PiecewiseFunction generateFireRed()
+{
     double p0  =  0.;
     double p1  =  0.36;
     double p3  =  1.;
@@ -245,7 +274,8 @@ PiecewiseFunction generateFireRed() {
     return fireRed;
 }
 
-PiecewiseFunction generateFireGreen() {
+PiecewiseFunction generateFireGreen()
+{
     double p0  =  0.;
     double p1  =  0.36;
     double p2  =  0.75;
@@ -259,7 +289,8 @@ PiecewiseFunction generateFireGreen() {
     return fireGreen;
 }
 
-PiecewiseFunction generateFireBlue() {
+PiecewiseFunction generateFireBlue()
+{
     double p0  =  0.;
     double p2  =  0.75;
     double p3  =  1.;
@@ -272,7 +303,8 @@ PiecewiseFunction generateFireBlue() {
 }
 
 
-PiecewiseFunction generateLeeLooRed() {
+PiecewiseFunction generateLeeLooRed()
+{
     double p0  =  0.;
     double p2  =  3./8.;
     double p3  =  5./8.;
@@ -290,7 +322,8 @@ PiecewiseFunction generateLeeLooRed() {
     return leeLooRed;
 }
 
-PiecewiseFunction generateLeeLooGreen() {
+PiecewiseFunction generateLeeLooGreen()
+{
     double p0  =  0.;
     double p1  =  1./8.;
     double p2  =  3./8.;
@@ -310,7 +343,8 @@ PiecewiseFunction generateLeeLooGreen() {
     return leeLooGreen;
 }
 
-PiecewiseFunction generateLeeLooBlue() {
+PiecewiseFunction generateLeeLooBlue()
+{
     double pm1 =  -1./8.;
     double p0  =  0.;
     double p1  =  1./8.;
@@ -328,7 +362,8 @@ PiecewiseFunction generateLeeLooBlue() {
     return leeLooBlue;
 }
 
-PiecewiseFunction generateRedBlueRed() {
+PiecewiseFunction generateRedBlueRed()
+{
     double p0  =  0.;
     double p1  =  0.45;
     double p2  =  0.5;
@@ -345,7 +380,8 @@ PiecewiseFunction generateRedBlueRed() {
     return rbRed;
 }
 
-PiecewiseFunction generateRedBlueGreen() {
+PiecewiseFunction generateRedBlueGreen()
+{
     double p0  =  0.;
     double p1  =  1.;
 
@@ -355,7 +391,8 @@ PiecewiseFunction generateRedBlueGreen() {
     return rbGreen;
 }
 
-PiecewiseFunction generateRedBlueBlue() {
+PiecewiseFunction generateRedBlueBlue()
+{
     double p0  =  0.;
     double p1  =  0.45;
     double p2  =  0.5;
@@ -373,47 +410,54 @@ PiecewiseFunction generateRedBlueBlue() {
 }
 
 
-ColorMap generateMap(std::string mapName) {
-    if (mapName == "earth") {
+ColorMap generateMap(std::string mapName)
+{
+    if (mapName == "earth")
+    {
         return ColorMap (
-                generateEarthRed(),
-                generateEarthGreen(),
-                generateEarthBlue() );
+                   generateEarthRed(),
+                   generateEarthGreen(),
+                   generateEarthBlue() );
     }
-    else if (mapName == "water") {
+    else if (mapName == "water")
+    {
         return ColorMap (
-                generateWaterRed(),
-                generateWaterGreen(),
-                generateWaterBlue() );
+                   generateWaterRed(),
+                   generateWaterGreen(),
+                   generateWaterBlue() );
     }
-    else if (mapName == "air") {
+    else if (mapName == "air")
+    {
         return ColorMap (
-                generateAirRed(),
-                generateAirGreen(),
-                generateAirBlue() );
+                   generateAirRed(),
+                   generateAirGreen(),
+                   generateAirBlue() );
     }
-    else if (mapName == "fire") {
+    else if (mapName == "fire")
+    {
         return ColorMap (
-                generateFireRed(),
-                generateFireGreen(),
-                generateFireBlue() );
+                   generateFireRed(),
+                   generateFireGreen(),
+                   generateFireBlue() );
     }
-    else if (mapName == "leeloo") {
+    else if (mapName == "leeloo")
+    {
         return ColorMap (
-                generateLeeLooRed(),
-                generateLeeLooGreen(),
-                generateLeeLooBlue() );
+                   generateLeeLooRed(),
+                   generateLeeLooGreen(),
+                   generateLeeLooBlue() );
     }
-    else if (mapName == "redblue") {
+    else if (mapName == "redblue")
+    {
         return ColorMap (
-                generateRedBlueRed(),
-                generateRedBlueGreen(),
-                generateRedBlueBlue() );
+                   generateRedBlueRed(),
+                   generateRedBlueGreen(),
+                   generateRedBlueBlue() );
     }
     return ColorMap (
-            generateLeeLooRed(),
-            generateLeeLooGreen(),
-            generateLeeLooBlue() );
+               generateLeeLooRed(),
+               generateLeeLooGreen(),
+               generateLeeLooBlue() );
 }
 
 } // namespace mapGenerators

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,85 +29,99 @@
 #include "core/runTimeDiagnostics.h"
 #include <algorithm>
 
-namespace plb {
+namespace plb
+{
 
 template<>
-char const* NativeType<char>::getName() {
+char const* NativeType<char>::getName()
+{
     static const char name[] = "char";
     return name;
 }
 
 template<>
-char const* NativeType<bool>::getName() {
+char const* NativeType<bool>::getName()
+{
     static const char name[] = "bool";
     return name;
 }
 
 template<>
-char const* NativeType<int>::getName() {
+char const* NativeType<int>::getName()
+{
     static const char name[] = "int";
     return name;
 }
 
 template<>
-char const* NativeType<long>::getName() {
+char const* NativeType<long>::getName()
+{
     static const char name[] = "long";
     return name;
 }
 
 template<>
-char const* NativeType<long long>::getName() {
+char const* NativeType<long long>::getName()
+{
     static const char name[] = "long-long";
     return name;
 }
 
 template<>
-char const* NativeType<float>::getName() {
+char const* NativeType<float>::getName()
+{
     static const char name[] = "float";
     return name;
 }
 
 template<>
-char const* NativeType<double>::getName() {
+char const* NativeType<double>::getName()
+{
     static const char name[] = "double";
     return name;
 }
 
 template<>
-char const* NativeType<long double>::getName() {
+char const* NativeType<long double>::getName()
+{
     static const char name[] = "long-double";
     return name;
 }
 
 #ifdef PLB_USE_GCC
 template<>
-char const* NativeType<__float128>::getName() {
+char const* NativeType<__float128>::getName()
+{
     static const char name[] = "float-128";
     return name;
 }
 #endif
 
 template<>
-char const* NativeType<Complex<float> >::getName() {
+char const* NativeType<Complex<float> >::getName()
+{
     static const char name[] = "complex-float";
     return name;
 }
 
 template<>
-char const* NativeType<Complex<double> >::getName() {
+char const* NativeType<Complex<double> >::getName()
+{
     static const char name[] = "complex-double";
     return name;
 }
 
 template<>
-char const* NativeType<Complex<long double> >::getName() {
+char const* NativeType<Complex<long double> >::getName()
+{
     static const char name[] = "complex-long-double";
     return name;
 }
 
 #ifdef PLB_USE_GCC
 template<>
-char const* NativeType<Complex<__float128> >::getName() {
+char const* NativeType<Complex<__float128> >::getName()
+{
     static const char name[] = "complex-float-128";
     return name;
 }
@@ -116,55 +130,70 @@ char const* NativeType<Complex<__float128> >::getName() {
 NativeTypeConstructor::NativeTypeConstructor(std::string typeName)
 {
     std::string tn(util::tolower(typeName));
-    if (tn=="char") {
+    if (tn=="char")
+    {
         nativeType = new NativeType<char>;
     }
-    else if (tn=="bool") {
+    else if (tn=="bool")
+    {
         nativeType = new NativeType<bool>;
     }
-    else if (tn=="int") {
+    else if (tn=="int")
+    {
         nativeType = new NativeType<int>;
     }
-    else if (tn=="long") {
+    else if (tn=="long")
+    {
         nativeType = new NativeType<long>;
     }
-    else if (tn=="long-long") {
+    else if (tn=="long-long")
+    {
         nativeType = new NativeType<long long>;
     }
-    else if (tn=="float") {
+    else if (tn=="float")
+    {
         nativeType = new NativeType<float>;
     }
-    else if (tn=="double") {
+    else if (tn=="double")
+    {
         nativeType = new NativeType<double>;
     }
-    else if (tn=="long-double") {
+    else if (tn=="long-double")
+    {
         nativeType = new NativeType<long double>;
     }
 #ifdef PLB_USE_GCC
-    else if (tn=="float-128") {
+    else if (tn=="float-128")
+    {
         nativeType = new NativeType<__float128>;
     }
 #endif
-    else if (tn=="complex-float") {
+    else if (tn=="complex-float")
+    {
         nativeType = new NativeType<Complex<float> >;
     }
-    else if (tn=="complex-double") {
+    else if (tn=="complex-double")
+    {
         nativeType = new NativeType<Complex<double> >;
     }
-    else if (tn=="complex-long-double") {
+    else if (tn=="complex-long-double")
+    {
         nativeType = new NativeType<Complex<long double> >;
     }
 #ifdef PLB_USE_GCC
-    else if (tn=="complex-float-128") {
+    else if (tn=="complex-float-128")
+    {
         nativeType = new NativeType<Complex<__float128> >;
     }
 #endif
-    else {
+    else
+    {
         plbLogicError("Type "+typeName+" is not recognized.");
     }
 }
 
-NativeTypeConstructor::~NativeTypeConstructor() {
+NativeTypeConstructor::~NativeTypeConstructor()
+{
     delete nativeType;
 }
 
@@ -178,7 +207,8 @@ NativeTypeConstructor& NativeTypeConstructor::operator=(NativeTypeConstructor co
     return *this;
 }
 
-void NativeTypeConstructor::swap(NativeTypeConstructor& rhs) {
+void NativeTypeConstructor::swap(NativeTypeConstructor& rhs)
+{
     std::swap(nativeType, rhs.nativeType);
 }
 

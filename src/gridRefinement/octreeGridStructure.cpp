@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -39,7 +39,8 @@
 #include <vector>
 #include <algorithm>    // std::random_shuffle
 
-namespace plb {
+namespace plb
+{
 
 OctreeGridStructure::OctreeGridStructure()
     : maxLevel(-1),
@@ -54,7 +55,8 @@ OctreeGridStructure::OctreeGridStructure(std::string xmlFileName)
     XMLreader document(xmlFileName);
 
     XMLreaderProxy blocks = document["block"];
-    for (; blocks.isValid(); blocks = blocks.iterId()) {
+    for (; blocks.isValid(); blocks = blocks.iterId())
+    {
         plint blockId = blocks.getId();
         Array<plint,6> domain;
         plint level;
@@ -68,7 +70,8 @@ OctreeGridStructure::OctreeGridStructure(std::string xmlFileName)
     }
 
     XMLreaderProxy overlaps = document["metadata"]["overlap"];
-    for (; overlaps.isValid(); overlaps = overlaps.iterId()) {
+    for (; overlaps.isValid(); overlaps = overlaps.iterId())
+    {
         plint blockId = overlaps.getId();
         Array<plint,6> domain;
         plint level;
@@ -82,7 +85,8 @@ OctreeGridStructure::OctreeGridStructure(std::string xmlFileName)
     }
 
     XMLreaderProxy neighborBlockIds = document["metadata"]["neighborBlockIds"];
-    for (; neighborBlockIds.isValid(); neighborBlockIds = neighborBlockIds.iterId()) {
+    for (; neighborBlockIds.isValid(); neighborBlockIds = neighborBlockIds.iterId())
+    {
         plint blockId = neighborBlockIds.getId();
         Array<plint,26> ids;
         neighborBlockIds.read<plint,26>(ids);
@@ -97,9 +101,12 @@ void OctreeGridStructure::addBlock(plint blockId, Box3D const& bulk, plint level
     maxLevel = std::max(maxLevel, level);
     maxProcessId = std::max(maxProcessId, processId);
 
-    if (boundingBoxes.find(level) == boundingBoxes.end()) {
+    if (boundingBoxes.find(level) == boundingBoxes.end())
+    {
         boundingBoxes[level] = bulk;
-    } else {
+    }
+    else
+    {
         boundingBoxes[level] = bound(boundingBoxes[level], bulk);
     }
 
@@ -120,22 +127,26 @@ void OctreeGridStructure::addNeighborBlockIds(plint blockId, Array<plint,26> con
 bool OctreeGridStructure::removeBlock(plint blockId, bool removeConnectivityInfo)
 {
     std::map<plint,Block>::const_iterator it = blocks.find(blockId);
-    if (it == blocks.end()) {
+    if (it == blocks.end())
+    {
         return(false);
     }
 
     plint levelOfRemovedBlock = it->second.level;
 
     plint numRemovedBlocks = blocks.erase(blockId);
-    if (removeConnectivityInfo) {
+    if (removeConnectivityInfo)
+    {
         (void) removeNeighborBlockIds(blockId);
     }
 
     // If a block was indeed removed, then we need to update all the relevant information.
-    if (numRemovedBlocks != 0) {
+    if (numRemovedBlocks != 0)
+    {
         maxLevel = -1;
         maxProcessId = -1;
-        for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it) {
+        for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it)
+        {
             Block const& block = it->second;
             maxLevel = std::max(maxLevel, block.level);
             maxProcessId = std::max(maxProcessId, block.processId);
@@ -145,12 +156,17 @@ bool OctreeGridStructure::removeBlock(plint blockId, bool removeConnectivityInfo
         plint numRemovedLevels = boundingBoxes.erase(levelOfRemovedBlock);
 #endif
         PLB_ASSERT(numRemovedLevels == 1);
-        for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it) {
+        for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it)
+        {
             Block const& block = it->second;
-            if (block.level == levelOfRemovedBlock) {
-                if (boundingBoxes.find(block.level) == boundingBoxes.end()) {
+            if (block.level == levelOfRemovedBlock)
+            {
+                if (boundingBoxes.find(block.level) == boundingBoxes.end())
+                {
                     boundingBoxes[block.level] = block.bulk;
-                } else {
+                }
+                else
+                {
                     boundingBoxes[block.level] = bound(boundingBoxes[block.level], block.bulk);
                 }
             }
@@ -190,7 +206,8 @@ Box3D OctreeGridStructure::getClosedCover(plint level) const
     plint levelCount = 0;
     Box3D openCoverAtMaxLevel;
     std::map<plint,Box3D>::const_iterator boundingBoxIt = boundingBoxes.begin();
-    for (; boundingBoxIt != boundingBoxes.end(); ++boundingBoxIt) {
+    for (; boundingBoxIt != boundingBoxes.end(); ++boundingBoxIt)
+    {
         plint boundingBoxLevel = boundingBoxIt->first;
         Box3D closedBoundingBoxAtLevel(boundingBoxIt->second);
         Box3D openBoundingBoxAtLevel(closedBoundingBoxAtLevel);
@@ -198,9 +215,12 @@ Box3D OctreeGridStructure::getClosedCover(plint level) const
         openBoundingBoxAtLevel.y1++;
         openBoundingBoxAtLevel.z1++;
         Box3D openBoundingBoxAtMaxLevel(openBoundingBoxAtLevel.multiply(util::intTwoToThePower(maxLevel - boundingBoxLevel)));
-        if (levelCount == 0) {
+        if (levelCount == 0)
+        {
             openCoverAtMaxLevel = openBoundingBoxAtMaxLevel;
-        } else {
+        }
+        else
+        {
             openCoverAtMaxLevel = bound(openCoverAtMaxLevel, openBoundingBoxAtMaxLevel);
         }
         levelCount++;
@@ -226,7 +246,8 @@ bool OctreeGridStructure::neighborIsAtSameLevel(plint blockId, plint direction) 
     PLB_ASSERT(direction >= 0 && direction < 26);
 
     plint neighborId = neighborBlockIdsIt->second[direction];
-    if (neighborId >= 0) {
+    if (neighborId >= 0)
+    {
         std::map<plint,Block>::const_iterator neighborIt = blocks.find(neighborId);
         PLB_ASSERT(neighborIt != blocks.end());
         return(blockIt->second.level == neighborIt->second.level);
@@ -244,7 +265,8 @@ bool OctreeGridStructure::neighborIsAtCoarserLevel(plint blockId, plint directio
     PLB_ASSERT(direction >= 0 && direction < 26);
 
     plint neighborId = neighborBlockIdsIt->second[direction];
-    if (neighborId >= 0) {
+    if (neighborId >= 0)
+    {
         std::map<plint,Block>::const_iterator neighborIt = blocks.find(neighborId);
         PLB_ASSERT(neighborIt != blocks.end());
         return(blockIt->second.level > neighborIt->second.level);
@@ -332,10 +354,12 @@ std::vector<plint> OctreeGridStructure::getBlockIdsAtLevel(plint level, bool inc
     PLB_ASSERT(level >= 0 && level <= maxLevel);
 
     std::vector<plint> blockIds;
-    for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it) {
+    for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it)
+    {
         plint blockId = it->first;
         Block const& block = it->second;
-        if (block.level == level && (includeOverlaps || !block.isOverlap)) {
+        if (block.level == level && (includeOverlaps || !block.isOverlap))
+        {
             blockIds.push_back(blockId);
         }
     }
@@ -348,10 +372,12 @@ std::vector<plint> OctreeGridStructure::getOverlapBlockIdsAtLevel(plint level) c
     PLB_ASSERT(level >= 0 && level <= maxLevel);
 
     std::vector<plint> blockIds;
-    for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it) {
+    for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it)
+    {
         plint blockId = it->first;
         Block const& block = it->second;
-        if (block.level == level && block.isOverlap) {
+        if (block.level == level && block.isOverlap)
+        {
             blockIds.push_back(blockId);
         }
     }
@@ -372,34 +398,60 @@ MultiBlockManagement3D OctreeGridStructure::getMultiBlockManagement(plint level,
     PLB_ASSERT(boundingBoxIt != boundingBoxes.end());
     Box3D const& boundingBoxAtLevel = boundingBoxIt->second;
 
-    if (doesIntersect(boundingBoxAtLevel, boundingBox)) {   // This is meant as an optimization.
+    if (doesIntersect(boundingBoxAtLevel, boundingBox))     // This is meant as an optimization.
+    {
 
         // for each process id ...
-        for (plint iP = 0; iP < getNumProcesses(); ++iP) {
+        for (plint iP = 0; iP < getNumProcesses(); ++iP)
+        {
             // ... get all blocks at level "level"
             std::vector<std::pair<plint,Box3D> > minBlks = getBlocksAndIdsAtLevelAndProcessorId(level, iP);
             plint minNumBlks = (plint)minBlks.size();
-            // pcout << "========Min Num Blocks = " << minNumBlks << std::endl;
 
             minBlks = mergeBlocks(minBlks);
             minNumBlks = (plint)minBlks.size();
-            // pcout << "======= Old Num Blocks = " << minNumBlks << std::endl;
 
-
-            do {
+            do
+            {
                 minNumBlks = (plint)minBlks.size();
                 minBlks = mergeBlocks(minBlks);
-            } while (minNumBlks != (plint)minBlks.size());
-            // minNumBlks = (plint)minBlks.size();
-            // pcout << "======= Min Num Blocks = " << minNumBlks << std::endl;
+            }
+            while (minNumBlks != (plint)minBlks.size());
+            minNumBlks = (plint)minBlks.size();
+            // pcout << "Min Num Blocks = " << minNumBlks << std::endl;
 
-            if (minNumBlks > 0) {
-                for (std::vector<std::pair<plint,Box3D> >::iterator it = minBlks.begin(); it != minBlks.end(); ++it) {
+            // if (minNumBlks > 0) {
+            //     for (plint iR = 0; iR < minNumBlks; ++iR) {
+            //         std::vector<std::pair<plint,Box3D> > blks = getBlocksAndIdsAtLevelAndProcessorId(level, iP);
+            //         std::random_shuffle ( blks.begin(), blks.end() );
+            //         plint numBlks = (plint)blks.size();
+
+            //         do {
+            //             numBlks = (plint)blks.size();
+            //             blks = mergeBlocks(blks);
+            //         } while (numBlks == (plint)blks.size());
+            //         numBlks = (plint)blks.size();
+
+            //         if (numBlks < minNumBlks) {
+            //             // pcout << "merged more." << std::endl;
+            //             minNumBlks = numBlks;
+            //             minBlks = blks;
+            //         }
+            //     }
+
+            // }
+            // pcout << "final min num blocks " << minNumBlks << std::endl;
+
+            if (minNumBlks > 0)
+            {
+                for (std::vector<std::pair<plint,Box3D> >::iterator it = minBlks.begin(); it != minBlks.end(); ++it)
+                {
                     // Although not all merged bulks may have intersections with the boundingBox,
                     // we retain their blockId (which does not correspond anymore to the blockId
                     // of the original grid structure file since blocks have been merged).
                     Box3D intersection;
-                    if (intersect(it->second, boundingBox, intersection)) {
+                    if (intersect(it->second, boundingBox, intersection))
+                    {
                         sparseBlock.addBlock(intersection, it->first);
                         threadAttribution.addBlock(it->first, iP);
                     }
@@ -424,9 +476,11 @@ std::vector<Box3D> OctreeGridStructure::computeBoxDifference(Box3D const& box, s
 {
     std::vector<Box3D> boxes;
     boxes.push_back(box);
-    for (plint iBoxToBeRemoved = 0; iBoxToBeRemoved < (plint) boxesToBeRemoved.size(); iBoxToBeRemoved++) {
+    for (plint iBoxToBeRemoved = 0; iBoxToBeRemoved < (plint) boxesToBeRemoved.size(); iBoxToBeRemoved++)
+    {
         std::vector<Box3D> boxDifference;
-        for (plint iBox = 0; iBox < (plint) boxes.size(); iBox++) {
+        for (plint iBox = 0; iBox < (plint) boxes.size(); iBox++)
+        {
             except(boxes[iBox], boxesToBeRemoved[iBoxToBeRemoved], boxDifference);
         }
         std::swap(boxes, boxDifference);
@@ -435,17 +489,23 @@ std::vector<Box3D> OctreeGridStructure::computeBoxDifference(Box3D const& box, s
     return(boxes);
 }
 
-// returns all the blocks that are located at a certain level located on a certain processor 
-std::vector<std::pair<plint,Box3D> > OctreeGridStructure::getBlocksAndIdsAtLevelAndProcessorId(plint level, plint processId) const {
+// returns all the blocks that are located at a certain level located on a certain processor
+std::vector<std::pair<plint,Box3D> > OctreeGridStructure::getBlocksAndIdsAtLevelAndProcessorId(plint level, plint processId) const
+{
     std::vector<std::pair<plint,Box3D> > blkAndIdAtLvlAndProcId;
-    for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it) {
+    for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it)
+    {
         plint blockId = it->first;
         Block const& block = it->second;
-        if (block.level == level && block.processId == processId) {
+        if (block.level == level && block.processId == processId)
+        {
             // but overlap blocks at the beginning. useful to merge them first
-            if (!block.isOverlap) {
+            if (!block.isOverlap)
+            {
                 blkAndIdAtLvlAndProcId.push_back(std::pair<plint,Box3D>(blockId, block.bulk));
-            } else {
+            }
+            else
+            {
                 blkAndIdAtLvlAndProcId.insert(blkAndIdAtLvlAndProcId.begin(), std::pair<plint,Box3D>(blockId, block.bulk));
             }
         }
@@ -456,18 +516,21 @@ std::vector<std::pair<plint,Box3D> > OctreeGridStructure::getBlocksAndIdsAtLevel
 // try to merge as many possible blocks in a vector of blocks.
 // The blocks must be at the same level and at the same processorId.
 // Comsumes the blkMerge.
-std::vector<std::pair<plint,Box3D> > OctreeGridStructure::mergeBlocks(std::vector<std::pair<plint,Box3D> > const &blkToMerge) const {
-
+std::vector<std::pair<plint,Box3D> > OctreeGridStructure::mergeBlocks(std::vector<std::pair<plint,Box3D> > const &blkToMerge) const
+{
     std::vector<std::pair<plint,Box3D> > result = blkToMerge;
-    std::sort(result.begin(), result.end());
-    
+
     plint size = 0;
-    while (size != (plint)result.size()) {
+    while (size != (plint)result.size())
+    {
         size = (plint)result.size();
-        for (plint iA = 0; iA < (plint)result.size(); ++iA) {
-            for (plint iB = iA+1; iB < (plint)result.size(); ++iB) {
+        for (plint iA = 0; iA < (plint)result.size(); ++iA)
+        {
+            for (plint iB = iA+1; iB < (plint)result.size(); ++iB)
+            {
                 bool merged = merge(result[iA].second, result[iB].second);
-                if (merged) {
+                if (merged)
+                {
                     result.erase (result.begin()+iB);
                     iB -= 1;
                 }
@@ -494,27 +557,33 @@ MultiBlockManagement3D OctreeGridStructure::getMultiBlockManagementForOutput(pli
     PLB_ASSERT(boundingBoxIt != boundingBoxes.end());
     Box3D const& boundingBoxAtLevel = boundingBoxIt->second;
 
-    if (doesIntersect(boundingBoxAtLevel, boundingBox)) {   // This is meant as an optimization.
+    if (doesIntersect(boundingBoxAtLevel, boundingBox))     // This is meant as an optimization.
+    {
         plint id = 0;
-        for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it) {
+        for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it)
+        {
             plint blockId = it->first;
             Block const& block = it->second;
-            if (block.level == level && !block.isOverlap) {
+            if (block.level == level && !block.isOverlap)
+            {
                 plint xMargin = 0;
                 plint yMargin = 0;
                 plint zMargin = 0;
                 plint h = 1;
 
                 if (neighborIsAtCoarserLevel(blockId, OT::surface0P()) ||
-                        (level != 0 && neighborIsBoundary(blockId, OT::surface0P()) && crop)) {
+                        (level != 0 && neighborIsBoundary(blockId, OT::surface0P()) && crop))
+                {
                     xMargin = h;
                 }
                 if (neighborIsAtCoarserLevel(blockId, OT::surface1P()) ||
-                        (level != 0 && neighborIsBoundary(blockId, OT::surface1P()) && crop)) {
+                        (level != 0 && neighborIsBoundary(blockId, OT::surface1P()) && crop))
+                {
                     yMargin = h;
                 }
                 if (neighborIsAtCoarserLevel(blockId, OT::surface2P()) ||
-                        (level != 0 && neighborIsBoundary(blockId, OT::surface2P()) && crop)) {
+                        (level != 0 && neighborIsBoundary(blockId, OT::surface2P()) && crop))
+                {
                     zMargin = h;
                 }
 
@@ -522,20 +591,24 @@ MultiBlockManagement3D OctreeGridStructure::getMultiBlockManagementForOutput(pli
                 std::vector<Box3D> domainsToBeRemoved;
 
                 if (neighborIsAtCoarserLevel(blockId, OT::edge0PP()) ||
-                        (level != 0 && neighborIsBoundary(blockId, OT::edge0PP()) && crop)) {
+                        (level != 0 && neighborIsBoundary(blockId, OT::edge0PP()) && crop))
+                {
                     domainsToBeRemoved.push_back(Box3D(bulk.x0, bulk.x1, bulk.y1, bulk.y1, bulk.z1, bulk.z1));
                 }
                 if (neighborIsAtCoarserLevel(blockId, OT::edge1PP()) ||
-                        (level != 0 && neighborIsBoundary(blockId, OT::edge1PP()) && crop)) {
+                        (level != 0 && neighborIsBoundary(blockId, OT::edge1PP()) && crop))
+                {
                     domainsToBeRemoved.push_back(Box3D(bulk.x1, bulk.x1, bulk.y0, bulk.y1, bulk.z1, bulk.z1));
                 }
                 if (neighborIsAtCoarserLevel(blockId, OT::edge2PP()) ||
-                        (level != 0 && neighborIsBoundary(blockId, OT::edge2PP()) && crop)) {
+                        (level != 0 && neighborIsBoundary(blockId, OT::edge2PP()) && crop))
+                {
                     domainsToBeRemoved.push_back(Box3D(bulk.x1, bulk.x1, bulk.y1, bulk.y1, bulk.z0, bulk.z1));
                 }
 
                 if ((neighborIsAtCoarserLevel(blockId, OT::cornerPPP()) ||
-                        (level != 0 && neighborIsBoundary(blockId, OT::cornerPPP()))) && crop) {
+                        (level != 0 && neighborIsBoundary(blockId, OT::cornerPPP()))) && crop)
+                {
                     domainsToBeRemoved.push_back(Box3D(bulk.x1, bulk.x1, bulk.y1, bulk.y1, bulk.z1, bulk.z1));
                 }
 
@@ -544,9 +617,11 @@ MultiBlockManagement3D OctreeGridStructure::getMultiBlockManagementForOutput(pli
                 bulk.z1 -= zMargin;
                 std::vector<Box3D> domains = computeBoxDifference(bulk, domainsToBeRemoved);
 
-                for (plint iDomain = 0; iDomain < (plint) domains.size(); iDomain++) {
+                for (plint iDomain = 0; iDomain < (plint) domains.size(); iDomain++)
+                {
                     Box3D intersection;
-                    if (intersect(domains[iDomain], boundingBox, intersection)) {
+                    if (intersect(domains[iDomain], boundingBox, intersection))
+                    {
                         sparseBlock.addBlock(intersection, id);
                         threadAttribution.addBlock(id, block.processId);
                         id++;
@@ -573,10 +648,12 @@ void OctreeGridStructure::writeXML(std::string xmlFileName) const
 {
     XMLwriter document;
 
-    for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it) {
+    for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it)
+    {
         plint blockId = it->first;
         Block const& block = it->second;
-        if (block.isOverlap) {
+        if (block.isOverlap)
+        {
             continue;
         }
         Box3D bulk(block.bulk);
@@ -588,10 +665,12 @@ void OctreeGridStructure::writeXML(std::string xmlFileName) const
         document["block"][blockId]["processId"].set(processId);
     }
 
-    for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it) {
+    for (std::map<plint,Block>::const_iterator it = blocks.begin(); it != blocks.end(); ++it)
+    {
         plint blockId = it->first;
         Block const& block = it->second;
-        if (!block.isOverlap) {
+        if (!block.isOverlap)
+        {
             continue;
         }
         Box3D bulk(block.bulk);
@@ -603,7 +682,8 @@ void OctreeGridStructure::writeXML(std::string xmlFileName) const
         document["metadata"]["overlap"][blockId]["processId"].set(processId);
     }
 
-    for (std::map<plint,Array<plint,26> >::const_iterator it = neighborBlockIds.begin(); it != neighborBlockIds.end(); ++it) {
+    for (std::map<plint,Array<plint,26> >::const_iterator it = neighborBlockIds.begin(); it != neighborBlockIds.end(); ++it)
+    {
         plint blockId = it->first;
         Array<plint,26> const& neighborIds = it->second;
         document["metadata"]["neighborBlockIds"][blockId].set<plint,26>(neighborIds);

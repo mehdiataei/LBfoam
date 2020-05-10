@@ -39,7 +39,7 @@ template<typename T, template<typename U> class Descriptor>
 void FS_AverageMassFunctional3D<T,Descriptor>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
     BlockStatistics& statistics = this->getStatistics();
 
@@ -82,7 +82,7 @@ template<typename T, template<typename U> class Descriptor>
 void FS_TotalMassFunctional3D<T,Descriptor>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
     BlockStatistics& statistics = this->getStatistics();
 
@@ -126,7 +126,7 @@ template<typename T, template<typename U> class Descriptor>
 void FS_AverageDensityFunctional3D<T,Descriptor>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
     BlockStatistics& statistics = this->getStatistics();
 
@@ -172,7 +172,7 @@ template<typename T, template<typename U> class Descriptor>
 void FS_AverageVolumeFractionFunctional3D<T,Descriptor>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
     BlockStatistics& statistics = this->getStatistics();
 
@@ -219,7 +219,7 @@ template<typename T, template<typename U> class Descriptor>
 void CountFreeSurfaceElementsFunctional3D<T,Descriptor>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
     BlockStatistics& statistics = this->getStatistics();
 
@@ -266,7 +266,7 @@ template<typename T, template<typename U> class Descriptor>
 void FS_AverageMomentumFunctional3D<T,Descriptor>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
     BlockStatistics& statistics = this->getStatistics();
 
@@ -317,7 +317,7 @@ template<typename T, template<typename U> class Descriptor>
 void FS_AverageHeightFunctional3D<T,Descriptor>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
     BlockStatistics& statistics = this->getStatistics();
     Dot3D absOffset = param.absOffset();
@@ -367,7 +367,7 @@ template<typename T, template<typename U> class Descriptor>
 void GetWaterLevelAtxyFunctional3D<T,Descriptor>::processGenericBlocks (
         Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     FreeSurfaceProcessorParam3D<T,Descriptor> param(atomicBlocks);
     BlockStatistics& statistics = this->getStatistics();
 
@@ -433,9 +433,9 @@ void FreeSurfaceComputeFluidVolume3D<T>::process(Box3D domain, ScalarField3D<T>&
         for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
             for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
                 int localFlag = flag.get(iX+offset.x, iY+offset.y, iZ+offset.z);
-                if (freeSurfaceFlag::isFullWet(localFlag)) {
+                if (freeSurfaceFlag3D::isFullWet(localFlag)) {
                     statistics.gatherSum(sumScalarId, (double) 1.0);
-                } else if (localFlag == freeSurfaceFlag::interface) {
+                } else if (localFlag == freeSurfaceFlag3D::interface) {
                     statistics.gatherSum(sumScalarId, (double) volumeFraction.get(iX, iY, iZ));
                 }
             }
@@ -491,9 +491,9 @@ void MaskedFreeSurfaceComputeFluidVolume3D<T>::processGenericBlocks (
             for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
                 if (mask.get(iX+offsetMask.x, iY+offsetMask.y, iZ+offsetMask.z)) {
                     int localFlag = flag.get(iX+offsetFlag.x, iY+offsetFlag.y, iZ+offsetFlag.z);
-                    if (freeSurfaceFlag::isFullWet(localFlag)) {
+                    if (freeSurfaceFlag3D::isFullWet(localFlag)) {
                         statistics.gatherSum(sumScalarId, (double) 1.0);
-                    } else if (localFlag == freeSurfaceFlag::interface) {
+                    } else if (localFlag == freeSurfaceFlag3D::interface) {
                         statistics.gatherSum(sumScalarId, (double) volumeFraction.get(iX, iY, iZ));
                     }
                 }
@@ -569,7 +569,7 @@ void FreeSurfaceBoxSumForcedEnergyFunctional3D<T,Descriptor>::processGenericBloc
     for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
         for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
             for (plint iZ=domain.z0; iZ<=domain.z1; ++iZ) {
-                if (freeSurfaceFlag::isWet(flag->get(iX+ofsFlag.x, iY+ofsFlag.y, iZ+ofsFlag.z))) {
+                if (freeSurfaceFlag3D::isWet(flag->get(iX+ofsFlag.x, iY+ofsFlag.y, iZ+ofsFlag.z))) {
                     Array<T,Descriptor<T>::d> velocity;
                     lattice->get(iX,iY,iZ).computeVelocity(velocity);
                     Array<T,Descriptor<T>::d> const& f = force->get(iX+ofsForce.x,iY+ofsForce.y,iZ+ofsForce.z);
@@ -643,17 +643,17 @@ void freeSurfaceComputeForcedVelocityNorm(MultiBlockLattice3D<T,Descriptor>& lat
     args.push_back(&velocityNorm);
     applyProcessingFunctional(new BoxForcedVelocityNormFunctional3D<T,Descriptor>, domain, args);
 
-    setToConstant<T>(velocityNorm, flag, (int) freeSurfaceFlag::empty, domain, (T) 0);
-    setToConstant<T>(velocityNorm, flag, (int) freeSurfaceFlag::protectEmpty, domain, (T) 0);
-    setToConstant<T>(velocityNorm, flag, (int) freeSurfaceFlag::wall, domain, (T) 0);
-    setToConstant<T>(velocityNorm, flag, (int) freeSurfaceFlag::slipWall, domain, (T) 0);
+    setToConstant<T>(velocityNorm, flag, (int) freeSurfaceFlag3D::empty, domain, (T) 0);
+    setToConstant<T>(velocityNorm, flag, (int) freeSurfaceFlag3D::protectEmpty, domain, (T) 0);
+    setToConstant<T>(velocityNorm, flag, (int) freeSurfaceFlag3D::wall, domain, (T) 0);
+    setToConstant<T>(velocityNorm, flag, (int) freeSurfaceFlag3D::slipWall, domain, (T) 0);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityNorm(MultiBlockLattice3D<T,Descriptor>& lattice,
+std::auto_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityNorm(MultiBlockLattice3D<T,Descriptor>& lattice,
         MultiTensorField3D<T,Descriptor<T>::d>& force, MultiScalarField3D<int>& flag, Box3D domain)
 {
-    std::unique_ptr<MultiScalarField3D<T> > velocityNorm = generateMultiScalarField<T>(lattice, domain);
+    std::auto_ptr<MultiScalarField3D<T> > velocityNorm = generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
     // is smaller than the bounding-box. Given that the BoxForcedVelocityNormFunctional3D() acts on both bulk and envelope,
@@ -669,7 +669,7 @@ std::unique_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityNorm(Mul
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityNorm(MultiBlockLattice3D<T,Descriptor>& lattice,
+std::auto_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityNorm(MultiBlockLattice3D<T,Descriptor>& lattice,
         MultiTensorField3D<T,Descriptor<T>::d>& force, MultiScalarField3D<int>& flag)
 {
     return freeSurfaceComputeForcedVelocityNorm(lattice, force, flag, lattice.getBoundingBox());
@@ -686,17 +686,17 @@ void freeSurfaceComputeForcedVelocityComponent(MultiBlockLattice3D<T,Descriptor>
     args.push_back(&velocityComponent);
     applyProcessingFunctional(new BoxForcedVelocityComponentFunctional3D<T,Descriptor>(iComponent), domain, args);
 
-    setToConstant<T>(velocityComponent, flag, (int) freeSurfaceFlag::empty, domain, (T) 0);
-    setToConstant<T>(velocityComponent, flag, (int) freeSurfaceFlag::protectEmpty, domain, (T) 0);
-    setToConstant<T>(velocityComponent, flag, (int) freeSurfaceFlag::wall, domain, (T) 0);
-    setToConstant<T>(velocityComponent, flag, (int) freeSurfaceFlag::slipWall, domain, (T) 0);
+    setToConstant<T>(velocityComponent, flag, (int) freeSurfaceFlag3D::empty, domain, (T) 0);
+    setToConstant<T>(velocityComponent, flag, (int) freeSurfaceFlag3D::protectEmpty, domain, (T) 0);
+    setToConstant<T>(velocityComponent, flag, (int) freeSurfaceFlag3D::wall, domain, (T) 0);
+    setToConstant<T>(velocityComponent, flag, (int) freeSurfaceFlag3D::slipWall, domain, (T) 0);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityComponent(MultiBlockLattice3D<T,Descriptor>& lattice,
+std::auto_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityComponent(MultiBlockLattice3D<T,Descriptor>& lattice,
         MultiTensorField3D<T,Descriptor<T>::d>& force, MultiScalarField3D<int>& flag, Box3D domain, plint iComponent)
 {
-    std::unique_ptr<MultiScalarField3D<T> > velocityComponent = generateMultiScalarField<T>(lattice, domain);
+    std::auto_ptr<MultiScalarField3D<T> > velocityComponent = generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
     // is smaller than the bounding-box. Given that the BoxForcedVelocityComponentFunctional3D() acts on both bulk and envelope,
@@ -712,7 +712,7 @@ std::unique_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityComponen
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityComponent(MultiBlockLattice3D<T,Descriptor>& lattice,
+std::auto_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityComponent(MultiBlockLattice3D<T,Descriptor>& lattice,
         MultiTensorField3D<T,Descriptor<T>::d>& force, MultiScalarField3D<int>& flag, plint iComponent)
 {
     return freeSurfaceComputeForcedVelocityComponent(lattice, force, flag, lattice.getBoundingBox(), iComponent);
@@ -728,17 +728,17 @@ void freeSurfaceComputeForcedVelocity(MultiBlockLattice3D<T,Descriptor>& lattice
     args.push_back(&velocity);
     applyProcessingFunctional(new BoxForcedVelocityFunctional3D<T,Descriptor>, domain, args);
 
-    setToConstant<T,Descriptor<T>::d>(velocity, flag, (int) freeSurfaceFlag::empty, domain, Array<T,Descriptor<T>::d>::zero());
-    setToConstant<T,Descriptor<T>::d>(velocity, flag, (int) freeSurfaceFlag::protectEmpty, domain, Array<T,Descriptor<T>::d>::zero());
-    setToConstant<T,Descriptor<T>::d>(velocity, flag, (int) freeSurfaceFlag::wall, domain, Array<T,Descriptor<T>::d>::zero());
-    setToConstant<T,Descriptor<T>::d>(velocity, flag, (int) freeSurfaceFlag::slipWall, domain, Array<T,Descriptor<T>::d>::zero());
+    setToConstant<T,Descriptor<T>::d>(velocity, flag, (int) freeSurfaceFlag3D::empty, domain, Array<T,Descriptor<T>::d>::zero());
+    setToConstant<T,Descriptor<T>::d>(velocity, flag, (int) freeSurfaceFlag3D::protectEmpty, domain, Array<T,Descriptor<T>::d>::zero());
+    setToConstant<T,Descriptor<T>::d>(velocity, flag, (int) freeSurfaceFlag3D::wall, domain, Array<T,Descriptor<T>::d>::zero());
+    setToConstant<T,Descriptor<T>::d>(velocity, flag, (int) freeSurfaceFlag3D::slipWall, domain, Array<T,Descriptor<T>::d>::zero());
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField3D<T,Descriptor<T>::d> > freeSurfaceComputeForcedVelocity(MultiBlockLattice3D<T,Descriptor>& lattice,
+std::auto_ptr<MultiTensorField3D<T,Descriptor<T>::d> > freeSurfaceComputeForcedVelocity(MultiBlockLattice3D<T,Descriptor>& lattice,
         MultiTensorField3D<T,Descriptor<T>::d>& force, MultiScalarField3D<int>& flag, Box3D domain)
 {
-    std::unique_ptr<MultiTensorField3D<T,Descriptor<T>::d> > velocity = generateMultiTensorField<T,Descriptor<T>::d>(lattice, domain);
+    std::auto_ptr<MultiTensorField3D<T,Descriptor<T>::d> > velocity = generateMultiTensorField<T,Descriptor<T>::d>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
     // is smaller than the bounding-box. Given that the BoxForcedVelocityFunctional3D() acts on both bulk and envelope,
@@ -754,7 +754,7 @@ std::unique_ptr<MultiTensorField3D<T,Descriptor<T>::d> > freeSurfaceComputeForce
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField3D<T,Descriptor<T>::d> >
+std::auto_ptr<MultiTensorField3D<T,Descriptor<T>::d> >
     freeSurfaceComputeForcedVelocity(MultiBlockLattice3D<T,Descriptor>& lattice, MultiTensorField3D<T,Descriptor<T>::d>& force,
             MultiScalarField3D<int>& flag)
 {

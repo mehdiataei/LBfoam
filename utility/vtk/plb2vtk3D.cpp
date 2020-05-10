@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,67 +36,63 @@ using namespace std;
 template<typename T>
 void plbFileToVtk( std::string fName, std::string identifier, VtkImageOutput3D<T>& vtkOut)
 {
-    parallelIO::SavedFullMultiBlockSerializer3D *serializer
-        = new parallelIO::SavedFullMultiBlockSerializer3D(fName);
-    Box3D bbox = serializer->getBoundingBox();
-    std::string convertType = serializer->dataType();
-    pcout << "Adding the field \"" << identifier << "\" from file " << fName
-          << " to the VTK file, with type \"" << convertType << "\""<< std::endl;
-    if (convertType=="double") {
-        vtkOut.template writeData<double> (
-                bbox.getNx(), bbox.getNy(), bbox.getNz(), 
-                serializer->getCellDim(), serializer, identifier );
-    }
-    else if (convertType=="float") {
-        vtkOut.template writeData<float> (
-                bbox.getNx(), bbox.getNy(), bbox.getNz(), 
-                serializer->getCellDim(), serializer, identifier );
-    }
-    else if (convertType=="int") {
-        vtkOut.template writeData<int> (
-                bbox.getNx(), bbox.getNy(), bbox.getNz(), 
-                serializer->getCellDim(), serializer, identifier );
-    }
-    else {
-        plbIOError("Cannot convert to type "+convertType);
-    }
+	parallelIO::SavedFullMultiBlockSerializer3D *serializer
+	    = new parallelIO::SavedFullMultiBlockSerializer3D(fName);
+	Box3D bbox = serializer->getBoundingBox();
+	std::string convertType = serializer->dataType();
+	pcout << "Adding the field \"" << identifier << "\" from file " << fName
+	      << " to the VTK file, with type \"" << convertType << "\""<< std::endl;
+	if (convertType=="double") {
+		vtkOut.template writeData<double> (
+		    bbox.getNx(), bbox.getNy(), bbox.getNz(),
+		    serializer->getCellDim(), serializer, identifier );
+	} else if (convertType=="float") {
+		vtkOut.template writeData<float> (
+		    bbox.getNx(), bbox.getNy(), bbox.getNz(),
+		    serializer->getCellDim(), serializer, identifier );
+	} else if (convertType=="int") {
+		vtkOut.template writeData<int> (
+		    bbox.getNx(), bbox.getNy(), bbox.getNz(),
+		    serializer->getCellDim(), serializer, identifier );
+	} else {
+		plbIOError("Cannot convert to type "+convertType);
+	}
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
-    plbInit(&argc, &argv);
+	plbInit(&argc, &argv);
 
-    global::directories().setOutputDir("./");
-    global::directories().setInputDir("./");
+	global::directories().setOutputDir("./");
+	global::directories().setInputDir("./");
 
-    plint numArgs(global::argc());
+	plint numArgs(global::argc());
 
-    std::vector<std::string> fNames;
-    try {
-        if (numArgs<3) {
-            throw(PlbIOException("Too few arguments"));
-        }
+	std::vector<std::string> fNames;
+	try {
+		if (numArgs<3) {
+			throw(PlbIOException("Too few arguments"));
+		}
 
-        for (plint iArg=1; iArg<numArgs; ++iArg) {
-            fNames.push_back(global::argv(iArg));
-        }
-    }
-    catch(PlbIOException const& exception) {
-        pcout << exception.what() << std::endl;
-        pcout << "Syntax: " << (std::string)global::argv(0)
-              << " plb_file_name1 [plb_file_name2, plb_file_name3, ...] output_name"
-              << std::endl;
-        return -1;
-    }
+		for (plint iArg=1; iArg<numArgs; ++iArg) {
+			fNames.push_back(global::argv(iArg));
+		}
+	} catch(PlbIOException const& exception) {
+		pcout << exception.what() << std::endl;
+		pcout << "Syntax: " << (std::string)global::argv(0)
+		      << " plb_file_name1 [plb_file_name2, plb_file_name3, ...] output_name"
+		      << std::endl;
+		return -1;
+	}
 
-    try {
-        double dx = 1.;
-        VtkImageOutput3D<double> vtkOut(FileName(fNames.back()).getName(), dx);
-        for (plint iFile=0; iFile<(plint)fNames.size()-1; ++iFile) {
-            plbFileToVtk(fNames[iFile], FileName(fNames[iFile]).getName(), vtkOut);
-        }
-    }
-    catch(PlbIOException const& exception) {
-        pcout << exception.what() << std::endl;
-    }
+	try {
+		double dx = 1.;
+		VtkImageOutput3D<double> vtkOut(FileName(fNames.back()).getName(), dx);
+		for (plint iFile=0; iFile<(plint)fNames.size()-1; ++iFile) {
+			plbFileToVtk(fNames[iFile], FileName(fNames[iFile]).getName(), vtkOut);
+		}
+	} catch(PlbIOException const& exception) {
+		pcout << exception.what() << std::endl;
+	}
 }

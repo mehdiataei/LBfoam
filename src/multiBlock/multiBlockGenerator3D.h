@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -43,7 +43,8 @@
 #include "multiBlock/sparseBlockStructure3D.h"
 #include <memory>
 
-namespace plb {
+namespace plb
+{
 
 /* *************** 1. MultiScalarField ************************************** */
 
@@ -51,8 +52,8 @@ namespace plb {
 ///   constructor, this factory function takes a full bounding-box, as well
 ///   as the envelope-width, as arguments.
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > generateMultiScalarField (
-        Box3D boundingBox, plint envelopeWidth=1 );
+std::auto_ptr<MultiScalarField3D<T> > generateMultiScalarField (
+    Box3D boundingBox, plint envelopeWidth=1 );
 
 /// Generate a multi-scalar-field from scratch. As opposed to the standard
 ///   constructor, this factory function takes a full bounding-box, as well
@@ -60,28 +61,28 @@ std::unique_ptr<MultiScalarField3D<T> > generateMultiScalarField (
 ///   The parameter envelopeWidth has no default value to avoid confusion
 ///   with the two-parameter version of this overloaded function.
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > generateMultiScalarField (
-        Box3D boundingBox, T iniVal, plint envelopeWidth );
+std::auto_ptr<MultiScalarField3D<T> > generateMultiScalarField (
+    Box3D boundingBox, T iniVal, plint envelopeWidth );
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > generateMultiScalarField (
-        MultiBlock3D& multiBlock, plint envelopeWidth );
+std::auto_ptr<MultiScalarField3D<T> > generateMultiScalarField (
+    MultiBlock3D& multiBlock, plint envelopeWidth );
 
 /// Generate a multi-scalar-field from scratch. As opposed to the standard
 ///   constructor, this factory function takes the explicit block-management
 ///   object, which includes stuff like block-distribution, parallelization,
 ///   envelope-width, etc. An optional initialization value can be provided.
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > defaultGenerateMultiScalarField3D (
-        MultiBlockManagement3D const& management, T iniVal = T() );
+std::auto_ptr<MultiScalarField3D<T> > defaultGenerateMultiScalarField3D (
+    MultiBlockManagement3D const& management, T iniVal = T() );
 
 /// Create a clone of a MultiScalarField (or of a sub-domain).
 /** This cannot be handled through a data processor, because the internal data
  *  processors of the scalar-field must be cloned as well.
  **/
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > clone (
-        MultiScalarField3D<T>& originalField, Box3D const& subDomain, bool crop=true );
+std::auto_ptr<MultiScalarField3D<T> > clone (
+    MultiScalarField3D<T>& originalField, Box3D const& subDomain, bool crop=true );
 
 /// Generate a new multi-scalar-field with same distribution as original block,
 ///   but intersected with a given domain.
@@ -90,9 +91,9 @@ std::unique_ptr<MultiScalarField3D<T> > clone (
  *    intersection, depending on the parameter crop.
  **/
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > generateMultiScalarField (
-        MultiBlock3D const& originalField, Box3D const& intersection,
-        bool crop=true );
+std::auto_ptr<MultiScalarField3D<T> > generateMultiScalarField (
+    MultiBlock3D const& originalField, Box3D const& intersection,
+    bool crop=true );
 
 /// Generate a new multi-scalar-field with a distribution which is the
 ///   intersection of the two original distributions.
@@ -103,9 +104,9 @@ std::unique_ptr<MultiScalarField3D<T> > generateMultiScalarField (
  *    the bound around the original ones if "crop" is false.
  **/
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > generateIntersectMultiScalarField (
-        MultiBlock3D const& originalField1,
-        MultiBlock3D const& originalField2, bool crop=true );
+std::auto_ptr<MultiScalarField3D<T> > generateIntersectMultiScalarField (
+    MultiBlock3D const& originalField1,
+    MultiBlock3D const& originalField2, bool crop=true );
 
 /// Generate a new multi-scalar-field with a distribution which is the
 ///   intersection of the two original distributions and a given domain.
@@ -117,10 +118,10 @@ std::unique_ptr<MultiScalarField3D<T> > generateIntersectMultiScalarField (
  *    is false.
  **/
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > generateIntersectMultiScalarField (
-        MultiBlock3D const& originalField1,
-        MultiBlock3D const& originalField2,
-        Box3D const& intersection, bool crop=true );
+std::auto_ptr<MultiScalarField3D<T> > generateIntersectMultiScalarField (
+    MultiBlock3D const& originalField1,
+    MultiBlock3D const& originalField2,
+    Box3D const& intersection, bool crop=true );
 
 /// Generate a new multi-scalar-field with a distribution which is the
 ///   union of the two original distributions.
@@ -131,35 +132,35 @@ std::unique_ptr<MultiScalarField3D<T> > generateIntersectMultiScalarField (
  *    taken from originalField2.
  **/
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > generateJoinMultiScalarField (
-        MultiBlock3D const& originalField1,
-        MultiBlock3D const& originalField2 );
+std::auto_ptr<MultiScalarField3D<T> > generateJoinMultiScalarField (
+    MultiBlock3D const& originalField1,
+    MultiBlock3D const& originalField2 );
 
 /// Generate a new multi-scalar-field with a distribution which is the
-/// the one of the orignal block, but with a new envelopeWidth 
+/// the one of the orignal block, but with a new envelopeWidth
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > extendEnvelopeWidth (
-        MultiScalarField3D<T>& originalBlock, plint envelopeWidth );
+std::auto_ptr<MultiScalarField3D<T> > extendEnvelopeWidth (
+    MultiScalarField3D<T>& originalBlock, plint envelopeWidth );
 
 /// Generate a new multi-scalar-field with a distribution which is the
 ///   union between the original one and an additional block.
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > extend (
-        MultiScalarField3D<T>& originalBlock, Box3D const& addedBlock );
+std::auto_ptr<MultiScalarField3D<T> > extend (
+    MultiScalarField3D<T>& originalBlock, Box3D const& addedBlock );
 
 /// Generate a new multi-scalar-field with a distribution which is the
 ///   union between the original one with exception of the specified block.
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > except (
-        MultiScalarField3D<T>& originalBlock,
-        Box3D const& exceptedBlock );
+std::auto_ptr<MultiScalarField3D<T> > except (
+    MultiScalarField3D<T>& originalBlock,
+    Box3D const& exceptedBlock );
 
 /// Create a clone of the original field with a different block-distribution.
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > redistribute (
-        MultiScalarField3D<T> const& originalField,
-        SparseBlockStructure3D const& newBlockStructure,
-        bool adjustPeriodicity=true );
+std::auto_ptr<MultiScalarField3D<T> > redistribute (
+    MultiScalarField3D<T> const& originalField,
+    SparseBlockStructure3D const& newBlockStructure,
+    bool adjustPeriodicity=true );
 
 /// Create a clone of the original field on the domain of intersection,
 ///   with a different block-distribution.
@@ -167,32 +168,32 @@ std::unique_ptr<MultiScalarField3D<T> > redistribute (
  *    intersection, depending on the parameter crop.
  **/
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > redistribute (
-        MultiScalarField3D<T> const& originalField,
-        SparseBlockStructure3D const& newBlockStructure,
-        Box3D const& intersection, bool crop=true );
+std::auto_ptr<MultiScalarField3D<T> > redistribute (
+    MultiScalarField3D<T> const& originalField,
+    SparseBlockStructure3D const& newBlockStructure,
+    Box3D const& intersection, bool crop=true );
 
 /// Create a clone of the original field, re-distributed in such a way
 ///   that it is aligned with the partner-block, i.e. it can be used
 ///   together with partner-block from within a data processor.
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > align (
-        MultiScalarField3D<T> const& originalBlock,
-        MultiBlock3D const& partnerBlock );
+std::auto_ptr<MultiScalarField3D<T> > align (
+    MultiScalarField3D<T> const& originalBlock,
+    MultiBlock3D const& partnerBlock );
 
 /// Create a clone of the original field, on a new regular distribution.
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > reparallelize (
-        MultiScalarField3D<T> const& originalBlock );
+std::auto_ptr<MultiScalarField3D<T> > reparallelize (
+    MultiScalarField3D<T> const& originalBlock );
 
 /// Create a clone of the original field, on a new regular distribution.
 /** The parameters blockLx, blockLy, and blockLz indicate the approximate size of the
  *  blocks.
  **/
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > reparallelize (
-        MultiScalarField3D<T> const& originalBlock,
-        plint blockLx, plint blockLy, plint blockLz );
+std::auto_ptr<MultiScalarField3D<T> > reparallelize (
+    MultiScalarField3D<T> const& originalBlock,
+    plint blockLx, plint blockLy, plint blockLz );
 
 
 /* *************** 2. MultiNTensorField ************************************** */
@@ -202,12 +203,12 @@ std::unique_ptr<MultiScalarField3D<T> > reparallelize (
 ///   object, which includes stuff like block-distribution, parallelization,
 ///   envelope-width, etc.
 template<typename T>
-std::unique_ptr<MultiNTensorField3D<T> > defaultGenerateMultiNTensorField3D (
-        MultiBlockManagement3D const& management, plint nDim=1 );
+std::auto_ptr<MultiNTensorField3D<T> > defaultGenerateMultiNTensorField3D (
+    MultiBlockManagement3D const& management, plint nDim=1 );
 
 template<typename T>
 MultiNTensorField3D<T>* generateMultiNTensorField3D (
-        MultiBlock3D& multiBlock, plint envelopeWidth, plint ndim );
+    MultiBlock3D& multiBlock, plint envelopeWidth, plint ndim );
 
 template<typename T>
 MultiNTensorField3D<T>* generateMultiNTensorField3D(Box3D const& domain, plint ndim);
@@ -221,7 +222,7 @@ MultiNTensorField3D<T>* generateMultiNTensorField3D(Box3D const& domain, plint n
  **/
 template<typename T>
 MultiNTensorField3D<T>* clone (
-        MultiNTensorField3D<T>& originalField, Box3D const& subDomain, bool crop=true );
+    MultiNTensorField3D<T>& originalField, Box3D const& subDomain, bool crop=true );
 
 /// Generate a new multi-tensor-field with same distribution as original block,
 ///   but intersected with a given domain.
@@ -231,20 +232,20 @@ MultiNTensorField3D<T>* clone (
  **/
 template<typename T>
 MultiNTensorField3D<T>* generateMultiNTensorField (
-        MultiBlock3D const& originalField, Box3D const& intersection,
-        plint nDim, bool crop=true );
+    MultiBlock3D const& originalField, Box3D const& intersection,
+    plint nDim, bool crop=true );
 
 template<typename T1, typename T2>
 MultiNTensorField3D<T2>*
-    generateNTensorFieldFromNTensor3D (
-            MultiNTensorField3D<T1> const& field,
-            Box3D const& intersection, plint nDim );
+generateNTensorFieldFromNTensor3D (
+    MultiNTensorField3D<T1> const& field,
+    Box3D const& intersection, plint nDim );
 
 template<typename T1, typename T2, template<typename U> class Descriptor>
 MultiNTensorField3D<T1>*
-    generateNTensorFieldFromBlockLattice3D (
-            MultiBlockLattice3D<T2,Descriptor> const& lattice,
-            Box3D const& intersection, plint nDim );
+generateNTensorFieldFromBlockLattice3D (
+    MultiBlockLattice3D<T2,Descriptor> const& lattice,
+    Box3D const& intersection, plint nDim );
 
 /// Generate a new multi-tensor-field with a distribution which is the
 ///   intersection of the two original distributions.
@@ -256,9 +257,9 @@ MultiNTensorField3D<T1>*
  **/
 template<typename T>
 MultiNTensorField3D<T>* generateIntersectMultiNTensorField (
-        MultiBlock3D const& originalField1,
-        MultiBlock3D const& originalField2,
-        plint nDim, bool crop=true );
+    MultiBlock3D const& originalField1,
+    MultiBlock3D const& originalField2,
+    plint nDim, bool crop=true );
 
 /// Generate a new multi-tensor-field with a distribution which is the
 ///   intersection of the two original distributions and a given domain.
@@ -271,9 +272,9 @@ MultiNTensorField3D<T>* generateIntersectMultiNTensorField (
  **/
 template<typename T>
 MultiNTensorField3D<T>* generateIntersectMultiNTensorField (
-        MultiBlock3D const& originalField1,
-        MultiBlock3D const& originalField2,
-        Box3D const& intersection, plint nDim,  bool crop=true );
+    MultiBlock3D const& originalField1,
+    MultiBlock3D const& originalField2,
+    Box3D const& intersection, plint nDim,  bool crop=true );
 
 /// Generate a new multi-tensor-field with a distribution which is the
 ///   union of the two original distributions.
@@ -285,41 +286,41 @@ MultiNTensorField3D<T>* generateIntersectMultiNTensorField (
  **/
 template<typename T>
 MultiNTensorField3D<T>* generateJoinMultiNTensorField (
-        MultiBlock3D const& originalField1,
-        MultiBlock3D const& originalField2,
-        plint nDim );
+    MultiBlock3D const& originalField1,
+    MultiBlock3D const& originalField2,
+    plint nDim );
 
 /// Generate a new multi-NTensor-field with a distribution which is the
-/// the one of the orignal block, but with a new envelopeWidth 
+/// the one of the orignal block, but with a new envelopeWidth
 template<typename T>
-std::unique_ptr<MultiNTensorField3D<T> > extendEnvelopeWidth (
-        MultiNTensorField3D<T>& originalBlock, plint envelopeWidth );
+std::auto_ptr<MultiNTensorField3D<T> > extendEnvelopeWidth (
+    MultiNTensorField3D<T>& originalBlock, plint envelopeWidth );
 
 /// Generate a new multi-ntensor-field with a distribution which is the
 ///   union between the original one and an additional block.
 template<typename T>
 MultiNTensorField3D<T>* extend (
-        MultiNTensorField3D<T>& originalBlock, Box3D const& addedBlock );
+    MultiNTensorField3D<T>& originalBlock, Box3D const& addedBlock );
 
 /// Generate a new multi-ntensor-field with a distribution which is the
 ///   union between the original one with exception of the specified block.
 template<typename T>
 MultiNTensorField3D<T>* except (
-        MultiNTensorField3D<T>& originalBlock,
-        Box3D const& exceptedBlock );
+    MultiNTensorField3D<T>& originalBlock,
+    Box3D const& exceptedBlock );
 
 /// Create a clone of the original field, re-distributed in such a way
 ///   that it is aligned with the partner-block, i.e. it can be used
 ///   together with partner-block from within a data processor.
 template<typename T>
 MultiNTensorField3D<T>* align (
-        MultiNTensorField3D<T> const& originalBlock,
-        MultiBlock3D const& partnerBlock );
+    MultiNTensorField3D<T> const& originalBlock,
+    MultiBlock3D const& partnerBlock );
 
 /// Create a clone of the original field, on a new regular distribution.
 template<typename T>
 MultiNTensorField3D<T>* reparallelize (
-        MultiNTensorField3D<T> const& originalBlock );
+    MultiNTensorField3D<T> const& originalBlock );
 
 /// Create a clone of the original field, on a new regular distribution.
 /** The parameters blockLx, blockLy, and blockLz indicate the approximate size of the
@@ -327,8 +328,8 @@ MultiNTensorField3D<T>* reparallelize (
  **/
 template<typename T>
 MultiNTensorField3D<T>* reparallelize (
-        MultiNTensorField3D<T> const& originalBlock,
-        plint blockLx, plint blockLy, plint blockLz );
+    MultiNTensorField3D<T> const& originalBlock,
+    plint blockLx, plint blockLy, plint blockLz );
 
 
 /* *************** 3. MultiTensorField ************************************** */
@@ -337,35 +338,35 @@ MultiNTensorField3D<T>* reparallelize (
 ///   constructor, this factory function takes a full bounding-box, as well
 ///   as the envelope-width, as arguments.
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > generateMultiTensorField (
-        Box3D boundingBox, plint envelopeWidth=1 );
+std::auto_ptr<MultiTensorField3D<T,nDim> > generateMultiTensorField (
+    Box3D boundingBox, plint envelopeWidth=1 );
 
 /// Generate a multi-tensor-field from scratch. As opposed to the standard
 ///   constructor, this factory function takes a full bounding-box, as well
 ///   as the envelope-width, as arguments.
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > generateMultiTensorField (
-        Box3D boundingBox, Array<T,nDim> const& iniVal, plint envelopeWidth=1 );
+std::auto_ptr<MultiTensorField3D<T,nDim> > generateMultiTensorField (
+    Box3D boundingBox, Array<T,nDim> const& iniVal, plint envelopeWidth=1 );
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > generateMultiTensorField (
-        MultiBlock3D& multiBlock, plint envelopeWidth );
+std::auto_ptr<MultiTensorField3D<T,nDim> > generateMultiTensorField (
+    MultiBlock3D& multiBlock, plint envelopeWidth );
 
 /// Generate a multi-tensor-field from scratch. As opposed to the standard
 ///   constructor, this factory function takes the explicit block-management
 ///   object, which includes stuff like block-distribution, parallelization,
 ///   envelope-width, etc. A default dummy argument is used for technical reasons.
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > defaultGenerateMultiTensorField3D (
-        MultiBlockManagement3D const& management, plint unnamedDummyArg=1 );
+std::auto_ptr<MultiTensorField3D<T,nDim> > defaultGenerateMultiTensorField3D (
+    MultiBlockManagement3D const& management, plint unnamedDummyArg=1 );
 
 /// Create a clone of a MultiTensorField (or of a sub-domain).
 /** This cannot be handled through a data processor, because the internal data
  *  processors of the tensor-field must be cloned as well.
  **/
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > clone (
-        MultiTensorField3D<T,nDim>& originalField, Box3D const& subDomain, bool crop=true );
+std::auto_ptr<MultiTensorField3D<T,nDim> > clone (
+    MultiTensorField3D<T,nDim>& originalField, Box3D const& subDomain, bool crop=true );
 
 /// Generate a new multi-tensor-field with same distribution as original block,
 ///   but intersected with a given domain.
@@ -374,9 +375,9 @@ std::unique_ptr<MultiTensorField3D<T,nDim> > clone (
  *    intersection, depending on the parameter crop.
  **/
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > generateMultiTensorField (
-        MultiBlock3D const& originalField, Box3D const& intersection,
-        bool crop=true );
+std::auto_ptr<MultiTensorField3D<T,nDim> > generateMultiTensorField (
+    MultiBlock3D const& originalField, Box3D const& intersection,
+    bool crop=true );
 
 /// Generate a new multi-tensor-field with a distribution which is the
 ///   intersection of the two original distributions.
@@ -387,9 +388,9 @@ std::unique_ptr<MultiTensorField3D<T,nDim> > generateMultiTensorField (
  *    the bound around the original ones if "crop" is false.
  **/
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > generateIntersectMultiTensorField (
-        MultiBlock3D const& originalField1,
-        MultiBlock3D const& originalField2, bool crop=true );
+std::auto_ptr<MultiTensorField3D<T,nDim> > generateIntersectMultiTensorField (
+    MultiBlock3D const& originalField1,
+    MultiBlock3D const& originalField2, bool crop=true );
 
 /// Generate a new multi-tensor-field with a distribution which is the
 ///   intersection of the two original distributions and a given domain.
@@ -401,10 +402,10 @@ std::unique_ptr<MultiTensorField3D<T,nDim> > generateIntersectMultiTensorField (
  *    is false.
  **/
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > generateIntersectMultiTensorField (
-        MultiBlock3D const& originalField1,
-        MultiBlock3D const& originalField2,
-        Box3D const& intersection, bool crop=true );
+std::auto_ptr<MultiTensorField3D<T,nDim> > generateIntersectMultiTensorField (
+    MultiBlock3D const& originalField1,
+    MultiBlock3D const& originalField2,
+    Box3D const& intersection, bool crop=true );
 
 /// Generate a new multi-tensor-field with a distribution which is the
 ///   union of the two original distributions.
@@ -415,35 +416,35 @@ std::unique_ptr<MultiTensorField3D<T,nDim> > generateIntersectMultiTensorField (
  *    taken from originalField2.
  **/
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > generateJoinMultiTensorField (
-        MultiBlock3D const& originalField1,
-        MultiBlock3D const& originalField2 );
+std::auto_ptr<MultiTensorField3D<T,nDim> > generateJoinMultiTensorField (
+    MultiBlock3D const& originalField1,
+    MultiBlock3D const& originalField2 );
 
 /// Generate a new multi-tensor-field with a distribution which is the
-/// the one of the orignal block, but with a new envelopeWidth 
+/// the one of the orignal block, but with a new envelopeWidth
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T, nDim> > extendEnvelopeWidth (
-        MultiTensorField3D<T, nDim>& originalBlock, plint envelopeWidth );
+std::auto_ptr<MultiTensorField3D<T, nDim> > extendEnvelopeWidth (
+    MultiTensorField3D<T, nDim>& originalBlock, plint envelopeWidth );
 
 /// Generate a new multi-tensor-field with a distribution which is the
 ///   union between the original one and an additional block.
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > extend (
-        MultiTensorField3D<T,nDim>& originalBlock, Box3D const& addedBlock );
+std::auto_ptr<MultiTensorField3D<T,nDim> > extend (
+    MultiTensorField3D<T,nDim>& originalBlock, Box3D const& addedBlock );
 
 /// Generate a new multi-tensor-field with a distribution which is the
 ///   union between the original one with exception of the specified block.
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > except (
-        MultiTensorField3D<T,nDim>& originalBlock,
-        Box3D const& exceptedBlock );
+std::auto_ptr<MultiTensorField3D<T,nDim> > except (
+    MultiTensorField3D<T,nDim>& originalBlock,
+    Box3D const& exceptedBlock );
 
 /// Create a clone of the original field with a different block-distribution.
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > redistribute (
-        MultiTensorField3D<T,nDim> const& originalField,
-        SparseBlockStructure3D const& newBlockStructure,
-        bool adjustPeriodicity=true );
+std::auto_ptr<MultiTensorField3D<T,nDim> > redistribute (
+    MultiTensorField3D<T,nDim> const& originalField,
+    SparseBlockStructure3D const& newBlockStructure,
+    bool adjustPeriodicity=true );
 
 /// Create a clone of the original field on the domain of intersection,
 ///   with a different block-distribution.
@@ -451,32 +452,32 @@ std::unique_ptr<MultiTensorField3D<T,nDim> > redistribute (
  *    intersection, depending on the parameter crop.
  **/
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > redistribute (
-        MultiTensorField3D<T,nDim> const& originalField,
-        SparseBlockStructure3D const& newBlockStructure,
-        Box3D const& intersection, bool crop=true );
+std::auto_ptr<MultiTensorField3D<T,nDim> > redistribute (
+    MultiTensorField3D<T,nDim> const& originalField,
+    SparseBlockStructure3D const& newBlockStructure,
+    Box3D const& intersection, bool crop=true );
 
 /// Create a clone of the original field, re-distributed in such a way
 ///   that it is aligned with the partner-block, i.e. it can be used
 ///   together with partner-block from within a data processor.
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > align (
-        MultiTensorField3D<T,nDim> const& originalBlock,
-        MultiBlock3D const& partnerBlock );
+std::auto_ptr<MultiTensorField3D<T,nDim> > align (
+    MultiTensorField3D<T,nDim> const& originalBlock,
+    MultiBlock3D const& partnerBlock );
 
 /// Create a clone of the original field, on a new regular distribution.
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > reparallelize (
-        MultiTensorField3D<T,nDim> const& originalBlock );
+std::auto_ptr<MultiTensorField3D<T,nDim> > reparallelize (
+    MultiTensorField3D<T,nDim> const& originalBlock );
 
 /// Create a clone of the original field, on a new regular distribution.
 /** The parameters blockLx, blockLy, and blockLz indicate the approximate size of the
  *  blocks.
  **/
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > reparallelize (
-        MultiTensorField3D<T,nDim> const& originalBlock,
-        plint blockLx, plint blockLy, plint blockLz);
+std::auto_ptr<MultiTensorField3D<T,nDim> > reparallelize (
+    MultiTensorField3D<T,nDim> const& originalBlock,
+    plint blockLx, plint blockLy, plint blockLz);
 
 
 /* *************** 4. MultiBlockLattice ************************************** */
@@ -485,39 +486,39 @@ std::unique_ptr<MultiTensorField3D<T,nDim> > reparallelize (
 ///   constructor, this factory function takes a full bounding-box, as well
 ///   as the envelope-width, as arguments.
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > generateMultiBlockLattice (
-        Box3D boundingBox, Dynamics<T,Descriptor>* backgroundDynamics, plint envelopeWidth=1 );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > generateMultiBlockLattice (
+    Box3D boundingBox, Dynamics<T,Descriptor>* backgroundDynamics, plint envelopeWidth=1 );
 
 /// Generate a multi-block-lattice from scratch. As opposed to the standard
 ///   constructor, this factory function takes the explicit block-management
 ///   object, which includes stuff like block-distribution, parallelization,
 ///   envelope-width, etc. A default dummy argument is used for technical reasons.
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > defaultGenerateMultiBlockLattice3D (
-        MultiBlockManagement3D const& management, plint unnamedDummyArg=1 );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > defaultGenerateMultiBlockLattice3D (
+    MultiBlockManagement3D const& management, plint unnamedDummyArg=1 );
 
 /// Generate a multi-block-lattice from scratch. As opposed to the standard
 ///   constructor, this factory function takes the explicit block-management
 ///   object, which includes stuff like block-distribution, parallelization,
 ///   envelope-width, etc. An optional background dynamics is also provided.
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > generateMultiBlockLattice (
-        MultiBlockManagement3D const& management,
-        Dynamics<T,Descriptor>* backgroundDynamics=0 );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > generateMultiBlockLattice (
+    MultiBlockManagement3D const& management,
+    Dynamics<T,Descriptor>* backgroundDynamics=new NoDynamics<T,Descriptor> );
 
 /// Create a clone of a MultiBlockLattice (or of a sub-domain).
 /** This cannot be handled through a data processor, because the internal data
  *  processors of the block-lattice must be cloned as well.
  **/
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > clone (
-        MultiBlockLattice3D<T,Descriptor>& originalLattice,
-        Box3D const& subDomain, bool crop=true );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > clone (
+    MultiBlockLattice3D<T,Descriptor>& originalLattice,
+    Box3D const& subDomain, bool crop=true );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > generateMultiBlockLattice (
-        MultiBlock3D& multiBlock, plint envelopeWidth,
-        Dynamics<T,Descriptor>* backgroundDynamics=0 );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > generateMultiBlockLattice (
+    MultiBlock3D& multiBlock, plint envelopeWidth,
+    Dynamics<T,Descriptor>* backgroundDynamics=new NoDynamics<T,Descriptor> );
 
 /// Generate a new multi-block-lattice with same distribution as original block,
 ///   but intersected with a given domain.
@@ -526,9 +527,9 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > generateMultiBlockLattice (
  *    intersection, depending on the parameter crop.
  **/
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > generateMultiBlockLattice (
-        MultiBlock3D const& originalBlock, Box3D const& intersection,
-        bool crop=true );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > generateMultiBlockLattice (
+    MultiBlock3D const& originalBlock, Box3D const& intersection,
+    bool crop=true );
 
 /// Generate a new multi-block-lattice with a distribution which is the
 ///   intersection of the two original distributions.
@@ -539,9 +540,9 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > generateMultiBlockLattice (
  *    the bound around the original ones if "crop" is false.
  **/
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > generateIntersectMultiBlockLattice (
-        MultiBlock3D const& originalBlock1,
-        MultiBlock3D const& originalBlock2, bool crop=true );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > generateIntersectMultiBlockLattice (
+    MultiBlock3D const& originalBlock1,
+    MultiBlock3D const& originalBlock2, bool crop=true );
 
 /// Generate a new multi-block-lattice with a distribution which is the
 ///   intersection of the two original distributions and a given domain.
@@ -553,10 +554,10 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > generateIntersectMultiBlockL
  *    is false.
  **/
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > generateIntersectMultiBlockLattice (
-        MultiBlock3D const& originalBlock1,
-        MultiBlock3D const& originalBlock2,
-        Box3D const& intersection, bool crop=true );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > generateIntersectMultiBlockLattice (
+    MultiBlock3D const& originalBlock1,
+    MultiBlock3D const& originalBlock2,
+    Box3D const& intersection, bool crop=true );
 
 /// Generate a new multi-block-lattice with a distribution which is the
 ///   union of the two original distributions.
@@ -567,29 +568,29 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > generateIntersectMultiBlockL
  *    taken from originalBlock2.
  **/
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > generateJoinMultiBlockLattice (
-        MultiBlock3D const& originalBlock1,
-        MultiBlock3D const& originalBlock2 );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > generateJoinMultiBlockLattice (
+    MultiBlock3D const& originalBlock1,
+    MultiBlock3D const& originalBlock2 );
 
 /// Generate a new multi-block-lattice with a distribution which is the
 ///   union between the original one and an additional block.
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > extend (
-        MultiBlockLattice3D<T,Descriptor>& originalBlock, Box3D const& addedBlock );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > extend (
+    MultiBlockLattice3D<T,Descriptor>& originalBlock, Box3D const& addedBlock );
 
 /// Generate a new multi-block-lattice with a distribution which is the
 ///   union between the original one with exception of the specified block.
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > except (
-        MultiBlockLattice3D<T,Descriptor>& originalBlock,
-        Box3D const& exceptedBlock );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > except (
+    MultiBlockLattice3D<T,Descriptor>& originalBlock,
+    Box3D const& exceptedBlock );
 
 /// Create a clone of the original lattice with a different block-distribution.
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T, Descriptor> > redistribute (
-        MultiBlockLattice3D<T, Descriptor> const& originalBlock,
-        SparseBlockStructure3D const& newBlockStructure,
-        bool adjustPeriodicity=true );
+std::auto_ptr<MultiBlockLattice3D<T, Descriptor> > redistribute (
+    MultiBlockLattice3D<T, Descriptor> const& originalBlock,
+    SparseBlockStructure3D const& newBlockStructure,
+    bool adjustPeriodicity=true );
 
 /// Create a clone of the original lattice on the domain of intersection,
 ///   with a different block-distribution.
@@ -597,32 +598,32 @@ std::unique_ptr<MultiBlockLattice3D<T, Descriptor> > redistribute (
  *    intersection, depending on the parameter crop.
  **/
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T, Descriptor> > redistribute (
-        MultiBlockLattice3D<T, Descriptor> const& originalBlock,
-        SparseBlockStructure3D const& newBlockStructure,
-        Box3D const& intersection, bool crop=true );
+std::auto_ptr<MultiBlockLattice3D<T, Descriptor> > redistribute (
+    MultiBlockLattice3D<T, Descriptor> const& originalBlock,
+    SparseBlockStructure3D const& newBlockStructure,
+    Box3D const& intersection, bool crop=true );
 
 /// Create a clone of the original lattice, re-distributed in such a way
 ///   that it is aligned with the partner-block, i.e. it can be used
 ///   together with partner-block from within a data processor.
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T, Descriptor> > align (
-        MultiBlockLattice3D<T, Descriptor> const& originalBlock,
-        MultiBlock3D const& partnerBlock );
+std::auto_ptr<MultiBlockLattice3D<T, Descriptor> > align (
+    MultiBlockLattice3D<T, Descriptor> const& originalBlock,
+    MultiBlock3D const& partnerBlock );
 
 /// Create a clone of the original lattice, on a new regular distribution.
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T, Descriptor> > reparallelize (
-        MultiBlockLattice3D<T, Descriptor> const& originalBlock );
+std::auto_ptr<MultiBlockLattice3D<T, Descriptor> > reparallelize (
+    MultiBlockLattice3D<T, Descriptor> const& originalBlock );
 
 /// Create a clone of the original lattice, on a new regular distribution.
 /** The parameters blockLx, blockLy, and blockLz indicate the approximate size of the
  *  blocks.
  **/
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T, Descriptor> > reparallelize (
-        MultiBlockLattice3D<T, Descriptor> const& originalBlock,
-        plint blockLx, plint blockLy, plint blockLz);
+std::auto_ptr<MultiBlockLattice3D<T, Descriptor> > reparallelize (
+    MultiBlockLattice3D<T, Descriptor> const& originalBlock,
+    plint blockLx, plint blockLy, plint blockLz);
 
 /* *************** 4. MultiParticleField ************************************ */
 
@@ -630,39 +631,39 @@ std::unique_ptr<MultiBlockLattice3D<T, Descriptor> > reparallelize (
 ///   constructor, this factory function takes a full bounding-box, as well
 ///   as the envelope-width, as arguments.
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > generateMultiDenseParticleField (
-        Box3D boundingBox, plint envelopeWidth=1 );
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > generateMultiDenseParticleField (
+    Box3D boundingBox, plint envelopeWidth=1 );
 
 template<typename T, template<typename U> class Descriptor, class ParticleFieldT>
-std::unique_ptr<MultiParticleField3D<ParticleFieldT> > generateMultiParticleField3D (
-        Box3D boundingBox, plint envelopeWidth=1 );
+std::auto_ptr<MultiParticleField3D<ParticleFieldT> > generateMultiParticleField3D (
+    Box3D boundingBox, plint envelopeWidth=1 );
 
 template<typename T, template<typename U> class Descriptor, class ParticleFieldT>
-std::unique_ptr<MultiParticleField3D<ParticleFieldT> > generateMultiParticleField3D (
-        MultiBlock3D& multiBlock, plint envelopeWidth );
+std::auto_ptr<MultiParticleField3D<ParticleFieldT> > generateMultiParticleField3D (
+    MultiBlock3D& multiBlock, plint envelopeWidth );
 
 template<typename T, template<typename U> class Descriptor, class ParticleFieldT>
-std::unique_ptr<MultiParticleField3D<ParticleFieldT> > generateMultiParticleField3D (
-        MultiBlockManagement3D const& management, PeriodicitySwitch3D const& periodicity,
-        plint envelopeWidth );
+std::auto_ptr<MultiParticleField3D<ParticleFieldT> > generateMultiParticleField3D (
+    MultiBlockManagement3D const& management, PeriodicitySwitch3D const& periodicity,
+    plint envelopeWidth );
 
 template<typename T, template<typename U> class Descriptor, class ParticleFieldT>
-std::unique_ptr<MultiParticleField3D<ParticleFieldT> > generateMultiParticleField3D (
-        MultiBlockManagement3D const& management, plint envelopeWidth );
+std::auto_ptr<MultiParticleField3D<ParticleFieldT> > generateMultiParticleField3D (
+    MultiBlockManagement3D const& management, plint envelopeWidth );
 
 /* *************** 5. MultiContainerBlock ************************************ */
 
-std::unique_ptr<MultiContainerBlock3D> generateMultiContainerBlock (
-        MultiBlock3D& multiBlock, plint envelopeWidth );
+std::auto_ptr<MultiContainerBlock3D> generateMultiContainerBlock (
+    MultiBlock3D& multiBlock, plint envelopeWidth );
 
 MultiContainerBlock3D* createMultiContainerBlock3D (
-        MultiBlockManagement3D const& management,
-        PeriodicitySwitch3D const& periodicity,
-        plint envelopeWidth, plint gridLevel );
+    MultiBlockManagement3D const& management,
+    PeriodicitySwitch3D const& periodicity,
+    plint envelopeWidth, plint gridLevel );
 
 MultiContainerBlock3D* createMultiContainerBlock3D (
-        MultiBlockManagement3D const& management,
-        plint envelopeWidth, plint gridLevel );
+    MultiBlockManagement3D const& management,
+    plint envelopeWidth, plint gridLevel );
 
 /* *************** General Functions **************************************** */
 

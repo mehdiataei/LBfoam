@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,44 +34,43 @@
 #include "parallelism/sendRecvPool.h"
 
 
-namespace plb {
+namespace plb
+{
 /// Determine pairs of domains associated to a data transfer between domains on two blocks.
 /** It is assumed that the two domains have the same extent.
  **/
 std::vector<Overlap3D> copyDomainDataTransfer (
-                           SparseBlockStructure2D const& block1, Box2D block1Domain,
-                           SparseBlockStructure3D const& block2, Box3D block2Domain );
+    SparseBlockStructure2D const& block1, Box2D block1Domain,
+    SparseBlockStructure3D const& block2, Box3D block2Domain );
 
 std::vector<Overlap3D> copyDomainDataTransfer (
-                           SparseBlockStructure3D const& block1, Box3D block1Domain,
-                           SparseBlockStructure2D const& block2, Box2D block2Domain );
+    SparseBlockStructure3D const& block1, Box3D block1Domain,
+    SparseBlockStructure2D const& block2, Box2D block2Domain );
 
-struct CommunicationStructure2D_3D
-{
-    CommunicationStructure2D_3D (
-            std::vector<Overlap3D> const& overlaps,
-            MultiBlockManagement2D const& originManagement,
-            MultiBlockManagement3D const& destinationManagement,
-            plint sizeOfCell );
-    CommunicationPackage3D sendPackage;
-    CommunicationPackage3D recvPackage;
-    CommunicationPackage3D sendRecvPackage;
-    SendPoolCommunicator sendComm;
-    RecvPoolCommunicator recvComm;
+struct CommunicationStructure2D_3D {
+	CommunicationStructure2D_3D (
+	    std::vector<Overlap3D> const& overlaps,
+	    MultiBlockManagement2D const& originManagement,
+	    MultiBlockManagement3D const& destinationManagement,
+	    plint sizeOfCell );
+	CommunicationPackage3D sendPackage;
+	CommunicationPackage3D recvPackage;
+	CommunicationPackage3D sendRecvPackage;
+	SendPoolCommunicator sendComm;
+	RecvPoolCommunicator recvComm;
 };
 
-struct CommunicationStructure3D_2D
-{
-    CommunicationStructure3D_2D (
-            std::vector<Overlap3D> const& overlaps,
-            MultiBlockManagement3D const& originManagement,
-            MultiBlockManagement2D const& destinationManagement,
-            plint sizeOfCell );
-    CommunicationPackage3D sendPackage;
-    CommunicationPackage3D recvPackage;
-    CommunicationPackage3D sendRecvPackage;
-    SendPoolCommunicator sendComm;
-    RecvPoolCommunicator recvComm;
+struct CommunicationStructure3D_2D {
+	CommunicationStructure3D_2D (
+	    std::vector<Overlap3D> const& overlaps,
+	    MultiBlockManagement3D const& originManagement,
+	    MultiBlockManagement2D const& destinationManagement,
+	    plint sizeOfCell );
+	CommunicationPackage3D sendPackage;
+	CommunicationPackage3D recvPackage;
+	CommunicationPackage3D sendRecvPackage;
+	SendPoolCommunicator sendComm;
+	RecvPoolCommunicator recvComm;
 };
 
 /// Inter-domain copy between two generic fields.
@@ -81,11 +80,11 @@ struct CommunicationStructure3D_2D
  *  The two blocks must be of same kind. This condition is enforced by an assertion.
  **/
 void copy_generic (
-        MultiBlock2D const& from, Box2D const& fromDomain,
-        MultiBlock3D& to, Box3D const& toDomain, modif::ModifT typeOfModif );
+    MultiBlock2D const& from, Box2D const& fromDomain,
+    MultiBlock3D& to, Box3D const& toDomain, modif::ModifT typeOfModif );
 void copy_generic (
-        MultiBlock3D const& from, Box3D const& fromDomain,
-        MultiBlock2D& to, Box2D const& toDomain, modif::ModifT typeOfModif );
+    MultiBlock3D const& from, Box3D const& fromDomain,
+    MultiBlock2D& to, Box2D const& toDomain, modif::ModifT typeOfModif );
 
 /// Inter-domain copy between two scalar-fields.
 /** The two blocks are not required to have same parallelization. If the two
@@ -94,18 +93,18 @@ void copy_generic (
  **/
 template<typename T>
 void copy (
-        MultiScalarField2D<T> const& from, Box2D const& fromDomain,
-        MultiScalarField3D<T>& to, Box3D const& toDomain )
+    MultiScalarField2D<T> const& from, Box2D const& fromDomain,
+    MultiScalarField3D<T>& to, Box3D const& toDomain )
 {
-    copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
+	copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
 }
 
 template<typename T>
 void copy (
-        MultiScalarField3D<T> const& from, Box3D const& fromDomain,
-        MultiScalarField2D<T>& to, Box2D const& toDomain )
+    MultiScalarField3D<T> const& from, Box3D const& fromDomain,
+    MultiScalarField2D<T>& to, Box2D const& toDomain )
 {
-    copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
+	copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
 }
 
 /// Inter-domain copy between two ntensor-fields.
@@ -115,17 +114,17 @@ void copy (
  **/
 template<typename T>
 void copy (
-        MultiNTensorField2D<T> const& from, Box2D const& fromDomain,
-        MultiNTensorField3D<T>& to, Box3D const& toDomain )
+    MultiNTensorField2D<T> const& from, Box2D const& fromDomain,
+    MultiNTensorField3D<T>& to, Box3D const& toDomain )
 {
-    copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
+	copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
 }
 template<typename T>
 void copy (
-        MultiNTensorField3D<T> const& from, Box3D const& fromDomain,
-        MultiNTensorField2D<T>& to, Box2D const& toDomain )
+    MultiNTensorField3D<T> const& from, Box3D const& fromDomain,
+    MultiNTensorField2D<T>& to, Box2D const& toDomain )
 {
-    copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
+	copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
 }
 
 
@@ -136,17 +135,17 @@ void copy (
  **/
 template<typename T, int nDim>
 void copy (
-        MultiTensorField2D<T,nDim> const& from, Box2D const& fromDomain,
-        MultiTensorField3D<T,nDim>& to, Box3D const& toDomain )
+    MultiTensorField2D<T,nDim> const& from, Box2D const& fromDomain,
+    MultiTensorField3D<T,nDim>& to, Box3D const& toDomain )
 {
-    copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
+	copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
 }
 template<typename T, int nDim>
 void copy (
-        MultiTensorField3D<T,nDim> const& from, Box3D const& fromDomain,
-        MultiTensorField2D<T,nDim>& to, Box2D const& toDomain )
+    MultiTensorField3D<T,nDim> const& from, Box3D const& fromDomain,
+    MultiTensorField2D<T,nDim>& to, Box2D const& toDomain )
 {
-    copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
+	copy_generic(from, fromDomain, to, toDomain, modif::staticVariables);
 }
 
 } // namespace plb

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,10 +29,11 @@
 #include "multiBlock/serialMultiDataField3D.h"
 #include "multiBlock/serialMultiDataField3D.hh"
 
-namespace plb {
+namespace plb
+{
 
-    template class SerialNTensorAccess3D<PRECOMP_T>;
+template class SerialNTensorAccess3D<PRECOMP_T>;
 
-    template class SerialScalarAccess3D<PRECOMP_T>;
+template class SerialScalarAccess3D<PRECOMP_T>;
 
 }

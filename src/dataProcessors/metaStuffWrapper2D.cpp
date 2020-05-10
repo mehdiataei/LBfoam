@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -40,15 +40,17 @@
 #include "multiBlock/multiContainerBlock2D.h"
 
 
-namespace plb {
+namespace plb
+{
 
-bool allFlagsTrue(MultiBlock2D* multiBlock) {
+bool allFlagsTrue(MultiBlock2D* multiBlock)
+{
     std::vector<MultiBlock2D*> singleBlockVector;
     singleBlockVector.push_back(multiBlock);
     AllFlagsTrueFunctional2D functional;
     applyProcessingFunctional (
-            functional, multiBlock->getBoundingBox(),
-            singleBlockVector );
+        functional, multiBlock->getBoundingBox(),
+        singleBlockVector );
     return functional.allTrue();
 }
 

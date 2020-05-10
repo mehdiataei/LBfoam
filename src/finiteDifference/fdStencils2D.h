@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,72 +31,74 @@
 #include "atomicBlock/blockLattice2D.h"
 #include "atomicBlock/blockLattice3D.h"
 
-namespace plb {
+namespace plb
+{
 
-namespace fd {
+namespace fd
+{
 
-    /// Fourth order central 2d-interpolation (a_p1p1=a(x+1/2,y+1/2), a_m2m2=a(x-3/2,y-3/2)), returns a(x)
-    template<typename T>
-    inline T centralSixteenPointsInterp(T a_m2m2, T a_m2m1, T a_m2p1, T a_m2p2, 
-                                        T a_m1m2, T a_m1m1, T a_m1p1, T a_m1p2, 
-                                        T a_p1m2, T a_p1m1, T a_p1p1, T a_p1p2, 
-                                        T a_p2m2, T a_p2m1, T a_p2p1, T a_p2p2) 
-    {
-        //   o --- o --- o --- o // a_m2p2  a_m1p2    a_p1p2  a_p2p2
-        
-        //   o --- o --- o --- o // a_m2p1  a_m1p1    a_p1p1  a_p2p1
-        //   ---------x--------- // 
-        //   o --- o --- o --- o // a_m2m1  a_m1m1    a_p1m1  a_p2m1
-        
-        //   o --- o --- o --- o // a_m2m2  a_m1m2    a_p1m2  a_p2m2
-        
-        T distTwo = -(T)9/(T)256*(a_m2m1 + a_m2p1 + a_m1m2 + a_m1p2 + a_p1m2 + a_p1p2 + a_p2m1 + a_p2p1);
-        T distThree = (T)1/(T)256*(a_m2m2 + a_m2p2 + a_p2p2 + a_p2m2);
-        T distOne = (T)81/(T)256*(a_p1p1 + a_m1p1 + a_m1m1 + a_p1m1);
-        
-        return distTwo + distThree + distOne;
-    }
-    
-    /// Third order central 2d-interpolation (a_p1p1=a(x+1/2,y+1/2), a_m2p1=a(x-3/2,y+1/2)), returns a(x)
-    template<typename T>
-    inline T asymTwelvePointsInterp(T a_m2m1, T a_m2p1, T a_m2p2, 
-                                    T a_m1m1, T a_m1p1, T a_m1p2, 
-                                    T a_p1m1, T a_p1p1, T a_p1p2, 
-                                    T a_p2m1, T a_p2p1, T a_p2p2) 
-    {
-        //   o --- o --- o --- o // a_m2p2  a_m1p2    a_p1p2  a_p2p2
-         
-        //   o --- o --- o --- o // a_m2p1  a_m1p1    a_p1p1  a_p2p1
-        //   ---------x--------- //
-        //   o --- o --- o --- o // a_m2m1  a_m1m1    a_p1m1  a_p2m1
-        
-        return  (T)1/(T)128  * (a_m2p2+a_p2p2)
-               -(T)3/(T)128  * (a_m2m1+a_p2m1)
-               -(T)3/(T)64   * (a_m2p1+a_p2p1)
-               -(T)9/(T)128  * (a_m1p2+a_p1p2)
-               +(T)27/(T)128 * (a_m1m1+a_p1m1)
-               +(T)27/(T)64  * (a_m1p1+a_p1p1);
-    }
-    
-    /// Third order central 2d-interpolation (a_p1p1=a(x+1/2,y+1/2), a_m2p1=a(x-3/2,y+1/2)), returns a(x)
-    template<typename T>
-    inline T asymNinePointsInterp(T a_m1m1, T a_m1p1, T a_m1p2,
-                                  T a_p1m1, T a_p1p1, T a_p1p2, 
-                                  T a_p2m1, T a_p2p1, T a_p2p2) 
-    {
-        //   o --- o --- o // a_m1p2    a_p1p2  a_p2p2
-        
-        //   o --- o --- o // a_m1p1    a_p1p1  a_p2p1
-        //   ---x--------- //
-        //   o --- o --- o // a_m1m1    a_p1m1  a_p2m1
-        
-        return   (T)9/(T)64*a_m1m1
-                +(T)9/(T)32*(a_m1p1+a_p1m1)
-                -(T)3/(T)64*(a_m1p2+a_p2m1)
-                +(T)9/(T)16*a_p1p1
-                -(T)3/(T)32*(a_p1p2+a_p2p1)
-                +(T)1/(T)64*a_p2p2;
-    }
+/// Fourth order central 2d-interpolation (a_p1p1=a(x+1/2,y+1/2), a_m2m2=a(x-3/2,y-3/2)), returns a(x)
+template<typename T>
+inline T centralSixteenPointsInterp(T a_m2m2, T a_m2m1, T a_m2p1, T a_m2p2,
+                                    T a_m1m2, T a_m1m1, T a_m1p1, T a_m1p2,
+                                    T a_p1m2, T a_p1m1, T a_p1p1, T a_p1p2,
+                                    T a_p2m2, T a_p2m1, T a_p2p1, T a_p2p2)
+{
+	//   o --- o --- o --- o // a_m2p2  a_m1p2    a_p1p2  a_p2p2
+
+	//   o --- o --- o --- o // a_m2p1  a_m1p1    a_p1p1  a_p2p1
+	//   ---------x--------- //
+	//   o --- o --- o --- o // a_m2m1  a_m1m1    a_p1m1  a_p2m1
+
+	//   o --- o --- o --- o // a_m2m2  a_m1m2    a_p1m2  a_p2m2
+
+	T distTwo = -(T)9/(T)256*(a_m2m1 + a_m2p1 + a_m1m2 + a_m1p2 + a_p1m2 + a_p1p2 + a_p2m1 + a_p2p1);
+	T distThree = (T)1/(T)256*(a_m2m2 + a_m2p2 + a_p2p2 + a_p2m2);
+	T distOne = (T)81/(T)256*(a_p1p1 + a_m1p1 + a_m1m1 + a_p1m1);
+
+	return distTwo + distThree + distOne;
+}
+
+/// Third order central 2d-interpolation (a_p1p1=a(x+1/2,y+1/2), a_m2p1=a(x-3/2,y+1/2)), returns a(x)
+template<typename T>
+inline T asymTwelvePointsInterp(T a_m2m1, T a_m2p1, T a_m2p2,
+                                T a_m1m1, T a_m1p1, T a_m1p2,
+                                T a_p1m1, T a_p1p1, T a_p1p2,
+                                T a_p2m1, T a_p2p1, T a_p2p2)
+{
+	//   o --- o --- o --- o // a_m2p2  a_m1p2    a_p1p2  a_p2p2
+
+	//   o --- o --- o --- o // a_m2p1  a_m1p1    a_p1p1  a_p2p1
+	//   ---------x--------- //
+	//   o --- o --- o --- o // a_m2m1  a_m1m1    a_p1m1  a_p2m1
+
+	return  (T)1/(T)128  * (a_m2p2+a_p2p2)
+	        -(T)3/(T)128  * (a_m2m1+a_p2m1)
+	        -(T)3/(T)64   * (a_m2p1+a_p2p1)
+	        -(T)9/(T)128  * (a_m1p2+a_p1p2)
+	        +(T)27/(T)128 * (a_m1m1+a_p1m1)
+	        +(T)27/(T)64  * (a_m1p1+a_p1p1);
+}
+
+/// Third order central 2d-interpolation (a_p1p1=a(x+1/2,y+1/2), a_m2p1=a(x-3/2,y+1/2)), returns a(x)
+template<typename T>
+inline T asymNinePointsInterp(T a_m1m1, T a_m1p1, T a_m1p2,
+                              T a_p1m1, T a_p1p1, T a_p1p2,
+                              T a_p2m1, T a_p2p1, T a_p2p2)
+{
+	//   o --- o --- o // a_m1p2    a_p1p2  a_p2p2
+
+	//   o --- o --- o // a_m1p1    a_p1p1  a_p2p1
+	//   ---x--------- //
+	//   o --- o --- o // a_m1m1    a_p1m1  a_p2m1
+
+	return   (T)9/(T)64*a_m1m1
+	         +(T)9/(T)32*(a_m1p1+a_p1m1)
+	         -(T)3/(T)64*(a_m1p2+a_p2m1)
+	         +(T)9/(T)16*a_p1p1
+	         -(T)3/(T)32*(a_p1p2+a_p2p1)
+	         +(T)1/(T)64*a_p2p2;
+}
 
 }  // namespace fd
 
@@ -104,4 +106,3 @@ namespace fd {
 
 
 #endif  // FD_STENCILS_2D_H
-

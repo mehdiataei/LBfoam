@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,7 +35,8 @@
 
 #include "atomicBlock/dataProcessingFunctional2D.h"
 
-namespace plb {
+namespace plb
+{
 
 class MultiGrid2D;
 template<typename T, template<typename U> class Descriptor> class MultiGridLattice2D;
@@ -62,54 +63,54 @@ void integrateProcessingFunctional(BoxProcessingFunctional2D* functional,
 /// of the functional.
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        LatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
-        Box2D domain,
-        std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel );
+    LatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
+    Box2D domain,
+    std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel );
 
 /// Integrate a functional into a sequence of block-lattices. If the
 /// number of lattices is 1 or 2, you should prefer the _L and _LL version
 /// of the functional.
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        LatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
-        Box2D domain,
-        std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel, plint level=0 );
+    LatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
+    Box2D domain,
+    std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel, plint level=0 );
 
 /// Apply a functional on a sequence of scalar-fields. If the number
 /// of lattices is 1 or 2, you should prefer the _S and _SS version
 /// of the functional.
 template<typename T>
 void applyProcessingFunctional (
-        ScalarFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain,
-        std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel );
+    ScalarFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain,
+    std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel );
 
 /// Integrate a functional into a sequence of scalar-fields. If the
 /// number of lattices is 1 or 2, you should prefer the _S and _SS version
 /// of the functional.
 template<typename T>
 void integrateProcessingFunctional (
-        ScalarFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain,
-        std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel, plint level=0 );
+    ScalarFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain,
+    std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel, plint level=0 );
 
 /// Apply a functional on a sequence of tensor-fields. If the number
 /// of lattices is 1 or 2, you should prefer the _T and _TT version
 /// of the functional.
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        TensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
-        Box2D domain,
-        std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel );
+    TensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
+    Box2D domain,
+    std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel );
 
 /// Integrate a functional into a sequence of tensor-fields. If the
 /// number of lattices is 1 or 2, you should prefer the _T and _TT version
 /// of the functional.
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        TensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
-        Box2D domain,
-        std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel, plint level=0 );
+    TensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
+    Box2D domain,
+    std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel, plint level=0 );
 
 
 /* *************** Typed wrappers with a single argument, boxed functionals * */
@@ -145,18 +146,18 @@ void integrateProcessingFunctional(BoxProcessingFunctional2D_T<T,nDim>* function
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor1>& lattice1,
-        MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel );
+    BoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor1>& lattice1,
+    MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel );
 
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor1>& lattice1,
-        MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel, plint level=0 );
+    BoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor1>& lattice1,
+    MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional(BoxProcessingFunctional2D_SS<T1,T2>* functional,
@@ -172,16 +173,16 @@ void integrateProcessingFunctional(BoxProcessingFunctional2D_SS<T1,T2>* function
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
-        Box2D domain,
-        MultiGridTensorField2D<T1,nDim1>& field1,
-        MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel );
+    BoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
+    Box2D domain,
+    MultiGridTensorField2D<T1,nDim1>& field1,
+    MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional, Box2D domain,
-        MultiGridTensorField2D<T1,nDim1>& field1,
-        MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel, plint level=0 );
+    BoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional, Box2D domain,
+    MultiGridTensorField2D<T1,nDim1>& field1,
+    MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel, plint level=0 );
 
 
 template<typename T1, typename T2, int nDim>
@@ -199,31 +200,31 @@ void integrateProcessingFunctional(BoxProcessingFunctional2D_ST<T1,T2,nDim>* fun
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridScalarField2D<T2>& field, plint referenceLevel );
+    BoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridScalarField2D<T2>& field, plint referenceLevel );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridScalarField2D<T2>& field, plint referenceLevel, plint level=0 );
+    BoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridScalarField2D<T2>& field, plint referenceLevel, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        BoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel );
+    BoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void integrateProcessingFunctional (
-        BoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel, plint level=0 );
+    BoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel, plint level=0 );
 
 
 /* *************** Generic wrappers, dotted functionals ********************* */
@@ -239,54 +240,54 @@ void integrateProcessingFunctional(DotProcessingFunctional2D* functional,
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        LatticeDotProcessingFunctional2D<T,Descriptor>* functional,
-        DotList2D const& dotList,
-        std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel );
+    LatticeDotProcessingFunctional2D<T,Descriptor>* functional,
+    DotList2D const& dotList,
+    std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        LatticeDotProcessingFunctional2D<T,Descriptor>* functional,
-        DotList2D const& dotList,
-        std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel, plint level=0 );
+    LatticeDotProcessingFunctional2D<T,Descriptor>* functional,
+    DotList2D const& dotList,
+    std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional (
-        ScalarFieldDotProcessingFunctional2D<T>* functional,
-        DotList2D const& dotList,
-        std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel );
+    ScalarFieldDotProcessingFunctional2D<T>* functional,
+    DotList2D const& dotList,
+    std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel );
 
 template<typename T>
 void integrateProcessingFunctional (
-        ScalarFieldDotProcessingFunctional2D<T>* functional,
-        DotList2D const& dotList,
-        std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel, plint level=0 );
+    ScalarFieldDotProcessingFunctional2D<T>* functional,
+    DotList2D const& dotList,
+    std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel, plint level=0 );
 
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        TensorFieldDotProcessingFunctional2D<T,nDim>* functional,
-        DotList2D const& dotList,
-        std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel );
+    TensorFieldDotProcessingFunctional2D<T,nDim>* functional,
+    DotList2D const& dotList,
+    std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel );
 
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        TensorFieldDotProcessingFunctional2D<T,nDim>* functional,
-        DotList2D const& dotList,
-        std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel, plint level=0 );
+    TensorFieldDotProcessingFunctional2D<T,nDim>* functional,
+    DotList2D const& dotList,
+    std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel, plint level=0 );
 
 
 /* *************** Typed wrappers with a single argument, dotted functionals* */
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_L<T,Descriptor>* functional,
-        DotList2D const& dotList,
-        MultiGridLattice2D<T,Descriptor>& lattice, plint referenceLevel );
+    DotProcessingFunctional2D_L<T,Descriptor>* functional,
+    DotList2D const& dotList,
+    MultiGridLattice2D<T,Descriptor>& lattice, plint referenceLevel );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_L<T,Descriptor>* functional,
-        DotList2D const& dotList,
-        MultiGridLattice2D<T,Descriptor>& lattice, plint referenceLevel, plint level=0 );
+    DotProcessingFunctional2D_L<T,Descriptor>* functional,
+    DotList2D const& dotList,
+    MultiGridLattice2D<T,Descriptor>& lattice, plint referenceLevel, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional(DotProcessingFunctional2D_S<T>* functional,
@@ -314,18 +315,18 @@ void integrateProcessingFunctional(DotProcessingFunctional2D_T<T,nDim>* function
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        DotList2D const& dotList,
-        MultiGridLattice2D<T1,Descriptor1>& lattice1,
-        MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel );
+    DotProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    DotList2D const& dotList,
+    MultiGridLattice2D<T1,Descriptor1>& lattice1,
+    MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel );
 
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        DotList2D const& dotList,
-        MultiGridLattice2D<T1,Descriptor1>& lattice1,
-        MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel, plint level=0 );
+    DotProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    DotList2D const& dotList,
+    MultiGridLattice2D<T1,Descriptor1>& lattice1,
+    MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional(DotProcessingFunctional2D_SS<T1,T2>* functional,
@@ -342,67 +343,67 @@ void integrateProcessingFunctional(DotProcessingFunctional2D_SS<T1,T2>* function
 /// Easy instantiation of dotted data processor for MultiTensorField-MultiTensorField coupling
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
-        DotList2D const& dotList,
-        MultiGridTensorField2D<T1,nDim1>& field1,
-        MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel );
+    DotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
+    DotList2D const& dotList,
+    MultiGridTensorField2D<T1,nDim1>& field1,
+    MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
-        DotList2D const& dotList,
-        MultiGridTensorField2D<T1,nDim1>& field1,
-        MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel, plint level=0 );
+    DotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
+    DotList2D const& dotList,
+    MultiGridTensorField2D<T1,nDim1>& field1,
+    MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel, plint level=0 );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
-        DotList2D const& dotList,
-        MultiGridTensorField2D<T1,nDim1>& field1,
-        MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel );
+    DotProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
+    DotList2D const& dotList,
+    MultiGridTensorField2D<T1,nDim1>& field1,
+    MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel );
 
 
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_ST<T1,T2,nDim>* functional,
-        DotList2D const& dotList,
-        MultiGridScalarField2D<T1>& field1,
-        MultiGridTensorField2D<T2,nDim>& field2, plint referenceLevel );
+    DotProcessingFunctional2D_ST<T1,T2,nDim>* functional,
+    DotList2D const& dotList,
+    MultiGridScalarField2D<T1>& field1,
+    MultiGridTensorField2D<T2,nDim>& field2, plint referenceLevel );
 
 template<typename T1, typename T2, int nDim>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_ST<T1,T2,nDim>* functional,
-        DotList2D const& dotList,
-        MultiGridScalarField2D<T1>& field1,
-        MultiGridTensorField2D<T2,nDim>& field2, plint referenceLevel, plint level=0 );
+    DotProcessingFunctional2D_ST<T1,T2,nDim>* functional,
+    DotList2D const& dotList,
+    MultiGridScalarField2D<T1>& field1,
+    MultiGridTensorField2D<T2,nDim>& field2, plint referenceLevel, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        DotList2D const& dotList,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridScalarField2D<T2>& field, plint referenceLevel );
+    DotProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    DotList2D const& dotList,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridScalarField2D<T2>& field, plint referenceLevel );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        DotList2D const& dotList,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridScalarField2D<T2>& field, plint referenceLevel, plint level=0 );
+    DotProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    DotList2D const& dotList,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridScalarField2D<T2>& field, plint referenceLevel, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        DotProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        DotList2D const& dotList,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel );
+    DotProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    DotList2D const& dotList,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void integrateProcessingFunctional (
-        DotProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        DotList2D const& dotList,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel, plint level=0 );
+    DotProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    DotList2D const& dotList,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel, plint level=0 );
 
 
 /* *************** Generic wrappers, bounded and boxed functionals ********** */
@@ -412,63 +413,63 @@ void applyProcessingFunctional(BoundedBoxProcessingFunctional2D* functional,
                                plint boundaryWidth );
 
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D* functional,
-        Box2D domain, std::vector<MultiGrid2D*> multiBlocks,
-        plint boundaryWidth, plint referenceLevel, plint level=0 );
+    BoundedBoxProcessingFunctional2D* functional,
+    Box2D domain, std::vector<MultiGrid2D*> multiBlocks,
+    plint boundaryWidth, plint referenceLevel, plint level=0 );
 
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        BoundedLatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
-        Box2D domain,
-        std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel,
-        plint boundaryWidth = Descriptor<T>::vicinity );
+    BoundedLatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
+    Box2D domain,
+    std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel,
+    plint boundaryWidth = Descriptor<T>::vicinity );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        BoundedLatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
-        Box2D domain, std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel,
-        plint boundaryWidth = Descriptor<T>::vicinity, plint level=0 );
+    BoundedLatticeBoxProcessingFunctional2D<T,Descriptor>* functional,
+    Box2D domain, std::vector<MultiGridLattice2D<T,Descriptor>*> lattices, plint referenceLevel,
+    plint boundaryWidth = Descriptor<T>::vicinity, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional (
-        BoundedScalarFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain, std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel,
-        plint boundaryWidth );
+    BoundedScalarFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain, std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel,
+    plint boundaryWidth );
 
 template<typename T>
 void integrateProcessingFunctional (
-        BoundedScalarFieldBoxProcessingFunctional2D<T>* functional,
-        Box2D domain, std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel,
-        plint boundaryWidth );
+    BoundedScalarFieldBoxProcessingFunctional2D<T>* functional,
+    Box2D domain, std::vector<MultiGridScalarField2D<T>*> fields, plint referenceLevel,
+    plint boundaryWidth );
 
 template<typename T, int nDim>
 void applyProcessingFunctional (
-        BoundedTensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
-        Box2D domain, std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel,
-        plint boundaryWidth );
+    BoundedTensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
+    Box2D domain, std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel,
+    plint boundaryWidth );
 
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        BoundedTensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
-        Box2D domain,
-        std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel, plint boundaryWidth );
+    BoundedTensorFieldBoxProcessingFunctional2D<T,nDim>* functional,
+    Box2D domain,
+    std::vector<MultiGridTensorField2D<T,nDim>*> fields, plint referenceLevel, plint boundaryWidth );
 
 /* ** Typed wrappers with a single argument, bounded and boxed functionals * */
 
 template<typename T, template<typename U> class Descriptor>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_L<T,Descriptor>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T,Descriptor>& lattice, plint referenceLevel,
-        plint boundaryWidth = Descriptor<T>::vicinity );
+    BoundedBoxProcessingFunctional2D_L<T,Descriptor>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T,Descriptor>& lattice, plint referenceLevel,
+    plint boundaryWidth = Descriptor<T>::vicinity );
 
 template<typename T, template<typename U> class Descriptor>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_L<T,Descriptor>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T,Descriptor>& lattice, plint referenceLevel,
-        plint boundaryWidth = Descriptor<T>::vicinity, plint level=0 );
+    BoundedBoxProcessingFunctional2D_L<T,Descriptor>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T,Descriptor>& lattice, plint referenceLevel,
+    plint boundaryWidth = Descriptor<T>::vicinity, plint level=0 );
 
 template<typename T>
 void applyProcessingFunctional(BoundedBoxProcessingFunctional2D_S<T>* functional,
@@ -487,10 +488,10 @@ void applyProcessingFunctional(BoundedBoxProcessingFunctional2D_T<T,nDim>* funct
 
 template<typename T, int nDim>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_T<T,nDim>* functional,
-        Box2D domain,
-        MultiGridTensorField2D<T,nDim>& field, plint referenceLevel,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_T<T,nDim>* functional,
+    Box2D domain,
+    MultiGridTensorField2D<T,nDim>& field, plint referenceLevel,
+    plint boundaryWidth, plint level=0 );
 
 
 /* ** Typed wrappers with two arguments, bounded and boxed functionals *** */
@@ -498,102 +499,102 @@ void integrateProcessingFunctional (
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor1>& lattice1,
-        MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel,
-        plint boundaryWidth = Descriptor1<T1>::vicinity );
+    BoundedBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor1>& lattice1,
+    MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel,
+    plint boundaryWidth = Descriptor1<T1>::vicinity );
 
 template<typename T1, template<typename U1> class Descriptor1,
          typename T2, template<typename U2> class Descriptor2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor1>& lattice1,
-        MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel,
-        plint boundaryWidth = Descriptor1<T1>::vicinity, plint level=0 );
+    BoundedBoxProcessingFunctional2D_LL<T1,Descriptor1,T2,Descriptor2>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor1>& lattice1,
+    MultiGridLattice2D<T2,Descriptor2>& lattice2, plint referenceLevel,
+    plint boundaryWidth = Descriptor1<T1>::vicinity, plint level=0 );
 
 template<typename T1, typename T2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_SS<T1,T2>* functional,
-        Box2D domain,
-        MultiGridScalarField2D<T1>& field1,
-        MultiGridScalarField2D<T2>& field2, plint referenceLevel,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_SS<T1,T2>* functional,
+    Box2D domain,
+    MultiGridScalarField2D<T1>& field1,
+    MultiGridScalarField2D<T2>& field2, plint referenceLevel,
+    plint boundaryWidth );
 
 template<typename T1, typename T2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_SS<T1,T2>* functional,
-        Box2D domain,
-        MultiGridScalarField2D<T1>& field1,
-        MultiGridScalarField2D<T2>& field2, plint referenceLevel,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_SS<T1,T2>* functional,
+    Box2D domain,
+    MultiGridScalarField2D<T1>& field1,
+    MultiGridScalarField2D<T2>& field2, plint referenceLevel,
+    plint boundaryWidth, plint level=0 );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
-        Box2D domain,
-        MultiGridTensorField2D<T1,nDim1>& field1,
-        MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
+    Box2D domain,
+    MultiGridTensorField2D<T1,nDim1>& field1,
+    MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel,
+    plint boundaryWidth );
 
 template<typename T1, int nDim1, typename T2, int nDim2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
-        Box2D domain,
-        MultiGridTensorField2D<T1,nDim1>& field1,
-        MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_TT<T1,nDim1,T2,nDim2>* functional,
+    Box2D domain,
+    MultiGridTensorField2D<T1,nDim1>& field1,
+    MultiGridTensorField2D<T2,nDim2>& field2, plint referenceLevel,
+    plint boundaryWidth, plint level=0 );
 
 
 template<typename T1, typename T2, int nDim>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_ST<T1,T2,nDim>* functional,
-        Box2D domain,
-        MultiGridScalarField2D<T1>& field1,
-        MultiGridTensorField2D<T2,nDim>& field2, plint referenceLevel,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_ST<T1,T2,nDim>* functional,
+    Box2D domain,
+    MultiGridScalarField2D<T1>& field1,
+    MultiGridTensorField2D<T2,nDim>& field2, plint referenceLevel,
+    plint boundaryWidth );
 
 template<typename T1, typename T2, int nDim>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_ST<T1,T2,nDim>* functional,
-        Box2D domain,
-        MultiGridScalarField2D<T1>& field1,
-        MultiGridTensorField2D<T2,nDim>& field2, plint referenceLevel,
-        plint boundaryWidth, plint level=0 );
+    BoundedBoxProcessingFunctional2D_ST<T1,T2,nDim>* functional,
+    Box2D domain,
+    MultiGridScalarField2D<T1>& field1,
+    MultiGridTensorField2D<T2,nDim>& field2, plint referenceLevel,
+    plint boundaryWidth, plint level=0 );
 
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridScalarField2D<T2>& field, plint referenceLevel,
-        plint boundaryWidth = Descriptor<T1>::vicinity );
+    BoundedBoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridScalarField2D<T2>& field, plint referenceLevel,
+    plint boundaryWidth = Descriptor<T1>::vicinity );
 
 template<typename T1, template<typename U> class Descriptor, typename T2>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridScalarField2D<T2>& field, plint referenceLevel,
-        plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
+    BoundedBoxProcessingFunctional2D_LS<T1,Descriptor,T2>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridScalarField2D<T2>& field, plint referenceLevel,
+    plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void applyProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel,
-        plint boundaryWidth = Descriptor<T1>::vicinity );
+    BoundedBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel,
+    plint boundaryWidth = Descriptor<T1>::vicinity );
 
 template<typename T1, template<typename U> class Descriptor, typename T2, int nDim>
 void integrateProcessingFunctional (
-        BoundedBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
-        Box2D domain,
-        MultiGridLattice2D<T1,Descriptor>& lattice,
-        MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel,
-        plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
+    BoundedBoxProcessingFunctional2D_LT<T1,Descriptor,T2,nDim>* functional,
+    Box2D domain,
+    MultiGridLattice2D<T1,Descriptor>& lattice,
+    MultiGridTensorField2D<T2,nDim>& field, plint referenceLevel,
+    plint boundaryWidth = Descriptor<T1>::vicinity, plint level=0 );
 
 }  // namespace plb
 

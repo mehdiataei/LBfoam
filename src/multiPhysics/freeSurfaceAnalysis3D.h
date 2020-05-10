@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -27,89 +27,94 @@
 
 #include "multiBlock/multiBlockLattice3D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor>
 T freeSurfaceAverageMass(std::vector<MultiBlock3D*> freeSurfaceArgs, Box3D domain);
-             
+
 template<typename T, template<typename U> class Descriptor>
 class FS_AverageMassFunctional3D : public PlainReductiveBoxProcessingFunctional3D
 {
 public:
-    FS_AverageMassFunctional3D();
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
-    virtual FS_AverageMassFunctional3D<T,Descriptor>* clone() const;
-    T getAverageMass() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        for (pluint i=0; i<modified.size(); ++i) {
-            modified[i] = modif::nothing;
-        }
-    }
+	FS_AverageMassFunctional3D();
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
+	virtual FS_AverageMassFunctional3D<T,Descriptor>* clone() const;
+	T getAverageMass() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		for (pluint i=0; i<modified.size(); ++i) {
+			modified[i] = modif::nothing;
+		}
+	}
 private:
-    plint averageMassId;
+	plint averageMassId;
 };
 
 
 template<typename T, template<typename U> class Descriptor>
 T freeSurfaceTotalMass(std::vector<MultiBlock3D*> freeSurfaceArgs, Box3D domain);
-             
+
 template<typename T, template<typename U> class Descriptor>
 class FS_TotalMassFunctional3D : public PlainReductiveBoxProcessingFunctional3D
 {
 public:
-    FS_TotalMassFunctional3D();
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
-    virtual FS_TotalMassFunctional3D<T,Descriptor>* clone() const;
-    T getTotalMass() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        for (pluint i=0; i<modified.size(); ++i) {
-            modified[i] = modif::nothing;
-        }
-    }
+	FS_TotalMassFunctional3D();
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
+	virtual FS_TotalMassFunctional3D<T,Descriptor>* clone() const;
+	T getTotalMass() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		for (pluint i=0; i<modified.size(); ++i) {
+			modified[i] = modif::nothing;
+		}
+	}
 private:
-    plint totalMassId;
+	plint totalMassId;
 };
 
 
 template<typename T, template<typename U> class Descriptor>
 T freeSurfaceAverageDensity(std::vector<MultiBlock3D*> freeSurfaceArgs, Box3D domain);
-             
+
 template<typename T, template<typename U> class Descriptor>
 class FS_AverageDensityFunctional3D : public PlainReductiveBoxProcessingFunctional3D
 {
 public:
-    FS_AverageDensityFunctional3D();
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
-    virtual FS_AverageDensityFunctional3D<T,Descriptor>* clone() const;
-    T getAverageDensity() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        for (pluint i=0; i<modified.size(); ++i) {
-            modified[i] = modif::nothing;
-        }
-    }
+	FS_AverageDensityFunctional3D();
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
+	virtual FS_AverageDensityFunctional3D<T,Descriptor>* clone() const;
+	T getAverageDensity() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		for (pluint i=0; i<modified.size(); ++i) {
+			modified[i] = modif::nothing;
+		}
+	}
 private:
-    plint averageDensityId;
+	plint averageDensityId;
 };
 
 
 template<typename T, template<typename U> class Descriptor>
 T freeSurfaceAverageVolumeFraction(std::vector<MultiBlock3D*> freeSurfaceArgs, Box3D domain);
-             
+
 template<typename T, template<typename U> class Descriptor>
 class FS_AverageVolumeFractionFunctional3D : public PlainReductiveBoxProcessingFunctional3D
 {
 public:
-    FS_AverageVolumeFractionFunctional3D();
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
-    virtual FS_AverageVolumeFractionFunctional3D<T,Descriptor>* clone() const;
-    T getAverageVolumeFraction() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        for (pluint i=0; i<modified.size(); ++i) {
-            modified[i] = modif::nothing;
-        }
-    }
+	FS_AverageVolumeFractionFunctional3D();
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
+	virtual FS_AverageVolumeFractionFunctional3D<T,Descriptor>* clone() const;
+	T getAverageVolumeFraction() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		for (pluint i=0; i<modified.size(); ++i) {
+			modified[i] = modif::nothing;
+		}
+	}
 private:
-    plint averageVfId;
+	plint averageVfId;
 };
 
 
@@ -120,60 +125,63 @@ template<typename T, template<typename U> class Descriptor>
 class CountFreeSurfaceElementsFunctional3D : public PlainReductiveBoxProcessingFunctional3D
 {
 public:
-    CountFreeSurfaceElementsFunctional3D(plint flagToLookFor_);
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
-    virtual CountFreeSurfaceElementsFunctional3D<T,Descriptor>* clone() const;
-    plint getNumElements() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        for (pluint i=0; i<modified.size(); ++i) {
-            modified[i] = modif::nothing;
-        }
-    }
+	CountFreeSurfaceElementsFunctional3D(plint flagToLookFor_);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
+	virtual CountFreeSurfaceElementsFunctional3D<T,Descriptor>* clone() const;
+	plint getNumElements() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		for (pluint i=0; i<modified.size(); ++i) {
+			modified[i] = modif::nothing;
+		}
+	}
 private:
-    plint numCellsId;
-    plint flagToLookFor;
+	plint numCellsId;
+	plint flagToLookFor;
 };
-    
+
 
 template<typename T, template<typename U> class Descriptor>
 Array<T,3> freeSurfaceAverageMomentum(std::vector<MultiBlock3D*> freeSurfaceArgs, Box3D domain);
-             
+
 template<typename T, template<typename U> class Descriptor>
 class FS_AverageMomentumFunctional3D : public PlainReductiveBoxProcessingFunctional3D
 {
 public:
-    FS_AverageMomentumFunctional3D();
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
-    virtual FS_AverageMomentumFunctional3D<T,Descriptor>* clone() const;
-    Array<T,3> getAverageMomentum() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        for (pluint i=0; i<modified.size(); ++i) {
-            modified[i] = modif::nothing;
-        }
-    }
+	FS_AverageMomentumFunctional3D();
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
+	virtual FS_AverageMomentumFunctional3D<T,Descriptor>* clone() const;
+	Array<T,3> getAverageMomentum() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		for (pluint i=0; i<modified.size(); ++i) {
+			modified[i] = modif::nothing;
+		}
+	}
 private:
-    Array<plint,3> averageMomentumId;
+	Array<plint,3> averageMomentumId;
 };
 
 
 template<typename T, template<typename U> class Descriptor>
 T freeSurfaceAverageHeight(std::vector<MultiBlock3D*> freeSurfaceArgs, Box3D domain);
-             
+
 template<typename T, template<typename U> class Descriptor>
 class FS_AverageHeightFunctional3D : public PlainReductiveBoxProcessingFunctional3D
 {
 public:
-    FS_AverageHeightFunctional3D();
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
-    virtual FS_AverageHeightFunctional3D<T,Descriptor>* clone() const;
-    T getAverageHeight() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        for (pluint i=0; i<modified.size(); ++i) {
-            modified[i] = modif::nothing;
-        }
-    }
+	FS_AverageHeightFunctional3D();
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
+	virtual FS_AverageHeightFunctional3D<T,Descriptor>* clone() const;
+	T getAverageHeight() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		for (pluint i=0; i<modified.size(); ++i) {
+			modified[i] = modif::nothing;
+		}
+	}
 private:
-    plint averageHeightId;
+	plint averageHeightId;
 };
 
 
@@ -184,32 +192,34 @@ template<typename T, template<typename U> class Descriptor>
 class GetWaterLevelAtxyFunctional3D : public PlainReductiveBoxProcessingFunctional3D
 {
 public:
-    GetWaterLevelAtxyFunctional3D();
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
-    virtual GetWaterLevelAtxyFunctional3D<T,Descriptor>* clone() const;
-    plint getNumFluidCellsAtXY() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        for (pluint i=0; i<modified.size(); ++i) {
-            modified[i] = modif::nothing;
-        }
-    }
+	GetWaterLevelAtxyFunctional3D();
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
+	virtual GetWaterLevelAtxyFunctional3D<T,Descriptor>* clone() const;
+	plint getNumFluidCellsAtXY() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		for (pluint i=0; i<modified.size(); ++i) {
+			modified[i] = modif::nothing;
+		}
+	}
 private:
-    plint numFluidOccupiedCellId;
+	plint numFluidOccupiedCellId;
 };
 
 // Here we count both the no-slip and the free-slip wall cells.
-class FreeSurfaceCountWallCells3D : public ReductiveBoxProcessingFunctional3D_S<int> {
+class FreeSurfaceCountWallCells3D : public ReductiveBoxProcessingFunctional3D_S<int>
+{
 public:
-    FreeSurfaceCountWallCells3D();
-    virtual void process(Box3D domain, ScalarField3D<int>& flag);
-    virtual FreeSurfaceCountWallCells3D* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
-    {
-        modified[0] = modif::nothing;   // Flags.
-    }
-    plint getNumWallCells() const;
+	FreeSurfaceCountWallCells3D();
+	virtual void process(Box3D domain, ScalarField3D<int>& flag);
+	virtual FreeSurfaceCountWallCells3D* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;   // Flags.
+	}
+	plint getNumWallCells() const;
 private:
-    plint sumScalarId;
+	plint sumScalarId;
 };
 
 plint freeSurfaceCountWallCells(MultiScalarField3D<int>& flag, Box3D domain);
@@ -218,36 +228,38 @@ template<typename T>
 T freeSurfaceComputePorosity(MultiScalarField3D<int>& flag, Box3D domain);
 
 template<typename T>
-class FreeSurfaceComputeFluidVolume3D : public ReductiveBoxProcessingFunctional3D_SS<T,int> {
+class FreeSurfaceComputeFluidVolume3D : public ReductiveBoxProcessingFunctional3D_SS<T,int>
+{
 public:
-    FreeSurfaceComputeFluidVolume3D();
-    virtual void process(Box3D domain, ScalarField3D<T>& volumeFraction, ScalarField3D<int>& flag);
-    virtual FreeSurfaceComputeFluidVolume3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
-    {
-        modified[0] = modif::nothing;   // Volume fraction.
-        modified[1] = modif::nothing;   // Flags.
-    }
-    T getFluidVolume() const;
+	FreeSurfaceComputeFluidVolume3D();
+	virtual void process(Box3D domain, ScalarField3D<T>& volumeFraction, ScalarField3D<int>& flag);
+	virtual FreeSurfaceComputeFluidVolume3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;   // Volume fraction.
+		modified[1] = modif::nothing;   // Flags.
+	}
+	T getFluidVolume() const;
 private:
-    plint sumScalarId;
+	plint sumScalarId;
 };
 
 template<typename T>
-class MaskedFreeSurfaceComputeFluidVolume3D : public PlainReductiveBoxProcessingFunctional3D {
+class MaskedFreeSurfaceComputeFluidVolume3D : public PlainReductiveBoxProcessingFunctional3D
+{
 public:
-    MaskedFreeSurfaceComputeFluidVolume3D();
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
-    virtual MaskedFreeSurfaceComputeFluidVolume3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
-    {
-        modified[0] = modif::nothing;   // Volume fraction.
-        modified[1] = modif::nothing;   // Flags.
-        modified[2] = modif::nothing;   // Mask.
-    }
-    T getFluidVolume() const;
+	MaskedFreeSurfaceComputeFluidVolume3D();
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks);
+	virtual MaskedFreeSurfaceComputeFluidVolume3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;   // Volume fraction.
+		modified[1] = modif::nothing;   // Flags.
+		modified[2] = modif::nothing;   // Mask.
+	}
+	T getFluidVolume() const;
 private:
-    plint sumScalarId;
+	plint sumScalarId;
 };
 
 template<typename T>
@@ -263,47 +275,49 @@ T freeSurfaceComputeFluidVolume(MultiScalarField3D<T>& volumeFraction, MultiScal
 // recompute it inside this function.
 template<typename T>
 T freeSurfaceComputeSaturation(T porosity, MultiScalarField3D<T>& volumeFraction,
-        MultiScalarField3D<int>& flag, Box3D domain);
+                               MultiScalarField3D<int>& flag, Box3D domain);
 
 // Here we find the smallest Box3D that includes all fluid and interface cells
-class FreeSurfaceComputeFluidBoundingBox3D : public ReductiveBoxProcessingFunctional3D_S<int> {
+class FreeSurfaceComputeFluidBoundingBox3D : public ReductiveBoxProcessingFunctional3D_S<int>
+{
 public:
-    FreeSurfaceComputeFluidBoundingBox3D();
-    virtual void process(Box3D domain, ScalarField3D<int>& flag);
-    virtual FreeSurfaceComputeFluidBoundingBox3D* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
-    {
-        modified[0] = modif::nothing;   // Flags.
-    }
-    Box3D getFluidBoundingBox() const;
+	FreeSurfaceComputeFluidBoundingBox3D();
+	virtual void process(Box3D domain, ScalarField3D<int>& flag);
+	virtual FreeSurfaceComputeFluidBoundingBox3D* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;   // Flags.
+	}
+	Box3D getFluidBoundingBox() const;
 private:
-    plint minIdX, minIdY, minIdZ;
-    plint maxIdX, maxIdY, maxIdZ;
+	plint minIdX, minIdY, minIdZ;
+	plint maxIdX, maxIdY, maxIdZ;
 };
 
 Box3D freeSurfaceComputeFluidBoundingBox(MultiScalarField3D<int>& flag, Box3D domain);
 Box3D freeSurfaceComputeFluidBoundingBox(MultiScalarField3D<int>& flag);
 
-template<typename T, template<typename U> class Descriptor> 
-class FreeSurfaceBoxSumForcedEnergyFunctional3D : public PlainReductiveBoxProcessingFunctional3D {
+template<typename T, template<typename U> class Descriptor>
+class FreeSurfaceBoxSumForcedEnergyFunctional3D : public PlainReductiveBoxProcessingFunctional3D
+{
 public:
-    FreeSurfaceBoxSumForcedEnergyFunctional3D();
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
-    virtual FreeSurfaceBoxSumForcedEnergyFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    T getAverageEnergy() const;
+	FreeSurfaceBoxSumForcedEnergyFunctional3D();
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
+	virtual FreeSurfaceBoxSumForcedEnergyFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	T getAverageEnergy() const;
 private:
-    plint sumEnergyId;
-    plint sumCellsId;
+	plint sumEnergyId;
+	plint sumCellsId;
 };
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 T freeSurfaceComputeAverageForcedEnergy(MultiBlockLattice3D<T,Descriptor>& lattice, MultiTensorField3D<T,Descriptor<T>::d>& force,
-        MultiScalarField3D<int>& flag, Box3D domain);
+                                        MultiScalarField3D<int>& flag, Box3D domain);
 
-template<typename T, template<typename U> class Descriptor> 
+template<typename T, template<typename U> class Descriptor>
 T freeSurfaceComputeAverageForcedEnergy(MultiBlockLattice3D<T,Descriptor>& lattice, MultiTensorField3D<T,Descriptor<T>::d>& force,
-        MultiScalarField3D<int>& flag);
+                                        MultiScalarField3D<int>& flag);
 
 template<typename T, template<typename U> class Descriptor>
 void freeSurfaceComputeForcedVelocityNorm(MultiBlockLattice3D<T,Descriptor>& lattice,
@@ -311,11 +325,11 @@ void freeSurfaceComputeForcedVelocityNorm(MultiBlockLattice3D<T,Descriptor>& lat
         MultiScalarField3D<T>& velocityNorm, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityNorm(MultiBlockLattice3D<T,Descriptor>& lattice,
+std::auto_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityNorm(MultiBlockLattice3D<T,Descriptor>& lattice,
         MultiTensorField3D<T,Descriptor<T>::d>& force, MultiScalarField3D<int>& flag, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityNorm(MultiBlockLattice3D<T,Descriptor>& lattice,
+std::auto_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityNorm(MultiBlockLattice3D<T,Descriptor>& lattice,
         MultiTensorField3D<T,Descriptor<T>::d>& force, MultiScalarField3D<int>& flag);
 
 template<typename T, template<typename U> class Descriptor>
@@ -324,26 +338,25 @@ void freeSurfaceComputeForcedVelocityComponent(MultiBlockLattice3D<T,Descriptor>
         MultiScalarField3D<T>& velocityComponent, Box3D domain, plint iComponent);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityComponent(MultiBlockLattice3D<T,Descriptor>& lattice,
+std::auto_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityComponent(MultiBlockLattice3D<T,Descriptor>& lattice,
         MultiTensorField3D<T,Descriptor<T>::d>& force, MultiScalarField3D<int>& flag, Box3D domain, plint iComponent);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityComponent(MultiBlockLattice3D<T,Descriptor>& lattice,
+std::auto_ptr<MultiScalarField3D<T> > freeSurfaceComputeForcedVelocityComponent(MultiBlockLattice3D<T,Descriptor>& lattice,
         MultiTensorField3D<T,Descriptor<T>::d>& force, MultiScalarField3D<int>& flag, plint iComponent);
 
 template<typename T, template<typename U> class Descriptor>
 void freeSurfaceComputeForcedVelocity(MultiBlockLattice3D<T,Descriptor>& lattice, MultiTensorField3D<T,Descriptor<T>::d>& force,
-        MultiScalarField3D<int>& flag, MultiTensorField3D<T,Descriptor<T>::d>& velocity, Box3D domain);
+                                      MultiScalarField3D<int>& flag, MultiTensorField3D<T,Descriptor<T>::d>& velocity, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField3D<T,Descriptor<T>::d> > freeSurfaceComputeForcedVelocity(MultiBlockLattice3D<T,Descriptor>& lattice,
+std::auto_ptr<MultiTensorField3D<T,Descriptor<T>::d> > freeSurfaceComputeForcedVelocity(MultiBlockLattice3D<T,Descriptor>& lattice,
         MultiTensorField3D<T,Descriptor<T>::d>& force, MultiScalarField3D<int>& flag, Box3D domain);
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField3D<T,Descriptor<T>::d> > freeSurfaceComputeForcedVelocity(MultiBlockLattice3D<T,Descriptor>& lattice,
+std::auto_ptr<MultiTensorField3D<T,Descriptor<T>::d> > freeSurfaceComputeForcedVelocity(MultiBlockLattice3D<T,Descriptor>& lattice,
         MultiTensorField3D<T,Descriptor<T>::d>& force, MultiScalarField3D<int>& flag);
 
 }  // namespace plb
 
 #endif  // FREE_SURFACE_ANALYSIS_3D_H
-

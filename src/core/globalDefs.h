@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -39,7 +39,8 @@
 #include <cstddef>
 #include <algorithm>
 
-namespace plb {
+namespace plb
+{
 
 // We take the definition that the base type of T is just T, except
 // in special cases. For example, for complex numbers, the base type
@@ -47,7 +48,7 @@ namespace plb {
 // plbComplex.h.
 template<typename T>
 struct PlbTraits {
-    typedef T BaseType;
+	typedef T BaseType;
 };
 
 /// Integer type for Palabos
@@ -63,7 +64,7 @@ typedef ptrdiff_t plint;
 
 /// Unsigned integer type for Palabos
 /** On some architectures, this type is larger
- *  than int. Using fluplint instead of unsigned plint 
+ *  than int. Using fluplint instead of unsigned plint
  *  ensures 64-bit compatibility of the code.
  **/
 #ifdef PLB_BGP
@@ -94,36 +95,37 @@ enum Precision { FLT, DBL, LDBL, INF };
 template<typename T>
 inline Precision floatingPointPrecision()
 {
-    if (sizeof(T) == sizeof(float)) {
-        return FLT;
-    } else if (sizeof(T) == sizeof(long double)) {
-        return LDBL;
-    }
-    return DBL;
+	if (sizeof(T) == sizeof(float)) {
+		return FLT;
+	} else if (sizeof(T) == sizeof(long double)) {
+		return LDBL;
+	}
+	return DBL;
 }
 
 template<typename T>
 inline T getEpsilon(Precision precision, T scale = T(1))
 {
-    PLB_ASSERT(scale > (T) 0);
+	PLB_ASSERT(scale > (T) 0);
 
-    T epsilon;
-    switch (precision) {
-    case FLT:
-        epsilon = std::numeric_limits<float>::epsilon();
-        break;
-    case DBL:
-        epsilon = std::numeric_limits<double>::epsilon();
-        break;
-    case LDBL:
-        epsilon = std::numeric_limits<long double>::epsilon();
-        break;
-    case INF: default:
-        epsilon = (T) 0;
-        break;
-    }
+	T epsilon;
+	switch (precision) {
+	case FLT:
+		epsilon = std::numeric_limits<float>::epsilon();
+		break;
+	case DBL:
+		epsilon = std::numeric_limits<double>::epsilon();
+		break;
+	case LDBL:
+		epsilon = std::numeric_limits<long double>::epsilon();
+		break;
+	case INF:
+	default:
+		epsilon = (T) 0;
+		break;
+	}
 
-    return scale * epsilon;
+	return scale * epsilon;
 }
 
 // Version that works also for integral types, and always refers to the
@@ -135,9 +137,9 @@ inline T getEpsilon(Precision precision, T scale = T(1))
 template<typename T>
 inline T getEpsilon(T scale = T(1))
 {
-    PLB_ASSERT(scale > (T) 0);
-    static T epsilon = std::numeric_limits<T>::epsilon();
-    return scale * epsilon;
+	PLB_ASSERT(scale > (T) 0);
+	static T epsilon = std::numeric_limits<T>::epsilon();
+	return scale * epsilon;
 }
 
 /// Enumeration type that sets the file format for the triangular surface meshes.
@@ -158,8 +160,9 @@ enum SurfaceGeometryFileFormat { STL, OFF };
  *                    or read: memory savings in the program are reflected by memory
  *                    savings on the disk.
  **/
-namespace IndexOrdering {
-    enum OrderingT {forward, backward, memorySaving};
+namespace IndexOrdering
+{
+enum OrderingT {forward, backward, memorySaving};
 }
 
 /// Sub-domain of an atomic-block, on which for example a data processor is executed.
@@ -168,119 +171,127 @@ namespace IndexOrdering {
  *      - envelope: Refers to nodes on the envelope, without the bulk.
  *      - bulkAndEnvelope: Refers to the full domain.
  **/
-namespace BlockDomain {
+namespace BlockDomain
+{
 
-    enum DomainT {bulk, envelope, bulkAndEnvelope};
-    inline bool usesEnvelope(DomainT domain) {
-        return domain==envelope || domain==bulkAndEnvelope;
-    }
+enum DomainT {bulk, envelope, bulkAndEnvelope};
+inline bool usesEnvelope(DomainT domain)
+{
+	return domain==envelope || domain==bulkAndEnvelope;
+}
 
 }
 
-namespace modif {
+namespace modif
+{
 
-    /// Indicates what kind of cell content was modified and must
-    ///   be updated in a multi-block structure.
-    enum ModifT {
-        nothing          =0,  //< No modification.
-        staticVariables  =1,  //< Static cell content (populations+externals).
-        dynamicVariables =2,  //< Only content of dynamics objects, but no static content.
-        allVariables     =3,  //< Both the static and dynamic cell content.
-        dataStructure    =4,  //< Recreate dynamics and copy both static and dynamic content.
-        undefined        =5   
-    };
-
-    enum { numConstants=5 };
-
-    /// If two data processors act on a block, combine their ModifT modification to
-    ///   determine a resulting (worst-case) ModifT modification.
-    inline ModifT combine(ModifT type1, ModifT type2) {
-        ModifT result = std::max(type1, type2);
-        // Note: static+dynamic = all.
-        if ( result==dynamicVariables &&
-             (type1==staticVariables || type2==staticVariables) )
-        {
-            result = allVariables;
-        }
-        return result;
-    }
-}
-
-namespace global {
-
-class IOpolicyClass {
-public:
-    void setIndexOrderingForStreams(IndexOrdering::OrderingT streamOrdering_);
-    IndexOrdering::OrderingT getIndexOrderingForStreams() const;
-
-    void setEndianSwitchOnBase64out(bool doSwitch);
-    bool getEndianSwitchOnBase64out();
-
-    void setEndianSwitchOnBase64in(bool doSwitch);
-    bool getEndianSwitchOnBase64in();
-
-    void setStlFilesHaveLowerBound(bool flag);
-    bool stlFilesHaveLowerBound() const;
-
-    void setLowerBoundForStlFiles(double stlLowerBound_);
-    double getLowerBoundForStlFiles() const;
-
-    void activateParallelIO(bool activate);
-    bool useParallelIO() const;
-private:
-    IOpolicyClass();
-private:
-    IndexOrdering::OrderingT streamOrdering;
-    bool endianSwitchOnBase64out;
-    bool endianSwitchOnBase64in;
-    bool stlLowerBoundFlag;
-    double stlLowerBound;
-    bool parallelIOflag;
-    friend IOpolicyClass& IOpolicy();
-};
-    
-class Directories {
-public:
-    /// Collectively set all output directories to the value specified by outputDir.
-    void setOutputDir(std::string outputDir_);
-    /// Specify output directory for logfile.
-    void setLogOutDir(std::string logOutDir_);
-    /// Specify output directory for the ImageWriter.
-    void setImageOutDir(std::string imageOutDir_);
-    /// Specify output directory for the VtkDataWriter.
-    void setVtkOutDir(std::string inputDir_);
-    /// Specify directory for input files.
-    void setInputDir(std::string inputDir);
-
-    /// Get output directory for logfile.
-    std::string getLogOutDir() const;
-    /// Get output directory for the ImageWriter.
-    std::string getImageOutDir() const;
-    /// Get output directory for the VtkDataWriter.
-    std::string getVtkOutDir() const;
-    /// Get directory for input files.
-    std::string getInputDir() const;
-    /// Get generic output directory.
-    std::string getOutputDir() const;
-private:
-    Directories();
-private:
-    std::string logOutDir;
-    std::string imageOutDir;
-    std::string vtkOutDir;
-    std::string inputDir;
-    std::string outputDir;
-friend Directories& directories();
+/// Indicates what kind of cell content was modified and must
+///   be updated in a multi-block structure.
+enum ModifT {
+	nothing          =0,  //< No modification.
+	staticVariables  =1,  //< Static cell content (populations+externals).
+	dynamicVariables =2,  //< Only content of dynamics objects, but no static content.
+	allVariables     =3,  //< Both the static and dynamic cell content.
+	dataStructure    =4,  //< Recreate dynamics and copy both static and dynamic content.
+	undefined        =5
 };
 
-inline Directories& directories() {
-    static Directories singleton;
-    return singleton;
+enum { numConstants=5 };
+
+/// If two data processors act on a block, combine their ModifT modification to
+///   determine a resulting (worst-case) ModifT modification.
+inline ModifT combine(ModifT type1, ModifT type2)
+{
+	ModifT result = std::max(type1, type2);
+	// Note: static+dynamic = all.
+	if ( result==dynamicVariables &&
+	     (type1==staticVariables || type2==staticVariables) ) {
+		result = allVariables;
+	}
+	return result;
+}
 }
 
-inline IOpolicyClass& IOpolicy() {
-    static IOpolicyClass singleton;
-    return singleton;
+namespace global
+{
+
+class IOpolicyClass
+{
+public:
+	void setIndexOrderingForStreams(IndexOrdering::OrderingT streamOrdering_);
+	IndexOrdering::OrderingT getIndexOrderingForStreams() const;
+
+	void setEndianSwitchOnBase64out(bool doSwitch);
+	bool getEndianSwitchOnBase64out();
+
+	void setEndianSwitchOnBase64in(bool doSwitch);
+	bool getEndianSwitchOnBase64in();
+
+	void setStlFilesHaveLowerBound(bool flag);
+	bool stlFilesHaveLowerBound() const;
+
+	void setLowerBoundForStlFiles(double stlLowerBound_);
+	double getLowerBoundForStlFiles() const;
+
+	void activateParallelIO(bool activate);
+	bool useParallelIO() const;
+private:
+	IOpolicyClass();
+private:
+	IndexOrdering::OrderingT streamOrdering;
+	bool endianSwitchOnBase64out;
+	bool endianSwitchOnBase64in;
+	bool stlLowerBoundFlag;
+	double stlLowerBound;
+	bool parallelIOflag;
+	friend IOpolicyClass& IOpolicy();
+};
+
+class Directories
+{
+public:
+	/// Collectively set all output directories to the value specified by outputDir.
+	void setOutputDir(std::string outputDir_);
+	/// Specify output directory for logfile.
+	void setLogOutDir(std::string logOutDir_);
+	/// Specify output directory for the ImageWriter.
+	void setImageOutDir(std::string imageOutDir_);
+	/// Specify output directory for the VtkDataWriter.
+	void setVtkOutDir(std::string inputDir_);
+	/// Specify directory for input files.
+	void setInputDir(std::string inputDir);
+
+	/// Get output directory for logfile.
+	std::string getLogOutDir() const;
+	/// Get output directory for the ImageWriter.
+	std::string getImageOutDir() const;
+	/// Get output directory for the VtkDataWriter.
+	std::string getVtkOutDir() const;
+	/// Get directory for input files.
+	std::string getInputDir() const;
+	/// Get generic output directory.
+	std::string getOutputDir() const;
+private:
+	Directories();
+private:
+	std::string logOutDir;
+	std::string imageOutDir;
+	std::string vtkOutDir;
+	std::string inputDir;
+	std::string outputDir;
+	friend Directories& directories();
+};
+
+inline Directories& directories()
+{
+	static Directories singleton;
+	return singleton;
+}
+
+inline IOpolicyClass& IOpolicy()
+{
+	static IOpolicyClass singleton;
+	return singleton;
 }
 
 }  // namespace global

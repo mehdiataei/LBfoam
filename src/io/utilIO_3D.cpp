@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -40,13 +40,15 @@
 #include <vector>
 #include <cstdio>
 
-namespace plb {
+namespace plb
+{
 
 void saveState(std::vector<MultiBlock3D*> blocks, plint iteration, bool saveDynamicContent,
-        FileName xmlFileName, FileName baseFileName, plint fileNamePadding)
+               FileName xmlFileName, FileName baseFileName, plint fileNamePadding)
 {
     std::string fname_base = createFileName(baseFileName.get(), iteration, fileNamePadding);
-    for (pluint i = 0; i < blocks.size(); i++) {
+    for (pluint i = 0; i < blocks.size(); i++)
+    {
         std::string fname(fname_base+"_"+util::val2str(i));
         parallelIO::save(*blocks[i], fname, saveDynamicContent);
     }
@@ -59,7 +61,7 @@ void saveState(std::vector<MultiBlock3D*> blocks, plint iteration, bool saveDyna
 }
 
 void loadState(std::vector<MultiBlock3D*> blocks, plint& iteration, bool saveDynamicContent,
-        FileName xmlFileName)
+               FileName xmlFileName)
 {
     XMLreader restart(xmlFileName.get());
     std::string fname_base;
@@ -68,28 +70,32 @@ void loadState(std::vector<MultiBlock3D*> blocks, plint& iteration, bool saveDyn
     restart["continue"]["num_blocks"].read(numBlocks);
     restart["continue"]["iteration"].read(iteration);
     PLB_ASSERT(blocks.size() == numBlocks);
-    for (pluint i = 0; i < blocks.size(); i++) {
+    for (pluint i = 0; i < blocks.size(); i++)
+    {
         std::string fname(fname_base+"_"+util::val2str(i));
         parallelIO::load(fname, *blocks[i], saveDynamicContent);
     }
 }
 
 bool abortExecution(FileName abortFileName, std::vector<MultiBlock3D*> blocks, plint iteration,
-        bool saveDynamicContent, FileName xmlFileName, FileName baseFileName,
-        plint fileNamePadding)
+                    bool saveDynamicContent, FileName xmlFileName, FileName baseFileName,
+                    plint fileNamePadding)
 {
     int stop = 0;
     bool stopExecution = false;
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         FILE *fp = fopen(abortFileName.get().c_str(), "rb");
-        if (fp != NULL) {
+        if (fp != NULL)
+        {
             stop = 1;
             fclose(fp);
             remove(abortFileName.get().c_str());
         }
     }
     global::mpi().bCast(&stop, 1);
-    if (stop) {
+    if (stop)
+    {
         stopExecution = true;
         saveState(blocks, iteration, saveDynamicContent, xmlFileName, baseFileName, fileNamePadding);
     }
@@ -97,28 +103,36 @@ bool abortExecution(FileName abortFileName, std::vector<MultiBlock3D*> blocks, p
     return stopExecution;
 }
 
-void saveBlocks(Group3D& blocks, bool saveDynamicContent, FileName fileName) {
+void saveBlocks(Group3D& blocks, bool saveDynamicContent, FileName fileName)
+{
     std::string fnameBase = fileName.getName();
-    if (fnameBase != "") {
+    if (fnameBase != "")
+    {
         fnameBase += "_";
     }
     fileName.defaultExt("dat");
-    for (plint i = 0; i < blocks.getNumBlocks(); i++) {
-        if (blocks.get(i).getBlockName() != "ContainerBlock3D") {
+    for (plint i = 0; i < blocks.getNumBlocks(); i++)
+    {
+        if (blocks.get(i).getBlockName() != "ContainerBlock3D")
+        {
             fileName.setName(fnameBase + blocks.getName(i));
             parallelIO::save(blocks.get(i), fileName.get(), saveDynamicContent);
         }
     }
 }
 
-void loadBlocks(Group3D& blocks, bool saveDynamicContent, FileName fileName) {
+void loadBlocks(Group3D& blocks, bool saveDynamicContent, FileName fileName)
+{
     std::string fnameBase = fileName.getName();
-    if (fnameBase != "") {
+    if (fnameBase != "")
+    {
         fnameBase += "_";
     }
     fileName.defaultExt("dat");
-    for (plint i = 0; i < blocks.getNumBlocks(); i++) {
-        if (blocks.get(i).getBlockName() != "ContainerBlock3D") {
+    for (plint i = 0; i < blocks.getNumBlocks(); i++)
+    {
+        if (blocks.get(i).getBlockName() != "ContainerBlock3D")
+        {
             fileName.setName(fnameBase + blocks.getName(i));
             parallelIO::load(fileName.get(), blocks.get(i), saveDynamicContent);
         }

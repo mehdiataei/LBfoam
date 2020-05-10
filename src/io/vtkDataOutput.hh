@@ -183,7 +183,7 @@ void VtkImageOutput2D<T>::writeData( ScalarField2D<T>& scalarField,
                                      std::string scalarFieldName, TConv scalingFactor,
                                      TConv additiveOffset )
 {
-    std::unique_ptr<ScalarField2D<TConv> > transformedField = copyConvert<T,TConv>(scalarField);
+    std::auto_ptr<ScalarField2D<TConv> > transformedField = copyConvert<T,TConv>(scalarField);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -202,7 +202,7 @@ void VtkImageOutput2D<T>::writeData( MultiScalarField2D<T>& scalarField,
                                      std::string scalarFieldName, TConv scalingFactor,
                                      TConv additiveOffset )
 {
-    std::unique_ptr<MultiScalarField2D<TConv> > transformedField = copyConvert<T,TConv>(scalarField);
+    std::auto_ptr<MultiScalarField2D<TConv> > transformedField = copyConvert<T,TConv>(scalarField);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -220,7 +220,7 @@ template<plint n, typename TConv>
 void VtkImageOutput2D<T>::writeData( TensorField2D<T,n>& tensorField,
                                      std::string tensorFieldName, TConv scalingFactor )
 {
-    std::unique_ptr<TensorField2D<TConv,n> > transformedField = copyConvert<T,TConv,n>(tensorField);
+    std::auto_ptr<TensorField2D<TConv,n> > transformedField = copyConvert<T,TConv,n>(tensorField);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -235,7 +235,7 @@ template<plint n, typename TConv>
 void VtkImageOutput2D<T>::writeData( MultiTensorField2D<T,n>& tensorField,
                                      std::string tensorFieldName, TConv scalingFactor )
 {
-    std::unique_ptr<MultiTensorField2D<TConv,n> > transformedField = copyConvert<T,TConv,n>(tensorField);
+    std::auto_ptr<MultiTensorField2D<TConv,n> > transformedField = copyConvert<T,TConv,n>(tensorField);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -337,7 +337,7 @@ void VtkImageOutput3D<T>::writeData( ScalarField3D<T>& scalarField,
                                      std::string scalarFieldName, TConv scalingFactor,
                                      TConv additiveOffset )
 {
-    std::unique_ptr<ScalarField3D<TConv> > transformedField = copyConvert<T,TConv>(scalarField);
+    std::auto_ptr<ScalarField3D<TConv> > transformedField = copyConvert<T,TConv>(scalarField);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -356,7 +356,7 @@ void VtkImageOutput3D<T>::writeData( MultiScalarField3D<T>& scalarField,
                                      std::string scalarFieldName, TConv scalingFactor,
                                      TConv additiveOffset )
 {
-    std::unique_ptr<MultiScalarField3D<TConv> > transformedField = copyConvert<T,TConv>(scalarField);
+    std::auto_ptr<MultiScalarField3D<TConv> > transformedField = copyConvert<T,TConv>(scalarField);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -374,7 +374,7 @@ template<plint n, typename TConv>
 void VtkImageOutput3D<T>::writeData( TensorField3D<T,n>& tensorField,
                                      std::string tensorFieldName, TConv scalingFactor )
 {
-    std::unique_ptr<TensorField3D<TConv,n> > transformedField = copyConvert<T,TConv,n>(tensorField);
+    std::auto_ptr<TensorField3D<TConv,n> > transformedField = copyConvert<T,TConv,n>(tensorField);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -389,7 +389,7 @@ template<plint n, typename TConv>
 void VtkImageOutput3D<T>::writeData( MultiTensorField3D<T,n>& tensorField,
                                      std::string tensorFieldName, TConv scalingFactor )
 {
-    std::unique_ptr<MultiTensorField3D<TConv,n> > transformedField = copyConvert<T,TConv,n>(tensorField);
+    std::auto_ptr<MultiTensorField3D<TConv,n> > transformedField = copyConvert<T,TConv,n>(tensorField);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -492,7 +492,7 @@ void ParallelVtkImageOutput3D<T>::writeData( MultiScalarField3D<T>& scalarField,
                                              std::string scalarFieldName, TConv scalingFactor,
                                              TConv additiveOffset )
 {
-    std::unique_ptr<MultiScalarField3D<TConv> > transformedField = copyConvert<T,TConv>(scalarField);
+    std::auto_ptr<MultiScalarField3D<TConv> > transformedField = copyConvert<T,TConv>(scalarField);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }
@@ -509,7 +509,7 @@ template<plint n, typename TConv>
 void ParallelVtkImageOutput3D<T>::writeData( MultiTensorField3D<T,n>& tensorField,
                                              std::string tensorFieldName, TConv scalingFactor )
 {
-    std::unique_ptr<MultiTensorField3D<TConv,n> > transformedField = copyConvert<T,TConv,n>(tensorField);
+    std::auto_ptr<MultiTensorField3D<TConv,n> > transformedField = copyConvert<T,TConv,n>(tensorField);
     if (!util::isOne(scalingFactor)) {
         multiplyInPlace(*transformedField, scalingFactor);
     }

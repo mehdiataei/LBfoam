@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -77,40 +77,44 @@ void writeGifs(BlockLatticeT& lattice,
                                 imSize, imSize );
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 100.,  // Re
-            100,       // N
-            1.,        // lx
-            1.,        // ly
-            1.         // lz
+        (T) 1e-2,  // uMax
+        (T) 100.,  // Re
+        100,       // N
+        1.,        // lx
+        1.,        // ly
+        1.         // lz
     );
     const plint logIter        = 10;
     const plint imageIter      = 60;
     const plint checkPointIter = 200;
     plint iniT, endT;
 
-    if (argc != 3) {
+    if (argc != 3)
+    {
         pcout << "Error; the syntax is \"" << argv[0] << " start-iter end-iter\"," << endl;
         return -1;
     }
 
     stringstream iniTstr, endTstr;
-    iniTstr << argv[1]; iniTstr >> iniT;
-    endTstr << argv[2]; endTstr >> endT;
+    iniTstr << argv[1];
+    iniTstr >> iniT;
+    endTstr << argv[2];
+    endTstr >> endT;
 
     writeLogFile(parameters, "3D diagonal cavity");
 
     MultiBlockLattice3D<T, DESCRIPTOR> lattice (
-            parameters.getNx(), parameters.getNy(), parameters.getNz(),
-            new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(), parameters.getNz(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* boundaryCondition
-        //= createInterpBoundaryCondition3D<T,DESCRIPTOR>();
+    //= createInterpBoundaryCondition3D<T,DESCRIPTOR>();
         = createLocalBoundaryCondition3D<T,DESCRIPTOR>();
 
     cavitySetup(lattice, parameters, *boundaryCondition);
@@ -118,19 +122,23 @@ int main(int argc, char* argv[]) {
 
     // Load saved data from a previous simulation, if the initial time step
     //   is larger than zero.
-    if (iniT>0) {
+    if (iniT>0)
+    {
         //loadRawMultiBlock(lattice, "checkpoint.dat");
         loadBinaryBlock(lattice, "checkpoint.dat");
     }
 
     // Main loop over time iterations.
-    for (plint iT=iniT; iT<endT; ++iT) {
-        if (iT%imageIter==0) {
+    for (plint iT=iniT; iT<endT; ++iT)
+    {
+        if (iT%imageIter==0)
+        {
             pcout << "Writing Gif ..." << endl;
             writeGifs(lattice, parameters, iT);
         }
 
-        if (iT%checkPointIter==0 && iT>iniT) {
+        if (iT%checkPointIter==0 && iT>iniT)
+        {
             pcout << "Saving the state of the simulation ..." << endl;
             //saveRawMultiBlock(lattice, "checkpoint.dat");
             saveBinaryBlock(lattice, "checkpoint.dat");
@@ -139,7 +147,8 @@ int main(int argc, char* argv[]) {
         // Lattice Boltzmann iteration step.
         lattice.collideAndStream();
 
-        if (iT%logIter==0) {
+        if (iT%logIter==0)
+        {
             pcout << "step " << iT
                   << "; t=" << iT*parameters.getDeltaT()
                   << "; av energy="

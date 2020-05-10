@@ -47,45 +47,54 @@
   */
 template<typename MatrixType> class LDLT
 {
-  public:
+public:
 
-    typedef typename MatrixType::Scalar Scalar;
-    typedef typename NumTraits<typename MatrixType::Scalar>::Real RealScalar;
-    typedef Matrix<Scalar, MatrixType::ColsAtCompileTime, 1> VectorType;
+	typedef typename MatrixType::Scalar Scalar;
+	typedef typename NumTraits<typename MatrixType::Scalar>::Real RealScalar;
+	typedef Matrix<Scalar, MatrixType::ColsAtCompileTime, 1> VectorType;
 
-    LDLT(const MatrixType& matrix)
-      : m_matrix(matrix.rows(), matrix.cols())
-    {
-      compute(matrix);
-    }
+	LDLT(const MatrixType& matrix)
+		: m_matrix(matrix.rows(), matrix.cols())
+	{
+		compute(matrix);
+	}
 
-    /** \returns the lower triangular matrix L */
-    inline Part<MatrixType, UnitLowerTriangular> matrixL(void) const { return m_matrix; }
+	/** \returns the lower triangular matrix L */
+	inline Part<MatrixType, UnitLowerTriangular> matrixL(void) const
+	{
+		return m_matrix;
+	}
 
-    /** \returns the coefficients of the diagonal matrix D */
-    inline DiagonalCoeffs<MatrixType> vectorD(void) const { return m_matrix.diagonal(); }
+	/** \returns the coefficients of the diagonal matrix D */
+	inline DiagonalCoeffs<MatrixType> vectorD(void) const
+	{
+		return m_matrix.diagonal();
+	}
 
-    /** \returns true if the matrix is positive definite */
-    inline bool isPositiveDefinite(void) const { return m_isPositiveDefinite; }
+	/** \returns true if the matrix is positive definite */
+	inline bool isPositiveDefinite(void) const
+	{
+		return m_isPositiveDefinite;
+	}
 
-    template<typename RhsDerived, typename ResultType>
-    bool solve(const MatrixBase<RhsDerived> &b, ResultType *result) const;
+	template<typename RhsDerived, typename ResultType>
+	bool solve(const MatrixBase<RhsDerived> &b, ResultType *result) const;
 
-    template<typename Derived>
-    bool solveInPlace(MatrixBase<Derived> &bAndX) const;
+	template<typename Derived>
+	bool solveInPlace(MatrixBase<Derived> &bAndX) const;
 
-    void compute(const MatrixType& matrix);
+	void compute(const MatrixType& matrix);
 
-  protected:
-    /** \internal
-      * Used to compute and store the cholesky decomposition A = L D L^* = U^* D U.
-      * The strict upper part is used during the decomposition, the strict lower
-      * part correspond to the coefficients of L (its diagonal is equal to 1 and
-      * is not stored), and the diagonal entries correspond to D.
-      */
-    MatrixType m_matrix;
+protected:
+	/** \internal
+	  * Used to compute and store the cholesky decomposition A = L D L^* = U^* D U.
+	  * The strict upper part is used during the decomposition, the strict lower
+	  * part correspond to the coefficients of L (its diagonal is equal to 1 and
+	  * is not stored), and the diagonal entries correspond to D.
+	  */
+	MatrixType m_matrix;
 
-    bool m_isPositiveDefinite;
+	bool m_isPositiveDefinite;
 };
 
 /** Compute / recompute the LLT decomposition A = L D L^* = U^* D U of \a matrix
@@ -93,52 +102,48 @@ template<typename MatrixType> class LDLT
 template<typename MatrixType>
 void LDLT<MatrixType>::compute(const MatrixType& a)
 {
-  assert(a.rows()==a.cols());
-  const int size = a.rows();
-  m_matrix.resize(size, size);
-  m_isPositiveDefinite = true;
-  const RealScalar eps = ei_sqrt(precision<Scalar>());
+	assert(a.rows()==a.cols());
+	const int size = a.rows();
+	m_matrix.resize(size, size);
+	m_isPositiveDefinite = true;
+	const RealScalar eps = ei_sqrt(precision<Scalar>());
 
-  if (size<=1)
-  {
-    m_matrix = a;
-    return;
-  }
+	if (size<=1) {
+		m_matrix = a;
+		return;
+	}
 
-  // Let's preallocate a temporay vector to evaluate the matrix-vector product into it.
-  // Unlike the standard LLT decomposition, here we cannot evaluate it to the destination
-  // matrix because it a sub-row which is not compatible suitable for efficient packet evaluation.
-  // (at least if we assume the matrix is col-major)
-  Matrix<Scalar,MatrixType::RowsAtCompileTime,1> _temporary(size);
+	// Let's preallocate a temporay vector to evaluate the matrix-vector product into it.
+	// Unlike the standard LLT decomposition, here we cannot evaluate it to the destination
+	// matrix because it a sub-row which is not compatible suitable for efficient packet evaluation.
+	// (at least if we assume the matrix is col-major)
+	Matrix<Scalar,MatrixType::RowsAtCompileTime,1> _temporary(size);
 
-  // Note that, in this algorithm the rows of the strict upper part of m_matrix is used to store
-  // column vector, thus the strange .conjugate() and .transpose()...
+	// Note that, in this algorithm the rows of the strict upper part of m_matrix is used to store
+	// column vector, thus the strange .conjugate() and .transpose()...
 
-  m_matrix.row(0) = a.row(0).conjugate();
-  m_matrix.col(0).end(size-1) = m_matrix.row(0).end(size-1) / m_matrix.coeff(0,0);
-  for (int j = 1; j < size; ++j)
-  {
-    RealScalar tmp = ei_real(a.coeff(j,j) - (m_matrix.row(j).start(j) * m_matrix.col(j).start(j).conjugate()).coeff(0,0));
-    m_matrix.coeffRef(j,j) = tmp;
+	m_matrix.row(0) = a.row(0).conjugate();
+	m_matrix.col(0).end(size-1) = m_matrix.row(0).end(size-1) / m_matrix.coeff(0,0);
+	for (int j = 1; j < size; ++j) {
+		RealScalar tmp = ei_real(a.coeff(j,j) - (m_matrix.row(j).start(j) * m_matrix.col(j).start(j).conjugate()).coeff(0,0));
+		m_matrix.coeffRef(j,j) = tmp;
 
-    if (tmp < eps)
-    {
-      m_isPositiveDefinite = false;
-      return;
-    }
+		if (tmp < eps) {
+			m_isPositiveDefinite = false;
+			return;
+		}
 
-    int endSize = size-j-1;
-    if (endSize>0)
-    {
-      _temporary.end(endSize) = ( m_matrix.block(j+1,0, endSize, j)
-                                  * m_matrix.col(j).start(j).conjugate() ).lazy();
+		int endSize = size-j-1;
+		if (endSize>0) {
+			_temporary.end(endSize) = ( m_matrix.block(j+1,0, endSize, j)
+			                            * m_matrix.col(j).start(j).conjugate() ).lazy();
 
-      m_matrix.row(j).end(endSize) = a.row(j).end(endSize).conjugate()
-                                   - _temporary.end(endSize).transpose();
+			m_matrix.row(j).end(endSize) = a.row(j).end(endSize).conjugate()
+			                               - _temporary.end(endSize).transpose();
 
-      m_matrix.col(j).end(endSize) = m_matrix.row(j).end(endSize) / tmp;
-    }
-  }
+			m_matrix.col(j).end(endSize) = m_matrix.row(j).end(endSize) / tmp;
+		}
+	}
 }
 
 /** Computes the solution x of \f$ A x = b \f$ using the current decomposition of A.
@@ -156,10 +161,10 @@ template<typename RhsDerived, typename ResultType>
 bool LDLT<MatrixType>
 ::solve(const MatrixBase<RhsDerived> &b, ResultType *result) const
 {
-  const int size = m_matrix.rows();
-  ei_assert(size==b.rows() && "LLT::solve(): invalid number of rows of the right hand side matrix b");
-  *result = b;
-  return solveInPlace(*result);
+	const int size = m_matrix.rows();
+	ei_assert(size==b.rows() && "LLT::solve(): invalid number of rows of the right hand side matrix b");
+	*result = b;
+	return solveInPlace(*result);
 }
 
 /** This is the \em in-place version of solve().
@@ -175,14 +180,14 @@ template<typename MatrixType>
 template<typename Derived>
 bool LDLT<MatrixType>::solveInPlace(MatrixBase<Derived> &bAndX) const
 {
-  const int size = m_matrix.rows();
-  ei_assert(size==bAndX.rows());
-  if (!m_isPositiveDefinite)
-    return false;
-  matrixL().solveTriangularInPlace(bAndX);
-  bAndX = (m_matrix.cwise().inverse().template part<Diagonal>() * bAndX).lazy();
-  m_matrix.adjoint().template part<UnitUpperTriangular>().solveTriangularInPlace(bAndX);
-  return true;
+	const int size = m_matrix.rows();
+	ei_assert(size==bAndX.rows());
+	if (!m_isPositiveDefinite)
+		return false;
+	matrixL().solveTriangularInPlace(bAndX);
+	bAndX = (m_matrix.cwise().inverse().template part<Diagonal>() * bAndX).lazy();
+	m_matrix.adjoint().template part<UnitUpperTriangular>().solveTriangularInPlace(bAndX);
+	return true;
 }
 
 /** \cholesky_module
@@ -192,7 +197,7 @@ template<typename Derived>
 inline const LDLT<typename MatrixBase<Derived>::PlainMatrixType>
 MatrixBase<Derived>::ldlt() const
 {
-  return derived();
+	return derived();
 }
 
 #endif // EIGEN_LDLT_H

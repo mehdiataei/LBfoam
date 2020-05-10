@@ -27,7 +27,6 @@
 
 #include "core/globalDefs.h"
 #include "core/functions.h"
-#include "latticeBoltzmann/geometricOperationTemplates.h"
 #include "offLattice/offLatticeBoundaryProfiles3D.h"
 
 namespace plb {
@@ -460,40 +459,6 @@ VelocityPlugProfile3D<T>*
 }
 
 
-/********** ExactRotationalVelocityProfile3D ********************************************/
-
-template<typename T>
-ExactRotationalVelocityProfile3D<T>::ExactRotationalVelocityProfile3D(
-        Array<T,3> const& angularVelocity_, Array<T,3> const& pointOnRotationAxis_)
-    : angularVelocity(angularVelocity_),
-      pointOnRotationAxis(pointOnRotationAxis_)
-{ }
-
-template<typename T>
-void ExactRotationalVelocityProfile3D<T>::setNormal(Array<T,3> const& normal_)
-{ }
-
-template<typename T>
-void ExactRotationalVelocityProfile3D<T>::defineCircularShape(Array<T,3> const& center_, T radius_)
-{ }
-
-template<typename T>
-void ExactRotationalVelocityProfile3D<T>::getData (
-        Array<T,3> const& pos, plint id, AtomicBlock3D const* argument,
-        Array<T,3>& data, OffBoundary::Type& bdType ) const
-{
-    bdType = OffBoundary::dirichlet;
-    data = getExactRotationalVelocity(pos, angularVelocity, pointOnRotationAxis);
-}
-
-template<typename T>
-ExactRotationalVelocityProfile3D<T>*
-    ExactRotationalVelocityProfile3D<T>::clone() const
-{
-    return new ExactRotationalVelocityProfile3D<T>(*this);
-}
-
-
 /********** NeumannBoundaryProfile3D ******************************************/
 
 template<typename T>
@@ -536,7 +501,9 @@ DensityNeumannBoundaryProfile3D<T>::DensityNeumannBoundaryProfile3D(T rho_)
 
 template<typename T>
 void DensityNeumannBoundaryProfile3D<T>::setNormal(Array<T,3> const& normal_)
-{ }
+{
+    normal = normal_;
+}
 
 template<typename T>
 void DensityNeumannBoundaryProfile3D<T>::defineCircularShape (

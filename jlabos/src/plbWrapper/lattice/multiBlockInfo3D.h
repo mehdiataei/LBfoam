@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,22 +32,24 @@
 #include "multiBlock/multiBlockLattice3D.h"
 #include "multiBlock/multiBlockInfo3D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename T> class Descriptor>
-class MultiBlockLatticeInfo {
+class MultiBlockLatticeInfo
+{
 public:
-    MultiBlockLatticeInfo(MultiBlockLattice3D<T,Descriptor> const& multiBlock);
-    plint getNx() const;
-    plint getNy() const;
-    plint getNz() const;
-    plint getNumBlocks() const;
-    Box3D getSmallestBlock() const;
-    Box3D getLargestBlock() const;
-    plint getNumAllocatedCells() const;
+	MultiBlockLatticeInfo(MultiBlockLattice3D<T,Descriptor> const& multiBlock);
+	plint getNx() const;
+	plint getNy() const;
+	plint getNz() const;
+	plint getNumBlocks() const;
+	Box3D getSmallestBlock() const;
+	Box3D getLargestBlock() const;
+	plint getNumAllocatedCells() const;
 private:
-    plint nx, ny, nz, numBlocks, numAllocatedCells;
-    Box3D smallest, largest;
+	plint nx, ny, nz, numBlocks, numAllocatedCells;
+	Box3D smallest, largest;
 };
 
 }  // namespace plb

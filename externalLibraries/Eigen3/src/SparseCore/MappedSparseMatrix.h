@@ -10,7 +10,8 @@
 #ifndef EIGEN_MAPPED_SPARSEMATRIX_H
 #define EIGEN_MAPPED_SPARSEMATRIX_H
 
-namespace Eigen {
+namespace Eigen
+{
 
 /** \deprecated Use Map<SparseMatrix<> >
   * \class MappedSparseMatrix
@@ -22,42 +23,43 @@ namespace Eigen {
   * See http://www.netlib.org/linalg/html_templates/node91.html for details on the storage scheme.
   *
   */
-namespace internal {
+namespace internal
+{
 template<typename _Scalar, int _Flags, typename _StorageIndex>
-struct traits<MappedSparseMatrix<_Scalar, _Flags, _StorageIndex> > : traits<SparseMatrix<_Scalar, _Flags, _StorageIndex> >
-{};
+struct traits<MappedSparseMatrix<_Scalar, _Flags, _StorageIndex> > : traits<SparseMatrix<_Scalar, _Flags, _StorageIndex> > {
+};
 } // end namespace internal
 
 template<typename _Scalar, int _Flags, typename _StorageIndex>
 class MappedSparseMatrix
-  : public Map<SparseMatrix<_Scalar, _Flags, _StorageIndex> >
+	: public Map<SparseMatrix<_Scalar, _Flags, _StorageIndex> >
 {
-    typedef Map<SparseMatrix<_Scalar, _Flags, _StorageIndex> > Base;
+	typedef Map<SparseMatrix<_Scalar, _Flags, _StorageIndex> > Base;
 
-  public:
-    
-    typedef typename Base::StorageIndex StorageIndex;
-    typedef typename Base::Scalar Scalar;
+public:
 
-    inline MappedSparseMatrix(Index rows, Index cols, Index nnz, StorageIndex* outerIndexPtr, StorageIndex* innerIndexPtr, Scalar* valuePtr, StorageIndex* innerNonZeroPtr = 0)
-      : Base(rows, cols, nnz, outerIndexPtr, innerIndexPtr, valuePtr, innerNonZeroPtr)
-    {}
+	typedef typename Base::StorageIndex StorageIndex;
+	typedef typename Base::Scalar Scalar;
 
-    /** Empty destructor */
-    inline ~MappedSparseMatrix() {}
+	inline MappedSparseMatrix(Index rows, Index cols, Index nnz, StorageIndex* outerIndexPtr, StorageIndex* innerIndexPtr, Scalar* valuePtr, StorageIndex* innerNonZeroPtr = 0)
+		: Base(rows, cols, nnz, outerIndexPtr, innerIndexPtr, valuePtr, innerNonZeroPtr)
+	{}
+
+	/** Empty destructor */
+	inline ~MappedSparseMatrix() {}
 };
 
-namespace internal {
+namespace internal
+{
 
 template<typename _Scalar, int _Options, typename _StorageIndex>
 struct evaluator<MappedSparseMatrix<_Scalar,_Options,_StorageIndex> >
-  : evaluator<SparseCompressedBase<MappedSparseMatrix<_Scalar,_Options,_StorageIndex> > >
-{
-  typedef MappedSparseMatrix<_Scalar,_Options,_StorageIndex> XprType;
-  typedef evaluator<SparseCompressedBase<XprType> > Base;
-  
-  evaluator() : Base() {}
-  explicit evaluator(const XprType &mat) : Base(mat) {}
+	: evaluator<SparseCompressedBase<MappedSparseMatrix<_Scalar,_Options,_StorageIndex> > > {
+	typedef MappedSparseMatrix<_Scalar,_Options,_StorageIndex> XprType;
+	typedef evaluator<SparseCompressedBase<XprType> > Base;
+
+	evaluator() : Base() {}
+	explicit evaluator(const XprType &mat) : Base(mat) {}
 };
 
 }

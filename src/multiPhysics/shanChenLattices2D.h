@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,69 +35,69 @@
 #include "core/globalDefs.h"
 #include "latticeBoltzmann/nearestNeighborLattices2D.h"
 
-namespace plb {
+namespace plb
+{
 
-namespace descriptors {
+namespace descriptors
+{
 
-    /// Density and Momentum as external scalars
-    struct DensityMomentumNoForceExternals2D {
-        static const int numScalars = 3;
-        static const int numSpecies = 2;
+/// Density and Momentum as external scalars
+struct DensityMomentumNoForceExternals2D {
+	static const int numScalars = 3;
+	static const int numSpecies = 2;
 
-        static const int densityBeginsAt  = 0;
-        static const int sizeOfDensity    = 1;
+	static const int densityBeginsAt  = 0;
+	static const int sizeOfDensity    = 1;
 
-        static const int momentumBeginsAt = 1;
-        static const int sizeOfMomentum   = 2;
+	static const int momentumBeginsAt = 1;
+	static const int sizeOfMomentum   = 2;
 
-        static const int forceBeginsAt    = 0;
-        static const int sizeOfForce      = 0;
-    };
+	static const int forceBeginsAt    = 0;
+	static const int sizeOfForce      = 0;
+};
 
-    /// Density, Momentum and Force as external scalars
-    struct DensityMomentumForceExternals2D {
-        static const int numScalars = 5;
-        static const int numSpecies = 3;
+/// Density, Momentum and Force as external scalars
+struct DensityMomentumForceExternals2D {
+	static const int numScalars = 5;
+	static const int numSpecies = 3;
 
-        static const int densityBeginsAt  = 0;
-        static const int sizeOfDensity    = 1;
+	static const int densityBeginsAt  = 0;
+	static const int sizeOfDensity    = 1;
 
-        static const int momentumBeginsAt = 1;
-        static const int sizeOfMomentum   = 2;
+	static const int momentumBeginsAt = 1;
+	static const int sizeOfMomentum   = 2;
 
-        static const int forceBeginsAt    = 3;
-        static const int sizeOfForce      = 2;
-    };
+	static const int forceBeginsAt    = 3;
+	static const int sizeOfForce      = 2;
+};
 
-    struct ShanChenExternalBase2D {
-        typedef DensityMomentumNoForceExternals2D ExternalField;
-    };
+struct ShanChenExternalBase2D {
+	typedef DensityMomentumNoForceExternals2D ExternalField;
+};
 
-    struct ForcedShanChenExternalBase2D {
-        typedef DensityMomentumForceExternals2D ExternalField;
-    };
+struct ForcedShanChenExternalBase2D {
+	typedef DensityMomentumForceExternals2D ExternalField;
+};
 
-    /// D2Q9 lattice for Shan-Chen model
-    template <typename T>
-    struct ShanChenD2Q9Descriptor
-        : public D2Q9DescriptorBase<T>, public ShanChenExternalBase2D
-    {
-        static const char name[];
-    };
+/// D2Q9 lattice for Shan-Chen model
+template <typename T>
+struct ShanChenD2Q9Descriptor
+	: public D2Q9DescriptorBase<T>, public ShanChenExternalBase2D {
+	static const char name[];
+};
 
-    template<typename T>
-    const char ShanChenD2Q9Descriptor<T>::name[] = "ShanChenD2Q9";
+template<typename T>
+const char ShanChenD2Q9Descriptor<T>::name[] = "ShanChenD2Q9";
 
-    /// D2Q9 lattice for Shan-Chen model with force
-    template <typename T>
-    struct ForcedShanChenD2Q9Descriptor
-        : public D2Q9DescriptorBase<T>, public ForcedShanChenExternalBase2D
-    {
-        static const char name[];
-    };
+/// D2Q9 lattice for Shan-Chen model with force
+template <typename T>
+struct ForcedShanChenD2Q9Descriptor
+	: public D2Q9DescriptorBase<T>, public ForcedShanChenExternalBase2D {
+	static const char name[];
+};
 
-    template<typename T>
-    const char ForcedShanChenD2Q9Descriptor<T>::name[] = "ForcedShanChenD2Q9";
+template<typename T>
+const char ForcedShanChenD2Q9Descriptor<T>::name[] = "ForcedShanChenD2Q9";
 
 }  // namespace descriptors
 

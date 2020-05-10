@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -24,7 +24,7 @@
 
 /* Acknowledgment: The strategy adopted here to encode
  * and decode Base64, and in particular the expression of the
- * arrays Base64Encoder::enc64 and Base64Decoder::dec64, 
+ * arrays Base64Encoder::enc64 and Base64Decoder::dec64,
  * are inspired by the open source library b64 by Bob Trower,
  * which is distributed under an MIT license at the address
  * http://base64.sourceforge.net/b64.c
@@ -37,46 +37,49 @@
 #include "core/globalDefs.h"
 #include <iosfwd>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class Base64Encoder {
+class Base64Encoder
+{
 public:
-    Base64Encoder(std::ostream& ostr_, pluint fullLength_);
-    void encode(const T* data, pluint length);
+	Base64Encoder(std::ostream& ostr_, pluint fullLength_);
+	void encode(const T* data, pluint length);
 private:
-    void fillOverflow(const unsigned char* charData, pluint charLength, pluint& pos);
-    void flushOverflow();
-    void writeSize();
-    void encodeBlock( const unsigned char* data);
-    void encodeUnfinishedBlock( const unsigned char* data, plint length);
+	void fillOverflow(const unsigned char* charData, pluint charLength, pluint& pos);
+	void flushOverflow();
+	void writeSize();
+	void encodeBlock( const unsigned char* data);
+	void encodeUnfinishedBlock( const unsigned char* data, plint length);
 private:
-    static const char enc64[65];
+	static const char enc64[65];
 private:
-    std::ostream& ostr;
-    pluint charFullLength;
-    pluint numWritten;
-    plint numOverflow;
-    unsigned char overflow[3];
+	std::ostream& ostr;
+	pluint charFullLength;
+	pluint numWritten;
+	plint numOverflow;
+	unsigned char overflow[3];
 };
 
 template<typename T>
-class Base64Decoder {
+class Base64Decoder
+{
 public:
-    Base64Decoder(std::istream& istr_, pluint fullLength_);
-    void decode(T* data, pluint length);
+	Base64Decoder(std::istream& istr_, pluint fullLength_);
+	void decode(T* data, pluint length);
 private:
-    void flushOverflow(unsigned char* charData, pluint charLength, pluint& pos);
-    unsigned char getNext();
-    void decodeBlock(unsigned char* data);
+	void flushOverflow(unsigned char* charData, pluint charLength, pluint& pos);
+	unsigned char getNext();
+	void decodeBlock(unsigned char* data);
 private:
-    static const char dec64[82];
+	static const char dec64[82];
 private:
-    std::istream& istr;
-    pluint charFullLength;
-    pluint numRead;
-    plint posOverflow;
-    unsigned char overflow[3];
+	std::istream& istr;
+	pluint charFullLength;
+	pluint numRead;
+	plint posOverflow;
+	unsigned char overflow[3];
 };
 
 } // namespace plb

@@ -588,7 +588,8 @@ MultiNTensorField2D<T>::~MultiNTensorField2D() {
 template<typename T>
 MultiNTensorField2D<T>::MultiNTensorField2D(MultiNTensorField2D<T> const& rhs)
     : NTensorFieldBase2D<T>(rhs),
-      MultiBlock2D(rhs),
+      // Use MultiBlock's sub-domain constructor to avoid that the data-processors are copied
+      MultiBlock2D(rhs, rhs.getBoundingBox(), false),
       multiNTensorAccess(rhs.multiNTensorAccess->clone())
 {
     allocateFields();

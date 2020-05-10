@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,31 +31,36 @@
 #include "core/globalDefs.h"
 #include <cmath>
 
-namespace plb {
+namespace plb
+{
 
 // Templatize computation of the power, because
 //   the integer case must be treated separately.
 
 template<typename T>
-inline T customPower(T a, T b) {
-    return pow(a,b);
+inline T customPower(T a, T b)
+{
+	return pow(a,b);
 }
 
 template<>
-inline int customPower(int a, int b) {
-    double result = pow((double)a,(double)b);
-    return (int)(result+0.5);
+inline int customPower(int a, int b)
+{
+	double result = pow((double)a,(double)b);
+	return (int)(result+0.5);
 }
 
 template<typename T>
-inline void customInPlacePower(T& a, T b) {
-    a = pow(a,b);
+inline void customInPlacePower(T& a, T b)
+{
+	a = pow(a,b);
 }
 
 template<>
-inline void customInPlacePower(int& a, int b) {
-    double result = pow((double)a,(double)b);
-    a = (int)(result+0.5);
+inline void customInPlacePower(int& a, int b)
+{
+	double result = pow((double)a,(double)b);
+	a = (int)(result+0.5);
 }
 
 }  // namespace plb

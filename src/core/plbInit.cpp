@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,9 +33,11 @@
 #include "core/runTimeDiagnostics.h"
 #include <sstream>
 
-namespace plb {
+namespace plb
+{
 
-void plbInit(int *argc, char ***argv, bool verbous) {
+void plbInit(int *argc, char ***argv, bool verbous)
+{
     global::mpi().init(argc, argv, verbous);
     global::mainArguments().setArgs(*argc, argv);
     global::plbRandom<float>().seed(10);
@@ -43,82 +45,99 @@ void plbInit(int *argc, char ***argv, bool verbous) {
     global::plbRandom<plint>().seed(10);
 }
 
-void plbInit() {
+void plbInit()
+{
     global::mpi().init();
     global::plbRandom<float>().seed(10);
     global::plbRandom<double>().seed(10);
     global::plbRandom<plint>().seed(10);
 }
 
-namespace global {
+namespace global
+{
 
-    MainArgv::MainArgv(std::string argument_, int whichArg_)
-        : argument(argument_),
-          whichArg(whichArg_)
-    { }
+MainArgv::MainArgv(std::string argument_, int whichArg_)
+    : argument(argument_),
+      whichArg(whichArg_)
+{ }
 
-    MainArgv:: operator std::string() const {
-        return argument;
+MainArgv:: operator std::string() const
+{
+    return argument;
+}
+
+int MainArgs::argc() const
+{
+    if (arguments.empty())
+    {
+        plbLogicError("Can't access command-line arguments: they have not yet been initialized.");
     }
+    return (int) arguments.size();
+}
 
-    int MainArgs::argc() const {
-        if (arguments.empty()) {
-            plbLogicError("Can't access command-line arguments: they have not yet been initialized.");
+MainArgv MainArgs::argv(int whichArg) const
+{
+    if (arguments.empty())
+    {
+        plbLogicError("Can't access command-line arguments: they have not yet been initialized.");
+    }
+    if (whichArg >= argc())
+    {
+        std::stringstream errMessage;
+        errMessage << "Can\'t read command-line argument " << whichArg << ": ";
+        if (argc()==1)
+        {
+            errMessage << "there are no command-line arguments";
         }
-        return (int) arguments.size();
-    }
-
-    MainArgv MainArgs::argv(int whichArg) const {
-        if (arguments.empty()) {
-            plbLogicError("Can't access command-line arguments: they have not yet been initialized.");
+        else if (argc()==2)
+        {
+            errMessage << "there is only one command-line argument";
         }
-        if (whichArg >= argc()) {
-            std::stringstream errMessage;
-            errMessage << "Can\'t read command-line argument " << whichArg << ": ";
-            if (argc()==1) {
-                errMessage << "there are no command-line arguments";
-            }
-            else if (argc()==2) {
-                errMessage << "there is only one command-line argument";
-            }
-            else {
-                errMessage << "there are only " << argc()-1 << " arguments";
-            }
-            plbIOError(errMessage.str());
+        else
+        {
+            errMessage << "there are only " << argc()-1 << " arguments";
         }
-        return MainArgv(arguments[whichArg], whichArg);
+        plbIOError(errMessage.str());
     }
+    return MainArgv(arguments[whichArg], whichArg);
+}
 
-    MainArgs::MainArgs()
-    { }
+MainArgs::MainArgs()
+{ }
 
-    void MainArgs::setArgs(int argcValue, char*** argvPointer) {
-        arguments.resize(argcValue);
-        for (plint iArg=0; iArg<argcValue; ++iArg) {
-            arguments[iArg] = std::string((*argvPointer)[iArg]);
-        }
+void MainArgs::setArgs(int argcValue, char*** argvPointer)
+{
+    arguments.resize(argcValue);
+    for (plint iArg=0; iArg<argcValue; ++iArg)
+    {
+        arguments[iArg] = std::string((*argvPointer)[iArg]);
     }
+}
 
-    void MainArgs::setArgs(std::vector<std::string> arguments_) {
-        arguments = arguments_;
-    }
+void MainArgs::setArgs(std::vector<std::string> arguments_)
+{
+    arguments = arguments_;
+}
 
-    MainArgs& mainArguments() {
-        static MainArgs instance;
-        return instance;
-    }
+MainArgs& mainArguments()
+{
+    static MainArgs instance;
+    return instance;
+}
 
-    int argc() {
-        return mainArguments().argc();
-    }
+int argc()
+{
+    return mainArguments().argc();
+}
 
-    MainArgv argv(int whichArg) {
-        return mainArguments().argv(whichArg);
-    }
+MainArgv argv(int whichArg)
+{
+    return mainArguments().argv(whichArg);
+}
 
-    template void MainArgv::read<int>(int& variable);
-    template void MainArgv::read<double>(double& variable);
-    template void MainArgv::read<std::string>(std::string& variable);
+template void MainArgv::read<int>(int& variable);
+template void MainArgv::read<double>(double& variable);
+template void MainArgv::read<std::string>(std::string& variable);
 
 }  // namespace global
 

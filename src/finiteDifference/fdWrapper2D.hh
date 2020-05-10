@@ -47,10 +47,10 @@ void computeLaplacian(MultiScalarField2D<T>& value, MultiScalarField2D<T>& lapla
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeLaplacian(MultiScalarField2D<T>& value, Box2D const& domain) {
+std::auto_ptr<MultiScalarField2D<T> > computeLaplacian(MultiScalarField2D<T>& value, Box2D const& domain) {
     MultiScalarField2D<T>* laplacian = new MultiScalarField2D<T>(value, domain);
     computeLaplacian(value, *laplacian, domain);
-    return std::unique_ptr<MultiScalarField2D<T> >(laplacian);
+    return std::auto_ptr<MultiScalarField2D<T> >(laplacian);
 }
 
 template<typename T>
@@ -61,14 +61,14 @@ void computeXderivative(MultiScalarField2D<T>& value, MultiScalarField2D<T>& der
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeXderivative(MultiScalarField2D<T>& value, Box2D const& domain) {
+std::auto_ptr<MultiScalarField2D<T> > computeXderivative(MultiScalarField2D<T>& value, Box2D const& domain) {
     MultiScalarField2D<T>* derivative = new MultiScalarField2D<T>(value, domain);
     computeXderivative(value, *derivative, domain);
-    return std::unique_ptr<MultiScalarField2D<T> >(derivative);
+    return std::auto_ptr<MultiScalarField2D<T> >(derivative);
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeXderivative(MultiScalarField2D<T>& value) {
+std::auto_ptr<MultiScalarField2D<T> > computeXderivative(MultiScalarField2D<T>& value) {
     return computeXderivative(value, value.getBoundingBox());
 }
 
@@ -81,14 +81,14 @@ void computeYderivative(MultiScalarField2D<T>& value, MultiScalarField2D<T>& der
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeYderivative(MultiScalarField2D<T>& value, Box2D const& domain) {
+std::auto_ptr<MultiScalarField2D<T> > computeYderivative(MultiScalarField2D<T>& value, Box2D const& domain) {
     MultiScalarField2D<T>* derivative = new MultiScalarField2D<T>(value, domain);
     computeYderivative(value, *derivative, domain);
-    return std::unique_ptr<MultiScalarField2D<T> >(derivative);
+    return std::auto_ptr<MultiScalarField2D<T> >(derivative);
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeYderivative(MultiScalarField2D<T>& value) {
+std::auto_ptr<MultiScalarField2D<T> > computeYderivative(MultiScalarField2D<T>& value) {
     return computeYderivative(value, value.getBoundingBox());
 }
 
@@ -100,39 +100,39 @@ void computeGradientNorm(MultiScalarField2D<T>& value, MultiScalarField2D<T>& de
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeGradientNorm(MultiScalarField2D<T>& value, Box2D const& domain) {
+std::auto_ptr<MultiScalarField2D<T> > computeGradientNorm(MultiScalarField2D<T>& value, Box2D const& domain) {
     MultiScalarField2D<T>* derivative = new MultiScalarField2D<T>(value, domain);
     computeGradientNorm(value, *derivative, domain);
-    return std::unique_ptr<MultiScalarField2D<T> >(derivative);
+    return std::auto_ptr<MultiScalarField2D<T> >(derivative);
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeGradientNorm(MultiScalarField2D<T>& value) {
+std::auto_ptr<MultiScalarField2D<T> > computeGradientNorm(MultiScalarField2D<T>& value) {
     return computeGradientNorm(value, value.getBoundingBox());
 }
 
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computePoissonRHS(MultiTensorField2D<T,2>& velocity, Box2D const& domain)
+std::auto_ptr<MultiScalarField2D<T> > computePoissonRHS(MultiTensorField2D<T,2>& velocity, Box2D const& domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > ux = extractComponent(velocity, domain, 0);
-    std::unique_ptr<MultiScalarField2D<T> > uy = extractComponent(velocity, domain, 1);
+    std::auto_ptr<MultiScalarField2D<T> > ux = extractComponent(velocity, domain, 0);
+    std::auto_ptr<MultiScalarField2D<T> > uy = extractComponent(velocity, domain, 1);
 
-    std::unique_ptr<MultiScalarField2D<T> > dx_ux = computeXderivative(*ux, domain);
-    std::unique_ptr<MultiScalarField2D<T> > dy_ux = computeYderivative(*ux, domain);
-    std::unique_ptr<MultiScalarField2D<T> > dx_uy = computeXderivative(*uy, domain);
-    std::unique_ptr<MultiScalarField2D<T> > dy_uy = computeYderivative(*uy, domain);
+    std::auto_ptr<MultiScalarField2D<T> > dx_ux = computeXderivative(*ux, domain);
+    std::auto_ptr<MultiScalarField2D<T> > dy_ux = computeYderivative(*ux, domain);
+    std::auto_ptr<MultiScalarField2D<T> > dx_uy = computeXderivative(*uy, domain);
+    std::auto_ptr<MultiScalarField2D<T> > dy_uy = computeYderivative(*uy, domain);
 
-    std::unique_ptr<MultiScalarField2D<T> > term1 = multiply(*dx_ux, *dx_ux, domain);
-    std::unique_ptr<MultiScalarField2D<T> > term2 = multiply((T)2, *multiply(*dx_uy, *dy_ux, domain), domain);
-    std::unique_ptr<MultiScalarField2D<T> > term3 = multiply(*dy_uy, *dy_uy, domain);
+    std::auto_ptr<MultiScalarField2D<T> > term1 = multiply(*dx_ux, *dx_ux, domain);
+    std::auto_ptr<MultiScalarField2D<T> > term2 = multiply((T)2, *multiply(*dx_uy, *dy_ux, domain), domain);
+    std::auto_ptr<MultiScalarField2D<T> > term3 = multiply(*dy_uy, *dy_uy, domain);
 
-    std::unique_ptr<MultiScalarField2D<T> > rhs = add(*term1, *add(*term2, *term3));
+    std::auto_ptr<MultiScalarField2D<T> > rhs = add(*term1, *add(*term2, *term3));
     return rhs;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computePoissonRHS(MultiTensorField2D<T,2>& velocity) {
+std::auto_ptr<MultiScalarField2D<T> > computePoissonRHS(MultiTensorField2D<T,2>& velocity) {
     return computePoissonRHS(velocity, velocity.getBoundingBox());
 }
 

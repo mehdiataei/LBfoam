@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,7 +32,8 @@
 #include <cmath>
 #include <limits>
 
-namespace plb {
+namespace plb
+{
 OctreeProcessLoads::OctreeProcessLoads(plint numProcesses_, plint numCellsPerBlock_, int minLeafLevel_)
     : numProcesses(numProcesses_),
       numCellsPerBlock(numCellsPerBlock_),
@@ -105,4 +106,3 @@ plint OctreeProcessLoads::getProcessWithMinLoad() const
 
 
 } // namespace plb
-

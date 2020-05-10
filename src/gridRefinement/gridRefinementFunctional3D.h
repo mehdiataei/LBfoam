@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,7 +31,8 @@
 #include "core/globalDefs.h"
 #include "atomicBlock/dataProcessingFunctional3D.h"
 
-namespace plb {
+namespace plb
+{
 
 
 /* *************** PART I ******************************************** */
@@ -42,84 +43,84 @@ template<typename T>
 class TemporalInterpolationFunctional3D : public BoxProcessingFunctional3D
 {
 public:
-    virtual void processGenericBlocks ( Box3D domain, std::vector<AtomicBlock3D*> fields );
-    virtual TemporalInterpolationFunctional3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void processGenericBlocks ( Box3D domain, std::vector<AtomicBlock3D*> fields );
+	virtual TemporalInterpolationFunctional3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 template<typename T>
 class CopyAndSpatialInterpolationPlaneFunctional3D : public BoxProcessingFunctional3D_NN<T,T>
 {
 public:
-    CopyAndSpatialInterpolationPlaneFunctional3D(plint direction_);
-    
-    virtual void process(Box3D domain, NTensorField3D<T>& cTensor, NTensorField3D<T>& fTensor);
-    virtual CopyAndSpatialInterpolationPlaneFunctional3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	CopyAndSpatialInterpolationPlaneFunctional3D(plint direction_);
+
+	virtual void process(Box3D domain, NTensorField3D<T>& cTensor, NTensorField3D<T>& fTensor);
+	virtual CopyAndSpatialInterpolationPlaneFunctional3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 private:
-    plint direction;
+	plint direction;
 };
 
 template<typename T>
 class CopyAndSpatialInterpolationEdgeFunctional3D : public BoxProcessingFunctional3D_NN<T,T>
 {
 public:
-    CopyAndSpatialInterpolationEdgeFunctional3D(plint direction_, plint orientOne_, plint orientTwo_);
-    
-    virtual void process(Box3D domain, NTensorField3D<T>& cTensor, NTensorField3D<T>& fTensor);
-    virtual CopyAndSpatialInterpolationEdgeFunctional3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	CopyAndSpatialInterpolationEdgeFunctional3D(plint direction_, plint orientOne_, plint orientTwo_);
+
+	virtual void process(Box3D domain, NTensorField3D<T>& cTensor, NTensorField3D<T>& fTensor);
+	virtual CopyAndSpatialInterpolationEdgeFunctional3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 private:
-    plint direction, orientOne, orientTwo;
+	plint direction, orientOne, orientTwo;
 };
 
 template<typename T>
 class CopyAndSpatialInterpolationCornerFunctional3D : public BoxProcessingFunctional3D_NN<T,T>
 {
 public:
-    CopyAndSpatialInterpolationCornerFunctional3D(plint direction_, plint orientOne_, plint orientTwo_);
-    
-    virtual void process(Box3D domain, NTensorField3D<T>& cTensor,NTensorField3D<T>& fTensor);
-    virtual CopyAndSpatialInterpolationCornerFunctional3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	CopyAndSpatialInterpolationCornerFunctional3D(plint direction_, plint orientOne_, plint orientTwo_);
+
+	virtual void process(Box3D domain, NTensorField3D<T>& cTensor,NTensorField3D<T>& fTensor);
+	virtual CopyAndSpatialInterpolationCornerFunctional3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 private:
-    /* Direction is 0 for the interface parallel to the X 
-     * axis and 1 for parallel in the Y axis. Orientation is -1 for negative in the axis xComp
-     * +1 is for positive in the axis xComp. **/ 
-    plint direction, orientOne, orientTwo;
+	/* Direction is 0 for the interface parallel to the X
+	 * axis and 1 for parallel in the Y axis. Orientation is -1 for negative in the axis xComp
+	 * +1 is for positive in the axis xComp. **/
+	plint direction, orientOne, orientTwo;
 };
 
 template<typename T>
 class CopyAndSpatialInterpolationBoundaryEdgeFunctional3D : public BoxProcessingFunctional3D_NN<T,T>
 {
 public:
-    CopyAndSpatialInterpolationBoundaryEdgeFunctional3D(plint direction_, plint orientOne_, plint orientTwo_);
-    
-    virtual void process(Box3D domain, NTensorField3D<T>& cTensor,NTensorField3D<T>& fTensor);
-    virtual CopyAndSpatialInterpolationBoundaryEdgeFunctional3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	CopyAndSpatialInterpolationBoundaryEdgeFunctional3D(plint direction_, plint orientOne_, plint orientTwo_);
+
+	virtual void process(Box3D domain, NTensorField3D<T>& cTensor,NTensorField3D<T>& fTensor);
+	virtual CopyAndSpatialInterpolationBoundaryEdgeFunctional3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 private:
-    /* Direction is 0 for the interface parallel to the X 
-     * axis and 1 for parallel in the Y axis. Orientation is -1 for negative in the axis xComp
-     * +1 is for positive in the axis xComp. **/ 
-    plint direction, orientOne, orientTwo;
+	/* Direction is 0 for the interface parallel to the X
+	 * axis and 1 for parallel in the Y axis. Orientation is -1 for negative in the axis xComp
+	 * +1 is for positive in the axis xComp. **/
+	plint direction, orientOne, orientTwo;
 };
 
 template<typename T>
 class CopyAndSpatialInterpolationBoundaryCornerFunctional3D : public BoxProcessingFunctional3D_NN<T,T>
 {
 public:
-    CopyAndSpatialInterpolationBoundaryCornerFunctional3D(plint direction_, plint orientOne_, plint orientTwo_);
-    
-    virtual void process(Box3D domain, NTensorField3D<T>& cTensor,NTensorField3D<T>& fTensor);
-    virtual CopyAndSpatialInterpolationBoundaryCornerFunctional3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	CopyAndSpatialInterpolationBoundaryCornerFunctional3D(plint direction_, plint orientOne_, plint orientTwo_);
+
+	virtual void process(Box3D domain, NTensorField3D<T>& cTensor,NTensorField3D<T>& fTensor);
+	virtual CopyAndSpatialInterpolationBoundaryCornerFunctional3D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 private:
-    /* Direction is 0 for the interface parallel to the X 
-     * axis, 1 for parallel in the Y axis, 2 for parallel in the Y axis. Orientation is -1 for negative in the axis xComp
-     * +1 is for positive in the axis xComp. **/ 
-    plint direction, orientOne, orientTwo;
+	/* Direction is 0 for the interface parallel to the X
+	 * axis, 1 for parallel in the Y axis, 2 for parallel in the Y axis. Orientation is -1 for negative in the axis xComp
+	 * +1 is for positive in the axis xComp. **/
+	plint direction, orientOne, orientTwo;
 };
 
 
@@ -128,9 +129,9 @@ class CopyAndFilterNonEquilibriumFunctional3D : public BoxProcessingFunctional3D
 {
 public:
 	CopyAndFilterNonEquilibriumFunctional3D(bool filterAll = true);
-    virtual void process(Box3D domain, NTensorField3D<T>& cTensor, NTensorField3D<T>& fTensor);
-    virtual CopyAndFilterNonEquilibriumFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void process(Box3D domain, NTensorField3D<T>& cTensor, NTensorField3D<T>& fTensor);
+	virtual CopyAndFilterNonEquilibriumFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 private:
 	plint minIndexFilter;
 };
@@ -139,42 +140,42 @@ template<typename T, template<typename U> class Descriptor>
 class CopyAndSelectiveFilterNonEquilibriumFunctional3D : public BoxProcessingFunctional3D_NN<T,T>
 {
 public:
-    CopyAndSelectiveFilterNonEquilibriumFunctional3D(T sigma_, bool filterAll = true);
-    virtual void process(Box3D domain, NTensorField3D<T>& cTensor, NTensorField3D<T>& fTensor);
-    virtual CopyAndSelectiveFilterNonEquilibriumFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	CopyAndSelectiveFilterNonEquilibriumFunctional3D(T sigma_, bool filterAll = true);
+	virtual void process(Box3D domain, NTensorField3D<T>& cTensor, NTensorField3D<T>& fTensor);
+	virtual CopyAndSelectiveFilterNonEquilibriumFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 private:
-    T sigma;
-    plint minIndexFilter;
-    Array<int,3> c;
-    Array<T,3> d;
+	T sigma;
+	plint minIndexFilter;
+	Array<int,3> c;
+	Array<T,3> d;
 };
 
 template<typename T, template<typename U> class Descriptor>
 class CopyFunctional3D : public BoxProcessingFunctional3D_NN<T,T>
 {
 public:
-    virtual void process(Box3D domain, NTensorField3D<T>& cTensor, NTensorField3D<T>& fTensor);
-    virtual CopyFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void process(Box3D domain, NTensorField3D<T>& cTensor, NTensorField3D<T>& fTensor);
+	virtual CopyFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 };
 
 
-template<typename T, template<typename U> class Descriptor, 
-    template<typename T2, template<typename U2> class Descriptor2> class Engine>
+template<typename T, template<typename U> class Descriptor,
+         template<typename T2, template<typename U2> class Descriptor2> class Engine>
 class DecomposeAndRescaleFunctional3D : public BoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    DecomposeAndRescaleFunctional3D(T xDt_, T xDxInv_, plint order_);
-    
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,NTensorField3D<T>& tensor);
-    virtual DecomposeAndRescaleFunctional3D<T,Descriptor,Engine>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    
+	DecomposeAndRescaleFunctional3D(T xDt_, T xDxInv_, plint order_);
+
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,NTensorField3D<T>& tensor);
+	virtual DecomposeAndRescaleFunctional3D<T,Descriptor,Engine>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
+
 private:
-    T xDt, xDxInv;
-    plint order;
+	T xDt, xDxInv;
+	plint order;
 };
 
 
@@ -182,19 +183,17 @@ template<typename T, template<typename U> class Descriptor>
 class RecomposeFunctional3D : public BoxProcessingFunctional3D_LN<T,Descriptor,T>
 {
 public:
-    RecomposeFunctional3D(plint order_);
-    
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,NTensorField3D<T>& tensor);
-    virtual RecomposeFunctional3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	RecomposeFunctional3D(plint order_);
+
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,NTensorField3D<T>& tensor);
+	virtual RecomposeFunctional3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    plint order;
+	plint order;
 };
 
 
 }  // namespace plb
 
 #endif  // DATA_ANALYSIS_FUNCTIONAL_3D_H
-
-

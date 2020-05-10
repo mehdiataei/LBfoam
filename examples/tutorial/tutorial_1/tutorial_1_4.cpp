@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -47,15 +47,18 @@ T rho0 = 1.; // All cells have initially density rho ...
 T deltaRho = 1.e-4;
 Array<T,2> u0(0,0);
 
-void initializeRhoOnCircle(plint iX, plint iY, T& rho, Array<T,2>& u) {
+void initializeRhoOnCircle(plint iX, plint iY, T& rho, Array<T,2>& u)
+{
     plint radius = nx/6;
     plint centerX = nx/3;
     plint centerY = ny/4;
     u = u0;
-    if( (iX-centerX)*(iX-centerX) + (iY-centerY)*(iY-centerY) < radius*radius) {
+    if( (iX-centerX)*(iX-centerX) + (iY-centerY)*(iY-centerY) < radius*radius)
+    {
         rho = rho0 + deltaRho;
     }
-    else {
+    else
+    {
         rho = rho0;
     }
 }
@@ -66,28 +69,30 @@ void defineInitialDensityAtCenter(MultiBlockLattice2D<T,DESCRIPTOR>& lattice)
 {
     // Initialize constant density everywhere.
     initializeAtEquilibrium (
-           lattice, lattice.getBoundingBox(), rho0, u0 );
+        lattice, lattice.getBoundingBox(), rho0, u0 );
 
     // And slightly higher density in the central box.
     initializeAtEquilibrium (
-           lattice, lattice.getBoundingBox(), initializeRhoOnCircle );
+        lattice, lattice.getBoundingBox(), initializeRhoOnCircle );
 
     lattice.initialize();
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-           nx, ny, new BGKdynamics<T,DESCRIPTOR>(omega) );
+        nx, ny, new BGKdynamics<T,DESCRIPTOR>(omega) );
 
     lattice.periodicity().toggleAll(true); // Set periodic boundaries.
 
     defineInitialDensityAtCenter(lattice);
 
     // First part: loop over time iterations.
-    for (plint iT=0; iT<maxIter; ++iT) {
+    for (plint iT=0; iT<maxIter; ++iT)
+    {
         lattice.collideAndStream();
     }
 

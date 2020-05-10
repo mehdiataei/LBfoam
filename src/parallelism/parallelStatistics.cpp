@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,7 +29,8 @@
 #include "parallelism/parallelStatistics.h"
 #include <cmath>
 
-namespace plb {
+namespace plb
+{
 
 #ifdef PLB_MPI_PARALLEL
 
@@ -39,18 +40,20 @@ ParallelCombinedStatistics* ParallelCombinedStatistics::clone() const
 }
 
 void ParallelCombinedStatistics::reduceStatistics (
-            std::vector<double>& averageObservables,
-            std::vector<double>& sumWeights,
-            std::vector<double>& sumObservables,
-            std::vector<double>& maxObservables,
-            std::vector<plint>& intSumObservables ) const
+    std::vector<double>& averageObservables,
+    std::vector<double>& sumWeights,
+    std::vector<double>& sumObservables,
+    std::vector<double>& maxObservables,
+    std::vector<plint>& intSumObservables ) const
 {
     // Averages
-    for (pluint iAverage=0; iAverage<averageObservables.size(); ++iAverage) {
+    for (pluint iAverage=0; iAverage<averageObservables.size(); ++iAverage)
+    {
         double globalAverage, globalWeight;
         global::mpi().reduce(averageObservables[iAverage]*sumWeights[iAverage], globalAverage, MPI_SUM);
         global::mpi().reduce(sumWeights[iAverage], globalWeight, MPI_SUM);
-        if (global::mpi().isMainProcessor() && std::fabs(globalWeight) > 0.5) {
+        if (global::mpi().isMainProcessor() && std::fabs(globalWeight) > 0.5)
+        {
             globalAverage /= globalWeight;
         }
         global::mpi().bCast(&globalAverage, 1);
@@ -58,7 +61,8 @@ void ParallelCombinedStatistics::reduceStatistics (
     }
 
     // Sum
-    for (pluint iSum=0; iSum<sumObservables.size(); ++iSum) {
+    for (pluint iSum=0; iSum<sumObservables.size(); ++iSum)
+    {
         double globalSum;
         global::mpi().reduce(sumObservables[iSum], globalSum, MPI_SUM);
         global::mpi().bCast(&globalSum, 1);
@@ -66,7 +70,8 @@ void ParallelCombinedStatistics::reduceStatistics (
     }
 
     // Max
-    for (pluint iMax=0; iMax<maxObservables.size(); ++iMax) {
+    for (pluint iMax=0; iMax<maxObservables.size(); ++iMax)
+    {
         double globalMax;
         global::mpi().reduce(maxObservables[iMax], globalMax, MPI_MAX);
         global::mpi().bCast(&globalMax, 1);
@@ -74,7 +79,8 @@ void ParallelCombinedStatistics::reduceStatistics (
     }
 
     // Integer sum
-    for (pluint iSum=0; iSum<intSumObservables.size(); ++iSum) {
+    for (pluint iSum=0; iSum<intSumObservables.size(); ++iSum)
+    {
         plint globalSum;
         global::mpi().reduce(intSumObservables[iSum], globalSum, MPI_SUM);
         global::mpi().bCast(&globalSum, 1);

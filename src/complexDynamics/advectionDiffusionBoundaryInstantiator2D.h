@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,237 +35,238 @@
 #include "dataProcessors/dataInitializerFunctional2D.h"
 #include "complexDynamics/advectionDiffusionBoundaryCondition2D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
-class AdvectionDiffusionBoundaryConditionInstantiator2D : 
-        public OnLatticeAdvectionDiffusionBoundaryCondition2D<T,Descriptor> 
+class AdvectionDiffusionBoundaryConditionInstantiator2D :
+	public OnLatticeAdvectionDiffusionBoundaryCondition2D<T,Descriptor>
 {
 public:
-    AdvectionDiffusionBoundaryConditionInstantiator2D();
+	AdvectionDiffusionBoundaryConditionInstantiator2D();
 
-    void addTemperatureBoundary0N(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureBoundary0P(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureBoundary1N(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureBoundary1P(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureBoundary0N(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureBoundary0P(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureBoundary1N(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureBoundary1P(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
 
-    void addTemperatureCornerNN(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureCornerNP(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureCornerPN(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureCornerPP(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureCornerNN(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureCornerNP(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureCornerPN(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureCornerPP(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice);
 
-    void addTemperatureBoundary0N(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureBoundary0P(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureBoundary1N(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureBoundary1P(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureBoundary0N(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureBoundary0P(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureBoundary1N(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureBoundary1P(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice);
 
-    void addTemperatureCornerNN(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureCornerNP(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureCornerPN(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice);
-    void addTemperatureCornerPP(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureCornerNN(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureCornerNP(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureCornerPN(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice);
+	void addTemperatureCornerPP(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice);
 
 private:
-    template<int direction, int orientation>
-        void addTemperatureBoundary(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
-    template<int normalX, int normalY>
-        void addTemperatureCorner(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice);
+	template<int direction, int orientation>
+	void addTemperatureBoundary(Box2D domain, BlockLattice2D<T,Descriptor>& lattice);
+	template<int normalX, int normalY>
+	void addTemperatureCorner(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice);
 
-    template<int direction, int orientation>
-        void addTemperatureBoundary(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice);
-    template<int normalX, int normalY>
-        void addTemperatureCorner(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice);
+	template<int direction, int orientation>
+	void addTemperatureBoundary(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice);
+	template<int normalX, int normalY>
+	void addTemperatureCorner(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice);
 };
 
 ///////// class AdvectionDiffusionBoundaryConditionInstantiator2D ////////////////////////
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-        AdvectionDiffusionBoundaryConditionInstantiator2D()
+AdvectionDiffusionBoundaryConditionInstantiator2D()
 { }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int direction, int orientation>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary(Box2D domain, BlockLattice2D<T,Descriptor>& lattice)
+addTemperatureBoundary(Box2D domain, BlockLattice2D<T,Descriptor>& lattice)
 {
-    PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
+	PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
 
-    setCompositeDynamics (
-            lattice, domain,
-            BoundaryManager::template getAdvectionDiffusionBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, domain,
+	    BoundaryManager::template getAdvectionDiffusionBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
 
-    // If the boundary condition has a non-local component, instantiate a corresponding data processor.
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getAdvectionDiffusionBoundaryProcessor<direction,orientation>();
-    if (functional) {
-        integrateProcessingFunctional(functional, domain, lattice);
-    }
+	// If the boundary condition has a non-local component, instantiate a corresponding data processor.
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getAdvectionDiffusionBoundaryProcessor<direction,orientation>();
+	if (functional) {
+		integrateProcessingFunctional(functional, domain, lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int xNormal, int yNormal>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureCorner(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice)
+addTemperatureCorner(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice)
 {
-    setCompositeDynamics (
-            lattice, Box2D(x,x,y,y),
-            BoundaryManager::template getAdvectionDiffusionCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, Box2D(x,x,y,y),
+	    BoundaryManager::template getAdvectionDiffusionCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
 
-    // If the boundary condition has a non-local component, instantiate a corresponding data processor.
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getAdvectionDiffusionCornerProcessor<xNormal,yNormal>();
-    if (functional) {
-        integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice);
-    }
+	// If the boundary condition has a non-local component, instantiate a corresponding data processor.
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getAdvectionDiffusionCornerProcessor<xNormal,yNormal>();
+	if (functional) {
+		integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary0N(Box2D domain, BlockLattice2D<T,Descriptor>& lattice)
+addTemperatureBoundary0N(Box2D domain, BlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureBoundary<0,-1>(domain, lattice);
+	addTemperatureBoundary<0,-1>(domain, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary0P(Box2D domain, BlockLattice2D<T,Descriptor>& lattice)
+addTemperatureBoundary0P(Box2D domain, BlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureBoundary<0,1>(domain, lattice);
+	addTemperatureBoundary<0,1>(domain, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary1N(Box2D domain, BlockLattice2D<T,Descriptor>& lattice)
+addTemperatureBoundary1N(Box2D domain, BlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureBoundary<1,-1>(domain, lattice);
+	addTemperatureBoundary<1,-1>(domain, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary1P(Box2D domain, BlockLattice2D<T,Descriptor>& lattice)
+addTemperatureBoundary1P(Box2D domain, BlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureBoundary<1,1>(domain, lattice);
+	addTemperatureBoundary<1,1>(domain, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNN(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice)
+addTemperatureCornerNN(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureCorner<-1,-1>(x,y, lattice);
+	addTemperatureCorner<-1,-1>(x,y, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNP(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice)
+addTemperatureCornerNP(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureCorner<-1,1>(x,y, lattice);
+	addTemperatureCorner<-1,1>(x,y, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPN(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice)
+addTemperatureCornerPN(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureCorner<1,-1>(x,y, lattice);
+	addTemperatureCorner<1,-1>(x,y, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPP(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice)
+addTemperatureCornerPP(plint x, plint y, BlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureCorner<1,1>(x,y, lattice);
+	addTemperatureCorner<1,1>(x,y, lattice);
 }
 
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int direction, int orientation>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice)
+addTemperatureBoundary(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice)
 {
-    PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
+	PLB_PRECONDITION(domain.x0==domain.x1 || domain.y0==domain.y1);
 
-    setCompositeDynamics (
-            lattice, domain,
-            BoundaryManager::template getAdvectionDiffusionBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
-    
-    // If the boundary condition has a non-local component, instantiate a corresponding data processor.
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getAdvectionDiffusionBoundaryProcessor<direction,orientation>();
-    if (functional) {
-        integrateProcessingFunctional(functional, domain, lattice);
-    }
+	setCompositeDynamics (
+	    lattice, domain,
+	    BoundaryManager::template getAdvectionDiffusionBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
+
+	// If the boundary condition has a non-local component, instantiate a corresponding data processor.
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getAdvectionDiffusionBoundaryProcessor<direction,orientation>();
+	if (functional) {
+		integrateProcessingFunctional(functional, domain, lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int xNormal, int yNormal>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureCorner(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice)
+addTemperatureCorner(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice)
 {
-    setCompositeDynamics (
-            lattice, Box2D(x,x,y,y),
-            BoundaryManager::template getAdvectionDiffusionCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
-    
-    // If the boundary condition has a non-local component, instantiate a corresponding data processor.
-    BoxProcessingFunctional2D_L<T,Descriptor>* functional
-        = BoundaryManager::template getAdvectionDiffusionCornerProcessor<xNormal,yNormal>();
-    if (functional) {
-        integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice);
-    }
+	setCompositeDynamics (
+	    lattice, Box2D(x,x,y,y),
+	    BoundaryManager::template getAdvectionDiffusionCornerDynamics<xNormal,yNormal>(new NoDynamics<T,Descriptor>) );
+
+	// If the boundary condition has a non-local component, instantiate a corresponding data processor.
+	BoxProcessingFunctional2D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getAdvectionDiffusionCornerProcessor<xNormal,yNormal>();
+	if (functional) {
+		integrateProcessingFunctional(functional, Box2D(x,x,y,y), lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary0N(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice)
+addTemperatureBoundary0N(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureBoundary<0,-1>(domain, lattice);
+	addTemperatureBoundary<0,-1>(domain, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary0P(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice)
+addTemperatureBoundary0P(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureBoundary<0,1>(domain, lattice);
+	addTemperatureBoundary<0,1>(domain, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary1N(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice)
+addTemperatureBoundary1N(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureBoundary<1,-1>(domain, lattice);
+	addTemperatureBoundary<1,-1>(domain, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary1P(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice)
+addTemperatureBoundary1P(Box2D domain, MultiBlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureBoundary<1,1>(domain, lattice);
+	addTemperatureBoundary<1,1>(domain, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNN(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice)
+addTemperatureCornerNN(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureCorner<-1,-1>(x,y, lattice);
+	addTemperatureCorner<-1,-1>(x,y, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNP(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice)
+addTemperatureCornerNP(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureCorner<-1,1>(x,y, lattice);
+	addTemperatureCorner<-1,1>(x,y, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPN(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice)
+addTemperatureCornerPN(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureCorner<1,-1>(x,y, lattice);
+	addTemperatureCorner<1,-1>(x,y, lattice);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator2D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPP(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice)
+addTemperatureCornerPP(plint x, plint y, MultiBlockLattice2D<T,Descriptor>& lattice)
 {
-    addTemperatureCorner<1,1>(x,y, lattice);
+	addTemperatureCorner<1,1>(x,y, lattice);
 }
 
 }

@@ -704,7 +704,7 @@ void InterpolationGeneralizedAlgorithm3D<T,Descriptor>::interpolateVariables (
                 cell2.getDynamics().computeRhoBarJ(cell2, rhoBar, u2);
             }
             Array<T,3> r(-2*(T)solidDirection.x,-2*(T)solidDirection.y,-2*(T)solidDirection.z);
-            T W = inamuroDeltaFunction<T>().W(r);
+            T W = inamuroDeltaFunction3D<T>().W(r);
             this->u += W*u2;
             totWeights += W;
 
@@ -727,7 +727,7 @@ void InterpolationGeneralizedAlgorithm3D<T,Descriptor>::interpolateVariables (
                     u2 *= Descriptor<T>::invRho(macroscopic2[0]);
                 }
                 Array<T,3> r(-2*(T)solidDirection.x,-2*(T)solidDirection.y,-2*(T)solidDirection.z);
-                T W = inamuroDeltaFunction<T>().W(r);
+                T W = inamuroDeltaFunction3D<T>().W(r);
                 this->u += W*u2;
                 totWeights += W;
             } else if ((plint) this->args.size() == 2) {
@@ -751,7 +751,7 @@ void InterpolationGeneralizedAlgorithm3D<T,Descriptor>::interpolateVariables (
                     u2 *= Descriptor<T>::invRho(rhoBarField->get(posRho2.x, posRho2.y, posRho2.z));
                 }
                 Array<T,3> r(-2*(T)solidDirection.x,-2*(T)solidDirection.y,-2*(T)solidDirection.z);
-                T W = inamuroDeltaFunction<T>().W(r);
+                T W = inamuroDeltaFunction3D<T>().W(r);
                 this->u += W*u2;
                 totWeights += W;
 
@@ -765,7 +765,7 @@ void InterpolationGeneralizedAlgorithm3D<T,Descriptor>::interpolateVariables (
     }
 
     Array<T,3> r(-(T)solidDirection.x,-(T)solidDirection.y,-(T)solidDirection.z);
-    T W = inamuroDeltaFunction<T>().W(r);
+    T W = inamuroDeltaFunction3D<T>().W(r);
     this->u += W*u1;
     totWeights += W;
 
@@ -796,7 +796,7 @@ void InterpolationGeneralizedAlgorithm3D<T,Descriptor>::reduceVariables(T sumWei
         Array<T,3> r((T)solidDirection.x,(T)solidDirection.y,(T)solidDirection.z);
         r /= norm(r);
         r *= wallDistance;
-        T W = inamuroDeltaFunction<T>().W(r);
+        T W = inamuroDeltaFunction3D<T>().W(r);
         this->u += W*wall_vel;
         totWeights += W;
     }
@@ -952,7 +952,7 @@ void InterpolationDefineVelocityOffLatticeModel3D<T,Descriptor>::interpolateVari
                 cell2.getDynamics().computeRhoBarJ(cell2, rhoBar2, u2);
             }
             Array<T,3> r(-2*(T)solidDirection.x,-2*(T)solidDirection.y,-2*(T)solidDirection.z);
-            T W = inamuroDeltaFunction<T>().W(r);
+            T W = inamuroDeltaFunction3D<T>().W(r);
             this->u += W*u2;
             rhoBar += W*rhoBar2;
             weightsU += W;
@@ -979,7 +979,7 @@ void InterpolationDefineVelocityOffLatticeModel3D<T,Descriptor>::interpolateVari
                     u2 *= Descriptor<T>::invRho(rhoBar2);
                 }
                 Array<T,3> r(-2*(T)solidDirection.x,-2*(T)solidDirection.y,-2*(T)solidDirection.z);
-                T W = inamuroDeltaFunction<T>().W(r);
+                T W = inamuroDeltaFunction3D<T>().W(r);
                 this->u += W*u2;
                 rhoBar += W*rhoBar2;
                 weightsU += W;
@@ -1007,7 +1007,7 @@ void InterpolationDefineVelocityOffLatticeModel3D<T,Descriptor>::interpolateVari
                     u2 *= Descriptor<T>::invRho(rhoBar2);
                 }
                 Array<T,3> r(-2*(T)solidDirection.x,-2*(T)solidDirection.y,-2*(T)solidDirection.z);
-                T W = inamuroDeltaFunction<T>().W(r);
+                T W = inamuroDeltaFunction3D<T>().W(r);
                 rhoBar  += W*rhoBar2;
                 this->u += W*u2;
                 weightsU += W;
@@ -1022,7 +1022,7 @@ void InterpolationDefineVelocityOffLatticeModel3D<T,Descriptor>::interpolateVari
     }
 
     Array<T,3> r(-(T)solidDirection.x,-(T)solidDirection.y,-(T)solidDirection.z);
-    T W = inamuroDeltaFunction<T>().W(r);
+    T W = inamuroDeltaFunction3D<T>().W(r);
     this->u += W*u1;
     rhoBar += W*rhoBar1;
     weightsU += W;
@@ -1032,7 +1032,7 @@ void InterpolationDefineVelocityOffLatticeModel3D<T,Descriptor>::interpolateVari
     r /= norm(r);
     r *= wallDistance;
 
-    W = inamuroDeltaFunction<T>().W(r);
+    W = inamuroDeltaFunction3D<T>().W(r);
     this->u += W*wall_vel;
     weightsU += W;
 }

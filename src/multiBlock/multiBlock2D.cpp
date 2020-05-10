@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,7 +35,8 @@
 #include <cmath>
 #include <algorithm>
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Class MultiStatSubscriber2D ****************************** */
 
@@ -43,40 +44,48 @@ MultiStatSubscriber2D::MultiStatSubscriber2D(MultiBlock2D& multiBlock_)
     : multiBlock(multiBlock_)
 { }
 
-plint MultiStatSubscriber2D::subscribeAverage() {
+plint MultiStatSubscriber2D::subscribeAverage()
+{
     std::vector<plint> const& blocks
         = multiBlock.getLocalInfo().getBlocks();
-    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock)
+    {
         plint blockId = blocks[iBlock];
         multiBlock.getComponent(blockId).internalStatSubscription().subscribeAverage();
     }
     return multiBlock.getInternalStatistics().subscribeAverage();
 }
 
-plint MultiStatSubscriber2D::subscribeSum() {
+plint MultiStatSubscriber2D::subscribeSum()
+{
     std::vector<plint> const& blocks
         = multiBlock.getLocalInfo().getBlocks();
-    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock)
+    {
         plint blockId = blocks[iBlock];
         multiBlock.getComponent(blockId).internalStatSubscription().subscribeSum();
     }
     return multiBlock.getInternalStatistics().subscribeSum();
 }
 
-plint MultiStatSubscriber2D::subscribeMax() {
+plint MultiStatSubscriber2D::subscribeMax()
+{
     std::vector<plint> const& blocks
         = multiBlock.getLocalInfo().getBlocks();
-    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock)
+    {
         plint blockId = blocks[iBlock];
         multiBlock.getComponent(blockId).internalStatSubscription().subscribeMax();
     }
     return multiBlock.getInternalStatistics().subscribeMax();
 }
 
-plint MultiStatSubscriber2D::subscribeIntSum() {
+plint MultiStatSubscriber2D::subscribeIntSum()
+{
     std::vector<plint> const& blocks
         = multiBlock.getLocalInfo().getBlocks();
-    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock)
+    {
         plint blockId = blocks[iBlock];
         multiBlock.getComponent(blockId).internalStatSubscription().subscribeIntSum();
     }
@@ -85,7 +94,7 @@ plint MultiStatSubscriber2D::subscribeIntSum() {
 
 
 /* *************** Class PeriodicitySwitch2D ******************************** */
-    
+
 PeriodicitySwitch2D::PeriodicitySwitch2D(MultiBlock2D& block_)
     : // Default all boundaries to non-periodic. Note: it is not possible to send a
       // signal "signalPeriodicity" to "block" at this point, because "block" might
@@ -106,7 +115,8 @@ PeriodicitySwitch2D& PeriodicitySwitch2D::operator=(PeriodicitySwitch2D const& r
     return *this;
 }
 
-void PeriodicitySwitch2D::toggle(plint direction, bool periodic) {
+void PeriodicitySwitch2D::toggle(plint direction, bool periodic)
+{
     PLB_PRECONDITION( direction==0 || direction==1 );
     periodicity[direction] = periodic;
     // Make sure periodic envelope is filled with data, else all
@@ -115,7 +125,8 @@ void PeriodicitySwitch2D::toggle(plint direction, bool periodic) {
     block.duplicateOverlaps(modif::dataStructure);
 }
 
-void PeriodicitySwitch2D::toggleAll(bool periodic) {
+void PeriodicitySwitch2D::toggleAll(bool periodic)
+{
     periodicity[0] = periodic;
     periodicity[1] = periodic;
     // Make sure periodic envelope is filled with data, else all
@@ -124,26 +135,31 @@ void PeriodicitySwitch2D::toggleAll(bool periodic) {
     block.duplicateOverlaps(modif::dataStructure);
 }
 
-bool PeriodicitySwitch2D::get(plint direction) const {
+bool PeriodicitySwitch2D::get(plint direction) const
+{
     PLB_PRECONDITION( direction==0 || direction==1 );
 
     return periodicity[direction];
 }
 
-bool PeriodicitySwitch2D::get(plint normalX, plint normalY) const {
+bool PeriodicitySwitch2D::get(plint normalX, plint normalY) const
+{
     bool testX = normalX != 0;
     bool testY = normalY != 0;
     return ( (!testX || (testX && periodicity[0]) ) &&
              (!testY || (testY && periodicity[1]) ) );
 }
 
-Box2D PeriodicitySwitch2D::getPeriodicEnvelope(Box2D const& bulk, plint envelopeWidth) const {
+Box2D PeriodicitySwitch2D::getPeriodicEnvelope(Box2D const& bulk, plint envelopeWidth) const
+{
     Box2D envelope(bulk);
-    if (get(0)) { // If periodic in x, extend bulk in x-direction
+    if (get(0))   // If periodic in x, extend bulk in x-direction
+    {
         envelope.x0 -= envelopeWidth;
         envelope.x1 += envelopeWidth;
     }
-    if (get(1)) { // If periodic in y, extend bulk in y-direction
+    if (get(1))   // If periodic in y, extend bulk in y-direction
+    {
         envelope.y0 -= envelopeWidth;
         envelope.y1 += envelopeWidth;
     }
@@ -154,31 +170,33 @@ Box2D PeriodicitySwitch2D::getPeriodicEnvelope(Box2D const& bulk, plint envelope
 /* *************** Class MultiBlock2D::ProcessorStorage2D ******************* */
 
 MultiBlock2D::ProcessorStorage2D::ProcessorStorage2D (
-        DataProcessorGenerator2D const& generator_,
-        std::vector<MultiBlock2D*> const& multiBlocks_,
-        plint level_ )
+    DataProcessorGenerator2D const& generator_,
+    std::vector<MultiBlock2D*> const& multiBlocks_,
+    plint level_ )
     : generator(generator_.clone()),
       multiBlockIds(multiBlocks_.size()),
       level(level_)
 {
-    for(pluint iBlock=0; iBlock<multiBlockIds.size(); ++iBlock) {
+    for(pluint iBlock=0; iBlock<multiBlockIds.size(); ++iBlock)
+    {
         multiBlockIds[iBlock] = multiBlocks_[iBlock]->getId();
     }
 }
 
-MultiBlock2D::ProcessorStorage2D::~ProcessorStorage2D() {
+MultiBlock2D::ProcessorStorage2D::~ProcessorStorage2D()
+{
     delete generator;
 }
 
 MultiBlock2D::ProcessorStorage2D::ProcessorStorage2D (
-        MultiBlock2D::ProcessorStorage2D const& rhs )
+    MultiBlock2D::ProcessorStorage2D const& rhs )
     : generator(rhs.generator->clone()),
       multiBlockIds(rhs.multiBlockIds),
       level(rhs.level)
 { }
 
 MultiBlock2D::ProcessorStorage2D& MultiBlock2D::ProcessorStorage2D::operator= (
-        MultiBlock2D::ProcessorStorage2D const& rhs )
+    MultiBlock2D::ProcessorStorage2D const& rhs )
 {
     MultiBlock2D::ProcessorStorage2D(rhs).swap(*this);
     return *this;
@@ -209,7 +227,8 @@ std::vector<id_t> const& MultiBlock2D::ProcessorStorage2D::getMultiBlockIds() co
 std::vector<MultiBlock2D*> MultiBlock2D::ProcessorStorage2D::getMultiBlocks() const
 {
     std::vector<MultiBlock2D*> multiBlocks(multiBlockIds.size());
-    for(pluint iBlock=0; iBlock<multiBlockIds.size(); ++iBlock) {
+    for(pluint iBlock=0; iBlock<multiBlockIds.size(); ++iBlock)
+    {
         multiBlocks[iBlock] = multiBlockRegistration2D().find(multiBlockIds[iBlock]);
         PLB_ASSERT( multiBlocks[iBlock] );
     }
@@ -222,10 +241,12 @@ plint MultiBlock2D::ProcessorStorage2D::getLevel() const
 }
 
 void MultiBlock2D::ProcessorStorage2D::replace (
-        id_t oldBlock, id_t newBlock )
+    id_t oldBlock, id_t newBlock )
 {
-    for (pluint iBlock=0; iBlock<multiBlockIds.size(); ++iBlock) {
-        if (multiBlockIds[iBlock]==oldBlock) {
+    for (pluint iBlock=0; iBlock<multiBlockIds.size(); ++iBlock)
+    {
+        if (multiBlockIds[iBlock]==oldBlock)
+        {
             multiBlockIds[iBlock]=newBlock;
         }
     }
@@ -297,7 +318,8 @@ MultiBlock2D::MultiBlock2D(MultiBlock2D const& rhs, Box2D subDomain, bool crop)
     id = multiBlockRegistration2D().announce(*this);
 }
 
-void MultiBlock2D::swap(MultiBlock2D& rhs) {
+void MultiBlock2D::swap(MultiBlock2D& rhs)
+{
     multiBlockManagement.swap(rhs.multiBlockManagement);
     multiBlocksChangedByManualProcessors.swap(rhs.multiBlocksChangedByManualProcessors);
     multiBlocksChangedByAutomaticProcessors.swap(rhs.multiBlocksChangedByAutomaticProcessors);
@@ -311,87 +333,110 @@ void MultiBlock2D::swap(MultiBlock2D& rhs) {
     std::swap(internalModifT, rhs.internalModifT);
 }
 
-MultiBlock2D::~MultiBlock2D() {
+MultiBlock2D::~MultiBlock2D()
+{
     delete blockCommunicator;
     delete combinedStatistics;
     multiBlockRegistration2D().release(*this);
 }
 
-id_t MultiBlock2D::getId() const {
+id_t MultiBlock2D::getId() const
+{
     return id;
 }
 
-void MultiBlock2D::initialize() {
+void MultiBlock2D::initialize()
+{
     executeInternalProcessors();
 }
 
-Box2D MultiBlock2D::getBoundingBox() const {
+Box2D MultiBlock2D::getBoundingBox() const
+{
     return multiBlockManagement.getBoundingBox();
 }
 
-plint MultiBlock2D::getNx() const {
+plint MultiBlock2D::getNx() const
+{
     return multiBlockManagement.getBoundingBox().getNx();
 }
 
-plint MultiBlock2D::getNy() const {
+plint MultiBlock2D::getNy() const
+{
     return multiBlockManagement.getBoundingBox().getNy();
 }
 
-MultiBlockManagement2D const& MultiBlock2D::getMultiBlockManagement() const {
+MultiBlockManagement2D const& MultiBlock2D::getMultiBlockManagement() const
+{
+    return multiBlockManagement;
+}
+// LBfoam: To modify the envelope
+MultiBlockManagement2D& MultiBlock2D::setMultiBlockManagement()
+{
     return multiBlockManagement;
 }
 
-LocalMultiBlockInfo2D const& MultiBlock2D::getLocalInfo() const {
+LocalMultiBlockInfo2D const& MultiBlock2D::getLocalInfo() const
+{
     return multiBlockManagement.getLocalInfo();
 }
 
-SparseBlockStructure2D const& MultiBlock2D::getSparseBlockStructure() const {
+SparseBlockStructure2D const& MultiBlock2D::getSparseBlockStructure() const
+{
     return multiBlockManagement.getSparseBlockStructure();
 }
 
-BlockStatistics& MultiBlock2D::getInternalStatistics() {
+BlockStatistics& MultiBlock2D::getInternalStatistics()
+{
     return internalStatistics;
 }
 
-BlockStatistics const& MultiBlock2D::getInternalStatistics() const {
+BlockStatistics const& MultiBlock2D::getInternalStatistics() const
+{
     return internalStatistics;
 }
 
-CombinedStatistics const& MultiBlock2D::getCombinedStatistics() const {
+CombinedStatistics const& MultiBlock2D::getCombinedStatistics() const
+{
     return *combinedStatistics;
 }
 
-StatSubscriber& MultiBlock2D::internalStatSubscription() {
+StatSubscriber& MultiBlock2D::internalStatSubscription()
+{
     return statSubscriber;
 }
 
-BlockCommunicator2D const& MultiBlock2D::getBlockCommunicator() const {
+BlockCommunicator2D const& MultiBlock2D::getBlockCommunicator() const
+{
     return *blockCommunicator;
 }
 
-void MultiBlock2D::duplicateOverlaps(modif::ModifT whichData) {
+void MultiBlock2D::duplicateOverlaps(modif::ModifT whichData)
+{
     this->getBlockCommunicator().duplicateOverlaps(*this, whichData);
 }
 
-void MultiBlock2D::signalPeriodicity() {
+void MultiBlock2D::signalPeriodicity()
+{
     getBlockCommunicator().signalPeriodicity();
 }
 
 DataSerializer* MultiBlock2D::getBlockSerializer (
-            Box2D const& domain, IndexOrdering::OrderingT ordering ) const
+    Box2D const& domain, IndexOrdering::OrderingT ordering ) const
 {
     return new MultiBlockFastSerializer2D(*this, domain, ordering);
 }
 
 DataUnSerializer* MultiBlock2D::getBlockUnSerializer (
-            Box2D const& domain, IndexOrdering::OrderingT ordering )
+    Box2D const& domain, IndexOrdering::OrderingT ordering )
 {
     return new MultiBlockFastUnSerializer2D(*this, domain, ordering);
 }
 
-void MultiBlock2D::resetFlags() {
+void MultiBlock2D::resetFlags()
+{
     std::vector<plint> const& blocks = getLocalInfo().getBlocks();
-    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock)
+    {
         plint blockId = blocks[iBlock];
         getComponent(blockId).setFlag(false);
     }
@@ -402,20 +447,25 @@ void MultiBlock2D::getDynamicsDict(Box2D domain, std::map<std::string,int>& dict
     return dict.clear();
 }
 
-void MultiBlock2D::evaluateStatistics() {
+void MultiBlock2D::evaluateStatistics()
+{
     std::vector<plint> const& blocks = getLocalInfo().getBlocks();
-    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock)
+    {
         plint blockId = blocks[iBlock];
         getComponent(blockId).evaluateStatistics();
     }
-    if (isInternalStatisticsOn()) reduceStatistics();
+    if (isInternalStatisticsOn())
+        reduceStatistics();
 }
 
-void MultiBlock2D::reduceStatistics() {
+void MultiBlock2D::reduceStatistics()
+{
     std::vector<plint> const& blocks = getLocalInfo().getBlocks();
     std::vector<BlockStatistics const*> individualStatistics;
     // Prepare a vector containing the BlockStatistics of all components
-    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock)
+    {
         plint blockId = blocks[iBlock];
         individualStatistics.push_back(&getComponent(blockId).getInternalStatistics());
     }
@@ -424,25 +474,30 @@ void MultiBlock2D::reduceStatistics() {
     //   statistics of current MultiBlock.
     combinedStatistics -> combine(individualStatistics, this->getInternalStatistics());
     // Copy result to each individual statistics
-    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock)
+    {
         plint blockId = blocks[iBlock];
         (getComponent(blockId).getInternalStatistics()) = (this->getInternalStatistics());
     }
 }
 
-void MultiBlock2D::toggleInternalStatistics(bool statisticsOn_) {
+void MultiBlock2D::toggleInternalStatistics(bool statisticsOn_)
+{
     statisticsOn = statisticsOn_;
 }
 
-bool MultiBlock2D::isInternalStatisticsOn() const {
+bool MultiBlock2D::isInternalStatisticsOn() const
+{
     return statisticsOn;
 }
 
-PeriodicitySwitch2D const& MultiBlock2D::periodicity() const {
+PeriodicitySwitch2D const& MultiBlock2D::periodicity() const
+{
     return periodicitySwitch;
 }
 
-PeriodicitySwitch2D& MultiBlock2D::periodicity() {
+PeriodicitySwitch2D& MultiBlock2D::periodicity()
+{
     return periodicitySwitch;
 }
 
@@ -461,14 +516,17 @@ void MultiBlock2D::setRefinementLevel(plint newLevel)
     multiBlockManagement.setRefinementLevel(newLevel);
 }
 
-void MultiBlock2D::executeInternalProcessors() {
+void MultiBlock2D::executeInternalProcessors()
+{
     global::profiler().start("dataProcessor");
     // Execute all automatic internal processors.
-    for (plint iLevel=0; iLevel<=maxProcessorLevel; ++iLevel) {
+    for (plint iLevel=0; iLevel<=maxProcessorLevel; ++iLevel)
+    {
         executeInternalProcessors(iLevel);
     }
     // Duplicate boundaries at least once in case there is no automatic processor.
-    if (maxProcessorLevel==-1) {
+    if (maxProcessorLevel==-1)
+    {
         global::profiler().start("envelope-update");
         this->duplicateOverlaps(internalModifT);
         global::profiler().stop("envelope-update");
@@ -476,31 +534,36 @@ void MultiBlock2D::executeInternalProcessors() {
     global::profiler().stop("dataProcessor");
 }
 
-void MultiBlock2D::executeInternalProcessors(plint level, bool communicate) {
+void MultiBlock2D::executeInternalProcessors(plint level, bool communicate)
+{
     std::vector<plint> const& blocks = getLocalInfo().getBlocks();
-    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<blocks.size(); ++iBlock)
+    {
         plint blockId = blocks[iBlock];
         getComponent(blockId).executeInternalProcessors(level);
     }
-    if (communicate) {
+    if (communicate)
+    {
         duplicateOverlapsInModifiedMultiBlocks(level);
     }
 }
 
 void MultiBlock2D::subscribeProcessor (
-        plint level,
-        std::vector<MultiBlock2D*> modifiedBlocks,
-        std::vector<modif::ModifT> typeOfModification,
-        bool includesEnvelope )
+    plint level,
+    std::vector<MultiBlock2D*> modifiedBlocks,
+    std::vector<modif::ModifT> typeOfModification,
+    bool includesEnvelope )
 {
     maxProcessorLevel = std::max(level, maxProcessorLevel);
 
-    if (level>=0) {
+    if (level>=0)
+    {
         addModifiedBlocks(level,
                           modifiedBlocks, typeOfModification,
                           multiBlocksChangedByAutomaticProcessors, includesEnvelope);
     }
-    else if (level<0) {
+    else if (level<0)
+    {
         addModifiedBlocks(-level,
                           modifiedBlocks, typeOfModification,
                           multiBlocksChangedByManualProcessors, includesEnvelope);
@@ -508,36 +571,39 @@ void MultiBlock2D::subscribeProcessor (
 }
 
 void MultiBlock2D::storeProcessor (
-        DataProcessorGenerator2D const& generator,
-        std::vector<MultiBlock2D*> multiBlocks, plint level)
+    DataProcessorGenerator2D const& generator,
+    std::vector<MultiBlock2D*> multiBlocks, plint level)
 {
     storedProcessors.push_back(ProcessorStorage2D(generator,multiBlocks,level));
 }
 
 std::vector<MultiBlock2D::ProcessorStorage2D> const&
-    MultiBlock2D::getStoredProcessors() const
+MultiBlock2D::getStoredProcessors() const
 {
     return storedProcessors;
 }
 
 void MultiBlock2D::addModifiedBlocks (
-        plint level,
-        std::vector<MultiBlock2D*> modifiedBlocks,
-        std::vector<modif::ModifT> typeOfModification,
-        std::vector<std::vector<BlockAndModif> >& multiBlockCollection,
-        bool includesEnvelope )
+    plint level,
+    std::vector<MultiBlock2D*> modifiedBlocks,
+    std::vector<modif::ModifT> typeOfModification,
+    std::vector<std::vector<BlockAndModif> >& multiBlockCollection,
+    bool includesEnvelope )
 {
     PLB_PRECONDITION( modifiedBlocks.size() == typeOfModification.size() );
     // Resize vector which collects modified blocks (resize needs to be
     //   done even when no block is added, to avoid memory violations
     //   during read access to the vector).
-    if ((pluint)level >= multiBlockCollection.size()) {
+    if ((pluint)level >= multiBlockCollection.size())
+    {
         multiBlockCollection.resize(level+1);
     }
     // Unless envelope is already included in the domain of application of the data
     //   processor, subscribe modified blocks for an update of the envelope.
-    if (!includesEnvelope) {
-        for (pluint iNewBlock=0; iNewBlock<modifiedBlocks.size(); ++iNewBlock) {
+    if (!includesEnvelope)
+    {
+        for (pluint iNewBlock=0; iNewBlock<modifiedBlocks.size(); ++iNewBlock)
+        {
             bool alreadyAdded=false;
             // Check if the block is already in the collection.
             // Note: It may seem stupid to use a linear-complexity algorithm to
@@ -546,9 +612,11 @@ void MultiBlock2D::addModifiedBlocks (
             // an unpredictable order (because the pointers have an unpredictable value).
             // This is a problem in parallel programs, because different threads may find a
             // different order, and the communication pattern between processes gets messed up.
-            for (pluint iOriginal=0; iOriginal<multiBlockCollection[level].size(); ++iOriginal) {
+            for (pluint iOriginal=0; iOriginal<multiBlockCollection[level].size(); ++iOriginal)
+            {
                 MultiBlock2D* existingBlock = multiBlockCollection[level][iOriginal].first;
-                if (existingBlock == modifiedBlocks[iNewBlock]) {
+                if (existingBlock == modifiedBlocks[iNewBlock])
+                {
                     // If the block already exists, simply update the type of modification
                     // that applies to it.
                     modif::ModifT& existingModif = multiBlockCollection[level][iOriginal].second;
@@ -557,61 +625,72 @@ void MultiBlock2D::addModifiedBlocks (
                 }
             }
             // If the block is not already in the structure, add it.
-            if (!alreadyAdded) {
+            if (!alreadyAdded)
+            {
                 multiBlockCollection[level].push_back (
-                        BlockAndModif( modifiedBlocks[iNewBlock], typeOfModification[iNewBlock] ) );
+                    BlockAndModif( modifiedBlocks[iNewBlock], typeOfModification[iNewBlock] ) );
             }
         }
     }
 }
 
-void MultiBlock2D::duplicateOverlapsInModifiedMultiBlocks(plint level) {
-    if (level==0) {
+void MultiBlock2D::duplicateOverlapsInModifiedMultiBlocks(plint level)
+{
+    if (level==0)
+    {
         duplicateOverlapsAtLevelZero(multiBlocksChangedByAutomaticProcessors[level]);
     }
-    else if (level>0) {
+    else if (level>0)
+    {
         if (level < (plint)multiBlocksChangedByAutomaticProcessors.size() )
         {
             duplicateOverlapsInModifiedMultiBlocks(multiBlocksChangedByAutomaticProcessors[level]);
         }
     }
-    else {  // level < 0
-        if( -level<(plint)multiBlocksChangedByManualProcessors.size() ) {
+    else     // level < 0
+    {
+        if( -level<(plint)multiBlocksChangedByManualProcessors.size() )
+        {
             duplicateOverlapsInModifiedMultiBlocks(multiBlocksChangedByManualProcessors[-level]);
         }
     }
 }
 
 void MultiBlock2D::duplicateOverlapsInModifiedMultiBlocks (
-        std::vector<BlockAndModif>& multiBlocks )
+    std::vector<BlockAndModif>& multiBlocks )
 {
-    for (pluint iBlock=0; iBlock<multiBlocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<multiBlocks.size(); ++iBlock)
+    {
         multiBlocks[iBlock].first->duplicateOverlaps (
-                multiBlocks[iBlock].second );
+            multiBlocks[iBlock].second );
     }
 }
 
 void MultiBlock2D::duplicateOverlapsAtLevelZero (
-        std::vector<BlockAndModif>& multiBlocks )
+    std::vector<BlockAndModif>& multiBlocks )
 {
     bool treatedThis = false;
-    for (pluint iBlock=0; iBlock<multiBlocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<multiBlocks.size(); ++iBlock)
+    {
         MultiBlock2D* modifiedBlock = multiBlocks[iBlock].first;
         modif::ModifT modificationType = multiBlocks[iBlock].second;
-        if (modifiedBlock==this) {
+        if (modifiedBlock==this)
+        {
             treatedThis = true;
             // If it's the current multi-block we are treating, make sure
             //   type of modification is equal to internalModifT or stronger.
             this->duplicateOverlaps(combine(modificationType, internalModifT));
         }
-        else {
+        else
+        {
             modifiedBlock->duplicateOverlaps(modificationType);
         }
     }
     // If current multi-block has not already been treated, duplicate
     //   overlaps explicitly (because overlaps are expected to be duplicated
     //   in any case at level 0).
-    if (!treatedThis) {
+    if (!treatedThis)
+    {
         this->duplicateOverlaps(internalModifT);
     }
 }
@@ -622,29 +701,36 @@ void MultiBlock2D::duplicateOverlapsAtLevelZero (
 MultiBlockRegistration2D::MultiBlockRegistration2D()
 { }
 
-id_t MultiBlockRegistration2D::announce(MultiBlock2D& block) {
+id_t MultiBlockRegistration2D::announce(MultiBlock2D& block)
+{
     id_t id = uniqueId.getId();
     multiBlocks.insert(std::pair<id_t,MultiBlock2D*>(id,&block));
     return id;
 }
 
-void MultiBlockRegistration2D::release(MultiBlock2D& block) {
+void MultiBlockRegistration2D::release(MultiBlock2D& block)
+{
     std::map<id_t,MultiBlock2D*>::iterator it = multiBlocks.find(block.getId());
-    if (it == multiBlocks.end()) {
+    if (it == multiBlocks.end())
+    {
         throw PlbLogicException("Releasing a block which is not registered.");
     }
-    else {
+    else
+    {
         uniqueId.releaseId(it->first);
         multiBlocks.erase(it);
     }
 }
 
-MultiBlock2D* MultiBlockRegistration2D::find(id_t id) {
+MultiBlock2D* MultiBlockRegistration2D::find(id_t id)
+{
     std::map<id_t,MultiBlock2D*>::iterator it = multiBlocks.find(id);
-    if (it == multiBlocks.end()) {
+    if (it == multiBlocks.end())
+    {
         return 0;
     }
-    else {
+    else
+    {
         return it->second;
     }
 }
@@ -658,7 +744,8 @@ MultiBlockRegistration2D& MultiBlockRegistration2D::operator=(MultiBlockRegistra
     return *this;
 }
 
-MultiBlockRegistration2D& multiBlockRegistration2D() {
+MultiBlockRegistration2D& multiBlockRegistration2D()
+{
     static MultiBlockRegistration2D instance;
     return instance;
 }

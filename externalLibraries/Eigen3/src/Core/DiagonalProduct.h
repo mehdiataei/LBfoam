@@ -11,7 +11,8 @@
 #ifndef EIGEN_DIAGONALPRODUCT_H
 #define EIGEN_DIAGONALPRODUCT_H
 
-namespace Eigen { 
+namespace Eigen
+{
 
 /** \returns the diagonal matrix product of \c *this by the diagonal matrix \a diagonal.
   */
@@ -20,7 +21,7 @@ template<typename DiagonalDerived>
 inline const Product<Derived, DiagonalDerived, LazyProduct>
 MatrixBase<Derived>::operator*(const DiagonalBase<DiagonalDerived> &a_diagonal) const
 {
-  return Product<Derived, DiagonalDerived, LazyProduct>(derived(),a_diagonal.derived());
+	return Product<Derived, DiagonalDerived, LazyProduct>(derived(),a_diagonal.derived());
 }
 
 } // end namespace Eigen

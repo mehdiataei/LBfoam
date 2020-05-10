@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,42 +28,43 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.hh"
 
-namespace plb {
+namespace plb
+{
 
-    template class OnLatticeBoundaryCondition3D<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    
-
-    template class
-        BoundaryConditionInstantiator3D
-        <
-            FLOAT_T, descriptors::DESCRIPTOR_3D,
-            RegularizedBoundaryManager3D < FLOAT_T, descriptors::DESCRIPTOR_3D >
-        >;
-
-    template OnLatticeBoundaryCondition3D<FLOAT_T,descriptors::DESCRIPTOR_3D>*
-        createLocalBoundaryCondition3D < FLOAT_T,descriptors::DESCRIPTOR_3D > ();
+template class OnLatticeBoundaryCondition3D<FLOAT_T, descriptors::DESCRIPTOR_3D>;
 
 
-    template class
-        BoundaryConditionInstantiator3D
-        <
-            FLOAT_T, descriptors::DESCRIPTOR_3D,
-            EquilibriumBoundaryManager3D < FLOAT_T, descriptors::DESCRIPTOR_3D >
-        >;
+template class
+BoundaryConditionInstantiator3D
+<
+    FLOAT_T, descriptors::DESCRIPTOR_3D,
+    RegularizedBoundaryManager3D < FLOAT_T, descriptors::DESCRIPTOR_3D >
+    >;
 
-    template OnLatticeBoundaryCondition3D<FLOAT_T,descriptors::DESCRIPTOR_3D>*
-        createEquilibriumBoundaryCondition3D < FLOAT_T,descriptors::DESCRIPTOR_3D > ();
+template OnLatticeBoundaryCondition3D<FLOAT_T,descriptors::DESCRIPTOR_3D>*
+createLocalBoundaryCondition3D < FLOAT_T,descriptors::DESCRIPTOR_3D > ();
 
 
-    template class
-        BoundaryConditionInstantiator3D
-        <
-            FLOAT_T, descriptors::DESCRIPTOR_3D,
-            InterpolationBoundaryManager3D < FLOAT_T, descriptors::DESCRIPTOR_3D >
-        >;
+template class
+BoundaryConditionInstantiator3D
+<
+    FLOAT_T, descriptors::DESCRIPTOR_3D,
+    EquilibriumBoundaryManager3D < FLOAT_T, descriptors::DESCRIPTOR_3D >
+    >;
 
-    template OnLatticeBoundaryCondition3D<FLOAT_T,descriptors::DESCRIPTOR_3D>*
-        createInterpBoundaryCondition3D < FLOAT_T,descriptors::DESCRIPTOR_3D > ();
+template OnLatticeBoundaryCondition3D<FLOAT_T,descriptors::DESCRIPTOR_3D>*
+createEquilibriumBoundaryCondition3D < FLOAT_T,descriptors::DESCRIPTOR_3D > ();
+
+
+template class
+BoundaryConditionInstantiator3D
+<
+    FLOAT_T, descriptors::DESCRIPTOR_3D,
+    InterpolationBoundaryManager3D < FLOAT_T, descriptors::DESCRIPTOR_3D >
+    >;
+
+template OnLatticeBoundaryCondition3D<FLOAT_T,descriptors::DESCRIPTOR_3D>*
+createInterpBoundaryCondition3D < FLOAT_T,descriptors::DESCRIPTOR_3D > ();
 
 }
 

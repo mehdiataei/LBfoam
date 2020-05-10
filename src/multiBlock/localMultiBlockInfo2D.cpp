@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,19 +31,20 @@
 #include "multiBlock/multiBlockManagement2D.h"
 #include <algorithm>
 
-namespace plb {
+namespace plb
+{
 
 PeriodicOverlap2D::PeriodicOverlap2D (
-        Overlap2D const& overlap_, plint normalX_, plint normalY_ )
+    Overlap2D const& overlap_, plint normalX_, plint normalY_ )
     : overlap(overlap_),
       normalX(normalX_),
       normalY(normalY_)
 { }
 
 LocalMultiBlockInfo2D::LocalMultiBlockInfo2D (
-        SparseBlockStructure2D const& sparseBlock,
-        ThreadAttribution const& attribution,
-        plint envelopeWidth_ )
+    SparseBlockStructure2D const& sparseBlock,
+    ThreadAttribution const& attribution,
+    plint envelopeWidth_ )
     : envelopeWidth(envelopeWidth_)
 {
     computeMyBlocks(sparseBlock,attribution);
@@ -57,30 +58,31 @@ LocalMultiBlockInfo2D::LocalMultiBlockInfo2D (
 }
 
 std::vector<plint> const&
-    LocalMultiBlockInfo2D::getBlocks() const
+LocalMultiBlockInfo2D::getBlocks() const
 {
     return myBlocks;
 }
 
 std::vector<Overlap2D> const&
-    LocalMultiBlockInfo2D::getNormalOverlaps() const
+LocalMultiBlockInfo2D::getNormalOverlaps() const
 {
     return normalOverlaps;
 }
 
 std::vector<PeriodicOverlap2D> const&
-    LocalMultiBlockInfo2D::getPeriodicOverlaps() const
+LocalMultiBlockInfo2D::getPeriodicOverlaps() const
 {
     return periodicOverlaps;
 }
 
 std::vector<PeriodicOverlap2D> const&
-    LocalMultiBlockInfo2D::getPeriodicOverlapWithRemoteData() const
+LocalMultiBlockInfo2D::getPeriodicOverlapWithRemoteData() const
 {
     return periodicOverlapWithRemoteData;
 }
 
-void LocalMultiBlockInfo2D::swap(LocalMultiBlockInfo2D& rhs) {
+void LocalMultiBlockInfo2D::swap(LocalMultiBlockInfo2D& rhs)
+{
     std::swap(envelopeWidth, rhs.envelopeWidth);
     myBlocks.swap(rhs.myBlocks);
     normalOverlaps.swap(rhs.normalOverlaps);
@@ -89,22 +91,23 @@ void LocalMultiBlockInfo2D::swap(LocalMultiBlockInfo2D& rhs) {
 }
 
 void LocalMultiBlockInfo2D::computeMyBlocks(SparseBlockStructure2D const& sparseBlock,
-                                            ThreadAttribution const& attribution)
+        ThreadAttribution const& attribution)
 {
     myBlocks = sparseBlock.getLocalBlocks(attribution);
 }
 
 void LocalMultiBlockInfo2D::computeAllNormalOverlaps (
-        SparseBlockStructure2D const& sparseBlock )
+    SparseBlockStructure2D const& sparseBlock )
 {
-    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock)
+    {
         plint blockId = myBlocks[iBlock];
         computeNormalOverlaps(sparseBlock, blockId);
     }
 }
 
 void LocalMultiBlockInfo2D::computeNormalOverlaps (
-        SparseBlockStructure2D const& sparseBlock, plint blockId )
+    SparseBlockStructure2D const& sparseBlock, plint blockId )
 {
     Box2D intersection;
     SmartBulk2D bulk(sparseBlock, envelopeWidth, blockId);
@@ -130,9 +133,10 @@ void LocalMultiBlockInfo2D::computeNormalOverlaps (
 }
 
 void LocalMultiBlockInfo2D::computeAllPeriodicOverlaps (
-        SparseBlockStructure2D const& sparseBlock )
+    SparseBlockStructure2D const& sparseBlock )
 {
-    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock)
+    {
         plint blockId = myBlocks[iBlock];
         Box2D bulk;
         sparseBlock.getBulk(blockId, bulk);
@@ -147,15 +151,18 @@ void LocalMultiBlockInfo2D::computeAllPeriodicOverlaps (
 }
 
 void LocalMultiBlockInfo2D::computePeriodicOverlaps (
-        SparseBlockStructure2D const& sparseBlock, plint blockId )
+    SparseBlockStructure2D const& sparseBlock, plint blockId )
 {
     Box2D intersection; // Temporary variable.
     std::vector<plint> neighbors; // Temporary variable.
     SmartBulk2D bulk(sparseBlock, envelopeWidth, blockId);
 
-    for (plint dx=-1; dx<=+1; dx+=1) {
-        for (plint dy=-1; dy<=+1; dy+=1) {
-            if (dx!=0 || dy!=0) {
+    for (plint dx=-1; dx<=+1; dx+=1)
+    {
+        for (plint dy=-1; dy<=+1; dy+=1)
+        {
+            if (dx!=0 || dy!=0)
+            {
                 // The new block is shifted by the length of the full multi block in each space
                 //   direction. Consequently, overlaps between the original multi block and the
                 //   shifted new block are identified as periodic overlaps.
@@ -166,17 +173,20 @@ void LocalMultiBlockInfo2D::computePeriodicOverlaps (
                 // Speed optimization: perform following checks only if the shifted
                 //   domain touches the bounding box.
                 Box2D dummyIntersection;
-                if (intersect(shiftedEnvelope, sparseBlock.getBoundingBox(), dummyIntersection)) {
+                if (intersect(shiftedEnvelope, sparseBlock.getBoundingBox(), dummyIntersection))
+                {
                     neighbors.clear();
                     sparseBlock.findNeighbors(shiftedBulk, envelopeWidth, neighbors);
                     // Check overlap with each existing block in the neighborhood, including with the newly added one.
-                    for (pluint iNeighbor=0; iNeighbor<neighbors.size(); ++iNeighbor) {
+                    for (pluint iNeighbor=0; iNeighbor<neighbors.size(); ++iNeighbor)
+                    {
                         plint neighborId = neighbors[iNeighbor];
                         SmartBulk2D neighborBulk(sparseBlock, envelopeWidth, neighborId);
                         // Does the envelope of the shifted new block overlap with the bulk of a previous
                         //   block? If yes, add an overlap, in which the previous block has the "original
                         //   position", and the new block has the "overlap position".
-                        if (intersect(neighborBulk.getBulk(), shiftedEnvelope, intersection)) {
+                        if (intersect(neighborBulk.getBulk(), shiftedEnvelope, intersection))
+                        {
                             PeriodicOverlap2D overlap (
                                 Overlap2D(neighborId, blockId, intersection, shiftX, shiftY),
                                 dx, dy );
@@ -189,13 +199,13 @@ void LocalMultiBlockInfo2D::computePeriodicOverlaps (
                         //   If we are in the situation in which the newly added block is periodic with itself,
                         //   this step must be skipped, because otherwise the overlap is counted twice.
                         if (!(neighborId==blockId) &&
-                            intersect(shiftedBulk, neighborBulk.computeEnvelope(), intersection))
+                                intersect(shiftedBulk, neighborBulk.computeEnvelope(), intersection))
                         {
                             intersection = intersection.shift(-shiftX,-shiftY);
                             periodicOverlaps.push_back (
-                                    PeriodicOverlap2D (
-                                        Overlap2D(blockId, neighborId, intersection, -shiftX, -shiftY),
-                                        -dx, -dy ) );
+                                PeriodicOverlap2D (
+                                    Overlap2D(blockId, neighborId, intersection, -shiftX, -shiftY),
+                                    -dx, -dy ) );
                         }
                     }
                 }

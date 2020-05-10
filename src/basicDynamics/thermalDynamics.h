@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,162 +32,167 @@
 #include "core/globalDefs.h"
 #include "core/dynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 /// Common base iso-thermal (or athermal) bulk dynamics
 template<typename T, template<typename U> class Descriptor>
-class ThermalBulkDynamics : public BasicBulkDynamics<T,Descriptor> {
+class ThermalBulkDynamics : public BasicBulkDynamics<T,Descriptor>
+{
 public:
-    ThermalBulkDynamics(T omega_);
+	ThermalBulkDynamics(T omega_);
 
-/* *************** Collision, Equilibrium, and Non-equilibrium ******* */
+	/* *************** Collision, Equilibrium, and Non-equilibrium ******* */
 
-    /// Re-compute particle populations from the leading moments
-    virtual void regularize(Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                            T jSqr, Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T thetaBar=T() ) const;
+	/// Re-compute particle populations from the leading moments
+	virtual void regularize(Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                        T jSqr, Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T thetaBar=T() ) const;
 
-/* *************** Computation of macroscopic variables ************** */
+	/* *************** Computation of macroscopic variables ************** */
 
-    /// Compute the temperature in lattice units
-    virtual T computeTemperature(Cell<T,Descriptor> const& cell) const;
+	/// Compute the temperature in lattice units
+	virtual T computeTemperature(Cell<T,Descriptor> const& cell) const;
 
-    /// Compute the "off-equilibrium part of Pi"
-    virtual void computePiNeq (
-        Cell<T,Descriptor> const& cell, Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq ) const;
-        
-    /// Compute the deviatoric stress tensor 
-    virtual void computeShearStress (
-        Cell<T,Descriptor> const& cell, Array<T,SymmetricTensor<T,Descriptor>::n>& stress ) const;
+	/// Compute the "off-equilibrium part of Pi"
+	virtual void computePiNeq (
+	    Cell<T,Descriptor> const& cell, Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq ) const;
 
-    /// Compute the heat flux in lattice units
-    virtual void computeHeatFlux( Cell<T,Descriptor> const& cell,
-                                  Array<T,Descriptor<T>::d>& q ) const;
+	/// Compute the deviatoric stress tensor
+	virtual void computeShearStress (
+	    Cell<T,Descriptor> const& cell, Array<T,SymmetricTensor<T,Descriptor>::n>& stress ) const;
 
-/* *************** Switch between population and moment representation ****** */
+	/// Compute the heat flux in lattice units
+	virtual void computeHeatFlux( Cell<T,Descriptor> const& cell,
+	                              Array<T,Descriptor<T>::d>& q ) const;
 
-    /// Number of variables required to decompose a population representation into moments.
-    /** In the present implementation, the decomposition is carried out up to order-1 in the
-     *    Chapman-Enskog expansion. Example: Take the D2Q9 lattice. A decomposition means:
-     *    - At order 0: Decompose into rho, u, and fNeq (1+2+9=12 variables)
-     *    - At order 1: Decompose into rho, u, and PiNeq (1+2+3=6 variables)
-     *    - At higher order: Decompose according to order 1.
-     */
-    virtual plint numDecomposedVariables(plint order) const;
+	/* *************** Switch between population and moment representation ****** */
 
-    /// Decompose from population representation into moment representation.
-    /**   \sa numDecomposedVariables()
-     */
-    virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
+	/// Number of variables required to decompose a population representation into moments.
+	/** In the present implementation, the decomposition is carried out up to order-1 in the
+	 *    Chapman-Enskog expansion. Example: Take the D2Q9 lattice. A decomposition means:
+	 *    - At order 0: Decompose into rho, u, and fNeq (1+2+9=12 variables)
+	 *    - At order 1: Decompose into rho, u, and PiNeq (1+2+3=6 variables)
+	 *    - At higher order: Decompose according to order 1.
+	 */
+	virtual plint numDecomposedVariables(plint order) const;
 
-    /// Recompose from moment representation to population representation.
-    /**   \sa numDecomposedVariables()
-     *    This process is also known as "regularization step", and this function is therefore
-     *    equivalent to regularize(), although one or the other function may be more useful
-     *    in a specific context, due to the form of the parameters.
-     */
-    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;
+	/// Decompose from population representation into moment representation.
+	/**   \sa numDecomposedVariables()
+	 */
+	virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
 
-    /// Change the space and time scales of the variables in moment representation.
-    /**   \sa numDecomposedVariables()
-     *    \param xDxInv Inverse of the factor by which space scale is multiplied.
-     *    \param xDt Factor by which time scale is multiplied.
-     */
-    virtual void rescale(std::vector<T>& rawData, T xDxInv, T xDt, plint order) const;
-    
+	/// Recompose from moment representation to population representation.
+	/**   \sa numDecomposedVariables()
+	 *    This process is also known as "regularization step", and this function is therefore
+	 *    equivalent to regularize(), although one or the other function may be more useful
+	 *    in a specific context, due to the form of the parameters.
+	 */
+	virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;
 
-/* *************** Additional moments, intended for internal use ***** */
+	/// Change the space and time scales of the variables in moment representation.
+	/**   \sa numDecomposedVariables()
+	 *    \param xDxInv Inverse of the factor by which space scale is multiplied.
+	 *    \param xDt Factor by which time scale is multiplied.
+	 */
+	virtual void rescale(std::vector<T>& rawData, T xDxInv, T xDt, plint order) const;
 
-    /// Returns 0, as a default value for isothermal flow.
-    virtual T computeEbar(Cell<T,Descriptor> const& cell) const;
+
+	/* *************** Additional moments, intended for internal use ***** */
+
+	/// Returns 0, as a default value for isothermal flow.
+	virtual T computeEbar(Cell<T,Descriptor> const& cell) const;
 
 private:
-    virtual void decomposeOrder0(Cell<T,Descriptor> const& cell, std::vector<T>& rawData) const;
-    virtual void decomposeOrder1(Cell<T,Descriptor> const& cell, std::vector<T>& rawData) const;
-    virtual void recomposeOrder0(Cell<T,Descriptor>& cell, std::vector<T> const& rawData) const;
-    virtual void recomposeOrder1(Cell<T,Descriptor>& cell, std::vector<T> const& rawData) const;
-    virtual void rescaleOrder0(std::vector<T>& rawData, T xDxInv, T xDt) const;
-    virtual void rescaleOrder1(std::vector<T>& rawData, T xDxInv, T xDt) const;
+	virtual void decomposeOrder0(Cell<T,Descriptor> const& cell, std::vector<T>& rawData) const;
+	virtual void decomposeOrder1(Cell<T,Descriptor> const& cell, std::vector<T>& rawData) const;
+	virtual void recomposeOrder0(Cell<T,Descriptor>& cell, std::vector<T> const& rawData) const;
+	virtual void recomposeOrder1(Cell<T,Descriptor>& cell, std::vector<T> const& rawData) const;
+	virtual void rescaleOrder0(std::vector<T>& rawData, T xDxInv, T xDt) const;
+	virtual void rescaleOrder1(std::vector<T>& rawData, T xDxInv, T xDt) const;
 };
 
 /// Implementation of O(Ma^2) BGK dynamics
 template<typename T, template<typename U> class Descriptor>
-class IsoThermalBGKdynamics : public ThermalBulkDynamics<T,Descriptor> {
+class IsoThermalBGKdynamics : public ThermalBulkDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    IsoThermalBGKdynamics(T omega_);
-    IsoThermalBGKdynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	IsoThermalBGKdynamics(T omega_);
+	IsoThermalBGKdynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual IsoThermalBGKdynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual IsoThermalBGKdynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// Implementation of O(Ma^4) BGK dynamics
 template<typename T, template<typename U> class Descriptor>
-class ThermalBGKdynamics : public ThermalBulkDynamics<T,Descriptor> {
+class ThermalBGKdynamics : public ThermalBulkDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    ThermalBGKdynamics(T omega_);
-    ThermalBGKdynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	ThermalBGKdynamics(T omega_);
+	ThermalBGKdynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
+	/// Clone the object on its dynamic type.
 	virtual ThermalBGKdynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// Implementation of O(Ma^2) BGK dynamics
 template<typename T, template<typename U> class Descriptor>
-class ThermalRLBdynamics : public ThermalBulkDynamics<T,Descriptor> {
+class ThermalRLBdynamics : public ThermalBulkDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    ThermalRLBdynamics(T omega_);
-    ThermalRLBdynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	ThermalRLBdynamics(T omega_);
+	ThermalRLBdynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual ThermalRLBdynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual ThermalRLBdynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
+	static int id;
 };
 
 }

@@ -89,9 +89,6 @@ namespace descriptors {
     template<typename T>
     const char AbsorbingWaveD2Q9Descriptor<T>::name[] = "AbsorbingWave_D2Q9";
 
-    template<typename T>
-    const char ExtSymTensorD2Q9Descriptor<T>::name[] = "ExtSymTensor_D2Q9";
-
 }  // namespace descriptors
 
 }  // namespace plb

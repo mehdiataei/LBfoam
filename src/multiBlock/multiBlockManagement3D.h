@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -38,45 +38,47 @@
 #include <vector>
 
 
-namespace plb {
+namespace plb
+{
 
-class MultiBlockManagement3D {
+class MultiBlockManagement3D
+{
 public:
-    MultiBlockManagement3D( SparseBlockStructure3D const& sparseBlock_,
-                            ThreadAttribution* threadAttribution_,
-                            plint envelopeWidth_,
-                            plint refinementLevel_ =0 );
-    MultiBlockManagement3D(MultiBlockManagement3D const& rhs);
-    MultiBlockManagement3D& operator=(MultiBlockManagement3D const& rhs);
-    void swap(MultiBlockManagement3D& rhs);
-    ~MultiBlockManagement3D();
-    plint getEnvelopeWidth() const;
-    Box3D getBoundingBox() const;
-    Box3D getBulk(plint blockId) const;
-    Box3D getUniqueBulk(plint blockId) const;
-    Box3D getEnvelope(plint blockId) const;
-    SparseBlockStructure3D const& getSparseBlockStructure() const;
-    LocalMultiBlockInfo3D const& getLocalInfo() const;
-    ThreadAttribution const& getThreadAttribution() const;
-    void setCoProcessors(std::map<plint,int> const& coProcessors);
-    bool findInLocalBulk (
-            plint iX, plint iY, plint iZ, plint& foundId,
-            plint& localX, plint& localY, plint& localZ ) const;
-    bool findAllLocalRepresentations (
-            plint iX, plint iY, plint iZ, std::vector<plint>& foundId,
-            std::vector<plint>& foundX, std::vector<plint>& foundY,
-            std::vector<plint>& foundZ ) const;
-    plint getRefinementLevel() const;
-    void setRefinementLevel(plint newLevel);
-    void changeEnvelopeWidth(plint newEnvelopeWidth);
-    // Same multi-block-management, except for envelope-width
-    bool equivalentTo(MultiBlockManagement3D const& rhs) const;
+	MultiBlockManagement3D( SparseBlockStructure3D const& sparseBlock_,
+	                        ThreadAttribution* threadAttribution_,
+	                        plint envelopeWidth_,
+	                        plint refinementLevel_ =0 );
+	MultiBlockManagement3D(MultiBlockManagement3D const& rhs);
+	MultiBlockManagement3D& operator=(MultiBlockManagement3D const& rhs);
+	void swap(MultiBlockManagement3D& rhs);
+	~MultiBlockManagement3D();
+	plint getEnvelopeWidth() const;
+	Box3D getBoundingBox() const;
+	Box3D getBulk(plint blockId) const;
+	Box3D getUniqueBulk(plint blockId) const;
+	Box3D getEnvelope(plint blockId) const;
+	SparseBlockStructure3D const& getSparseBlockStructure() const;
+	LocalMultiBlockInfo3D const& getLocalInfo() const;
+	ThreadAttribution const& getThreadAttribution() const;
+	void setCoProcessors(std::map<plint,int> const& coProcessors);
+	bool findInLocalBulk (
+	    plint iX, plint iY, plint iZ, plint& foundId,
+	    plint& localX, plint& localY, plint& localZ ) const;
+	bool findAllLocalRepresentations (
+	    plint iX, plint iY, plint iZ, std::vector<plint>& foundId,
+	    std::vector<plint>& foundX, std::vector<plint>& foundY,
+	    std::vector<plint>& foundZ ) const;
+	plint getRefinementLevel() const;
+	void setRefinementLevel(plint newLevel);
+	void changeEnvelopeWidth(plint newEnvelopeWidth);
+	// Same multi-block-management, except for envelope-width
+	bool equivalentTo(MultiBlockManagement3D const& rhs) const;
 private:
-    plint                  envelopeWidth;
-    SparseBlockStructure3D sparseBlock;
-    ThreadAttribution*     threadAttribution;
-    LocalMultiBlockInfo3D  localInfo;
-    plint                  refinementLevel;
+	plint                  envelopeWidth;
+	SparseBlockStructure3D sparseBlock;
+	ThreadAttribution*     threadAttribution;
+	LocalMultiBlockInfo3D  localInfo;
+	plint                  refinementLevel;
 };
 
 MultiBlockManagement3D scale(MultiBlockManagement3D const& originalManagement, plint relativeLevel);
@@ -87,13 +89,13 @@ MultiBlockManagement3D scale(MultiBlockManagement3D const& originalManagement, p
  * the same as the bounding-box of the original block-management.
  */
 MultiBlockManagement3D intersect (
-        MultiBlockManagement3D const& originalManagement,
-        Box3D subDomain, bool crop );
+    MultiBlockManagement3D const& originalManagement,
+    Box3D subDomain, bool crop );
 
 /// Choose yourself the bounding box of the resulting block-management.
 MultiBlockManagement3D intersect (
-        MultiBlockManagement3D const& originalManagement,
-        Box3D subDomain, Box3D newBoundingBox );
+    MultiBlockManagement3D const& originalManagement,
+    Box3D subDomain, Box3D newBoundingBox );
 
 /// Create a new block-management as an intersection of the old ones.
 /** The bounding box of the result is the intersection of the two original bounding
@@ -138,34 +140,35 @@ MultiBlockManagement3D reparallelize(MultiBlockManagement3D const& management,
 
 
 /// Compute envelope and things alike.
-class SmartBulk3D {
+class SmartBulk3D
+{
 public:
-    /** The bulk has zero coordinates in case the block id does not exist. **/
-    SmartBulk3D( MultiBlockManagement3D const& management,
-                 plint blockId );
-    /** The bulk has zero coordinates in case the block id does not exist. **/
-    SmartBulk3D( SparseBlockStructure3D const& sparseBlock_,
-                 plint envelopeWidth_, plint blockId );
-    SmartBulk3D( SparseBlockStructure3D const& sparseBlock_,
-                 plint envelopeWidth_, Box3D const& bulk_ );
-    /// Access the bulk.
-    Box3D getBulk() const;
-    /// Compute envelope of a given block.
-    Box3D computeEnvelope() const;
-    /// Compute envelope of a given block, exluding margins of the outer domain.
-    Box3D computeNonPeriodicEnvelope() const;
-    /// Convert to local coordinates of a given block.
-    Box3D toLocal(Box3D const& coord) const;
-    /// Convert to local x-coordinate of a given block.
-    plint toLocalX(plint iX) const;
-    /// Convert to local y-coordinate of a given block.
-    plint toLocalY(plint iY) const;
-    /// Convert to local z-coordinate of a given block.
-    plint toLocalZ(plint iZ) const;
+	/** The bulk has zero coordinates in case the block id does not exist. **/
+	SmartBulk3D( MultiBlockManagement3D const& management,
+	             plint blockId );
+	/** The bulk has zero coordinates in case the block id does not exist. **/
+	SmartBulk3D( SparseBlockStructure3D const& sparseBlock_,
+	             plint envelopeWidth_, plint blockId );
+	SmartBulk3D( SparseBlockStructure3D const& sparseBlock_,
+	             plint envelopeWidth_, Box3D const& bulk_ );
+	/// Access the bulk.
+	Box3D getBulk() const;
+	/// Compute envelope of a given block.
+	Box3D computeEnvelope() const;
+	/// Compute envelope of a given block, exluding margins of the outer domain.
+	Box3D computeNonPeriodicEnvelope() const;
+	/// Convert to local coordinates of a given block.
+	Box3D toLocal(Box3D const& coord) const;
+	/// Convert to local x-coordinate of a given block.
+	plint toLocalX(plint iX) const;
+	/// Convert to local y-coordinate of a given block.
+	plint toLocalY(plint iY) const;
+	/// Convert to local z-coordinate of a given block.
+	plint toLocalZ(plint iZ) const;
 private:
-    SparseBlockStructure3D const& sparseBlock;
-    plint envelopeWidth;
-    Box3D bulk;
+	SparseBlockStructure3D const& sparseBlock;
+	plint envelopeWidth;
+	Box3D bulk;
 };
 
 }  // namespace plb

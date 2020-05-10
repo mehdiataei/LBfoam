@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -40,12 +40,14 @@ typedef double T;
 
 // To define the surface as an iso-level of a height function.
 template<typename T>
-class ShapeFunction {
+class ShapeFunction
+{
 public:
     ShapeFunction(Array<plint,3> const& c1_, Array<plint,3> const& c2_)
         : c1(c1_), c2(c2_)
     { }
-    T operator()(plint iX, plint iY, plint iZ) {
+    T operator()(plint iX, plint iY, plint iZ)
+    {
         return std::min( std::sqrt((T)util::sqr(iX-c1[0])+(T)util::sqr(iY-c1[1])+(T)util::sqr(iZ-c1[2])),
                          std::sqrt((T)util::sqr(iX-c2[0])+(T)util::sqr(iY-c2[1])+(T)util::sqr(iZ-c2[2])) );
     }
@@ -55,16 +57,19 @@ private:
 
 
 // To define the surface from a boolean inside-vs-outside function.
-class SphereFunction {
+class SphereFunction
+{
 public:
     SphereFunction(Array<plint,3> const& center_,  plint radius_)
         : center(center_),
           radius(radius_)
     { }
-    bool intIsInside(Array<plint,3> const& pos) const {
+    bool intIsInside(Array<plint,3> const& pos) const
+    {
         return normSqr(pos-center) < radius*radius;
     }
-    bool floatIsInside(Array<T,3> const& pos) const {
+    bool floatIsInside(Array<T,3> const& pos) const
+    {
         return normSqr(Array<T,3>(pos[0]-center[0],pos[1]-center[1],pos[2]-center[2])) < radius*radius;
     }
 private:
@@ -73,7 +78,8 @@ private:
 };
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 
     plbInit(&argc, &argv);
 
@@ -93,7 +99,7 @@ int main(int argc, char* argv[]) {
 
     std::vector<Triangle> triangles2;
     isoSurfaceMarchingCube<T,SphereFunction>(triangles2, scalarField, SphereFunction(Array<plint,3>(40,40,40), 50),
-                                             scalarField.getBoundingBox().enlarge(-1));
+            scalarField.getBoundingBox().enlarge(-1));
     TriangleSet<T>(triangles2).writeAsciiSTL("iso2.stl");
 
 
@@ -108,13 +114,13 @@ int main(int argc, char* argv[]) {
     plint borderWidth = 1;
     plint envelopeWidth = 1;
     DEFscaledMesh<T>* defMesh =
-                new DEFscaledMesh<T>(artery, resolution, referenceDirection, margin, extraLayer);
+        new DEFscaledMesh<T>(artery, resolution, referenceDirection, margin, extraLayer);
     TriangleBoundary3D<T> boundary(*defMesh);
     delete defMesh;
     boundary.getMesh().inflate();
     const int flowType = voxelFlag::inside;
     VoxelizedDomain3D<T> voxelizedDomain (
-                boundary, flowType, extraLayer, borderWidth, envelopeWidth, blockSize );
+        boundary, flowType, extraLayer, borderWidth, envelopeWidth, blockSize );
 
     isoSurfaceMarchingCube(triangles, voxelizedDomain, voxelizedDomain.getVoxelMatrix().getBoundingBox());
 
@@ -124,4 +130,3 @@ int main(int argc, char* argv[]) {
     triangleSet.translate(voxelizedDomain.getBoundary().getPhysicalLocation());
     triangleSet.writeAsciiSTL("newartery.stl");
 }
-

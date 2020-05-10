@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,7 +32,8 @@
 #include "core/dynamics.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 /// Implementation of "full-way bounce-back" dynamics which computes momentum exchange.
 /** This is a very popular way to implement no-slip boundary conditions,
@@ -48,126 +49,127 @@ namespace plb {
  * The code works for both 2D and 3D lattices.
  */
 template<typename T, template<typename U> class Descriptor>
-class MomentumExchangeBounceBack : public Dynamics<T,Descriptor> {
+class MomentumExchangeBounceBack : public Dynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
+	/* *************** Construction / Destruction ************************ */
 
-    /** You may fix a fictitious density value on bounce-back nodes via the constructor.
-     *  \param forceIds_ Contains identifiers to access the reductive variables
-     *  in the BlockStatistics objects, and to update the value of the total momentum
-     *  exchange on the obstacle. The value of the force-ids must be determined
-     *  previously by the user through a call to the method subscribeSum() of
-     *  the BlockStatistics object in the used lattice. 
-     */
-    MomentumExchangeBounceBack(Array<plint, Descriptor<T>::d> forceIds_, T rho_=T() );
-    
-    MomentumExchangeBounceBack(HierarchicUnserializer& unserializer);
+	/** You may fix a fictitious density value on bounce-back nodes via the constructor.
+	 *  \param forceIds_ Contains identifiers to access the reductive variables
+	 *  in the BlockStatistics objects, and to update the value of the total momentum
+	 *  exchange on the obstacle. The value of the force-ids must be determined
+	 *  previously by the user through a call to the method subscribeSum() of
+	 *  the BlockStatistics object in the used lattice.
+	 */
+	MomentumExchangeBounceBack(Array<plint, Descriptor<T>::d> forceIds_, T rho_=T() );
 
-    /// Clone the object on its dynamic type.
-    virtual MomentumExchangeBounceBack<T,Descriptor>* clone() const;
-    
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    
-    virtual void serialize(HierarchicSerializer& serializer) const;
+	MomentumExchangeBounceBack(HierarchicUnserializer& unserializer);
 
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    
-/* *************** Collision, Equilibrium, and Non-equilibrium ******* */
+	/// Clone the object on its dynamic type.
+	virtual MomentumExchangeBounceBack<T,Descriptor>* clone() const;
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Implementation of the collision step, with imposed macroscopic variables
-    virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
-                         Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
+	virtual void serialize(HierarchicSerializer& serializer) const;
 
-    /// Yields 0
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	virtual void unserialize(HierarchicUnserializer& unserializer);
 
-    /// Does nothing
-    virtual void regularize(Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                            T jSqr, Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T thetaBar=T() ) const;
+	/* *************** Collision, Equilibrium, and Non-equilibrium ******* */
 
-/* *************** Computation of macroscopic variables ************** */
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Yields fictitious density
-    virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
-    /// Yields 0
-    virtual T computePressure(Cell<T,Descriptor> const& cell) const;
-    /// Yields 0
-    virtual void computeVelocity( Cell<T,Descriptor> const& cell,
-                                  Array<T,Descriptor<T>::d>& u ) const;
-    /// Yields 0
-    virtual T computeTemperature(Cell<T,Descriptor> const& cell) const;
-    /// Yields 0
-    virtual void computePiNeq (
-        Cell<T,Descriptor> const& cell, Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq ) const;
-    /// Yields 0
-    virtual void computeShearStress (
-        Cell<T,Descriptor> const& cell, Array<T,SymmetricTensor<T,Descriptor>::n>& stress ) const;
-    /// Yields 0
-    virtual void computeHeatFlux( Cell<T,Descriptor> const& cell,
-                                  Array<T,Descriptor<T>::d>& q ) const;
+	/// Implementation of the collision step, with imposed macroscopic variables
+	virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
+	                             Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
 
-    /// Does nothing
-    virtual void computeMoment( Cell<T,Descriptor> const& cell,
-                                plint momentId, T* moment ) const;
+	/// Yields 0
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 
-/* *************** Access to Dynamics variables, e.g. omega ********** */
+	/// Does nothing
+	virtual void regularize(Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                        T jSqr, Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T thetaBar=T() ) const;
 
-    /// Yields 0
-    virtual T getOmega() const;
+	/* *************** Computation of macroscopic variables ************** */
 
-    /// Does nothing
-    virtual void setOmega(T omega_);
+	/// Yields fictitious density
+	virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
+	/// Yields 0
+	virtual T computePressure(Cell<T,Descriptor> const& cell) const;
+	/// Yields 0
+	virtual void computeVelocity( Cell<T,Descriptor> const& cell,
+	                              Array<T,Descriptor<T>::d>& u ) const;
+	/// Yields 0
+	virtual T computeTemperature(Cell<T,Descriptor> const& cell) const;
+	/// Yields 0
+	virtual void computePiNeq (
+	    Cell<T,Descriptor> const& cell, Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq ) const;
+	/// Yields 0
+	virtual void computeShearStress (
+	    Cell<T,Descriptor> const& cell, Array<T,SymmetricTensor<T,Descriptor>::n>& stress ) const;
+	/// Yields 0
+	virtual void computeHeatFlux( Cell<T,Descriptor> const& cell,
+	                              Array<T,Descriptor<T>::d>& q ) const;
 
-/* *************** Switch between population and moment representation ****** */
+	/// Does nothing
+	virtual void computeMoment( Cell<T,Descriptor> const& cell,
+	                            plint momentId, T* moment ) const;
 
-    /// Yields Descriptor<T>::q + Descriptor<T>::ExternalField::numScalars.
-    virtual plint numDecomposedVariables(plint order) const;
+	/* *************** Access to Dynamics variables, e.g. omega ********** */
 
-    /// Decomposed data is identical with original cell data.
-    virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
+	/// Yields 0
+	virtual T getOmega() const;
 
-    /// Decomposed data is identical with original cell data.
-    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;
+	/// Does nothing
+	virtual void setOmega(T omega_);
 
-    /// Nothing happens here.
-    virtual void rescale(std::vector<T>& rawData, T xDxInv, T xDt, plint order) const;
+	/* *************** Switch between population and moment representation ****** */
 
-    /// For MomentumExchangeBounceBack the moments of the populations have no meaning.
-    virtual bool hasMoments() const;
+	/// Yields Descriptor<T>::q + Descriptor<T>::ExternalField::numScalars.
+	virtual plint numDecomposedVariables(plint order) const;
 
-/* *************** Additional moments, intended for internal use ***** */
+	/// Decomposed data is identical with original cell data.
+	virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
 
-    /// Yields fictitious density
-    virtual T computeRhoBar(Cell<T,Descriptor> const& cell) const;
+	/// Decomposed data is identical with original cell data.
+	virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;
 
-    /// Yields fictitious density and 0
-    virtual void computeRhoBarJ(Cell<T,Descriptor> const& cell,
-                                T& rhoBar, Array<T,Descriptor<T>::d>& j) const;
+	/// Nothing happens here.
+	virtual void rescale(std::vector<T>& rawData, T xDxInv, T xDt, plint order) const;
 
-    /// Compute order-0 moment rho-bar, order-1 moment j, and order-2
-    ///   off-equilibrium moment PiNeq.
-    virtual void computeRhoBarJPiNeq(Cell<T,Descriptor> const& cell,
-                                     T& rhoBar, Array<T,Descriptor<T>::d>& j,
-                                     Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq) const;
-    /// Yields 0
-    virtual T computeEbar(Cell<T,Descriptor> const& cell) const;
+	/// For MomentumExchangeBounceBack the moments of the populations have no meaning.
+	virtual bool hasMoments() const;
+
+	/* *************** Additional moments, intended for internal use ***** */
+
+	/// Yields fictitious density
+	virtual T computeRhoBar(Cell<T,Descriptor> const& cell) const;
+
+	/// Yields fictitious density and 0
+	virtual void computeRhoBarJ(Cell<T,Descriptor> const& cell,
+	                            T& rhoBar, Array<T,Descriptor<T>::d>& j) const;
+
+	/// Compute order-0 moment rho-bar, order-1 moment j, and order-2
+	///   off-equilibrium moment PiNeq.
+	virtual void computeRhoBarJPiNeq(Cell<T,Descriptor> const& cell,
+	                                 T& rhoBar, Array<T,Descriptor<T>::d>& j,
+	                                 Array<T,SymmetricTensor<T,Descriptor>::n>& PiNeq) const;
+	/// Yields 0
+	virtual T computeEbar(Cell<T,Descriptor> const& cell) const;
 public:
-    /// Define the directions which point from the current cell into a fluid node.
-    void setFluidDirections(std::vector<plint> const& fluidDirections_);
-    /// Get the directions which point from the current cell into a fluid node.
-    std::vector<plint> const& getFluidDirections() const;
+	/// Define the directions which point from the current cell into a fluid node.
+	void setFluidDirections(std::vector<plint> const& fluidDirections_);
+	/// Get the directions which point from the current cell into a fluid node.
+	std::vector<plint> const& getFluidDirections() const;
 private:
-    std::vector<plint> fluidDirections;
-    Array<plint, Descriptor<T>::d> forceIds;
-    T rho;
+	std::vector<plint> fluidDirections;
+	Array<plint, Descriptor<T>::d> forceIds;
+	T rho;
 private:
-    static int id;
+	static int id;
 };
 
 }  // namespace plb

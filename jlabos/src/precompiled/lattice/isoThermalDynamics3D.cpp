@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,18 +35,19 @@
 #include "latticeBoltzmann/mrtLattices.h"
 #include "latticeBoltzmann/mrtLattices.hh"
 
-namespace plb {
+namespace plb
+{
 
-    template class IsoThermalBulkDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    template class BGKdynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    template class IncBGKdynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    template class ConstRhoBGKdynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    template class RLBdynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    template class RegularizedBGKdynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
-    template class ChopardDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class IsoThermalBulkDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class BGKdynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class IncBGKdynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class ConstRhoBGKdynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class RLBdynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class RegularizedBGKdynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
+template class ChopardDynamics<FLOAT_T, descriptors::DESCRIPTOR_3D>;
 
 #if NUMBIT_3D == 19
-    template class IsoThermalBulkDynamics<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
+template class IsoThermalBulkDynamics<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
 #endif
 
 }

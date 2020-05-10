@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,7 +33,8 @@
 #include "core/util.h"
 #include "core/dynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 Box3D scaleBox(Box3D box, plint nLevel);
 
@@ -42,23 +43,25 @@ template<typename T>
 class ScalarCopyFineToCoarseZerothOrder3D : public BoxProcessingFunctional3D_SS<T,T>
 {
 public:
-    ScalarCopyFineToCoarseZerothOrder3D(plint dimDx_, plint dimDt_, plint dxScale_, plint dtScale_);
-    ScalarCopyFineToCoarseZerothOrder3D(ScalarCopyFineToCoarseZerothOrder3D<T> const& rhs);
-    ScalarCopyFineToCoarseZerothOrder3D<T>& operator= (
-            ScalarCopyFineToCoarseZerothOrder3D<T> const& rhs );
-    virtual void process( Box3D fineDomain,
-                          ScalarField3D<T>& fineField, ScalarField3D<T>& coarseField );
-    virtual ScalarCopyFineToCoarseZerothOrder3D<T>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const {
-        return BlockDomain::bulk;
-    }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::staticVariables;
-    }
+	ScalarCopyFineToCoarseZerothOrder3D(plint dimDx_, plint dimDt_, plint dxScale_, plint dtScale_);
+	ScalarCopyFineToCoarseZerothOrder3D(ScalarCopyFineToCoarseZerothOrder3D<T> const& rhs);
+	ScalarCopyFineToCoarseZerothOrder3D<T>& operator= (
+	    ScalarCopyFineToCoarseZerothOrder3D<T> const& rhs );
+	virtual void process( Box3D fineDomain,
+	                      ScalarField3D<T>& fineField, ScalarField3D<T>& coarseField );
+	virtual ScalarCopyFineToCoarseZerothOrder3D<T>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const
+	{
+		return BlockDomain::bulk;
+	}
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::staticVariables;
+	}
 private:
-    plint dimDx, dimDt;
-    plint dxScale, dtScale;
+	plint dimDx, dimDt;
+	plint dxScale, dtScale;
 };
 
 /// Copy data from a fine to a coarse TensorField3D.
@@ -66,23 +69,25 @@ template<typename T, int nDim>
 class TensorCopyFineToCoarseZerothOrder3D : public BoxProcessingFunctional3D_TT<T,nDim,T,nDim>
 {
 public:
-    TensorCopyFineToCoarseZerothOrder3D(plint dimDx_, plint dimDt_, plint dxScale_, plint dtScale_);
-    TensorCopyFineToCoarseZerothOrder3D(TensorCopyFineToCoarseZerothOrder3D<T,nDim> const& rhs);
-    TensorCopyFineToCoarseZerothOrder3D<T,nDim>& operator= (
-            TensorCopyFineToCoarseZerothOrder3D<T,nDim> const& rhs );
-    virtual void process( Box3D fineDomain,
-                          TensorField3D<T,nDim>& fineField, TensorField3D<T,nDim>& coarseField );
-    virtual TensorCopyFineToCoarseZerothOrder3D<T,nDim>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const {
-        return BlockDomain::bulk;
-    }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::staticVariables;
-    }
+	TensorCopyFineToCoarseZerothOrder3D(plint dimDx_, plint dimDt_, plint dxScale_, plint dtScale_);
+	TensorCopyFineToCoarseZerothOrder3D(TensorCopyFineToCoarseZerothOrder3D<T,nDim> const& rhs);
+	TensorCopyFineToCoarseZerothOrder3D<T,nDim>& operator= (
+	    TensorCopyFineToCoarseZerothOrder3D<T,nDim> const& rhs );
+	virtual void process( Box3D fineDomain,
+	                      TensorField3D<T,nDim>& fineField, TensorField3D<T,nDim>& coarseField );
+	virtual TensorCopyFineToCoarseZerothOrder3D<T,nDim>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const
+	{
+		return BlockDomain::bulk;
+	}
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::staticVariables;
+	}
 private:
-    plint dimDx, dimDt;
-    plint dxScale, dtScale;
+	plint dimDx, dimDt;
+	plint dxScale, dtScale;
 };
 
 /// Copy data from a fine to a coarse ScalarField3D.
@@ -90,23 +95,25 @@ template<typename T, template<typename U> class Descriptor>
 class LatticeCopyFineToCoarseZerothOrder3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    LatticeCopyFineToCoarseZerothOrder3D(plint dxScale_, plint dtScale_);
-    LatticeCopyFineToCoarseZerothOrder3D(LatticeCopyFineToCoarseZerothOrder3D<T,Descriptor> const& rhs);
-    LatticeCopyFineToCoarseZerothOrder3D<T,Descriptor>& operator= (
-            LatticeCopyFineToCoarseZerothOrder3D<T,Descriptor> const& rhs );
-    virtual void process( Box3D fineDomain,
-                          BlockLattice3D<T,Descriptor>& fineLattice,
-                          BlockLattice3D<T,Descriptor>& coarseLattice );
-    virtual LatticeCopyFineToCoarseZerothOrder3D<T,Descriptor>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const {
-        return BlockDomain::bulk;
-    }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::staticVariables;
-    }
+	LatticeCopyFineToCoarseZerothOrder3D(plint dxScale_, plint dtScale_);
+	LatticeCopyFineToCoarseZerothOrder3D(LatticeCopyFineToCoarseZerothOrder3D<T,Descriptor> const& rhs);
+	LatticeCopyFineToCoarseZerothOrder3D<T,Descriptor>& operator= (
+	    LatticeCopyFineToCoarseZerothOrder3D<T,Descriptor> const& rhs );
+	virtual void process( Box3D fineDomain,
+	                      BlockLattice3D<T,Descriptor>& fineLattice,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice );
+	virtual LatticeCopyFineToCoarseZerothOrder3D<T,Descriptor>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const
+	{
+		return BlockDomain::bulk;
+	}
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::staticVariables;
+	}
 private:
-    plint dxScale, dtScale;
+	plint dxScale, dtScale;
 };
 
 /// Copy data from a fine to a coarse ScalarField3D.
@@ -114,23 +121,25 @@ template<typename T, template<typename U> class Descriptor>
 class LatticeCopyFineToCoarseNoScale3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    LatticeCopyFineToCoarseNoScale3D(plint dxScale_);
-    LatticeCopyFineToCoarseNoScale3D(LatticeCopyFineToCoarseNoScale3D<T,Descriptor> const& rhs);
-    LatticeCopyFineToCoarseNoScale3D<T,Descriptor>& operator= (
-            LatticeCopyFineToCoarseNoScale3D<T,Descriptor> const& rhs );
-    virtual void process( Box3D fineDomain,
-                          BlockLattice3D<T,Descriptor>& fineLattice,
-                          BlockLattice3D<T,Descriptor>& coarseLattice );
-    virtual LatticeCopyFineToCoarseNoScale3D<T,Descriptor>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const {
-        return BlockDomain::bulk;
-    }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::staticVariables;
-    }
+	LatticeCopyFineToCoarseNoScale3D(plint dxScale_);
+	LatticeCopyFineToCoarseNoScale3D(LatticeCopyFineToCoarseNoScale3D<T,Descriptor> const& rhs);
+	LatticeCopyFineToCoarseNoScale3D<T,Descriptor>& operator= (
+	    LatticeCopyFineToCoarseNoScale3D<T,Descriptor> const& rhs );
+	virtual void process( Box3D fineDomain,
+	                      BlockLattice3D<T,Descriptor>& fineLattice,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice );
+	virtual LatticeCopyFineToCoarseNoScale3D<T,Descriptor>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const
+	{
+		return BlockDomain::bulk;
+	}
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::staticVariables;
+	}
 private:
-    plint dxScale;
+	plint dxScale;
 };
 
 /// Copy particles from a fine to a coarse field.
@@ -138,19 +147,21 @@ template<typename T, template<typename U> class Descriptor>
 class CopyRescaleParticles3D : public BoxProcessingFunctional3D
 {
 public:
-    CopyRescaleParticles3D(plint dxScale_, plint dtScale_);
-    virtual void processGenericBlocks (
-            Box3D fineDomain, std::vector<AtomicBlock3D*> blocks );
-    virtual CopyRescaleParticles3D<T,Descriptor>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const {
-        return BlockDomain::bulk;
-    }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::staticVariables;
-    }
+	CopyRescaleParticles3D(plint dxScale_, plint dtScale_);
+	virtual void processGenericBlocks (
+	    Box3D fineDomain, std::vector<AtomicBlock3D*> blocks );
+	virtual CopyRescaleParticles3D<T,Descriptor>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const
+	{
+		return BlockDomain::bulk;
+	}
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::staticVariables;
+	}
 private:
-    plint dxScale, dtScale;
+	plint dxScale, dtScale;
 };
 
 
@@ -159,30 +170,32 @@ template<typename T>
 class ScalarInterpolateCoarseToFine3D : public BoxProcessingFunctional3D_SS<T,T>
 {
 public:
-    ScalarInterpolateCoarseToFine3D(plint dimDx_, plint dimDt_, plint dxScale_, plint dtScale_);
+	ScalarInterpolateCoarseToFine3D(plint dimDx_, plint dimDt_, plint dxScale_, plint dtScale_);
 
-    ScalarInterpolateCoarseToFine3D(
-            ScalarInterpolateCoarseToFine3D<T> const& rhs);
-    ScalarInterpolateCoarseToFine3D<T>& operator= (
-            ScalarInterpolateCoarseToFine3D<T> const& rhs );
-    
-    virtual void process( Box3D coarseDomain,
-                          ScalarField3D<T>& coarseField,
-                          ScalarField3D<T>& fineField );
+	ScalarInterpolateCoarseToFine3D(
+	    ScalarInterpolateCoarseToFine3D<T> const& rhs);
+	ScalarInterpolateCoarseToFine3D<T>& operator= (
+	    ScalarInterpolateCoarseToFine3D<T> const& rhs );
 
-    virtual ScalarInterpolateCoarseToFine3D<T>* clone() const;
-    
-    virtual BlockDomain::DomainT appliesTo() const {
-        return BlockDomain::bulk;
-    }
+	virtual void process( Box3D coarseDomain,
+	                      ScalarField3D<T>& coarseField,
+	                      ScalarField3D<T>& fineField );
 
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::staticVariables;
-    }
+	virtual ScalarInterpolateCoarseToFine3D<T>* clone() const;
+
+	virtual BlockDomain::DomainT appliesTo() const
+	{
+		return BlockDomain::bulk;
+	}
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::staticVariables;
+	}
 private:
-    plint dimDx, dimDt;
-    plint dxScale, dtScale;
+	plint dimDx, dimDt;
+	plint dxScale, dtScale;
 };
 
 /// Copy data from a coarse to a fine TensorField3D, using bilinear interpolation.
@@ -190,30 +203,32 @@ template<typename T, int nDim>
 class TensorInterpolateCoarseToFine3D : public BoxProcessingFunctional3D_TT<T,nDim,T,nDim>
 {
 public:
-    TensorInterpolateCoarseToFine3D(plint dimDx_, plint dimDt_, plint dxScale_, plint dtScale_);
+	TensorInterpolateCoarseToFine3D(plint dimDx_, plint dimDt_, plint dxScale_, plint dtScale_);
 
-    TensorInterpolateCoarseToFine3D(
-            TensorInterpolateCoarseToFine3D<T,nDim> const& rhs);
-    TensorInterpolateCoarseToFine3D<T,nDim>& operator= (
-            TensorInterpolateCoarseToFine3D<T,nDim> const& rhs );
-    
-    virtual void process( Box3D coarseDomain,
-                          TensorField3D<T,nDim>& coarseField,
-                          TensorField3D<T,nDim>& fineField );
+	TensorInterpolateCoarseToFine3D(
+	    TensorInterpolateCoarseToFine3D<T,nDim> const& rhs);
+	TensorInterpolateCoarseToFine3D<T,nDim>& operator= (
+	    TensorInterpolateCoarseToFine3D<T,nDim> const& rhs );
 
-    virtual TensorInterpolateCoarseToFine3D<T,nDim>* clone() const;
-    
-    virtual BlockDomain::DomainT appliesTo() const {
-        return BlockDomain::bulk;
-    }
+	virtual void process( Box3D coarseDomain,
+	                      TensorField3D<T,nDim>& coarseField,
+	                      TensorField3D<T,nDim>& fineField );
 
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::staticVariables;
-    }
+	virtual TensorInterpolateCoarseToFine3D<T,nDim>* clone() const;
+
+	virtual BlockDomain::DomainT appliesTo() const
+	{
+		return BlockDomain::bulk;
+	}
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::staticVariables;
+	}
 private:
-    plint dimDx, dimDt;
-    plint dxScale, dtScale;
+	plint dimDx, dimDt;
+	plint dxScale, dtScale;
 };
 
 
@@ -222,29 +237,31 @@ template<typename T, template<typename U> class Descriptor>
 class LatticeInterpolateCoarseToFine3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    LatticeInterpolateCoarseToFine3D(plint dxScale_, plint dtScale_);
+	LatticeInterpolateCoarseToFine3D(plint dxScale_, plint dtScale_);
 
-    LatticeInterpolateCoarseToFine3D (
-            LatticeInterpolateCoarseToFine3D<T,Descriptor> const& rhs );
-    LatticeInterpolateCoarseToFine3D<T,Descriptor>& operator= (
-            LatticeInterpolateCoarseToFine3D<T,Descriptor> const& rhs );
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice );
+	LatticeInterpolateCoarseToFine3D (
+	    LatticeInterpolateCoarseToFine3D<T,Descriptor> const& rhs );
+	LatticeInterpolateCoarseToFine3D<T,Descriptor>& operator= (
+	    LatticeInterpolateCoarseToFine3D<T,Descriptor> const& rhs );
 
-    virtual LatticeInterpolateCoarseToFine3D<T,Descriptor>* clone() const;
-    
-    virtual BlockDomain::DomainT appliesTo() const {
-        return BlockDomain::bulk;
-    }
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice );
 
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::staticVariables;
-    }
+	virtual LatticeInterpolateCoarseToFine3D<T,Descriptor>* clone() const;
+
+	virtual BlockDomain::DomainT appliesTo() const
+	{
+		return BlockDomain::bulk;
+	}
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::staticVariables;
+	}
 private:
-    plint dxScale, dtScale;
+	plint dxScale, dtScale;
 };
 
 
@@ -253,78 +270,80 @@ template<typename T, template<typename U> class Descriptor>
 class LatticeLinearInterpolateCoarseToFine3D : public BoxProcessingFunctional3D_LL<T,Descriptor,T,Descriptor>
 {
 public:
-    LatticeLinearInterpolateCoarseToFine3D(plint dxScale_, plint dtScale_);
+	LatticeLinearInterpolateCoarseToFine3D(plint dxScale_, plint dtScale_);
 
-    LatticeLinearInterpolateCoarseToFine3D (
-            LatticeLinearInterpolateCoarseToFine3D<T,Descriptor> const& rhs );
-    LatticeLinearInterpolateCoarseToFine3D<T,Descriptor>& operator= (
-            LatticeLinearInterpolateCoarseToFine3D<T,Descriptor> const& rhs );
-    
-    virtual void process( Box3D coarseDomain,
-                          BlockLattice3D<T,Descriptor>& coarseLattice,
-                          BlockLattice3D<T,Descriptor>& fineLattice );
+	LatticeLinearInterpolateCoarseToFine3D (
+	    LatticeLinearInterpolateCoarseToFine3D<T,Descriptor> const& rhs );
+	LatticeLinearInterpolateCoarseToFine3D<T,Descriptor>& operator= (
+	    LatticeLinearInterpolateCoarseToFine3D<T,Descriptor> const& rhs );
 
-    virtual LatticeLinearInterpolateCoarseToFine3D<T,Descriptor>* clone() const;
-    
-    virtual BlockDomain::DomainT appliesTo() const {
-        return BlockDomain::bulk;
-    }
+	virtual void process( Box3D coarseDomain,
+	                      BlockLattice3D<T,Descriptor>& coarseLattice,
+	                      BlockLattice3D<T,Descriptor>& fineLattice );
 
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::staticVariables;
-    }
+	virtual LatticeLinearInterpolateCoarseToFine3D<T,Descriptor>* clone() const;
+
+	virtual BlockDomain::DomainT appliesTo() const
+	{
+		return BlockDomain::bulk;
+	}
+
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::staticVariables;
+	}
 private:
-    plint dxScale, dtScale;
+	plint dxScale, dtScale;
 };
 
 
 template <typename T>
-std::unique_ptr<MultiScalarField3D<T> > coarsen (
-        MultiScalarField3D<T>& fineField,
-        plint dimDx, plint dimDt, plint dxScale, plint dtScale );
+std::auto_ptr<MultiScalarField3D<T> > coarsen (
+    MultiScalarField3D<T>& fineField,
+    plint dimDx, plint dimDt, plint dxScale, plint dtScale );
 
 template <typename T>
-std::unique_ptr<MultiScalarField3D<T> > refine (
-        MultiScalarField3D<T>& coarseField,
-        plint dimDx, plint dimDt, plint dxScale, plint dtScale );
+std::auto_ptr<MultiScalarField3D<T> > refine (
+    MultiScalarField3D<T>& coarseField,
+    plint dimDx, plint dimDt, plint dxScale, plint dtScale );
 
 
 template <typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > coarsen (
-        MultiTensorField3D<T,nDim>& fineField,
-        plint dimDx, plint dimDt, plint dxScale, plint dtScale );
+std::auto_ptr<MultiTensorField3D<T,nDim> > coarsen (
+    MultiTensorField3D<T,nDim>& fineField,
+    plint dimDx, plint dimDt, plint dxScale, plint dtScale );
 
 template <typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > refine (
-        MultiTensorField3D<T,nDim>& coarseField,
-        plint dimDx, plint dimDt, plint dxScale, plint dtScale );
+std::auto_ptr<MultiTensorField3D<T,nDim> > refine (
+    MultiTensorField3D<T,nDim>& coarseField,
+    plint dimDx, plint dimDt, plint dxScale, plint dtScale );
 
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > coarsen (
-        MultiBlockLattice3D<T,Descriptor>& fineLattice,
-        plint dxScale, plint dtScale, Dynamics<T,Descriptor>* backgroundDynamics );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > coarsen (
+    MultiBlockLattice3D<T,Descriptor>& fineLattice,
+    plint dxScale, plint dtScale, Dynamics<T,Descriptor>* backgroundDynamics );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > coarsenNoScale (
-        MultiBlockLattice3D<T,Descriptor>& fineLattice, plint dxScale, Dynamics<T,Descriptor>* backgroundDynamics );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > coarsenNoScale (
+    MultiBlockLattice3D<T,Descriptor>& fineLattice, plint dxScale, Dynamics<T,Descriptor>* backgroundDynamics );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > refine (
-        MultiBlockLattice3D<T,Descriptor>& coarseLattice,
-        plint dxScale, plint dtScale, Dynamics<T,Descriptor>* backgroundDynamics );
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > refine (
+    MultiBlockLattice3D<T,Descriptor>& coarseLattice,
+    plint dxScale, plint dtScale, Dynamics<T,Descriptor>* backgroundDynamics );
 
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > refine (
-        MultiParticleField3D<DenseParticleField3D<T,Descriptor> >& coarseField,
-        plint dxScale, plint dtScale );
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > refine (
+    MultiParticleField3D<DenseParticleField3D<T,Descriptor> >& coarseField,
+    plint dxScale, plint dtScale );
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > coarsen (
-        MultiParticleField3D<DenseParticleField3D<T,Descriptor> >& fineField,
-        plint dxScale, plint dtScale );
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > coarsen (
+    MultiParticleField3D<DenseParticleField3D<T,Descriptor> >& fineField,
+    plint dxScale, plint dtScale );
 
 }  // namespace plb
 

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -64,7 +64,8 @@ int main(int argc, char* argv[])
     TriangleSet<T> rightCylinderPart;
     int rv = 0;
     rv = cylinder.cutWithPlane(cutPlane, rightCylinderPart);
-    if (rv != 1) {
+    if (rv != 1)
+    {
         pcout << "Problem with the surface cutting." << std::endl;
         exit(1);
     }
@@ -74,7 +75,8 @@ int main(int argc, char* argv[])
     cutPlane.normal = -cutPlane.normal;
     rv = 0;
     rv = cylinder.cutWithPlane(cutPlane, leftCylinderPart);
-    if (rv != 1) {
+    if (rv != 1)
+    {
         pcout << "Problem with the surface cutting." << std::endl;
         exit(1);
     }
@@ -92,7 +94,8 @@ int main(int argc, char* argv[])
     cutPlane.normal = -cutPlane.normal;
     rv = 0;
     rv = cylinder.cutWithPlane(cutPlane, cutCuboid, newRightCylinderPart);
-    if (rv != 1) {
+    if (rv != 1)
+    {
         pcout << "Problem with the surface cutting." << std::endl;
         exit(1);
     }
@@ -106,7 +109,8 @@ int main(int argc, char* argv[])
     TriangleSet<T> newBrokenRightCylinderPart;
     rv = 0;
     rv = cylinder.cutWithPlane(cutPlane, cutCuboid, newBrokenRightCylinderPart);
-    if (rv != 1) {
+    if (rv != 1)
+    {
         pcout << "Problem with the surface cutting." << std::endl;
         exit(1);
     }
@@ -114,4 +118,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-

@@ -410,12 +410,12 @@ void UnfilteredCoarseGridInterfaceInstantiator<T,Descriptor>::instantiateDataPro
 
 template<typename T, template<typename U> class Descriptor>
 
-std::unique_ptr< MultiGridLattice2D<T,Descriptor> > 
+std::auto_ptr< MultiGridLattice2D<T,Descriptor> > 
         MultiGridGenerator2D<T,Descriptor>::createRefinedLatticeCubicInterpolationNoFiltering(
                         MultiGridManagement2D management,
                         Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel )
 {
-    return std::unique_ptr<MultiGridLattice2D<T,Descriptor> >(
+    return std::auto_ptr<MultiGridLattice2D<T,Descriptor> >(
         new MultiGridLattice2D<T,Descriptor> 
             ( management, 
               defaultMultiGridPolicy2D().getBlockCommunicator<T>(management.getNumLevels()),
@@ -428,12 +428,12 @@ std::unique_ptr< MultiGridLattice2D<T,Descriptor> >
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiGridLattice2D<T,Descriptor> > 
+std::auto_ptr< MultiGridLattice2D<T,Descriptor> > 
         MultiGridGenerator2D<T,Descriptor>::createRefinedLatticeLinearInterpolationNoFiltering(
                         MultiGridManagement2D management,
                         Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel )
 {
-    return std::unique_ptr<MultiGridLattice2D<T,Descriptor> >(
+    return std::auto_ptr<MultiGridLattice2D<T,Descriptor> >(
         new MultiGridLattice2D<T,Descriptor> 
             ( management, 
               defaultMultiGridPolicy2D().getBlockCommunicator<T>(management.getNumLevels()),
@@ -446,12 +446,12 @@ std::unique_ptr< MultiGridLattice2D<T,Descriptor> >
 }
 
 template<typename T, template<typename U> class Descriptor>                        
-std::unique_ptr< MultiGridLattice2D<T,Descriptor> > 
+std::auto_ptr< MultiGridLattice2D<T,Descriptor> > 
         MultiGridGenerator2D<T,Descriptor>::createRefinedLatticeCubicInterpolationFiltering(
                         MultiGridManagement2D management,
                         Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel )
 {
-    return std::unique_ptr<MultiGridLattice2D<T,Descriptor> >(
+    return std::auto_ptr<MultiGridLattice2D<T,Descriptor> >(
         new MultiGridLattice2D<T,Descriptor> 
             ( management, 
               defaultMultiGridPolicy2D().getBlockCommunicator<T>(management.getNumLevels()),
@@ -465,12 +465,12 @@ std::unique_ptr< MultiGridLattice2D<T,Descriptor> >
 
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr< MultiGridLattice2D<T,Descriptor> > 
+std::auto_ptr< MultiGridLattice2D<T,Descriptor> > 
         MultiGridGenerator2D<T,Descriptor>::createRefinedLatticeLinearInterpolationFiltering(
                         MultiGridManagement2D management,
                         Dynamics<T,Descriptor>* backgroundDynamics, plint behaviorLevel)
 {
-    return std::unique_ptr<MultiGridLattice2D<T,Descriptor> >(
+    return std::auto_ptr<MultiGridLattice2D<T,Descriptor> >(
         new MultiGridLattice2D<T,Descriptor> 
             ( management, 
               defaultMultiGridPolicy2D().getBlockCommunicator<T>(management.getNumLevels()),

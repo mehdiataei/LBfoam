@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,15 +31,16 @@
 #include "core/geometry3D.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 struct DomainAndId3D {
-    DomainAndId3D(Box3D domain_, plint id_)
-        : domain(domain_),
-          id(id_)
-    { }
-    Box3D domain;
-    plint id;
+	DomainAndId3D(Box3D domain_, plint id_)
+		: domain(domain_),
+		  id(id_)
+	{ }
+	Box3D domain;
+	plint id;
 };
 
 /// Compute mutual intersections between domains, and remove overlaps.

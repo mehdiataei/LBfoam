@@ -31,7 +31,6 @@
 #include "dataProcessors/dataInitializerFunctional3D.h"
 #include "core/cell.h"
 #include "latticeBoltzmann/geometricOperationTemplates.h"
-#include "latticeBoltzmann/externalFieldAccess.h"
 #include "atomicBlock/blockLattice3D.h"
 #include "multiGrid/multiGridUtil.h"
 #include <limits>
@@ -2863,7 +2862,7 @@ void MaskedIniConstTensorFunctional3D_N<T,nDim>::processGenericBlocks (
 {
     NTensorField3D<int>* mask = dynamic_cast<NTensorField3D<int>*>(atomicBlocks[0]);
     PLB_ASSERT(mask);
-    TensorField3D<T,nDim>* field = dynamic_cast<TensorField3D<T,nDim>*>(atomicBlocks[1]);
+    TensorField3D<T,3>* field = dynamic_cast<TensorField3D<T,3>*>(atomicBlocks[1]);
     PLB_ASSERT(field);
 
     Dot3D offset = computeRelativeDisplacement(*mask, *field);

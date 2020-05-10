@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,9 +31,11 @@
 
 #include "complexDynamics/carreauGlobalDefs.h"
 
-namespace plb {
+namespace plb
+{
 
-namespace global {
+namespace global
+{
 
 void CarreauParametersClass::setNu0(double nu0_)
 {
@@ -42,7 +44,7 @@ void CarreauParametersClass::setNu0(double nu0_)
 
 void CarreauParametersClass::setNuInf(double nuInf_)
 {
-	nuInf = nuInf_;
+    nuInf = nuInf_;
 }
 
 void CarreauParametersClass::setLambda(double lambda_)
@@ -64,7 +66,7 @@ double CarreauParametersClass::getNu0() const
 
 double CarreauParametersClass::getNuInf() const
 {
-	return nuInf;
+    return nuInf;
 }
 
 

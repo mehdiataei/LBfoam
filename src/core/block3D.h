@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,16 +32,18 @@
 #include "core/blockStatistics.h"
 #include "core/geometry3D.h"
 
-namespace plb {
+namespace plb
+{
 
-class Block3D {
+class Block3D
+{
 public:
-    virtual ~Block3D() { }
-    virtual Box3D getBoundingBox() const =0;
-    virtual DataSerializer* getBlockSerializer (
-            Box3D const& domain, IndexOrdering::OrderingT ordering ) const =0;
-    virtual DataUnSerializer* getBlockUnSerializer (
-            Box3D const& domain, IndexOrdering::OrderingT ordering ) =0;
+	virtual ~Block3D() { }
+	virtual Box3D getBoundingBox() const =0;
+	virtual DataSerializer* getBlockSerializer (
+	    Box3D const& domain, IndexOrdering::OrderingT ordering ) const =0;
+	virtual DataUnSerializer* getBlockUnSerializer (
+	    Box3D const& domain, IndexOrdering::OrderingT ordering ) =0;
 };
 
 void copySerializedBlock( Block3D const& from, Block3D& to,
@@ -49,18 +51,21 @@ void copySerializedBlock( Block3D const& from, Block3D& to,
 
 /// Some end-user implementations of the Block3D have a static cache-policy class,
 ///   which can be access to fine-tune the performance on a given platform.
-class CachePolicy3D {
+class CachePolicy3D
+{
 public:
-    CachePolicy3D(plint blockSize_) : blockSize(blockSize_)
-    { }
-    void setBlockSize(plint blockSize_) {
-        blockSize = blockSize_;
-    }
-    plint getBlockSize() const {
-        return blockSize;
-    }
+	CachePolicy3D(plint blockSize_) : blockSize(blockSize_)
+	{ }
+	void setBlockSize(plint blockSize_)
+	{
+		blockSize = blockSize_;
+	}
+	plint getBlockSize() const
+	{
+		return blockSize;
+	}
 private:
-    plint blockSize;
+	plint blockSize;
 };
 
 } // namespace plb

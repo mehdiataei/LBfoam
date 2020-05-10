@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -38,71 +38,80 @@
 #include <map>
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class MultiLevelScalarField3D : public MultiLevel3D {
+class MultiLevelScalarField3D : public MultiLevel3D
+{
 public:
-    // The dynamics dyn must be right for the coarsest instantiated level.
-    MultiLevelScalarField3D(const OctreeGridStructure& ogs_);
-    MultiLevelScalarField3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel);
-    MultiLevelScalarField3D(const OctreeGridStructure& ogs_, T iniVal);
-    MultiLevelScalarField3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel, T iniVal);
+	// The dynamics dyn must be right for the coarsest instantiated level.
+	MultiLevelScalarField3D(const OctreeGridStructure& ogs_);
+	MultiLevelScalarField3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel);
+	MultiLevelScalarField3D(const OctreeGridStructure& ogs_, T iniVal);
+	MultiLevelScalarField3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel, T iniVal);
 
-    MultiLevelScalarField3D(MultiLevelScalarField3D<T> const& rhs);
-    MultiLevelScalarField3D<T>& operator=(MultiLevelScalarField3D<T> const& rhs);
-    void swap(MultiLevelScalarField3D<T>& rhs);
-    ~MultiLevelScalarField3D();
+	MultiLevelScalarField3D(MultiLevelScalarField3D<T> const& rhs);
+	MultiLevelScalarField3D<T>& operator=(MultiLevelScalarField3D<T> const& rhs);
+	void swap(MultiLevelScalarField3D<T>& rhs);
+	~MultiLevelScalarField3D();
 
-    virtual MultiScalarField3D<T> const& getLevel(plint iL) const;
-    virtual MultiScalarField3D<T>& getLevel(plint iL);
-    
-    plint getNumLevels() const { 
-        return ogs.getNumLevels();
-    }
-    
-    OctreeGridStructure const& getOgs() const {
-        return ogs;
-    }
+	virtual MultiScalarField3D<T> const& getLevel(plint iL) const;
+	virtual MultiScalarField3D<T>& getLevel(plint iL);
+
+	plint const getNumLevels() const
+	{
+		return ogs.getNumLevels();
+	}
+
+	OctreeGridStructure const& getOgs() const
+	{
+		return ogs;
+	}
 private:
-    OctreeGridStructure ogs;
+	OctreeGridStructure ogs;
 private:
-    std::vector<MultiScalarField3D<T> *> gridLevels;
+	std::vector<MultiScalarField3D<T> *> gridLevels;
 };
 
 
 template<typename T>
-class MultiLevelScalarFieldForOutput3D : public MultiLevel3D {
+class MultiLevelScalarFieldForOutput3D : public MultiLevel3D
+{
 public:
-    // The dynamics dyn must be right for the coarsest instantiated level.
-    MultiLevelScalarFieldForOutput3D(const OctreeGridStructure& ogs_, bool crop);
-    MultiLevelScalarFieldForOutput3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel, bool crop);
-    MultiLevelScalarFieldForOutput3D(MultiLevelScalarFieldForOutput3D<T> const& rhs);
-    MultiLevelScalarFieldForOutput3D<T>& operator=(MultiLevelScalarFieldForOutput3D<T> const& rhs);
-    void swap(MultiLevelScalarFieldForOutput3D<T>& rhs);
-    ~MultiLevelScalarFieldForOutput3D();
+	// The dynamics dyn must be right for the coarsest instantiated level.
+	MultiLevelScalarFieldForOutput3D(const OctreeGridStructure& ogs_, bool crop);
+	MultiLevelScalarFieldForOutput3D(const OctreeGridStructure& ogs_, Box3D domain, plint domainLevel, bool crop);
+	MultiLevelScalarFieldForOutput3D(MultiLevelScalarFieldForOutput3D<T> const& rhs);
+	MultiLevelScalarFieldForOutput3D<T>& operator=(MultiLevelScalarFieldForOutput3D<T> const& rhs);
+	void swap(MultiLevelScalarFieldForOutput3D<T>& rhs);
+	~MultiLevelScalarFieldForOutput3D();
 
-    virtual MultiScalarField3D<T> const &getLevel(plint iL) const {
-        PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
-        return *gridLevels[iL];
-    }
-    
-    virtual MultiScalarField3D<T> &getLevel(plint iL) {
-        PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
-        return *gridLevels[iL];
-    }
-    
-    plint getNumLevels() const { 
-        return ogs.getNumLevels();
-    }
-    
-    OctreeGridStructure const& getOgs() const {
-        return ogs;
-    }
+	virtual MultiScalarField3D<T> const &getLevel(plint iL) const
+	{
+		PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
+		return *gridLevels[iL];
+	}
+
+	virtual MultiScalarField3D<T> &getLevel(plint iL)
+	{
+		PLB_ASSERT(iL <= getNumLevels() && iL >= 0);
+		return *gridLevels[iL];
+	}
+
+	plint const getNumLevels() const
+	{
+		return ogs.getNumLevels();
+	}
+
+	OctreeGridStructure const& getOgs() const
+	{
+		return ogs;
+	}
 private:
-    OctreeGridStructure ogs;
+	OctreeGridStructure ogs;
 private:
-    std::vector<MultiScalarField3D<T> *> gridLevels;
+	std::vector<MultiScalarField3D<T> *> gridLevels;
 };
 
 

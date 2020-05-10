@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,42 +35,47 @@
 #include "core/globalDefs.h"
 #include "core/dynamics.h"
 
-namespace plb {
-    
+namespace plb
+{
+
 /// Common base iso-thermal (or athermal) bulk dynamics
 template<typename T, template<typename U> class Descriptor>
-class AdvectionDiffusionDynamics : public BasicBulkDynamics<T,Descriptor> {
+class AdvectionDiffusionDynamics : public BasicBulkDynamics<T,Descriptor>
+{
 public:
-    AdvectionDiffusionDynamics(T omega_);
+	AdvectionDiffusionDynamics(T omega_);
 
-/* *************** Collision, Equilibrium, and Non-equilibrium ******* */
+	/* *************** Collision, Equilibrium, and Non-equilibrium ******* */
 
-    /// Re-compute particle populations from the leading moments
-    virtual void regularize(Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                            T jSqr, Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T thetaBar=T() ) const;
+	/// Re-compute particle populations from the leading moments
+	virtual void regularize(Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                        T jSqr, Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T thetaBar=T() ) const;
 
-/* *************** Additional moments, intended for internal use ***** */
+	/* *************** Additional moments, intended for internal use ***** */
 
-    /// Returns 0, as a default value for isothermal flow.
-    virtual T computeEbar(Cell<T,Descriptor> const& cell) const;
+	/// Returns 0, as a default value for isothermal flow.
+	virtual T computeEbar(Cell<T,Descriptor> const& cell) const;
 
-/* *************** Switch between population and moment representation ****** */
+	/* *************** Switch between population and moment representation ****** */
 
-    /// Number of variables required to decompose a population representation into moments.
-    virtual plint numDecomposedVariables(plint order) const;
+	/// Number of variables required to decompose a population representation into moments.
+	virtual plint numDecomposedVariables(plint order) const;
 
-    /// Decompose from population representation into moment representation.
-    virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
+	/// Decompose from population representation into moment representation.
+	virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
 
-    /// Recompose from moment representation to population representation.
-    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;
+	/// Recompose from moment representation to population representation.
+	virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;
 
-    /// Change the space and time scales of the variables in moment representation.
-    virtual void rescale(std::vector<T>& rawData, T xDxInv, T xDt, plint order) const;
+	/// Change the space and time scales of the variables in moment representation.
+	virtual void rescale(std::vector<T>& rawData, T xDxInv, T xDt, plint order) const;
 
-    virtual bool isAdvectionDiffusion() const { return true; }
+	virtual bool isAdvectionDiffusion() const
+	{
+		return true;
+	}
 
-    virtual void computeVelocity( Cell<T,Descriptor> const& cell, Array<T,Descriptor<T>::d>& u ) const;
+	virtual void computeVelocity( Cell<T,Descriptor> const& cell, Array<T,Descriptor<T>::d>& u ) const;
 };
 
 /// Regularized Advection-Diffusion dynamics
@@ -78,186 +83,192 @@ public:
  *   the thesis of J. Latt (2007).
  */
 template<typename T, template<typename U> class Descriptor>
-class AdvectionDiffusionRLBdynamics : public AdvectionDiffusionDynamics <T,Descriptor> {
+class AdvectionDiffusionRLBdynamics : public AdvectionDiffusionDynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    AdvectionDiffusionRLBdynamics(T omega_);
-    AdvectionDiffusionRLBdynamics(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual AdvectionDiffusionRLBdynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
-    /// Implementation of the collision step, with imposed macroscopic variables
-    /// The arguments:
-    /// - rhoBar: the "rhoBar" version of the scalar rho.
-    /// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
-    virtual void collideExternal (
-            Cell<T,Descriptor>& cell, T rhoBar,
-            Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Constructor
+	AdvectionDiffusionRLBdynamics(T omega_);
+	AdvectionDiffusionRLBdynamics(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual AdvectionDiffusionRLBdynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
+	/// Implementation of the collision step, with imposed macroscopic variables
+	/// The arguments:
+	/// - rhoBar: the "rhoBar" version of the scalar rho.
+	/// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
+	virtual void collideExternal (
+	    Cell<T,Descriptor>& cell, T rhoBar,
+	    Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// SRT Advection-Diffusion dynamics by Perko & Patel PRE 89, 053309 (2014).
 template<typename T, template<typename U> class Descriptor>
-class AdvectionDiffusionPerkoDynamics : public AdvectionDiffusionDynamics <T,Descriptor> {
+class AdvectionDiffusionPerkoDynamics : public AdvectionDiffusionDynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    AdvectionDiffusionPerkoDynamics(T omega_, T omegaRef_);
-    AdvectionDiffusionPerkoDynamics(HierarchicUnserializer& unserializer);
-    /// Serialize the dynamics object.
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    /// Un-Serialize the dynamics object.
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual AdvectionDiffusionPerkoDynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
-    /// Implementation of the collision step, with imposed macroscopic variables
-    /// The arguments:
-    /// - rhoBar: the "rhoBar" version of the scalar rho.
-    /// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
-    virtual void collideExternal (
-            Cell<T,Descriptor>& cell, T rhoBar,
-            Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Constructor
+	AdvectionDiffusionPerkoDynamics(T omega_, T omegaRef_);
+	AdvectionDiffusionPerkoDynamics(HierarchicUnserializer& unserializer);
+	/// Serialize the dynamics object.
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	/// Un-Serialize the dynamics object.
+	virtual void unserialize(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual AdvectionDiffusionPerkoDynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
+	/// Implementation of the collision step, with imposed macroscopic variables
+	/// The arguments:
+	/// - rhoBar: the "rhoBar" version of the scalar rho.
+	/// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
+	virtual void collideExternal (
+	    Cell<T,Descriptor>& cell, T rhoBar,
+	    Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
-    T omegaRef;
+	static int id;
+	T omegaRef;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class AdvectionDiffusionWithSourceLinearRLBdynamics : public AdvectionDiffusionDynamics <T,Descriptor> {
+class AdvectionDiffusionWithSourceLinearRLBdynamics : public AdvectionDiffusionDynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    AdvectionDiffusionWithSourceLinearRLBdynamics(T omega_);
-    AdvectionDiffusionWithSourceLinearRLBdynamics(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual AdvectionDiffusionWithSourceLinearRLBdynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
-    /// Implementation of the collision step, with imposed macroscopic variables
-    /// The arguments:
-    /// - rhoBar: the "rhoBar" version of the scalar rho.
-    /// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
-    virtual void collideExternal (
-            Cell<T,Descriptor>& cell, T rhoBar,
-            Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Constructor
+	AdvectionDiffusionWithSourceLinearRLBdynamics(T omega_);
+	AdvectionDiffusionWithSourceLinearRLBdynamics(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual AdvectionDiffusionWithSourceLinearRLBdynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
+	/// Implementation of the collision step, with imposed macroscopic variables
+	/// The arguments:
+	/// - rhoBar: the "rhoBar" version of the scalar rho.
+	/// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
+	virtual void collideExternal (
+	    Cell<T,Descriptor>& cell, T rhoBar,
+	    Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
+	static int id;
 };
 
 template<typename T, template<typename U> class Descriptor>
-class AdvectionDiffusionWithSourceRLBdynamics : public AdvectionDiffusionDynamics <T,Descriptor> {
+class AdvectionDiffusionWithSourceRLBdynamics : public AdvectionDiffusionDynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    AdvectionDiffusionWithSourceRLBdynamics(T omega_);
-    AdvectionDiffusionWithSourceRLBdynamics(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual AdvectionDiffusionWithSourceRLBdynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
-    /// Implementation of the collision step, with imposed macroscopic variables
-    /// The arguments:
-    /// - rhoBar: the "rhoBar" version of the scalar rho.
-    /// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
-    virtual void collideExternal (
-            Cell<T,Descriptor>& cell, T rhoBar,
-            Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Constructor
+	AdvectionDiffusionWithSourceRLBdynamics(T omega_);
+	AdvectionDiffusionWithSourceRLBdynamics(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual AdvectionDiffusionWithSourceRLBdynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
+	/// Implementation of the collision step, with imposed macroscopic variables
+	/// The arguments:
+	/// - rhoBar: the "rhoBar" version of the scalar rho.
+	/// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
+	virtual void collideExternal (
+	    Cell<T,Descriptor>& cell, T rhoBar,
+	    Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// SRT Advection-Diffusion dynamics by Perko & Patel PRE 89, 053309 (2014),
 /// modified to account for a source term.
 template<typename T, template<typename U> class Descriptor>
-class AdvectionDiffusionWithSourcePerkoDynamics : public AdvectionDiffusionDynamics <T,Descriptor> {
+class AdvectionDiffusionWithSourcePerkoDynamics : public AdvectionDiffusionDynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    AdvectionDiffusionWithSourcePerkoDynamics(T omega_, T omegaRef_);
-    AdvectionDiffusionWithSourcePerkoDynamics(HierarchicUnserializer& unserializer);
-    /// Serialize the dynamics object.
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    /// Un-Serialize the dynamics object.
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual AdvectionDiffusionWithSourcePerkoDynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
-    /// Implementation of the collision step, with imposed macroscopic variables
-    /// The arguments:
-    /// - rhoBar: the "rhoBar" version of the scalar rho.
-    /// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
-    virtual void collideExternal (
-            Cell<T,Descriptor>& cell, T rhoBar,
-            Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Constructor
+	AdvectionDiffusionWithSourcePerkoDynamics(T omega_, T omegaRef_);
+	AdvectionDiffusionWithSourcePerkoDynamics(HierarchicUnserializer& unserializer);
+	/// Serialize the dynamics object.
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	/// Un-Serialize the dynamics object.
+	virtual void unserialize(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual AdvectionDiffusionWithSourcePerkoDynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
+	/// Implementation of the collision step, with imposed macroscopic variables
+	/// The arguments:
+	/// - rhoBar: the "rhoBar" version of the scalar rho.
+	/// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
+	virtual void collideExternal (
+	    Cell<T,Descriptor>& cell, T rhoBar,
+	    Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
-    T omegaRef;
+	static int id;
+	T omegaRef;
 };
 
 /// Regularized Advection-Diffusion dynamics with artificial diffusivity as in the Smagorinsky model.
 template<typename T, template<typename U> class Descriptor>
-class SmagorinskyAdvectionDiffusionRLBdynamics : public AdvectionDiffusionDynamics <T,Descriptor> {
+class SmagorinskyAdvectionDiffusionRLBdynamics : public AdvectionDiffusionDynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    SmagorinskyAdvectionDiffusionRLBdynamics(T omega_, T T0_, T cSmago_);
-    /// Constructor from a serialized object.
-    SmagorinskyAdvectionDiffusionRLBdynamics(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual SmagorinskyAdvectionDiffusionRLBdynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Serialize the dynamics object.
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    /// Un-Serialize the dynamics object.
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
-    /// Implementation of the collision step, with imposed macroscopic variables
-    /// The arguments:
-    /// - rhoBar: the "rhoBar" version of the scalar rho.
-    /// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
-    virtual void collideExternal (
-            Cell<T,Descriptor>& cell, T rhoBar,
-            Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Constructor
+	SmagorinskyAdvectionDiffusionRLBdynamics(T omega_, T T0_, T cSmago_);
+	/// Constructor from a serialized object.
+	SmagorinskyAdvectionDiffusionRLBdynamics(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual SmagorinskyAdvectionDiffusionRLBdynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Serialize the dynamics object.
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	/// Un-Serialize the dynamics object.
+	virtual void unserialize(HierarchicUnserializer& unserializer);
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
+	/// Implementation of the collision step, with imposed macroscopic variables
+	/// The arguments:
+	/// - rhoBar: the "rhoBar" version of the scalar rho.
+	/// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
+	virtual void collideExternal (
+	    Cell<T,Descriptor>& cell, T rhoBar,
+	    Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    T invT0;
-    T cSmago;
-    static int id;
+	T invT0;
+	T cSmago;
+	static int id;
 };
 
 /// BGK Advection-Diffusion dynamics
@@ -265,31 +276,32 @@ private:
  *  term.
  */
 template<typename T, template<typename U> class Descriptor>
-class AdvectionDiffusionBGKdynamics : public AdvectionDiffusionDynamics <T,Descriptor> {
+class AdvectionDiffusionBGKdynamics : public AdvectionDiffusionDynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    AdvectionDiffusionBGKdynamics(T omega_);
-    AdvectionDiffusionBGKdynamics(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual AdvectionDiffusionBGKdynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
-    /// Implementation of the collision step, with imposed macroscopic variables
-    /// The arguments:
-    /// - rhoBar: the "rhoBar" version of the scalar rho.
-    /// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
-    virtual void collideExternal (
-            Cell<T,Descriptor>& cell, T rhoBar,
-            Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Constructor
+	AdvectionDiffusionBGKdynamics(T omega_);
+	AdvectionDiffusionBGKdynamics(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual AdvectionDiffusionBGKdynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
+	/// Implementation of the collision step, with imposed macroscopic variables
+	/// The arguments:
+	/// - rhoBar: the "rhoBar" version of the scalar rho.
+	/// - jEq: the equilibrium part of the second-order moment. jEq = u*rho, where u is the external convective term.
+	virtual void collideExternal (
+	    Cell<T,Descriptor>& cell, T rhoBar,
+	    Array<T,Descriptor<T>::d> const& jEq, T thetaBar, BlockStatistics& stat );
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
+	                             T jSqr, T thetaBar=T()) const;
 
 private:
-    static int id;
+	static int id;
 };
 
 /// Complete BGK Advection-Diffusion dynamics
@@ -297,49 +309,50 @@ private:
  *  term. We tried to reduce it with the extended exquilibrium distribution
  */
 template<typename T, template<typename U> class Descriptor>
-class CompleteAdvectionDiffusionBGKdynamics : public AdvectionDiffusionDynamics <T,Descriptor> {
+class CompleteAdvectionDiffusionBGKdynamics : public AdvectionDiffusionDynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    CompleteAdvectionDiffusionBGKdynamics(T omega_);
-    CompleteAdvectionDiffusionBGKdynamics(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual CompleteAdvectionDiffusionBGKdynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Computation of the density field (sum_i f_i = rho*phi), phi is the advected diffused field
-    /// rho the density of the fluid
-    virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
-    
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
-    /// Implementation of the collision step, with imposed macroscopic variables
-    /// The arguments:
-    /// - rhoBar: the "rhoBar" version of the scalar rho.
-    /// - j: the equilibrium part of the second-order moment. j = u*rho, where u is the external convective term.
-    virtual void collideExternal (
-            Cell<T,Descriptor>& cell, T rhoBar,
-            Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat );
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Constructor
+	CompleteAdvectionDiffusionBGKdynamics(T omega_);
+	CompleteAdvectionDiffusionBGKdynamics(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual CompleteAdvectionDiffusionBGKdynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Computation of the density field (sum_i f_i = rho*phi), phi is the advected diffused field
+	/// rho the density of the fluid
+	virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
 
-/* *************** Switch between population and moment representation ****** */
-/*
-    /// Number of variables required to decompose a population representation into moments.
-    virtual plint numDecomposedVariables(plint order) const;
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
+	/// Implementation of the collision step, with imposed macroscopic variables
+	/// The arguments:
+	/// - rhoBar: the "rhoBar" version of the scalar rho.
+	/// - j: the equilibrium part of the second-order moment. j = u*rho, where u is the external convective term.
+	virtual void collideExternal (
+	    Cell<T,Descriptor>& cell, T rhoBar,
+	    Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat );
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 
-    /// Decompose from population representation into moment representation.
-    virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
+	/* *************** Switch between population and moment representation ****** */
+	/*
+	    /// Number of variables required to decompose a population representation into moments.
+	    virtual plint numDecomposedVariables(plint order) const;
 
-    /// Recompose from moment representation to population representation.
-    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;*/
-    
-    /// Re-compute particle populations from the leading moments
-    virtual void regularize(Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                            T jSqr, Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T thetaBar=T() ) const;
+	    /// Decompose from population representation into moment representation.
+	    virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
+
+	    /// Recompose from moment representation to population representation.
+	    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;*/
+
+	/// Re-compute particle populations from the leading moments
+	virtual void regularize(Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                        T jSqr, Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T thetaBar=T() ) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// Complete BGK Advection-Diffusion dynamics
@@ -347,35 +360,36 @@ private:
  *  term. We tried to reduce it with the extended exquilibrium distribution
  */
 template<typename T, template<typename U> class Descriptor>
-class CompleteRegularizedAdvectionDiffusionBGKdynamics : public CompleteAdvectionDiffusionBGKdynamics <T,Descriptor> {
+class CompleteRegularizedAdvectionDiffusionBGKdynamics : public CompleteAdvectionDiffusionBGKdynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    CompleteRegularizedAdvectionDiffusionBGKdynamics(T omega_);
-    CompleteRegularizedAdvectionDiffusionBGKdynamics(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual CompleteRegularizedAdvectionDiffusionBGKdynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Computation of the density field (sum_i f_i = rho*phi), phi is the advected diffused field
-    /// rho the density of the fluid
-    virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
-    
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
+	/// Constructor
+	CompleteRegularizedAdvectionDiffusionBGKdynamics(T omega_);
+	CompleteRegularizedAdvectionDiffusionBGKdynamics(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual CompleteRegularizedAdvectionDiffusionBGKdynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Computation of the density field (sum_i f_i = rho*phi), phi is the advected diffused field
+	/// rho the density of the fluid
+	virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
 
-/* *************** Switch between population and moment representation ****** */
-/*
-    /// Number of variables required to decompose a population representation into moments.
-    virtual plint numDecomposedVariables(plint order) const;
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
 
-    /// Decompose from population representation into moment representation.
-    virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
+	/* *************** Switch between population and moment representation ****** */
+	/*
+	    /// Number of variables required to decompose a population representation into moments.
+	    virtual plint numDecomposedVariables(plint order) const;
 
-    /// Recompose from moment representation to population representation.
-    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;*/
+	    /// Decompose from population representation into moment representation.
+	    virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
+
+	    /// Recompose from moment representation to population representation.
+	    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;*/
 private:
-    static int id;
+	static int id;
 };
 
 /// Complete BGK Advection-Diffusion dynamics with source
@@ -383,35 +397,36 @@ private:
  *  term. We tried to reduce it with the extended exquilibrium distribution
  */
 template<typename T, template<typename U> class Descriptor>
-class CompleteRegularizedAdvectionDiffusionWithSourceBGKdynamics : public CompleteAdvectionDiffusionBGKdynamics <T,Descriptor> {
+class CompleteRegularizedAdvectionDiffusionWithSourceBGKdynamics : public CompleteAdvectionDiffusionBGKdynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    CompleteRegularizedAdvectionDiffusionWithSourceBGKdynamics(T omega_);
-    CompleteRegularizedAdvectionDiffusionWithSourceBGKdynamics(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual CompleteRegularizedAdvectionDiffusionWithSourceBGKdynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Computation of the density field (sum_i f_i = rho*phi), phi is the advected diffused field
-    /// rho the density of the fluid
-    virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
-    
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
+	/// Constructor
+	CompleteRegularizedAdvectionDiffusionWithSourceBGKdynamics(T omega_);
+	CompleteRegularizedAdvectionDiffusionWithSourceBGKdynamics(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual CompleteRegularizedAdvectionDiffusionWithSourceBGKdynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Computation of the density field (sum_i f_i = rho*phi), phi is the advected diffused field
+	/// rho the density of the fluid
+	virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
 
-/* *************** Switch between population and moment representation ****** */
-/*
-    /// Number of variables required to decompose a population representation into moments.
-    virtual plint numDecomposedVariables(plint order) const;
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
 
-    /// Decompose from population representation into moment representation.
-    virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
+	/* *************** Switch between population and moment representation ****** */
+	/*
+	    /// Number of variables required to decompose a population representation into moments.
+	    virtual plint numDecomposedVariables(plint order) const;
 
-    /// Recompose from moment representation to population representation.
-    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;*/
+	    /// Decompose from population representation into moment representation.
+	    virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
+
+	    /// Recompose from moment representation to population representation.
+	    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;*/
 private:
-    static int id;
+	static int id;
 };
 
 
@@ -420,68 +435,69 @@ private:
  *  term. We tried to reduce it with the extended exquilibrium distribution
  */
 template<typename T, template<typename U> class Descriptor>
-class CompleteAdvectionDiffusionTRTdynamics : public AdvectionDiffusionDynamics <T,Descriptor> {
+class CompleteAdvectionDiffusionTRTdynamics : public AdvectionDiffusionDynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    CompleteAdvectionDiffusionTRTdynamics(T omega_, T psi_);
-    CompleteAdvectionDiffusionTRTdynamics(T omega_);
-    CompleteAdvectionDiffusionTRTdynamics(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual CompleteAdvectionDiffusionTRTdynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Serialize the dynamics object.
-    virtual void serialize(HierarchicSerializer& serializer) const;
+	/// Constructor
+	CompleteAdvectionDiffusionTRTdynamics(T omega_, T psi_);
+	CompleteAdvectionDiffusionTRTdynamics(T omega_);
+	CompleteAdvectionDiffusionTRTdynamics(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual CompleteAdvectionDiffusionTRTdynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Serialize the dynamics object.
+	virtual void serialize(HierarchicSerializer& serializer) const;
 
-    /// Un-Serialize the dynamics object.
-    virtual void unserialize(HierarchicUnserializer& unserializer);
-    
-    /// Computation of the density field (sum_i f_i = rho*phi), phi is the advected diffused field
-    /// rho the density of the fluid
-    virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
-    
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
-    /// Implementation of the collision step, with imposed macroscopic variables
-    /// The arguments:
-    /// - rhoBar: the "rhoBar" version of the scalar rho.
-    /// - j: the equilibrium part of the second-order moment. j = u*rho, where u is the external convective term.
-    virtual void collideExternal (
-            Cell<T,Descriptor>& cell, T rhoBar,
-            Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat );
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
-                            
-/* *************** Configurable parameters *************************** */
+	/// Un-Serialize the dynamics object.
+	virtual void unserialize(HierarchicUnserializer& unserializer);
 
-    /// Set local value of any generic parameter
-    virtual void setParameter(plint whichParameter, T value);
-    /// Get local value of any generic parameter
-    virtual T getParameter(plint whichParameter) const;
-    /// Set local speed of sound
-    void setPsi(T psi_);
-    /// Get local speed of sound
-    T    getPsi() const;
+	/// Computation of the density field (sum_i f_i = rho*phi), phi is the advected diffused field
+	/// rho the density of the fluid
+	virtual T computeDensity(Cell<T,Descriptor> const& cell) const;
 
-/* *************** Switch between population and moment representation ****** */
-/*
-    /// Number of variables required to decompose a population representation into moments.
-    virtual plint numDecomposedVariables(plint order) const;
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
+	/// Implementation of the collision step, with imposed macroscopic variables
+	/// The arguments:
+	/// - rhoBar: the "rhoBar" version of the scalar rho.
+	/// - j: the equilibrium part of the second-order moment. j = u*rho, where u is the external convective term.
+	virtual void collideExternal (
+	    Cell<T,Descriptor>& cell, T rhoBar,
+	    Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat );
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 
-    /// Decompose from population representation into moment representation.
-    virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
+	/* *************** Configurable parameters *************************** */
 
-    /// Recompose from moment representation to population representation.
-    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;*/
-    
-    /// Re-compute particle populations from the leading moments
-    virtual void regularize(Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                            T jSqr, Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T thetaBar=T() ) const;
+	/// Set local value of any generic parameter
+	virtual void setParameter(plint whichParameter, T value);
+	/// Get local value of any generic parameter
+	virtual T getParameter(plint whichParameter) const;
+	/// Set local speed of sound
+	void setPsi(T psi_);
+	/// Get local speed of sound
+	T    getPsi() const;
+
+	/* *************** Switch between population and moment representation ****** */
+	/*
+	    /// Number of variables required to decompose a population representation into moments.
+	    virtual plint numDecomposedVariables(plint order) const;
+
+	    /// Decompose from population representation into moment representation.
+	    virtual void decompose(Cell<T,Descriptor> const& cell, std::vector<T>& rawData, plint order) const;
+
+	    /// Recompose from moment representation to population representation.
+	    virtual void recompose(Cell<T,Descriptor>& cell, std::vector<T> const& rawData, plint order) const;*/
+
+	/// Re-compute particle populations from the leading moments
+	virtual void regularize(Cell<T,Descriptor>& cell, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                        T jSqr, Array<T,SymmetricTensor<T,Descriptor>::n> const& PiNeq, T thetaBar=T() ) const;
 private:
-    static int id;
-    T psi;
+	static int id;
+	T psi;
 };
 
 /// BGK Advection-Diffusion dynamics
@@ -489,27 +505,27 @@ private:
  *  term.
  */
 template<typename T, template<typename U> class Descriptor>
-class AdvectionDiffusionWithSourceBGKdynamics : public AdvectionDiffusionDynamics <T,Descriptor> {
+class AdvectionDiffusionWithSourceBGKdynamics : public AdvectionDiffusionDynamics <T,Descriptor>
+{
 public:
-    /// Constructor
-    AdvectionDiffusionWithSourceBGKdynamics(T omega_);
-    AdvectionDiffusionWithSourceBGKdynamics(HierarchicUnserializer& unserializer);
-    /// Clone the object on its dynamic type.
-    virtual AdvectionDiffusionWithSourceBGKdynamics<T,Descriptor>* clone() const;
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics );
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Constructor
+	AdvectionDiffusionWithSourceBGKdynamics(T omega_);
+	AdvectionDiffusionWithSourceBGKdynamics(HierarchicUnserializer& unserializer);
+	/// Clone the object on its dynamic type.
+	virtual AdvectionDiffusionWithSourceBGKdynamics<T,Descriptor>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics );
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& jEq,
+	                             T jSqr, T thetaBar=T()) const;
 
 private:
-    static int id;
+	static int id;
 };
 
 } // namespace plb
 
 #endif  // ADVECTION_DIFFUSION_DYNAMICS_H
-

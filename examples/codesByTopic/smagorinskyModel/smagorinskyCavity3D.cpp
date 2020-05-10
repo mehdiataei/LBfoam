@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -39,7 +39,8 @@ using namespace std;
 typedef double T;
 #define DESCRIPTOR descriptors::D3Q19Descriptor
 
-void randomIniCondition(plint iX, plint iY, plint iZ, T randomValue, T& rho, Array<T,3>& velocity) {
+void randomIniCondition(plint iX, plint iY, plint iZ, T randomValue, T& rho, Array<T,3>& velocity)
+{
     velocity.resetToZero();
     rho = (T)1 + 1.e-2*randomValue;
 }
@@ -102,17 +103,18 @@ void writeVTK(MultiBlockLattice3D<T,DESCRIPTOR>& lattice,
 }
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 1.e4,  // Re
-            90,        // N
-            1.,        // lx
-            1.,        // ly
-            1.         // lz
+        (T) 1e-2,  // uMax
+        (T) 1.e4,  // Re
+        90,        // N
+        1.,        // lx
+        1.,        // ly
+        1.         // lz
     );
     const T logT     = (T)1/(T)500;
     const T imSave   = (T)1/(T)10;
@@ -123,16 +125,16 @@ int main(int argc, char* argv[]) {
 
     T cSmago = 0.14;
     MultiBlockLattice3D<T, DESCRIPTOR> lattice (
-            parameters.getNx(), parameters.getNy(), parameters.getNz(),
-            //new SmagorinskyBGKdynamics<T,DESCRIPTOR>(parameters.getOmega(), cSmago) );
-            new SmagorinskyRegularizedDynamics<T,DESCRIPTOR>(parameters.getOmega(), cSmago) );
-            //new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(), parameters.getNz(),
+        //new SmagorinskyBGKdynamics<T,DESCRIPTOR>(parameters.getOmega(), cSmago) );
+        new SmagorinskyRegularizedDynamics<T,DESCRIPTOR>(parameters.getOmega(), cSmago) );
+    //new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     // Uncomment the following line to instantiate the Smagorinsky LES model,
     //   if the background-dynamics (i.e. the dynamics given to "lattice" in
     //   the constructor) is BGKdynamics instead of SmagorinskyBGKdynamics.
-    
-      // instantiateStaticSmagorinsky(lattice, lattice.getBoundingBox(), cSmago);
+
+    // instantiateStaticSmagorinsky(lattice, lattice.getBoundingBox(), cSmago);
 
     OnLatticeBoundaryCondition3D<T,DESCRIPTOR>* boundaryCondition
         = createLocalBoundaryCondition3D<T,DESCRIPTOR>();
@@ -142,20 +144,24 @@ int main(int argc, char* argv[]) {
     T previousIterationTime = T();
 
     // Main loop over time iterations.
-    for (plint iT=0; iT<parameters.nStep(maxT); ++iT) {
+    for (plint iT=0; iT<parameters.nStep(maxT); ++iT)
+    {
         global::timer("mainLoop").restart();
 
-        if (iT%parameters.nStep(imSave)==0) {
+        if (iT%parameters.nStep(imSave)==0)
+        {
             pcout << "Writing Gif ..." << endl;
             writeGifs(lattice, parameters, iT);
         }
 
-        if (iT%parameters.nStep(vtkSave)==0 && iT>0) {
+        if (iT%parameters.nStep(vtkSave)==0 && iT>0)
+        {
             pcout << "Saving VTK file ..." << endl;
             writeVTK(lattice, parameters, iT);
         }
-        
-        if (iT%parameters.nStep(logT)==0) {
+
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "step " << iT
                   << "; t=" << iT*parameters.getDeltaT();
         }
@@ -163,7 +169,8 @@ int main(int argc, char* argv[]) {
         // Lattice Boltzmann iteration step.
         lattice.collideAndStream();
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "; av energy="
                   << setprecision(10) << getStoredAverageEnergy<T>(lattice)
                   << "; av rho="

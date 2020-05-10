@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -27,31 +27,42 @@
 
 #include <string>
 
-namespace plb {
+namespace plb
+{
 
 struct DynamicNativeType {
-    virtual ~DynamicNativeType() { }
-    virtual DynamicNativeType* clone() const =0;
-    virtual int getTypeSize() const =0;
+	virtual ~DynamicNativeType() { }
+	virtual DynamicNativeType* clone() const =0;
+	virtual int getTypeSize() const =0;
 };
 
 template <typename T>
 struct NativeType : public DynamicNativeType {
-    static char const* getName();
-    virtual NativeType<T>* clone() const { return new NativeType<T>(*this); }
-    virtual int getTypeSize() const { return sizeof(T); }
+	static char const* getName();
+	virtual NativeType<T>* clone() const
+	{
+		return new NativeType<T>(*this);
+	}
+	virtual int getTypeSize() const
+	{
+		return sizeof(T);
+	}
 };
 
-class NativeTypeConstructor {
+class NativeTypeConstructor
+{
 public:
-    NativeTypeConstructor(std::string typeName);
-    ~NativeTypeConstructor();
-    NativeTypeConstructor(NativeTypeConstructor const& rhs);
-    NativeTypeConstructor& operator=(NativeTypeConstructor const& rhs);
-    void swap(NativeTypeConstructor& rhs);
-    int getTypeSize() const { return nativeType->getTypeSize(); }
+	NativeTypeConstructor(std::string typeName);
+	~NativeTypeConstructor();
+	NativeTypeConstructor(NativeTypeConstructor const& rhs);
+	NativeTypeConstructor& operator=(NativeTypeConstructor const& rhs);
+	void swap(NativeTypeConstructor& rhs);
+	int getTypeSize() const
+	{
+		return nativeType->getTypeSize();
+	}
 private:
-    DynamicNativeType* nativeType;
+	DynamicNativeType* nativeType;
 };
 
 }  // namespace plb

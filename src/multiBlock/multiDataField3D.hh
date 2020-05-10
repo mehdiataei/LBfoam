@@ -99,7 +99,6 @@ MultiScalarField3D<T>::MultiScalarField3D(MultiScalarField3D<T> const& rhs)
     typename BlockMap::const_iterator rhsIt = rhs.fields.begin();
 
     for (; it != fields.end(); ++it, ++rhsIt) {
-        PLB_ASSERT( rhsIt != rhs.fields.end() );
         *(it->second) = *(rhsIt->second);
     }
 }
@@ -386,7 +385,6 @@ MultiTensorField3D<T,nDim>::MultiTensorField3D(MultiTensorField3D<T,nDim> const&
     typename BlockMap::const_iterator rhsIt = rhs.fields.begin();
 
     for (; it != fields.end(); ++it, ++rhsIt) {
-        PLB_ASSERT( rhsIt != rhs.fields.end() );
         *(it->second) = *(rhsIt->second);
     }
 }
@@ -681,7 +679,8 @@ MultiNTensorField3D<T>::~MultiNTensorField3D() {
 template<typename T>
 MultiNTensorField3D<T>::MultiNTensorField3D(MultiNTensorField3D<T> const& rhs)
     : NTensorFieldBase3D<T>(rhs),
-      MultiBlock3D(rhs),
+      // Use MultiBlock's sub-domain constructor to avoid that the data-processors are copied
+      MultiBlock3D(rhs, rhs.getBoundingBox(), false),
       multiNTensorAccess(rhs.multiNTensorAccess->clone()),
       scalarOrTensorView(0)
 {
@@ -690,7 +689,6 @@ MultiNTensorField3D<T>::MultiNTensorField3D(MultiNTensorField3D<T> const& rhs)
     typename BlockMap::const_iterator rhsIt = rhs.fields.begin();
 
     for (; it != fields.end(); ++it, ++rhsIt) {
-        PLB_ASSERT( rhsIt != rhs.fields.end() );
         *(it->second) = *(rhsIt->second);
     }
 }

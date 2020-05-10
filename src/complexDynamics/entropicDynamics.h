@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,7 +36,8 @@
 #include "basicDynamics/isoThermalDynamics.h"
 #include "complexDynamics/variableOmegaDynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor> class Cell;
 
@@ -46,82 +47,85 @@ template<typename T, template<typename U> class Descriptor>
 class EntropicDynamics : public IsoThermalBulkDynamics<T,Descriptor>
 {
 public:
-/* *************** Construction / Destruction ************************ */
-    EntropicDynamics(T omega_);
+	/* *************** Construction / Destruction ************************ */
+	EntropicDynamics(T omega_);
 
-    EntropicDynamics(HierarchicUnserializer& unserializer);
+	EntropicDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual EntropicDynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual EntropicDynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    virtual bool isEntropic() const{
-        return true;
-    }
+	virtual bool isEntropic() const
+	{
+		return true;
+	}
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Implementation of the collision step, with imposed macroscopic variables
-    virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
-                         Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
+	/// Implementation of the collision step, with imposed macroscopic variables
+	virtual void collideExternal(Cell<T,Descriptor>& cell, T rhoBar,
+	                             Array<T,Descriptor<T>::d> const& j, T thetaBar, BlockStatistics& stat);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 
 private:
-    static int id;
+	static int id;
 };
 
 
 /// Implementation of the forced entropic collision step
 template<typename T, template<typename U> class Descriptor>
-class ForcedEntropicDynamics : public IsoThermalBulkDynamics<T,Descriptor> {
+class ForcedEntropicDynamics : public IsoThermalBulkDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    ForcedEntropicDynamics(T omega_);
+	/* *************** Construction / Destruction ************************ */
+	ForcedEntropicDynamics(T omega_);
 
-    ForcedEntropicDynamics(HierarchicUnserializer& unserializer);
+	ForcedEntropicDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual ForcedEntropicDynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual ForcedEntropicDynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    virtual bool isEntropic() const{
-        return true;
-    }
+	virtual bool isEntropic() const
+	{
+		return true;
+	}
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    /// computes the entropy function H(f)=sum_i f_i*ln(f_i/t_i)
-    T computeEntropy(Array<T,Descriptor<T>::q> const& f);
-    /// computes the entropy growth H(f)-H(f-alpha*fNeq)
-    T computeEntropyGrowth(Array<T,Descriptor<T>::q> const& f, Array<T,Descriptor<T>::q> const& fNeq, T alpha);
-    /// computes the entropy growth derivative
-    /// dH/dalpha=-sum_i fNeq_i*ln((f_i-alpha*fNeq_i)/t_i)
-    T computeEntropyGrowthDerivative(Array<T,Descriptor<T>::q> const& f, Array<T,Descriptor<T>::q> const& fNeq, T alpha);
-    /// Get the alpha parameter
-    bool getAlpha(T &alpha, Array<T,Descriptor<T>::q> const& f, Array<T,Descriptor<T>::q> const& fNeq);
-    
-    static const int forceBeginsAt = Descriptor<T>::ExternalField::forceBeginsAt;
-    static const int sizeOfForce   = Descriptor<T>::ExternalField::sizeOfForce;
-    static int id;
+	/// computes the entropy function H(f)=sum_i f_i*ln(f_i/t_i)
+	T computeEntropy(Array<T,Descriptor<T>::q> const& f);
+	/// computes the entropy growth H(f)-H(f-alpha*fNeq)
+	T computeEntropyGrowth(Array<T,Descriptor<T>::q> const& f, Array<T,Descriptor<T>::q> const& fNeq, T alpha);
+	/// computes the entropy growth derivative
+	/// dH/dalpha=-sum_i fNeq_i*ln((f_i-alpha*fNeq_i)/t_i)
+	T computeEntropyGrowthDerivative(Array<T,Descriptor<T>::q> const& f, Array<T,Descriptor<T>::q> const& fNeq, T alpha);
+	/// Get the alpha parameter
+	bool getAlpha(T &alpha, Array<T,Descriptor<T>::q> const& f, Array<T,Descriptor<T>::q> const& fNeq);
+
+	static const int forceBeginsAt = Descriptor<T>::ExternalField::forceBeginsAt;
+	static const int sizeOfForce   = Descriptor<T>::ExternalField::sizeOfForce;
+	static int id;
 };
 
 /*******************************************************************************
@@ -135,36 +139,37 @@ template<typename T, template<typename U> class Descriptor>
 class VariableOmegaELBMDynamics : public VariableOmegaDynamics<T,Descriptor>
 {
 public:
-/* *************** Construction / Destruction ************************ */
-    VariableOmegaELBMDynamics(T omega0_, bool automaticPrepareCollision=true);
+	/* *************** Construction / Destruction ************************ */
+	VariableOmegaELBMDynamics(T omega0_, bool automaticPrepareCollision=true);
 
-    VariableOmegaELBMDynamics(HierarchicUnserializer& unserializer);
+	VariableOmegaELBMDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual VariableOmegaELBMDynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual VariableOmegaELBMDynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    virtual bool isEntropic() const{
-        return true;
-    }
+	virtual bool isEntropic() const
+	{
+		return true;
+	}
 
-    /// Serialize the dynamics object.
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    /// Un-Serialize the dynamics object.
-    virtual void unserialize(HierarchicUnserializer& unserializer);
+	/// Serialize the dynamics object.
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	/// Un-Serialize the dynamics object.
+	virtual void unserialize(HierarchicUnserializer& unserializer);
 
-    /// With this method, you can modify the constant value omega0 (not the actual value of omega,
-    ///  which is computed during run-time from omega0 and the local strain-rate).
-    virtual void setOmega(T omega_);
-    /// Returns omega0.
-    virtual T getOmega() const;
+	/// With this method, you can modify the constant value omega0 (not the actual value of omega,
+	///  which is computed during run-time from omega0 and the local strain-rate).
+	virtual void setOmega(T omega_);
+	/// Returns omega0.
+	virtual T getOmega() const;
 
-    virtual T getOmegaFromCell(Cell<T,Descriptor> const& cell) const;
+	virtual T getOmegaFromCell(Cell<T,Descriptor> const& cell) const;
 private:
-    T omega0;
-    static int id;
+	T omega0;
+	static int id;
 };
 
 }  // namespace plb

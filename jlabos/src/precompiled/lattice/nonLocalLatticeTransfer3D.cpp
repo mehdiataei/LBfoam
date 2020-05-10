@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,34 +29,35 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.hh"
 
-namespace plb {
+namespace plb
+{
 
 template
 void copyNonLocal<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& from,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& to, Box3D const& domain,
-        modif::ModifT whichContent );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& from,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& to, Box3D const& domain,
+    modif::ModifT whichContent );
 
 template
 void copy<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& from, Box3D const& fromDomain,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& to, Box3D const& toDomain,
-        modif::ModifT typeOfModif );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& from, Box3D const& fromDomain,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& to, Box3D const& toDomain,
+    modif::ModifT typeOfModif );
 
 template
 void copyPopulations<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& from, Box3D const& fromDomain,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& to, Box3D const& toDomain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& from, Box3D const& fromDomain,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& to, Box3D const& toDomain );
 
 template
 void copyAll<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& from, Box3D const& fromDomain,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& to, Box3D const& toDomain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& from, Box3D const& fromDomain,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& to, Box3D const& toDomain );
 
 template
 void copyRegenerate<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& from, Box3D const& fromDomain,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& to, Box3D const& toDomain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D> const& from, Box3D const& fromDomain,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& to, Box3D const& toDomain );
 
 }
 

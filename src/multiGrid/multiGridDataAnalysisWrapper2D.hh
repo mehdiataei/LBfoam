@@ -118,12 +118,12 @@ void extractSubDomain( MultiGridLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridLattice2D<T,Descriptor> > extractSubDomain(
+std::auto_ptr<MultiGridLattice2D<T,Descriptor> > extractSubDomain(
         MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain )
 {
     MultiGridLattice2D<T,Descriptor>* extractedLattice = new MultiGridLattice2D<T,Descriptor>(lattice, domain);
     extractSubDomain(lattice, *extractedLattice, domain);
-    return std::unique_ptr<MultiGridLattice2D<T,Descriptor> >(extractedLattice);
+    return std::auto_ptr<MultiGridLattice2D<T,Descriptor> >(extractedLattice);
 }
 
 
@@ -137,15 +137,15 @@ void computeDensity(MultiGridLattice2D<T,Descriptor>& lattice, MultiGridScalarFi
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeDensity(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > computeDensity(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
     MultiGridScalarField2D<T>* density = new MultiGridScalarField2D<T>(lattice, domain);
     computeDensity(lattice, *density, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(density);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(density);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeDensity(MultiGridLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiGridScalarField2D<T> > computeDensity(MultiGridLattice2D<T,Descriptor>& lattice) {
     return computeDensity(lattice, lattice.getBoundingBox());
 }
 
@@ -160,15 +160,15 @@ void computeRhoBar(MultiGridLattice2D<T,Descriptor>& lattice, MultiGridScalarFie
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeRhoBar(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > computeRhoBar(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
     MultiGridScalarField2D<T>* rhoBar = new MultiGridScalarField2D<T>(lattice, domain);
     computeRhoBar(lattice, *rhoBar, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(rhoBar);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(rhoBar);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeRhoBar(MultiGridLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiGridScalarField2D<T> > computeRhoBar(MultiGridLattice2D<T,Descriptor>& lattice) {
     return computeRhoBar(lattice, lattice.getBoundingBox());
 }
 
@@ -183,15 +183,15 @@ void computeKineticEnergy(MultiGridLattice2D<T,Descriptor>& lattice, MultiGridSc
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeKineticEnergy(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > computeKineticEnergy(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
     MultiGridScalarField2D<T>* energy = new MultiGridScalarField2D<T>(lattice, domain);
     computeKineticEnergy(lattice, *energy, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(energy);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(energy);
 }   
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeKineticEnergy(MultiGridLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiGridScalarField2D<T> > computeKineticEnergy(MultiGridLattice2D<T,Descriptor>& lattice) {
     return computeKineticEnergy(lattice, lattice.getBoundingBox());
 }
 
@@ -208,15 +208,15 @@ void computeVelocityNorm(
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeVelocityNorm(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > computeVelocityNorm(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
     MultiGridScalarField2D<T>* velocityNorm = new MultiGridScalarField2D<T>(lattice, domain);
     computeVelocityNorm(lattice, *velocityNorm, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(velocityNorm);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(velocityNorm);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeVelocityNorm(MultiGridLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiGridScalarField2D<T> > computeVelocityNorm(MultiGridLattice2D<T,Descriptor>& lattice) {
     return computeVelocityNorm(lattice, lattice.getBoundingBox());
 }
 
@@ -233,16 +233,16 @@ void computeVelocityComponent(MultiGridLattice2D<T,Descriptor>& lattice, MultiGr
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeVelocityComponent(MultiGridLattice2D<T,Descriptor>& lattice,
+std::auto_ptr<MultiGridScalarField2D<T> > computeVelocityComponent(MultiGridLattice2D<T,Descriptor>& lattice,
                                                                Box2D domain, plint iComponent)
 {
     MultiGridScalarField2D<T>* velocityComponent = new MultiGridScalarField2D<T>(lattice, domain);
     computeVelocityComponent(lattice, *velocityComponent, domain, iComponent);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(velocityComponent);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(velocityComponent);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeVelocityComponent(
+std::auto_ptr<MultiGridScalarField2D<T> > computeVelocityComponent(
                 MultiGridLattice2D<T,Descriptor>& lattice, plint iComponent )
 {
     return computeVelocityComponent(lattice, lattice.getBoundingBox(), iComponent);
@@ -260,17 +260,17 @@ void computeVelocity( MultiGridLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField2D<T,Descriptor<T>::d> > computeVelocity(MultiGridLattice2D<T,Descriptor>& lattice,
+std::auto_ptr<MultiGridTensorField2D<T,Descriptor<T>::d> > computeVelocity(MultiGridLattice2D<T,Descriptor>& lattice,
 Box2D domain)
 {
     MultiGridTensorField2D<T,Descriptor<T>::d>* velocity
         = new MultiGridTensorField2D<T,Descriptor<T>::d>(lattice, domain);
     computeVelocity(lattice, *velocity, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,Descriptor<T>::d> >(velocity);
+    return std::auto_ptr<MultiGridTensorField2D<T,Descriptor<T>::d> >(velocity);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField2D<T,Descriptor<T>::d> >
+std::auto_ptr<MultiGridTensorField2D<T,Descriptor<T>::d> >
     computeVelocity(MultiGridLattice2D<T,Descriptor>& lattice)
 {
     return computeVelocity(lattice, lattice.getBoundingBox());
@@ -289,17 +289,17 @@ void computePiNeq( MultiGridLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computePiNeq(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
     MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n>* PiNeq
         = new MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n>(lattice, domain);
     computePiNeq(lattice, *PiNeq, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(PiNeq);
+    return std::auto_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(PiNeq);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computePiNeq(MultiGridLattice2D<T,Descriptor>& lattice)
 {
     return computePiNeq(lattice, lattice.getBoundingBox());
@@ -317,17 +317,17 @@ void computeShearStress( MultiGridLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computeShearStress(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
     MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n>* stress
         = new MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n>(lattice, domain);
     computeShearStress(lattice, *stress, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(stress);
+    return std::auto_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(stress);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computeShearStress(MultiGridLattice2D<T,Descriptor>& lattice)
 {
     return computeShearStress(lattice, lattice.getBoundingBox());
@@ -346,17 +346,17 @@ void computeStrainRateFromStress( MultiGridLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computeStrainRateFromStress(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
     MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n>* S
         = new MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n>(lattice, domain);
     computeStrainRateFromStress(lattice, *S, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(S);
+    return std::auto_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(S);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiGridTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computeStrainRateFromStress(MultiGridLattice2D<T,Descriptor>& lattice)
 {
     return computeStrainRateFromStress(lattice, lattice.getBoundingBox());
@@ -372,15 +372,15 @@ void computeTemperature(MultiGridLattice2D<T,Descriptor>& lattice, MultiGridScal
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeTemperature(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > computeTemperature(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
     MultiGridScalarField2D<T>* temperature = new MultiGridScalarField2D<T>(lattice, domain);
     computeTemperature(lattice, *temperature, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(temperature);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(temperature);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeTemperature(MultiGridLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiGridScalarField2D<T> > computeTemperature(MultiGridLattice2D<T,Descriptor>& lattice) {
     return computeTemperature(lattice, lattice.getBoundingBox());
 }
 
@@ -394,15 +394,15 @@ void computeSoundSpeed(MultiGridLattice2D<T,Descriptor>& lattice, MultiGridScala
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeSoundSpeed(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > computeSoundSpeed(MultiGridLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
     MultiGridScalarField2D<T>* soundSpeed = new MultiGridScalarField2D<T>(lattice, domain);
     computeSoundSpeed(lattice, *soundSpeed, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(soundSpeed);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(soundSpeed);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeSoundSpeed(MultiGridLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiGridScalarField2D<T> > computeSoundSpeed(MultiGridLattice2D<T,Descriptor>& lattice) {
     return computeSoundSpeed(lattice, lattice.getBoundingBox());
 }
 
@@ -418,16 +418,16 @@ void computePopulation(MultiGridLattice2D<T,Descriptor>& lattice, MultiGridScala
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computePopulation(MultiGridLattice2D<T,Descriptor>& lattice,
+std::auto_ptr<MultiGridScalarField2D<T> > computePopulation(MultiGridLattice2D<T,Descriptor>& lattice,
                                                         Box2D domain, plint iPop)
 {
     MultiGridScalarField2D<T>* population = new MultiGridScalarField2D<T>(lattice, domain);
     computePopulation(lattice, *population, domain, iPop);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(population);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(population);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computePopulation(MultiGridLattice2D<T,Descriptor>& lattice, plint iPop)
+std::auto_ptr<MultiGridScalarField2D<T> > computePopulation(MultiGridLattice2D<T,Descriptor>& lattice, plint iPop)
 {
     return computePopulation(lattice, lattice.getBoundingBox(), iPop);
 }
@@ -442,17 +442,17 @@ void computeAllPopulations(MultiGridLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridScalarField2D<T> > computeAllPopulations(MultiGridLattice2D<T,Descriptor>& lattice,
+std::auto_ptr<MultiGridScalarField2D<T> > computeAllPopulations(MultiGridLattice2D<T,Descriptor>& lattice,
                                                             Box2D domain)
 {
     MultiGridTensorField2D<T,Descriptor<T>::q>* populations = 
             new MultiGridTensorField2D<T,Descriptor<T>::q>(lattice, domain);
     computeAllPopulations(lattice, *populations, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,Descriptor<T>::q> >(populations);
+    return std::auto_ptr<MultiGridTensorField2D<T,Descriptor<T>::q> >(populations);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiGridTensorField2D<T,Descriptor<T>::q> > computeAllPopulations(MultiGridLattice2D<T,Descriptor>&
+std::auto_ptr<MultiGridTensorField2D<T,Descriptor<T>::q> > computeAllPopulations(MultiGridLattice2D<T,Descriptor>&
 lattice)
 {
     return computeAllPopulations(lattice, lattice.getBoundingBox());
@@ -478,11 +478,11 @@ void extractSubDomain( MultiGridScalarField2D<T>& field,
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > extractSubDomain(MultiGridScalarField2D<T>& field, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > extractSubDomain(MultiGridScalarField2D<T>& field, Box2D domain)
 {
     MultiGridScalarField2D<T>* extractedField = new MultiGridScalarField2D<T>(field, domain);
     extractSubDomain(field, *extractedField, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(extractedField);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(extractedField);
 }
 
 /* *************** MultiScalarField - Scalar operations *************** */
@@ -495,15 +495,15 @@ void add(MultiGridScalarField2D<T>& field, T scalar, MultiGridScalarField2D<T>& 
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > add(MultiGridScalarField2D<T>& field, T scalar, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > add(MultiGridScalarField2D<T>& field, T scalar, Box2D domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(field, domain);
     add(field, scalar, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > add(MultiGridScalarField2D<T>& field, T scalar)
+std::auto_ptr<MultiGridScalarField2D<T> > add(MultiGridScalarField2D<T>& field, T scalar)
 {
     return add(field, scalar, field.getBoundingBox());
 }
@@ -517,15 +517,15 @@ void add(T scalar, MultiGridScalarField2D<T>& field, MultiGridScalarField2D<T>& 
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > add(T scalar, MultiGridScalarField2D<T>& field, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > add(T scalar, MultiGridScalarField2D<T>& field, Box2D domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(field, domain);
     add(scalar, field, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > add(T scalar, MultiGridScalarField2D<T>& field)
+std::auto_ptr<MultiGridScalarField2D<T> > add(T scalar, MultiGridScalarField2D<T>& field)
 {
     return add(scalar, field, field.getBoundingBox());
 }
@@ -539,15 +539,15 @@ void subtract(MultiGridScalarField2D<T>& field, T scalar, MultiGridScalarField2D
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > subtract(MultiGridScalarField2D<T>& field, T scalar, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > subtract(MultiGridScalarField2D<T>& field, T scalar, Box2D domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(field, domain);
     subtract(field, scalar, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > subtract(MultiGridScalarField2D<T>& field, T scalar)
+std::auto_ptr<MultiGridScalarField2D<T> > subtract(MultiGridScalarField2D<T>& field, T scalar)
 {
     return subtract(field, scalar, field.getBoundingBox());
 }
@@ -561,15 +561,15 @@ void subtract(T scalar, MultiGridScalarField2D<T>& field, MultiGridScalarField2D
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > subtract(T scalar, MultiGridScalarField2D<T>& field, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > subtract(T scalar, MultiGridScalarField2D<T>& field, Box2D domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(field, domain);
     subtract(scalar, field, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > subtract(T scalar, MultiGridScalarField2D<T>& field)
+std::auto_ptr<MultiGridScalarField2D<T> > subtract(T scalar, MultiGridScalarField2D<T>& field)
 {
     return subtract(scalar, field, field.getBoundingBox());
 }
@@ -583,15 +583,15 @@ void multiply(MultiGridScalarField2D<T>& field, T scalar, MultiGridScalarField2D
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > multiply(MultiGridScalarField2D<T>& field, T scalar, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > multiply(MultiGridScalarField2D<T>& field, T scalar, Box2D domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(field, domain);
     multiply(field, scalar, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > multiply(MultiGridScalarField2D<T>& field, T scalar)
+std::auto_ptr<MultiGridScalarField2D<T> > multiply(MultiGridScalarField2D<T>& field, T scalar)
 {
     return multiply(field, scalar, field.getBoundingBox());
 }
@@ -605,15 +605,15 @@ void multiply(T scalar, MultiGridScalarField2D<T>& field, MultiGridScalarField2D
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > multiply(T scalar, MultiGridScalarField2D<T>& field, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > multiply(T scalar, MultiGridScalarField2D<T>& field, Box2D domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(field, domain);
     multiply(scalar, field, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > multiply(T scalar, MultiGridScalarField2D<T>& field)
+std::auto_ptr<MultiGridScalarField2D<T> > multiply(T scalar, MultiGridScalarField2D<T>& field)
 {
     return multiply(scalar, field, field.getBoundingBox());
 }
@@ -627,15 +627,15 @@ void divide(MultiGridScalarField2D<T>& field, T scalar, MultiGridScalarField2D<T
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > divide(MultiGridScalarField2D<T>& field, T scalar, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > divide(MultiGridScalarField2D<T>& field, T scalar, Box2D domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(field, domain);
     divide(field, scalar, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > divide(MultiGridScalarField2D<T>& field, T scalar)
+std::auto_ptr<MultiGridScalarField2D<T> > divide(MultiGridScalarField2D<T>& field, T scalar)
 {
     return divide(field, scalar, field.getBoundingBox());
 }
@@ -649,15 +649,15 @@ void divide(T scalar, MultiGridScalarField2D<T>& field, MultiGridScalarField2D<T
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > divide(T scalar, MultiGridScalarField2D<T>& field, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > divide(T scalar, MultiGridScalarField2D<T>& field, Box2D domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(field, domain);
     divide(scalar, field, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > divide(T scalar, MultiGridScalarField2D<T>& field)
+std::auto_ptr<MultiGridScalarField2D<T> > divide(T scalar, MultiGridScalarField2D<T>& field)
 {
     return divide(scalar, field, field.getBoundingBox());
 }
@@ -723,15 +723,15 @@ void copyConvert(MultiGridScalarField2D<T1>& field, MultiGridScalarField2D<T2>& 
 }
 
 template<typename T1, typename T2>
-std::unique_ptr<MultiGridScalarField2D<T2> > copyConvert(MultiGridScalarField2D<T1>& field, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T2> > copyConvert(MultiGridScalarField2D<T1>& field, Box2D domain)
 {
     MultiGridScalarField2D<T2>* convertedField = new MultiGridScalarField2D<T2>(field, domain);
     copyConvert(field, *convertedField, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T2> >(convertedField);
+    return std::auto_ptr<MultiGridScalarField2D<T2> >(convertedField);
 }
 
 template<typename T1, typename T2>
-std::unique_ptr<MultiGridScalarField2D<T2> > copyConvert(MultiGridScalarField2D<T1>& field)
+std::auto_ptr<MultiGridScalarField2D<T2> > copyConvert(MultiGridScalarField2D<T1>& field)
 {
     return copyConvert<T1,T2>(field, field.getBoundingBox());
 }
@@ -748,15 +748,15 @@ void add(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B, MultiGridSc
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > add(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > add(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B, Box2D domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(A, domain);
     add(A, B, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > add(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B)
+std::auto_ptr<MultiGridScalarField2D<T> > add(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B)
 {
     return add(A, B, A.getBoundingBox());
 }
@@ -775,16 +775,16 @@ domain)
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > subtract(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B, Box2D
+std::auto_ptr<MultiGridScalarField2D<T> > subtract(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B, Box2D
 domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(A, domain);
     subtract(A, B, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > subtract(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B)
+std::auto_ptr<MultiGridScalarField2D<T> > subtract(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B)
 {
     return subtract(A, B, A.getBoundingBox());
 }
@@ -803,16 +803,16 @@ domain)
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > multiply(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B, Box2D
+std::auto_ptr<MultiGridScalarField2D<T> > multiply(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B, Box2D
 domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(A, domain);
     multiply(A, B, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > multiply(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B)
+std::auto_ptr<MultiGridScalarField2D<T> > multiply(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B)
 {
     return multiply(A, B, A.getBoundingBox());
 }
@@ -829,16 +829,16 @@ void divide(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B, MultiGri
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > divide(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B, Box2D
+std::auto_ptr<MultiGridScalarField2D<T> > divide(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B, Box2D
 domain)
 {
     MultiGridScalarField2D<T>* result = new MultiGridScalarField2D<T>(A, domain);
     divide(A, B, *result, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(result);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > divide(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B)
+std::auto_ptr<MultiGridScalarField2D<T> > divide(MultiGridScalarField2D<T>& A, MultiGridScalarField2D<T>& B)
 {
     return divide(A, B, A.getBoundingBox());
 }
@@ -927,11 +927,11 @@ void extractSubDomain( MultiGridTensorField2D<T,nDim>& field,
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField2D<T,nDim> > extractSubDomain(MultiGridTensorField2D<T,nDim>& field, Box2D domain)
+std::auto_ptr<MultiGridTensorField2D<T,nDim> > extractSubDomain(MultiGridTensorField2D<T,nDim>& field, Box2D domain)
 {
     MultiGridTensorField2D<T,nDim>* extractedField = new MultiGridTensorField2D<T,nDim>(field, domain);
     extractSubDomain(field, *extractedField, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,nDim> >(extractedField);
+    return std::auto_ptr<MultiGridTensorField2D<T,nDim> >(extractedField);
 }
 
 
@@ -947,16 +947,16 @@ int iComponent)
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField2D<T> > extractComponent(MultiGridTensorField2D<T,nDim>& tensorField, Box2D domain,
+std::auto_ptr<MultiGridScalarField2D<T> > extractComponent(MultiGridTensorField2D<T,nDim>& tensorField, Box2D domain,
 int iComponent)
 {
     MultiGridScalarField2D<T>* component = new MultiGridScalarField2D<T>(tensorField, domain);
     extractComponent(tensorField, *component, domain, iComponent);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(component);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(component);
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField2D<T> > extractComponent(MultiGridTensorField2D<T,nDim>& tensorField, int iComponent)
+std::auto_ptr<MultiGridScalarField2D<T> > extractComponent(MultiGridTensorField2D<T,nDim>& tensorField, int iComponent)
 {
     return extractComponent(tensorField, tensorField.getBoundingBox(), iComponent);
 }
@@ -972,15 +972,15 @@ void computeNorm(MultiGridTensorField2D<T,nDim>& tensorField, MultiGridScalarFie
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField2D<T> > computeNorm(MultiGridTensorField2D<T,nDim>& tensorField, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > computeNorm(MultiGridTensorField2D<T,nDim>& tensorField, Box2D domain)
 {
     MultiGridScalarField2D<T>* component = new MultiGridScalarField2D<T>(tensorField, domain);
     computeNorm(tensorField, *component, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(component);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(component);
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField2D<T> > computeNorm(MultiGridTensorField2D<T,nDim>& tensorField)
+std::auto_ptr<MultiGridScalarField2D<T> > computeNorm(MultiGridTensorField2D<T,nDim>& tensorField)
 {
     return computeNorm(tensorField, tensorField.getBoundingBox());
 }
@@ -996,15 +996,15 @@ void computeNormSqr(MultiGridTensorField2D<T,nDim>& tensorField, MultiGridScalar
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField2D<T> > computeNormSqr(MultiGridTensorField2D<T,nDim>& tensorField, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > computeNormSqr(MultiGridTensorField2D<T,nDim>& tensorField, Box2D domain)
 {
     MultiGridScalarField2D<T>* component = new MultiGridScalarField2D<T>(tensorField, domain);
     computeNormSqr(tensorField, *component, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(component);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(component);
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridScalarField2D<T> > computeNormSqr(MultiGridTensorField2D<T,nDim>& tensorField)
+std::auto_ptr<MultiGridScalarField2D<T> > computeNormSqr(MultiGridTensorField2D<T,nDim>& tensorField)
 {
     return computeNormSqr(tensorField, tensorField.getBoundingBox());
 }
@@ -1020,16 +1020,16 @@ void computeSymmetricTensorNorm(MultiGridTensorField2D<T,3>& tensorField, MultiG
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorNorm(MultiGridTensorField2D<T,3>& tensorField, Box2D
+std::auto_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorNorm(MultiGridTensorField2D<T,3>& tensorField, Box2D
 domain)
 {
     MultiGridScalarField2D<T>* norm = new MultiGridScalarField2D<T>(tensorField, domain);
     computeSymmetricTensorNorm(tensorField, *norm, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(norm);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(norm);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorNorm(MultiGridTensorField2D<T,3>& tensorField)
+std::auto_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorNorm(MultiGridTensorField2D<T,3>& tensorField)
 {
     return computeSymmetricTensorNorm(tensorField, tensorField.getBoundingBox());
 }
@@ -1047,16 +1047,16 @@ domain)
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorNormSqr(MultiGridTensorField2D<T,3>& tensorField, Box2D
+std::auto_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorNormSqr(MultiGridTensorField2D<T,3>& tensorField, Box2D
 domain)
 {
     MultiGridScalarField2D<T>* normSqr = new MultiGridScalarField2D<T>(tensorField, domain);
     computeSymmetricTensorNormSqr(tensorField, *normSqr, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(normSqr);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(normSqr);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorNormSqr(MultiGridTensorField2D<T,3>& tensorField)
+std::auto_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorNormSqr(MultiGridTensorField2D<T,3>& tensorField)
 {
     return computeSymmetricTensorNormSqr(tensorField, tensorField.getBoundingBox());
 }
@@ -1074,16 +1074,16 @@ domain)
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorTrace(MultiGridTensorField2D<T,3>& tensorField, Box2D
+std::auto_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorTrace(MultiGridTensorField2D<T,3>& tensorField, Box2D
 domain)
 {
     MultiGridScalarField2D<T>* trace = new MultiGridScalarField2D<T>(tensorField, domain);
     computeSymmetricTensorTrace(tensorField, *trace, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(trace);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(trace);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorTrace(MultiGridTensorField2D<T,3>& tensorField)
+std::auto_ptr<MultiGridScalarField2D<T> > computeSymmetricTensorTrace(MultiGridTensorField2D<T,3>& tensorField)
 {
     return computeSymmetricTensorTrace(tensorField, tensorField.getBoundingBox());
 }
@@ -1101,15 +1101,15 @@ void computeVorticity(MultiGridTensorField2D<T,2>& velocity, MultiGridScalarFiel
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > computeVorticity(MultiGridTensorField2D<T,2>& velocity, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > computeVorticity(MultiGridTensorField2D<T,2>& velocity, Box2D domain)
 {
     MultiGridScalarField2D<T>* vorticity = new MultiGridScalarField2D<T>(velocity, domain);
     computeVorticity(velocity, *vorticity, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(vorticity);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(vorticity);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > computeVorticity(MultiGridTensorField2D<T,2>& velocity)
+std::auto_ptr<MultiGridScalarField2D<T> > computeVorticity(MultiGridTensorField2D<T,2>& velocity)
 {
     return computeVorticity(velocity, velocity.getBoundingBox());
 }
@@ -1125,15 +1125,15 @@ void computeBulkVorticity(MultiGridTensorField2D<T,2>& velocity, MultiGridScalar
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > computeBulkVorticity(MultiGridTensorField2D<T,2>& velocity, Box2D domain)
+std::auto_ptr<MultiGridScalarField2D<T> > computeBulkVorticity(MultiGridTensorField2D<T,2>& velocity, Box2D domain)
 {
     MultiGridScalarField2D<T>* vorticity = new MultiGridScalarField2D<T>(velocity, domain);
     computeBulkVorticity(velocity, *vorticity, domain);
-    return std::unique_ptr<MultiGridScalarField2D<T> >(vorticity);
+    return std::auto_ptr<MultiGridScalarField2D<T> >(vorticity);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridScalarField2D<T> > computeBulkVorticity(MultiGridTensorField2D<T,2>& velocity)
+std::auto_ptr<MultiGridScalarField2D<T> > computeBulkVorticity(MultiGridTensorField2D<T,2>& velocity)
 {
     return computeBulkVorticity(velocity, velocity.getBoundingBox());
 }
@@ -1152,15 +1152,15 @@ void computeStrainRate(MultiGridTensorField2D<T,2>& velocity, MultiGridTensorFie
 }
 
 template<typename T>
-std::unique_ptr<MultiGridTensorField2D<T,3> > computeStrainRate(MultiGridTensorField2D<T,2>& velocity, Box2D domain)
+std::auto_ptr<MultiGridTensorField2D<T,3> > computeStrainRate(MultiGridTensorField2D<T,2>& velocity, Box2D domain)
 {
     MultiGridTensorField2D<T,3>* S = new MultiGridTensorField2D<T,3>(velocity, domain);
     computeStrainRate(velocity, *S, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,3> >(S);
+    return std::auto_ptr<MultiGridTensorField2D<T,3> >(S);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridTensorField2D<T,3> > computeStrainRate(MultiGridTensorField2D<T,2>& velocity)
+std::auto_ptr<MultiGridTensorField2D<T,3> > computeStrainRate(MultiGridTensorField2D<T,2>& velocity)
 {
     return computeStrainRate(velocity, velocity.getBoundingBox());
 }
@@ -1176,15 +1176,15 @@ void computeBulkStrainRate(MultiGridTensorField2D<T,2>& velocity, MultiGridTenso
 }
 
 template<typename T>
-std::unique_ptr<MultiGridTensorField2D<T,3> > computeBulkStrainRate(MultiGridTensorField2D<T,2>& velocity, Box2D domain)
+std::auto_ptr<MultiGridTensorField2D<T,3> > computeBulkStrainRate(MultiGridTensorField2D<T,2>& velocity, Box2D domain)
 {
     MultiGridTensorField2D<T,3>* S = new MultiGridTensorField2D<T,3>(velocity, domain);
     computeBulkStrainRate(velocity, *S, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,3> >(S);
+    return std::auto_ptr<MultiGridTensorField2D<T,3> >(S);
 }
 
 template<typename T>
-std::unique_ptr<MultiGridTensorField2D<T,3> > computeBulkStrainRate(MultiGridTensorField2D<T,2>& velocity)
+std::auto_ptr<MultiGridTensorField2D<T,3> > computeBulkStrainRate(MultiGridTensorField2D<T,2>& velocity)
 {
     return computeBulkStrainRate(velocity, velocity.getBoundingBox());
 }
@@ -1202,15 +1202,15 @@ void copyConvert(MultiGridTensorField2D<T1,nDim>& field, MultiGridTensorField2D<
 }
 
 template<typename T1, typename T2, int nDim>
-std::unique_ptr<MultiGridTensorField2D<T2,nDim> > copyConvert(MultiGridTensorField2D<T1,nDim>& field, Box2D domain)
+std::auto_ptr<MultiGridTensorField2D<T2,nDim> > copyConvert(MultiGridTensorField2D<T1,nDim>& field, Box2D domain)
 {
     MultiGridTensorField2D<T2,nDim>* convertedField = new MultiGridTensorField2D<T2,nDim>(field, domain);
     copyConvert<T1,T2,nDim>(field, *convertedField, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T2,nDim> >(convertedField);
+    return std::auto_ptr<MultiGridTensorField2D<T2,nDim> >(convertedField);
 }
 
 template<typename T1, typename T2, int nDim>
-std::unique_ptr<MultiGridTensorField2D<T2,nDim> > copyConvert(MultiGridTensorField2D<T1,nDim>& field)
+std::auto_ptr<MultiGridTensorField2D<T2,nDim> > copyConvert(MultiGridTensorField2D<T1,nDim>& field)
 {
     return copyConvert<T1,T2,nDim>(field, field.getBoundingBox());
 }
@@ -1228,16 +1228,16 @@ Box2D domain)
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField2D<T,nDim> > add(MultiGridTensorField2D<T,nDim>& A, MultiGridTensorField2D<T,nDim>& B,
+std::auto_ptr<MultiGridTensorField2D<T,nDim> > add(MultiGridTensorField2D<T,nDim>& A, MultiGridTensorField2D<T,nDim>& B,
 Box2D domain)
 {
     MultiGridTensorField2D<T,nDim>* result = new MultiGridTensorField2D<T,nDim>(A, domain);
     add(A, B, *result, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,nDim> >(result);
+    return std::auto_ptr<MultiGridTensorField2D<T,nDim> >(result);
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField2D<T,nDim> > add(MultiGridTensorField2D<T,nDim>& A, MultiGridTensorField2D<T,nDim>& B)
+std::auto_ptr<MultiGridTensorField2D<T,nDim> > add(MultiGridTensorField2D<T,nDim>& A, MultiGridTensorField2D<T,nDim>& B)
 {
     return add(A, B, A.getBoundingBox());
 }
@@ -1256,16 +1256,16 @@ result, Box2D domain)
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField2D<T,nDim> > subtract(MultiGridTensorField2D<T,nDim>& A,
+std::auto_ptr<MultiGridTensorField2D<T,nDim> > subtract(MultiGridTensorField2D<T,nDim>& A,
 MultiGridTensorField2D<T,nDim>& B, Box2D domain)
 {
     MultiGridTensorField2D<T,nDim>* result = new MultiGridTensorField2D<T,nDim>(A, domain);
     subtract(A, B, *result, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,nDim> >(result);
+    return std::auto_ptr<MultiGridTensorField2D<T,nDim> >(result);
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField2D<T,nDim> > subtract(MultiGridTensorField2D<T,nDim>& A,
+std::auto_ptr<MultiGridTensorField2D<T,nDim> > subtract(MultiGridTensorField2D<T,nDim>& A,
 MultiGridTensorField2D<T,nDim>& B)
 {
     return subtract(A, B, A.getBoundingBox());
@@ -1285,16 +1285,16 @@ result, Box2D domain)
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField2D<T,nDim> > multiply(MultiGridTensorField2D<T,nDim>& A,
+std::auto_ptr<MultiGridTensorField2D<T,nDim> > multiply(MultiGridTensorField2D<T,nDim>& A,
 MultiGridTensorField2D<T,nDim>& B, Box2D domain)
 {
     MultiGridTensorField2D<T,nDim>* result = new MultiGridTensorField2D<T,nDim>(A, domain);
     multiply(A, B, *result, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,nDim> >(result);
+    return std::auto_ptr<MultiGridTensorField2D<T,nDim> >(result);
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField2D<T,nDim> > multiply(MultiGridTensorField2D<T,nDim>& A,
+std::auto_ptr<MultiGridTensorField2D<T,nDim> > multiply(MultiGridTensorField2D<T,nDim>& A,
 MultiGridTensorField2D<T,nDim>& B)
 {
     return multiply(A, B, A.getBoundingBox());
@@ -1313,16 +1313,16 @@ result, Box2D domain)
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField2D<T,nDim> > divide(MultiGridTensorField2D<T,nDim>& A, MultiGridTensorField2D<T,nDim>&
+std::auto_ptr<MultiGridTensorField2D<T,nDim> > divide(MultiGridTensorField2D<T,nDim>& A, MultiGridTensorField2D<T,nDim>&
 B, Box2D domain)
 {
     MultiGridTensorField2D<T,nDim>* result = new MultiGridTensorField2D<T,nDim>(A, domain);
     divide(A, B, *result, domain);
-    return std::unique_ptr<MultiGridTensorField2D<T,nDim> >(result);
+    return std::auto_ptr<MultiGridTensorField2D<T,nDim> >(result);
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiGridTensorField2D<T,nDim> > divide(MultiGridTensorField2D<T,nDim>& A, MultiGridTensorField2D<T,nDim>&
+std::auto_ptr<MultiGridTensorField2D<T,nDim> > divide(MultiGridTensorField2D<T,nDim>& A, MultiGridTensorField2D<T,nDim>&
 B)
 {
     return divide(A, B, A.getBoundingBox());

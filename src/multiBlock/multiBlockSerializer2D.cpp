@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,13 +31,14 @@
 #include "core/plbDebug.h"
 #include "io/parallelIO.h"
 
-namespace plb {
+namespace plb
+{
 
 ////////// class MultiBlockSerializer2D ////////////////////////////
 
 MultiBlockSerializer2D::MultiBlockSerializer2D (
-        MultiBlock2D const& multiBlock_,
-        IndexOrdering::OrderingT ordering_ )
+    MultiBlock2D const& multiBlock_,
+    IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(multiBlock.getBoundingBox()),
@@ -46,113 +47,137 @@ MultiBlockSerializer2D::MultiBlockSerializer2D (
 { }
 
 MultiBlockSerializer2D::MultiBlockSerializer2D (
-        MultiBlock2D const& multiBlock_,
-        Box2D domain_,
-        IndexOrdering::OrderingT ordering_ )
+    MultiBlock2D const& multiBlock_,
+    Box2D domain_,
+    IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_), ordering(ordering_),
       domain(domain_),
       iX(domain.x0), iY(domain.y0),
       buffer(1) // this avoids buffer of size 0 which one cannot point to
 { }
 
-MultiBlockSerializer2D* MultiBlockSerializer2D::clone() const {
+MultiBlockSerializer2D* MultiBlockSerializer2D::clone() const
+{
     return new MultiBlockSerializer2D(*this);
 }
 
-pluint MultiBlockSerializer2D::getSize() const {
-    if (ordering==IndexOrdering::memorySaving) {
+pluint MultiBlockSerializer2D::getSize() const
+{
+    if (ordering==IndexOrdering::memorySaving)
+    {
         return
             getSparseBlockStructure().getNumBulkCells() * multiBlock.sizeOfCell();
     }
-    else {
+    else
+    {
         return domain.nCells() * multiBlock.sizeOfCell();
     }
 }
 
-const char* MultiBlockSerializer2D::getNextDataBuffer(pluint& bufferSize) const {
+const char* MultiBlockSerializer2D::getNextDataBuffer(pluint& bufferSize) const
+{
     PLB_PRECONDITION( !isEmpty() );
     EuclideanIterator2D iterator(getSparseBlockStructure());
     if (ordering==IndexOrdering::forward ||
-        ordering==IndexOrdering::memorySaving)
+            ordering==IndexOrdering::memorySaving)
     {
         plint nextBlockId, nextChunkSize;
         bool hasData = iterator.getNextChunkY(iX,iY, nextBlockId, nextChunkSize);
-        if (iY+nextChunkSize>domain.y1+1) {
+        if (iY+nextChunkSize>domain.y1+1)
+        {
             nextChunkSize = domain.y1-iY+1;
         }
-        if (hasData) {
+        if (hasData)
+        {
             computeBufferAlongY(nextBlockId, nextChunkSize);
             bufferSize = nextChunkSize*multiBlock.sizeOfCell();
         }
-        else {
-            if (ordering==IndexOrdering::forward) {
+        else
+        {
+            if (ordering==IndexOrdering::forward)
+            {
                 fillBufferWithZeros(nextChunkSize);
                 bufferSize = nextChunkSize*multiBlock.sizeOfCell();
             }
-            else {
+            else
+            {
                 bufferSize = 0;
             }
         }
         iY += nextChunkSize;
-        if (iY > domain.y1) {
+        if (iY > domain.y1)
+        {
             PLB_ASSERT(iY == domain.y1+1);
             iY = domain.y0;
             ++iX;
         }
     }
-    else {
+    else
+    {
         plint nextBlockId, nextChunkSize;
         bool hasData = iterator.getNextChunkX(iX,iY, nextBlockId, nextChunkSize);
-        if (iX+nextChunkSize>domain.x1+1) {
+        if (iX+nextChunkSize>domain.x1+1)
+        {
             nextChunkSize = domain.x1-iX+1;
         }
-        if (hasData) {
+        if (hasData)
+        {
             computeBufferAlongX(nextBlockId, nextChunkSize);
             bufferSize = nextChunkSize*multiBlock.sizeOfCell();
         }
-        else {
+        else
+        {
             fillBufferWithZeros(nextChunkSize);
             bufferSize = nextChunkSize*multiBlock.sizeOfCell();
         }
         iX += nextChunkSize;
-        if (iX > domain.x1) {
+        if (iX > domain.x1)
+        {
             PLB_ASSERT(iX == domain.x1+1);
             iX = domain.x0;
             ++iY;
         }
     }
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         return &buffer[0];
     }
-    else {
+    else
+    {
         return 0;
     }
 }
 
-bool MultiBlockSerializer2D::isEmpty() const {
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+bool MultiBlockSerializer2D::isEmpty() const
+{
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         return iX > domain.x1;
     }
-    else {
+    else
+    {
         return iY > domain.y1;
     }
 }
 
-SparseBlockStructure2D const& MultiBlockSerializer2D::getSparseBlockStructure() const {
+SparseBlockStructure2D const& MultiBlockSerializer2D::getSparseBlockStructure() const
+{
     return multiBlock.getMultiBlockManagement().getSparseBlockStructure();
 }
 
-bool MultiBlockSerializer2D::isLocal(plint blockId) const {
+bool MultiBlockSerializer2D::isLocal(plint blockId) const
+{
     return multiBlock.getMultiBlockManagement().
-               getThreadAttribution().isLocal(blockId);
+           getThreadAttribution().isLocal(blockId);
 }
 
 void MultiBlockSerializer2D::computeBufferAlongX ( plint nextBlockId,
-                                                   plint nextChunkSize ) const
+        plint nextChunkSize ) const
 {
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
     bool blockIsLocal = isLocal(nextBlockId);
-    if (blockIsLocal) {
+    if (blockIsLocal)
+    {
         SmartBulk2D bulk(multiBlock.getMultiBlockManagement(), nextBlockId);
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
@@ -161,18 +186,19 @@ void MultiBlockSerializer2D::computeBufferAlongX ( plint nextBlockId,
         plint localY = bulk.toLocalY(iY);
         AtomicBlock2D const& nextBlock = multiBlock.getComponent(nextBlockId);
         nextBlock.getDataTransfer().send (
-                Box2D(localX,localX+nextChunkSize-1, localY, localY),
-                buffer, modif::staticVariables );
+            Box2D(localX,localX+nextChunkSize-1, localY, localY),
+            buffer, modif::staticVariables );
     }
     communicateBuffer(bufferSize, nextBlockId, blockIsLocal);
 }
 
 void MultiBlockSerializer2D::computeBufferAlongY (
-        plint nextBlockId, plint nextChunkSize ) const
+    plint nextBlockId, plint nextChunkSize ) const
 {
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
     bool blockIsLocal = isLocal(nextBlockId);
-    if (blockIsLocal) {
+    if (blockIsLocal)
+    {
         SmartBulk2D bulk(multiBlock.getMultiBlockManagement(), nextBlockId);
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
@@ -181,14 +207,14 @@ void MultiBlockSerializer2D::computeBufferAlongY (
         plint localY = bulk.toLocalY(iY);
         AtomicBlock2D const& nextBlock = multiBlock.getComponent(nextBlockId);
         nextBlock.getDataTransfer().send (
-                Box2D(localX,localX, localY, localY+nextChunkSize-1),
-                buffer, modif::staticVariables );
+            Box2D(localX,localX, localY, localY+nextChunkSize-1),
+            buffer, modif::staticVariables );
     }
     communicateBuffer(bufferSize, nextBlockId, blockIsLocal);
 }
 
 void MultiBlockSerializer2D::communicateBuffer (
-        plint bufferSize, plint fromBlockId, bool isAllocated ) const
+    plint bufferSize, plint fromBlockId, bool isAllocated ) const
 {
 #ifdef PLB_MPI_PARALLEL
     // Exchanging a dummy message ahead of the main data has the effect
@@ -197,13 +223,15 @@ void MultiBlockSerializer2D::communicateBuffer (
     //   it does a poor job handling all the requests from the other processors
     //   at the same time.
     plint dummyMessage;
-    if (isAllocated && !global::mpi().isMainProcessor()) {
+    if (isAllocated && !global::mpi().isMainProcessor())
+    {
         global::mpi().receive(&dummyMessage, 1, 0);
         global::mpi().rSend(&buffer[0], bufferSize, 0);
     }
-    if (!isAllocated && global::mpi().isMainProcessor()) {
+    if (!isAllocated && global::mpi().isMainProcessor())
+    {
         int fromProc = multiBlock.getMultiBlockManagement().
-                           getThreadAttribution().getMpiProcess(fromBlockId);
+                       getThreadAttribution().getMpiProcess(fromBlockId);
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
         buffer.resize(bufferSize);
@@ -216,13 +244,16 @@ void MultiBlockSerializer2D::communicateBuffer (
 #endif  // PLB_MPI_PARALLEL
 }
 
-void MultiBlockSerializer2D::fillBufferWithZeros(plint nextChunkSize) const {
+void MultiBlockSerializer2D::fillBufferWithZeros(plint nextChunkSize) const
+{
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
         buffer.resize(bufferSize);
-        for (plint iBuffer=0; iBuffer<bufferSize; ++iBuffer) {
+        for (plint iBuffer=0; iBuffer<bufferSize; ++iBuffer)
+        {
             buffer[iBuffer] = 0;
         }
     }
@@ -232,8 +263,8 @@ void MultiBlockSerializer2D::fillBufferWithZeros(plint nextChunkSize) const {
 ////////// class MultiBlockUnSerializer2D ////////////////////////////
 
 MultiBlockUnSerializer2D::MultiBlockUnSerializer2D (
-        MultiBlock2D& multiBlock_,
-        IndexOrdering::OrderingT ordering_ )
+    MultiBlock2D& multiBlock_,
+    IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(multiBlock.getBoundingBox()),
@@ -242,9 +273,9 @@ MultiBlockUnSerializer2D::MultiBlockUnSerializer2D (
 { }
 
 MultiBlockUnSerializer2D::MultiBlockUnSerializer2D (
-        MultiBlock2D& multiBlock_,
-        Box2D domain_,
-        IndexOrdering::OrderingT ordering_ )
+    MultiBlock2D& multiBlock_,
+    Box2D domain_,
+    IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(domain_),
@@ -252,116 +283,146 @@ MultiBlockUnSerializer2D::MultiBlockUnSerializer2D (
       buffer(1) // this avoids buffer of size 0 which one cannot point to
 { }
 
-MultiBlockUnSerializer2D* MultiBlockUnSerializer2D::clone() const {
+MultiBlockUnSerializer2D* MultiBlockUnSerializer2D::clone() const
+{
     return new MultiBlockUnSerializer2D(*this);
 }
 
 
-pluint MultiBlockUnSerializer2D::getSize() const {
-    if (ordering==IndexOrdering::memorySaving) {
+pluint MultiBlockUnSerializer2D::getSize() const
+{
+    if (ordering==IndexOrdering::memorySaving)
+    {
         return getSparseBlockStructure().getNumBulkCells() * multiBlock.sizeOfCell();
     }
-    else {
+    else
+    {
         return domain.nCells() * multiBlock.sizeOfCell();
     }
 }
 
-char* MultiBlockUnSerializer2D::getNextDataBuffer(pluint& bufferSize) {
+char* MultiBlockUnSerializer2D::getNextDataBuffer(pluint& bufferSize)
+{
     PLB_PRECONDITION( !isFull() );
     EuclideanIterator2D iterator(getSparseBlockStructure());
     plint nextBlockId, nextChunkSize;
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         bool hasData = iterator.getNextChunkY(iX,iY, nextBlockId, nextChunkSize);
-        if (iY+nextChunkSize>domain.y1+1) {
+        if (iY+nextChunkSize>domain.y1+1)
+        {
             nextChunkSize = domain.y1-iY+1;
         }
         bufferSize = nextChunkSize * multiBlock.sizeOfCell();
-        if (ordering==IndexOrdering::memorySaving && !hasData) {
+        if (ordering==IndexOrdering::memorySaving && !hasData)
+        {
             bufferSize = 0;
         }
     }
-    else {
+    else
+    {
         iterator.getNextChunkX(iX,iY, nextBlockId, nextChunkSize);
-        if (iX+nextChunkSize>domain.x1+1) {
+        if (iX+nextChunkSize>domain.x1+1)
+        {
             nextChunkSize = domain.x1-iX+1;
         }
         bufferSize = nextChunkSize * multiBlock.sizeOfCell();
     }
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
         buffer.resize(bufferSize);
     }
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         return &buffer[0];
     }
-    else {
+    else
+    {
         return 0;
     }
 }
 
-void MultiBlockUnSerializer2D::commitData() {
+void MultiBlockUnSerializer2D::commitData()
+{
     PLB_PRECONDITION( !isFull() );
     EuclideanIterator2D iterator(getSparseBlockStructure());
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         plint nextBlockId, nextChunkSize;
         bool hasData = iterator.getNextChunkY(iX,iY, nextBlockId, nextChunkSize);
-        if (iY+nextChunkSize>domain.y1+1) {
+        if (iY+nextChunkSize>domain.y1+1)
+        {
             nextChunkSize = domain.y1-iY+1;
         }
-        if (hasData) {
+        if (hasData)
+        {
             fillBufferAlongY(nextBlockId, nextChunkSize);
         }
         iY += nextChunkSize;
-        if (iY > domain.y1) {
+        if (iY > domain.y1)
+        {
             iY = domain.y0;
             ++iX;
         }
     }
-    else {
+    else
+    {
         plint nextBlockId, nextChunkSize;
         bool hasData = iterator.getNextChunkX(iX,iY, nextBlockId, nextChunkSize);
-        if (iX+nextChunkSize>domain.x1+1) {
+        if (iX+nextChunkSize>domain.x1+1)
+        {
             nextChunkSize = domain.x1-iX+1;
         }
-        if (hasData) {
+        if (hasData)
+        {
             fillBufferAlongX(nextBlockId, nextChunkSize);
         }
         iX += nextChunkSize;
-        if (iX > domain.x1) {
+        if (iX > domain.x1)
+        {
             iX = domain.x0;
             ++iY;
         }
     }
     // At the end of unserialization, duplicate overlaps.
-    if (isFull()) {
+    if (isFull())
+    {
         multiBlock.duplicateOverlaps(modif::staticVariables);
     }
 }
 
-bool MultiBlockUnSerializer2D::isFull() const {
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+bool MultiBlockUnSerializer2D::isFull() const
+{
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         return iX > domain.x1;
     }
-    else {
+    else
+    {
         return iY > domain.y1;
     }
 }
 
-SparseBlockStructure2D const& MultiBlockUnSerializer2D::getSparseBlockStructure() const {
+SparseBlockStructure2D const& MultiBlockUnSerializer2D::getSparseBlockStructure() const
+{
     return multiBlock.getMultiBlockManagement().getSparseBlockStructure();
 }
 
-bool MultiBlockUnSerializer2D::isLocal(plint blockId) const {
+bool MultiBlockUnSerializer2D::isLocal(plint blockId) const
+{
     return multiBlock.getMultiBlockManagement().
-               getThreadAttribution().isLocal(blockId);
+           getThreadAttribution().isLocal(blockId);
 }
 
-void MultiBlockUnSerializer2D::fillBufferAlongX(plint nextBlockId, plint nextChunkSize) {
+void MultiBlockUnSerializer2D::fillBufferAlongX(plint nextBlockId, plint nextChunkSize)
+{
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
     bool blockIsLocal = isLocal(nextBlockId);
     communicateBuffer(bufferSize, nextBlockId, blockIsLocal);
-    if (blockIsLocal) {
+    if (blockIsLocal)
+    {
         SmartBulk2D bulk(multiBlock.getMultiBlockManagement(), nextBlockId);
         plint localX = bulk.toLocalX(iX);
         plint localY = bulk.toLocalY(iY);
@@ -371,11 +432,13 @@ void MultiBlockUnSerializer2D::fillBufferAlongX(plint nextBlockId, plint nextChu
     }
 }
 
-void MultiBlockUnSerializer2D::fillBufferAlongY(plint nextBlockId, plint nextChunkSize) {
+void MultiBlockUnSerializer2D::fillBufferAlongY(plint nextBlockId, plint nextChunkSize)
+{
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
     bool blockIsLocal = isLocal(nextBlockId);
     communicateBuffer(bufferSize, nextBlockId, blockIsLocal);
-    if (blockIsLocal) {
+    if (blockIsLocal)
+    {
         SmartBulk2D bulk(multiBlock.getMultiBlockManagement(), nextBlockId);
         plint localX = bulk.toLocalX(iX);
         plint localY = bulk.toLocalY(iY);
@@ -386,79 +449,94 @@ void MultiBlockUnSerializer2D::fillBufferAlongY(plint nextBlockId, plint nextChu
 }
 
 void MultiBlockUnSerializer2D::communicateBuffer (
-        plint bufferSize, plint toBlockId, bool isAllocated ) const
+    plint bufferSize, plint toBlockId, bool isAllocated ) const
 {
 #ifdef PLB_MPI_PARALLEL
-    if (isAllocated && !global::mpi().isMainProcessor()) {
+    if (isAllocated && !global::mpi().isMainProcessor())
+    {
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
         buffer.resize(bufferSize);
         global::mpi().receive(&buffer[0], bufferSize, 0);
     }
-    if (!isAllocated && global::mpi().isMainProcessor()) {
+    if (!isAllocated && global::mpi().isMainProcessor())
+    {
         int toProc = multiBlock.getMultiBlockManagement().
-                         getThreadAttribution().getMpiProcess(toBlockId);
+                     getThreadAttribution().getMpiProcess(toBlockId);
         global::mpi().send(&buffer[0], bufferSize, toProc);
     }
 #endif
 }
 
 MultiBlockFastSerializer2D::MultiBlockFastSerializer2D (
-        MultiBlock2D const& multiBlock_, IndexOrdering::OrderingT ordering_ )
+    MultiBlock2D const& multiBlock_, IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(multiBlock.getBoundingBox())
 {
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         pos = domain.x0;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         pos = domain.y0;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
 }
 
 MultiBlockFastSerializer2D::MultiBlockFastSerializer2D (
-        MultiBlock2D const& multiBlock_,
-        Box2D domain_, IndexOrdering::OrderingT ordering_ )
+    MultiBlock2D const& multiBlock_,
+    Box2D domain_, IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(domain_)
 {
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         pos = domain.x0;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         pos = domain.y0;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
 }
 
-MultiBlockFastSerializer2D* MultiBlockFastSerializer2D::clone() const {
+MultiBlockFastSerializer2D* MultiBlockFastSerializer2D::clone() const
+{
     return new MultiBlockFastSerializer2D(*this);
 }
 
-pluint MultiBlockFastSerializer2D::getSize() const {
+pluint MultiBlockFastSerializer2D::getSize() const
+{
     return domain.nCells()*multiBlock.sizeOfCell();
 }
 
-const char* MultiBlockFastSerializer2D::getNextDataBuffer(pluint& bufferSize) const {
+const char* MultiBlockFastSerializer2D::getNextDataBuffer(pluint& bufferSize) const
+{
     bufferSize = computeSlice();
-    if (buffer.empty()) buffer.resize(1);
+    if (buffer.empty())
+        buffer.resize(1);
     return &buffer[0];
 }
 
-bool MultiBlockFastSerializer2D::isEmpty() const {
-    if (ordering==IndexOrdering::forward) {
+bool MultiBlockFastSerializer2D::isEmpty() const
+{
+    if (ordering==IndexOrdering::forward)
+    {
         return pos > domain.x1;
     }
-    else {
+    else
+    {
         return pos > domain.y1;
     }
 }
@@ -466,13 +544,16 @@ bool MultiBlockFastSerializer2D::isEmpty() const {
 pluint MultiBlockFastSerializer2D::computeSlice() const
 {
     Box2D slice(domain);
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         slice.x0=slice.x1=pos;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         slice.y0=slice.y1=pos;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
@@ -480,11 +561,12 @@ pluint MultiBlockFastSerializer2D::computeSlice() const
     blockStructure.addBlock(slice, 0);
     plint envelopeWidth=1;
     MultiBlockManagement2D serialMultiBlockManagement (
-            blockStructure, new OneToOneThreadAttribution, envelopeWidth );
+        blockStructure, new OneToOneThreadAttribution, envelopeWidth );
     MultiBlock2D* multiSerialBlock = multiBlock.clone(serialMultiBlockManagement);
 
     pluint bufferSize = slice.nCells()*multiBlock.sizeOfCell();
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         AtomicBlock2D& atomicSerialBlock = multiSerialBlock->getComponent(0);
         SmartBulk2D oneBlockSlice(serialMultiBlockManagement, 0);
         Box2D localSlice(oneBlockSlice.toLocal(slice));
@@ -497,79 +579,97 @@ pluint MultiBlockFastSerializer2D::computeSlice() const
 }
 
 MultiBlockFastUnSerializer2D::MultiBlockFastUnSerializer2D (
-        MultiBlock2D& multiBlock_, IndexOrdering::OrderingT ordering_ )
+    MultiBlock2D& multiBlock_, IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(multiBlock.getBoundingBox())
 {
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         pos = domain.x0;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         pos = domain.y0;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
 }
 
 MultiBlockFastUnSerializer2D::MultiBlockFastUnSerializer2D (
-        MultiBlock2D& multiBlock_,
-        Box2D domain_, IndexOrdering::OrderingT ordering_ )
+    MultiBlock2D& multiBlock_,
+    Box2D domain_, IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(domain_)
 {
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         pos = domain.x0;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         pos = domain.y0;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
 }
 
-MultiBlockFastUnSerializer2D* MultiBlockFastUnSerializer2D::clone() const {
+MultiBlockFastUnSerializer2D* MultiBlockFastUnSerializer2D::clone() const
+{
     return new MultiBlockFastUnSerializer2D(*this);
 }
 
-pluint MultiBlockFastUnSerializer2D::getSize() const {
+pluint MultiBlockFastUnSerializer2D::getSize() const
+{
     return domain.nCells()*multiBlock.sizeOfCell();
 }
 
-char* MultiBlockFastUnSerializer2D::getNextDataBuffer(pluint& bufferSize) {
-    if (ordering==IndexOrdering::forward) {
+char* MultiBlockFastUnSerializer2D::getNextDataBuffer(pluint& bufferSize)
+{
+    if (ordering==IndexOrdering::forward)
+    {
         bufferSize = domain.getNy()*multiBlock.sizeOfCell();
     }
-    else {
+    else
+    {
         bufferSize = domain.getNx()*multiBlock.sizeOfCell();
     }
 
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         buffer.resize(bufferSize);
     }
-    else {
+    else
+    {
         buffer.clear();
     }
-    if (buffer.empty()) {
+    if (buffer.empty())
+    {
         buffer.resize(1);
     }
     return &buffer[0];
 }
 
-void MultiBlockFastUnSerializer2D::commitData() {
+void MultiBlockFastUnSerializer2D::commitData()
+{
     Box2D slice(domain);
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         slice.x0=slice.x1=pos;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         slice.y0=slice.y1=pos;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
@@ -577,9 +677,10 @@ void MultiBlockFastUnSerializer2D::commitData() {
     blockStructure.addBlock(slice, 0);
     plint envelopeWidth=1;
     MultiBlockManagement2D serialMultiBlockManagement (
-            blockStructure, new OneToOneThreadAttribution, envelopeWidth );
+        blockStructure, new OneToOneThreadAttribution, envelopeWidth );
     MultiBlock2D* multiSerialBlock = multiBlock.clone(serialMultiBlockManagement);
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         AtomicBlock2D& atomicSerialBlock = multiSerialBlock->getComponent(0);
         SmartBulk2D oneBlockBulk(serialMultiBlockManagement, 0);
         Box2D localSlice(oneBlockBulk.toLocal(slice));
@@ -590,11 +691,14 @@ void MultiBlockFastUnSerializer2D::commitData() {
     ++pos;
 }
 
-bool MultiBlockFastUnSerializer2D::isFull() const {
-    if (ordering==IndexOrdering::forward) {
+bool MultiBlockFastUnSerializer2D::isFull() const
+{
+    if (ordering==IndexOrdering::forward)
+    {
         return pos > domain.x1;
     }
-    else {
+    else
+    {
         return pos > domain.y1;
     }
 }

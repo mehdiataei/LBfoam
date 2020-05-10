@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -43,12 +43,14 @@ typedef double T;
 
 /// A functional, used to initialize a pressure boundary to constant density
 template<typename T>
-class ConstantDensity {
+class ConstantDensity
+{
 public:
     ConstantDensity(T density_)
         : density(density_)
     { }
-    T operator()(plint iX, plint iY) const {
+    T operator()(plint iX, plint iY) const
+    {
         return density;
     }
 private:
@@ -73,14 +75,14 @@ void defineCylinderGeometry( MultiBlockLattice2D<T,DESCRIPTOR>& lattice,
     boundaryCondition.setPressureConditionOnBlockBoundaries(lattice, outlet);
 
     setBoundaryVelocity (
-            lattice, lattice.getBoundingBox(),
-            PoiseuilleVelocity<T>(parameters) );
+        lattice, lattice.getBoundingBox(),
+        PoiseuilleVelocity<T>(parameters) );
     setBoundaryDensity (
-            lattice, outlet,
-            ConstantDensity<T>(1.) );
+        lattice, outlet,
+        ConstantDensity<T>(1.) );
     initializeAtEquilibrium (
-            lattice, lattice.getBoundingBox(),
-            PoiseuilleVelocityAndDensity<T,DESCRIPTOR>(parameters) );
+        lattice, lattice.getBoundingBox(),
+        PoiseuilleVelocityAndDensity<T,DESCRIPTOR>(parameters) );
 
     int cx     = nx/4;
     int cy     = ny/2+2;
@@ -106,17 +108,18 @@ void writeGifs(MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint iter)
                                imSize, imSize );
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 100.,  // Re
-            64,        // N
-            5.,        // lx
-            1.         // ly 
+        (T) 1e-2,  // uMax
+        (T) 100.,  // Re
+        64,        // N
+        5.,        // lx
+        1.         // ly
     );
     const T logT     = (T)0.01;
     const T imSave   = (T)1.;
@@ -125,8 +128,8 @@ int main(int argc, char* argv[]) {
     writeLogFile(parameters, "Poiseuille flow");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-            parameters.getNx(), parameters.getNy(),
-            new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
     lattice.initialize();
 
     // The drag and lift acting on the obstacle are computed with help of the
@@ -137,20 +140,23 @@ int main(int argc, char* argv[]) {
     forceIds[1] = lattice.internalStatSubscription().subscribeSum();
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
-        //boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createInterpBoundaryCondition2D<T,DESCRIPTOR>();
+    //boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     defineCylinderGeometry(lattice, parameters, *boundaryCondition, forceIds);
 
     // Main loop over time iterations.
-    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT) {
-        if (iT%parameters.nStep(imSave)==0) {
+    for (plint iT=0; iT*parameters.getDeltaT()<maxT; ++iT)
+    {
+        if (iT%parameters.nStep(imSave)==0)
+        {
             pcout << "Saving Gif ..." << endl;
             writeGifs(lattice, iT);
         }
 
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "step " << iT
                   << "; lattice time=" << lattice.getTimeCounter().getTime()
                   << "; t=" << iT*parameters.getDeltaT();
@@ -159,7 +165,8 @@ int main(int argc, char* argv[]) {
         // Lattice Boltzmann iteration step.
         lattice.collideAndStream();
 
-        if (iT%parameters.nStep(logT)==0) {
+        if (iT%parameters.nStep(logT)==0)
+        {
             pcout << "; av energy="
                   << setprecision(10) << getStoredAverageEnergy<T>(lattice)
                   << "; av rho="

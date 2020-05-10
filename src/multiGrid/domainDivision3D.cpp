@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,145 +28,173 @@
 
 #include "multiGrid/domainDivision3D.h"
 
-namespace plb {
+namespace plb
+{
 
 SurfaceDivision3D::SurfaceDivision3D(Box3D const& domain_, plint boundaryWidth, plint direction_)
     : domain(domain_),bw(boundaryWidth),direction(direction_)
 {}
 
-Box3D SurfaceDivision3D::bulk() const{
+Box3D SurfaceDivision3D::bulk() const
+{
     // plane XY
-    if (direction == 2){
+    if (direction == 2)
+    {
         return Box3D(domain.x0+bw,domain.x1-bw,
                      domain.y0+bw,domain.y1-bw,
                      domain.z0,domain.z1);
     }
     // plane YZ
-    if (direction == 0){
+    if (direction == 0)
+    {
         return Box3D(domain.x0,domain.x1,
                      domain.y0+bw,domain.y1-bw,
                      domain.z0+bw,domain.z1-bw);
     }
     // plane XZ
     return Box3D(domain.x0+bw,domain.x1-bw,
-                domain.y0,domain.y1,
-                domain.z0+bw,domain.z1-bw);
+                 domain.y0,domain.y1,
+                 domain.z0+bw,domain.z1-bw);
 }
 
-Box3D SurfaceDivision3D::edge0N() const{
+Box3D SurfaceDivision3D::edge0N() const
+{
     // plane XY
-    if (direction == 2){
+    if (direction == 2)
+    {
         return Box3D( domain.x0, domain.x0+bw-1,
                       domain.y0+bw, domain.y1-bw,
                       domain.z0,domain.z1 );
     }
     // plane YZ
-    if (direction == 0){
+    if (direction == 0)
+    {
         return Box3D();
     }
     // plane XZ
     return Box3D();
 }
 
-Box3D SurfaceDivision3D::edge0P() const{
+Box3D SurfaceDivision3D::edge0P() const
+{
     // plane XY
-    if (direction == 2){
+    if (direction == 2)
+    {
         return Box3D( domain.x1-bw+1, domain.x1,
                       domain.y0+bw,   domain.y1-bw,
                       domain.z0,      domain.z1 );
     }
     // plane YZ
-    if (direction == 0){
+    if (direction == 0)
+    {
         return Box3D();
     }
     // plane XZ
     return Box3D();
 }
 
-Box3D SurfaceDivision3D::edge1N() const{
+Box3D SurfaceDivision3D::edge1N() const
+{
     // plane XY
-    if (direction == 2){
+    if (direction == 2)
+    {
         return Box3D(domain.x0+bw,   domain.x1-bw,
                      domain.y0,      domain.y0+bw-1,
                      domain.z0,      domain.z1);
     }
     // plane YZ
-    if (direction == 0){
+    if (direction == 0)
+    {
         return Box3D();
     }
     // plane XZ
     return Box3D();
 }
 
-Box3D SurfaceDivision3D::edge1P() const{
+Box3D SurfaceDivision3D::edge1P() const
+{
     // plane XY
-    if (direction == 2){
+    if (direction == 2)
+    {
         return Box3D( domain.x0+bw,   domain.x1-bw,
                       domain.y1-bw+1, domain.y1,
                       domain.z0,      domain.z1 );
     }
     // plane YZ
-    if (direction == 0){
+    if (direction == 0)
+    {
         return Box3D();
     }
     // plane XZ
     return Box3D();
 }
 
-Box3D SurfaceDivision3D::cornerNN() const{
+Box3D SurfaceDivision3D::cornerNN() const
+{
     // plane XY
-    if (direction == 2){
+    if (direction == 2)
+    {
         return Box3D( domain.x0,    domain.x0+bw-1,
                       domain.y0,    domain.y0+bw-1,
                       domain.z0,    domain.z1 );
     }
     // plane YZ
-    if (direction == 0){
+    if (direction == 0)
+    {
         return Box3D();
     }
     // plane XZ
     return Box3D();
 }
 
-Box3D SurfaceDivision3D::cornerPN() const{
+Box3D SurfaceDivision3D::cornerPN() const
+{
     // plane XY
-    if (direction == 2){
+    if (direction == 2)
+    {
         return Box3D(domain.x1-bw+1, domain.x1,
                      domain.y0,      domain.y0+bw-1,
                      domain.z0,      domain.z1);
     }
     // plane YZ
-    if (direction == 1){
+    if (direction == 1)
+    {
         return Box3D();
     }
     // plane XZ
     return Box3D();
 }
 
-Box3D SurfaceDivision3D::cornerNP() const{
+Box3D SurfaceDivision3D::cornerNP() const
+{
     // plane XY
-    if (direction == 2){
+    if (direction == 2)
+    {
         return Box3D( domain.x0,      domain.x0+bw-1,
                       domain.y1-bw+1, domain.y1,
                       domain.z0,      domain.z1 );
     }
     // plane YZ
-    if (direction == 0){
+    if (direction == 0)
+    {
         return Box3D();
     }
     // plane XZ
     return Box3D();
 }
 
-Box3D SurfaceDivision3D::cornerPP() const{
+Box3D SurfaceDivision3D::cornerPP() const
+{
     // plane XY
-    if (direction == 2){
+    if (direction == 2)
+    {
         return Box3D(domain.x1-bw+1, domain.x1,
                      domain.y1-bw+1, domain.y1,
                      domain.z0,      domain.z1);
     }
     // plane YZ
-    if (direction == 0){
+    if (direction == 0)
+    {
         return Box3D();
     }
     // plane XZ
@@ -174,4 +202,3 @@ Box3D SurfaceDivision3D::cornerPP() const{
 }
 
 }  // namespace plb
-

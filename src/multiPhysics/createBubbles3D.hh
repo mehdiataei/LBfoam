@@ -112,7 +112,7 @@ T computeAverageSphereDensity(FreeSurfaceFields3D<T,Descriptor>& fields, Array<T
 }
 
 template<typename T, template<typename U> class Descriptor>
-void punchSphere(FreeSurfaceSetup<T,Descriptor>& setup, Array<T,3> const& center, T radius,
+void punchSphere(FreeSurfaceSetup3D<T,Descriptor>& setup, Array<T,3> const& center, T radius,
                  T rhoEmpty, T rho0, Dynamics<T,Descriptor>& dynamics)
 {
     applyProcessingFunctional (
@@ -146,7 +146,7 @@ void punchSphere(FreeSurfaceSetup<T,Descriptor>& setup, Array<T,3> const& center
 }
 
 template<typename T, template<typename U> class Descriptor>
-void analyticalPunchSphere(FreeSurfaceSetup<T,Descriptor>& setup, Array<T,3> const& center, T radius,
+void analyticalPunchSphere(FreeSurfaceSetup3D<T,Descriptor>& setup, Array<T,3> const& center, T radius,
                            T rhoEmpty, T rho0, plint subDivision, Dynamics<T,Descriptor>& dynamics)
 {
     applyProcessingFunctional (
@@ -162,7 +162,7 @@ void analyticalPunchSphere(FreeSurfaceSetup<T,Descriptor>& setup, Array<T,3> con
         setup.getGroup().getBoundingBox(), setup.freeSurfaceArgs );
 
     applyProcessingFunctional (
-        new FreeSurfaceIniEmptyToInterfaceNodes3D<T,Descriptor>(dynamics.clone(), Array<T,3>((T)0.,(T)0.,(T)0.)),
+        new FreeSurfaceIniEmptyToInterfaceNodes3D<T,Descriptor>(dynamics->clone(), Array<T,3>((T)0.,(T)0.,(T)0.)),
                                 setup.getGroup().getBoundingBox(),
                                 setup.freeSurfaceArgs );
 
@@ -180,138 +180,11 @@ void analyticalPunchSphere(FreeSurfaceSetup<T,Descriptor>& setup, Array<T,3> con
 }
 
 template<typename T, template<typename U> class Descriptor>
-T computeAverageSphereDensity(FreeSurfaceSetup<T,Descriptor>& setup, Array<T,3> const& center, T radius)
+T computeAverageSphereDensity(FreeSurfaceSetup3D<T,Descriptor>& setup, Array<T,3> const& center, T radius)
 {
     CalculateAverageSphereDensity3D<T,Descriptor> functional(center, radius);
     applyProcessingFunctional (
             functional, setup.getGroup().getBoundingBox(), setup.freeSurfaceArgs );
-    return functional.getAverageDensity();
-}
-
-template<typename T, template<typename U> class Descriptor>
-void punchSphere(FreeSurfaceWrapper<T,Descriptor>& wrapper, Array<T,3> const& center, T radius,
-                 T rhoEmpty, T rho0, Dynamics<T,Descriptor>& dynamics)
-{
-    applyProcessingFunctional (
-            new PunchSphere3D<T,Descriptor>(center, radius, rho0),
-            wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-
-    applyProcessingFunctional (
-        new FreeSurfaceComputeInterfaceLists3D<T,Descriptor>(),
-        wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-
-    applyProcessingFunctional (
-        new FreeSurfaceIniInterfaceToAnyNodes3D<T,Descriptor>(rhoEmpty),
-        wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-
-    applyProcessingFunctional (
-        new FreeSurfaceIniEmptyToInterfaceNodes3D<T,Descriptor>(dynamics.clone(), Array<T,3>((T)0.,(T)0.,(T)0.)),
-                                wrapper.getGroup().getBoundingBox(),
-                                wrapper.freeSurfaceArgs );
-
-    applyProcessingFunctional (
-        new FreeSurfaceRemoveFalseInterfaceCells3D<T,Descriptor>(rhoEmpty),
-        wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-
-    applyProcessingFunctional (
-        new FreeSurfaceEqualMassExcessReDistributionAndComputationOfLostMass3D<T,Descriptor>(wrapper.getReductionData()),
-        wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-
-    {
-        std::vector<MultiBlock3D*> args;
-        args.push_back(&wrapper.getFlag());
-        args.push_back(&wrapper.getMass());
-
-        applyProcessingFunctional (
-            new FreeSurfaceComputeReductionsPerProcess3D<T>(wrapper.getReductionData()),
-            wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-    }
-
-    {
-        std::vector<MultiBlock3D*> args;
-        args.push_back(&wrapper.getLattice());
-
-#ifdef PLB_MPI_PARALLEL
-        applyProcessingFunctional (
-            new FreeSurfaceComputeReductions3D(wrapper.getReductionData(), wrapper.getReductionCommunicator()),
-            wrapper.getGroup().getBoundingBox(), args );
-#else
-        applyProcessingFunctional (
-            new FreeSurfaceComputeSerialReductions3D(wrapper.getReductionData()),
-            wrapper.getGroup().getBoundingBox(), args );
-#endif
-
-        applyProcessingFunctional (
-            new FreeSurfaceResetReductionData3D(wrapper.getReductionData()),
-            wrapper.getGroup().getBoundingBox(), args );
-    }
-}
-
-template<typename T, template<typename U> class Descriptor>
-void analyticalPunchSphere(FreeSurfaceWrapper<T,Descriptor>& wrapper, Array<T,3> const& center, T radius,
-                           T rhoEmpty, T rho0, plint subDivision, Dynamics<T,Descriptor>& dynamics)
-{
-    applyProcessingFunctional (
-            new AnalyticalPunchSphere3D<T,Descriptor>(center, radius, rho0, subDivision),
-            wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-
-    applyProcessingFunctional (
-        new FreeSurfaceComputeInterfaceLists3D<T,Descriptor>(),
-        wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-
-    applyProcessingFunctional (
-        new FreeSurfaceIniInterfaceToAnyNodes3D<T,Descriptor>(rhoEmpty),
-        wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-
-    applyProcessingFunctional (
-        new FreeSurfaceIniEmptyToInterfaceNodes3D<T,Descriptor>(dynamics.clone(), Array<T,3>((T)0.,(T)0.,(T)0.)),
-                                wrapper.getGroup().getBoundingBox(),
-                                wrapper.freeSurfaceArgs );
-
-    applyProcessingFunctional (
-        new FreeSurfaceRemoveFalseInterfaceCells3D<T,Descriptor>(rhoEmpty),
-        wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-
-    applyProcessingFunctional (
-        new FreeSurfaceEqualMassExcessReDistributionAndComputationOfLostMass3D<T,Descriptor>(wrapper.getReductionData()),
-        wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-
-    {
-        std::vector<MultiBlock3D*> args;
-        args.push_back(&wrapper.getFlag());
-        args.push_back(&wrapper.getMass());
-
-        applyProcessingFunctional (
-            new FreeSurfaceComputeReductionsPerProcess3D<T>(wrapper.getReductionData()),
-            wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
-    }
-
-    {
-        std::vector<MultiBlock3D*> args;
-        args.push_back(&wrapper.getLattice());
-
-#ifdef PLB_MPI_PARALLEL
-        applyProcessingFunctional (
-            new FreeSurfaceComputeReductions3D(wrapper.getReductionData(), wrapper.getReductionCommunicator()),
-            wrapper.getGroup().getBoundingBox(), args );
-#else
-        applyProcessingFunctional (
-            new FreeSurfaceComputeSerialReductions3D(wrapper.getReductionData()),
-            wrapper.getGroup().getBoundingBox(), args );
-#endif
-
-        applyProcessingFunctional (
-            new FreeSurfaceResetReductionData3D(wrapper.getReductionData()),
-            wrapper.getGroup().getBoundingBox(), args );
-    }
-}
-
-template<typename T, template<typename U> class Descriptor>
-T computeAverageSphereDensity(FreeSurfaceWrapper<T,Descriptor>& wrapper, Array<T,3> const& center, T radius)
-{
-    CalculateAverageSphereDensity3D<T,Descriptor> functional(center, radius);
-    applyProcessingFunctional (
-            functional, wrapper.getGroup().getBoundingBox(), wrapper.freeSurfaceArgs );
     return functional.getAverageDensity();
 }
 

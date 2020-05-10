@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,103 +36,105 @@
 #include <map>
 
 
-namespace plb {
+namespace plb
+{
 
-class SparseBlockStructure2D {
+class SparseBlockStructure2D
+{
 public:
-    typedef std::map<Dot2D, std::vector<plint> > GridT;
+	typedef std::map<Dot2D, std::vector<plint> > GridT;
 public:
-    /// Sparse grid structure with default internal implementation.
-    SparseBlockStructure2D(plint nx, plint ny);
-    /// Sparse grid structure with default internal implementation.
-    SparseBlockStructure2D(Box2D boundingBox_);
-    /// Sparse grid structure with explicit grid parameters.
-    SparseBlockStructure2D(Box2D boundingBox_,
-                           plint gridNx_, plint gridNy_);
-    /// Restrict an existing SparseBlockStructure2D to a sub-domain.
-    SparseBlockStructure2D(SparseBlockStructure2D const& rhs, Box2D boundingBox_);
-    /// Add a new block to the sparse block-structure.
-    void addBlock(Box2D const& bulk, Box2D const& uniqueBulk, plint blockId);
-    /// Add a new block to the sparse block-structure; uniqueBulk = bulk.
-    void addBlock(Box2D const& bulk, plint blockId);
-    /// Remove an existing block from the sparse block-structure.
-    void removeBlock(plint blockId);
-    /// Check if a block with the given ID already exists in the block-structure.
-    bool exists(plint blockId);
-    /// Return 1 + the maximum block ID currently found in the structure.
-    plint nextIncrementalId() const;
-    /// Return outer bounding box.
-    Box2D getBoundingBox() const;
-    /// Get the bulk of a given block. Returns false if the block does not exist.
-    bool getBulk(plint blockId, Box2D& bulk) const;
-    /// Get the unique bulk of a given block. Returns false if the block does not exist.
-    bool getUniqueBulk(plint blockId, Box2D& uniqueBulk) const;
-    /// Return the number of blocks contained in the structure.
-    plint getNumBlocks() const;
-    /// Get the number of bulk cells, cumulated over all blocks.
-    plint getNumBulkCells() const;
-    /// Get the id-to-bulk map for all blocks.
-    std::map<plint,Box2D> const& getBulks() const;
-    /// Enumerate all blocks attributed to the current MPI thread.
-    std::vector<plint> getLocalBlocks(ThreadAttribution const& attribution) const;
-    /// Find a block which contains given coordinates. Return -1 in case no block is found.
-    plint locate(plint iX, plint iY) const;
-    /// Intersect a given block with all blocks of the sparse block-structure.
-    void intersect( Box2D const& bulk, std::vector<plint>& ids,
-                    std::vector<Box2D>& intersections ) const;
-    /// Intersect the envelope of block "blockId" with all neighbors
-    /// in a given direction.
-    void computeOverlaps( Box2D const& bulk, plint dx, plint dy,
-                          std::vector<plint>& ids,
-                          std::vector<Box2D>& overlapsOnBulk,
-                          std::vector<Box2D>& overlapsOnNeighbors ) const;
-    /// Intersect the envelope of block "blockId" with all neighbors.
-    void computeOverlaps( plint blockId, plint envelopeWidth,
-                          std::vector<plint>& ids,
-                          std::vector<Box2D>& overlapsOnBulk,
-                          std::vector<Box2D>& overlapsOnNeighbors ) const;
-    /// Find all blocks adjacent to a given area (a specific block can be
-    ///   excluded from the search.
-    void findNeighbors( Box2D const& block, plint neighborhoodWidth,
-                        std::vector<plint>& neighbors,
-                        plint excludeId=-1 ) const;
-    /// Find all blocks adjacent to a given block of the structure.
-    void findNeighbors( plint blockId, plint neighborhoodWidth,
-                        std::vector<plint>& neighbors ) const;
-    void swap(SparseBlockStructure2D& rhs);
-    bool equals(SparseBlockStructure2D const& rhs) const;
+	/// Sparse grid structure with default internal implementation.
+	SparseBlockStructure2D(plint nx, plint ny);
+	/// Sparse grid structure with default internal implementation.
+	SparseBlockStructure2D(Box2D boundingBox_);
+	/// Sparse grid structure with explicit grid parameters.
+	SparseBlockStructure2D(Box2D boundingBox_,
+	                       plint gridNx_, plint gridNy_);
+	/// Restrict an existing SparseBlockStructure2D to a sub-domain.
+	SparseBlockStructure2D(SparseBlockStructure2D const& rhs, Box2D boundingBox_);
+	/// Add a new block to the sparse block-structure.
+	void addBlock(Box2D const& bulk, Box2D const& uniqueBulk, plint blockId);
+	/// Add a new block to the sparse block-structure; uniqueBulk = bulk.
+	void addBlock(Box2D const& bulk, plint blockId);
+	/// Remove an existing block from the sparse block-structure.
+	void removeBlock(plint blockId);
+	/// Check if a block with the given ID already exists in the block-structure.
+	bool exists(plint blockId);
+	/// Return 1 + the maximum block ID currently found in the structure.
+	plint nextIncrementalId() const;
+	/// Return outer bounding box.
+	Box2D getBoundingBox() const;
+	/// Get the bulk of a given block. Returns false if the block does not exist.
+	bool getBulk(plint blockId, Box2D& bulk) const;
+	/// Get the unique bulk of a given block. Returns false if the block does not exist.
+	bool getUniqueBulk(plint blockId, Box2D& uniqueBulk) const;
+	/// Return the number of blocks contained in the structure.
+	plint getNumBlocks() const;
+	/// Get the number of bulk cells, cumulated over all blocks.
+	plint getNumBulkCells() const;
+	/// Get the id-to-bulk map for all blocks.
+	std::map<plint,Box2D> const& getBulks() const;
+	/// Enumerate all blocks attributed to the current MPI thread.
+	std::vector<plint> getLocalBlocks(ThreadAttribution const& attribution) const;
+	/// Find a block which contains given coordinates. Return -1 in case no block is found.
+	plint locate(plint iX, plint iY) const;
+	/// Intersect a given block with all blocks of the sparse block-structure.
+	void intersect( Box2D const& bulk, std::vector<plint>& ids,
+	                std::vector<Box2D>& intersections ) const;
+	/// Intersect the envelope of block "blockId" with all neighbors
+	/// in a given direction.
+	void computeOverlaps( Box2D const& bulk, plint dx, plint dy,
+	                      std::vector<plint>& ids,
+	                      std::vector<Box2D>& overlapsOnBulk,
+	                      std::vector<Box2D>& overlapsOnNeighbors ) const;
+	/// Intersect the envelope of block "blockId" with all neighbors.
+	void computeOverlaps( plint blockId, plint envelopeWidth,
+	                      std::vector<plint>& ids,
+	                      std::vector<Box2D>& overlapsOnBulk,
+	                      std::vector<Box2D>& overlapsOnNeighbors ) const;
+	/// Find all blocks adjacent to a given area (a specific block can be
+	///   excluded from the search.
+	void findNeighbors( Box2D const& block, plint neighborhoodWidth,
+	                    std::vector<plint>& neighbors,
+	                    plint excludeId=-1 ) const;
+	/// Find all blocks adjacent to a given block of the structure.
+	void findNeighbors( plint blockId, plint neighborhoodWidth,
+	                    std::vector<plint>& neighbors ) const;
+	void swap(SparseBlockStructure2D& rhs);
+	bool equals(SparseBlockStructure2D const& rhs) const;
 private:
-    /// Default resolution of the sparse grid.
-    void defaultGridN();
-    /// Compute gridLx, gridLy.
-    void iniGridParameters();
-    /// Convert block x-coordinate into coordinate of the sparse-block grid.
-    plint gridPosX(plint realX) const;
-    /// Convert block y-coordinate into coordinate of the sparse-block grid.
-    plint gridPosY(plint realY) const;
-    /// Convert block coordinates into coordinates of the sparse-block grid.
-    Box2D getGridBox(Box2D const& realBlock) const;
-    /// Extend bulk by an envelope layer in a given direction, in view of
-    ///   computing overlaps with neighbors.
-    void computeEnvelopeTerm (
-        plint block0, plint block1,
-        plint& env0, plint& env1, plint delta ) const;
-    /// Integrate block into the sparse-block indirect addressing scheme.
-    void integrateBlock(plint blockId, Box2D bulk);
-    /// Remove block from the sparse-block indirect addressing scheme.
-    void extractBlock(plint blockId);
+	/// Default resolution of the sparse grid.
+	void defaultGridN();
+	/// Compute gridLx, gridLy.
+	void iniGridParameters();
+	/// Convert block x-coordinate into coordinate of the sparse-block grid.
+	plint gridPosX(plint realX) const;
+	/// Convert block y-coordinate into coordinate of the sparse-block grid.
+	plint gridPosY(plint realY) const;
+	/// Convert block coordinates into coordinates of the sparse-block grid.
+	Box2D getGridBox(Box2D const& realBlock) const;
+	/// Extend bulk by an envelope layer in a given direction, in view of
+	///   computing overlaps with neighbors.
+	void computeEnvelopeTerm (
+	    plint block0, plint block1,
+	    plint& env0, plint& env1, plint delta ) const;
+	/// Integrate block into the sparse-block indirect addressing scheme.
+	void integrateBlock(plint blockId, Box2D bulk);
+	/// Remove block from the sparse-block indirect addressing scheme.
+	void extractBlock(plint blockId);
 private:
-    Box2D boundingBox;
-    plint gridLx, gridLy;
-    plint gridNx, gridNy;
-    GridT grid;
-    // Attention: If replacing the map by a hashed_map, remember that
-    // nextIncrementalId() uses the fact that elements are ordered inside
-    // the map. Therefore, nextIncrementalId() must then be rewritten.
-    std::map<plint,Box2D> bulks;
-    /// UniqueBulks is never used for internal algorithms. It's just here to be
-    ///   provided to the user when asked for.
-    std::map<plint,Box2D> uniqueBulks;
+	Box2D boundingBox;
+	plint gridLx, gridLy;
+	plint gridNx, gridNy;
+	GridT grid;
+	// Attention: If replacing the map by a hashed_map, remember that
+	// nextIncrementalId() uses the fact that elements are ordered inside
+	// the map. Therefore, nextIncrementalId() must then be rewritten.
+	std::map<plint,Box2D> bulks;
+	/// UniqueBulks is never used for internal algorithms. It's just here to be
+	///   provided to the user when asked for.
+	std::map<plint,Box2D> uniqueBulks;
 };
 
 /// The bounding box of the result is the intersection of bounding box and
@@ -176,29 +178,30 @@ SparseBlockStructure2D except( SparseBlockStructure2D const& sparseBlock,
 ///   newly created block which overlap with partnerStructure and should be parallelized
 ///   correspondingly.
 SparseBlockStructure2D alignDistribution2D (
-                           SparseBlockStructure2D const& originalStructure,
-                           SparseBlockStructure2D const& partnerStructure,
-                           std::vector<plint>& newIds,
-                           std::map<plint,std::vector<plint> >& remappedFromPartner );
+    SparseBlockStructure2D const& originalStructure,
+    SparseBlockStructure2D const& partnerStructure,
+    std::vector<plint>& newIds,
+    std::map<plint,std::vector<plint> >& remappedFromPartner );
 
 
 
 /// Iterate in a structured way over a sparse multi-block structure.
-class EuclideanIterator2D {
+class EuclideanIterator2D
+{
 public:
-    EuclideanIterator2D(SparseBlockStructure2D const& sparseBlock_);
-    /// Locate block and determine how much data can be
-    ///     accessed in a x-contiguous manner. Return value indicates if
-    ///     the memory corresponding to the chunk is allocated or not.
-    bool getNextChunkX(plint iX, plint iY,
-                       plint& blockId, plint& chunkSize) const;
-    /// Locate block and determine how much data can be
-    ///     accessed in a y-contiguous manner. Return value indicates if
-    ///     the memory corresponding to the chunk is allocated or not.
-    bool getNextChunkY(plint iX, plint iY,
-                       plint& blockId, plint& chunkSize) const;
+	EuclideanIterator2D(SparseBlockStructure2D const& sparseBlock_);
+	/// Locate block and determine how much data can be
+	///     accessed in a x-contiguous manner. Return value indicates if
+	///     the memory corresponding to the chunk is allocated or not.
+	bool getNextChunkX(plint iX, plint iY,
+	                   plint& blockId, plint& chunkSize) const;
+	/// Locate block and determine how much data can be
+	///     accessed in a y-contiguous manner. Return value indicates if
+	///     the memory corresponding to the chunk is allocated or not.
+	bool getNextChunkY(plint iX, plint iY,
+	                   plint& blockId, plint& chunkSize) const;
 private:
-    SparseBlockStructure2D const& sparseBlock;
+	SparseBlockStructure2D const& sparseBlock;
 };
 
 }  // namespace plb

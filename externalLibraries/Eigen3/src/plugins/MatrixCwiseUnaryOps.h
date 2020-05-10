@@ -29,7 +29,10 @@ EIGEN_DOC_UNARY_ADDONS(cwiseAbs,absolute value)
 ///
 EIGEN_DEVICE_FUNC
 EIGEN_STRONG_INLINE const CwiseAbsReturnType
-cwiseAbs() const { return CwiseAbsReturnType(derived()); }
+cwiseAbs() const
+{
+	return CwiseAbsReturnType(derived());
+}
 
 /// \returns an expression of the coefficient-wise squared absolute value of \c *this
 ///
@@ -42,7 +45,10 @@ EIGEN_DOC_UNARY_ADDONS(cwiseAbs2,squared absolute value)
 ///
 EIGEN_DEVICE_FUNC
 EIGEN_STRONG_INLINE const CwiseAbs2ReturnType
-cwiseAbs2() const { return CwiseAbs2ReturnType(derived()); }
+cwiseAbs2() const
+{
+	return CwiseAbs2ReturnType(derived());
+}
 
 /// \returns an expression of the coefficient-wise square root of *this.
 ///
@@ -55,7 +61,10 @@ EIGEN_DOC_UNARY_ADDONS(cwiseSqrt,square-root)
 ///
 EIGEN_DEVICE_FUNC
 inline const CwiseSqrtReturnType
-cwiseSqrt() const { return CwiseSqrtReturnType(derived()); }
+cwiseSqrt() const
+{
+	return CwiseSqrtReturnType(derived());
+}
 
 /// \returns an expression of the coefficient-wise signum of *this.
 ///
@@ -66,7 +75,10 @@ EIGEN_DOC_UNARY_ADDONS(cwiseSign,sign function)
 ///
 EIGEN_DEVICE_FUNC
 inline const CwiseSignReturnType
-cwiseSign() const { return CwiseSignReturnType(derived()); }
+cwiseSign() const
+{
+	return CwiseSignReturnType(derived());
+}
 
 
 /// \returns an expression of the coefficient-wise inverse of *this.
@@ -80,6 +92,7 @@ EIGEN_DOC_UNARY_ADDONS(cwiseInverse,inverse)
 ///
 EIGEN_DEVICE_FUNC
 inline const CwiseInverseReturnType
-cwiseInverse() const { return CwiseInverseReturnType(derived()); }
-
-
+cwiseInverse() const
+{
+	return CwiseInverseReturnType(derived());
+}

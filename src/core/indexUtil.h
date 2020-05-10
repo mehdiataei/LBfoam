@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,15 +32,17 @@
 #include "core/globalDefs.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
-class IndexCollection {
+class IndexCollection
+{
 public:
-    /// Assumption: indexes are sorted in asceding order.
-    IndexCollection(std::vector<plint> const& indexes_);
-    std::vector<plint> const& get() const;
+	/// Assumption: indexes are sorted in asceding order.
+	IndexCollection(std::vector<plint> const& indexes_);
+	std::vector<plint> const& get() const;
 private:
-    std::vector<plint> indexes;
+	std::vector<plint> indexes;
 };
 
 IndexCollection operator&&(IndexCollection const& coll1, IndexCollection const& coll2);
@@ -50,16 +52,17 @@ IndexCollection operator||(IndexCollection const& coll1, IndexCollection const& 
 IndexCollection operator!(IndexCollection const& coll);
 
 template<typename T, template<typename U> class Descriptor>
-class Index {
+class Index
+{
 public:
-    Index(plint direction_);
-    IndexCollection operator==(plint value) const;
-    IndexCollection operator<(plint value) const;
-    IndexCollection operator<=(plint value) const;
-    IndexCollection operator>(plint value) const;
-    IndexCollection operator>=(plint value) const;
+	Index(plint direction_);
+	IndexCollection operator==(plint value) const;
+	IndexCollection operator<(plint value) const;
+	IndexCollection operator<=(plint value) const;
+	IndexCollection operator>(plint value) const;
+	IndexCollection operator>=(plint value) const;
 private:
-    plint direction;
+	plint direction;
 };
 
 std::vector<plint> findIndexes(IndexCollection const& collection);

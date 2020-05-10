@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,33 +32,35 @@
 #include "core/geometry2D.h"
 #include "core/blockStatistics.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor> struct Dynamics;
 template<typename T, template<typename U> class Descriptor> class Cell;
 
 /// An interface to all the variants of (more or less) regular lattices.
 template<typename T, template<typename U> class Descriptor>
-class BlockLatticeBase2D {
+class BlockLatticeBase2D
+{
 public:
-    BlockLatticeBase2D();
-    virtual ~BlockLatticeBase2D();
-    void swap(BlockLatticeBase2D<T,Descriptor>& rhs);
+	BlockLatticeBase2D();
+	virtual ~BlockLatticeBase2D();
+	void swap(BlockLatticeBase2D<T,Descriptor>& rhs);
 public:
-    virtual Cell<T,Descriptor>& get(plint iX, plint iY) =0;
-    virtual Cell<T,Descriptor> const& get(plint iX, plint iY) const =0;
-    virtual void specifyStatisticsStatus (Box2D domain, bool status) =0;
-    virtual void collide(Box2D domain) =0;
-    virtual void collide() =0;
-    virtual void stream(Box2D domain) =0;
-    virtual void stream() =0;
-    virtual void collideAndStream(Box2D domain) =0;
-    virtual void collideAndStream() =0;
-    virtual void incrementTime() =0;
-    TimeCounter& getTimeCounter();
-    TimeCounter const& getTimeCounter() const;
+	virtual Cell<T,Descriptor>& get(plint iX, plint iY) =0;
+	virtual Cell<T,Descriptor> const& get(plint iX, plint iY) const =0;
+	virtual void specifyStatisticsStatus (Box2D domain, bool status) =0;
+	virtual void collide(Box2D domain) =0;
+	virtual void collide() =0;
+	virtual void stream(Box2D domain) =0;
+	virtual void stream() =0;
+	virtual void collideAndStream(Box2D domain) =0;
+	virtual void collideAndStream() =0;
+	virtual void incrementTime() =0;
+	TimeCounter& getTimeCounter();
+	TimeCounter const& getTimeCounter() const;
 private:
-    TimeCounter timeCounter;
+	TimeCounter timeCounter;
 };
 
 }  // namespace plb

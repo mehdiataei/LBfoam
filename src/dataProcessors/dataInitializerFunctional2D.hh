@@ -31,7 +31,6 @@
 #include "dataProcessors/dataInitializerFunctional2D.h"
 #include "core/cell.h"
 #include "latticeBoltzmann/geometricOperationTemplates.h"
-#include "latticeBoltzmann/externalFieldAccess.h"
 #include "atomicBlock/blockLattice2D.h"
 #include "multiGrid/multiGridUtil.h"
 #include <limits>

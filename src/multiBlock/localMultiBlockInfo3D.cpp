@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,10 +31,11 @@
 #include "multiBlock/multiBlockManagement3D.h"
 #include <algorithm>
 
-namespace plb {
+namespace plb
+{
 
 PeriodicOverlap3D::PeriodicOverlap3D (
-        Overlap3D const& overlap_, plint normalX_, plint normalY_, plint normalZ_ )
+    Overlap3D const& overlap_, plint normalX_, plint normalY_, plint normalZ_ )
     : overlap(overlap_),
       normalX(normalX_),
       normalY(normalY_),
@@ -43,9 +44,9 @@ PeriodicOverlap3D::PeriodicOverlap3D (
 
 
 LocalMultiBlockInfo3D::LocalMultiBlockInfo3D (
-        SparseBlockStructure3D const& sparseBlock,
-        ThreadAttribution const& attribution,
-        plint envelopeWidth_ )
+    SparseBlockStructure3D const& sparseBlock,
+    ThreadAttribution const& attribution,
+    plint envelopeWidth_ )
     : envelopeWidth(envelopeWidth_)
 {
     computeMyBlocks(sparseBlock,attribution);
@@ -59,30 +60,31 @@ LocalMultiBlockInfo3D::LocalMultiBlockInfo3D (
 }
 
 std::vector<plint> const&
-    LocalMultiBlockInfo3D::getBlocks() const
+LocalMultiBlockInfo3D::getBlocks() const
 {
     return myBlocks;
 }
 
 std::vector<Overlap3D> const&
-    LocalMultiBlockInfo3D::getNormalOverlaps() const
+LocalMultiBlockInfo3D::getNormalOverlaps() const
 {
     return normalOverlaps;
 }
 
 std::vector<PeriodicOverlap3D> const&
-    LocalMultiBlockInfo3D::getPeriodicOverlaps() const
+LocalMultiBlockInfo3D::getPeriodicOverlaps() const
 {
     return periodicOverlaps;
 }
 
 std::vector<PeriodicOverlap3D> const&
-    LocalMultiBlockInfo3D::getPeriodicOverlapWithRemoteData() const
+LocalMultiBlockInfo3D::getPeriodicOverlapWithRemoteData() const
 {
     return periodicOverlapWithRemoteData;
 }
 
-void LocalMultiBlockInfo3D::swap(LocalMultiBlockInfo3D& rhs) {
+void LocalMultiBlockInfo3D::swap(LocalMultiBlockInfo3D& rhs)
+{
     std::swap(envelopeWidth, rhs.envelopeWidth);
     myBlocks.swap(rhs.myBlocks);
     normalOverlaps.swap(rhs.normalOverlaps);
@@ -91,22 +93,23 @@ void LocalMultiBlockInfo3D::swap(LocalMultiBlockInfo3D& rhs) {
 }
 
 void LocalMultiBlockInfo3D::computeMyBlocks(SparseBlockStructure3D const& sparseBlock,
-                                            ThreadAttribution const& attribution)
+        ThreadAttribution const& attribution)
 {
     myBlocks = sparseBlock.getLocalBlocks(attribution);
 }
 
 void LocalMultiBlockInfo3D::computeAllNormalOverlaps (
-        SparseBlockStructure3D const& sparseBlock )
+    SparseBlockStructure3D const& sparseBlock )
 {
-    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock)
+    {
         plint blockId = myBlocks[iBlock];
         computeNormalOverlaps(sparseBlock, blockId);
     }
 }
 
 void LocalMultiBlockInfo3D::computeNormalOverlaps (
-        SparseBlockStructure3D const& sparseBlock, plint blockId )
+    SparseBlockStructure3D const& sparseBlock, plint blockId )
 {
     Box3D intersection;
     SmartBulk3D bulk(sparseBlock, envelopeWidth, blockId);
@@ -132,9 +135,10 @@ void LocalMultiBlockInfo3D::computeNormalOverlaps (
 }
 
 void LocalMultiBlockInfo3D::computeAllPeriodicOverlaps (
-        SparseBlockStructure3D const& sparseBlock )
+    SparseBlockStructure3D const& sparseBlock )
 {
-    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock)
+    {
         plint blockId = myBlocks[iBlock];
         Box3D bulk;
         sparseBlock.getBulk(blockId, bulk);
@@ -149,16 +153,20 @@ void LocalMultiBlockInfo3D::computeAllPeriodicOverlaps (
 }
 
 void LocalMultiBlockInfo3D::computePeriodicOverlaps (
-        SparseBlockStructure3D const& sparseBlock, plint blockId )
+    SparseBlockStructure3D const& sparseBlock, plint blockId )
 {
     Box3D intersection; // Temporary variable.
     std::vector<plint> neighbors; // Temporary variable.
     SmartBulk3D bulk(sparseBlock, envelopeWidth, blockId);
 
-    for (plint dx=-1; dx<=+1; dx+=1) {
-        for (plint dy=-1; dy<=+1; dy+=1) {
-            for (plint dz=-1; dz<=+1; dz+=1) {
-                if (dx!=0 || dy!=0 || dz!=0) {
+    for (plint dx=-1; dx<=+1; dx+=1)
+    {
+        for (plint dy=-1; dy<=+1; dy+=1)
+        {
+            for (plint dz=-1; dz<=+1; dz+=1)
+            {
+                if (dx!=0 || dy!=0 || dz!=0)
+                {
                     // The new block is shifted by the length of the full multi block in each space
                     //   direction. Consequently, overlaps between the original multi block and the
                     //   shifted new block are identified as periodic overlaps.
@@ -170,17 +178,20 @@ void LocalMultiBlockInfo3D::computePeriodicOverlaps (
                     // Speed optimization: perform following checks only if the shifted
                     //   domain touches the bounding box.
                     Box3D dummyIntersection;
-                    if (intersect(shiftedEnvelope, sparseBlock.getBoundingBox(), dummyIntersection)) {
+                    if (intersect(shiftedEnvelope, sparseBlock.getBoundingBox(), dummyIntersection))
+                    {
                         neighbors.clear();
                         sparseBlock.findNeighbors(shiftedBulk, envelopeWidth, neighbors);
                         // Check overlap with each existing block in the neighborhood, including with the newly added one.
-                        for (pluint iNeighbor=0; iNeighbor<neighbors.size(); ++iNeighbor) {
+                        for (pluint iNeighbor=0; iNeighbor<neighbors.size(); ++iNeighbor)
+                        {
                             plint neighborId = neighbors[iNeighbor];
                             SmartBulk3D neighborBulk(sparseBlock, envelopeWidth, neighborId);
                             // Does the envelope of the shifted new block overlap with the bulk of a previous
                             //   block? If yes, add an overlap, in which the previous block has the "original
                             //   position", and the new block has the "overlap position".
-                            if (intersect(neighborBulk.getBulk(), shiftedEnvelope, intersection)) {
+                            if (intersect(neighborBulk.getBulk(), shiftedEnvelope, intersection))
+                            {
                                 PeriodicOverlap3D overlap (
                                     Overlap3D(neighborId, blockId, intersection, shiftX, shiftY, shiftZ),
                                     dx, dy, dz );
@@ -193,13 +204,13 @@ void LocalMultiBlockInfo3D::computePeriodicOverlaps (
                             //   If we are in the situation in which the newly added block is periodic with itself,
                             //   this step must be skipped, because otherwise the overlap is counted twice.
                             if (!(neighborId==blockId) &&
-                                intersect(shiftedBulk, neighborBulk.computeEnvelope(), intersection))
+                                    intersect(shiftedBulk, neighborBulk.computeEnvelope(), intersection))
                             {
                                 intersection = intersection.shift(-shiftX,-shiftY, -shiftZ);
                                 periodicOverlaps.push_back (
-                                        PeriodicOverlap3D (
-                                            Overlap3D(blockId, neighborId, intersection, -shiftX, -shiftY, -shiftZ),
-                                            -dx, -dy, -dz ) );
+                                    PeriodicOverlap3D (
+                                        Overlap3D(blockId, neighborId, intersection, -shiftX, -shiftY, -shiftZ),
+                                        -dx, -dy, -dz ) );
                             }
                         }
                     }

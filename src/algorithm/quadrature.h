@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,30 +29,40 @@
 
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class GaussLegendreQuadrature {
+class GaussLegendreQuadrature
+{
 public:
-    typedef T (*IntegralKernel)(T x, void *data);
+	typedef T (*IntegralKernel)(T x, void *data);
 public:
-    GaussLegendreQuadrature(plint n_, plint maxNumOfIterations_=64);
-    GaussLegendreQuadrature<T>* clone() const;
-    T evaluateIntegral(IntegralKernel integralKernel, void *data, T x0, T x1) const;
-    plint getN() const { return n; }
-    std::vector<T> const& getNodes() const { return nodes; };
-    std::vector<T> const& getWeights() const { return weights; };
+	GaussLegendreQuadrature(plint n_, plint maxNumOfIterations_=64);
+	GaussLegendreQuadrature<T>* clone() const;
+	T evaluateIntegral(IntegralKernel integralKernel, void *data, T x0, T x1) const;
+	plint getN() const
+	{
+		return n;
+	}
+	std::vector<T> const& getNodes() const
+	{
+		return nodes;
+	};
+	std::vector<T> const& getWeights() const
+	{
+		return weights;
+	};
 private:
-    void evaluateLegendrePolynomialAndDerivative(plint k, T x, T& L_k, T& dL_k) const;
-    void evaluateNodesAndWeights();
+	void evaluateLegendrePolynomialAndDerivative(plint k, T x, T& L_k, T& dL_k) const;
+	void evaluateNodesAndWeights();
 private:
-    plint n;
-    std::vector<T> nodes;
-    std::vector<T> weights;
-    plint maxNumOfIterations;
+	plint n;
+	std::vector<T> nodes;
+	std::vector<T> weights;
+	plint maxNumOfIterations;
 };
 
 }  // namespace plb
 
 #endif  // QUADRATURE_H
-

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,7 +36,8 @@
 #include "core/globalDefs.h"
 #include "basicDynamics/isoThermalDynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor> class Cell;
 
@@ -46,35 +47,36 @@ template<typename T, template<typename U> class Descriptor>
 class KBCDynamics : public IsoThermalBulkDynamics<T,Descriptor>
 {
 public:
-/* *************** Construction / Destruction ************************ */
-    KBCDynamics(T omega_);
-    KBCDynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	KBCDynamics(T omega_);
+	KBCDynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual KBCDynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual KBCDynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// TODO: check if this has to be true.
-    virtual bool isEntropic() const{
-        return false;
-    }
+	/// TODO: check if this has to be true.
+	virtual bool isEntropic() const
+	{
+		return false;
+	}
 
-/* *************** Collision and Equilibrium ************************* */
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/* *************** Collision and Equilibrium ************************* */
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    T computeGamma(Array<T,Descriptor<T>::q> const& deltaS,
-                   Array<T,Descriptor<T>::q> const& deltaH,
-                   Array<T,Descriptor<T>::q> const& fEq);
+	T computeGamma(Array<T,Descriptor<T>::q> const& deltaS,
+	               Array<T,Descriptor<T>::q> const& deltaH,
+	               Array<T,Descriptor<T>::q> const& fEq);
 
-    static int id;
+	static int id;
 };
 
 }  // namespace plb

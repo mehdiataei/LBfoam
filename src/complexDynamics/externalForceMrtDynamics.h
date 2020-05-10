@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -38,207 +38,214 @@
 #include "basicDynamics/externalForceDynamics.h"
 #include "mrtDynamics.h"
 
-namespace plb {
-    
+namespace plb
+{
+
 /// Implementation of the MRT collision step
 template<typename T, template<typename U> class Descriptor>
-class GuoExternalForceMRTdynamics : public ExternalForceDynamics<T,Descriptor> {
+class GuoExternalForceMRTdynamics : public ExternalForceDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    GuoExternalForceMRTdynamics(T omega_);
-    GuoExternalForceMRTdynamics(HierarchicUnserializer& unserializer);
-    
-    /// Clone the object on its dynamic type.
-    virtual GuoExternalForceMRTdynamics<T,Descriptor>* clone() const;
+	/* *************** Construction / Destruction ************************ */
+	GuoExternalForceMRTdynamics(T omega_);
+	GuoExternalForceMRTdynamics(HierarchicUnserializer& unserializer);
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Clone the object on its dynamic type.
+	virtual GuoExternalForceMRTdynamics<T,Descriptor>* clone() const;
 
-/* *************** Collision and Equilibrium ************************* */
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
+
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// Implementation of the MRT collision step with external force
 /// and Smagorinsky model
 template<typename T, template<typename U> class Descriptor>
-class GuoExternalForceSmagorinskyMRTdynamics : public ExternalForceDynamics<T,Descriptor> {
+class GuoExternalForceSmagorinskyMRTdynamics : public ExternalForceDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    GuoExternalForceSmagorinskyMRTdynamics(T omega_, T cSmago_);
-    GuoExternalForceSmagorinskyMRTdynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	GuoExternalForceSmagorinskyMRTdynamics(T omega_, T cSmago_);
+	GuoExternalForceSmagorinskyMRTdynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual GuoExternalForceSmagorinskyMRTdynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual GuoExternalForceSmagorinskyMRTdynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Serialize the dynamics object.
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    /// Un-Serialize the dynamics object.
-    virtual void unserialize(HierarchicUnserializer& unserializer);
+	/// Serialize the dynamics object.
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	/// Un-Serialize the dynamics object.
+	virtual void unserialize(HierarchicUnserializer& unserializer);
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    T cSmago;
-    static int id;
+	T cSmago;
+	static int id;
 };
 
 
 /// Implementation of the quasi incompressible MRT collision step with external force
 /// and Smagorinsky model
 template<typename T, template<typename U> class Descriptor>
-class GuoExternalForceSmagorinskyIncMRTdynamics : public IncExternalForceDynamics<T,Descriptor> {
+class GuoExternalForceSmagorinskyIncMRTdynamics : public IncExternalForceDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    GuoExternalForceSmagorinskyIncMRTdynamics(T omega_, T cSmago_);
-    GuoExternalForceSmagorinskyIncMRTdynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	GuoExternalForceSmagorinskyIncMRTdynamics(T omega_, T cSmago_);
+	GuoExternalForceSmagorinskyIncMRTdynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual GuoExternalForceSmagorinskyIncMRTdynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual GuoExternalForceSmagorinskyIncMRTdynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Serialize the dynamics object.
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    /// Un-Serialize the dynamics object.
-    virtual void unserialize(HierarchicUnserializer& unserializer);
+	/// Serialize the dynamics object.
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	/// Un-Serialize the dynamics object.
+	virtual void unserialize(HierarchicUnserializer& unserializer);
 
-    /// Say if velocity in this dynamics is computed as "j" (the order-1 moment
-    ///   of the populations) or as "j/rho".
-    virtual bool velIsJ() const;
+	/// Say if velocity in this dynamics is computed as "j" (the order-1 moment
+	///   of the populations) or as "j/rho".
+	virtual bool velIsJ() const;
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    T cSmago;
-    static int id;
+	T cSmago;
+	static int id;
 };
 
 /// Implementation of the MRT collision step with external force
 /// and ConsistentSmagorinsky model
 template<typename T, template<typename U> class Descriptor>
-class GuoExternalForceConsistentSmagorinskyMRTdynamics : public ExternalForceDynamics<T,Descriptor> {
+class GuoExternalForceConsistentSmagorinskyMRTdynamics : public ExternalForceDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    GuoExternalForceConsistentSmagorinskyMRTdynamics(T omega_, T cSmago_);
-    GuoExternalForceConsistentSmagorinskyMRTdynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	GuoExternalForceConsistentSmagorinskyMRTdynamics(T omega_, T cSmago_);
+	GuoExternalForceConsistentSmagorinskyMRTdynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual GuoExternalForceConsistentSmagorinskyMRTdynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual GuoExternalForceConsistentSmagorinskyMRTdynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Serialize the dynamics object.
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    /// Un-Serialize the dynamics object.
-    virtual void unserialize(HierarchicUnserializer& unserializer);
+	/// Serialize the dynamics object.
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	/// Un-Serialize the dynamics object.
+	virtual void unserialize(HierarchicUnserializer& unserializer);
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    T cSmago;
-    static int id;
+	T cSmago;
+	static int id;
 };
 
 
 /// Implementation of the quasi incompressible MRT collision step with external force
 /// and ConsistentSmagorinsky model
 template<typename T, template<typename U> class Descriptor>
-class GuoExternalForceConsistentSmagorinskyIncMRTdynamics : public IncExternalForceDynamics<T,Descriptor> {
+class GuoExternalForceConsistentSmagorinskyIncMRTdynamics : public IncExternalForceDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    GuoExternalForceConsistentSmagorinskyIncMRTdynamics(T omega_, T cSmago_);
-    GuoExternalForceConsistentSmagorinskyIncMRTdynamics(HierarchicUnserializer& unserializer);
+	/* *************** Construction / Destruction ************************ */
+	GuoExternalForceConsistentSmagorinskyIncMRTdynamics(T omega_, T cSmago_);
+	GuoExternalForceConsistentSmagorinskyIncMRTdynamics(HierarchicUnserializer& unserializer);
 
-    /// Clone the object on its dynamic type.
-    virtual GuoExternalForceConsistentSmagorinskyIncMRTdynamics<T,Descriptor>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual GuoExternalForceConsistentSmagorinskyIncMRTdynamics<T,Descriptor>* clone() const;
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Serialize the dynamics object.
-    virtual void serialize(HierarchicSerializer& serializer) const;
-    /// Un-Serialize the dynamics object.
-    virtual void unserialize(HierarchicUnserializer& unserializer);
+	/// Serialize the dynamics object.
+	virtual void serialize(HierarchicSerializer& serializer) const;
+	/// Un-Serialize the dynamics object.
+	virtual void unserialize(HierarchicUnserializer& unserializer);
 
-    /// Say if velocity in this dynamics is computed as "j" (the order-1 moment
-    ///   of the populations) or as "j/rho".
-    virtual bool velIsJ() const;
+	/// Say if velocity in this dynamics is computed as "j" (the order-1 moment
+	///   of the populations) or as "j/rho".
+	virtual bool velIsJ() const;
 
-/* *************** Collision and Equilibrium ************************* */
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    T cSmago;
-    static int id;
+	T cSmago;
+	static int id;
 };
 
 
 /// Implementation of the MRT collision step with External Momenta
 template<typename T, template<typename U> class Descriptor>
-class GuoExternalForceAndMomentMRTdynamics : public ExternalForceDynamics<T,Descriptor> {
+class GuoExternalForceAndMomentMRTdynamics : public ExternalForceDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    GuoExternalForceAndMomentMRTdynamics(T omega_);
-    GuoExternalForceAndMomentMRTdynamics(HierarchicUnserializer& unserializer);
-    
-    /// Clone the object on its dynamic type.
-    virtual GuoExternalForceAndMomentMRTdynamics<T,Descriptor>* clone() const;
+	/* *************** Construction / Destruction ************************ */
+	GuoExternalForceAndMomentMRTdynamics(T omega_);
+	GuoExternalForceAndMomentMRTdynamics(HierarchicUnserializer& unserializer);
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Clone the object on its dynamic type.
+	virtual GuoExternalForceAndMomentMRTdynamics<T,Descriptor>* clone() const;
 
-/* *************** Collision and Equilibrium ************************* */
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
+
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
+	static int id;
 };
 
 
@@ -247,32 +254,32 @@ private:
 
 /// Implementation of the MRT collision step with He External force
 template<typename T, template<typename U> class Descriptor>
-class HeExternalForceMRTdynamics : public ExternalForceDynamics<T,Descriptor> {
+class HeExternalForceMRTdynamics : public ExternalForceDynamics<T,Descriptor>
+{
 public:
-/* *************** Construction / Destruction ************************ */
-    HeExternalForceMRTdynamics(T omega_);
-    HeExternalForceMRTdynamics(HierarchicUnserializer& unserializer);
-    
-    /// Clone the object on its dynamic type.
-    virtual HeExternalForceMRTdynamics<T,Descriptor>* clone() const;
+	/* *************** Construction / Destruction ************************ */
+	HeExternalForceMRTdynamics(T omega_);
+	HeExternalForceMRTdynamics(HierarchicUnserializer& unserializer);
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Clone the object on its dynamic type.
+	virtual HeExternalForceMRTdynamics<T,Descriptor>* clone() const;
 
-/* *************** Collision and Equilibrium ************************* */
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Implementation of the collision step
-    virtual void collide(Cell<T,Descriptor>& cell,
-                         BlockStatistics& statistics_);
+	/* *************** Collision and Equilibrium ************************* */
 
-    /// Compute equilibrium distribution function
-    virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
-                                 T jSqr, T thetaBar=T()) const;
+	/// Implementation of the collision step
+	virtual void collide(Cell<T,Descriptor>& cell,
+	                     BlockStatistics& statistics_);
+
+	/// Compute equilibrium distribution function
+	virtual T computeEquilibrium(plint iPop, T rhoBar, Array<T,Descriptor<T>::d> const& j,
+	                             T jSqr, T thetaBar=T()) const;
 private:
-    static int id;
+	static int id;
 };
 
 }  // namespace plb
 
 #endif  // MRT_DYNAMICS_H
-

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -37,46 +37,48 @@
 
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
 struct OctreeData {
-    OctreeData(Cuboid<T> const& cuboid_);
+	OctreeData(Cuboid<T> const& cuboid_);
 
-    Cuboid<T> cuboid;
-    bool touch; // This is a variable to be used for optimizing
-                // the certain processes (like refinement and
-                // finding the overlap blocks). If its value is
-                // true, this means that a processing function
-                // may "touch" the node, and do something with
-                // its data.
+	Cuboid<T> cuboid;
+	bool touch; // This is a variable to be used for optimizing
+	// the certain processes (like refinement and
+	// finding the overlap blocks). If its value is
+	// true, this means that a processing function
+	// may "touch" the node, and do something with
+	// its data.
 
-    Box3D bulk; // This is the bulk of the Palabos blocks. The bulk is
-                // not needed during the process of the tree creation
-                // (this is why it does not appear in the constructor).
-    plint blockId; // After the full tree is constructed, we need to
-                   // have a unique id for each leaf and overlap node,
-                   // that will become blocks for Palabos.
-    bool isOverlap; // A boolean to determine if a non-leaf cell is an
-                    // overlap needed for the coupling with the next
-                    // grid level.
-    bool allocate;  // A boolean for each cell to determine if it will
-                    // be allocated and included in the grid structure.
-                    // This variable has a meaning only for the leaf
-                    // nodes and is set to true for all non-leaves.
-                    // The user will define regions where nodes will not
-                    // be allocated, by providing negative grid density
-                    // values. If a block is "fully contained" in a
-                    // region of space with negative grid density,
-                    // then it will not be allocated. In the majority
-                    // of the following algorithms, a leaf node is
-                    // considered only if it is allocated (for example
-                    // only the allocated leaves are refined, counted,
-                    // etc).
-    plint processId; // MPI process id.
+	Box3D bulk; // This is the bulk of the Palabos blocks. The bulk is
+	// not needed during the process of the tree creation
+	// (this is why it does not appear in the constructor).
+	plint blockId; // After the full tree is constructed, we need to
+	// have a unique id for each leaf and overlap node,
+	// that will become blocks for Palabos.
+	bool isOverlap; // A boolean to determine if a non-leaf cell is an
+	// overlap needed for the coupling with the next
+	// grid level.
+	bool allocate;  // A boolean for each cell to determine if it will
+	// be allocated and included in the grid structure.
+	// This variable has a meaning only for the leaf
+	// nodes and is set to true for all non-leaves.
+	// The user will define regions where nodes will not
+	// be allocated, by providing negative grid density
+	// values. If a block is "fully contained" in a
+	// region of space with negative grid density,
+	// then it will not be allocated. In the majority
+	// of the following algorithms, a leaf node is
+	// considered only if it is allocated (for example
+	// only the allocated leaves are refined, counted,
+	// etc).
+	plint processId; // MPI process id.
 };
 
-namespace octreeDataUtil {
+namespace octreeDataUtil
+{
 
 template<typename T>
 inline bool isAllocatableLeaf(OctreeNode<OctreeData<T> >* node);
@@ -97,214 +99,227 @@ void getAllocatedMinMaxOctreeLeafNodeLevels(OctreeNode<OctreeData<T> >* root, in
 
 template<typename T>
 struct AssignOctreeData {
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	void operator()(OctreeNode<OctreeData<T> >* node);
 };
 
 template<typename T>
-class GridDensityFunction {
+class GridDensityFunction
+{
 public:
-    GridDensityFunction(std::string fileName, bool boundFromBelow);
-    GridDensityFunction(Cuboid<T> const& cuboid_, T dx_, ScalarField3D<T> const& gridDensity_, bool boundFromBelow);
-    GridDensityFunction(GridDensityFunction<T> const& rhs);
-    void swap(GridDensityFunction<T>& rhs);
-    GridDensityFunction<T>& operator=(GridDensityFunction<T> const& rhs);
-    GridDensityFunction<T>* clone() const;
-    ~GridDensityFunction();
-    bool hasNegativeValues() const;
-    T operator()(Array<T,3> const& pos) const;
-    T operator()(Cuboid<T> const& c) const;
+	GridDensityFunction(std::string fileName, bool boundFromBelow);
+	GridDensityFunction(Cuboid<T> const& cuboid_, T dx_, ScalarField3D<T> const& gridDensity_, bool boundFromBelow);
+	GridDensityFunction(GridDensityFunction<T> const& rhs);
+	void swap(GridDensityFunction<T>& rhs);
+	GridDensityFunction<T>& operator=(GridDensityFunction<T> const& rhs);
+	GridDensityFunction<T>* clone() const;
+	~GridDensityFunction();
+	bool hasNegativeValues() const;
+	T operator()(Array<T,3> const& pos) const;
+	T operator()(Cuboid<T> const& c) const;
 private:
-    Cuboid<T> cuboid;
-    T dx;
-    plint nx, ny, nz;
-    ScalarField3D<T>* gridDensity;
-    bool existNegativeValues;
+	Cuboid<T> cuboid;
+	T dx;
+	plint nx, ny, nz;
+	ScalarField3D<T>* gridDensity;
+	bool existNegativeValues;
 };
 
 template<typename T>
-class RefineOctree {
+class RefineOctree
+{
 public:
-    RefineOctree(GridDensityFunction<T> const& gridDensityFunction_, T gridDensityScaleFactor_,
-            int minLeafLevel_, int maxLeafLevel_, bool useSamples_, plint numSamples_);
-    void reset();
-    bool refinedOctree() const;
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	RefineOctree(GridDensityFunction<T> const& gridDensityFunction_, T gridDensityScaleFactor_,
+	             int minLeafLevel_, int maxLeafLevel_, bool useSamples_, plint numSamples_);
+	void reset();
+	bool refinedOctree() const;
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    T getMaxScaledGridDensityFromPoints(Cuboid<T> const& cuboid, plint n) const;
-    T getMaxScaledGridDensityFromVolumes(Cuboid<T> const& cuboid) const;
+	T getMaxScaledGridDensityFromPoints(Cuboid<T> const& cuboid, plint n) const;
+	T getMaxScaledGridDensityFromVolumes(Cuboid<T> const& cuboid) const;
 private:
-    AssignOctreeData<T> assignOctreeData;
-    GridDensityFunction<T> const& gridDensityFunction;
-    T gridDensityScaleFactor;
-    int minLeafLevel;
-    int maxLeafLevel;
-    bool useSamples;
-    plint numSamples;
-    bool refined;
+	AssignOctreeData<T> assignOctreeData;
+	GridDensityFunction<T> const& gridDensityFunction;
+	T gridDensityScaleFactor;
+	int minLeafLevel;
+	int maxLeafLevel;
+	bool useSamples;
+	plint numSamples;
+	bool refined;
 };
 
 template<typename T>
-class CalibrateOctree {
+class CalibrateOctree
+{
 public:
-    CalibrateOctree();
-    void reset();
-    bool calibratedOctree() const;
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	CalibrateOctree();
+	void reset();
+	bool calibratedOctree() const;
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    AssignOctreeData<T> assignOctreeData;
-    bool calibrated;
+	AssignOctreeData<T> assignOctreeData;
+	bool calibrated;
 };
 
 template<typename T>
-class DeallocateOctreeLeafNodes {
+class DeallocateOctreeLeafNodes
+{
 public:
-    DeallocateOctreeLeafNodes(GridDensityFunction<T> const& gridDensityFunction_, int maxLeafLevel_,
-            bool useSamples_, plint numSamples_);
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	DeallocateOctreeLeafNodes(GridDensityFunction<T> const& gridDensityFunction_, int maxLeafLevel_,
+	                          bool useSamples_, plint numSamples_);
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    bool isMaxGridDensityNegativeOnPoints(Cuboid<T> const& cuboid, plint n) const;
-    bool isMaxGridDensityNegativeInVolumes(Cuboid<T> const& cuboid) const;
+	bool isMaxGridDensityNegativeOnPoints(Cuboid<T> const& cuboid, plint n) const;
+	bool isMaxGridDensityNegativeInVolumes(Cuboid<T> const& cuboid) const;
 private:
-    GridDensityFunction<T> const& gridDensityFunction;
-    int maxLeafLevel;
-    bool useSamples;
-    plint numSamples;
+	GridDensityFunction<T> const& gridDensityFunction;
+	int maxLeafLevel;
+	bool useSamples;
+	plint numSamples;
 };
 
 template<typename T>
-class CountOctreeLeafNodes {
+class CountOctreeLeafNodes
+{
 public:
-    CountOctreeLeafNodes();
-    void reset();
-    plint getNumLeafNodes() const;
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	CountOctreeLeafNodes();
+	void reset();
+	plint getNumLeafNodes() const;
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    plint numLeaves;
+	plint numLeaves;
 };
 
 template<typename T>
-class GatherOctreeLeafCuboids {
+class GatherOctreeLeafCuboids
+{
 public:
-    void reset();
-    std::vector<Cuboid<T> > const& getCuboids() const;
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	void reset();
+	std::vector<Cuboid<T> > const& getCuboids() const;
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    std::vector<Cuboid<T> > cuboids;
+	std::vector<Cuboid<T> > cuboids;
 };
 
 template<typename T>
 struct TouchAllOctreeNodes {
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	void operator()(OctreeNode<OctreeData<T> >* node);
 };
 
 template<typename T>
 struct AssignOctreeOverlapNodes {
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	void operator()(OctreeNode<OctreeData<T> >* node);
 };
 
 template<typename T>
 struct CheckOctreeOverlapNodes {
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	void operator()(OctreeNode<OctreeData<T> >* node);
 };
 
 template<typename T>
-class ComputeOctreeBulks {
+class ComputeOctreeBulks
+{
 public:
-    ComputeOctreeBulks(T dxFinest_, int maxLeafLevel_, Cuboid<T> const& fullDomain_, plint nx_, plint ny_, plint nz_);
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	ComputeOctreeBulks(T dxFinest_, int maxLeafLevel_, Cuboid<T> const& fullDomain_, plint nx_, plint ny_, plint nz_);
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    T dxFinest;
-    int maxLeafLevel;
-    Cuboid<T> fullDomain;
-    plint nx, ny, nz;
+	T dxFinest;
+	int maxLeafLevel;
+	Cuboid<T> fullDomain;
+	plint nx, ny, nz;
 };
 
 template<typename T>
-class AssignOctreeLeafAndOverlapIds {
+class AssignOctreeLeafAndOverlapIds
+{
 public:
-    AssignOctreeLeafAndOverlapIds();
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	AssignOctreeLeafAndOverlapIds();
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    plint blockId;
+	plint blockId;
 };
 
 // We consider overlap blocks to have the same "weight" as normal blocks, although there
 // exist optimizations to make the overlap blocks smaller. Due to this fact there is an
 // error in the estimation of the process loads.
-class OctreeProcessLoads {
+class OctreeProcessLoads
+{
 public:
-    OctreeProcessLoads(plint numProcesses_, plint numCellsPerBlock_, int minLeafLevel_);
-    void clearLoads();
-    void clearLoad(plint processId);
-    plint getNumProcesses() const;
-    plint getNumCellsPerBlock() const;
-    int getMinLeafLevel() const;
-    plint getLoad(plint processId) const;
-    void addLoad(plint processId, int level);
-    plint getProcessWithMinLoad() const;
+	OctreeProcessLoads(plint numProcesses_, plint numCellsPerBlock_, int minLeafLevel_);
+	void clearLoads();
+	void clearLoad(plint processId);
+	plint getNumProcesses() const;
+	plint getNumCellsPerBlock() const;
+	int getMinLeafLevel() const;
+	plint getLoad(plint processId) const;
+	void addLoad(plint processId, int level);
+	plint getProcessWithMinLoad() const;
 private:
-    plint numProcesses;
-    plint numCellsPerBlock;
-    int minLeafLevel;
-    std::vector<plint> loads;
+	plint numProcesses;
+	plint numCellsPerBlock;
+	int minLeafLevel;
+	std::vector<plint> loads;
 };
 
 template<typename T>
-class AssignOctreeOverlapProcessIds {
+class AssignOctreeOverlapProcessIds
+{
 public:
-    AssignOctreeOverlapProcessIds(int level_, int numLevelsToGroupOverlaps_, OctreeProcessLoads& octreeProcessLoads_);
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	AssignOctreeOverlapProcessIds(int level_, int numLevelsToGroupOverlaps_, OctreeProcessLoads& octreeProcessLoads_);
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    bool needsProcessId(OctreeNode<OctreeData<T> >* node);
-    void assignProcessIdsPreOrder(OctreeNode<OctreeData<T> >* root);
+	bool needsProcessId(OctreeNode<OctreeData<T> >* node);
+	void assignProcessIdsPreOrder(OctreeNode<OctreeData<T> >* root);
 private:
-    int level;
-    int numLevelsToGroupOverlaps;
-    OctreeProcessLoads& octreeProcessLoads;
-    int groupingLevel;
-    plint singleProcessId;
+	int level;
+	int numLevelsToGroupOverlaps;
+	OctreeProcessLoads& octreeProcessLoads;
+	int groupingLevel;
+	plint singleProcessId;
 };
 
 template<typename T>
-class EnforceOctreeProcessAssignmentConstraints {
+class EnforceOctreeProcessAssignmentConstraints
+{
 public:
-    EnforceOctreeProcessAssignmentConstraints(OctreeProcessLoads& octreeProcessLoads_);
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	EnforceOctreeProcessAssignmentConstraints(OctreeProcessLoads& octreeProcessLoads_);
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    OctreeProcessLoads& octreeProcessLoads;
+	OctreeProcessLoads& octreeProcessLoads;
 };
 
 template<typename T>
-class AssignOctreeLeafProcessIds {
+class AssignOctreeLeafProcessIds
+{
 public:
-    AssignOctreeLeafProcessIds(int level_, int numLevelsToGroupBlocks_, bool strongGrouping_,
-            OctreeProcessLoads& octreeProcessLoads_);
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	AssignOctreeLeafProcessIds(int level_, int numLevelsToGroupBlocks_, bool strongGrouping_,
+	                           OctreeProcessLoads& octreeProcessLoads_);
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    bool needsProcessId(OctreeNode<OctreeData<T> >* node);
-    void determineSingleOverlapProcessIdPreOrder(OctreeNode<OctreeData<T> >* root);
-    void assignProcessIdsPreOrder(OctreeNode<OctreeData<T> >* root);
+	bool needsProcessId(OctreeNode<OctreeData<T> >* node);
+	void determineSingleOverlapProcessIdPreOrder(OctreeNode<OctreeData<T> >* root);
+	void assignProcessIdsPreOrder(OctreeNode<OctreeData<T> >* root);
 private:
-    int level;
-    int numLevelsToGroupBlocks;
-    bool strongGrouping;
-    OctreeProcessLoads& octreeProcessLoads;
-    int overlapLevel;
-    int groupingLevel;
-    plint singleProcessId;
+	int level;
+	int numLevelsToGroupBlocks;
+	bool strongGrouping;
+	OctreeProcessLoads& octreeProcessLoads;
+	int overlapLevel;
+	int groupingLevel;
+	plint singleProcessId;
 };
 
 template<typename T>
-class GatherOctreeCuboidsInLatticeUnits {
+class GatherOctreeCuboidsInLatticeUnits
+{
 public:
-    GatherOctreeCuboidsInLatticeUnits(bool gatherOverlaps_, int maxLeafLevel_, int whichLevel_, plint whichProcess_);
-    std::vector<Cuboid<T> > const& getCuboids() const;
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	GatherOctreeCuboidsInLatticeUnits(bool gatherOverlaps_, int maxLeafLevel_, int whichLevel_, plint whichProcess_);
+	std::vector<Cuboid<T> > const& getCuboids() const;
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    bool gatherOverlaps;
-    int maxLeafLevel, whichLevel;
-    plint whichProcess;
-    std::vector<Cuboid<T> > cuboids;
+	bool gatherOverlaps;
+	int maxLeafLevel, whichLevel;
+	plint whichProcess;
+	std::vector<Cuboid<T> > cuboids;
 };
 
 // Load Balancing.
@@ -338,131 +353,132 @@ private:
 // octree grid structure. In the grid statistics, we do not consider the optimization to make the overlap
 // blocks smaller either.
 template<typename T>
-class ComputeOctreeGridStatistics {
+class ComputeOctreeGridStatistics
+{
 public:
-    ComputeOctreeGridStatistics(int minLeafLevel_, int maxLeafLevel_, plint numProcesses_, plint numCellsPerBlock_);
-    plint getNumLeafBlocksOnLevel(int level) const;
-    plint getNumOverlapBlocksOnLevel(int level) const;
-    plint getNumBlocksOnLevelOnProcess(int level, plint processId) const;
-    plint getNumBlocksOnProcess(plint processId) const;
-    T getRelativeLoadOnLevelOnProcess(int level, plint processId) const;
-    T getRelativeLoadOnProcess(plint processId) const;
-    T getStandardDeviationOfRelativeLoadOnLevel(int level) const;
-    T getStandardDeviationOfRelativeLoad() const;
-    T getRangeOfRelativeLoadOnLevel(int level) const;
-    T getRangeOfRelativeLoad() const;
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	ComputeOctreeGridStatistics(int minLeafLevel_, int maxLeafLevel_, plint numProcesses_, plint numCellsPerBlock_);
+	plint getNumLeafBlocksOnLevel(int level) const;
+	plint getNumOverlapBlocksOnLevel(int level) const;
+	plint getNumBlocksOnLevelOnProcess(int level, plint processId) const;
+	plint getNumBlocksOnProcess(plint processId) const;
+	T getRelativeLoadOnLevelOnProcess(int level, plint processId) const;
+	T getRelativeLoadOnProcess(plint processId) const;
+	T getStandardDeviationOfRelativeLoadOnLevel(int level) const;
+	T getStandardDeviationOfRelativeLoad() const;
+	T getRangeOfRelativeLoadOnLevel(int level) const;
+	T getRangeOfRelativeLoad() const;
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    int minLeafLevel, maxLeafLevel;
-    plint numProcesses, numCellsPerBlock;
-    std::vector<plint> numLeafBlocksOnLevel;
-    std::vector<plint> numOverlapBlocksOnLevel;
-    std::vector<std::vector<plint> > numBlocksOnLevelOnProcess;
-    std::vector<std::vector<plint> > loadOnLevelOnProcess;
-    std::vector<plint> totalLoadOnLevel;
-    plint totalLoad;
+	int minLeafLevel, maxLeafLevel;
+	plint numProcesses, numCellsPerBlock;
+	std::vector<plint> numLeafBlocksOnLevel;
+	std::vector<plint> numOverlapBlocksOnLevel;
+	std::vector<std::vector<plint> > numBlocksOnLevelOnProcess;
+	std::vector<std::vector<plint> > loadOnLevelOnProcess;
+	std::vector<plint> totalLoadOnLevel;
+	plint totalLoad;
 };
 
 template<typename T>
-class ConstructOctreeGridStructure {
+class ConstructOctreeGridStructure
+{
 public:
-    ConstructOctreeGridStructure(OctreeGridStructure& octreeGridStructure_, int minLeafLevel_);
-    void operator()(OctreeNode<OctreeData<T> >* node);
+	ConstructOctreeGridStructure(OctreeGridStructure& octreeGridStructure_, int minLeafLevel_);
+	void operator()(OctreeNode<OctreeData<T> >* node);
 private:
-    OctreeGridStructure& octreeGridStructure;
-    int minLeafLevel;
+	OctreeGridStructure& octreeGridStructure;
+	int minLeafLevel;
 };
 
 template<typename T>
-class OctreeGridGenerator {
+class OctreeGridGenerator
+{
 public:
-    OctreeGridGenerator(std::string xmlFileName);
-    OctreeGridGenerator(Cuboid<T> const& fullDomain_, std::string gridDensityFunctionFile_, int minLeafLevel_, int maxLeafLevel_,
-            plint n_, plint numProcesses_, bool xPeriodic_ = false, bool yPeriodic_ = false, bool zPeriodic_ = false,
-            T gridDensityScaleFactor_ = (T) 1, bool useSamples_ = false, plint numSamples_ = -1, plint maxIter_ = 100,
-            bool removeBlocks_ = true, bool fineToCoarse_ = true, int numLevelsToGroupBlocks_ = 0,
-            int numLevelsToGroupOverlaps_ = -1, bool strongGrouping_ = false, std::string outDir_ = "./", bool verbose_ = true,
-            bool stlOutput_ = true, std::string stlBaseName_ = "octree");
+	OctreeGridGenerator(std::string xmlFileName);
+	OctreeGridGenerator(Cuboid<T> const& fullDomain_, std::string gridDensityFunctionFile_, int minLeafLevel_, int maxLeafLevel_,
+	                    plint n_, plint numProcesses_, T gridDensityScaleFactor_ = (T) 1, bool useSamples_ = false, plint numSamples_ = -1,
+	                    plint maxIter_ = 100, bool removeBlocks_ = true, bool fineToCoarse_ = true, int numLevelsToGroupBlocks_ = 0,
+	                    int numLevelsToGroupOverlaps_ = -1, bool strongGrouping_ = false, std::string outDir_ = "./", bool verbose_ = true,
+	                    bool stlOutput_ = true, std::string stlBaseName_ = "octree");
 
-    OctreeGridStructure generateOctreeGridStructure();
+	OctreeGridStructure generateOctreeGridStructure();
 
-    Cuboid<T> const& getFullDomain() const;
-    int getMinLevel() const;
-    int getMaxLevel() const;
-    plint getNumProcesses() const;
-    plint getBlockNx() const;
-    plint getBlockNy() const;
-    plint getBlockNz() const;
-    T getDxFinestLevel() const;
-    std::string getOutDir() const;
+	Cuboid<T> const& getFullDomain() const;
+	int getMinLevel() const;
+	int getMaxLevel() const;
+	plint getNumProcesses() const;
+	plint getBlockNx() const;
+	plint getBlockNy() const;
+	plint getBlockNz() const;
+	T getDxFinestLevel() const;
+	std::string getOutDir() const;
 
-    void setOutputAndErrorStreams(Parallel_ostream& outStream, Parallel_ostream& errStream);
+	void setOutputAndErrorStreams(Parallel_ostream& outStream, Parallel_ostream& errStream);
 private:
-    // Geometry and grid density function.
+	// Geometry and grid density function.
 
-    Cuboid<T> fullDomain;
-    std::string gridDensityFunctionFile;
-    bool xPeriodic, yPeriodic, zPeriodic;
-    T gridDensityScaleFactor;
+	Cuboid<T> fullDomain;
+	std::string gridDensityFunctionFile;
+	T gridDensityScaleFactor;
 
-    // Octree construction parameters.
+	// Octree construction parameters.
 
-    int minLeafLevel;
-    int maxLeafLevel;
-    bool useSamples;
-    plint numSamples;
-    plint maxIter;
-    bool removeBlocks;
+	int minLeafLevel;
+	int maxLeafLevel;
+	bool useSamples;
+	plint numSamples;
+	plint maxIter;
+	bool removeBlocks;
 
-    // Block size and number of processes.
+	// Block size and number of processes.
 
-    plint n;
-    plint numProcesses;
+	plint n;
+	plint numProcesses;
 
-    // Process assignment parameters.
+	// Process assignment parameters.
 
-    // Assign processIds from the finest to the coarsest level or the other way around.
-    // We choose that both overlaps and allocatable leaves are grouped in the same
-    // direction (fine -> coarse, or coarse -> fine).
-    bool fineToCoarse;
+	// Assign processIds from the finest to the coarsest level or the other way around.
+	// We choose that both overlaps and allocatable leaves are grouped in the same
+	// direction (fine -> coarse, or coarse -> fine).
+	bool fineToCoarse;
 
-    // The octree nodes can be grouped or not. By grouping nodes we mean
-    // that we assign adjacent nodes to the same process (they have
-    // the same processId).
-    // If numLevelsToGroup* = 0, this means that no grouping takes
-    // place.
-    // If numLevelsToGroup* = 1, this means that the adjacent
-    // nodes are grouped "per level", so in groups of 8 nodes at
-    // most.
-    // If numLevelsToGroup* = 2, this means that the groups have
-    // 64 nodes at most.
-    // In general, if numLevelsToGroup* = l, then the respective
-    // groups have at most 8^l nodes.
-    int numLevelsToGroupBlocks;     // For allocatable leaves.
-    int numLevelsToGroupOverlaps;   // For overlaps.
+	// The octree nodes can be grouped or not. By grouping nodes we mean
+	// that we assign adjacent nodes to the same process (they have
+	// the same processId).
+	// If numLevelsToGroup* = 0, this means that no grouping takes
+	// place.
+	// If numLevelsToGroup* = 1, this means that the adjacent
+	// nodes are grouped "per level", so in groups of 8 nodes at
+	// most.
+	// If numLevelsToGroup* = 2, this means that the groups have
+	// 64 nodes at most.
+	// In general, if numLevelsToGroup* = l, then the respective
+	// groups have at most 8^l nodes.
+	int numLevelsToGroupBlocks;     // For allocatable leaves.
+	int numLevelsToGroupOverlaps;   // For overlaps.
 
-    // If strongGrouping is true, then the overlap blocks are grouped with
-    // all their leaf children.
-    // If strongGrouping is false, then the overlap blocks are grouped
-    // only with their leaf children to which they are coupled.
-    bool strongGrouping;
+	// If strongGrouping is true, then the overlap blocks are grouped with
+	// all their leaf children.
+	// If strongGrouping is false, then the overlap blocks are grouped
+	// only with their leaf children to which they are coupled.
+	bool strongGrouping;
 
-    // Output parameters.
+	// Output parameters.
 
-    std::string outDir;
-    bool verbose;
-    bool stlOutput;
-    std::string stlBaseName;
+	std::string outDir;
+	bool verbose;
+	bool stlOutput;
+	std::string stlBaseName;
 
-    // Derived parameters (not user-provided).
+	// Derived parameters (not user-provided).
 
-    plint nx, ny, nz;
-    T dxFinest;
+	plint nx, ny, nz;
+	T dxFinest;
 
-    // Output and error parallel streams.
+	// Output and error parallel streams.
 
-    Parallel_ostream* outS;
-    Parallel_ostream* errS;
+	Parallel_ostream* outS;
+	Parallel_ostream* errS;
 };
 
 } // namespace plb

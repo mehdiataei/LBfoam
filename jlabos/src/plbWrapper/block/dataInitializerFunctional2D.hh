@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -336,7 +336,7 @@ SetNTensorComponentFunctional2D<T>::SetNTensorComponentFunctional2D(int whichDim
 template<typename T>
 void SetNTensorComponentFunctional2D<T>::process (
         Box2D domain, NTensorField2D<T>& scalarField,
-                      NTensorField2D<T>& tensorField )
+        NTensorField2D<T>& tensorField )
 {
     PLB_PRECONDITION( scalarField.getNdim()==1 );
     PLB_PRECONDITION( tensorField.getNdim()==2 );
@@ -344,7 +344,7 @@ void SetNTensorComponentFunctional2D<T>::process (
     for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
         for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
             tensorField.get(iX+offset.x, iY+offset.y)[whichDim] =
-                *scalarField.get(iX,iY);
+                    *scalarField.get(iX,iY);
         }
     }
 }
@@ -383,8 +383,8 @@ MaskedSetNTensorComponentFunctional2D<T>::MaskedSetNTensorComponentFunctional2D(
 template<typename T>
 void MaskedSetNTensorComponentFunctional2D<T>::process (
         Box2D domain, NTensorField2D<T>& scalarField,
-                      NTensorField2D<T>& tensorField,
-                      NTensorField2D<int>& mask )
+        NTensorField2D<T>& tensorField,
+        NTensorField2D<int>& mask )
 {
     PLB_PRECONDITION( scalarField.getNdim()==1 );
     PLB_PRECONDITION( tensorField.getNdim()==2 );
@@ -394,7 +394,7 @@ void MaskedSetNTensorComponentFunctional2D<T>::process (
         for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
             if (*mask.get(iX+maskOfs.x,iY+maskOfs.y)) {
                 tensorField.get(iX+offset.x, iY+offset.y)[whichDim] =
-                    *scalarField.get(iX,iY);
+                        *scalarField.get(iX,iY);
             }
         }
     }
@@ -435,7 +435,7 @@ AssignNTensorFunctional2D<T>::AssignNTensorFunctional2D()
 template<typename T>
 void AssignNTensorFunctional2D<T>::process (
         Box2D domain, NTensorField2D<T>& A,
-                      NTensorField2D<T>& B )
+        NTensorField2D<T>& B )
 {
     PLB_PRECONDITION( A.getNdim() == B.getNdim() );
     plint ndim = A.getNdim();
@@ -495,8 +495,8 @@ MaskedAssignNTensorFunctional2D<T>::MaskedAssignNTensorFunctional2D()
 template<typename T>
 void MaskedAssignNTensorFunctional2D<T>::process (
         Box2D domain, NTensorField2D<T>& A,
-                      NTensorField2D<T>& B,
-                      NTensorField2D<int>& mask )
+        NTensorField2D<T>& B,
+        NTensorField2D<int>& mask )
 {
     PLB_PRECONDITION( A.getNdim() == B.getNdim() );
     plint ndim = A.getNdim();
@@ -551,6 +551,144 @@ void MaskedAssignNTensorFunctional2D<T>::getTypeOfModification (
 template<typename T>
 void MaskedAssignNTensorFunctional2D<T>::rescale(double dxScale, double dtScale)
 { }
+
+
+// Added by Mehdi Ataei as part of LBfoam project
+/* ************* Class LBMsmoothen ******************* */
+
+template<typename T, template<typename U> class Descriptor>
+void LBMsmoothen<T,Descriptor>::process (
+        Box2D domain, ScalarField2D<T>& data, ScalarField2D<T>& result )
+{
+    typedef Descriptor<T> D;
+    Dot2D offset = computeRelativeDisplacement(data, result);
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+            result.get(iX+offset.x,iY+offset.y) = (T)0;
+            T sum = (T) 0;
+            for (plint iPop=1; iPop<D::q; ++iPop) {
+                plint nextX = iX+D::c[iPop][0];
+                plint nextY = iY+D::c[iPop][1];
+                sum += D::t[iPop];
+                result.get(iX+offset.x,iY+offset.y) +=
+                        D::t[iPop] * data.get(nextX,nextY);
+            }
+            result.get(iX+offset.x,iY+offset.y) /= sum;
+
+        }
+    }
+}
+
+template<typename T, template<typename U> class Descriptor>
+LBMsmoothen<T,Descriptor>*
+LBMsmoothen<T,Descriptor>::clone() const
+{
+    return new LBMsmoothen<T,Descriptor>(*this);
+}
+
+template<typename T, template<typename U> class Descriptor>
+void LBMsmoothen<T,Descriptor>::getTypeOfModification (
+        std::vector<modif::ModifT>& modified) const
+{
+    modified[0] = modif::nothing;
+    modified[1] = modif::staticVariables;
+}
+
+
+/* ************* Class LBMsmoothenInPlace2D ******************* */
+
+template<typename T, template<typename U> class Descriptor>
+void LBMsmoothenInPlace2D<T,Descriptor>::process (
+        Box2D domain, ScalarField2D<T>& data )
+{
+    typedef Descriptor<T> D;
+
+    ScalarField2D<T> smoothData(domain.getNx(), domain.getNy());
+    Dot2D offset(-domain.x0, -domain.y0);
+
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+            smoothData.get(iX+offset.x,iY+offset.y) = (T) 0;
+            T sum = (T) 0;
+            for (plint iPop=1; iPop<D::q; ++iPop) {
+                plint nextX = iX+D::c[iPop][0];
+                plint nextY = iY+D::c[iPop][1];
+                sum += D::t[iPop];
+                smoothData.get(iX+offset.x,iY+offset.y) +=
+                        D::t[iPop] * data.get(nextX,nextY);
+            }
+            smoothData.get(iX+offset.x,iY+offset.y) /= sum;
+
+        }
+    }
+
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+            data.get(iX,iY) = smoothData.get(iX+offset.x,iY+offset.y);
+
+        }
+    }
+}
+
+template<typename T, template<typename U> class Descriptor>
+LBMsmoothenInPlace2D<T,Descriptor>*
+LBMsmoothenInPlace2D<T,Descriptor>::clone() const
+{
+    return new LBMsmoothenInPlace2D<T,Descriptor>(*this);
+}
+
+template<typename T, template<typename U> class Descriptor>
+void LBMsmoothenInPlace2D<T,Descriptor>::getTypeOfModification (
+        std::vector<modif::ModifT>& modified) const
+{
+    modified[0] = modif::staticVariables;
+}
+
+
+/* ************* Class Smoothen2D ******************* */
+
+template<typename T>
+void Smoothen2D<T>::process(Box2D domain, ScalarField2D<T>& data, ScalarField2D<T>& result)
+{
+    Dot2D offset = computeRelativeDisplacement(data, result);
+
+    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
+        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+            T *res = &result.get(iX+offset.x, iY+offset.y);
+            *res = (T) 0;
+            int n = 0;
+            for (int i = -1; i < 2; i++) {
+                plint nextX = iX + i;
+                for (int j = -1; j < 2; j++) {
+                    plint nextY = iY + j;
+                    if (!(i == 0 && j == 0)) {
+                        n++;
+                        *res += data.get(nextX, nextY);
+                    }
+
+                }
+            }
+            *res /= (T) n;
+
+        }
+    }
+}
+
+template<typename T>
+Smoothen2D<T>* Smoothen2D<T>::clone() const
+{
+    return new Smoothen2D<T>(*this);
+}
+
+template<typename T>
+void Smoothen2D<T>::getTypeOfModification (std::vector<modif::ModifT>& modified) const
+{
+    modified[0] = modif::nothing;
+    modified[1] = modif::staticVariables;
+}
+
+
+
 
 }  // namespace plb
 

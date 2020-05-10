@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,7 +31,8 @@ using namespace std;
 typedef double T;
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
@@ -58,5 +59,5 @@ int main(int argc, char* argv[]) {
 
     const T pi = (T)4.*std::atan((T)1.);
     T(*Tsin)(T) = std::sin;  // Explicit reference to the overloaded "sin" is required for automatic template instantiation.
-    imageWriter.writeScaledGif("sine", *evaluate(Tsin , *multiply((T)2.*pi/(T)N, field3)));
+    imageWriter.writeScaledGif("sine", *evaluate(Tsin, *multiply((T)2.*pi/(T)N, field3)));
 }

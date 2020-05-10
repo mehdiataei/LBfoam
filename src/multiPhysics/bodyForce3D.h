@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,88 +36,75 @@
 
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 // Implementation of the momentum correction algorithm for applying a constant body force.
 template<typename T, template<typename U> class Descriptor>
-class AddConstForceToMomentum3D : public BoxProcessingFunctional3D {
+class AddConstForceToMomentum3D : public BoxProcessingFunctional3D
+{
 public:
-    AddConstForceToMomentum3D(Array<T,3> const& force_);
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
-    virtual AddConstForceToMomentum3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	AddConstForceToMomentum3D(Array<T,3> const& force_);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
+	virtual AddConstForceToMomentum3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    Array<T,3> force;
+	Array<T,3> force;
 };
 
 template<typename T, template<typename U> class Descriptor>
 void addConstForceToMomentum(MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarField3D<T>& rhoBar,
-        MultiTensorField3D<T,3>& j, Array<T,3> const& force, Box3D const& domain);
+                             MultiTensorField3D<T,3>& j, Array<T,3> const& force, Box3D const& domain);
 
 // Implementation of the momentum correction algorithm for applying a body force given by a user-provided function.
 template<typename T, template<typename U> class Descriptor, class ForceFunction>
-class AddCustomForceToMomentum3D : public BoxProcessingFunctional3D {
+class AddCustomForceToMomentum3D : public BoxProcessingFunctional3D
+{
 public:
-    AddCustomForceToMomentum3D(ForceFunction f_);
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
-    virtual AddCustomForceToMomentum3D<T,Descriptor,ForceFunction>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	AddCustomForceToMomentum3D(ForceFunction f_);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
+	virtual AddCustomForceToMomentum3D<T,Descriptor,ForceFunction>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    ForceFunction f;
+	ForceFunction f;
 };
 
 template<typename T, template<class U> class Descriptor, class ForceFunction>
 void addCustomForceToMomentum(MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarField3D<T>& rhoBar,
-        MultiTensorField3D<T,3>& j, ForceFunction f, Box3D const& domain);
+                              MultiTensorField3D<T,3>& j, ForceFunction f, Box3D const& domain);
 
 // Implementation of the momentum correction algorithm for applying a body force.
 template<typename T, template<typename U> class Descriptor>
-class AddForceToMomentum3D : public BoxProcessingFunctional3D {
+class AddForceToMomentum3D : public BoxProcessingFunctional3D
+{
 public:
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
-    virtual AddForceToMomentum3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
+	virtual AddForceToMomentum3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 template<typename T, template<typename U> class Descriptor>
 void addForceToMomentum(MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarField3D<T>& rhoBar,
-        MultiTensorField3D<T,3>& j, MultiTensorField3D<T,3>& force, Box3D const& domain);
-
-// Implementation of the momentum correction algorithm for applying a constant body force only to the wet nodes.
-template<typename T, template<typename U> class Descriptor>
-class FreeSurfaceAddConstForceToMomentum3D : public BoxProcessingFunctional3D {
-public:
-    FreeSurfaceAddConstForceToMomentum3D(Array<T,3> const& force_);
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
-    virtual FreeSurfaceAddConstForceToMomentum3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
-private:
-    Array<T,3> force;
-};
-
-template<typename T, template<typename U> class Descriptor>
-void freeSurfaceAddConstForceToMomentum(MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarField3D<T>& rhoBar,
-        MultiTensorField3D<T,3>& j, MultiScalarField3D<int>& flag, Array<T,3> const& force,
-        Box3D const& domain);
+                        MultiTensorField3D<T,3>& j, MultiTensorField3D<T,3>& force, Box3D const& domain);
 
 // Implementation of the momentum correction algorithm for applying a body force only to the wet nodes.
 template<typename T, template<typename U> class Descriptor>
-class FreeSurfaceAddForceToMomentum3D : public BoxProcessingFunctional3D {
+class FreeSurfaceAddForceToMomentum3D : public BoxProcessingFunctional3D
+{
 public:
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
-    virtual FreeSurfaceAddForceToMomentum3D<T,Descriptor>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
+	virtual FreeSurfaceAddForceToMomentum3D<T,Descriptor>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 template<typename T, template<typename U> class Descriptor>
 void freeSurfaceAddForceToMomentum(MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarField3D<T>& rhoBar,
-        MultiTensorField3D<T,3>& j, MultiScalarField3D<int>& flag, MultiTensorField3D<T,3>& force,
-        Box3D const& domain);
+                                   MultiTensorField3D<T,3>& j, MultiScalarField3D<int>& flag, MultiTensorField3D<T,3>& force,
+                                   Box3D const& domain);
 
 // Transform a constant force in a rotating reference frame, and add the Coriolis and centripetal forces.
 // The Coriolis force depends on the local velocity. To compute this velocity we need to know the body
@@ -125,25 +112,26 @@ void freeSurfaceAddForceToMomentum(MultiBlockLattice3D<T,Descriptor>& lattice, M
 // in the "force" block passed to processGenericBlocks (fourth block in the vector). This data processor
 // overwrites the "force" block with the new body force computed.
 template<typename T, template<typename U> class Descriptor>
-class ComputeRotatingFrameForce3D : public BoxProcessingFunctional3D {
+class ComputeRotatingFrameForce3D : public BoxProcessingFunctional3D
+{
 public:
-    ComputeRotatingFrameForce3D(Array<T,3> const& constantForce_, Array<T,3> const& angularVelocity_,
-            Array<T,3> const& origin_, bool incompressibleModel_);
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
-    virtual ComputeRotatingFrameForce3D<T,Descriptor>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	ComputeRotatingFrameForce3D(Array<T,3> const& constantForce_, Array<T,3> const& angularVelocity_,
+	                            Array<T,3> const& origin_, bool incompressibleModel_);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
+	virtual ComputeRotatingFrameForce3D<T,Descriptor>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 private:
-    Array<T,3> constantForce;
-    Array<T,3> angularVelocity;
-    Array<T,3> origin;
-    bool incompressibleModel;
+	Array<T,3> constantForce;
+	Array<T,3> angularVelocity;
+	Array<T,3> origin;
+	bool incompressibleModel;
 };
 
 template<typename T, template<typename U> class Descriptor>
 void computeRotatingFrameForce(MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarField3D<T>& rhoBar,
-        MultiTensorField3D<T,3>& j, MultiTensorField3D<T,3>& force, Array<T,3> const& constantForce,
-        Array<T,3> const& angularVelocity, Array<T,3> const& origin, bool incompressibleModel, Box3D domain);
+                               MultiTensorField3D<T,3>& j, MultiTensorField3D<T,3>& force, Array<T,3> const& constantForce,
+                               Array<T,3> const& angularVelocity, Array<T,3> const& origin, bool incompressibleModel, Box3D domain);
 
 // Transform a constant force in a rotating reference frame, and add the Coriolis and centripetal forces only on wet nodes
 // (on the rest of the cells, the force is set to zero).
@@ -152,19 +140,20 @@ void computeRotatingFrameForce(MultiBlockLattice3D<T,Descriptor>& lattice, Multi
 // in the "force" block passed to processGenericBlocks (fifth block in the vector). This data processor
 // overwrites the "force" block with the new body force computed.
 template<typename T, template<typename U> class Descriptor>
-class FreeSurfaceComputeRotatingFrameForce3D : public BoxProcessingFunctional3D {
+class FreeSurfaceComputeRotatingFrameForce3D : public BoxProcessingFunctional3D
+{
 public:
-    FreeSurfaceComputeRotatingFrameForce3D(Array<T,3> const& constantForce_, Array<T,3> const& angularVelocity_,
-            Array<T,3> const& origin_, bool incompressibleModel_);
-    virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
-    virtual FreeSurfaceComputeRotatingFrameForce3D<T,Descriptor>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	FreeSurfaceComputeRotatingFrameForce3D(Array<T,3> const& constantForce_, Array<T,3> const& angularVelocity_,
+	                                       Array<T,3> const& origin_, bool incompressibleModel_);
+	virtual void processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> blocks);
+	virtual FreeSurfaceComputeRotatingFrameForce3D<T,Descriptor>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 private:
-    Array<T,3> constantForce;
-    Array<T,3> angularVelocity;
-    Array<T,3> origin;
-    bool incompressibleModel;
+	Array<T,3> constantForce;
+	Array<T,3> angularVelocity;
+	Array<T,3> origin;
+	bool incompressibleModel;
 };
 
 template<typename T, template<typename U> class Descriptor>
@@ -172,40 +161,6 @@ void freeSurfaceComputeRotatingFrameForce(MultiBlockLattice3D<T,Descriptor>& lat
         MultiTensorField3D<T,3>& j, MultiScalarField3D<int>& flag, MultiTensorField3D<T,3>& force,
         Array<T,3> const& constantForce, Array<T,3> const& angularVelocity, Array<T,3> const& origin,
         bool incompressibleModel, Box3D domain);
-
-template<typename T>
-class ComputeTorqueFromBodyForce3D : public ReductiveBoxProcessingFunctional3D_T<T,3> {
-public:
-    ComputeTorqueFromBodyForce3D(Array<T,3> const& center_);
-    virtual void process(Box3D domain, TensorField3D<T,3>& force);
-    virtual ComputeTorqueFromBodyForce3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    Array<T,3> getTorque() const;
-private:
-    Array<T,3> center;
-    Array<plint,3> torqueIds;
-};
-
-template<typename T>
-class MaskedComputeTorqueFromBodyForce3D : public ReductiveBoxProcessingFunctional3D_ST<int,T,3> {
-public:
-    MaskedComputeTorqueFromBodyForce3D(Array<T,3> const& center_, int flag_);
-    virtual void process(Box3D domain, ScalarField3D<int>& mask, TensorField3D<T,3>& force);
-    virtual MaskedComputeTorqueFromBodyForce3D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    Array<T,3> getTorque() const;
-private:
-    Array<T,3> center;
-    int flag;
-    Array<plint,3> torqueIds;
-};
-
-template<typename T>
-Array<T,3> computeTorqueFromBodyForce(MultiTensorField3D<T,3>& force, Array<T,3> const& center, Box3D domain);
-
-template<typename T>
-Array<T,3> computeTorqueFromBodyForce(MultiTensorField3D<T,3>& force, MultiScalarField3D<int>& mask,
-        Array<T,3> const& center, int flag, Box3D domain);
 
 }  // namespace plb
 

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,43 +34,46 @@
 #include <unistd.h>
 #endif
 
-namespace plb {
+namespace plb
+{
 
-namespace global {
+namespace global
+{
 
 /// A cumulative timer for benchmarking program parts and summing up the times.
 /** In serial, the C function clock() is used. In parallel, the MPI
  *  function is used.
  */
-class PlbTimer {
+class PlbTimer
+{
 public:
-    PlbTimer();
-    /// Proceed with time measurement.
-    void start();
-    /// Reset timer to zero and start time measurement.
-    void restart();
-    /// Interrupt time measurement ( you can still proceed with start() ).
-    /* \return Current cumulative time.
-     */
-    double stop();
-    /// Reset timer to zero.
-    void reset();
-    /// Get current cumulative time.
-    double getTime() const;
+	PlbTimer();
+	/// Proceed with time measurement.
+	void start();
+	/// Reset timer to zero and start time measurement.
+	void restart();
+	/// Interrupt time measurement ( you can still proceed with start() ).
+	/* \return Current cumulative time.
+	 */
+	double stop();
+	/// Reset timer to zero.
+	void reset();
+	/// Get current cumulative time.
+	double getTime() const;
 private:
-    double cumulativeTime;
-    bool   isOn;
+	double cumulativeTime;
+	bool   isOn;
 #ifdef PLB_MPI_PARALLEL
-    double startTime;
+	double startTime;
 #else
 #if defined PLB_USE_POSIX && defined _POSIX_TIMERS && (_POSIX_TIMERS > 0) && !defined(PLB_NGETTIME)
-    double startTime;
+	double startTime;
 #else
-    clock_t startClock;
+	clock_t startClock;
 #endif
 #endif
-friend PlbTimer& timer(std::string nameOfTimer);
-friend PlbTimer& plbTimer(std::string nameOfTimer);
+	friend PlbTimer& timer(std::string nameOfTimer);
+	friend PlbTimer& plbTimer(std::string nameOfTimer);
 };
 
 // Global instance of timer objects, for public use.
@@ -81,19 +84,20 @@ PlbTimer& plbTimer(std::string nameOfTimer);
 
 /// A cumulative counter for benchmarking program parts and summing up occurrences
 ///   of events.
-class PlbCounter {
+class PlbCounter
+{
 public:
-    PlbCounter();
-    /// Increment the counter.
-    plint increment(plint value=1);
-    /// Reset counter to zero.
-    void reset();
-    /// Return current count.
-    plint getCount() const;
+	PlbCounter();
+	/// Increment the counter.
+	plint increment(plint value=1);
+	/// Reset counter to zero.
+	void reset();
+	/// Return current count.
+	plint getCount() const;
 private:
-    plint count;
-friend PlbCounter& counter(std::string nameOfCounter);
-friend PlbCounter& plbCounter(std::string nameOfCounter);
+	plint count;
+	friend PlbCounter& counter(std::string nameOfCounter);
+	friend PlbCounter& plbCounter(std::string nameOfCounter);
 };
 
 // Global instance of counter objects, for public use.

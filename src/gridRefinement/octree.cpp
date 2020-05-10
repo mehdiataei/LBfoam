@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -61,45 +61,145 @@
 #define BRDR    -2
 #define SMLR    -3
 
-namespace plb {
+namespace plb
+{
 
-int OctreeTables::surface0N() { return(L); }
-int OctreeTables::surface0P() { return(R); }
-int OctreeTables::surface1N() { return(D); }
-int OctreeTables::surface1P() { return(U); }
-int OctreeTables::surface2N() { return(B); }
-int OctreeTables::surface2P() { return(F); }
+int OctreeTables::surface0N()
+{
+    return(L);
+}
+int OctreeTables::surface0P()
+{
+    return(R);
+}
+int OctreeTables::surface1N()
+{
+    return(D);
+}
+int OctreeTables::surface1P()
+{
+    return(U);
+}
+int OctreeTables::surface2N()
+{
+    return(B);
+}
+int OctreeTables::surface2P()
+{
+    return(F);
+}
 
-int OctreeTables::edge0NN() { return(DB); }
-int OctreeTables::edge0NP() { return(DF); }
-int OctreeTables::edge0PN() { return(UB); }
-int OctreeTables::edge0PP() { return(UF); }
-int OctreeTables::edge1NN() { return(LB); }
-int OctreeTables::edge1NP() { return(RB); }
-int OctreeTables::edge1PN() { return(LF); }
-int OctreeTables::edge1PP() { return(RF); }
-int OctreeTables::edge2NN() { return(LD); }
-int OctreeTables::edge2NP() { return(LU); }
-int OctreeTables::edge2PN() { return(RD); }
-int OctreeTables::edge2PP() { return(RU); }
+int OctreeTables::edge0NN()
+{
+    return(DB);
+}
+int OctreeTables::edge0NP()
+{
+    return(DF);
+}
+int OctreeTables::edge0PN()
+{
+    return(UB);
+}
+int OctreeTables::edge0PP()
+{
+    return(UF);
+}
+int OctreeTables::edge1NN()
+{
+    return(LB);
+}
+int OctreeTables::edge1NP()
+{
+    return(RB);
+}
+int OctreeTables::edge1PN()
+{
+    return(LF);
+}
+int OctreeTables::edge1PP()
+{
+    return(RF);
+}
+int OctreeTables::edge2NN()
+{
+    return(LD);
+}
+int OctreeTables::edge2NP()
+{
+    return(LU);
+}
+int OctreeTables::edge2PN()
+{
+    return(RD);
+}
+int OctreeTables::edge2PP()
+{
+    return(RU);
+}
 
-int OctreeTables::cornerNNN() { return(LDB); }
-int OctreeTables::cornerNNP() { return(LDF); }
-int OctreeTables::cornerNPN() { return(LUB); }
-int OctreeTables::cornerNPP() { return(LUF); }
-int OctreeTables::cornerPNN() { return(RDB); }
-int OctreeTables::cornerPNP() { return(RDF); }
-int OctreeTables::cornerPPN() { return(RUB); }
-int OctreeTables::cornerPPP() { return(RUF); }
+int OctreeTables::cornerNNN()
+{
+    return(LDB);
+}
+int OctreeTables::cornerNNP()
+{
+    return(LDF);
+}
+int OctreeTables::cornerNPN()
+{
+    return(LUB);
+}
+int OctreeTables::cornerNPP()
+{
+    return(LUF);
+}
+int OctreeTables::cornerPNN()
+{
+    return(RDB);
+}
+int OctreeTables::cornerPNP()
+{
+    return(RDF);
+}
+int OctreeTables::cornerPPN()
+{
+    return(RUB);
+}
+int OctreeTables::cornerPPP()
+{
+    return(RUF);
+}
 
-int OctreeTables::border() { return(BRDR); }
-int OctreeTables::smaller() { return(SMLR); }
+int OctreeTables::border()
+{
+    return(BRDR);
+}
+int OctreeTables::smaller()
+{
+    return(SMLR);
+}
 
-int OctreeTables::adj(int dir, int oct) { return(adjTab[dir][oct]); }
-int OctreeTables::reflect(int dir, int oct) { return(reflTab[dir][oct]); }
-int OctreeTables::commonFace(int dir, int oct) { return(comFaceTab[dir][oct]); }
-int OctreeTables::commonEdge(int dir, int oct) { return(comEdgeTab[dir][oct]); }
-int OctreeTables::undef() { return(UNDEF); }
+int OctreeTables::adj(int dir, int oct)
+{
+    return(adjTab[dir][oct]);
+}
+int OctreeTables::reflect(int dir, int oct)
+{
+    return(reflTab[dir][oct]);
+}
+int OctreeTables::commonFace(int dir, int oct)
+{
+    return(comFaceTab[dir][oct]);
+}
+int OctreeTables::commonEdge(int dir, int oct)
+{
+    return(comEdgeTab[dir][oct]);
+}
+int OctreeTables::undef()
+{
+    return(UNDEF);
+}
 
 const int OctreeTables::adjTab[26][8] =
 {

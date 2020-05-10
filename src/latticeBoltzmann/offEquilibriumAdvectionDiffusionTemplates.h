@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,7 +28,7 @@
 /** \file
  * Specialized helper functions for advanced techniques around LB
  * implementations. They implement the physics of the first-order terms
- * of the Chapman-Enskog expansion and are useful whenever a transition 
+ * of the Chapman-Enskog expansion and are useful whenever a transition
  * from hydrodynamical variables (rho, u) to kinetic variables (f) si to
  * be implemented. Additionally, they are used for the implementation of
  * the stable RLB dynamics.
@@ -44,7 +44,8 @@
 #include "core/cell.h"
 #include "core/util.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, class Descriptor> struct offEquilibriumAdvectionDiffusionTemplatesImpl;
 
@@ -53,36 +54,36 @@ template<typename T, template<typename U> class Descriptor>
 struct offEquilibriumAdvectionDiffusionTemplates {
 
 /// Compute off-equilibrium part of the f's from the current j.
-/** Implements the following formula (with Einstein index contraction):
- * /f[ f_i^{neq} = t_i / (c_s^4) *
- *                 (c_{ia} j_a /f]
- * By Pi we mean the tensor computed from the off-equilibrium functions:
- * /f[ j_a = \sum c_{ia} f_i^{neq}
- *         = \sum c_{ia} f_i - \rho u_a  Id /f]
- * where u_a is an external vectorial field (the velocity for example)
- */
-static T fromJtoFneq(plint iPop, Array<T,Descriptor<T>::d> const& jNeq) {
-    return offEquilibriumAdvectionDiffusionTemplatesImpl<T,typename Descriptor<T>::BaseDescriptor>
-        ::fromJtoFneq(iPop, jNeq);
-}
+	/** Implements the following formula (with Einstein index contraction):
+	 * /f[ f_i^{neq} = t_i / (c_s^4) *
+	 *                 (c_{ia} j_a /f]
+	 * By Pi we mean the tensor computed from the off-equilibrium functions:
+	 * /f[ j_a = \sum c_{ia} f_i^{neq}
+	 *         = \sum c_{ia} f_i - \rho u_a  Id /f]
+	 * where u_a is an external vectorial field (the velocity for example)
+	 */
+	static T fromJtoFneq(plint iPop, Array<T,Descriptor<T>::d> const& jNeq)
+	{
+		return offEquilibriumAdvectionDiffusionTemplatesImpl<T,typename Descriptor<T>::BaseDescriptor>
+		       ::fromJtoFneq(iPop, jNeq);
+	}
 
 };  // struct offEquilibriumAdvectionDiffusionTemplates
 
 template<typename T, class Descriptor>
 struct offEquilibriumAdvectionDiffusionTemplatesImpl {
 
-static T fromJtoFneq (
-    plint iPop, Array<T,Descriptor::d> const& jNeq )
-{
-    T fNeq = (T)Descriptor::c[iPop][0]*jNeq[0];
-    for (plint iD=1; iD<Descriptor::d; ++iD) 
-    {
-        fNeq += (T)Descriptor::c[iPop][iD]*jNeq[iD];
-    }
-    fNeq *= Descriptor::t[iPop] * Descriptor::invCs2;
-            
-    return fNeq;
-}
+	static T fromJtoFneq (
+	    plint iPop, Array<T,Descriptor::d> const& jNeq )
+	{
+		T fNeq = (T)Descriptor::c[iPop][0]*jNeq[0];
+		for (plint iD=1; iD<Descriptor::d; ++iD) {
+			fNeq += (T)Descriptor::c[iPop][iD]*jNeq[iD];
+		}
+		fNeq *= Descriptor::t[iPop] * Descriptor::invCs2;
+
+		return fNeq;
+	}
 
 };  // struct offEquilibriumAdvectionDiffusionTemplates
 

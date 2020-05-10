@@ -68,8 +68,7 @@ GridLevelContainer3D<T,Descriptor>::GridLevelContainer3D(std::vector<Group3D*>& 
 
 template<typename T, template <typename U> class Descriptor>
 GridLevelContainer3D<T,Descriptor>::GridLevelContainer3D(
-    Dynamics<T,Descriptor> *dyn_, const OctreeGridStructure& ogs, plint order_, plint level_,
-    bool xPeriodic_, bool yPeriodic_, bool zPeriodic_) :
+    Dynamics<T,Descriptor> *dyn_, const OctreeGridStructure& ogs, plint order_, plint level_) :
     dyn(dyn_), order(order_), level(level_), parity(0), owned(true)
 {
     numVariables = dyn->numDecomposedVariables(order);
@@ -80,9 +79,7 @@ GridLevelContainer3D<T,Descriptor>::GridLevelContainer3D(
                                                     defaultMultiBlockPolicy3D().getMultiCellAccess<T,Descriptor>(),
                                                     dyn->clone());
     defineDynamics(*lattice, lattice->getBoundingBox(), dyn->clone()); // TODO: Check if really needed, or should be done a posteriori.
-    lattice->periodicity().toggle(0, xPeriodic_);
-    lattice->periodicity().toggle(1, yPeriodic_);
-    lattice->periodicity().toggle(2, zPeriodic_);
+    lattice->periodicity().toggleAll(false);
     dataProcessors = new MultiContainerBlock3D(lattice->getMultiBlockManagement(), defaultMultiBlockPolicy3D().getCombinedStatistics());
 
     if (level < ogs.getNumLevels()-1) {
@@ -262,20 +259,10 @@ GridLevelContainer3D<T,Descriptor>::GridLevelContainer3D(
         //                                           defaultMultiBlockPolicy3D().getCombinedStatistics(),
         //                                           defaultMultiBlockPolicy3D().getMultiNTensorAccess<T>());
         
-        decomposed_t0->periodicity().toggle(  0, xPeriodic_);
-        decomposed_t12->periodicity().toggle( 0, xPeriodic_);
-        decomposed_t1->periodicity().toggle(  0, xPeriodic_);
-        decomposed_fine->periodicity().toggle(0, xPeriodic_);        
-
-        decomposed_t0->periodicity().toggle(  1, yPeriodic_);
-        decomposed_t12->periodicity().toggle( 1, yPeriodic_);
-        decomposed_t1->periodicity().toggle(  1, yPeriodic_);
-        decomposed_fine->periodicity().toggle(1, yPeriodic_);        
-
-        decomposed_t0->periodicity().toggle(  2, zPeriodic_);
-        decomposed_t12->periodicity().toggle( 2, zPeriodic_);
-        decomposed_t1->periodicity().toggle(  2, zPeriodic_);
-        decomposed_fine->periodicity().toggle(2, zPeriodic_);        
+        decomposed_t0->periodicity().toggleAll(false);
+        decomposed_t12->periodicity().toggleAll(false);
+        decomposed_t1->periodicity().toggleAll(false);
+        decomposed_fine->periodicity().toggleAll(false);        
     } else {
         decomposed_t0   = 0;
         decomposed_t12  = 0;
@@ -346,14 +333,14 @@ template<typename T, template <typename U> class Descriptor,
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
 MultiLevelCoupling3D<T,Descriptor,Engine>::MultiLevelCoupling3D(
     OctreeGridStructure& ogs_, Dynamics<T,Descriptor> *dyn_, plint order_,
-    plint overlapWidth_, bool filterAll_, bool xPeriodic_, bool yPeriodic_, bool zPeriodic_) :
+    plint overlapWidth_, bool filterAll_) :
         ogs(ogs_), dyn(dyn_), order(order_), 
         overlapWidth(overlapWidth_),
         filterAll(filterAll_)
 { 
-    //pcout << "Generating grid levels and coupling interfaces." << std::endl;
-    generateLevelsAndCouplingInterfaces(xPeriodic_, yPeriodic_, zPeriodic_);
-    //pcout << "Initializing tensor fields and integrating processing functionals." << std::endl;
+    pcout << "Generating grid levels and coupling interfaces." << std::endl;
+    generateLevelsAndCouplingInterfaces();
+    pcout << "Initializing tensor fields and integrating processing functionals." << std::endl;
     initializeTensorFields();
     integrateProcessingFunctionals();
 }
@@ -403,7 +390,7 @@ MultiLevelCoupling3D<T,Descriptor,Engine>::~MultiLevelCoupling3D()
 
 template<typename T, template <typename U> class Descriptor, 
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-void MultiLevelCoupling3D<T,Descriptor,Engine>::generateLevelsAndCouplingInterfaces(bool xPeriodic, bool yPeriodic, bool zPeriodic)
+void MultiLevelCoupling3D<T,Descriptor,Engine>::generateLevelsAndCouplingInterfaces()
 {
     // computation of the relaxation time vector used for the dynamics
     std::vector<Array<T,Descriptor<T>::q> > relaxationFrequencies(getNumLevels());
@@ -425,8 +412,7 @@ void MultiLevelCoupling3D<T,Descriptor,Engine>::generateLevelsAndCouplingInterfa
     // creation of the lattice and tensor fields
     for (plint level=0; level< getNumLevels(); ++level) {
         dyn->setRelaxationFrequencies(relaxationFrequencies[level]);
-        gridLevels.push_back(new GridLevelContainer3D<T,Descriptor>(dyn->clone(), ogs, order, level,
-                    xPeriodic, yPeriodic, zPeriodic));
+        gridLevels.push_back(new GridLevelContainer3D<T,Descriptor>(dyn->clone(), ogs, order, level));
     }
 }
 
@@ -622,14 +608,14 @@ void MultiLevelCoupling3D<T,Descriptor,Engine>::integrateProcessingFunctionals(p
 
 template<typename T, template <typename U> class Descriptor, 
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-void MultiLevelCoupling3D<T,Descriptor,Engine>::collideAndStream(plint iL, std::map<plint, bool> const& useExecuteInternalProcessors,
+void MultiLevelCoupling3D<T,Descriptor,Engine>::collideAndStream(plint iL, std::map<plint, bool>& useExecuteInternalProcessors,
                                                                  std::vector<plint> const &extProcIds, bool computeStats,
                                                                  plint statsId,
                                                                  std::vector<std::vector<plint > > const &ids,
                                                                  std::vector<std::vector<std::vector<T> > > &results
                                                                  ) 
 {
-    std::map<plint, bool>::const_iterator it = useExecuteInternalProcessors.find(iL);
+    std::map<plint, bool>::iterator it = useExecuteInternalProcessors.find(iL);
     PLB_ASSERT(it != useExecuteInternalProcessors.end());
     global::timer("gr_collideAndStream").start();
     global::timer("gr_collideAndStream_"+util::val2str(iL)).start();
@@ -765,9 +751,9 @@ void MultiLevelCoupling3D<T,Descriptor,Engine>::collideAndStream(plint iL, std::
 /*
 template<typename T, template <typename U> class Descriptor, 
     template<typename T2, template<typename U2> class Descriptor2> class Engine>
-void MultiLevelCoupling3D<T,Descriptor,Engine>::collideAndStream(plint iL, std::map<plint, bool> const& useExecuteInternalProcessors) 
+void MultiLevelCoupling3D<T,Descriptor,Engine>::collideAndStream(plint iL, std::map<plint, bool>& useExecuteInternalProcessors) 
 {
-    std::map<plint, bool>::const_iterator it = useExecuteInternalProcessors.find(iL);
+    std::map<plint, bool>::iterator it = useExecuteInternalProcessors.find(iL);
     PLB_ASSERT(it != useExecuteInternalProcessors.end());
     global::timer("gr_collideAndStream_"+util::val2str(iL)).start();
     if (it->second) {

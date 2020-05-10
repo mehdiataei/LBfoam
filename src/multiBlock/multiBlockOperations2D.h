@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,7 +33,8 @@
 #include "core/geometry2D.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 class MultiBlock2D;
 struct DataProcessorGenerator2D;
@@ -57,6 +58,9 @@ void executeDataProcessor( ReductiveDataProcessorGenerator2D& generator,
 
 void executeDataProcessor( ReductiveDataProcessorGenerator2D& generator,
                            MultiBlock2D& object1, MultiBlock2D& object2 );
+// Mehdi
+void addInternalProcessor( DataProcessorGenerator2D const& generator, MultiBlock2D& actor,
+                           std::vector<MultiBlock2D*> multiBlockArgs, plint level );
 
 
 void addInternalProcessor( DataProcessorGenerator2D const& generator,
@@ -71,32 +75,33 @@ void addInternalProcessor( DataProcessorGenerator2D const& generator,
 
 
 template<class OriginalGenerator, class MutableGenerator>
-class MultiProcessing2D {
+class MultiProcessing2D
+{
 public:
-    MultiProcessing2D( OriginalGenerator& generator_,
-                       std::vector<MultiBlock2D*> multiBlocks_ );
-    ~MultiProcessing2D();
-    void extractProcessorsOnFirstBlock(BlockDomain::DomainT appliesTo);
-    void intersectWithRemainingBlocks(BlockDomain::DomainT appliesTo);
-    void subdivideGenerator();
-    void adjustCoordinates();
-    std::vector<MutableGenerator*> const& getRetainedGenerators() const;
-    std::vector<std::vector<plint> > const& getAtomicBlockNumbers() const;
-    void multiBlocksWhichRequireUpdate (
-            std::vector<MultiBlock2D*>& multiBlocksModifiedByProcessor,
-            std::vector<modif::ModifT>& typesOfModification ) const;
-    void updateEnvelopesWhereRequired();
-    std::vector<MutableGenerator*> releaseRetainedGenerators();
+	MultiProcessing2D( OriginalGenerator& generator_,
+	                   std::vector<MultiBlock2D*> multiBlocks_ );
+	~MultiProcessing2D();
+	void extractProcessorsOnFirstBlock(BlockDomain::DomainT appliesTo);
+	void intersectWithRemainingBlocks(BlockDomain::DomainT appliesTo);
+	void subdivideGenerator();
+	void adjustCoordinates();
+	std::vector<MutableGenerator*> const& getRetainedGenerators() const;
+	std::vector<std::vector<plint> > const& getAtomicBlockNumbers() const;
+	void multiBlocksWhichRequireUpdate (
+	    std::vector<MultiBlock2D*>& multiBlocksModifiedByProcessor,
+	    std::vector<modif::ModifT>& typesOfModification ) const;
+	void updateEnvelopesWhereRequired();
+	std::vector<MutableGenerator*> releaseRetainedGenerators();
 private:
-    void extractGeneratorOnBlocks(std::vector<Box2D> const& finalDomains,
-                                  std::vector<std::vector<plint> > const& finalIds,
-                                  plint shiftX=0, plint shiftY=0);
+	void extractGeneratorOnBlocks(std::vector<Box2D> const& finalDomains,
+	                              std::vector<std::vector<plint> > const& finalIds,
+	                              plint shiftX=0, plint shiftY=0);
 private:
-    OriginalGenerator&               generator;
-    std::vector<MultiBlock2D*>       multiBlocks;
-    MultiBlock2D*                    firstMultiBlock;
-    std::vector<MutableGenerator*>   retainedGenerators;
-    std::vector<std::vector<plint> > atomicBlockNumbers;
+	OriginalGenerator&               generator;
+	std::vector<MultiBlock2D*>       multiBlocks;
+	MultiBlock2D*                    firstMultiBlock;
+	std::vector<MutableGenerator*>   retainedGenerators;
+	std::vector<std::vector<plint> > atomicBlockNumbers;
 };
 
 

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -27,28 +27,12 @@
 
 #include "core/globalDefs.h"
 
-namespace plb {
+namespace plb
+{
 
 /// Returns the drag coefficient.
 /// CD = 2 Fd/(rho u^2 r^2 pi)
 /// Input: Re = 2 r u / nu
-/// The paper to cite for this is:
-/// @book{clift_bubbles_1978,
-///	title = {Bubbles, {Drops}, and {Particles}},
-///	isbn = {978-0-12-176950-5},
-///	url = {https://books.google.ch/books?id=n8gRAQAAIAAJ},
-///	publisher = {Academic Press},
-///	author = {Clift, R. and Grace, J.R. and Weber, M.E. and Weber, M.F.},
-///	year = {1978},
-///	lccn = {77006592},
-///	keywords = {bench-data}
-///} 
-/// But I used the easier to read document 
-/// Drag on spherical particles and steady settling velocities
-/// R. Shankar Subramanian
-/// Department of Chemical and Biomolecular Engineering
-/// Clarkson University
-
 double empirical_sphere_drag(double Re);
 
 double computeTerminalVelocity(double densityRatio, double vSphere, double r, double kinematicViscosity, double gravity=9.8, bool doOutput=true);

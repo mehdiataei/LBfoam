@@ -1894,6 +1894,32 @@ void maskedToThePowerInPlace(MultiNTensorField2D<T>& A, T* alpha, int size, Mult
             new Masked_A_toThePower_alpha_inplace_NTensor2D<T>(alphaVect), domain, A, mask );
 }
 
+// Added by Mehdi Ataei as part of LBfoam project
+/* *************** LBMsmoothen ******************************************* */
+
+
+template<typename T, template<typename U> class Descriptor>
+void LBMsmoothen(MultiScalarField2D<T>& data, MultiScalarField2D<T>& result, Box2D domain)
+{
+    applyProcessingFunctional(new LBMsmoothen<T,Descriptor>, domain, data, result);
+}
+
+template<typename T, template<typename U> class Descriptor>
+std::auto_ptr<MultiScalarField2D<T> > LBMsmoothen(MultiScalarField2D<T>& data, Box2D domain)
+{
+    std::auto_ptr<MultiScalarField2D<T> > result =
+        generateMultiScalarField<T>(data, domain);
+    LBMsmoothen<T,Descriptor>(data, *result, domain);
+    return result;
+}
+
+template<typename T, template<typename U> class Descriptor>
+std::auto_ptr<MultiScalarField2D<T> > LBMsmoothen(MultiScalarField2D<T>& data)
+{
+    return LBMsmoothen<T,Descriptor>(data, data.getBoundingBox());
+}
+
+
 }  // namespace plb
 
 #endif  // SWIG_DATA_ANALYSIS_WRAPPER_2D_HH

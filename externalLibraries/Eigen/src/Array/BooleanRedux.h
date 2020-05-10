@@ -26,59 +26,65 @@
 #define EIGEN_ALLANDANY_H
 
 template<typename Derived, int UnrollCount>
-struct ei_all_unroller
-{
-  enum {
-    col = (UnrollCount-1) / Derived::RowsAtCompileTime,
-    row = (UnrollCount-1) % Derived::RowsAtCompileTime
-  };
+struct ei_all_unroller {
+	enum {
+		col = (UnrollCount-1) / Derived::RowsAtCompileTime,
+		row = (UnrollCount-1) % Derived::RowsAtCompileTime
+	};
 
-  inline static bool run(const Derived &mat)
-  {
-    return ei_all_unroller<Derived, UnrollCount-1>::run(mat) && mat.coeff(row, col);
-  }
+	inline static bool run(const Derived &mat)
+	{
+		return ei_all_unroller<Derived, UnrollCount-1>::run(mat) && mat.coeff(row, col);
+	}
 };
 
 template<typename Derived>
-struct ei_all_unroller<Derived, 1>
-{
-  inline static bool run(const Derived &mat) { return mat.coeff(0, 0); }
+struct ei_all_unroller<Derived, 1> {
+	inline static bool run(const Derived &mat)
+	{
+		return mat.coeff(0, 0);
+	}
 };
 
 template<typename Derived>
-struct ei_all_unroller<Derived, Dynamic>
-{
-  inline static bool run(const Derived &) { return false; }
+struct ei_all_unroller<Derived, Dynamic> {
+	inline static bool run(const Derived &)
+	{
+		return false;
+	}
 };
 
 template<typename Derived, int UnrollCount>
-struct ei_any_unroller
-{
-  enum {
-    col = (UnrollCount-1) / Derived::RowsAtCompileTime,
-    row = (UnrollCount-1) % Derived::RowsAtCompileTime
-  };
+struct ei_any_unroller {
+	enum {
+		col = (UnrollCount-1) / Derived::RowsAtCompileTime,
+		row = (UnrollCount-1) % Derived::RowsAtCompileTime
+	};
 
-  inline static bool run(const Derived &mat)
-  {
-    return ei_any_unroller<Derived, UnrollCount-1>::run(mat) || mat.coeff(row, col);
-  }
+	inline static bool run(const Derived &mat)
+	{
+		return ei_any_unroller<Derived, UnrollCount-1>::run(mat) || mat.coeff(row, col);
+	}
 };
 
 template<typename Derived>
-struct ei_any_unroller<Derived, 1>
-{
-  inline static bool run(const Derived &mat) { return mat.coeff(0, 0); }
+struct ei_any_unroller<Derived, 1> {
+	inline static bool run(const Derived &mat)
+	{
+		return mat.coeff(0, 0);
+	}
 };
 
 template<typename Derived>
-struct ei_any_unroller<Derived, Dynamic>
-{
-  inline static bool run(const Derived &) { return false; }
+struct ei_any_unroller<Derived, Dynamic> {
+	inline static bool run(const Derived &)
+	{
+		return false;
+	}
 };
 
 /** \array_module
-  * 
+  *
   * \returns true if all coefficients are true
   *
   * \addexample CwiseAll \label How to check whether a point is inside a box (using operator< and all())
@@ -91,23 +97,22 @@ struct ei_any_unroller<Derived, Dynamic>
 template<typename Derived>
 inline bool MatrixBase<Derived>::all() const
 {
-  const bool unroll = SizeAtCompileTime * (CoeffReadCost + NumTraits<Scalar>::AddCost)
-                      <= EIGEN_UNROLLING_LIMIT;
-  if(unroll)
-    return ei_all_unroller<Derived,
-                           unroll ? int(SizeAtCompileTime) : Dynamic
-     >::run(derived());
-  else
-  {
-    for(int j = 0; j < cols(); ++j)
-      for(int i = 0; i < rows(); ++i)
-        if (!coeff(i, j)) return false;
-    return true;
-  }
+	const bool unroll = SizeAtCompileTime * (CoeffReadCost + NumTraits<Scalar>::AddCost)
+	                    <= EIGEN_UNROLLING_LIMIT;
+	if(unroll)
+		return ei_all_unroller<Derived,
+		       unroll ? int(SizeAtCompileTime) : Dynamic
+		       >::run(derived());
+	else {
+		for(int j = 0; j < cols(); ++j)
+			for(int i = 0; i < rows(); ++i)
+				if (!coeff(i, j)) return false;
+		return true;
+	}
 }
 
 /** \array_module
-  * 
+  *
   * \returns true if at least one coefficient is true
   *
   * \sa MatrixBase::all()
@@ -115,23 +120,22 @@ inline bool MatrixBase<Derived>::all() const
 template<typename Derived>
 inline bool MatrixBase<Derived>::any() const
 {
-  const bool unroll = SizeAtCompileTime * (CoeffReadCost + NumTraits<Scalar>::AddCost)
-                      <= EIGEN_UNROLLING_LIMIT;
-  if(unroll)
-    return ei_any_unroller<Derived,
-                           unroll ? int(SizeAtCompileTime) : Dynamic
-           >::run(derived());
-  else
-  {
-    for(int j = 0; j < cols(); ++j)
-      for(int i = 0; i < rows(); ++i)
-        if (coeff(i, j)) return true;
-    return false;
-  }
+	const bool unroll = SizeAtCompileTime * (CoeffReadCost + NumTraits<Scalar>::AddCost)
+	                    <= EIGEN_UNROLLING_LIMIT;
+	if(unroll)
+		return ei_any_unroller<Derived,
+		       unroll ? int(SizeAtCompileTime) : Dynamic
+		       >::run(derived());
+	else {
+		for(int j = 0; j < cols(); ++j)
+			for(int i = 0; i < rows(); ++i)
+				if (coeff(i, j)) return true;
+		return false;
+	}
 }
 
 /** \array_module
-  * 
+  *
   * \returns the number of coefficients which evaluate to true
   *
   * \sa MatrixBase::all(), MatrixBase::any()
@@ -139,7 +143,7 @@ inline bool MatrixBase<Derived>::any() const
 template<typename Derived>
 inline int MatrixBase<Derived>::count() const
 {
-  return this->cast<bool>().cast<int>().sum();
+	return this->cast<bool>().cast<int>().sum();
 }
 
 #endif // EIGEN_ALLANDANY_H

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,11 +30,12 @@
 #include "parallelism/parallelMultiDataField3D.h"
 #include "parallelism/parallelMultiDataField3D.hh"
 
-namespace plb {
+namespace plb
+{
 
 #ifdef PLB_MPI_PARALLEL
-    template class ParallelNTensorAccess3D<PRECOMP_T>;
-    template class ParallelScalarAccess3D<PRECOMP_T>;
+template class ParallelNTensorAccess3D<PRECOMP_T>;
+template class ParallelScalarAccess3D<PRECOMP_T>;
 #endif
 
 }

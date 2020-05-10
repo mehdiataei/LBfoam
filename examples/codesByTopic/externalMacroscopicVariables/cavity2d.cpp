@@ -32,7 +32,7 @@
 
 #include "palabos2D.h"
 #ifndef PLB_PRECOMPILED // Unless precompiled version is used,
-  #include "palabos2D.hh"   // include full template code
+#include "palabos2D.hh"   // include full template code
 #endif
 #include <vector>
 #include <cmath>
@@ -92,17 +92,18 @@ void writeVTK(BlockLatticeT& lattice,
     vtkOut.writeData<2,float>(*computeVelocity(lattice), "velocity", dx/dt);
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
 
     IncomprFlowParam<T> parameters(
-            (T) 1e-2,  // uMax
-            (T) 100.,  // Re
-            1024,       // N
-            1.,        // lx
-            1.         // ly
+        (T) 1e-2,  // uMax
+        (T) 100.,  // Re
+        1024,       // N
+        1.,        // lx
+        1.         // ly
     );
     //const T logT     = (T)0.1;
     //const T imSave   = (T)0.2;
@@ -112,15 +113,15 @@ int main(int argc, char* argv[]) {
     writeLogFile(parameters, "2D cavity");
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice (
-              parameters.getNx(), parameters.getNy(),
-              new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     MultiBlockLattice2D<T, DESCRIPTOR> lattice2 (
-              parameters.getNx(), parameters.getNy(),
-              new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
+        parameters.getNx(), parameters.getNy(),
+        new BGKdynamics<T,DESCRIPTOR>(parameters.getOmega()) );
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     cavitySetup(lattice, parameters, *boundaryCondition);
     cavitySetup(lattice2, parameters, *boundaryCondition);
@@ -139,7 +140,8 @@ int main(int argc, char* argv[]) {
                                    lattice2.getBoundingBox(), lattice2RhoBarJparam, -1 );
     // Main loop over time iterations.
     global::timer("iterations").start();
-    for (plint iT=0; iT<1000; ++iT) {
+    for (plint iT=0; iT<1000; ++iT)
+    {
 
         // Lattice Boltzmann iteration step.
         lattice.collideAndStream();
@@ -147,7 +149,8 @@ int main(int argc, char* argv[]) {
         lattice2.executeInternalProcessors();
         computeRhoBarJ(lattice2, rhoBar, j, lattice2.getBoundingBox());
 
-        if (iT%100==0) {
+        if (iT%100==0)
+        {
             pcout << "Energy 1: " << computeAverageEnergy(lattice) << std::endl;
             pcout << "Energy 2: " << computeAverageEnergy(lattice2) << std::endl;
             pcout << global::timer("iterations").getTime()/(iT+1) << std::endl;
@@ -156,8 +159,8 @@ int main(int argc, char* argv[]) {
             T dt = parameters.getDeltaT();
             VtkImageOutput2D<T> vtkOut(createFileName("diff_", iT, 6), dx);
             vtkOut.writeData<float>(
-                    *subtract(*computeVelocityNorm(lattice),*computeVelocityNorm(lattice2)), 
-                    "velocityNormDiff", dx/dt);
+                *subtract(*computeVelocityNorm(lattice),*computeVelocityNorm(lattice2)),
+                "velocityNormDiff", dx/dt);
         }
 
     }

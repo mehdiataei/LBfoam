@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,69 +35,69 @@
 #include "core/globalDefs.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 
-namespace plb {
+namespace plb
+{
 
-namespace descriptors {
+namespace descriptors
+{
 
-    /// Density and Momentum as external scalars
-    struct DensityMomentumNoForceExternals3D {
-        static const int numScalars = 4;
-        static const int numSpecies = 2;
+/// Density and Momentum as external scalars
+struct DensityMomentumNoForceExternals3D {
+	static const int numScalars = 4;
+	static const int numSpecies = 2;
 
-        static const int densityBeginsAt  = 0;
-        static const int sizeOfDensity    = 1;
+	static const int densityBeginsAt  = 0;
+	static const int sizeOfDensity    = 1;
 
-        static const int momentumBeginsAt = 1;
-        static const int sizeOfMomentum   = 3;
+	static const int momentumBeginsAt = 1;
+	static const int sizeOfMomentum   = 3;
 
-        static const int forceBeginsAt    = 0;
-        static const int sizeOfForce      = 0;
-    };
+	static const int forceBeginsAt    = 0;
+	static const int sizeOfForce      = 0;
+};
 
-    /// Density, Momentum and Force as external scalars
-    struct DensityMomentumForceExternals3D {
-        static const int numScalars = 7;
-        static const int numSpecies = 3;
+/// Density, Momentum and Force as external scalars
+struct DensityMomentumForceExternals3D {
+	static const int numScalars = 7;
+	static const int numSpecies = 3;
 
-        static const int densityBeginsAt  = 0;
-        static const int sizeOfDensity    = 1;
+	static const int densityBeginsAt  = 0;
+	static const int sizeOfDensity    = 1;
 
-        static const int momentumBeginsAt = 1;
-        static const int sizeOfMomentum   = 3;
+	static const int momentumBeginsAt = 1;
+	static const int sizeOfMomentum   = 3;
 
-        static const int forceBeginsAt    = 4;
-        static const int sizeOfForce      = 3;
-    };
+	static const int forceBeginsAt    = 4;
+	static const int sizeOfForce      = 3;
+};
 
-    struct ShanChenExternalBase3D {
-        typedef DensityMomentumNoForceExternals3D ExternalField;
-    };
+struct ShanChenExternalBase3D {
+	typedef DensityMomentumNoForceExternals3D ExternalField;
+};
 
-    struct ForcedShanChenExternalBase3D {
-        typedef DensityMomentumForceExternals3D ExternalField;
-    };
+struct ForcedShanChenExternalBase3D {
+	typedef DensityMomentumForceExternals3D ExternalField;
+};
 
-    /// D3Q19 lattice for Shan-Chen model
-    template <typename T>
-    struct ShanChenD3Q19Descriptor
-        : public D3Q19DescriptorBase<T>, public ShanChenExternalBase3D
-    {
-        static const char name[];
-    };
+/// D3Q19 lattice for Shan-Chen model
+template <typename T>
+struct ShanChenD3Q19Descriptor
+	: public D3Q19DescriptorBase<T>, public ShanChenExternalBase3D {
+	static const char name[];
+};
 
-    template<typename T>
-    const char ShanChenD3Q19Descriptor<T>::name[] = "ShanChenD3Q19";
+template<typename T>
+const char ShanChenD3Q19Descriptor<T>::name[] = "ShanChenD3Q19";
 
-    /// D3Q19 lattice for Shan-Chen model with force
-    template <typename T>
-    struct ForcedShanChenD3Q19Descriptor
-        : public D3Q19DescriptorBase<T>, public ForcedShanChenExternalBase3D
-    {
-        static const char name[];
-    };
+/// D3Q19 lattice for Shan-Chen model with force
+template <typename T>
+struct ForcedShanChenD3Q19Descriptor
+	: public D3Q19DescriptorBase<T>, public ForcedShanChenExternalBase3D {
+	static const char name[];
+};
 
-    template<typename T>
-    const char ForcedShanChenD3Q19Descriptor<T>::name[] = "ForcedShanChenD3Q19";
+template<typename T>
+const char ForcedShanChenD3Q19Descriptor<T>::name[] = "ForcedShanChenD3Q19";
 
 }  // namespace descriptors
 

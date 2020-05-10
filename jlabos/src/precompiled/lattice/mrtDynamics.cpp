@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -26,7 +26,7 @@
  * A collection of dynamics classes (e.g. BGK) with which a Cell object
  * can be instantiated -- template instantiation.
  */
- 
+
 #include "core/dynamics.h"
 #include "core/dynamics.hh"
 #include "complexDynamics/mrtDynamics.h"
@@ -34,25 +34,26 @@
 #include "latticeBoltzmann/mrtLattices.h"
 #include "latticeBoltzmann/mrtLattices.hh"
 
-namespace plb {
+namespace plb
+{
 
 #ifdef COMPILE_2D
 #if NUMBIT_2D == 9
-    template class Dynamics<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
-    template class IsoThermalBulkDynamics<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
-    template class MRTdynamics<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
-    template class BounceBack<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
-    template class NoDynamics<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
+template class Dynamics<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
+template class IsoThermalBulkDynamics<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
+template class MRTdynamics<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
+template class BounceBack<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
+template class NoDynamics<FLOAT_T, descriptors::MRTD2Q9Descriptor>;
 #endif
 #endif  // COMPILE_2D
-    
+
 #ifdef COMPILE_3D
 #if NUMBIT_3D == 19
-    template class Dynamics<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
-    template class IsoThermalBulkDynamics<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
-    template class MRTdynamics<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
-    template class BounceBack<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
-    template class NoDynamics<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
+template class Dynamics<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
+template class IsoThermalBulkDynamics<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
+template class MRTdynamics<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
+template class BounceBack<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
+template class NoDynamics<FLOAT_T, descriptors::MRTD3Q19Descriptor>;
 #endif
 #endif  // COMPILE_3D
 

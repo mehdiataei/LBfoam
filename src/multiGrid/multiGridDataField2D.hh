@@ -129,7 +129,7 @@ int MultiGridScalarField2D<T>::getBlockId() const {
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > MultiGridScalarField2D<T>::convertToCoarsest(plint dimDx, plint dimDt){
+std::auto_ptr<MultiScalarField2D<T> > MultiGridScalarField2D<T>::convertToCoarsest(plint dimDx, plint dimDt){
     
 //TODO: modify avec new functions
 //     plint levels = this->getNumLevels();
@@ -147,11 +147,11 @@ std::unique_ptr<MultiScalarField2D<T> > MultiGridScalarField2D<T>::convertToCoar
 //         tmp = copy; // keep always a pointer over copy
 //     }
 //     
-//     return std::unique_ptr<MultiScalarField2D<T> >(copy);
+//     return std::auto_ptr<MultiScalarField2D<T> >(copy);
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > MultiGridScalarField2D<T>::convertToFinest(plint dimDx, plint dimDt){
+std::auto_ptr<MultiScalarField2D<T> > MultiGridScalarField2D<T>::convertToFinest(plint dimDx, plint dimDt){
     
 //TODO: modify avec new functions
 //     MultiScalarField2D<T> *copy, *tmp;
@@ -167,7 +167,7 @@ std::unique_ptr<MultiScalarField2D<T> > MultiGridScalarField2D<T>::convertToFine
 //         tmp = copy; // keep always a pointer over copy
 //     }
 //         
-//     return std::unique_ptr<MultiScalarField2D<T> >(copy);
+//     return std::auto_ptr<MultiScalarField2D<T> >(copy);
 }
 
 
@@ -273,7 +273,7 @@ void MultiGridTensorField2D<T,nDim>::allocateFields( std::vector<BlockCommunicat
 
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > MultiGridTensorField2D<T,nDim>::convertToCoarsest(plint dimDx, plint dimDt){
+std::auto_ptr<MultiTensorField2D<T,nDim> > MultiGridTensorField2D<T,nDim>::convertToCoarsest(plint dimDx, plint dimDt){
 //TODO: modify avec new functions
 //     plint levels = this->getNumLevels();
 // 
@@ -290,11 +290,11 @@ std::unique_ptr<MultiTensorField2D<T,nDim> > MultiGridTensorField2D<T,nDim>::con
 //         tmp = copy; // keep always a pointer over copy
 //     }
 //     
-//     return std::unique_ptr<MultiTensorField2D<T,nDim> >(copy);
+//     return std::auto_ptr<MultiTensorField2D<T,nDim> >(copy);
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > MultiGridTensorField2D<T,nDim>::convertToFinest(plint dimDx, plint dimDt){
+std::auto_ptr<MultiTensorField2D<T,nDim> > MultiGridTensorField2D<T,nDim>::convertToFinest(plint dimDx, plint dimDt){
 //TODO: modify avec new functions
 //     MultiTensorField2D<T,nDim> *copy, *tmp;
 //     copy = joinMultiTensorInFinest(
@@ -309,7 +309,7 @@ std::unique_ptr<MultiTensorField2D<T,nDim> > MultiGridTensorField2D<T,nDim>::con
 //         tmp = copy; // keep always a pointer over copy
 //     }
 //         
-//     return std::unique_ptr<MultiTensorField2D<T,nDim> >(copy);
+//     return std::auto_ptr<MultiTensorField2D<T,nDim> >(copy);
 }
 
 

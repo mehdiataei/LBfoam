@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,7 +31,8 @@
 #include <vector>
 #include <set>
 
-namespace plb {
+namespace plb
+{
 
 #ifdef PLB_MPI_PARALLEL
 
@@ -54,8 +55,8 @@ void repartitionIter(SparseBlockStructure3D const& sparseBlock, std::set<plint>&
 /// On the current MPI thread compute the fitness of the current block repartition, i.e. the number
 ///   of contacts between local blocks, and returned detailed contact info for each block.
 void evaluateNeighbors (
-        SparseBlockStructure3D const& sparseBlock, std::set<plint> const& localBlocks,
-        std::vector<BlockWithContact>& contacts, plint& totalContacts );
+    SparseBlockStructure3D const& sparseBlock, std::set<plint> const& localBlocks,
+    std::vector<BlockWithContact>& contacts, plint& totalContacts );
 
 /// Count the number of contacts between local blocks. This could also be obtained through the function
 ///   evaluateNeighbors, which however would be slower.
@@ -69,4 +70,3 @@ plint getNumLocalNeighbors(SparseBlockStructure3D const& sparseBlock, std::set<p
 }  // namespace plb
 
 #endif  // DOMAIN_CLUSTERING_3D_H
-

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -39,7 +39,8 @@ typedef double T;
 
 /// Describe the geometry of the half-circular channel, used in tutorial 2.
 template<typename T>
-class BounceBackNodes : public DomainFunctional2D {
+class BounceBackNodes : public DomainFunctional2D
+{
 public:
     BounceBackNodes(plint N, plint radius)
         : cx(N/2),
@@ -49,11 +50,13 @@ public:
     { }
     /// Return true for all cells outside the channel, on which bounce-back
     ///  dynamics must be instantiated.
-    virtual bool operator() (plint iX, plint iY) const {
+    virtual bool operator() (plint iX, plint iY) const
+    {
         T rSqr = util::sqr(iX-cx) + util::sqr(iY-cy);
         return rSqr <= innerR*innerR || rSqr >= outerR*outerR;
     }
-    virtual BounceBackNodes<T>* clone() const {
+    virtual BounceBackNodes<T>* clone() const
+    {
         return new BounceBackNodes<T>(*this);
     }
 private:
@@ -68,12 +71,15 @@ private:
  *  non-parallelizable. Instead, use a data-processor.
  */
 void createHalfCircleManually (
-        MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint N, plint radius )
+    MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint N, plint radius )
 {
     BounceBackNodes<T> domain(N,radius);
-    for (plint iX=0; iX<=N; ++iX) {
-        for (plint iY=0; iY<=N/2; ++iY) {
-            if (domain(iX,iY)) {
+    for (plint iX=0; iX<=N; ++iX)
+    {
+        for (plint iY=0; iY<=N/2; ++iY)
+        {
+            if (domain(iX,iY))
+            {
                 defineDynamics(lattice, iX, iY, new BounceBack<T,DESCRIPTOR>);
             }
         }
@@ -90,22 +96,27 @@ public:
     HalfCircleInstantiateFunctional(plint N_, plint radius_)
         : N(N_), radius(radius_)
     { }
-    virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice) {
+    virtual void process(Box2D domain, BlockLattice2D<T,Descriptor>& lattice)
+    {
         BounceBackNodes<T> bbDomain(N,radius);
         Dot2D relativeOffset = lattice.getLocation();
-        for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-            for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-                if (bbDomain(iX+relativeOffset.x,iY+relativeOffset.y)) {
+        for (plint iX=domain.x0; iX<=domain.x1; ++iX)
+        {
+            for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+            {
+                if (bbDomain(iX+relativeOffset.x,iY+relativeOffset.y))
+                {
                     lattice.attributeDynamics (
-                            iX,iY, new BounceBack<T,DESCRIPTOR> );
+                        iX,iY, new BounceBack<T,DESCRIPTOR> );
                 }
             }
         }
     }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+    {
         modified[0] = modif::dataStructure;
     }
-    virtual HalfCircleInstantiateFunctional<T,Descriptor>* clone() const 
+    virtual HalfCircleInstantiateFunctional<T,Descriptor>* clone() const
     {
         return new HalfCircleInstantiateFunctional<T,Descriptor>(*this);
     }
@@ -114,20 +125,20 @@ private:
     plint radius;
 };
 
-/// Automatic instantiation of the bounce-back nodes for the boundary, 
+/// Automatic instantiation of the bounce-back nodes for the boundary,
 ///   using a data processor.
 void createHalfCircleFromDataProcessor (
-        MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint N, plint radius )
+    MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint N, plint radius )
 {
     applyProcessingFunctional (
-            new HalfCircleInstantiateFunctional<T,DESCRIPTOR>(N,radius),
-            lattice.getBoundingBox(), lattice );
+        new HalfCircleInstantiateFunctional<T,DESCRIPTOR>(N,radius),
+        lattice.getBoundingBox(), lattice );
 }
 
 
 void halfCircleSetup (
-        MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint N, plint radius,
-        OnLatticeBoundaryCondition2D<T,DESCRIPTOR>& boundaryCondition )
+    MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint N, plint radius,
+    OnLatticeBoundaryCondition2D<T,DESCRIPTOR>& boundaryCondition )
 {
     // The channel is pressure-driven, with a difference deltaRho
     //   between inlet and outlet.
@@ -149,7 +160,7 @@ void halfCircleSetup (
     Array<T,2> zeroVelocity((T)0.,(T)0.);
     T constantDensity = (T)1;
     initializeAtEquilibrium (
-           lattice, lattice.getBoundingBox(), constantDensity, zeroVelocity );
+        lattice, lattice.getBoundingBox(), constantDensity, zeroVelocity );
 
     // Manual creation of the geometry works but is slow, especially in
     //   parallel programs.
@@ -170,7 +181,8 @@ void writeGifs(MultiBlockLattice2D<T,DESCRIPTOR>& lattice, plint iter)
                                imSize, imSize );
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     global::directories().setOutputDir("./tmp/");
@@ -183,7 +195,7 @@ int main(int argc, char* argv[]) {
     plint radius    = N/3;    // Inner radius of the half-circle.
 
     // Parameters for the creation of the multi-block.
-    
+
     // d is the width of the block which is exempted from the full domain.
     plint d = (plint) (2.*std::sqrt((T)util::sqr(radius)-(T)util::sqr(N/4.)));
     plint x0 = (N-d)/2 + 1;  // Begin of the exempted block.
@@ -209,13 +221,15 @@ int main(int argc, char* argv[]) {
     );
 
     OnLatticeBoundaryCondition2D<T,DESCRIPTOR>*
-        boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
+    boundaryCondition = createLocalBoundaryCondition2D<T,DESCRIPTOR>();
 
     halfCircleSetup(lattice, N, radius, *boundaryCondition);
 
     // Main loop over time iterations.
-    for (plint iT=0; iT<maxT; ++iT) {
-        if (iT%imageIter==0) {
+    for (plint iT=0; iT<maxT; ++iT)
+    {
+        if (iT%imageIter==0)
+        {
             pcout << "Saving Gif at time step " << iT << endl;
             writeGifs(lattice, iT);
         }

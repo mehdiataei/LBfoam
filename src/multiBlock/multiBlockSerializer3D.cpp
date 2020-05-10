@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,13 +30,14 @@
 #include "atomicBlock/atomicBlock3D.h"
 #include "core/plbDebug.h"
 
-namespace plb {
+namespace plb
+{
 
 ////////// class MultiBlockSerializer3D ////////////////////////////
 
 MultiBlockSerializer3D::MultiBlockSerializer3D (
-        MultiBlock3D const& multiBlock_,
-        IndexOrdering::OrderingT ordering_ )
+    MultiBlock3D const& multiBlock_,
+    IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(multiBlock.getBoundingBox()),
@@ -45,123 +46,149 @@ MultiBlockSerializer3D::MultiBlockSerializer3D (
 { }
 
 MultiBlockSerializer3D::MultiBlockSerializer3D (
-        MultiBlock3D const& multiBlock_,
-        Box3D domain_,
-        IndexOrdering::OrderingT ordering_ )
+    MultiBlock3D const& multiBlock_,
+    Box3D domain_,
+    IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_), ordering(ordering_),
       domain(domain_),
       iX(domain.x0), iY(domain.y0), iZ(domain.z0),
       buffer(1) // this avoids buffer of size 0 which one cannot point to
 { }
 
-MultiBlockSerializer3D* MultiBlockSerializer3D::clone() const {
+MultiBlockSerializer3D* MultiBlockSerializer3D::clone() const
+{
     return new MultiBlockSerializer3D(*this);
 }
 
-pluint MultiBlockSerializer3D::getSize() const {
-    if (ordering==IndexOrdering::memorySaving) {
+pluint MultiBlockSerializer3D::getSize() const
+{
+    if (ordering==IndexOrdering::memorySaving)
+    {
         return
             getSparseBlockStructure().getNumBulkCells() * multiBlock.sizeOfCell();
     }
-    else {
+    else
+    {
         return domain.nCells() * multiBlock.sizeOfCell();
     }
 }
 
-const char* MultiBlockSerializer3D::getNextDataBuffer(pluint& bufferSize) const {
+const char* MultiBlockSerializer3D::getNextDataBuffer(pluint& bufferSize) const
+{
     PLB_PRECONDITION( !isEmpty() );
     EuclideanIterator3D iterator(getSparseBlockStructure());
     if (ordering==IndexOrdering::forward ||
-        ordering==IndexOrdering::memorySaving)
+            ordering==IndexOrdering::memorySaving)
     {
         plint nextBlockId, nextChunkSize;
         bool hasData = iterator.getNextChunkZ(iX,iY,iZ, nextBlockId, nextChunkSize);
-        if (iZ+nextChunkSize>domain.z1+1) {
+        if (iZ+nextChunkSize>domain.z1+1)
+        {
             nextChunkSize = domain.z1-iZ+1;
         }
-        if (hasData) {
+        if (hasData)
+        {
             computeBufferAlongZ(nextBlockId, nextChunkSize);
             bufferSize = nextChunkSize*multiBlock.sizeOfCell();
         }
-        else {
-            if (ordering==IndexOrdering::forward) {
+        else
+        {
+            if (ordering==IndexOrdering::forward)
+            {
                 fillBufferWithZeros(nextChunkSize);
                 bufferSize = nextChunkSize*multiBlock.sizeOfCell();
             }
-            else {
+            else
+            {
                 bufferSize = 0;
             }
         }
         iZ += nextChunkSize;
-        if (iZ > domain.z1) {
+        if (iZ > domain.z1)
+        {
             PLB_ASSERT(iZ==domain.z1+1);
             iZ = domain.z0;
             ++iY;
-            if (iY > domain.y1) {
+            if (iY > domain.y1)
+            {
                 PLB_ASSERT(iY==domain.y1+1);
                 iY = domain.y0;
                 ++iX;
             }
         }
     }
-    else {
+    else
+    {
         plint nextBlockId, nextChunkSize;
         bool hasData = iterator.getNextChunkX(iX,iY,iZ, nextBlockId, nextChunkSize);
-        if (iX+nextChunkSize>domain.x1+1) {
+        if (iX+nextChunkSize>domain.x1+1)
+        {
             nextChunkSize = domain.x1-iX+1;
         }
-        if (hasData) {
+        if (hasData)
+        {
             computeBufferAlongX(nextBlockId, nextChunkSize);
             bufferSize = nextChunkSize*multiBlock.sizeOfCell();
         }
-        else {
+        else
+        {
             fillBufferWithZeros(nextChunkSize);
             bufferSize = nextChunkSize*multiBlock.sizeOfCell();
         }
         iX += nextChunkSize;
-        if (iX > domain.x1) {
+        if (iX > domain.x1)
+        {
             PLB_ASSERT(iX==domain.x1+1);
             iX = domain.x0;
             ++iY;
-            if (iY > domain.y1) {
+            if (iY > domain.y1)
+            {
                 PLB_ASSERT(iY==domain.y1+1);
                 iY = domain.y0;
                 ++iZ;
             }
         }
     }
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         return &buffer[0];
     }
-    else {
+    else
+    {
         return 0;
     }
 }
 
-bool MultiBlockSerializer3D::isEmpty() const {
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+bool MultiBlockSerializer3D::isEmpty() const
+{
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         return iX > domain.x1;
     }
-    else {
+    else
+    {
         return iZ > domain.z1;
     }
 }
 
-SparseBlockStructure3D const& MultiBlockSerializer3D::getSparseBlockStructure() const {
+SparseBlockStructure3D const& MultiBlockSerializer3D::getSparseBlockStructure() const
+{
     return multiBlock.getMultiBlockManagement().getSparseBlockStructure();
 }
 
-bool MultiBlockSerializer3D::isLocal(plint blockId) const {
+bool MultiBlockSerializer3D::isLocal(plint blockId) const
+{
     return multiBlock.getMultiBlockManagement().
-               getThreadAttribution().isLocal(blockId);
+           getThreadAttribution().isLocal(blockId);
 }
 
 void MultiBlockSerializer3D::computeBufferAlongX ( plint nextBlockId,
-                                                   plint nextChunkSize ) const
+        plint nextChunkSize ) const
 {
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
     bool blockIsLocal = isLocal(nextBlockId);
-    if (blockIsLocal) {
+    if (blockIsLocal)
+    {
         SmartBulk3D bulk(multiBlock.getMultiBlockManagement(), nextBlockId);
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
@@ -171,18 +198,19 @@ void MultiBlockSerializer3D::computeBufferAlongX ( plint nextBlockId,
         plint localZ = bulk.toLocalZ(iZ);
         AtomicBlock3D const& nextBlock = multiBlock.getComponent(nextBlockId);
         nextBlock.getDataTransfer().send (
-                Box3D(localX,localX+nextChunkSize-1, localY, localY, localZ, localZ),
-                buffer, modif::staticVariables );
+            Box3D(localX,localX+nextChunkSize-1, localY, localY, localZ, localZ),
+            buffer, modif::staticVariables );
     }
     communicateBuffer(bufferSize, nextBlockId, blockIsLocal);
 }
 
 void MultiBlockSerializer3D::computeBufferAlongY (
-        plint nextBlockId, plint nextChunkSize ) const
+    plint nextBlockId, plint nextChunkSize ) const
 {
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
     bool blockIsLocal = isLocal(nextBlockId);
-    if (blockIsLocal) {
+    if (blockIsLocal)
+    {
         SmartBulk3D bulk(multiBlock.getMultiBlockManagement(), nextBlockId);
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
@@ -192,18 +220,19 @@ void MultiBlockSerializer3D::computeBufferAlongY (
         plint localZ = bulk.toLocalZ(iZ);
         AtomicBlock3D const& nextBlock = multiBlock.getComponent(nextBlockId);
         nextBlock.getDataTransfer().send (
-                Box3D(localX,localX, localY, localY+nextChunkSize-1, localZ, localZ),
-                buffer, modif::staticVariables );
+            Box3D(localX,localX, localY, localY+nextChunkSize-1, localZ, localZ),
+            buffer, modif::staticVariables );
     }
     communicateBuffer(bufferSize, nextBlockId, blockIsLocal);
 }
 
 void MultiBlockSerializer3D::computeBufferAlongZ (
-        plint nextBlockId, plint nextChunkSize ) const
+    plint nextBlockId, plint nextChunkSize ) const
 {
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
     bool blockIsLocal = isLocal(nextBlockId);
-    if (blockIsLocal) {
+    if (blockIsLocal)
+    {
         SmartBulk3D bulk(multiBlock.getMultiBlockManagement(), nextBlockId);
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
@@ -213,14 +242,14 @@ void MultiBlockSerializer3D::computeBufferAlongZ (
         plint localZ = bulk.toLocalZ(iZ);
         AtomicBlock3D const& nextBlock = multiBlock.getComponent(nextBlockId);
         nextBlock.getDataTransfer().send (
-                Box3D(localX,localX, localY,localY, localZ, localZ+nextChunkSize-1),
-                buffer, modif::staticVariables );
+            Box3D(localX,localX, localY,localY, localZ, localZ+nextChunkSize-1),
+            buffer, modif::staticVariables );
     }
     communicateBuffer(bufferSize, nextBlockId, blockIsLocal);
 }
 
 void MultiBlockSerializer3D::communicateBuffer (
-        plint bufferSize, plint fromBlockId, bool isAllocated ) const
+    plint bufferSize, plint fromBlockId, bool isAllocated ) const
 {
 #ifdef PLB_MPI_PARALLEL
     // Exchanging a dummy message ahead of the main data has the effect
@@ -229,13 +258,15 @@ void MultiBlockSerializer3D::communicateBuffer (
     //   it does a poor job handling all the requests from the other processors
     //   at the same time.
     plint dummyMessage;
-    if (isAllocated && !global::mpi().isMainProcessor()) {
+    if (isAllocated && !global::mpi().isMainProcessor())
+    {
         global::mpi().receive(&dummyMessage, 1, 0);
         global::mpi().rSend(&buffer[0], bufferSize, 0);
     }
-    if (!isAllocated && global::mpi().isMainProcessor()) {
+    if (!isAllocated && global::mpi().isMainProcessor())
+    {
         int fromProc = multiBlock.getMultiBlockManagement().
-                           getThreadAttribution().getMpiProcess(fromBlockId);
+                       getThreadAttribution().getMpiProcess(fromBlockId);
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
         buffer.resize(bufferSize);
@@ -248,13 +279,16 @@ void MultiBlockSerializer3D::communicateBuffer (
 #endif  // PLB_MPI_PARALLEL
 }
 
-void MultiBlockSerializer3D::fillBufferWithZeros(plint nextChunkSize) const {
+void MultiBlockSerializer3D::fillBufferWithZeros(plint nextChunkSize) const
+{
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
         buffer.resize(bufferSize);
-        for (plint iBuffer=0; iBuffer<bufferSize; ++iBuffer) {
+        for (plint iBuffer=0; iBuffer<bufferSize; ++iBuffer)
+        {
             buffer[iBuffer] = 0;
         }
     }
@@ -264,8 +298,8 @@ void MultiBlockSerializer3D::fillBufferWithZeros(plint nextChunkSize) const {
 ////////// class MultiBlockUnSerializer3D ////////////////////////////
 
 MultiBlockUnSerializer3D::MultiBlockUnSerializer3D (
-        MultiBlock3D& multiBlock_,
-        IndexOrdering::OrderingT ordering_ )
+    MultiBlock3D& multiBlock_,
+    IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(multiBlock.getBoundingBox()),
@@ -274,9 +308,9 @@ MultiBlockUnSerializer3D::MultiBlockUnSerializer3D (
 { }
 
 MultiBlockUnSerializer3D::MultiBlockUnSerializer3D (
-        MultiBlock3D& multiBlock_,
-        Box3D domain_,
-        IndexOrdering::OrderingT ordering_ )
+    MultiBlock3D& multiBlock_,
+    Box3D domain_,
+    IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(domain_),
@@ -284,241 +318,292 @@ MultiBlockUnSerializer3D::MultiBlockUnSerializer3D (
       buffer(1) // this avoids buffer of size 0 which one cannot point to
 { }
 
-MultiBlockUnSerializer3D* MultiBlockUnSerializer3D::clone() const {
+MultiBlockUnSerializer3D* MultiBlockUnSerializer3D::clone() const
+{
     return new MultiBlockUnSerializer3D(*this);
 }
 
 
-pluint MultiBlockUnSerializer3D::getSize() const {
-    if (ordering==IndexOrdering::memorySaving) {
+pluint MultiBlockUnSerializer3D::getSize() const
+{
+    if (ordering==IndexOrdering::memorySaving)
+    {
         return getSparseBlockStructure().getNumBulkCells() * multiBlock.sizeOfCell();
     }
-    else {
+    else
+    {
         return domain.nCells() * multiBlock.sizeOfCell();
     }
 }
 
-char* MultiBlockUnSerializer3D::getNextDataBuffer(pluint& bufferSize) {
+char* MultiBlockUnSerializer3D::getNextDataBuffer(pluint& bufferSize)
+{
     PLB_PRECONDITION( !isFull() );
     EuclideanIterator3D iterator(getSparseBlockStructure());
     plint nextBlockId, nextChunkSize;
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         bool hasData = iterator.getNextChunkZ(iX,iY,iZ, nextBlockId, nextChunkSize);
-        if (iZ+nextChunkSize>domain.z1+1) {
+        if (iZ+nextChunkSize>domain.z1+1)
+        {
             nextChunkSize = domain.z1-iZ+1;
         }
         bufferSize = nextChunkSize * multiBlock.sizeOfCell();
-        if (ordering==IndexOrdering::memorySaving && !hasData) {
+        if (ordering==IndexOrdering::memorySaving && !hasData)
+        {
             bufferSize = 0;
         }
     }
-    else {
+    else
+    {
         iterator.getNextChunkX(iX,iY,iZ, nextBlockId, nextChunkSize);
-        if (iX+nextChunkSize>domain.x1+1) {
+        if (iX+nextChunkSize>domain.x1+1)
+        {
             nextChunkSize = domain.x1-iX+1;
         }
         bufferSize = nextChunkSize * multiBlock.sizeOfCell();
     }
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
         buffer.resize(bufferSize);
     }
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         return &buffer[0];
     }
-    else {
+    else
+    {
         return 0;
     }
 }
 
-void MultiBlockUnSerializer3D::commitData() {
+void MultiBlockUnSerializer3D::commitData()
+{
     PLB_PRECONDITION( !isFull() );
     EuclideanIterator3D iterator(getSparseBlockStructure());
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         plint nextBlockId, nextChunkSize;
         bool hasData = iterator.getNextChunkZ(iX,iY,iZ, nextBlockId, nextChunkSize);
-        if (iZ+nextChunkSize>domain.z1+1) {
+        if (iZ+nextChunkSize>domain.z1+1)
+        {
             nextChunkSize = domain.z1-iZ+1;
         }
-        if (hasData) {
+        if (hasData)
+        {
             fillBufferAlongZ(nextBlockId, nextChunkSize);
         }
         iZ += nextChunkSize;
-        if (iZ > domain.z1) {
+        if (iZ > domain.z1)
+        {
             iZ = domain.z0;
             ++iY;
-            if (iY > domain.y1) {
+            if (iY > domain.y1)
+            {
                 iY = domain.y0;
                 ++iX;
             }
         }
     }
-    else {
+    else
+    {
         plint nextBlockId, nextChunkSize;
         bool hasData = iterator.getNextChunkX(iX,iY,iZ, nextBlockId, nextChunkSize);
-        if (iX+nextChunkSize>domain.x1+1) {
+        if (iX+nextChunkSize>domain.x1+1)
+        {
             nextChunkSize = domain.x1-iX+1;
         }
-        if (hasData) {
+        if (hasData)
+        {
             fillBufferAlongX(nextBlockId, nextChunkSize);
         }
         iX += nextChunkSize;
-        if (iX > domain.x1) {
+        if (iX > domain.x1)
+        {
             iX = domain.x0;
             ++iY;
-            if (iY > domain.y1) {
+            if (iY > domain.y1)
+            {
                 iY = domain.y0;
                 ++iZ;
             }
         }
     }
     // At the end of unserialization, duplicate overlaps.
-    if (isFull()) {
+    if (isFull())
+    {
         multiBlock.duplicateOverlaps(modif::staticVariables);
     }
 }
 
-bool MultiBlockUnSerializer3D::isFull() const {
-    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving) {
+bool MultiBlockUnSerializer3D::isFull() const
+{
+    if (ordering==IndexOrdering::forward || ordering==IndexOrdering::memorySaving)
+    {
         return iX > domain.x1;
     }
-    else {
+    else
+    {
         return iZ > domain.z1;
     }
 }
 
-SparseBlockStructure3D const& MultiBlockUnSerializer3D::getSparseBlockStructure() const {
+SparseBlockStructure3D const& MultiBlockUnSerializer3D::getSparseBlockStructure() const
+{
     return multiBlock.getMultiBlockManagement().getSparseBlockStructure();
 }
 
-bool MultiBlockUnSerializer3D::isLocal(plint blockId) const {
+bool MultiBlockUnSerializer3D::isLocal(plint blockId) const
+{
     return multiBlock.getMultiBlockManagement().
-               getThreadAttribution().isLocal (blockId);
+           getThreadAttribution().isLocal (blockId);
 }
 
-void MultiBlockUnSerializer3D::fillBufferAlongX(plint nextBlockId, plint nextChunkSize) {
+void MultiBlockUnSerializer3D::fillBufferAlongX(plint nextBlockId, plint nextChunkSize)
+{
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
     bool blockIsLocal = isLocal(nextBlockId);
     communicateBuffer(bufferSize, nextBlockId, blockIsLocal);
-    if (blockIsLocal) {
+    if (blockIsLocal)
+    {
         SmartBulk3D bulk(multiBlock.getMultiBlockManagement(), nextBlockId);
         plint localX = bulk.toLocalX(iX);
         plint localY = bulk.toLocalY(iY);
         plint localZ = bulk.toLocalZ(iZ);
         AtomicBlock3D& nextBlock = multiBlock.getComponent(nextBlockId);
         nextBlock.getDataTransfer().receive (
-                Box3D(localX,localX+nextChunkSize-1, localY, localY, localZ, localZ),
-                buffer, modif::staticVariables );
+            Box3D(localX,localX+nextChunkSize-1, localY, localY, localZ, localZ),
+            buffer, modif::staticVariables );
     }
 }
 
-void MultiBlockUnSerializer3D::fillBufferAlongY(plint nextBlockId, plint nextChunkSize) {
+void MultiBlockUnSerializer3D::fillBufferAlongY(plint nextBlockId, plint nextChunkSize)
+{
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
     bool blockIsLocal = isLocal(nextBlockId);
     communicateBuffer(bufferSize, nextBlockId, blockIsLocal);
-    if (blockIsLocal) {
+    if (blockIsLocal)
+    {
         SmartBulk3D bulk(multiBlock.getMultiBlockManagement(), nextBlockId);
         plint localX = bulk.toLocalX(iX);
         plint localY = bulk.toLocalY(iY);
         plint localZ = bulk.toLocalZ(iZ);
         AtomicBlock3D& nextBlock = multiBlock.getComponent(nextBlockId);
         nextBlock.getDataTransfer().receive (
-                Box3D(localX,localX, localY, localY+nextChunkSize-1, localZ,localZ),
-                      buffer, modif::staticVariables);
+            Box3D(localX,localX, localY, localY+nextChunkSize-1, localZ,localZ),
+            buffer, modif::staticVariables);
     }
 }
 
-void MultiBlockUnSerializer3D::fillBufferAlongZ(plint nextBlockId, plint nextChunkSize) {
+void MultiBlockUnSerializer3D::fillBufferAlongZ(plint nextBlockId, plint nextChunkSize)
+{
     plint bufferSize = nextChunkSize*multiBlock.sizeOfCell();
     bool blockIsLocal = isLocal(nextBlockId);
     communicateBuffer(bufferSize, nextBlockId, blockIsLocal);
-    if (blockIsLocal) {
+    if (blockIsLocal)
+    {
         SmartBulk3D bulk(multiBlock.getMultiBlockManagement(), nextBlockId);
         plint localX = bulk.toLocalX(iX);
         plint localY = bulk.toLocalY(iY);
         plint localZ = bulk.toLocalZ(iZ);
         AtomicBlock3D& nextBlock = multiBlock.getComponent(nextBlockId);
         nextBlock.getDataTransfer().receive (
-                Box3D(localX,localX, localY,localY, localZ, localZ+nextChunkSize-1),
-                buffer, modif::staticVariables );
+            Box3D(localX,localX, localY,localY, localZ, localZ+nextChunkSize-1),
+            buffer, modif::staticVariables );
     }
 }
 
 void MultiBlockUnSerializer3D::communicateBuffer (
-        plint bufferSize, plint toBlockId, bool isAllocated ) const
+    plint bufferSize, plint toBlockId, bool isAllocated ) const
 {
 #ifdef PLB_MPI_PARALLEL
-    if (isAllocated && !global::mpi().isMainProcessor()) {
+    if (isAllocated && !global::mpi().isMainProcessor())
+    {
         // Avoid pointing to a buffer of size 0, as this leads to undefined behavior.
         PLB_ASSERT(bufferSize>0);
         buffer.resize(bufferSize);
         global::mpi().receive(&buffer[0], bufferSize, 0);
     }
-    if (!isAllocated && global::mpi().isMainProcessor()) {
+    if (!isAllocated && global::mpi().isMainProcessor())
+    {
         int toProc = multiBlock.getMultiBlockManagement().
-                         getThreadAttribution().getMpiProcess(toBlockId);
+                     getThreadAttribution().getMpiProcess(toBlockId);
         global::mpi().send(&buffer[0], bufferSize, toProc);
     }
 #endif
 }
 
 MultiBlockFastSerializer3D::MultiBlockFastSerializer3D (
-        MultiBlock3D const& multiBlock_, IndexOrdering::OrderingT ordering_ )
+    MultiBlock3D const& multiBlock_, IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(multiBlock.getBoundingBox())
 {
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         pos = domain.x0;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         pos = domain.z0;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
 }
 
 MultiBlockFastSerializer3D::MultiBlockFastSerializer3D (
-        MultiBlock3D const& multiBlock_,
-        Box3D domain_, IndexOrdering::OrderingT ordering_ )
+    MultiBlock3D const& multiBlock_,
+    Box3D domain_, IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(domain_)
 {
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         pos = domain.x0;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         pos = domain.z0;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
 }
 
-MultiBlockFastSerializer3D* MultiBlockFastSerializer3D::clone() const {
+MultiBlockFastSerializer3D* MultiBlockFastSerializer3D::clone() const
+{
     return new MultiBlockFastSerializer3D(*this);
 }
 
-pluint MultiBlockFastSerializer3D::getSize() const {
+pluint MultiBlockFastSerializer3D::getSize() const
+{
     return domain.nCells()*multiBlock.sizeOfCell();
 }
 
-const char* MultiBlockFastSerializer3D::getNextDataBuffer(pluint& bufferSize) const {
+const char* MultiBlockFastSerializer3D::getNextDataBuffer(pluint& bufferSize) const
+{
     bufferSize = computeSlice();
-    if (buffer.empty()) buffer.resize(1);
+    if (buffer.empty())
+        buffer.resize(1);
     return &buffer[0];
 }
 
-bool MultiBlockFastSerializer3D::isEmpty() const {
-    if (ordering==IndexOrdering::forward) {
+bool MultiBlockFastSerializer3D::isEmpty() const
+{
+    if (ordering==IndexOrdering::forward)
+    {
         return pos > domain.x1;
     }
-    else {
+    else
+    {
         return pos > domain.z1;
     }
 }
@@ -526,13 +611,16 @@ bool MultiBlockFastSerializer3D::isEmpty() const {
 pluint MultiBlockFastSerializer3D::computeSlice() const
 {
     Box3D slice(domain);
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         slice.x0=slice.x1=pos;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         slice.z0=slice.z1=pos;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
@@ -540,21 +628,25 @@ pluint MultiBlockFastSerializer3D::computeSlice() const
     blockStructure.addBlock(slice, 0);
     plint envelopeWidth=1;
     MultiBlockManagement3D serialMultiBlockManagement (
-            blockStructure, new OneToOneThreadAttribution, envelopeWidth );
+        blockStructure, new OneToOneThreadAttribution, envelopeWidth );
     MultiBlock3D* multiSerialBlock = multiBlock.clone(serialMultiBlockManagement);
 
     pluint bufferSize = slice.nCells()*multiBlock.sizeOfCell();
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         AtomicBlock3D& atomicSerialBlock = multiSerialBlock->getComponent(0);
-        if (ordering==IndexOrdering::forward) {
+        if (ordering==IndexOrdering::forward)
+        {
             SmartBulk3D oneBlockSlice(serialMultiBlockManagement, 0);
             Box3D localSlice(oneBlockSlice.toLocal(slice));
             atomicSerialBlock.getDataTransfer().send(localSlice, buffer, modif::staticVariables);
         }
-        else {
+        else
+        {
             buffer.clear();
             std::vector<char> tmpBuf;
-            for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+            for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+            {
                 Box3D subSlice(domain.x0, domain.x1, iY,iY, pos,pos);
                 SmartBulk3D oneBlockSlice(serialMultiBlockManagement, 0);
                 Box3D localSlice(oneBlockSlice.toLocal(subSlice));
@@ -570,79 +662,97 @@ pluint MultiBlockFastSerializer3D::computeSlice() const
 }
 
 MultiBlockFastUnSerializer3D::MultiBlockFastUnSerializer3D (
-        MultiBlock3D& multiBlock_, IndexOrdering::OrderingT ordering_ )
+    MultiBlock3D& multiBlock_, IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(multiBlock.getBoundingBox())
 {
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         pos = domain.x0;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         pos = domain.z0;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
 }
 
 MultiBlockFastUnSerializer3D::MultiBlockFastUnSerializer3D (
-        MultiBlock3D& multiBlock_,
-        Box3D domain_, IndexOrdering::OrderingT ordering_ )
+    MultiBlock3D& multiBlock_,
+    Box3D domain_, IndexOrdering::OrderingT ordering_ )
     : multiBlock(multiBlock_),
       ordering(ordering_),
       domain(domain_)
 {
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         pos = domain.x0;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         pos = domain.z0;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
 }
 
-MultiBlockFastUnSerializer3D* MultiBlockFastUnSerializer3D::clone() const {
+MultiBlockFastUnSerializer3D* MultiBlockFastUnSerializer3D::clone() const
+{
     return new MultiBlockFastUnSerializer3D(*this);
 }
 
-pluint MultiBlockFastUnSerializer3D::getSize() const {
+pluint MultiBlockFastUnSerializer3D::getSize() const
+{
     return domain.nCells()*multiBlock.sizeOfCell();
 }
 
-char* MultiBlockFastUnSerializer3D::getNextDataBuffer(pluint& bufferSize) {
-    if (ordering==IndexOrdering::forward) {
+char* MultiBlockFastUnSerializer3D::getNextDataBuffer(pluint& bufferSize)
+{
+    if (ordering==IndexOrdering::forward)
+    {
         bufferSize = domain.getNy()*domain.getNz()*multiBlock.sizeOfCell();
     }
-    else {
+    else
+    {
         bufferSize = domain.getNy()*domain.getNx()*multiBlock.sizeOfCell();
     }
 
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         buffer.resize(bufferSize);
     }
-    else {
+    else
+    {
         buffer.clear();
     }
-    if (buffer.empty()) {
+    if (buffer.empty())
+    {
         buffer.resize(1);
     }
     return &buffer[0];
 }
 
-void MultiBlockFastUnSerializer3D::commitData() {
+void MultiBlockFastUnSerializer3D::commitData()
+{
     Box3D slice(domain);
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         slice.x0=slice.x1=pos;
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         slice.z0=slice.z1=pos;
     }
-    else {
+    else
+    {
         // Sparse ordering not implemented.
         PLB_ASSERT( false );
     }
@@ -650,20 +760,24 @@ void MultiBlockFastUnSerializer3D::commitData() {
     blockStructure.addBlock(slice, 0);
     plint envelopeWidth=1;
     MultiBlockManagement3D serialMultiBlockManagement (
-            blockStructure, new OneToOneThreadAttribution, envelopeWidth );
+        blockStructure, new OneToOneThreadAttribution, envelopeWidth );
     MultiBlock3D* multiSerialBlock = multiBlock.clone(serialMultiBlockManagement);
-    if (global::mpi().isMainProcessor()) {
+    if (global::mpi().isMainProcessor())
+    {
         AtomicBlock3D& atomicSerialBlock = multiSerialBlock->getComponent(0);
-        if (ordering==IndexOrdering::forward) {
+        if (ordering==IndexOrdering::forward)
+        {
             SmartBulk3D oneBlockBulk(serialMultiBlockManagement, 0);
             Box3D localSlice(oneBlockBulk.toLocal(slice));
             atomicSerialBlock.getDataTransfer().receive(localSlice, buffer, modif::staticVariables);
         }
-        else {
+        else
+        {
             plint sizeOfSubSlice = domain.getNx()*multiBlock.sizeOfCell();
             std::vector<char> subBuffer(sizeOfSubSlice);
             plint subPos=0;
-            for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+            for (plint iY=domain.y0; iY<=domain.y1; ++iY)
+            {
                 std::copy(buffer.begin()+subPos, buffer.begin()+subPos+sizeOfSubSlice,
                           subBuffer.begin());
                 subPos += sizeOfSubSlice;
@@ -679,11 +793,14 @@ void MultiBlockFastUnSerializer3D::commitData() {
     ++pos;
 }
 
-bool MultiBlockFastUnSerializer3D::isFull() const {
-    if (ordering==IndexOrdering::forward) {
+bool MultiBlockFastUnSerializer3D::isFull() const
+{
+    if (ordering==IndexOrdering::forward)
+    {
         return pos > domain.x1;
     }
-    else {
+    else
+    {
         return pos > domain.z1;
     }
 }

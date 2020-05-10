@@ -593,12 +593,6 @@ void N_BoxStrainRateFromStressFunctional2D<T,Descriptor>::process (
             Cell<T,Descriptor> const& cell = lattice.get(iX,iY);
             cell.computePiNeq(element);
             T omega     = cell.getDynamics().getOmega();
-            if (cell.getDynamics().hasMoments()) {
-                T dynamicOmega = cell.getDynamics().getDynamicParameter(dynamicParams::dynamicOmega, cell);
-                if (!util::isZero(dynamicOmega)) {
-                    omega = dynamicOmega;
-                } 
-            }
             T rhoBar    = cell.getDynamics().computeRhoBar(cell);
             T prefactor = - omega * Descriptor<T>::invCs2 *
                             Descriptor<T>::invRho(rhoBar) / (T)2;
@@ -648,12 +642,6 @@ void Masked_N_BoxStrainRateFromStressFunctional2D<T,Descriptor>::process (
                 Cell<T,Descriptor> const& cell = lattice.get(iX,iY);
                 cell.computePiNeq(element);
                 T omega     = cell.getDynamics().getOmega();
-                if (cell.getDynamics().hasMoments()) {
-                    T dynamicOmega = cell.getDynamics().getDynamicParameter(dynamicParams::dynamicOmega, cell);
-                    if (!util::isZero(dynamicOmega)) {
-                        omega = dynamicOmega;
-                    } 
-                }
                 T rhoBar    = cell.getDynamics().computeRhoBar(cell);
                 T prefactor = - omega * Descriptor<T>::invCs2 *
                                 Descriptor<T>::invRho(rhoBar) / (T)2;

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,36 +29,41 @@
 #include <set>
 #include <typeinfo>
 
-namespace plb {
+namespace plb
+{
 
 
 template<typename T>
-class EnumeratedUniqueObjects {
-public:
-    pluint operator[] (T const& object) {
-        typename std::set<T>::iterator pos = objects.insert(object).first;
-        return distance(objects.begin(), pos);
-    }
-private:
-    std::set<T> objects;
-};
-
-struct TypeInfoComparator
+class EnumeratedUniqueObjects
 {
-    bool operator () (std::type_info const* t1, std::type_info const* t2) const {
-        return t1->before(*t2);
-    }
+public:
+	pluint operator[] (T const& object)
+	{
+		typename std::set<T>::iterator pos = objects.insert(object).first;
+		return distance(objects.begin(), pos);
+	}
+private:
+	std::set<T> objects;
+};
+
+struct TypeInfoComparator {
+	bool operator () (std::type_info const* t1, std::type_info const* t2) const
+	{
+		return t1->before(*t2);
+	}
 };
 
 
-class EnumeratedUniqueTypeIds {
+class EnumeratedUniqueTypeIds
+{
 public:
-    pluint operator[] (std::type_info const& object) {
-        std::set<std::type_info const*, TypeInfoComparator>::iterator pos = objects.insert(&object).first;
-        return std::distance(objects.begin(), pos);
-    }
+	pluint operator[] (std::type_info const& object)
+	{
+		std::set<std::type_info const*, TypeInfoComparator>::iterator pos = objects.insert(&object).first;
+		return std::distance(objects.begin(), pos);
+	}
 private:
-    std::set<std::type_info const*, TypeInfoComparator> objects;
+	std::set<std::type_info const*, TypeInfoComparator> objects;
 };
 
 } // namespace plb

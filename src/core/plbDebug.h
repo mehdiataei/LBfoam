@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,21 +29,22 @@
 
 #ifdef PLB_DEBUG
 
-    #define PLB_ASSERT( COND )        assert( COND );
-    #define PLB_PRECONDITION( COND )  assert( COND );
-    #define PLB_POSTCONDITION( COND ) assert( COND );
-    #define PLB_STATECHECK( A,B )     assert( (A) == (B) );
+#define PLB_ASSERT( COND )        assert( COND );
+#define PLB_PRECONDITION( COND )  assert( COND );
+#define PLB_POSTCONDITION( COND ) assert( COND );
+#define PLB_STATECHECK( A,B )     assert( (A) == (B) );
 
 #else
 
-    #define PLB_ASSERT( COND )
-    #define PLB_PRECONDITION( COND )
-    #define PLB_POSTCONDITION( COND )
-    #define PLB_STATECHECK( A,B )
+#define PLB_ASSERT( COND )
+#define PLB_PRECONDITION( COND )
+#define PLB_POSTCONDITION( COND )
+#define PLB_STATECHECK( A,B )
 
 #endif  // PLB_DEBUG
 
-namespace plb {
+namespace plb
+{
 
 // Programmatically enable core dumps for POSIX systems.
 // In a parallel program, this function must be called after plbInit.

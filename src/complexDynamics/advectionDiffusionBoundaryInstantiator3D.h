@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,203 +35,205 @@
 #include "dataProcessors/dataInitializerFunctional3D.h"
 #include "complexDynamics/advectionDiffusionBoundaryCondition3D.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
-class AdvectionDiffusionBoundaryConditionInstantiator3D : 
-		public OnLatticeAdvectionDiffusionBoundaryCondition3D<T,Descriptor> {
+class AdvectionDiffusionBoundaryConditionInstantiator3D :
+	public OnLatticeAdvectionDiffusionBoundaryCondition3D<T,Descriptor>
+{
 public:
-    AdvectionDiffusionBoundaryConditionInstantiator3D();
+	AdvectionDiffusionBoundaryConditionInstantiator3D();
 
-    void addTemperatureBoundary0N (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureBoundary0P (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType=boundary::dirichlet );
-    void addTemperatureBoundary1N (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureBoundary1P (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureBoundary2N (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureBoundary2P (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
+	void addTemperatureBoundary0N (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureBoundary0P (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType=boundary::dirichlet );
+	void addTemperatureBoundary1N (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureBoundary1P (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureBoundary2N (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureBoundary2P (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
 
-    void addTemperatureEdge0NN (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge0NP (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge0PN (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge0PP (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge1NN (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge1NP (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge1PN (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge1PP (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge2NN (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge2NP (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge2PN (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge2PP (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
+	void addTemperatureEdge0NN (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge0NP (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge0PN (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge0PP (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge1NN (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge1NP (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge1PN (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge1PP (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge2NN (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge2NP (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge2PN (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge2PP (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
 
-    void addTemperatureCornerNNN (
-            plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerNNP (
-            plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerNPN (
-            plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerNPP (
-            plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerPNN (
-            plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerPNP (
-            plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerPPN (
-            plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerPPP (
-            plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
+	void addTemperatureCornerNNN (
+	    plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerNNP (
+	    plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerNPN (
+	    plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerNPP (
+	    plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerPNN (
+	    plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerPNP (
+	    plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerPPN (
+	    plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerPPP (
+	    plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
 
 
-    void addTemperatureBoundary0N (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureBoundary0P (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureBoundary1N (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureBoundary1P (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureBoundary2N (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureBoundary2P (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
+	void addTemperatureBoundary0N (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureBoundary0P (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureBoundary1N (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureBoundary1P (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureBoundary2N (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureBoundary2P (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
 
-    void addTemperatureEdge0NN (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge0NP (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge0PN (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge0PP (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge1NN (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge1NP (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge1PN (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge1PP (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge2NN (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge2NP (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge2PN (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureEdge2PP (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
+	void addTemperatureEdge0NN (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge0NP (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge0PN (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge0PP (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge1NN (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge1NP (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge1PN (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge1PP (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge2NN (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge2NP (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge2PN (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureEdge2PP (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
 
-    void addTemperatureCornerNNN (
-            plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerNNP (
-            plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerNPN (
-            plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerNPP (
-            plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerPNN (
-            plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerPNP (
-            plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerPPN (
-            plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    void addTemperatureCornerPPP (
-            plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
+	void addTemperatureCornerNNN (
+	    plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerNNP (
+	    plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerNPN (
+	    plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerNPP (
+	    plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerPNN (
+	    plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerPNP (
+	    plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerPPN (
+	    plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	void addTemperatureCornerPPP (
+	    plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
 
 private:
-    template<int direction, int orientation>
-    void addTemperatureBoundary (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    template<int plane, int normal1, int normal2>
-    void addTemperatureEdge (
-            Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    template<int normalX, int normalY, int normalZ>
-    void addTemperatureCorner (
-            plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
+	template<int direction, int orientation>
+	void addTemperatureBoundary (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	template<int plane, int normal1, int normal2>
+	void addTemperatureEdge (
+	    Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	template<int normalX, int normalY, int normalZ>
+	void addTemperatureCorner (
+	    plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
 
-    template<int direction, int orientation>
-    void addTemperatureBoundary (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    template<int plane, int normal1, int normal2>
-    void addTemperatureEdge (
-            Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
-    template<int normalX, int normalY, int normalZ>
-    void addTemperatureCorner (
-            plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType );
+	template<int direction, int orientation>
+	void addTemperatureBoundary (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	template<int plane, int normal1, int normal2>
+	void addTemperatureEdge (
+	    Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
+	template<int normalX, int normalY, int normalZ>
+	void addTemperatureCorner (
+	    plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+	    boundary::BcType bcType );
 };
 
 
@@ -239,553 +241,553 @@ private:
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    AdvectionDiffusionBoundaryConditionInstantiator3D()
+AdvectionDiffusionBoundaryConditionInstantiator3D()
 { }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int direction, int orientation>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                       boundary::BcType bcType)
 {
-    PLB_PRECONDITION( domain.x0==domain.x1 || domain.y0==domain.y1 || domain.z0==domain.z1 );
+	PLB_PRECONDITION( domain.x0==domain.x1 || domain.y0==domain.y1 || domain.z0==domain.z1 );
 
-    setCompositeDynamics (
-            lattice, domain,
-            BoundaryManager::template getTemperatureBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, domain,
+	    BoundaryManager::template getTemperatureBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
 
-    // In case an outflow condition is used, start by instantiating a data processor which copies
-    //   all velocity values from the previous lattice cell.
-    if (bcType==boundary::neumann) {
-        integrateProcessingFunctional (
-                new FlatAdiabaticBoundaryFunctional3D<T,Descriptor, direction, orientation>,
-                domain, lattice );
-    }
+	// In case an outflow condition is used, start by instantiating a data processor which copies
+	//   all velocity values from the previous lattice cell.
+	if (bcType==boundary::neumann) {
+		integrateProcessingFunctional (
+		    new FlatAdiabaticBoundaryFunctional3D<T,Descriptor, direction, orientation>,
+		    domain, lattice );
+	}
 
-    BoxProcessingFunctional3D_L<T,Descriptor>* functional
-        = BoundaryManager::template getTemperatureBoundaryProcessor<direction,orientation>(domain);
-    if (functional) {
-        integrateProcessingFunctional(functional, domain, lattice);
-    }
+	BoxProcessingFunctional3D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getTemperatureBoundaryProcessor<direction,orientation>(domain);
+	if (functional) {
+		integrateProcessingFunctional(functional, domain, lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int plane, int normal1, int normal2>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                   boundary::BcType bcType)
 {
-    PLB_PRECONDITION(
-            ( domain.x0==domain.x1 && domain.y0==domain.y1 ) ||
-            ( domain.x0==domain.x1 && domain.z0==domain.z1 ) ||
-            ( domain.y0==domain.y1 && domain.z0==domain.z1 ) );
+	PLB_PRECONDITION(
+	    ( domain.x0==domain.x1 && domain.y0==domain.y1 ) ||
+	    ( domain.x0==domain.x1 && domain.z0==domain.z1 ) ||
+	    ( domain.y0==domain.y1 && domain.z0==domain.z1 ) );
 
-    setCompositeDynamics (
-            lattice, domain,
-            BoundaryManager::template getTemperatureEdgeDynamics<plane,normal1,normal2>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, domain,
+	    BoundaryManager::template getTemperatureEdgeDynamics<plane,normal1,normal2>(new NoDynamics<T,Descriptor>) );
 
-    BoxProcessingFunctional3D_L<T,Descriptor>* functional
-        = BoundaryManager::template getTemperatureEdgeProcessor<plane,normal1,normal2>(domain);
-    if (functional) {
-        integrateProcessingFunctional(functional, domain, lattice);
-    }
+	BoxProcessingFunctional3D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getTemperatureEdgeProcessor<plane,normal1,normal2>(domain);
+	if (functional) {
+		integrateProcessingFunctional(functional, domain, lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int xNormal, int yNormal, int zNormal>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCorner(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCorner(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+                     boundary::BcType bcType)
 {
-    setCompositeDynamics (
-            lattice, Box3D(x,x, y,y, z,z),
-            BoundaryManager::template  getTemperatureCornerDynamics<xNormal,yNormal,zNormal>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, Box3D(x,x, y,y, z,z),
+	    BoundaryManager::template  getTemperatureCornerDynamics<xNormal,yNormal,zNormal>(new NoDynamics<T,Descriptor>) );
 
-    BoxProcessingFunctional3D_L<T,Descriptor>* functional
-        = BoundaryManager::template getTemperatureCornerProcessor<xNormal,yNormal,zNormal>(x,y,z);
-    if (functional) {
-        integrateProcessingFunctional(functional, Box3D(x,x,y,y,z,z), lattice);
-    }
+	BoxProcessingFunctional3D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getTemperatureCornerProcessor<xNormal,yNormal,zNormal>(x,y,z);
+	if (functional) {
+		integrateProcessingFunctional(functional, Box3D(x,x,y,y,z,z), lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary0N(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary0N(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<0,-1>(domain, lattice, bcType);
+	addTemperatureBoundary<0,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary0P(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary0P(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<0,1>(domain, lattice, bcType);
+	addTemperatureBoundary<0,1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary1N(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary1N(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<1,-1>(domain, lattice, bcType);
+	addTemperatureBoundary<1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary1P(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary1P(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<1, 1>(domain, lattice, bcType);
+	addTemperatureBoundary<1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary2N(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary2N(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<2,-1>(domain, lattice, bcType);
+	addTemperatureBoundary<2,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary2P(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary2P(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<2, 1>(domain, lattice, bcType);
+	addTemperatureBoundary<2, 1>(domain, lattice, bcType);
 }
 
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge0NN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge0NN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<0,-1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<0,-1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge0NP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge0NP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<0,-1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<0,-1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge0PN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge0PN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<0, 1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<0, 1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge0PP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge0PP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<0, 1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<0, 1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge1NN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge1NN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<1,-1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<1,-1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge1NP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge1NP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<1,-1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<1,-1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge1PN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge1PN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<1, 1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<1, 1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge1PP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge1PP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<1, 1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<1, 1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge2NN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge2NN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<2,-1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<2,-1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge2NP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge2NP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<2,-1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<2,-1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge2PN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge2PN(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<2, 1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<2, 1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge2PP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge2PP(Box3D domain, BlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<2, 1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<2, 1, 1>(domain, lattice, bcType);
 }
 
 
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNNN(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerNNN(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner<-1,-1,-1>(x,y,z, lattice, bcType);
+	addTemperatureCorner<-1,-1,-1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNNP(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerNNP(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner<-1,-1, 1>(x,y,z, lattice, bcType);
+	addTemperatureCorner<-1,-1, 1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNPN(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerNPN(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner<-1, 1,-1>(x,y,z, lattice, bcType);
+	addTemperatureCorner<-1, 1,-1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNPP(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerNPP(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner<-1, 1, 1>(x,y,z, lattice, bcType);
+	addTemperatureCorner<-1, 1, 1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPNN(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerPNN(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner< 1,-1,-1>(x,y,z, lattice, bcType);
+	addTemperatureCorner< 1,-1,-1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPNP(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerPNP(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner< 1,-1, 1>(x,y,z, lattice, bcType);
+	addTemperatureCorner< 1,-1, 1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPPN(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerPPN(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner< 1, 1,-1>(x,y,z, lattice, bcType);
+	addTemperatureCorner< 1, 1,-1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPPP(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerPPP(plint x, plint y, plint z, BlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner< 1, 1, 1>(x,y,z, lattice, bcType);
+	addTemperatureCorner< 1, 1, 1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int direction, int orientation>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                       boundary::BcType bcType)
 {
-    PLB_PRECONDITION( domain.x0==domain.x1 || domain.y0==domain.y1 || domain.z0==domain.z1 );
+	PLB_PRECONDITION( domain.x0==domain.x1 || domain.y0==domain.y1 || domain.z0==domain.z1 );
 
-    setCompositeDynamics (
-            lattice, domain,
-            BoundaryManager::template getTemperatureBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, domain,
+	    BoundaryManager::template getTemperatureBoundaryDynamics<direction,orientation>(new NoDynamics<T,Descriptor>) );
 
-    BoxProcessingFunctional3D_L<T,Descriptor>* functional
-        = BoundaryManager::template getTemperatureBoundaryProcessor<direction,orientation>(domain);
-    if (functional) {
-        integrateProcessingFunctional(functional, domain, lattice);
-    }
+	BoxProcessingFunctional3D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getTemperatureBoundaryProcessor<direction,orientation>(domain);
+	if (functional) {
+		integrateProcessingFunctional(functional, domain, lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int plane, int normal1, int normal2>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                   boundary::BcType bcType)
 {
-    PLB_PRECONDITION(
-            ( domain.x0==domain.x1 && domain.y0==domain.y1 ) ||
-            ( domain.x0==domain.x1 && domain.z0==domain.z1 ) ||
-            ( domain.y0==domain.y1 && domain.z0==domain.z1 ) );
+	PLB_PRECONDITION(
+	    ( domain.x0==domain.x1 && domain.y0==domain.y1 ) ||
+	    ( domain.x0==domain.x1 && domain.z0==domain.z1 ) ||
+	    ( domain.y0==domain.y1 && domain.z0==domain.z1 ) );
 
-    setCompositeDynamics (
-            lattice, domain,
-            BoundaryManager::template getTemperatureEdgeDynamics<plane,normal1,normal2>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, domain,
+	    BoundaryManager::template getTemperatureEdgeDynamics<plane,normal1,normal2>(new NoDynamics<T,Descriptor>) );
 
-    BoxProcessingFunctional3D_L<T,Descriptor>* functional
-        = BoundaryManager::template getTemperatureEdgeProcessor<plane,normal1,normal2>(domain);
-    if (functional) {
-        integrateProcessingFunctional(functional, domain, lattice);
-    }
+	BoxProcessingFunctional3D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getTemperatureEdgeProcessor<plane,normal1,normal2>(domain);
+	if (functional) {
+		integrateProcessingFunctional(functional, domain, lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 template<int xNormal, int yNormal, int zNormal>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCorner(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCorner(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+                     boundary::BcType bcType)
 {
-    setCompositeDynamics (
-            lattice, Box3D(x,x, y,y, z,z),
-            BoundaryManager::template  getTemperatureCornerDynamics<xNormal,yNormal,zNormal>(new NoDynamics<T,Descriptor>) );
+	setCompositeDynamics (
+	    lattice, Box3D(x,x, y,y, z,z),
+	    BoundaryManager::template  getTemperatureCornerDynamics<xNormal,yNormal,zNormal>(new NoDynamics<T,Descriptor>) );
 
-    BoxProcessingFunctional3D_L<T,Descriptor>* functional
-        = BoundaryManager::template getTemperatureCornerProcessor<xNormal,yNormal,zNormal>(x,y,z);
-    if (functional) {
-        integrateProcessingFunctional(functional, Box3D(x,x,y,y,z,z), lattice);
-    }
+	BoxProcessingFunctional3D_L<T,Descriptor>* functional
+	    = BoundaryManager::template getTemperatureCornerProcessor<xNormal,yNormal,zNormal>(x,y,z);
+	if (functional) {
+		integrateProcessingFunctional(functional, Box3D(x,x,y,y,z,z), lattice);
+	}
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary0N(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary0N(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<0,-1>(domain, lattice, bcType);
+	addTemperatureBoundary<0,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary0P(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary0P(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<0,1>(domain, lattice, bcType);
+	addTemperatureBoundary<0,1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary1N(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary1N(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<1,-1>(domain, lattice, bcType);
+	addTemperatureBoundary<1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary1P(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary1P(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<1, 1>(domain, lattice, bcType);
+	addTemperatureBoundary<1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary2N(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary2N(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<2,-1>(domain, lattice, bcType);
+	addTemperatureBoundary<2,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureBoundary2P(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureBoundary2P(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                         boundary::BcType bcType)
 {
-    addTemperatureBoundary<2, 1>(domain, lattice, bcType);
+	addTemperatureBoundary<2, 1>(domain, lattice, bcType);
 }
 
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge0NN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge0NN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<0,-1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<0,-1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge0NP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge0NP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<0,-1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<0,-1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge0PN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge0PN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<0, 1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<0, 1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge0PP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge0PP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<0, 1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<0, 1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge1NN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge1NN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<1,-1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<1,-1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge1NP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge1NP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<1,-1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<1,-1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge1PN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge1PN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<1, 1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<1, 1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge1PP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge1PP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<1, 1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<1, 1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge2NN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge2NN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<2,-1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<2,-1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge2NP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge2NP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<2,-1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<2,-1, 1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge2PN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge2PN(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<2, 1,-1>(domain, lattice, bcType);
+	addTemperatureEdge<2, 1,-1>(domain, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureEdge2PP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureEdge2PP(Box3D domain, MultiBlockLattice3D<T,Descriptor>& lattice,
+                      boundary::BcType bcType)
 {
-    addTemperatureEdge<2, 1, 1>(domain, lattice, bcType);
+	addTemperatureEdge<2, 1, 1>(domain, lattice, bcType);
 }
 
 
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNNN(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerNNN(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner<-1,-1,-1>(x,y,z, lattice, bcType);
+	addTemperatureCorner<-1,-1,-1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNNP(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerNNP(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner<-1,-1, 1>(x,y,z, lattice, bcType);
+	addTemperatureCorner<-1,-1, 1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNPN(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerNPN(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner<-1, 1,-1>(x,y,z, lattice, bcType);
+	addTemperatureCorner<-1, 1,-1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerNPP(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerNPP(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner<-1, 1, 1>(x,y,z, lattice, bcType);
+	addTemperatureCorner<-1, 1, 1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPNN(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerPNN(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner< 1,-1,-1>(x,y,z, lattice, bcType);
+	addTemperatureCorner< 1,-1,-1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPNP(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerPNP(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner< 1,-1, 1>(x,y,z, lattice, bcType);
+	addTemperatureCorner< 1,-1, 1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPPN(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerPPN(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner< 1, 1,-1>(x,y,z, lattice, bcType);
+	addTemperatureCorner< 1, 1,-1>(x,y,z, lattice, bcType);
 }
 
 template<typename T, template<typename U> class Descriptor, class BoundaryManager>
 void AdvectionDiffusionBoundaryConditionInstantiator3D<T,Descriptor,BoundaryManager>::
-    addTemperatureCornerPPP(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
-            boundary::BcType bcType)
+addTemperatureCornerPPP(plint x, plint y, plint z, MultiBlockLattice3D<T,Descriptor>& lattice,
+                        boundary::BcType bcType)
 {
-    addTemperatureCorner< 1, 1, 1>(x,y,z, lattice, bcType);
+	addTemperatureCorner< 1, 1, 1>(x,y,z, lattice, bcType);
 }
 
 }  // namespace plb

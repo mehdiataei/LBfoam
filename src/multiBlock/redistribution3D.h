@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -33,19 +33,21 @@
 #include "core/globalDefs.h"
 #include "multiBlock/multiBlockManagement3D.h"
 
-namespace plb {
+namespace plb
+{
 
 struct MultiBlockRedistribute3D {
-    virtual ~MultiBlockRedistribute3D() { }
-    virtual MultiBlockManagement3D redistribute(MultiBlockManagement3D const& original) const=0;
+	virtual ~MultiBlockRedistribute3D() { }
+	virtual MultiBlockManagement3D redistribute(MultiBlockManagement3D const& original) const=0;
 };
 
-class RandomRedistribute3D : public MultiBlockRedistribute3D {
+class RandomRedistribute3D : public MultiBlockRedistribute3D
+{
 public:
-    RandomRedistribute3D(pluint rseed_=10);
-    virtual MultiBlockManagement3D redistribute(MultiBlockManagement3D const& original) const;
+	RandomRedistribute3D(pluint rseed_=10);
+	virtual MultiBlockManagement3D redistribute(MultiBlockManagement3D const& original) const;
 private:
-    pluint rseed;
+	pluint rseed;
 };
 
 }  // namespace plb

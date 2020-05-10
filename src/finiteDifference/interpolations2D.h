@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -31,34 +31,35 @@
 #include "atomicBlock/dataField2D.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 /// Helper function: linear interpolation within one cell.
 template<typename T>
 void linearInterpolationCoefficients (
-        AtomicBlock2D const& block, Array<T,2> const& position );
+    AtomicBlock2D const& block, Array<T,2> const& position );
 
 template<typename T, plint nDim>
 Array<T,nDim> linearInterpolateTensorField (
-        TensorField2D<T,nDim>& tensorField, Array<T,2> const& position );
+    TensorField2D<T,nDim>& tensorField, Array<T,2> const& position );
 
 template<typename T, plint nDim>
 Array<T,nDim> predictorCorrectorTensorField (
-        TensorField2D<T,nDim>& tensorField, Array<T,2> const& position, T scaling );
+    TensorField2D<T,nDim>& tensorField, Array<T,2> const& position, T scaling );
 
 template<typename T>
 Array<T,2> predictorCorrectorNTensorField (
-        NTensorField2D<T>& tensorField, Array<T,2> const& position, T scaling );
+    NTensorField2D<T>& tensorField, Array<T,2> const& position, T scaling );
 
-        
+
 template<typename T>
 void predictorCorrectorRhoBarJ (
-        NTensorField2D<T>& rhoBarJ, Array<T,2> const& position,
-        bool velIsJ, Array<T,2>& j, T& rhoBar );
-        
+    NTensorField2D<T>& rhoBarJ, Array<T,2> const& position,
+    bool velIsJ, Array<T,2>& j, T& rhoBar );
+
 template<typename T>
 T linearInterpolateScalarField (
-        ScalarField2D<T>& scalarField, Array<T,2> const& position );
+    ScalarField2D<T>& scalarField, Array<T,2> const& position );
 
 }  // namespace plb
 

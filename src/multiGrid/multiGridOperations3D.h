@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -37,7 +37,8 @@
 #include "multiGrid/multiGrid3D.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
 class MultiBlock3D;
 struct DataProcessorGenerator3D;

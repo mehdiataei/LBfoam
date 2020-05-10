@@ -27,54 +27,51 @@
 #define EIGEN_REDUX_H
 
 template<typename BinaryOp, typename Derived, int Start, int Length>
-struct ei_redux_impl
-{
-  enum {
-    HalfLength = Length/2
-  };
+struct ei_redux_impl {
+	enum {
+		HalfLength = Length/2
+	};
 
-  typedef typename ei_result_of<BinaryOp(typename Derived::Scalar)>::type Scalar;
+	typedef typename ei_result_of<BinaryOp(typename Derived::Scalar)>::type Scalar;
 
-  static Scalar run(const Derived &mat, const BinaryOp& func)
-  {
-    return func(
-      ei_redux_impl<BinaryOp, Derived, Start, HalfLength>::run(mat, func),
-      ei_redux_impl<BinaryOp, Derived, Start+HalfLength, Length - HalfLength>::run(mat, func));
-  }
+	static Scalar run(const Derived &mat, const BinaryOp& func)
+	{
+		return func(
+		           ei_redux_impl<BinaryOp, Derived, Start, HalfLength>::run(mat, func),
+		           ei_redux_impl<BinaryOp, Derived, Start+HalfLength, Length - HalfLength>::run(mat, func));
+	}
 };
 
 template<typename BinaryOp, typename Derived, int Start>
-struct ei_redux_impl<BinaryOp, Derived, Start, 1>
-{
-  enum {
-    col = Start / Derived::RowsAtCompileTime,
-    row = Start % Derived::RowsAtCompileTime
-  };
+struct ei_redux_impl<BinaryOp, Derived, Start, 1> {
+	enum {
+		col = Start / Derived::RowsAtCompileTime,
+		row = Start % Derived::RowsAtCompileTime
+	};
 
-  typedef typename ei_result_of<BinaryOp(typename Derived::Scalar)>::type Scalar;
+	typedef typename ei_result_of<BinaryOp(typename Derived::Scalar)>::type Scalar;
 
-  static Scalar run(const Derived &mat, const BinaryOp &)
-  {
-    return mat.coeff(row, col);
-  }
+	static Scalar run(const Derived &mat, const BinaryOp &)
+	{
+		return mat.coeff(row, col);
+	}
 };
 
 template<typename BinaryOp, typename Derived, int Start>
-struct ei_redux_impl<BinaryOp, Derived, Start, Dynamic>
-{
-  typedef typename ei_result_of<BinaryOp(typename Derived::Scalar)>::type Scalar;
-  static Scalar run(const Derived& mat, const BinaryOp& func)
-  {
-    ei_assert(mat.rows()>0 && mat.cols()>0 && "you are using a non initialized matrix");
-    Scalar res;
-    res = mat.coeff(0,0);
-    for(int i = 1; i < mat.rows(); ++i)
-      res = func(res, mat.coeff(i, 0));
-    for(int j = 1; j < mat.cols(); ++j)
-      for(int i = 0; i < mat.rows(); ++i)
-        res = func(res, mat.coeff(i, j));
-    return res;
-  }
+struct ei_redux_impl<BinaryOp, Derived, Start, Dynamic> {
+	typedef typename ei_result_of<BinaryOp(typename Derived::Scalar)>::type Scalar;
+	static Scalar run(const Derived& mat, const BinaryOp& func)
+	{
+		ei_assert(mat.rows()>0 && mat.cols()>0 && "you are using a non initialized matrix");
+		Scalar res;
+		res = mat.coeff(0,0);
+		for(int i = 1; i < mat.rows(); ++i)
+			res = func(res, mat.coeff(i, 0));
+		for(int j = 1; j < mat.cols(); ++j)
+			for(int i = 0; i < mat.rows(); ++i)
+				res = func(res, mat.coeff(i, j));
+		return res;
+	}
 };
 
 /** \returns the result of a full redux operation on the whole matrix or vector using \a func
@@ -89,11 +86,11 @@ template<typename BinaryOp>
 typename ei_result_of<BinaryOp(typename ei_traits<Derived>::Scalar)>::type
 MatrixBase<Derived>::redux(const BinaryOp& func) const
 {
-  const bool unroll = SizeAtCompileTime * CoeffReadCost
-                    + (SizeAtCompileTime-1) * ei_functor_traits<BinaryOp>::Cost
-                    <= EIGEN_UNROLLING_LIMIT;
-  return ei_redux_impl<BinaryOp, Derived, 0, unroll ? int(SizeAtCompileTime) : Dynamic>
-            ::run(derived(), func);
+	const bool unroll = SizeAtCompileTime * CoeffReadCost
+	                    + (SizeAtCompileTime-1) * ei_functor_traits<BinaryOp>::Cost
+	                    <= EIGEN_UNROLLING_LIMIT;
+	return ei_redux_impl<BinaryOp, Derived, 0, unroll ? int(SizeAtCompileTime) : Dynamic>
+	       ::run(derived(), func);
 }
 
 /** \returns the minimum of all coefficients of *this
@@ -102,7 +99,7 @@ template<typename Derived>
 inline typename ei_traits<Derived>::Scalar
 MatrixBase<Derived>::minCoeff() const
 {
-  return this->redux(Eigen::ei_scalar_min_op<Scalar>());
+	return this->redux(Eigen::ei_scalar_min_op<Scalar>());
 }
 
 /** \returns the maximum of all coefficients of *this
@@ -111,7 +108,7 @@ template<typename Derived>
 inline typename ei_traits<Derived>::Scalar
 MatrixBase<Derived>::maxCoeff() const
 {
-  return this->redux(Eigen::ei_scalar_max_op<Scalar>());
+	return this->redux(Eigen::ei_scalar_max_op<Scalar>());
 }
 
 #endif // EIGEN_REDUX_H

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -27,7 +27,8 @@
  */
 #include "multiBlock/multiBlockInfo3D.h"
 
-namespace plb {
+namespace plb
+{
 
 bool getMultiBlockInfo(MultiBlock3D const& multiBlock,
                        plint& nx, plint& ny, plint& nz, plint& numBlocks,
@@ -40,7 +41,8 @@ bool getMultiBlockInfo(MultiBlock3D const& multiBlock,
 
     MultiBlockManagement3D const& management = multiBlock.getMultiBlockManagement();
     SparseBlockStructure3D const& sparseBlock = management.getSparseBlockStructure();
-    if (sparseBlock.getNumBlocks()==0) {
+    if (sparseBlock.getNumBlocks()==0)
+    {
         return false;
     }
     plint firstBulk = sparseBlock.getBulks().begin()->first;
@@ -51,14 +53,17 @@ bool getMultiBlockInfo(MultiBlock3D const& multiBlock,
     std::map<plint,Box3D>::const_iterator it = sparseBlock.getBulks().begin();
     plint smallestBlock = it->first;
     plint largestBlock = it->first;
-    for (; it != sparseBlock.getBulks().end(); ++it) {
+    for (; it != sparseBlock.getBulks().end(); ++it)
+    {
         plint numCells = it->second.nCells();
         numAllocatedCells += numCells;
-        if (numCells>maxNumCells) {
+        if (numCells>maxNumCells)
+        {
             maxNumCells = numCells;
             largestBlock = it->first;
         }
-        if (numCells<minNumCells) {
+        if (numCells<minNumCells)
+        {
             minNumCells = numCells;
             smallestBlock = it->first;
         }
@@ -69,23 +74,25 @@ bool getMultiBlockInfo(MultiBlock3D const& multiBlock,
     return true;
 }
 
-std::string getMultiBlockInfo(MultiBlock3D const& multiBlock) {
+std::string getMultiBlockInfo(MultiBlock3D const& multiBlock)
+{
     plint nx, ny, nz;
     plint numBlocks;
     plint numAllocatedCells;
     Box3D smallest, largest;
-    if (!getMultiBlockInfo(multiBlock, nx, ny, nz, numBlocks, smallest, largest, numAllocatedCells)) {
+    if (!getMultiBlockInfo(multiBlock, nx, ny, nz, numBlocks, smallest, largest, numAllocatedCells))
+    {
         return std::string("Empty multi-block\n");
     }
     std::stringstream blockInfo;
     blockInfo << "Size of the multi-block:     "  << nx << "-by-" << ny << "-by-" << nz << "\n";
     blockInfo << "Number of atomic-blocks:     "  << numBlocks << "\n";
     blockInfo << "Smallest atomic-block:       "  << smallest.getNx() << "-by-"
-                                                  << smallest.getNy() << "-by-"
-                                                  << smallest.getNz() << "\n";
+              << smallest.getNy() << "-by-"
+              << smallest.getNz() << "\n";
     blockInfo << "Largest atomic-block:        "  << largest.getNx()  << "-by-"
-                                                  << largest.getNy() << "-by-"
-                                                  << largest.getNz() << "\n";
+              << largest.getNy() << "-by-"
+              << largest.getNz() << "\n";
     blockInfo << "Number of allocated cells:   "  << (double)numAllocatedCells/1.e6 << " million\n";
     blockInfo << "Fraction of allocated domain: " << (double)numAllocatedCells/(double)(nx*ny*nz)*100 << " percent\n";
 

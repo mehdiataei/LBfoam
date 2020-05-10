@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -27,37 +27,39 @@
 
 #include "core/globalDefs.h"
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class Complex {
+class Complex
+{
 public:
-    Complex();
-    Complex(T Re_);
-    Complex(T Re_, T Imag_);
-    template<typename U> operator U() const;
-    T real() const;
-    T imaginary() const;
-    T modulus() const;
-    T sqrModulus() const;
-    Complex<T> conjugate() const;
-    T argument() const;
-    Complex<T> intpow(int n) const;
-    Complex<T>& operator+=(Complex<T> const& rhs);
-    template<typename U> Complex<T>& operator+=(U rhs);
-    Complex<T>& operator-=(Complex<T> const& rhs);
-    template<typename U> Complex<T>& operator-=(U rhs);
-    Complex<T> operator-() const;
-    Complex<T>& operator*=(Complex<T> const& rhs);
-    template<typename U> Complex<T>& operator*=(U rhs);
-    Complex<T>& operator/=(Complex<T> const& rhs);
-    template<typename U> Complex<T>& operator/=(U rhs);
+	Complex();
+	Complex(T Re_);
+	Complex(T Re_, T Imag_);
+	template<typename U> operator U() const;
+	T real() const;
+	T imaginary() const;
+	T modulus() const;
+	T sqrModulus() const;
+	Complex<T> conjugate() const;
+	T argument() const;
+	Complex<T> intpow(int n) const;
+	Complex<T>& operator+=(Complex<T> const& rhs);
+	template<typename U> Complex<T>& operator+=(U rhs);
+	Complex<T>& operator-=(Complex<T> const& rhs);
+	template<typename U> Complex<T>& operator-=(U rhs);
+	Complex<T> operator-() const;
+	Complex<T>& operator*=(Complex<T> const& rhs);
+	template<typename U> Complex<T>& operator*=(U rhs);
+	Complex<T>& operator/=(Complex<T> const& rhs);
+	template<typename U> Complex<T>& operator/=(U rhs);
 private:
-    // If at any point someone adds more data here, he should go
-    // also to the file mpiManager.cpp and change the implementation
-    // of the reduction operations for the Complex data types.
-    T Re, Imag;
-    static T pi;
+	// If at any point someone adds more data here, he should go
+	// also to the file mpiManager.cpp and change the implementation
+	// of the reduction operations for the Complex data types.
+	T Re, Imag;
+	static T pi;
 };
 
 // In some templated codes (for example the call to std::sqrt(arg)), it is
@@ -65,9 +67,8 @@ private:
 // in all other cases, T is cast to T. That's why we overload
 // PlbTraits from globalDefs.h for the Complex type.
 template<typename U>
-struct PlbTraits<Complex<U> >
-{
-    typedef U BaseType;
+struct PlbTraits<Complex<U> > {
+	typedef U BaseType;
 };
 
 template<typename T>

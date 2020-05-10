@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -34,56 +34,57 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 #include "latticeBoltzmann/nearestNeighborLattices3D.hh"
 
-namespace plb {
+namespace plb
+{
 
 // Atomic-block
 
 template FLOAT_T computeAverageDensity<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
+    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
 template FLOAT_T computeAverageDensity<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
+    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
 
 template FLOAT_T computeAverageRhoBar<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
+    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
 template FLOAT_T computeAverageRhoBar<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
+    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
 
 template FLOAT_T computeAverageEnergy<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
+    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
 template FLOAT_T computeAverageEnergy<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
+    BlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
 
 // Multi-block
 
 template FLOAT_T computeAverageDensity<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
 template FLOAT_T computeAverageDensity<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
 
 template FLOAT_T computeAverageRhoBar<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
 template FLOAT_T computeAverageRhoBar<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
 
 template FLOAT_T computeAverageEnergy<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice, Box3D domain );
 template FLOAT_T computeAverageEnergy<FLOAT_T, descriptors::DESCRIPTOR_3D> (
-                    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
+    MultiBlockLattice3D<FLOAT_T, descriptors::DESCRIPTOR_3D>& lattice );
 
 template
 void copyPopulations<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-        BlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeFrom,
-        BlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeTo, Box3D domain );
+    BlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeFrom,
+    BlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeTo, Box3D domain );
 
 template
 void copyAll<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeFrom,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeTo, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeFrom,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeTo, Box3D domain );
 
 template
 void copyRegenerate<FLOAT_T,descriptors::DESCRIPTOR_3D> (
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeFrom,
-        MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeTo, Box3D domain );
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeFrom,
+    MultiBlockLattice3D<FLOAT_T,descriptors::DESCRIPTOR_3D>& latticeTo, Box3D domain );
 }  // namespace plb
 
 #endif  // COMPILE_3D

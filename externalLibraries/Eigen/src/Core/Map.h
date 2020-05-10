@@ -45,54 +45,56 @@
   * \sa Matrix::Map()
   */
 template<typename MatrixType, int _PacketAccess>
-struct ei_traits<Map<MatrixType, _PacketAccess> > : public ei_traits<MatrixType>
-{
-  enum {
-    PacketAccess = _PacketAccess,
-    Flags = ei_traits<MatrixType>::Flags & ~AlignedBit
-  };
-  typedef typename ei_meta_if<int(PacketAccess)==ForceAligned,
-                              Map<MatrixType, _PacketAccess>&,
-                              Map<MatrixType, ForceAligned> >::ret AlignedDerivedType;
+struct ei_traits<Map<MatrixType, _PacketAccess> > : public ei_traits<MatrixType> {
+	enum {
+		PacketAccess = _PacketAccess,
+		Flags = ei_traits<MatrixType>::Flags & ~AlignedBit
+	};
+	typedef typename ei_meta_if<int(PacketAccess)==ForceAligned,
+	        Map<MatrixType, _PacketAccess>&,
+	        Map<MatrixType, ForceAligned> >::ret AlignedDerivedType;
 };
 
 template<typename MatrixType, int PacketAccess> class Map
-  : public MapBase<Map<MatrixType, PacketAccess> >
+	: public MapBase<Map<MatrixType, PacketAccess> >
 {
-  public:
+public:
 
-    _EIGEN_GENERIC_PUBLIC_INTERFACE(Map, MapBase<Map>)
-    typedef typename ei_traits<Map>::AlignedDerivedType AlignedDerivedType;
+	_EIGEN_GENERIC_PUBLIC_INTERFACE(Map, MapBase<Map>)
+	typedef typename ei_traits<Map>::AlignedDerivedType AlignedDerivedType;
 
-    inline int stride() const { return this->innerSize(); }
+	inline int stride() const
+	{
+		return this->innerSize();
+	}
 
-    AlignedDerivedType _convertToForceAligned()
-    {
-      return Map<MatrixType,ForceAligned>(Base::m_data, Base::m_rows.value(), Base::m_cols.value());
-    }
+	AlignedDerivedType _convertToForceAligned()
+	{
+		return Map<MatrixType,ForceAligned>(Base::m_data, Base::m_rows.value(), Base::m_cols.value());
+	}
 
-    inline Map(const Scalar* data) : Base(data) {}
+	inline Map(const Scalar* data) : Base(data) {}
 
-    inline Map(const Scalar* data, int size) : Base(data, size) {}
+	inline Map(const Scalar* data, int size) : Base(data, size) {}
 
-    inline Map(const Scalar* data, int rows, int cols) : Base(data, rows, cols) {}
+	inline Map(const Scalar* data, int rows, int cols) : Base(data, rows, cols) {}
 
-    inline void resize(int rows, int cols)
-    {
-      EIGEN_ONLY_USED_FOR_DEBUG(rows);
-      EIGEN_ONLY_USED_FOR_DEBUG(cols);
-      ei_assert(rows == this->rows());
-      ei_assert(cols == this->cols());
-    }
+	inline void resize(int rows, int cols)
+	{
+		EIGEN_ONLY_USED_FOR_DEBUG(rows);
+		EIGEN_ONLY_USED_FOR_DEBUG(cols);
+		ei_assert(rows == this->rows());
+		ei_assert(cols == this->cols());
+	}
 
-    inline void resize(int size)
-    {
-      EIGEN_STATIC_ASSERT_VECTOR_ONLY(MatrixType)
-      EIGEN_ONLY_USED_FOR_DEBUG(size);
-      ei_assert(size == this->size());
-    }
+	inline void resize(int size)
+	{
+		EIGEN_STATIC_ASSERT_VECTOR_ONLY(MatrixType)
+		EIGEN_ONLY_USED_FOR_DEBUG(size);
+		ei_assert(size == this->size());
+	}
 
-    EIGEN_INHERIT_ASSIGNMENT_OPERATORS(Map)
+	EIGEN_INHERIT_ASSIGNMENT_OPERATORS(Map)
 };
 
 /** Constructor copying an existing array of data.
@@ -103,9 +105,9 @@ template<typename MatrixType, int PacketAccess> class Map
   */
 template<typename _Scalar, int _Rows, int _Cols, int _StorageOrder, int _MaxRows, int _MaxCols>
 inline Matrix<_Scalar, _Rows, _Cols, _StorageOrder, _MaxRows, _MaxCols>
-  ::Matrix(const Scalar *data)
+::Matrix(const Scalar *data)
 {
-  _set_noalias(Eigen::Map<Matrix>(data));
+	_set_noalias(Eigen::Map<Matrix>(data));
 }
 
 #endif // EIGEN_MAP_H

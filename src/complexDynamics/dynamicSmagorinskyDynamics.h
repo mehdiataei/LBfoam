@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,25 +28,28 @@
 #include "core/globalDefs.h"
 #include "core/dynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 /// A dynamics which reads the relaxation parameter from external scalar before collision.
 template<typename T, template<typename U> class Descriptor>
-class ExternalOmegaDynamics : public CompositeDynamics<T,Descriptor> {
+class ExternalOmegaDynamics : public CompositeDynamics<T,Descriptor>
+{
 public:
-    ExternalOmegaDynamics(Dynamics<T,Descriptor>* baseDynamics_)
-        : CompositeDynamics<T,Descriptor>(baseDynamics_)
-    { }
-    virtual void prepareCollision(Cell<T,Descriptor>& cell) {
-        // Copy relaxation parameter from external scalar.
-        this->setOmega(*cell.getExternal(Descriptor<T>::ExternalField::omegaBeginsAt));
-    }
-    ExternalOmegaDynamics<T,Descriptor>* clone() const {
-        return new ExternalOmegaDynamics(*this);
-    }
+	ExternalOmegaDynamics(Dynamics<T,Descriptor>* baseDynamics_)
+		: CompositeDynamics<T,Descriptor>(baseDynamics_)
+	{ }
+	virtual void prepareCollision(Cell<T,Descriptor>& cell)
+	{
+		// Copy relaxation parameter from external scalar.
+		this->setOmega(*cell.getExternal(Descriptor<T>::ExternalField::omegaBeginsAt));
+	}
+	ExternalOmegaDynamics<T,Descriptor>* clone() const
+	{
+		return new ExternalOmegaDynamics(*this);
+	}
 };
 
 } // namespace plb
 
 #endif  // DYNAMIC_SMAGORINSKY_DYNAMICS_H
-

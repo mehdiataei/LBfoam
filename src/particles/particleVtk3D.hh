@@ -55,22 +55,8 @@ void writeSurfaceVTK( TriangleBoundary3D<T> const& boundary,
                       std::string const& fName, bool dynamicMesh, plint tag,
                       std::vector<T> const& scalarFactor, std::vector<T> const& vectorFactor )
 {
-    writeSurfaceVTK( boundary, particles,
-                      particles.getBoundingBox(), scalars, vectors,
-                      fName, dynamicMesh, tag, scalarFactor, vectorFactor );
-}
-
-template<typename T, template<typename U> class Descriptor>
-void writeSurfaceVTK( TriangleBoundary3D<T> const& boundary,
-                      MultiParticleField3D<DenseParticleField3D<T,Descriptor> >& particles,
-                      Box3D const& bb, 
-                      std::vector<std::string> const& scalars,
-                      std::vector<std::string> const& vectors,
-                      std::string const& fName, bool dynamicMesh, plint tag,
-                      std::vector<T> const& scalarFactor, std::vector<T> const& vectorFactor )
-{
-    SparseBlockStructure3D blockStructure(bb);
-    blockStructure.addBlock(bb, 0);
+    SparseBlockStructure3D blockStructure(particles.getBoundingBox());
+    blockStructure.addBlock(particles.getBoundingBox(), 0);
     plint envelopeWidth=1;
     MultiBlockManagement3D serialMultiBlockManagement (
             blockStructure, new OneToOneThreadAttribution, envelopeWidth );
@@ -79,14 +65,14 @@ void writeSurfaceVTK( TriangleBoundary3D<T> const& boundary,
             serialMultiBlockManagement,
             defaultMultiBlockPolicy3D().getCombinedStatistics() );
 
-    copy ( particles, bb, multiSerialParticles, bb );
+    copy ( particles, particles.getBoundingBox(), multiSerialParticles, particles.getBoundingBox() );
     if (global::mpi().isMainProcessor()) {
         ParticleField3D<T,Descriptor>& atomicSerialParticles =
             dynamic_cast<ParticleField3D<T,Descriptor>&>(multiSerialParticles.getComponent(0));
 
         std::vector<Particle3D<T,Descriptor>*> found;
         SmartBulk3D oneBlockBulk(serialMultiBlockManagement, 0);
-        atomicSerialParticles.findParticles(oneBlockBulk.toLocal(bb), found);
+        atomicSerialParticles.findParticles(oneBlockBulk.toLocal(particles.getBoundingBox()), found);
 
         vtkForVertices(found, boundary, scalars, vectors, fName, dynamicMesh, tag, scalarFactor, vectorFactor);
     }

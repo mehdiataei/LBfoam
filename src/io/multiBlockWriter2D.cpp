@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -44,9 +44,11 @@
 #include <algorithm>
 #include <memory>
 
-namespace plb {
+namespace plb
+{
 
-namespace parallelIO {
+namespace parallelIO
+{
 
 /***** 1. Multi-Block Writer **************************************************/
 
@@ -65,7 +67,8 @@ void writeXmlSpec( MultiBlock2D& multiBlock, FileName fName,
     XMLwriter& xmlMultiBlock = xml["Block2D"];
     xmlMultiBlock["General"]["Family"].setString(blockName);
     xmlMultiBlock["General"]["Datatype"].setString(typeInfo[0]);
-    if (typeInfo.size()>1) {
+    if (typeInfo.size()>1)
+    {
         xmlMultiBlock["General"]["Descriptor"].setString(typeInfo[1]);
     }
     xmlMultiBlock["General"]["cellDim"].set(multiBlock.getCellDim());
@@ -83,12 +86,14 @@ void writeXmlSpec( MultiBlock2D& multiBlock, FileName fName,
     XMLwriter& xmlBulks = xmlMultiBlock["Data"]["Component"];
     std::map<plint,Box2D>::const_iterator it = bulks.begin();
     plint iComp=0;
-    for(; it != bulks.end(); ++it) {
+    for(; it != bulks.end(); ++it)
+    {
         Box2D bulk = it->second;
         xmlBulks[iComp].set<plint,4>(bulk.to_plbArray());
         ++iComp;
     }
-    if (!offset.empty()) {
+    if (!offset.empty())
+    {
         xmlMultiBlock["Data"]["Offsets"].set(offset);
     }
 
@@ -101,10 +106,11 @@ void writeXmlSpec( MultiBlock2D& multiBlock, FileName fName,
     //   name (which is not the case of the data processors below).
     std::map<std::string,int> dynamicsDict;
     multiBlock.getDynamicsDict(multiBlock.getBoundingBox(), dynamicsDict);
-    if (!dynamicsDict.empty()) {
+    if (!dynamicsDict.empty())
+    {
         XMLwriter& xmlDynamicsDict = xmlMultiBlock["Data"]["DynamicsDict"];
         for( std::map<std::string,int>::const_iterator it = dynamicsDict.begin();
-             it != dynamicsDict.end(); ++it )
+                it != dynamicsDict.end(); ++it )
         {
             xmlDynamicsDict[it->first].set(it->second);
         }
@@ -120,9 +126,11 @@ void writeXmlSpec( MultiBlock2D& multiBlock, FileName fName,
     //   id ("id") because several instances of the same class may occur.
     XMLwriter& xmlProcessors = xmlMultiBlock["Data"]["Processor"];
     std::vector<MultiBlock2D::ProcessorStorage2D> const& processors = multiBlock.getStoredProcessors();
-    for (plint iProcessor=0; iProcessor<(plint)processors.size(); ++iProcessor) {
+    for (plint iProcessor=0; iProcessor<(plint)processors.size(); ++iProcessor)
+    {
         int id = processors[iProcessor].getGenerator().getStaticId();
-        if (id>=0) {
+        if (id>=0)
+        {
             Box2D domain;
             std::string data;
             processors[iProcessor].getGenerator().serialize(domain, data);
@@ -149,7 +157,8 @@ void writeOneBlockXmlSpec( MultiBlock2D& multiBlock, FileName fName, plint dataS
     XMLwriter& xmlMultiBlock = xml["Block2D"];
     xmlMultiBlock["General"]["Family"].setString(blockName);
     xmlMultiBlock["General"]["Datatype"].setString(typeInfo[0]);
-    if (typeInfo.size()>1) {
+    if (typeInfo.size()>1)
+    {
         xmlMultiBlock["General"]["Descriptor"].setString(typeInfo[1]);
     }
     xmlMultiBlock["General"]["cellDim"].set(multiBlock.getCellDim());
@@ -162,10 +171,12 @@ void writeOneBlockXmlSpec( MultiBlock2D& multiBlock, FileName fName, plint dataS
     xmlMultiBlock["Structure"]["NumComponents"].set(1);
 
     xmlMultiBlock["Data"]["File"].setString(FileName(fName).setExt("dat"));
-    if (ordering == IndexOrdering::forward) {
+    if (ordering == IndexOrdering::forward)
+    {
         xmlMultiBlock["Data"]["IndexOrdering"].setString("zIsFastest");
     }
-    else {
+    else
+    {
         xmlMultiBlock["Data"]["IndexOrdering"].setString("xIsFastest");
     }
 
@@ -178,16 +189,20 @@ void writeOneBlockXmlSpec( MultiBlock2D& multiBlock, FileName fName, plint dataS
     xml.print(FileName(fName).defaultPath(global::directories().getOutputDir()));
 }
 
-void transposeToBackward(plint sizeOfCell, Box2D const& domain, std::vector<char>& data) {
+void transposeToBackward(plint sizeOfCell, Box2D const& domain, std::vector<char>& data)
+{
     plint nx = domain.getNx();
     plint ny = domain.getNy();
     std::vector<char> transp(data.size());
 
-    for (plint iX=0; iX<nx; ++iX) {
-        for (plint iY=0; iY<ny; ++iY) {
+    for (plint iX=0; iX<nx; ++iX)
+    {
+        for (plint iY=0; iY<ny; ++iY)
+        {
             plint iForward = sizeOfCell*(iY + ny*iX);
             plint iBackward = sizeOfCell*(iX + nx*iY);
-            for (plint iByte=0; iByte<sizeOfCell; ++iByte) {
+            for (plint iByte=0; iByte<sizeOfCell; ++iByte)
+            {
                 transp[iBackward+iByte] = data[iForward+iByte];
             }
         }
@@ -214,43 +229,49 @@ void saveFull( MultiBlock2D& multiBlock, FileName fName, IndexOrdering::Ordering
     global::profiler().start("io");
     SparseBlockStructure2D blockStructure(multiBlock.getBoundingBox());
     Box2D bbox = multiBlock.getBoundingBox();
-    if (ordering==IndexOrdering::forward) {
+    if (ordering==IndexOrdering::forward)
+    {
         plint nBlocks = std::min(bbox.getNx(), (plint)global::mpi().getSize());
         std::vector<std::pair<plint,plint> > ranges;
         util::linearRepartition(bbox.x0, bbox.x1, nBlocks, ranges);
-        for (pluint iRange=0; iRange<ranges.size(); ++iRange) {
+        for (pluint iRange=0; iRange<ranges.size(); ++iRange)
+        {
             blockStructure.addBlock (
-                    Box2D( ranges[iRange].first, ranges[iRange].second,
-                           bbox.y0, bbox.y1 ),
-                    iRange );
+                Box2D( ranges[iRange].first, ranges[iRange].second,
+                       bbox.y0, bbox.y1 ),
+                iRange );
         }
     }
-    else if (ordering==IndexOrdering::backward) {
+    else if (ordering==IndexOrdering::backward)
+    {
         plint nBlocks = std::min(bbox.getNy(), (plint)global::mpi().getSize());
         std::vector<std::pair<plint,plint> > ranges;
         util::linearRepartition(bbox.y0, bbox.y1, nBlocks, ranges);
-        for (pluint iRange=0; iRange<ranges.size(); ++iRange) {
+        for (pluint iRange=0; iRange<ranges.size(); ++iRange)
+        {
             blockStructure.addBlock (
-                    Box2D( bbox.x0, bbox.x1, ranges[iRange].first, ranges[iRange].second ),
-                    iRange );
+                Box2D( bbox.x0, bbox.x1, ranges[iRange].first, ranges[iRange].second ),
+                iRange );
         }
     }
-    else {
+    else
+    {
         // Sparse ordering not defined.
         PLB_ASSERT( false );
     }
     plint envelopeWidth=1;
     MultiBlockManagement2D adjacentMultiBlockManagement (
-            blockStructure, new OneToOneThreadAttribution, envelopeWidth );
+        blockStructure, new OneToOneThreadAttribution, envelopeWidth );
     MultiBlock2D* multiAdjacentBlock = multiBlock.clone(adjacentMultiBlockManagement);
-    
+
     std::vector<plint> offset;
     std::vector<plint> myBlockIds;
     std::vector<std::vector<char> > data;
 
     bool dynamicContent = false;
     dumpData(*multiAdjacentBlock, dynamicContent, offset, myBlockIds, data);
-    if (ordering==IndexOrdering::backward && myBlockIds.size()==1) {
+    if (ordering==IndexOrdering::backward && myBlockIds.size()==1)
+    {
         PLB_ASSERT( data.size()==1 );
         Box2D domain;
         blockStructure.getBulk(myBlockIds[0], domain);
@@ -277,7 +298,8 @@ void dumpData( MultiBlock2D& multiBlock, bool dynamicContent,
     std::map<plint,plint> toContiguousId;
     std::map<plint,Box2D>::const_iterator it = bulks.begin();
     plint pos = 0;
-    for (; it != bulks.end(); ++it) {
+    for (; it != bulks.end(); ++it)
+    {
         toContiguousId[it->first] = pos;
         ++pos;
     }
@@ -287,7 +309,8 @@ void dumpData( MultiBlock2D& multiBlock, bool dynamicContent,
     data.resize(myBlocks.size());
     std::vector<plint> blockSize(numBlocks);
     std::fill(blockSize.begin(), blockSize.end(), 0);
-    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock) {
+    for (pluint iBlock=0; iBlock<myBlocks.size(); ++iBlock)
+    {
         plint blockId = myBlocks[iBlock];
         SmartBulk2D bulk(management, blockId);
         Box2D localBulk(bulk.toLocal(bulk.getBulk()));

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,7 +32,8 @@
 #include "atomicBlock/dataField2D.h"
 #include <cmath>
 
-namespace plb {
+namespace plb
+{
 
 /* ******** IterateDynamicsFunctional2D ************************************ */
 
@@ -40,56 +41,69 @@ IterateDynamicsFunctional2D::IterateDynamicsFunctional2D(std::vector<int> previo
     : previousMaximum(previousMaximum_),
       maxIds(previousMaximum.size())
 {
-    for (pluint i=0; i<maxIds.size(); ++i) {
+    for (pluint i=0; i<maxIds.size(); ++i)
+    {
         maxIds[i] = this->getStatistics().subscribeMax();
     }
 }
 
 void IterateDynamicsFunctional2D::processGenericBlocks (
-        Box2D domain, std::vector<AtomicBlock2D*> blocks )
+    Box2D domain, std::vector<AtomicBlock2D*> blocks )
 {
     PLB_PRECONDITION( blocks.size()==1 );
     AtomicContainerBlock2D& container = *dynamic_cast<AtomicContainerBlock2D*>(blocks[0]);
     StoreDynamicsID* storeId = dynamic_cast<StoreDynamicsID*>(container.getData());
     std::vector<int> nextIDs(previousMaximum.size());
-    for (pluint i=0; i<nextIDs.size(); ++i) {
+    for (pluint i=0; i<nextIDs.size(); ++i)
+    {
         nextIDs[i] = -1;
     }
-    if (!storeId->empty()) {
+    if (!storeId->empty())
+    {
         nextIDs = storeId->getCurrent();
         util::extendVectorSize(nextIDs, previousMaximum.size());
-        if (vectorEquals(nextIDs,previousMaximum)) {
+        if (vectorEquals(nextIDs,previousMaximum))
+        {
             nextIDs = storeId->iterate();
             util::extendVectorSize(nextIDs, previousMaximum.size());
         }
     }
-    for (pluint i=0; i<nextIDs.size(); ++i) {
-        if(i>0 && this->getStatistics().getMax(maxIds[i-1])>=(double)nextIDs[i-1]){
+    for (pluint i=0; i<nextIDs.size(); ++i)
+    {
+        if(i>0 && this->getStatistics().getMax(maxIds[i-1])>=(double)nextIDs[i-1])
+        {
             this->getStatistics().gatherMax(maxIds[i], (double)nextIDs[i]);
         }
     }
 }
 
-IterateDynamicsFunctional2D* IterateDynamicsFunctional2D::clone() const {
+IterateDynamicsFunctional2D* IterateDynamicsFunctional2D::clone() const
+{
     return new IterateDynamicsFunctional2D(*this);
 }
 
-void IterateDynamicsFunctional2D::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void IterateDynamicsFunctional2D::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
     modified[0] = modif::staticVariables;
 }
 
-BlockDomain::DomainT IterateDynamicsFunctional2D::appliesTo() const {
+BlockDomain::DomainT IterateDynamicsFunctional2D::appliesTo() const
+{
     return BlockDomain::bulk;
 }
 
-std::vector<int> IterateDynamicsFunctional2D::getNextMaximum() const {
+std::vector<int> IterateDynamicsFunctional2D::getNextMaximum() const
+{
     std::vector<int> maximum(maxIds.size());
-    for (pluint i=0; i<maxIds.size(); ++i) {
+    for (pluint i=0; i<maxIds.size(); ++i)
+    {
         double d_maximum=this->getStatistics().getMax(maxIds[i]);
-        if (d_maximum<0.5) {
+        if (d_maximum<0.5)
+        {
             maximum[i] = -1;
         }
-        else {
+        else
+        {
             maximum[i] = (int)(.5+d_maximum);
         }
     }
@@ -103,27 +117,32 @@ AllFlagsTrueFunctional2D::AllFlagsTrueFunctional2D()
 { }
 
 void AllFlagsTrueFunctional2D::processGenericBlocks (
-        Box2D domain, std::vector<AtomicBlock2D*> blocks )
+    Box2D domain, std::vector<AtomicBlock2D*> blocks )
 {
     PLB_PRECONDITION( blocks.size()==1 );
-    if (!blocks[0]->getFlag()) {
+    if (!blocks[0]->getFlag())
+    {
         this->getStatistics().gatherIntSum(numFalseId, 1);
     }
 }
 
-AllFlagsTrueFunctional2D* AllFlagsTrueFunctional2D::clone() const {
+AllFlagsTrueFunctional2D* AllFlagsTrueFunctional2D::clone() const
+{
     return new AllFlagsTrueFunctional2D(*this);
 }
 
-void AllFlagsTrueFunctional2D::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
+void AllFlagsTrueFunctional2D::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
     modified[0] = modif::nothing;
 }
 
-BlockDomain::DomainT AllFlagsTrueFunctional2D::appliesTo() const {
+BlockDomain::DomainT AllFlagsTrueFunctional2D::appliesTo() const
+{
     return BlockDomain::bulk;
 }
 
-bool AllFlagsTrueFunctional2D::allTrue() const {
+bool AllFlagsTrueFunctional2D::allTrue() const
+{
     return this->getStatistics().getIntSum(numFalseId)==0;
 }
 

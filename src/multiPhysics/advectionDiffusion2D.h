@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,7 +30,9 @@
 #include "atomicBlock/dataProcessor2D.h"
 #include "atomicBlock/blockLattice2D.h"
 
-namespace plb {
+
+namespace plb
+{
 
 /**
 * Multiphysics class for one-way coupling between Navier-Stokes and
@@ -38,31 +40,30 @@ namespace plb {
 * to the advection-diffusion field, which is advected passively.
 */
 template< typename T,
-          template<typename U1> class FluidDescriptor, 
+          template<typename U1> class FluidDescriptor,
           template<typename U2> class ScalarDescriptor
-        >
+          >
 class LatticeToPassiveAdvDiff2D :
-    public BoxProcessingFunctional2D_LL<T,FluidDescriptor,T,ScalarDescriptor>
+	public BoxProcessingFunctional2D_LL<T,FluidDescriptor,T,ScalarDescriptor>
 {
 public:
-    LatticeToPassiveAdvDiff2D(T scaling_=1.);
-    virtual void process( Box2D domain,
-                          BlockLattice2D<T,FluidDescriptor>& fluid,
-                          BlockLattice2D<T,ScalarDescriptor>& scalar );
-    virtual LatticeToPassiveAdvDiff2D<T,FluidDescriptor,ScalarDescriptor>* clone() const;
-    virtual BlockDomain::DomainT appliesTo() const;
-    void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	LatticeToPassiveAdvDiff2D(T scaling_=1.);
+	virtual void process( Box2D domain,
+	                      BlockLattice2D<T,FluidDescriptor>& fluid,
+	                      BlockLattice2D<T,ScalarDescriptor>& scalar );
+	virtual LatticeToPassiveAdvDiff2D<T,FluidDescriptor,ScalarDescriptor>* clone() const;
+	virtual BlockDomain::DomainT appliesTo() const;
+	void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 private:
-    T scaling;
+	T scaling;
 };
 
 template< typename T,
-          template<typename U1> class FluidDescriptor, 
+          template<typename U1> class FluidDescriptor,
           template<typename U2> class ScalarDescriptor
-        >
+          >
 void latticeToPassiveAdvDiff(MultiBlockLattice2D<T,FluidDescriptor>& fluid, MultiBlockLattice2D<T,ScalarDescriptor>& scalar, Box2D domain);
 
 }  // namespace plb
 
 #endif  // ADVECTION_DIFFUSION_2D_H
-

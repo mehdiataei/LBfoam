@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -35,7 +35,8 @@
 #include "dataProcessors/dataInitializerFunctional3D.h"
 #include "sitmo/prng_engine.hpp"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** PART I ******************************************** */
 /* *************** Initialization of the block-lattice: atomic-blocks  */
@@ -79,7 +80,7 @@ void defineDynamics( BlockLattice3D<T,Descriptor>& lattice, ScalarField3D<int>& 
 template<typename T, template<typename U> class Descriptor>
 void defineDynamics( BlockLattice3D<T,Descriptor>& lattice, ScalarField3D<int>& intMask,
                      Dynamics<T,Descriptor>* dynamics, int whichFlag );
-                     
+
 template<typename T, template<typename U> class Descriptor>
 void recomposeFromFlowVariables ( BlockLattice3D<T,Descriptor>& lattice,
                                   ScalarField3D<T>& density, TensorField3D<T,3>& velocity,
@@ -101,37 +102,39 @@ void setBoundaryVelocity(BlockLattice3D<T,Descriptor>& lattice, Box3D domain, Ar
 
 template<typename T, template<class U> class Descriptor>
 void setBoundaryVelocity(BlockLattice3D<T,Descriptor>& lattice, TensorField3D<T,Descriptor<T>::d>& force,
-        Box3D domain, Array<T,Descriptor<T>::d> velocity);
+                         Box3D domain, Array<T,Descriptor<T>::d> velocity);
 
 template<typename T, template<class U> class Descriptor>
 void setBoundaryVelocity(BlockLattice3D<T,Descriptor>& lattice, Array<T,Descriptor<T>::d> force,
-        Box3D domain, Array<T,Descriptor<T>::d> velocity);
+                         Box3D domain, Array<T,Descriptor<T>::d> velocity);
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class VelocityFunction>
-void setBoundaryVelocity(BlockLattice3D<T,Descriptor>& lattice, Box3D domain, VelocityFunction f) {
-    applyIndexed (
-            lattice, domain,
-            new SetCustomBoundaryVelocityFunctional3D<T,Descriptor,VelocityFunction> (f) );
+void setBoundaryVelocity(BlockLattice3D<T,Descriptor>& lattice, Box3D domain, VelocityFunction f)
+{
+	applyIndexed (
+	    lattice, domain,
+	    new SetCustomBoundaryVelocityFunctional3D<T,Descriptor,VelocityFunction> (f) );
 }
 
 template<typename T, template<class U> class Descriptor, class VelocityFunction>
 void setBoundaryVelocity(BlockLattice3D<T,Descriptor>& lattice, TensorField3D<T,Descriptor<T>::d>& force,
-        Box3D domain, VelocityFunction f);
+                         Box3D domain, VelocityFunction f);
 
 template<typename T, template<class U> class Descriptor, class VelocityFunction>
 void setBoundaryVelocity(BlockLattice3D<T,Descriptor>& lattice, Array<T,Descriptor<T>::d> force,
-        Box3D domain, VelocityFunction f);
+                         Box3D domain, VelocityFunction f);
 
 template<typename T, template<class U> class Descriptor>
 void setBoundaryDensity(BlockLattice3D<T,Descriptor>& lattice, Box3D domain, T rho);
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class DensityFunction>
-void setBoundaryDensity(BlockLattice3D<T,Descriptor>& lattice, Box3D domain, DensityFunction f) {
-    applyIndexed (
-            lattice, domain,
-            new SetCustomBoundaryDensityFunctional3D<T,Descriptor,DensityFunction> (f) );
+void setBoundaryDensity(BlockLattice3D<T,Descriptor>& lattice, Box3D domain, DensityFunction f)
+{
+	applyIndexed (
+	    lattice, domain,
+	    new SetCustomBoundaryDensityFunctional3D<T,Descriptor,DensityFunction> (f) );
 }
 
 
@@ -143,9 +146,9 @@ void initializeAtEquilibrium(BlockLattice3D<T,Descriptor>& lattice, Box3D domain
 template<typename T, template<class U> class Descriptor, class RhoUFunction>
 void initializeAtEquilibrium(BlockLattice3D<T,Descriptor>& lattice, Box3D domain, RhoUFunction f)
 {
-    applyIndexed (
-            lattice, domain,
-            new IniCustomEquilibriumFunctional3D<T,Descriptor,RhoUFunction> (f) );
+	applyIndexed (
+	    lattice, domain,
+	    new IniCustomEquilibriumFunctional3D<T,Descriptor,RhoUFunction> (f) );
 }
 
 template<typename T, template<class U> class Descriptor>
@@ -230,7 +233,7 @@ void defineDynamics( MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarFiel
 template<typename T, template<typename U> class Descriptor>
 void defineDynamics( MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarField3D<int>& intMask,
                      Dynamics<T,Descriptor>* dynamics, int whichFlag );
-                     
+
 template<typename T, template<typename U> class Descriptor>
 void recomposeFromFlowVariables ( MultiBlockLattice3D<T,Descriptor>& lattice,
                                   MultiScalarField3D<T>& density, TensorField3D<T,3>& velocity,
@@ -243,13 +246,13 @@ void recomposeFromFlowVariables ( MultiBlockLattice3D<T,Descriptor>& lattice,
 
 template<typename T, template<typename U> class Descriptor>
 void recomposeFromOrderZeroVariables ( MultiBlockLattice3D<T,Descriptor>& lattice,
-                                  MultiScalarField3D<T>& density, TensorField3D<T,3>& velocity,
-                                  MultiTensorField3D<T,Descriptor<T>::q>& fNeq, Box3D domain );
+                                       MultiScalarField3D<T>& density, TensorField3D<T,3>& velocity,
+                                       MultiTensorField3D<T,Descriptor<T>::q>& fNeq, Box3D domain );
 
 template<typename T, template<typename U> class Descriptor>
 void recomposeFromOrderZeroVariables ( MultiBlockLattice3D<T,Descriptor>& lattice,
-                                  MultiScalarField3D<T>& density, TensorField3D<T,3>& velocity,
-                                  MultiTensorField3D<T,Descriptor<T>::q>& fNeq );
+                                       MultiScalarField3D<T>& density, TensorField3D<T,3>& velocity,
+                                       MultiTensorField3D<T,Descriptor<T>::q>& fNeq );
 
 template<typename T, template<class U> class Descriptor>
 void setOmega(MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, T omega);
@@ -265,37 +268,39 @@ void setBoundaryVelocity(MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domai
 
 template<typename T, template<class U> class Descriptor>
 void setBoundaryVelocity(MultiBlockLattice3D<T,Descriptor>& lattice, MultiTensorField3D<T,Descriptor<T>::d>& force,
-        Box3D domain, Array<T,Descriptor<T>::d> velocity);
+                         Box3D domain, Array<T,Descriptor<T>::d> velocity);
 
 template<typename T, template<class U> class Descriptor>
 void setBoundaryVelocity(MultiBlockLattice3D<T,Descriptor>& lattice, Array<T,Descriptor<T>::d> force,
-        Box3D domain, Array<T,Descriptor<T>::d> velocity);
+                         Box3D domain, Array<T,Descriptor<T>::d> velocity);
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class VelocityFunction>
-void setBoundaryVelocity(MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, VelocityFunction f) {
-    applyIndexed (
-            lattice, domain,
-            new SetCustomBoundaryVelocityFunctional3D<T,Descriptor,VelocityFunction> (f) );
+void setBoundaryVelocity(MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, VelocityFunction f)
+{
+	applyIndexed (
+	    lattice, domain,
+	    new SetCustomBoundaryVelocityFunctional3D<T,Descriptor,VelocityFunction> (f) );
 }
 
 template<typename T, template<class U> class Descriptor, class VelocityFunction>
 void setBoundaryVelocity(MultiBlockLattice3D<T,Descriptor>& lattice, MultiTensorField3D<T,Descriptor<T>::d>& force,
-        Box3D domain, VelocityFunction f);
+                         Box3D domain, VelocityFunction f);
 
 template<typename T, template<class U> class Descriptor, class VelocityFunction>
 void setBoundaryVelocity(MultiBlockLattice3D<T,Descriptor>& lattice, Array<T,Descriptor<T>::d> force,
-        Box3D domain, VelocityFunction f);
+                         Box3D domain, VelocityFunction f);
 
 template<typename T, template<class U> class Descriptor>
 void setBoundaryDensity(MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, T rho);
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class DensityFunction>
-void setBoundaryDensity(MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, DensityFunction f) {
-    applyIndexed (
-            lattice, domain,
-            new SetCustomBoundaryDensityFunctional3D<T,Descriptor,DensityFunction> (f) );
+void setBoundaryDensity(MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, DensityFunction f)
+{
+	applyIndexed (
+	    lattice, domain,
+	    new SetCustomBoundaryDensityFunctional3D<T,Descriptor,DensityFunction> (f) );
 }
 
 
@@ -319,58 +324,58 @@ void maskedInitializeAtEquilibrium(MultiBlockLattice3D<T,Descriptor>& lattice,
 template<typename T, template<class U> class Descriptor, class RhoUFunction>
 void initializeAtEquilibrium(MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, RhoUFunction f)
 {
-    applyIndexed (
-            lattice, domain,
-            new IniCustomEquilibriumFunctional3D<T,Descriptor,RhoUFunction> (f) );
+	applyIndexed (
+	    lattice, domain,
+	    new IniCustomEquilibriumFunctional3D<T,Descriptor,RhoUFunction> (f) );
 }
 
 template<typename T, template<class U> class Descriptor, class RhoUFunction>
 void initializeAtRandomEquilibrium(MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, RhoUFunction f)
 {
-    applyIndexed (
-            lattice, domain,
-            new IniCustomRandomEquilibriumFunctional3D<T,Descriptor,RhoUFunction> (f) );
+	applyIndexed (
+	    lattice, domain,
+	    new IniCustomRandomEquilibriumFunctional3D<T,Descriptor,RhoUFunction> (f) );
 }
 
 
 // The force is not necessarily constant and is read from a provided tensor field.
 template<typename T, template<class U> class Descriptor>
 void initializeAtEquilibrium(MultiBlockLattice3D<T,Descriptor>& lattice, MultiTensorField3D<T,Descriptor<T>::d>& force,
-        Box3D domain, T density, Array<T,Descriptor<T>::d> velocity, T temperature = (T) 1);
+                             Box3D domain, T density, Array<T,Descriptor<T>::d> velocity, T temperature = (T) 1);
 
 // The force is not necessarily constant and is read from a provided tensor field.
 template<typename T, template<class U> class Descriptor, class RhoUFunction>
 void initializeAtEquilibrium(MultiBlockLattice3D<T,Descriptor>& lattice, MultiTensorField3D<T,Descriptor<T>::d>& force,
-        Box3D domain, RhoUFunction f, T temperature = (T) 1);
+                             Box3D domain, RhoUFunction f, T temperature = (T) 1);
 
 // The force is not necessarily constant and is read from a provided tensor field.
 // There is also a vector of fields of random numbers to be provided to the RhoUFunction.
 template<typename T, template<class U> class Descriptor, class RhoUFunction>
 void initializeAtEquilibrium(MultiBlockLattice3D<T,Descriptor>& lattice, MultiTensorField3D<T,Descriptor<T>::d>& force,
-        std::vector<MultiScalarField3D<T>*> randomFields, Box3D domain, RhoUFunction f, T temperature = (T) 1);
+                             std::vector<MultiScalarField3D<T>*> randomFields, Box3D domain, RhoUFunction f, T temperature = (T) 1);
 
 
 template<typename T, template<class U> class Descriptor>
 void initializeAtEquilibrium(MultiBlockLattice3D<T,Descriptor>& lattice, Array<T,Descriptor<T>::d> force,
-        Box3D domain, T density, Array<T,Descriptor<T>::d> velocity, T temperature = (T) 1);
+                             Box3D domain, T density, Array<T,Descriptor<T>::d> velocity, T temperature = (T) 1);
 
 template<typename T, template<class U> class Descriptor, class RhoUFunction>
 void initializeAtEquilibrium(MultiBlockLattice3D<T,Descriptor>& lattice, Array<T,Descriptor<T>::d> force,
-        Box3D domain, RhoUFunction f, T temperature = (T) 1);
+                             Box3D domain, RhoUFunction f, T temperature = (T) 1);
 
 // There is a vector of fields of random numbers to be provided to the RhoUFunction.
 template<typename T, template<class U> class Descriptor, class RhoUFunction>
 void initializeAtEquilibrium(MultiBlockLattice3D<T,Descriptor>& lattice, Array<T,Descriptor<T>::d> force,
-        std::vector<MultiScalarField3D<T>*> randomFields, Box3D domain, RhoUFunction f, T temperature = (T) 1);
+                             std::vector<MultiScalarField3D<T>*> randomFields, Box3D domain, RhoUFunction f, T temperature = (T) 1);
 
 
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, template<class U> class Descriptor, class RhoVelTempFunction>
 void initializeAtThermalEquilibrium(MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, RhoVelTempFunction f)
 {
-    applyIndexed (
-            lattice, domain,
-            new IniCustomThermalEquilibriumFunctional3D<T,Descriptor,RhoVelTempFunction> (f) );
+	applyIndexed (
+	    lattice, domain,
+	    new IniCustomThermalEquilibriumFunctional3D<T,Descriptor,RhoVelTempFunction> (f) );
 }
 
 template<typename T, template<class U> class Descriptor>
@@ -423,15 +428,15 @@ void setExternalVector( MultiBlockLattice3D<T,Descriptor>& lattice, MultiScalarF
 
 template<typename T, template<class U> class Descriptor>
 void interpolatePopulations (
-        MultiBlockLattice3D<T,Descriptor>& modifiedLattice,
-        MultiBlockLattice3D<T,Descriptor>& constLattice,
-        plint minIter, plint maxIter, Box3D const& domain );
+    MultiBlockLattice3D<T,Descriptor>& modifiedLattice,
+    MultiBlockLattice3D<T,Descriptor>& constLattice,
+    plint minIter, plint maxIter, Box3D const& domain );
 
 template<typename T, template<class U> class Descriptor>
 void interpolatePopulations (
-        MultiBlockLattice3D<T,Descriptor>& modifiedLattice,
-        MultiBlockLattice3D<T,Descriptor>& constLattice,
-        plint minIter, plint maxIter );
+    MultiBlockLattice3D<T,Descriptor>& modifiedLattice,
+    MultiBlockLattice3D<T,Descriptor>& constLattice,
+    plint minIter, plint maxIter );
 
 
 
@@ -452,7 +457,7 @@ void setToConstant(ScalarField3D<T>& field, ScalarField3D<int>& mask, int flag,
 
 /// Initialize tensor-field with the same constant tensor/vector on each cell.
 template<typename T, int nDim>
-void setToConstant( TensorField3D<T,nDim>& field, Box3D domain, 
+void setToConstant( TensorField3D<T,nDim>& field, Box3D domain,
                     Array<T,nDim> const& value );
 
 /// Initialize tensor-field with the same constant tensor/vector on each cell on which
@@ -464,25 +469,28 @@ void setToConstant( TensorField3D<T,nDim>& field, ScalarField3D<int>& mask, int 
 /// Initialize scalar-field with the a value from a function.
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, class Function>
-void setToFunction(ScalarField3D<T>& field, Box3D domain, Function f) {
-    applyProcessingFunctional (
-            new SetToScalarFunctionFunctional3D<T,Function>(f), domain, field );
+void setToFunction(ScalarField3D<T>& field, Box3D domain, Function f)
+{
+	applyProcessingFunctional (
+	    new SetToScalarFunctionFunctional3D<T,Function>(f), domain, field );
 }
 
 /// Initialize tensor-field with a vector/tensor value from a function.
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, int nDim, class Function>
-void setToFunction(TensorField3D<T,nDim>& field, Box3D domain, Function f) {
-    applyProcessingFunctional (
-            new SetToTensorFunctionFunctional3D<T,nDim,Function>(f), domain, field );
+void setToFunction(TensorField3D<T,nDim>& field, Box3D domain, Function f)
+{
+	applyProcessingFunctional (
+	    new SetToTensorFunctionFunctional3D<T,nDim,Function>(f), domain, field );
 }
 
 /// Initialize an N-tensor-field with values from a function.
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, class Function>
-void setToFunction(NTensorField3D<T>& field, Box3D domain, Function f) {
-    applyProcessingFunctional (
-            new SetToNTensorFunctionFunctional3D<T,Function>(f), domain, field );
+void setToFunction(NTensorField3D<T>& field, Box3D domain, Function f)
+{
+	applyProcessingFunctional (
+	    new SetToNTensorFunctionFunctional3D<T,Function>(f), domain, field );
 }
 
 /// Assign the component "index" of its space coordinate to each cell.
@@ -521,7 +529,7 @@ void setToConstant(MultiScalarField3D<T>& field, MultiNTensorField3D<int>& mask,
 
 /// Initialize tensor-field with the same constant tensor/vector on each cell.
 template<typename T, int nDim>
-void setToConstant( MultiTensorField3D<T,nDim>& field, Box3D domain, 
+void setToConstant( MultiTensorField3D<T,nDim>& field, Box3D domain,
                     Array<T,nDim> const& value );
 
 /// Initialize tensor-field with the same constant tensor/vector on each cell on which
@@ -538,25 +546,28 @@ void setToConstant( MultiTensorField3D<T,nDim>& field, MultiNTensorField3D<int>&
 /// Initialize scalar-field with the a value from a function.
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, class Function>
-void setToFunction(MultiScalarField3D<T>& field, Box3D domain, Function f) {
-    applyProcessingFunctional (
-            new SetToScalarFunctionFunctional3D<T,Function>(f), domain, field );
+void setToFunction(MultiScalarField3D<T>& field, Box3D domain, Function f)
+{
+	applyProcessingFunctional (
+	    new SetToScalarFunctionFunctional3D<T,Function>(f), domain, field );
 }
 
 /// Initialize tensor-field with a vector/tensor value from a function.
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, int nDim, class Function>
-void setToFunction(MultiTensorField3D<T,nDim>& field, Box3D domain, Function f) {
-    applyProcessingFunctional (
-            new SetToTensorFunctionFunctional3D<T,nDim,Function>(f), domain, field );
+void setToFunction(MultiTensorField3D<T,nDim>& field, Box3D domain, Function f)
+{
+	applyProcessingFunctional (
+	    new SetToTensorFunctionFunctional3D<T,nDim,Function>(f), domain, field );
 }
 
 /// Initialize an N-tensor-field with values from a function.
 // This function is implemented in-place, because it cannot be precompiled due to its generic nature.
 template<typename T, class Function>
-void setToFunction(MultiNTensorField3D<T>& field, Box3D domain, Function f) {
-    applyProcessingFunctional (
-            new SetToNTensorFunctionFunctional3D<T,Function>(f), domain, field );
+void setToFunction(MultiNTensorField3D<T>& field, Box3D domain, Function f)
+{
+	applyProcessingFunctional (
+	    new SetToNTensorFunctionFunctional3D<T,Function>(f), domain, field );
 }
 
 /// Assign the component "index" of its space coordinate to each cell.

@@ -90,6 +90,12 @@ for srcDir in glob.glob(palabosRoot+'/src/*'):
 for srcDir in srcPaths:
     sourceFiles.extend(glob.glob(srcDir+'/*.cpp'))
 
+
+# find LBfoam project source files
+
+for srcDir in glob.glob(palabosRoot+'/src/lbfoam/*'):
+    sourceFiles.extend(glob.glob(srcDir+'/*.cpp'))
+
 sourceFiles.extend(glob.glob(palabosRoot+'/externalLibraries/tinyxml/*.cpp'));
 
 if MPIparallel:

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,24 +32,26 @@
 #include "core/plbDebug.h"
 #include "core/geometry2D.h"
 
-namespace plb {
+namespace plb
+{
 
 /// Fragmentation of the surface of a block into bulk, edges, and corners.
-class BlockSurface2D {
+class BlockSurface2D
+{
 public:
-    BlockSurface2D(Box2D const& domain_, plint boundaryWidth);
-    Box2D bulk() const;
-    Box2D edge0N() const;
-    Box2D edge0P() const;
-    Box2D edge1N() const;
-    Box2D edge1P() const;
-    Box2D cornerNN() const;
-    Box2D cornerPN() const;
-    Box2D cornerNP() const;
-    Box2D cornerPP() const;
+	BlockSurface2D(Box2D const& domain_, plint boundaryWidth);
+	Box2D bulk() const;
+	Box2D edge0N() const;
+	Box2D edge0P() const;
+	Box2D edge1N() const;
+	Box2D edge1P() const;
+	Box2D cornerNN() const;
+	Box2D cornerPN() const;
+	Box2D cornerNP() const;
+	Box2D cornerPP() const;
 private:
-    Box2D domain;
-    plint bw;
+	Box2D domain;
+	plint bw;
 };
 
 }  // namespace plb

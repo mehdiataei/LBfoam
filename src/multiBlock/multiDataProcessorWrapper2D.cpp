@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,7 +29,8 @@
 #include "atomicBlock/dataProcessor2D.h"
 #include "core/plbDebug.h"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** BoxProcessing2D, general case *************************** */
 
@@ -47,6 +48,14 @@ void integrateProcessingFunctional(BoxProcessingFunctional2D* functional,
 {
     addInternalProcessor( BoxProcessorGenerator2D(functional, domain),
                           multiBlocks, level );
+}
+
+void integrateProcessingFunctional(BoxProcessingFunctional2D* functional, Box2D domain,
+                                   MultiBlock2D& actor, std::vector<MultiBlock2D*> multiBlockArgs,
+                                   plint level)
+{
+    addInternalProcessor( BoxProcessorGenerator2D(functional, domain),
+                          actor, multiBlockArgs, level );
 }
 
 
@@ -78,7 +87,8 @@ void applyProcessingFunctional(BoundedBoxProcessingFunctional2D* functional,
     std::vector<BoxProcessorGenerator2D*> generators;
     functional -> getGenerators(domain, boundaryWidth, generators);
     delete functional;
-    for (pluint iGen=0; iGen<generators.size(); ++iGen) {
+    for (pluint iGen=0; iGen<generators.size(); ++iGen)
+    {
         executeDataProcessor( *generators[iGen], multiBlocks );
         delete generators[iGen];
     }
@@ -91,7 +101,8 @@ void integrateProcessingFunctional(BoundedBoxProcessingFunctional2D* functional,
     std::vector<BoxProcessorGenerator2D*> generators;
     functional -> getGenerators(domain, boundaryWidth, generators);
     delete functional;
-    for (pluint iGen=0; iGen<generators.size(); ++iGen) {
+    for (pluint iGen=0; iGen<generators.size(); ++iGen)
+    {
         addInternalProcessor( *generators[iGen], multiBlocks, level );
         delete generators[iGen];
     }

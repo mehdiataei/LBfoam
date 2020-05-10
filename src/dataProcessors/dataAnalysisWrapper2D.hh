@@ -110,11 +110,11 @@ void computeDensity(BlockLattice2D<T,Descriptor>& lattice, ScalarField2D<T>& den
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<ScalarField2D<T> > computeDensity(BlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<ScalarField2D<T> > computeDensity(BlockLattice2D<T,Descriptor>& lattice)
 {
     ScalarField2D<T>* density = new ScalarField2D<T>(lattice.getNx(), lattice.getNy());
     computeDensity(lattice, *density);
-    return std::unique_ptr<ScalarField2D<T> >(density);
+    return std::auto_ptr<ScalarField2D<T> >(density);
 }
 
 
@@ -128,11 +128,11 @@ void computeRhoBar(BlockLattice2D<T,Descriptor>& lattice, ScalarField2D<T>& rhoB
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<ScalarField2D<T> > computeRhoBar(BlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<ScalarField2D<T> > computeRhoBar(BlockLattice2D<T,Descriptor>& lattice)
 {
     ScalarField2D<T>* rhoBar = new ScalarField2D<T>(lattice.getNx(), lattice.getNy());
     computeRhoBar(lattice, *rhoBar);
-    return std::unique_ptr<ScalarField2D<T> >(rhoBar);
+    return std::auto_ptr<ScalarField2D<T> >(rhoBar);
 }
 
 
@@ -146,11 +146,11 @@ void computeKineticEnergy(BlockLattice2D<T,Descriptor>& lattice, ScalarField2D<T
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<ScalarField2D<T> > computeKineticEnergy(BlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<ScalarField2D<T> > computeKineticEnergy(BlockLattice2D<T,Descriptor>& lattice)
 {
     ScalarField2D<T>* energy = new ScalarField2D<T>(lattice.getNx(), lattice.getNy());
     computeKineticEnergy(lattice, *energy);
-    return std::unique_ptr<ScalarField2D<T> >(energy);
+    return std::auto_ptr<ScalarField2D<T> >(energy);
 }
 
 
@@ -164,11 +164,11 @@ void computeVelocityNorm(BlockLattice2D<T,Descriptor>& lattice, ScalarField2D<T>
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<ScalarField2D<T> > computeVelocityNorm(BlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<ScalarField2D<T> > computeVelocityNorm(BlockLattice2D<T,Descriptor>& lattice)
 {
     ScalarField2D<T>* velocityNorm = new ScalarField2D<T>(lattice.getNx(), lattice.getNy());
     computeVelocityNorm(lattice, *velocityNorm);
-    return std::unique_ptr<ScalarField2D<T> >(velocityNorm);
+    return std::auto_ptr<ScalarField2D<T> >(velocityNorm);
 }
 
 
@@ -185,12 +185,12 @@ void computeVelocityComponent(BlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<ScalarField2D<T> > computeVelocityComponent (
+std::auto_ptr<ScalarField2D<T> > computeVelocityComponent (
         BlockLattice2D<T,Descriptor>& lattice, plint iComponent )
 {
     ScalarField2D<T>* velocityComponent = new ScalarField2D<T>(lattice.getNx(), lattice.getNy());
     computeVelocityComponent(lattice, *velocityComponent, iComponent);
-    return std::unique_ptr<ScalarField2D<T> >(velocityComponent);
+    return std::auto_ptr<ScalarField2D<T> >(velocityComponent);
 }
 
 
@@ -205,12 +205,12 @@ void computeVelocity(BlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<TensorField2D<T,Descriptor<T>::d> > computeVelocity(BlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<TensorField2D<T,Descriptor<T>::d> > computeVelocity(BlockLattice2D<T,Descriptor>& lattice)
 {
     TensorField2D<T,Descriptor<T>::d>* velocity
         = new TensorField2D<T,Descriptor<T>::d>(lattice.getNx(), lattice.getNy());
     computeVelocity(lattice, *velocity);
-    return std::unique_ptr<TensorField2D<T,Descriptor<T>::d> >(velocity);
+    return std::auto_ptr<TensorField2D<T,Descriptor<T>::d> >(velocity);
 }
 
 
@@ -225,12 +225,12 @@ void computePiNeq(BlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> > computePiNeq(BlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> > computePiNeq(BlockLattice2D<T,Descriptor>& lattice)
 {
     TensorField2D<T,SymmetricTensor<T,Descriptor>::n>* PiNeq
         = new TensorField2D<T,SymmetricTensor<T,Descriptor>::n>(lattice.getNx(), lattice.getNy());
     computePiNeq(lattice, *PiNeq);
-    return std::unique_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(PiNeq);
+    return std::auto_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(PiNeq);
 }
 
 
@@ -245,12 +245,12 @@ void computeShearStress(BlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> > computeShearStress(BlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> > computeShearStress(BlockLattice2D<T,Descriptor>& lattice)
 {
     TensorField2D<T,SymmetricTensor<T,Descriptor>::n>* PiNeq
         = new TensorField2D<T,SymmetricTensor<T,Descriptor>::n>(lattice.getNx(), lattice.getNy());
     computeShearStress(lattice, *PiNeq);
-    return std::unique_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(PiNeq);
+    return std::auto_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(PiNeq);
 }
 
 
@@ -265,12 +265,12 @@ void computeStrainRateFromStress(BlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> > computeStrainRateFromStress(BlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> > computeStrainRateFromStress(BlockLattice2D<T,Descriptor>& lattice)
 {
     TensorField2D<T,SymmetricTensor<T,Descriptor>::n>* S
         = new TensorField2D<T,SymmetricTensor<T,Descriptor>::n>(lattice.getNx(), lattice.getNy());
     computeStrainRateFromStress(lattice, *S);
-    return std::unique_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(S);
+    return std::auto_ptr<TensorField2D<T,SymmetricTensor<T,Descriptor>::n> >(S);
 }
 
 /* *************** Temperature ******************************************* */
@@ -283,11 +283,11 @@ void computeTemperature(BlockLattice2D<T,Descriptor>& lattice, ScalarField2D<T>&
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<ScalarField2D<T> > computeTemperature(BlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<ScalarField2D<T> > computeTemperature(BlockLattice2D<T,Descriptor>& lattice)
 {
     ScalarField2D<T>* temperature = new ScalarField2D<T>(lattice.getNx(), lattice.getNy());
     computeTemperature(lattice, *temperature);
-    return std::unique_ptr<ScalarField2D<T> >(temperature);
+    return std::auto_ptr<ScalarField2D<T> >(temperature);
 }
 
 /* *************** SoundSpeed ******************************************* */
@@ -300,11 +300,11 @@ void computeSoundSpeed(BlockLattice2D<T,Descriptor>& lattice, ScalarField2D<T>& 
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<ScalarField2D<T> > computeSoundSpeed(BlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<ScalarField2D<T> > computeSoundSpeed(BlockLattice2D<T,Descriptor>& lattice)
 {
     ScalarField2D<T>* soundSpeed = new ScalarField2D<T>(lattice.getNx(), lattice.getNy());
     computeSoundSpeed(lattice, *soundSpeed);
-    return std::unique_ptr<ScalarField2D<T> >(soundSpeed);
+    return std::auto_ptr<ScalarField2D<T> >(soundSpeed);
 }
 
 
@@ -318,11 +318,11 @@ void computePopulation(BlockLattice2D<T,Descriptor>& lattice, ScalarField2D<T>& 
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<ScalarField2D<T> > computePopulation(BlockLattice2D<T,Descriptor>& lattice, plint iPop)
+std::auto_ptr<ScalarField2D<T> > computePopulation(BlockLattice2D<T,Descriptor>& lattice, plint iPop)
 {
     ScalarField2D<T>* population = new ScalarField2D<T>(lattice.getNx(), lattice.getNy());
     computePopulation(lattice, *population, iPop);
-    return std::unique_ptr<ScalarField2D<T> >(population);
+    return std::auto_ptr<ScalarField2D<T> >(population);
 }
 
 template<typename T, template<typename U> class Descriptor>
@@ -335,12 +335,12 @@ void computeAllPopulations(BlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<ScalarField2D<T> > computeAllPopulations(BlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<ScalarField2D<T> > computeAllPopulations(BlockLattice2D<T,Descriptor>& lattice)
 {
     TensorField2D<T,Descriptor<T>::q>* populations = 
             new TensorField2D<T,Descriptor<T>::q>(lattice);
     computeAllPopulations(lattice, *populations);
-    return std::unique_ptr<TensorField2D<T,Descriptor<T>::q> >(populations);
+    return std::auto_ptr<TensorField2D<T,Descriptor<T>::q> >(populations);
 }
 
 template<typename T, template<typename U> class Descriptor>
@@ -490,11 +490,11 @@ void add(ScalarField2D<T>& field, T scalar, ScalarField2D<T>& result)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > add(ScalarField2D<T>& field, T scalar)
+std::auto_ptr<ScalarField2D<T> > add(ScalarField2D<T>& field, T scalar)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(field.getNx(), field.getNy());
     add(field, scalar, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 
@@ -506,11 +506,11 @@ void add(T scalar, ScalarField2D<T>& field, ScalarField2D<T>& result)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > add(T scalar, ScalarField2D<T>& field)
+std::auto_ptr<ScalarField2D<T> > add(T scalar, ScalarField2D<T>& field)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(field.getNx(), field.getNy());
     add(scalar, field, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 
@@ -522,11 +522,11 @@ void subtract(ScalarField2D<T>& field, T scalar, ScalarField2D<T>& result)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > subtract(ScalarField2D<T>& field, T scalar)
+std::auto_ptr<ScalarField2D<T> > subtract(ScalarField2D<T>& field, T scalar)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(field.getNx(), field.getNy());
     subtract(field, scalar, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 
@@ -538,11 +538,11 @@ void subtract(T scalar, ScalarField2D<T>& field, ScalarField2D<T>& result)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > subtract(T scalar, ScalarField2D<T>& field)
+std::auto_ptr<ScalarField2D<T> > subtract(T scalar, ScalarField2D<T>& field)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(field.getNx(), field.getNy());
     subtract(scalar, field, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 
@@ -554,11 +554,11 @@ void multiply(ScalarField2D<T>& field, T scalar, ScalarField2D<T>& result)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > multiply(ScalarField2D<T>& field, T scalar)
+std::auto_ptr<ScalarField2D<T> > multiply(ScalarField2D<T>& field, T scalar)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(field.getNx(), field.getNy());
     multiply(field, scalar, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 
@@ -570,11 +570,11 @@ void multiply(T scalar, ScalarField2D<T>& field, ScalarField2D<T>& result)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > multiply(T scalar, ScalarField2D<T>& field)
+std::auto_ptr<ScalarField2D<T> > multiply(T scalar, ScalarField2D<T>& field)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(field.getNx(), field.getNy());
     multiply(scalar, field, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 
@@ -586,11 +586,11 @@ void divide(ScalarField2D<T>& field, T scalar, ScalarField2D<T>& result)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > divide(ScalarField2D<T>& field, T scalar)
+std::auto_ptr<ScalarField2D<T> > divide(ScalarField2D<T>& field, T scalar)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(field.getNx(), field.getNy());
     divide(field, scalar, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 
@@ -602,11 +602,11 @@ void divide(T scalar, ScalarField2D<T>& field, ScalarField2D<T>& result)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > divide(T scalar, ScalarField2D<T>& field)
+std::auto_ptr<ScalarField2D<T> > divide(T scalar, ScalarField2D<T>& field)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(field.getNx(), field.getNy());
     divide(scalar, field, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 /* *************** ScalarField operations *************** */
@@ -619,7 +619,7 @@ void computeSqrt(ScalarField2D<T>& A, ScalarField2D<T>& result, Box2D domain)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > computeSqrt(ScalarField2D<T>& A, Box2D domain)
+std::auto_ptr<ScalarField2D<T> > computeSqrt(ScalarField2D<T>& A, Box2D domain)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(A.getNx(), A.getNy());
     computeSqrt(A, *result, domain);
@@ -627,7 +627,7 @@ std::unique_ptr<ScalarField2D<T> > computeSqrt(ScalarField2D<T>& A, Box2D domain
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > computeSqrt(ScalarField2D<T>& A)
+std::auto_ptr<ScalarField2D<T> > computeSqrt(ScalarField2D<T>& A)
 {
     return computeSqrt(A, A.getBoundingBox());
 }
@@ -641,7 +641,7 @@ void computeAbsoluteValue(ScalarField2D<T>& A, ScalarField2D<T>& result, Box2D d
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > computeAbsoluteValue(ScalarField2D<T>& A, Box2D domain)
+std::auto_ptr<ScalarField2D<T> > computeAbsoluteValue(ScalarField2D<T>& A, Box2D domain)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(A.getNx(), A.getNy());
     computeAbsoluteValue(A, *result, domain);
@@ -649,7 +649,7 @@ std::unique_ptr<ScalarField2D<T> > computeAbsoluteValue(ScalarField2D<T>& A, Box
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > computeAbsoluteValue(ScalarField2D<T>& A)
+std::auto_ptr<ScalarField2D<T> > computeAbsoluteValue(ScalarField2D<T>& A)
 {
     return computeAbsoluteValue(A, A.getBoundingBox());
 }
@@ -691,11 +691,11 @@ void copy(ScalarField2D<T1>& field, ScalarField2D<T2>& convertedField)
 }
 
 template<typename T1, typename T2>
-std::unique_ptr<ScalarField2D<T2> > copyConvert(ScalarField2D<T1>& field)
+std::auto_ptr<ScalarField2D<T2> > copyConvert(ScalarField2D<T1>& field)
 {
     ScalarField2D<T2>* convertedField = new ScalarField2D<T2>(field.getNx(), field.getNy());
     plb::copy(field, *convertedField);
-    return std::unique_ptr<ScalarField2D<T2> >(convertedField);
+    return std::auto_ptr<ScalarField2D<T2> >(convertedField);
 }
 
 
@@ -711,11 +711,11 @@ void add(ScalarField2D<T>& A, ScalarField2D<T>& B, ScalarField2D<T>& result)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > add(ScalarField2D<T>& A, ScalarField2D<T>& B)
+std::auto_ptr<ScalarField2D<T> > add(ScalarField2D<T>& A, ScalarField2D<T>& B)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(A.getNx(), A.getNy());
     add(A, B, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 
@@ -731,11 +731,11 @@ void subtract(ScalarField2D<T>& A, ScalarField2D<T>& B, ScalarField2D<T>& result
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > subtract(ScalarField2D<T>& A, ScalarField2D<T>& B)
+std::auto_ptr<ScalarField2D<T> > subtract(ScalarField2D<T>& A, ScalarField2D<T>& B)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(A.getNx(), A.getNy());
     subtract(A, B, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 
@@ -751,11 +751,11 @@ void multiply(ScalarField2D<T>& A, ScalarField2D<T>& B, ScalarField2D<T>& result
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > multiply(ScalarField2D<T>& A, ScalarField2D<T>& B)
+std::auto_ptr<ScalarField2D<T> > multiply(ScalarField2D<T>& A, ScalarField2D<T>& B)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(A.getNx(), A.getNy());
     multiply(A, B, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 
@@ -771,11 +771,11 @@ void divide(ScalarField2D<T>& A, ScalarField2D<T>& B, ScalarField2D<T>& result)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > divide(ScalarField2D<T>& A, ScalarField2D<T>& B)
+std::auto_ptr<ScalarField2D<T> > divide(ScalarField2D<T>& A, ScalarField2D<T>& B)
 {
     ScalarField2D<T>* result = new ScalarField2D<T>(A.getNx(), A.getNy());
     divide(A, B, *result);
-    return std::unique_ptr<ScalarField2D<T> >(result);
+    return std::auto_ptr<ScalarField2D<T> >(result);
 }
 
 
@@ -837,11 +837,11 @@ void extractComponent(TensorField2D<T,nDim>& tensorField, ScalarField2D<T>& comp
 }
 
 template<typename T, int nDim>
-std::unique_ptr<ScalarField2D<T> > extractComponent(TensorField2D<T,nDim>& tensorField, int iComponent)
+std::auto_ptr<ScalarField2D<T> > extractComponent(TensorField2D<T,nDim>& tensorField, int iComponent)
 {
     ScalarField2D<T>* component = new ScalarField2D<T>(tensorField.getNx(), tensorField.getNy());
     extractComponent(tensorField, *component, iComponent);
-    return std::unique_ptr<ScalarField2D<T> >(component);
+    return std::auto_ptr<ScalarField2D<T> >(component);
 }
 
 /* *************** Vector-norm of each cell in the field *************** */
@@ -854,11 +854,11 @@ void computeNorm(TensorField2D<T,nDim>& tensorField, ScalarField2D<T>& norm)
 }
 
 template<typename T, int nDim>
-std::unique_ptr<ScalarField2D<T> > computeNorm(TensorField2D<T,nDim>& tensorField)
+std::auto_ptr<ScalarField2D<T> > computeNorm(TensorField2D<T,nDim>& tensorField)
 {
     ScalarField2D<T>* norm = new ScalarField2D<T>(tensorField.getNx(), tensorField.getNy());
     computeNorm(tensorField, *norm);
-    return std::unique_ptr<ScalarField2D<T> >(norm);
+    return std::auto_ptr<ScalarField2D<T> >(norm);
 }
 
 /* *************** Sqrt operation on each component of each cell *************** */
@@ -871,7 +871,7 @@ void computeSqrt(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& result, Box2D 
 }
 
 template<typename T, int nDim>
-std::unique_ptr<TensorField2D<T,nDim> > computeSqrt(TensorField2D<T,nDim>& A, Box2D domain)
+std::auto_ptr<TensorField2D<T,nDim> > computeSqrt(TensorField2D<T,nDim>& A, Box2D domain)
 {
     TensorField2D<T,nDim>* result = new TensorField2D<T,nDim>(A.getNx(), A.getNy());
     computeSqrt(A, *result, domain);
@@ -879,7 +879,7 @@ std::unique_ptr<TensorField2D<T,nDim> > computeSqrt(TensorField2D<T,nDim>& A, Bo
 }
 
 template<typename T, int nDim>
-std::unique_ptr<TensorField2D<T,nDim> > computeSqrt(TensorField2D<T,nDim>& A)
+std::auto_ptr<TensorField2D<T,nDim> > computeSqrt(TensorField2D<T,nDim>& A)
 {
     return computeSqrt(A, A.getBoundingBox());
 }
@@ -896,11 +896,11 @@ void computeNormSqr(TensorField2D<T,nDim>& tensorField, ScalarField2D<T>& normSq
 }
 
 template<typename T, int nDim>
-std::unique_ptr<ScalarField2D<T> > computeNormSqr(TensorField2D<T,nDim>& tensorField)
+std::auto_ptr<ScalarField2D<T> > computeNormSqr(TensorField2D<T,nDim>& tensorField)
 {
     ScalarField2D<T>* normSqr = new ScalarField2D<T>(tensorField.getNx(), tensorField.getNy());
     computeNormSqr(tensorField, *normSqr);
-    return std::unique_ptr<ScalarField2D<T> >(normSqr);
+    return std::auto_ptr<ScalarField2D<T> >(normSqr);
 }
 
 
@@ -914,11 +914,11 @@ void computeSymmetricTensorNorm(TensorField2D<T,3>& tensorField, ScalarField2D<T
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > computeSymmetricTensorNorm(TensorField2D<T,3>& tensorField)
+std::auto_ptr<ScalarField2D<T> > computeSymmetricTensorNorm(TensorField2D<T,3>& tensorField)
 {
     ScalarField2D<T>* norm = new ScalarField2D<T>(tensorField.getNx(), tensorField.getNy());
     computeSymmetricTensorNorm(tensorField, *norm);
-    return std::unique_ptr<ScalarField2D<T> >(norm);
+    return std::auto_ptr<ScalarField2D<T> >(norm);
 }
 
 
@@ -932,11 +932,11 @@ void computeSymmetricTensorNormSqr(TensorField2D<T,3>& tensorField, ScalarField2
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > computeSymmetricTensorNormSqr(TensorField2D<T,3>& tensorField)
+std::auto_ptr<ScalarField2D<T> > computeSymmetricTensorNormSqr(TensorField2D<T,3>& tensorField)
 {
     ScalarField2D<T>* normSqr = new ScalarField2D<T>(tensorField.getNx(), tensorField.getNy());
     computeSymmetricTensorNormSqr(tensorField, *normSqr);
-    return std::unique_ptr<ScalarField2D<T> >(normSqr);
+    return std::auto_ptr<ScalarField2D<T> >(normSqr);
 }
 
 
@@ -950,11 +950,11 @@ void computeSymmetricTensorTrace(TensorField2D<T,3>& tensorField, ScalarField2D<
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > computeSymmetricTensorTrace(TensorField2D<T,3>& tensorField)
+std::auto_ptr<ScalarField2D<T> > computeSymmetricTensorTrace(TensorField2D<T,3>& tensorField)
 {
     ScalarField2D<T>* trace = new ScalarField2D<T>(tensorField.getNx(), tensorField.getNy());
     computeSymmetricTensorTrace(tensorField, *trace);
-    return std::unique_ptr<ScalarField2D<T> >(trace);
+    return std::auto_ptr<ScalarField2D<T> >(trace);
 }
 
 
@@ -969,11 +969,11 @@ void computeVorticity(TensorField2D<T,2>& velocity, ScalarField2D<T>& vorticity)
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > computeVorticity(TensorField2D<T,2>& velocity)
+std::auto_ptr<ScalarField2D<T> > computeVorticity(TensorField2D<T,2>& velocity)
 {
     ScalarField2D<T>* vorticity = new ScalarField2D<T>(velocity.getNx(), velocity.getNy());
     computeVorticity(velocity, *vorticity);
-    return std::unique_ptr<ScalarField2D<T> >(vorticity);
+    return std::auto_ptr<ScalarField2D<T> >(vorticity);
 }
 
 
@@ -987,11 +987,11 @@ void computeBulkVorticity(TensorField2D<T,2>& velocity, ScalarField2D<T>& vortic
 }
 
 template<typename T>
-std::unique_ptr<ScalarField2D<T> > computeBulkVorticity(TensorField2D<T,2>& velocity)
+std::auto_ptr<ScalarField2D<T> > computeBulkVorticity(TensorField2D<T,2>& velocity)
 {
     ScalarField2D<T>* vorticity = new ScalarField2D<T>(velocity.getNx(), velocity.getNy());
     computeBulkVorticity(velocity, *vorticity);
-    return std::unique_ptr<ScalarField2D<T> >(vorticity);
+    return std::auto_ptr<ScalarField2D<T> >(vorticity);
 }
 
 
@@ -1006,11 +1006,11 @@ void computeStrainRate(TensorField2D<T,2>& velocity, TensorField2D<T,3>& S)
 }
 
 template<typename T>
-std::unique_ptr<TensorField2D<T,3> > computeStrainRate(TensorField2D<T,2>& velocity)
+std::auto_ptr<TensorField2D<T,3> > computeStrainRate(TensorField2D<T,2>& velocity)
 {
     TensorField2D<T,3>* S = new TensorField2D<T,3>(velocity.getNx(), velocity.getNy());
     computeStrainRate(velocity, *S);
-    return std::unique_ptr<TensorField2D<T,3> >(S);
+    return std::auto_ptr<TensorField2D<T,3> >(S);
 }
 
 
@@ -1024,11 +1024,11 @@ void computeBulkStrainRate(TensorField2D<T,2>& velocity, TensorField2D<T,3>& S)
 }
 
 template<typename T>
-std::unique_ptr<TensorField2D<T,3> > computeBulkVorticity(TensorField2D<T,2>& velocity)
+std::auto_ptr<TensorField2D<T,3> > computeBulkVorticity(TensorField2D<T,2>& velocity)
 {
     TensorField2D<T,3>* S = new TensorField2D<T,3>(velocity.getNx(), velocity.getNy());
     computeBulkStrainRate(velocity, *S);
-    return std::unique_ptr<TensorField2D<T,3> >(S);
+    return std::auto_ptr<TensorField2D<T,3> >(S);
 }
 
 
@@ -1042,11 +1042,11 @@ void copy(TensorField2D<T1,nDim>& field, TensorField2D<T2,nDim>& convertedField)
 }
 
 template<typename T1, typename T2, int nDim>
-std::unique_ptr<TensorField2D<T2,nDim> > copyConvert(TensorField2D<T1,nDim>& field)
+std::auto_ptr<TensorField2D<T2,nDim> > copyConvert(TensorField2D<T1,nDim>& field)
 {
     TensorField2D<T2,nDim>* convertedField = new TensorField2D<T2,nDim>(field.getNx(), field.getNy());
     plb::copy(field, *convertedField);
-    return std::unique_ptr<TensorField2D<T2,nDim> >(convertedField);
+    return std::auto_ptr<TensorField2D<T2,nDim> >(convertedField);
 }
 
 template<typename T, int nDim>
@@ -1061,11 +1061,11 @@ void add(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B, TensorField2D<T,nDi
 }
 
 template<typename T, int nDim>
-std::unique_ptr<TensorField2D<T,nDim> > add(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B)
+std::auto_ptr<TensorField2D<T,nDim> > add(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B)
 {
     TensorField2D<T,nDim>* result = new TensorField2D<T,nDim>(A.getNx(), A.getNy());
     add(A, B, *result);
-    return std::unique_ptr<TensorField2D<T,nDim> >(result);
+    return std::auto_ptr<TensorField2D<T,nDim> >(result);
 }
 
 
@@ -1081,11 +1081,11 @@ void subtract(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B, TensorField2D<
 }
 
 template<typename T, int nDim>
-std::unique_ptr<TensorField2D<T,nDim> > subtract(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B)
+std::auto_ptr<TensorField2D<T,nDim> > subtract(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B)
 {
     TensorField2D<T,nDim>* result = new TensorField2D<T,nDim>(A.getNx(), A.getNy());
     subtract(A, B, *result);
-    return std::unique_ptr<TensorField2D<T,nDim> >(result);
+    return std::auto_ptr<TensorField2D<T,nDim> >(result);
 }
 
 
@@ -1101,11 +1101,11 @@ void multiply(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B, TensorField2D<
 }
 
 template<typename T, int nDim>
-std::unique_ptr<TensorField2D<T,nDim> > multiply(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B)
+std::auto_ptr<TensorField2D<T,nDim> > multiply(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B)
 {
     TensorField2D<T,nDim>* result = new TensorField2D<T,nDim>(A.getNx(), A.getNy());
     multiply(A, B, *result);
-    return std::unique_ptr<TensorField2D<T,nDim> >(result);
+    return std::auto_ptr<TensorField2D<T,nDim> >(result);
 }
 
 
@@ -1117,11 +1117,11 @@ void multiply(TensorField2D<T,nDim>& field, T scalar, TensorField2D<T,nDim>& res
 }
 
 template<typename T, int nDim>
-std::unique_ptr<TensorField2D<T,nDim> > multiply(TensorField2D<T,nDim>& field, T scalar)
+std::auto_ptr<TensorField2D<T,nDim> > multiply(TensorField2D<T,nDim>& field, T scalar)
 {
     TensorField2D<T,nDim>* result = new TensorField2D<T,nDim>(field.getNx(), field.getNy());
     multiply(field, scalar, *result, field.getBoundingBox());
-    return std::unique_ptr<TensorField2D<T,nDim> >(result);
+    return std::auto_ptr<TensorField2D<T,nDim> >(result);
 }
 
 
@@ -1133,11 +1133,11 @@ void multiply(T scalar, TensorField2D<T,nDim>& field, TensorField2D<T,nDim>& res
 }
 
 template<typename T, int nDim>
-std::unique_ptr<TensorField2D<T,nDim> > multiply(T scalar, TensorField2D<T,nDim>& field)
+std::auto_ptr<TensorField2D<T,nDim> > multiply(T scalar, TensorField2D<T,nDim>& field)
 {
     TensorField2D<T,nDim>* result = new TensorField2D<T,nDim>(field.getNx(), field.getNy());
     multiply(scalar, field, *result);
-    return std::unique_ptr<TensorField2D<T,nDim> >(result);
+    return std::auto_ptr<TensorField2D<T,nDim> >(result);
 }
 
 
@@ -1153,11 +1153,11 @@ void divide(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B, TensorField2D<T,
 }
 
 template<typename T, int nDim>
-std::unique_ptr<TensorField2D<T,nDim> > divide(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B)
+std::auto_ptr<TensorField2D<T,nDim> > divide(TensorField2D<T,nDim>& A, TensorField2D<T,nDim>& B)
 {
     TensorField2D<T,nDim>* result = new TensorField2D<T,nDim>(A.getNx(), A.getNy());
     divide(A, B, *result);
-    return std::unique_ptr<TensorField2D<T,nDim> >(result);
+    return std::auto_ptr<TensorField2D<T,nDim> >(result);
 }
 
 
@@ -1401,9 +1401,9 @@ void extractSubDomain( MultiBlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > extractSubDomain(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > extractSubDomain(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiBlockLattice2D<T,Descriptor> > extractedLattice =
+    std::auto_ptr<MultiBlockLattice2D<T,Descriptor> > extractedLattice =
         generateMultiBlockLattice<T,Descriptor>(lattice, domain);
     extractSubDomain(lattice, *extractedLattice, domain);
     return extractedLattice;
@@ -1420,9 +1420,9 @@ void computeDensity(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarField
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeDensity(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeDensity(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > density =
+    std::auto_ptr<MultiScalarField2D<T> > density =
         generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1438,7 +1438,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeDensity(MultiBlockLattice2D<T,Des
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeDensity(MultiBlockLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiScalarField2D<T> > computeDensity(MultiBlockLattice2D<T,Descriptor>& lattice) {
     return computeDensity(lattice, lattice.getBoundingBox());
 }
 
@@ -1453,9 +1453,9 @@ void computeRhoBar(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarField2
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeRhoBar(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeRhoBar(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > rhoBar =
+    std::auto_ptr<MultiScalarField2D<T> > rhoBar =
         generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1471,7 +1471,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeRhoBar(MultiBlockLattice2D<T,Desc
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeRhoBar(MultiBlockLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiScalarField2D<T> > computeRhoBar(MultiBlockLattice2D<T,Descriptor>& lattice) {
     return computeRhoBar(lattice, lattice.getBoundingBox());
 }
 
@@ -1499,10 +1499,10 @@ void computePackedRhoBarJ(MultiBlockLattice2D<T,Descriptor>& lattice, MultiNTens
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiNTensorField2D<T> > computePackedRhoBarJ(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiNTensorField2D<T> > computePackedRhoBarJ(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    plint nDim = 1 + Descriptor<T>::d;
-    std::unique_ptr<MultiNTensorField2D<T> > rhoBarJ(generateMultiNTensorField<T>(lattice, domain, nDim));
+    std::auto_ptr<MultiNTensorField2D<T> > rhoBarJ =
+        generateMultiNTensorField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
     // is smaller than the bounding-box. Given that the PackedRhoBarJFunctional2D() acts on both bulk and envelope,
@@ -1517,7 +1517,7 @@ std::unique_ptr<MultiNTensorField2D<T> > computePackedRhoBarJ(MultiBlockLattice2
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computePackedRhoBarJ(MultiBlockLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiScalarField2D<T> > computePackedRhoBarJ(MultiBlockLattice2D<T,Descriptor>& lattice) {
     return computePackedRhoBarJ(lattice, lattice.getBoundingBox());
 }
 
@@ -1532,9 +1532,9 @@ void computeKineticEnergy(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScala
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeKineticEnergy(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeKineticEnergy(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > energy =
+    std::auto_ptr<MultiScalarField2D<T> > energy =
         generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1550,13 +1550,24 @@ std::unique_ptr<MultiScalarField2D<T> > computeKineticEnergy(MultiBlockLattice2D
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeKineticEnergy(MultiBlockLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiScalarField2D<T> > computeKineticEnergy(MultiBlockLattice2D<T,Descriptor>& lattice) {
     return computeKineticEnergy(lattice, lattice.getBoundingBox());
 }
 
+// Added by Mehdi Ataei as part of LBfoam project
 
 /* *************** Velocity Norm ************************************* */
-
+template<typename T, template<typename U> class Descriptor>
+void computeForcedVelocityNorm(MultiBlockLattice2D<T,Descriptor>& lattice, MultiTensorField2D<T,Descriptor<T>::d>& force,
+        MultiScalarField2D<T>& velocityNorm, Box2D domain)
+{
+    std::vector<MultiBlock2D*> args;
+    args.push_back(&lattice);
+    args.push_back(&force);
+    args.push_back(&velocityNorm);
+    applyProcessingFunctional (
+            new BoxForcedVelocityNormFunctional2D<T,Descriptor>, domain, args );
+}
 template<typename T, template<typename U> class Descriptor>
 void computeVelocityNorm(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarField2D<T>& velocityNorm, Box2D domain)
 {
@@ -1565,9 +1576,9 @@ void computeVelocityNorm(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalar
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeVelocityNorm(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeVelocityNorm(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > velocityNorm =
+    std::auto_ptr<MultiScalarField2D<T> > velocityNorm =
         generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1583,12 +1594,25 @@ std::unique_ptr<MultiScalarField2D<T> > computeVelocityNorm(MultiBlockLattice2D<
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeVelocityNorm(MultiBlockLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiScalarField2D<T> > computeVelocityNorm(MultiBlockLattice2D<T,Descriptor>& lattice) {
     return computeVelocityNorm(lattice, lattice.getBoundingBox());
 }
 
+// Added by Mehdi Ataei as part of LBfoam project
 
 /* *************** Velocity Component ******************************** */
+template<typename T, template<typename U> class Descriptor> 
+void computeForcedVelocityComponent(MultiBlockLattice2D<T,Descriptor>& lattice, MultiTensorField2D<T,Descriptor<T>::d>& force,
+        MultiScalarField2D<T>& velocityComponent, Box2D domain, plint iComponent)
+{
+    std::vector<MultiBlock2D*> args;
+    args.push_back(&lattice);
+    args.push_back(&force);
+    args.push_back(&velocityComponent);
+    applyProcessingFunctional (
+            new BoxForcedVelocityComponentFunctional2D<T,Descriptor>(iComponent), domain, args );
+}
+
 
 template<typename T, template<typename U> class Descriptor>
 void computeVelocityComponent(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarField2D<T>& velocityComponent,
@@ -1599,10 +1623,10 @@ void computeVelocityComponent(MultiBlockLattice2D<T,Descriptor>& lattice, MultiS
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeVelocityComponent(MultiBlockLattice2D<T,Descriptor>& lattice,
+std::auto_ptr<MultiScalarField2D<T> > computeVelocityComponent(MultiBlockLattice2D<T,Descriptor>& lattice,
                                                                Box2D domain, plint iComponent)
 {
-    std::unique_ptr<MultiScalarField2D<T> >velocityComponent =
+    std::auto_ptr<MultiScalarField2D<T> >velocityComponent =
         generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1619,14 +1643,24 @@ std::unique_ptr<MultiScalarField2D<T> > computeVelocityComponent(MultiBlockLatti
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeVelocityComponent(MultiBlockLattice2D<T,Descriptor>& lattice, plint iComponent)
+std::auto_ptr<MultiScalarField2D<T> > computeVelocityComponent(MultiBlockLattice2D<T,Descriptor>& lattice, plint iComponent)
 {
     return computeVelocityComponent(lattice, lattice.getBoundingBox(), iComponent);
 }
 
-
+// Added by Mehdi Ataei as part of LBfoam project
 /* *************** Velocity ****************************************** */
-
+template<typename T, template<typename U> class Descriptor>
+void computeForcedVelocity(MultiBlockLattice2D<T,Descriptor>& lattice, MultiTensorField2D<T,Descriptor<T>::d>& force,
+        MultiTensorField2D<T,Descriptor<T>::d>& velocity, Box2D domain)
+{
+    std::vector<MultiBlock2D*> args;
+    args.push_back(&lattice);
+    args.push_back(&force);
+    args.push_back(&velocity);
+    applyProcessingFunctional (
+            new BoxForcedVelocityFunctional2D<T,Descriptor>, domain, args );
+}
 template<typename T, template<typename U> class Descriptor>
 void computeVelocity(MultiBlockLattice2D<T,Descriptor>& lattice,
                      MultiTensorField2D<T,Descriptor<T>::d>& velocity, Box2D domain)
@@ -1636,9 +1670,9 @@ void computeVelocity(MultiBlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::d> > computeVelocity(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::d> > computeVelocity(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::d> > velocity
+    std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::d> > velocity
         = generateMultiTensorField<T,Descriptor<T>::d>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1654,7 +1688,7 @@ std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::d> > computeVelocity(MultiBl
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::d> >
+std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::d> >
     computeVelocity(MultiBlockLattice2D<T,Descriptor>& lattice)
 {
     return computeVelocity(lattice, lattice.getBoundingBox());
@@ -1673,10 +1707,10 @@ void computePiNeq( MultiBlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computePiNeq(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> > PiNeq
+    std::auto_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> > PiNeq
         = generateMultiTensorField<T,SymmetricTensor<T,Descriptor>::n>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1692,7 +1726,7 @@ std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computePiNeq(MultiBlockLattice2D<T,Descriptor>& lattice)
 {
     return computePiNeq(lattice, lattice.getBoundingBox());
@@ -1710,10 +1744,10 @@ void computeShearStress( MultiBlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computeShearStress(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> > PiNeq
+    std::auto_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> > PiNeq
         = generateMultiTensorField<T,SymmetricTensor<T,Descriptor>::n>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1729,7 +1763,7 @@ std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computeShearStress(MultiBlockLattice2D<T,Descriptor>& lattice)
 {
     return computeShearStress(lattice, lattice.getBoundingBox());
@@ -1748,10 +1782,10 @@ void computeStrainRateFromStress( MultiBlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computeStrainRateFromStress(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> > S
+    std::auto_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> > S
         = generateMultiTensorField<T,SymmetricTensor<T,Descriptor>::n>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1767,7 +1801,7 @@ std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
+std::auto_ptr<MultiTensorField2D<T,SymmetricTensor<T,Descriptor>::n> >
     computeStrainRateFromStress(MultiBlockLattice2D<T,Descriptor>& lattice)
 {
     return computeStrainRateFromStress(lattice, lattice.getBoundingBox());
@@ -1783,9 +1817,9 @@ void computeTemperature(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarF
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeTemperature(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeTemperature(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > temperature = 
+    std::auto_ptr<MultiScalarField2D<T> > temperature = 
         generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1801,7 +1835,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeTemperature(MultiBlockLattice2D<T
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeTemperature(MultiBlockLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiScalarField2D<T> > computeTemperature(MultiBlockLattice2D<T,Descriptor>& lattice) {
     return computeTemperature(lattice, lattice.getBoundingBox());
 }
 
@@ -1815,9 +1849,9 @@ void computeSoundSpeed(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarFi
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeSoundSpeed(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeSoundSpeed(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > soundSpeed =
+    std::auto_ptr<MultiScalarField2D<T> > soundSpeed =
         generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1833,7 +1867,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeSoundSpeed(MultiBlockLattice2D<T,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeSoundSpeed(MultiBlockLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiScalarField2D<T> > computeSoundSpeed(MultiBlockLattice2D<T,Descriptor>& lattice) {
     return computeSoundSpeed(lattice, lattice.getBoundingBox());
 }
 
@@ -1849,10 +1883,10 @@ void computePopulation(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarFi
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computePopulation(MultiBlockLattice2D<T,Descriptor>& lattice,
+std::auto_ptr<MultiScalarField2D<T> > computePopulation(MultiBlockLattice2D<T,Descriptor>& lattice,
                                                         Box2D domain, plint iPop)
 {
-    std::unique_ptr<MultiScalarField2D<T> > population =
+    std::auto_ptr<MultiScalarField2D<T> > population =
         generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1868,7 +1902,7 @@ std::unique_ptr<MultiScalarField2D<T> > computePopulation(MultiBlockLattice2D<T,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computePopulation(MultiBlockLattice2D<T,Descriptor>& lattice, plint iPop)
+std::auto_ptr<MultiScalarField2D<T> > computePopulation(MultiBlockLattice2D<T,Descriptor>& lattice, plint iPop)
 {
     return computePopulation(lattice, lattice.getBoundingBox(), iPop);
 }
@@ -1883,10 +1917,10 @@ void computeEquilibrium(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarF
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeEquilibrium(MultiBlockLattice2D<T,Descriptor>& lattice,
+std::auto_ptr<MultiScalarField2D<T> > computeEquilibrium(MultiBlockLattice2D<T,Descriptor>& lattice,
                                                          Box2D domain, plint iPop)
 {
-    std::unique_ptr<MultiScalarField2D<T> > equilibrium =
+    std::auto_ptr<MultiScalarField2D<T> > equilibrium =
         generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1902,7 +1936,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeEquilibrium(MultiBlockLattice2D<T
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeEquilibrium(MultiBlockLattice2D<T,Descriptor>& lattice, plint iPop)
+std::auto_ptr<MultiScalarField2D<T> > computeEquilibrium(MultiBlockLattice2D<T,Descriptor>& lattice, plint iPop)
 {
     return computeEquilibrium(lattice, lattice.getBoundingBox(), iPop);
 }
@@ -1918,10 +1952,10 @@ void computeAllPopulations(MultiBlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::q> > computeAllPopulations(MultiBlockLattice2D<T,Descriptor>& lattice,
+std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::q> > computeAllPopulations(MultiBlockLattice2D<T,Descriptor>& lattice,
                                                             Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::q> > populations = 
+    std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::q> > populations = 
             generateMultiTensorField<T,Descriptor<T>::q>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -1937,7 +1971,7 @@ std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::q> > computeAllPopulations(M
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::q> > computeAllPopulations(MultiBlockLattice2D<T,Descriptor>& lattice)
+std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::q> > computeAllPopulations(MultiBlockLattice2D<T,Descriptor>& lattice)
 {
     return computeAllPopulations(lattice, lattice.getBoundingBox());
 }
@@ -1988,9 +2022,9 @@ void computeOmega(MultiBlockLattice2D<T,Descriptor>& lattice, MultiScalarField2D
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeOmega(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeOmega(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > omega =
+    std::auto_ptr<MultiScalarField2D<T> > omega =
         generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -2006,7 +2040,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeOmega(MultiBlockLattice2D<T,Descr
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeOmega(MultiBlockLattice2D<T,Descriptor>& lattice) {
+std::auto_ptr<MultiScalarField2D<T> > computeOmega(MultiBlockLattice2D<T,Descriptor>& lattice) {
     return computeOmega(lattice, lattice.getBoundingBox());
 }
 
@@ -2021,9 +2055,9 @@ void computeExternalForce(MultiBlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::d> > computeExternalForce(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::d> > computeExternalForce(MultiBlockLattice2D<T,Descriptor>& lattice, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::d> > force
+    std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::d> > force
         = generateMultiTensorField<T,Descriptor<T>::d>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -2039,7 +2073,7 @@ std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::d> > computeExternalForce(Mu
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::d> >
+std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::d> >
     computeExternalForce(MultiBlockLattice2D<T,Descriptor>& lattice)
 {
     return computeExternalForce(lattice, lattice.getBoundingBox());
@@ -2056,9 +2090,9 @@ void computeExternalScalar(MultiBlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> > computeExternalScalar(MultiBlockLattice2D<T,Descriptor>& lattice, int whichScalar, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeExternalScalar(MultiBlockLattice2D<T,Descriptor>& lattice, int whichScalar, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > scalar
+    std::auto_ptr<MultiScalarField2D<T> > scalar
         = generateMultiScalarField<T>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -2074,7 +2108,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeExternalScalar(MultiBlockLattice2
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField2D<T> >
+std::auto_ptr<MultiScalarField2D<T> >
     computeExternalScalar(MultiBlockLattice2D<T,Descriptor>& lattice, int whichScalar)
 {
     return computeExternalScalar(lattice, whichScalar, lattice.getBoundingBox());
@@ -2092,10 +2126,10 @@ void computeExternalVector(MultiBlockLattice2D<T,Descriptor>& lattice,
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::d> >
+std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::d> >
 computeExternalVector(MultiBlockLattice2D<T,Descriptor>& lattice, int vectorBeginsAt, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::d> > tensorField
+    std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::d> > tensorField
         = generateMultiTensorField<T,Descriptor<T>::d>(lattice, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -2112,7 +2146,7 @@ computeExternalVector(MultiBlockLattice2D<T,Descriptor>& lattice, int vectorBegi
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiTensorField2D<T,Descriptor<T>::d> >
+std::auto_ptr<MultiTensorField2D<T,Descriptor<T>::d> >
     computeExternalVector(MultiBlockLattice2D<T,Descriptor>& lattice, int vectorBeginsAt)
 {
     return computeExternalVector(lattice, vectorBeginsAt, lattice.getBoundingBox());
@@ -2131,9 +2165,9 @@ void extractSubDomain( MultiScalarField2D<T>& field,
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > extractSubDomain(MultiScalarField2D<T>& field, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > extractSubDomain(MultiScalarField2D<T>& field, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > extractedField = 
+    std::auto_ptr<MultiScalarField2D<T> > extractedField = 
         generateMultiScalarField<T>(field, domain);
     extractSubDomain(field, *extractedField, domain);
     return extractedField;
@@ -2149,16 +2183,16 @@ void lessThan(MultiScalarField2D<T>& field, T scalar, MultiScalarField2D<int>& r
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<int> > lessThan(MultiScalarField2D<T>& field, T scalar, Box2D domain)
+std::auto_ptr<MultiScalarField2D<int> > lessThan(MultiScalarField2D<T>& field, T scalar, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<int> >result =
+    std::auto_ptr<MultiScalarField2D<int> >result =
         generateMultiScalarField<int>(field, domain);
     lessThan(field, scalar, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<int> > lessThan(MultiScalarField2D<T>& field, T scalar)
+std::auto_ptr<MultiScalarField2D<int> > lessThan(MultiScalarField2D<T>& field, T scalar)
 {
     return lessThan(field, scalar, field.getBoundingBox());
 }
@@ -2172,16 +2206,16 @@ void greaterThan(MultiScalarField2D<T>& field, T scalar, MultiScalarField2D<int>
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<int> > greaterThan(MultiScalarField2D<T>& field, T scalar, Box2D domain)
+std::auto_ptr<MultiScalarField2D<int> > greaterThan(MultiScalarField2D<T>& field, T scalar, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<int> >result =
+    std::auto_ptr<MultiScalarField2D<int> >result =
         generateMultiScalarField<int>(field, domain);
     greaterThan(field, scalar, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<int> > greaterThan(MultiScalarField2D<T>& field, T scalar)
+std::auto_ptr<MultiScalarField2D<int> > greaterThan(MultiScalarField2D<T>& field, T scalar)
 {
     return greaterThan(field, scalar, field.getBoundingBox());
 }
@@ -2195,16 +2229,16 @@ void add(MultiScalarField2D<T>& field, T scalar, MultiScalarField2D<T>& result, 
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > add(MultiScalarField2D<T>& field, T scalar, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > add(MultiScalarField2D<T>& field, T scalar, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> >result =
+    std::auto_ptr<MultiScalarField2D<T> >result =
         generateMultiScalarField<T>(field, domain);
     add(field, scalar, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > add(MultiScalarField2D<T>& field, T scalar)
+std::auto_ptr<MultiScalarField2D<T> > add(MultiScalarField2D<T>& field, T scalar)
 {
     return add(field, scalar, field.getBoundingBox());
 }
@@ -2218,16 +2252,16 @@ void add(T scalar, MultiScalarField2D<T>& field, MultiScalarField2D<T>& result, 
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > add(T scalar, MultiScalarField2D<T>& field, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > add(T scalar, MultiScalarField2D<T>& field, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result =
+    std::auto_ptr<MultiScalarField2D<T> > result =
         generateMultiScalarField<T>(field, domain);
     add(scalar, field, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > add(T scalar, MultiScalarField2D<T>& field)
+std::auto_ptr<MultiScalarField2D<T> > add(T scalar, MultiScalarField2D<T>& field)
 {
     return add(scalar, field, field.getBoundingBox());
 }
@@ -2241,16 +2275,16 @@ void subtract(MultiScalarField2D<T>& field, T scalar, MultiScalarField2D<T>& res
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > subtract(MultiScalarField2D<T>& field, T scalar, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > subtract(MultiScalarField2D<T>& field, T scalar, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result =
+    std::auto_ptr<MultiScalarField2D<T> > result =
         generateMultiScalarField<T>(field, domain);
     subtract(field, scalar, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > subtract(MultiScalarField2D<T>& field, T scalar)
+std::auto_ptr<MultiScalarField2D<T> > subtract(MultiScalarField2D<T>& field, T scalar)
 {
     return subtract(field, scalar, field.getBoundingBox());
 }
@@ -2264,16 +2298,16 @@ void subtract(T scalar, MultiScalarField2D<T>& field, MultiScalarField2D<T>& res
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > subtract(T scalar, MultiScalarField2D<T>& field, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > subtract(T scalar, MultiScalarField2D<T>& field, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result =
+    std::auto_ptr<MultiScalarField2D<T> > result =
         generateMultiScalarField<T>(field, domain);
     subtract(scalar, field, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > subtract(T scalar, MultiScalarField2D<T>& field)
+std::auto_ptr<MultiScalarField2D<T> > subtract(T scalar, MultiScalarField2D<T>& field)
 {
     return subtract(scalar, field, field.getBoundingBox());
 }
@@ -2287,16 +2321,16 @@ void multiply(MultiScalarField2D<T>& field, T scalar, MultiScalarField2D<T>& res
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > multiply(MultiScalarField2D<T>& field, T scalar, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > multiply(MultiScalarField2D<T>& field, T scalar, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result =
+    std::auto_ptr<MultiScalarField2D<T> > result =
         generateMultiScalarField<T>(field, domain);
     multiply(field, scalar, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > multiply(MultiScalarField2D<T>& field, T scalar)
+std::auto_ptr<MultiScalarField2D<T> > multiply(MultiScalarField2D<T>& field, T scalar)
 {
     return multiply(field, scalar, field.getBoundingBox());
 }
@@ -2310,16 +2344,16 @@ void multiply(T scalar, MultiScalarField2D<T>& field, MultiScalarField2D<T>& res
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > multiply(T scalar, MultiScalarField2D<T>& field, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > multiply(T scalar, MultiScalarField2D<T>& field, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result =
+    std::auto_ptr<MultiScalarField2D<T> > result =
         generateMultiScalarField<T>(field, domain);
     multiply(scalar, field, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > multiply(T scalar, MultiScalarField2D<T>& field)
+std::auto_ptr<MultiScalarField2D<T> > multiply(T scalar, MultiScalarField2D<T>& field)
 {
     return multiply(scalar, field, field.getBoundingBox());
 }
@@ -2333,16 +2367,16 @@ void divide(MultiScalarField2D<T>& field, T scalar, MultiScalarField2D<T>& resul
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > divide(MultiScalarField2D<T>& field, T scalar, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > divide(MultiScalarField2D<T>& field, T scalar, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result =
+    std::auto_ptr<MultiScalarField2D<T> > result =
         generateMultiScalarField<T>(field, domain);
     divide(field, scalar, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > divide(MultiScalarField2D<T>& field, T scalar)
+std::auto_ptr<MultiScalarField2D<T> > divide(MultiScalarField2D<T>& field, T scalar)
 {
     return divide(field, scalar, field.getBoundingBox());
 }
@@ -2356,16 +2390,16 @@ void divide(T scalar, MultiScalarField2D<T>& field, MultiScalarField2D<T>& resul
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > divide(T scalar, MultiScalarField2D<T>& field, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > divide(T scalar, MultiScalarField2D<T>& field, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result =
+    std::auto_ptr<MultiScalarField2D<T> > result =
         generateMultiScalarField<T>(field, domain);
     divide(scalar, field, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > divide(T scalar, MultiScalarField2D<T>& field)
+std::auto_ptr<MultiScalarField2D<T> > divide(T scalar, MultiScalarField2D<T>& field)
 {
     return divide(scalar, field, field.getBoundingBox());
 }
@@ -2430,9 +2464,9 @@ void computeSqrt(MultiScalarField2D<T>& A, MultiScalarField2D<T>& result, Box2D 
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeSqrt(MultiScalarField2D<T>& A, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeSqrt(MultiScalarField2D<T>& A, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result = generateMultiScalarField<T>(A, domain);
+    std::auto_ptr<MultiScalarField2D<T> > result = generateMultiScalarField<T>(A, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
     // is smaller than the bounding-box. Given that the ComputeScalarSqrtFunctional2D() acts on both bulk and envelope,
@@ -2447,7 +2481,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeSqrt(MultiScalarField2D<T>& A, Bo
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeSqrt(MultiScalarField2D<T>& A)
+std::auto_ptr<MultiScalarField2D<T> > computeSqrt(MultiScalarField2D<T>& A)
 {
     return computeSqrt(A, A.getBoundingBox());
 }
@@ -2463,9 +2497,9 @@ void computePower(MultiScalarField2D<T>& A, MultiScalarField2D<T>& result, T pow
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computePower(MultiScalarField2D<T>& A, T power, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computePower(MultiScalarField2D<T>& A, T power, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result = generateMultiScalarField<T>(A, domain);
+    std::auto_ptr<MultiScalarField2D<T> > result = generateMultiScalarField<T>(A, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
     // is smaller than the bounding-box. Given that the ComputeScalarSqrtFunctional2D() acts on both bulk and envelope,
@@ -2480,7 +2514,7 @@ std::unique_ptr<MultiScalarField2D<T> > computePower(MultiScalarField2D<T>& A, T
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computePower(MultiScalarField2D<T>& A, T power)
+std::auto_ptr<MultiScalarField2D<T> > computePower(MultiScalarField2D<T>& A, T power)
 {
     return computePower(A, power, A.getBoundingBox());
 }
@@ -2493,9 +2527,9 @@ void computeLog(MultiScalarField2D<T>& A, MultiScalarField2D<T>& result, Box2D d
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeLog(MultiScalarField2D<T>& A, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeLog(MultiScalarField2D<T>& A, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result = generateMultiScalarField<T>(A, domain);
+    std::auto_ptr<MultiScalarField2D<T> > result = generateMultiScalarField<T>(A, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
     // is smaller than the bounding-box. Given that the ComputeScalarLogFunctional2D() acts on both bulk and envelope,
@@ -2510,7 +2544,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeLog(MultiScalarField2D<T>& A, Box
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeLog(MultiScalarField2D<T>& A)
+std::auto_ptr<MultiScalarField2D<T> > computeLog(MultiScalarField2D<T>& A)
 {
     return computeLog(A, A.getBoundingBox());
 }
@@ -2523,9 +2557,9 @@ void computeAbsoluteValue(MultiScalarField2D<T>& A, MultiScalarField2D<T>& resul
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeAbsoluteValue(MultiScalarField2D<T>& A, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeAbsoluteValue(MultiScalarField2D<T>& A, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result = generateMultiScalarField<T>(A, domain);
+    std::auto_ptr<MultiScalarField2D<T> > result = generateMultiScalarField<T>(A, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
     // is smaller than the bounding-box. Given that the ComputeAbsoluteValueFunctional2D() acts on both bulk and envelope,
@@ -2540,7 +2574,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeAbsoluteValue(MultiScalarField2D<
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeAbsoluteValue(MultiScalarField2D<T>& A)
+std::auto_ptr<MultiScalarField2D<T> > computeAbsoluteValue(MultiScalarField2D<T>& A)
 {
     return computeAbsoluteValue(A, A.getBoundingBox());
 }
@@ -2556,16 +2590,16 @@ void copy(MultiScalarField2D<T1>& field, MultiScalarField2D<T2>& convertedField,
 }
 
 template<typename T1, typename T2>
-std::unique_ptr<MultiScalarField2D<T2> > copyConvert(MultiScalarField2D<T1>& field, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T2> > copyConvert(MultiScalarField2D<T1>& field, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T2> > convertedField =
+    std::auto_ptr<MultiScalarField2D<T2> > convertedField =
         generateMultiScalarField<T2>(field, domain);
     plb::copy(field, *convertedField, domain);
     return convertedField;
 }
 
 template<typename T1, typename T2>
-std::unique_ptr<MultiScalarField2D<T2> > copyConvert(MultiScalarField2D<T1>& field)
+std::auto_ptr<MultiScalarField2D<T2> > copyConvert(MultiScalarField2D<T1>& field)
 {
     return copyConvert<T1,T2>(field, field.getBoundingBox());
 }
@@ -2583,16 +2617,16 @@ void lessThan(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, MultiScalarFie
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<int> > lessThan(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
+std::auto_ptr<MultiScalarField2D<int> > lessThan(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<int> > result =
+    std::auto_ptr<MultiScalarField2D<int> > result =
         generateIntersectMultiScalarField<int>(A, B, domain);
     lessThan(A, B, *result, domain);
-    return result;
+    return std::auto_ptr<MultiScalarField2D<int> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<int> > lessThan(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
+std::auto_ptr<MultiScalarField2D<int> > lessThan(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
 {
     return lessThan(A, B, A.getBoundingBox());
 }
@@ -2611,16 +2645,16 @@ void greaterThan(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, MultiScalar
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<int> > greaterThan(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
+std::auto_ptr<MultiScalarField2D<int> > greaterThan(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<int> > result =
+    std::auto_ptr<MultiScalarField2D<int> > result =
         generateIntersectMultiScalarField<int>(A, B, domain);
     greaterThan(A, B, *result, domain);
-    return result;
+    return std::auto_ptr<MultiScalarField2D<int> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<int> > greaterThan(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
+std::auto_ptr<MultiScalarField2D<int> > greaterThan(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
 {
     return greaterThan(A, B, A.getBoundingBox());
 }
@@ -2639,16 +2673,16 @@ void add(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, MultiScalarField2D<
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > add(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > add(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result =
+    std::auto_ptr<MultiScalarField2D<T> > result =
         generateIntersectMultiScalarField<T>(A, B, domain);
     add(A, B, *result, domain);
-    return result;
+    return std::auto_ptr<MultiScalarField2D<T> >(result);
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > add(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
+std::auto_ptr<MultiScalarField2D<T> > add(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
 {
     return add(A, B, A.getBoundingBox());
 }
@@ -2666,16 +2700,16 @@ void subtract(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, MultiScalarFie
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > subtract(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > subtract(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T>  >result =
+    std::auto_ptr<MultiScalarField2D<T>  >result =
         generateIntersectMultiScalarField<T>(A,B, domain);
     subtract(A, B, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > subtract(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
+std::auto_ptr<MultiScalarField2D<T> > subtract(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
 {
     return subtract(A, B, A.getBoundingBox());
 }
@@ -2693,16 +2727,16 @@ void multiply(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, MultiScalarFie
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > multiply(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > multiply(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result =
+    std::auto_ptr<MultiScalarField2D<T> > result =
         generateIntersectMultiScalarField<T>(A,B, domain);
     multiply(A, B, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > multiply(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
+std::auto_ptr<MultiScalarField2D<T> > multiply(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
 {
     return multiply(A, B, A.getBoundingBox());
 }
@@ -2719,16 +2753,16 @@ void divide(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, MultiScalarField
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > divide(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > divide(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result =
+    std::auto_ptr<MultiScalarField2D<T> > result =
         generateIntersectMultiScalarField<T>(A, B, domain);
     divide(A, B, *result, domain);
     return result;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > divide(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
+std::auto_ptr<MultiScalarField2D<T> > divide(MultiScalarField2D<T>& A, MultiScalarField2D<T>& B)
 {
     return divide(A, B, A.getBoundingBox());
 }
@@ -2816,9 +2850,9 @@ void extractSubDomain( MultiTensorField2D<T,nDim>& field,
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > extractSubDomain(MultiTensorField2D<T,nDim>& field, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,nDim> > extractSubDomain(MultiTensorField2D<T,nDim>& field, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,nDim> > extractedField =
+    std::auto_ptr<MultiTensorField2D<T,nDim> > extractedField =
         generateMultiTensorField<T,nDim>(field, domain);
     extractSubDomain(field, *extractedField, domain);
     return extractedField;
@@ -2835,16 +2869,16 @@ void extractComponent(MultiTensorField2D<T,nDim>& tensorField, MultiScalarField2
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiScalarField2D<T> > extractComponent(MultiTensorField2D<T,nDim>& tensorField, Box2D domain, int iComponent)
+std::auto_ptr<MultiScalarField2D<T> > extractComponent(MultiTensorField2D<T,nDim>& tensorField, Box2D domain, int iComponent)
 {
-    std::unique_ptr<MultiScalarField2D<T> > component =
+    std::auto_ptr<MultiScalarField2D<T> > component =
         generateMultiScalarField<T>(tensorField, domain);
     extractComponent(tensorField, *component, domain, iComponent);
     return component;
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiScalarField2D<T> > extractComponent(MultiTensorField2D<T,nDim>& tensorField, int iComponent)
+std::auto_ptr<MultiScalarField2D<T> > extractComponent(MultiTensorField2D<T,nDim>& tensorField, int iComponent)
 {
     return extractComponent(tensorField, tensorField.getBoundingBox(), iComponent);
 }
@@ -2860,9 +2894,9 @@ void computeNorm(MultiTensorField2D<T,nDim>& tensorField, MultiScalarField2D<T>&
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiScalarField2D<T> > computeNorm(MultiTensorField2D<T,nDim>& tensorField, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeNorm(MultiTensorField2D<T,nDim>& tensorField, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > component =
+    std::auto_ptr<MultiScalarField2D<T> > component =
         generateMultiScalarField<T>(tensorField, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -2878,7 +2912,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeNorm(MultiTensorField2D<T,nDim>& 
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiScalarField2D<T> > computeNorm(MultiTensorField2D<T,nDim>& tensorField)
+std::auto_ptr<MultiScalarField2D<T> > computeNorm(MultiTensorField2D<T,nDim>& tensorField)
 {
     return computeNorm(tensorField, tensorField.getBoundingBox());
 }
@@ -2893,9 +2927,9 @@ void computeSqrt(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& resu
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > computeSqrt(MultiTensorField2D<T,nDim>& A, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,nDim> > computeSqrt(MultiTensorField2D<T,nDim>& A, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,nDim> > result = generateMultiTensorField<T,nDim>(A, domain);
+    std::auto_ptr<MultiTensorField2D<T,nDim> > result = generateMultiTensorField<T,nDim>(A, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
     // is smaller than the bounding-box. Given that the ComputeTensorSqrtFunctional2D() acts on both bulk and envelope,
@@ -2910,7 +2944,7 @@ std::unique_ptr<MultiTensorField2D<T,nDim> > computeSqrt(MultiTensorField2D<T,nD
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > computeSqrt(MultiTensorField2D<T,nDim>& A)
+std::auto_ptr<MultiTensorField2D<T,nDim> > computeSqrt(MultiTensorField2D<T,nDim>& A)
 {
     return computeSqrt(A, A.getBoundingBox());
 }
@@ -2926,9 +2960,9 @@ void computeNormSqr(MultiTensorField2D<T,nDim>& tensorField, MultiScalarField2D<
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiScalarField2D<T> > computeNormSqr(MultiTensorField2D<T,nDim>& tensorField, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeNormSqr(MultiTensorField2D<T,nDim>& tensorField, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > component =
+    std::auto_ptr<MultiScalarField2D<T> > component =
         generateMultiScalarField<T>(tensorField, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -2944,7 +2978,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeNormSqr(MultiTensorField2D<T,nDim
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiScalarField2D<T> > computeNormSqr(MultiTensorField2D<T,nDim>& tensorField)
+std::auto_ptr<MultiScalarField2D<T> > computeNormSqr(MultiTensorField2D<T,nDim>& tensorField)
 {
     return computeNormSqr(tensorField, tensorField.getBoundingBox());
 }
@@ -2959,16 +2993,16 @@ void computeMaximumElement(MultiTensorField2D<T,nDim>& A, MultiScalarField2D<T>&
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiScalarField2D<T> > computeMaximumElement(MultiTensorField2D<T,nDim>& A, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeMaximumElement(MultiTensorField2D<T,nDim>& A, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > result = generateMultiScalarField<T>(A, domain);
+    std::auto_ptr<MultiScalarField2D<T> > result = generateMultiScalarField<T>(A, domain);
 
     computeMaximumElement(A, *result, domain);
     return result;
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiScalarField2D<T> > computeMaximumElement(MultiTensorField2D<T,nDim>& A)
+std::auto_ptr<MultiScalarField2D<T> > computeMaximumElement(MultiTensorField2D<T,nDim>& A)
 {
     return computeMaximumElement(A, A.getBoundingBox());
 }
@@ -2984,9 +3018,9 @@ void computeSymmetricTensorNorm(MultiTensorField2D<T,3>& tensorField, MultiScala
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeSymmetricTensorNorm(MultiTensorField2D<T,3>& tensorField, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeSymmetricTensorNorm(MultiTensorField2D<T,3>& tensorField, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > norm =
+    std::auto_ptr<MultiScalarField2D<T> > norm =
         generateMultiScalarField<T>(tensorField, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -3002,7 +3036,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeSymmetricTensorNorm(MultiTensorFi
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeSymmetricTensorNorm(MultiTensorField2D<T,3>& tensorField)
+std::auto_ptr<MultiScalarField2D<T> > computeSymmetricTensorNorm(MultiTensorField2D<T,3>& tensorField)
 {
     return computeSymmetricTensorNorm(tensorField, tensorField.getBoundingBox());
 }
@@ -3018,9 +3052,9 @@ void computeSymmetricTensorNormSqr(MultiTensorField2D<T,3>& tensorField, MultiSc
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeSymmetricTensorNormSqr(MultiTensorField2D<T,3>& tensorField, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeSymmetricTensorNormSqr(MultiTensorField2D<T,3>& tensorField, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > normSqr =
+    std::auto_ptr<MultiScalarField2D<T> > normSqr =
         generateMultiScalarField<T>(tensorField, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -3036,7 +3070,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeSymmetricTensorNormSqr(MultiTenso
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeSymmetricTensorNormSqr(MultiTensorField2D<T,3>& tensorField)
+std::auto_ptr<MultiScalarField2D<T> > computeSymmetricTensorNormSqr(MultiTensorField2D<T,3>& tensorField)
 {
     return computeSymmetricTensorNormSqr(tensorField, tensorField.getBoundingBox());
 }
@@ -3052,9 +3086,9 @@ void computeSymmetricTensorTrace(MultiTensorField2D<T,3>& tensorField, MultiScal
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeSymmetricTensorTrace(MultiTensorField2D<T,3>& tensorField, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeSymmetricTensorTrace(MultiTensorField2D<T,3>& tensorField, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > trace =
+    std::auto_ptr<MultiScalarField2D<T> > trace =
         generateMultiScalarField<T>(tensorField, domain);
 
     // The domain needs to be extended to the outer envelopes, for the following reason. Imagine that the domain
@@ -3070,7 +3104,7 @@ std::unique_ptr<MultiScalarField2D<T> > computeSymmetricTensorTrace(MultiTensorF
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeSymmetricTensorTrace(MultiTensorField2D<T,3>& tensorField)
+std::auto_ptr<MultiScalarField2D<T> > computeSymmetricTensorTrace(MultiTensorField2D<T,3>& tensorField)
 {
     return computeSymmetricTensorTrace(tensorField, tensorField.getBoundingBox());
 }
@@ -3086,16 +3120,16 @@ void computeGradient(MultiScalarField2D<T>& phi, MultiTensorField2D<T,2>& gradie
 }
 
 template<typename T>
-std::unique_ptr<MultiTensorField2D<T,2> > computeGradient(MultiScalarField2D<T>& phi, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,2> > computeGradient(MultiScalarField2D<T>& phi, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,2> > gradient =
+    std::auto_ptr<MultiTensorField2D<T,2> > gradient =
     generateMultiTensorField<T,2>(phi, domain);
     computeGradient(phi, *gradient, domain);
     return gradient;
 }
 
 template<typename T>
-std::unique_ptr<MultiTensorField2D<T,2> > computeGradient(MultiScalarField2D<T>& phi)
+std::auto_ptr<MultiTensorField2D<T,2> > computeGradient(MultiScalarField2D<T>& phi)
 {
     return computeGradient(phi, phi.getBoundingBox());
 }
@@ -3112,16 +3146,16 @@ void computeVorticity(MultiTensorField2D<T,2>& velocity, MultiScalarField2D<T>& 
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeVorticity(MultiTensorField2D<T,2>& velocity, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeVorticity(MultiTensorField2D<T,2>& velocity, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > vorticity =
+    std::auto_ptr<MultiScalarField2D<T> > vorticity =
         generateMultiScalarField<T>(velocity, domain);
     computeVorticity(velocity, *vorticity, domain);
     return vorticity;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeVorticity(MultiTensorField2D<T,2>& velocity)
+std::auto_ptr<MultiScalarField2D<T> > computeVorticity(MultiTensorField2D<T,2>& velocity)
 {
     return computeVorticity(velocity, velocity.getBoundingBox());
 }
@@ -3137,16 +3171,16 @@ void computeBulkVorticity(MultiTensorField2D<T,2>& velocity, MultiScalarField2D<
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeBulkVorticity(MultiTensorField2D<T,2>& velocity, Box2D domain)
+std::auto_ptr<MultiScalarField2D<T> > computeBulkVorticity(MultiTensorField2D<T,2>& velocity, Box2D domain)
 {
-    std::unique_ptr<MultiScalarField2D<T> > vorticity =
+    std::auto_ptr<MultiScalarField2D<T> > vorticity =
         generateMultiScalarField<T>(velocity, domain);
     computeBulkVorticity(velocity, *vorticity, domain);
     return vorticity;
 }
 
 template<typename T>
-std::unique_ptr<MultiScalarField2D<T> > computeBulkVorticity(MultiTensorField2D<T,2>& velocity)
+std::auto_ptr<MultiScalarField2D<T> > computeBulkVorticity(MultiTensorField2D<T,2>& velocity)
 {
     return computeBulkVorticity(velocity, velocity.getBoundingBox());
 }
@@ -3164,16 +3198,16 @@ void computeStrainRate(MultiTensorField2D<T,2>& velocity, MultiTensorField2D<T,3
 }
 
 template<typename T>
-std::unique_ptr<MultiTensorField2D<T,3> > computeStrainRate(MultiTensorField2D<T,2>& velocity, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,3> > computeStrainRate(MultiTensorField2D<T,2>& velocity, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,3> > S =
+    std::auto_ptr<MultiTensorField2D<T,3> > S =
         generateMultiTensorField<T,3>(velocity, domain);
     computeStrainRate(velocity, *S, domain);
     return S;
 }
 
 template<typename T>
-std::unique_ptr<MultiTensorField2D<T,3> > computeStrainRate(MultiTensorField2D<T,2>& velocity)
+std::auto_ptr<MultiTensorField2D<T,3> > computeStrainRate(MultiTensorField2D<T,2>& velocity)
 {
     return computeStrainRate(velocity, velocity.getBoundingBox());
 }
@@ -3189,16 +3223,16 @@ void computeBulkStrainRate(MultiTensorField2D<T,2>& velocity, MultiTensorField2D
 }
 
 template<typename T>
-std::unique_ptr<MultiTensorField2D<T,3> > computeBulkStrainRate(MultiTensorField2D<T,2>& velocity, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,3> > computeBulkStrainRate(MultiTensorField2D<T,2>& velocity, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,3> > S =
+    std::auto_ptr<MultiTensorField2D<T,3> > S =
         generateMultiTensorField<T,3>(velocity, domain);
     computeBulkStrainRate(velocity, *S, domain);
     return S;
 }
 
 template<typename T>
-std::unique_ptr<MultiTensorField2D<T,3> > computeBulkStrainRate(MultiTensorField2D<T,2>& velocity)
+std::auto_ptr<MultiTensorField2D<T,3> > computeBulkStrainRate(MultiTensorField2D<T,2>& velocity)
 {
     return computeBulkStrainRate(velocity, velocity.getBoundingBox());
 }
@@ -3215,16 +3249,16 @@ void copy(MultiTensorField2D<T1,nDim>& field, MultiTensorField2D<T2,nDim>& conve
 }
 
 template<typename T1, typename T2, int nDim>
-std::unique_ptr<MultiTensorField2D<T2,nDim> > copyConvert(MultiTensorField2D<T1,nDim>& field, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T2,nDim> > copyConvert(MultiTensorField2D<T1,nDim>& field, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T2,nDim> > convertedField =
+    std::auto_ptr<MultiTensorField2D<T2,nDim> > convertedField =
         generateMultiTensorField<T2,nDim>(field, domain);
     plb::copy<T1,T2,nDim>(field, *convertedField, domain);
     return convertedField;
 }
 
 template<typename T1, typename T2, int nDim>
-std::unique_ptr<MultiTensorField2D<T2,nDim> > copyConvert(MultiTensorField2D<T1,nDim>& field)
+std::auto_ptr<MultiTensorField2D<T2,nDim> > copyConvert(MultiTensorField2D<T1,nDim>& field)
 {
     return copyConvert<T1,T2,nDim>(field, field.getBoundingBox());
 }
@@ -3241,16 +3275,16 @@ void add(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B, MultiTens
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > add(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,nDim> > add(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,nDim> > result =
+    std::auto_ptr<MultiTensorField2D<T,nDim> > result =
         generateIntersectMultiTensorField<T,nDim>(A, B, domain);
     add(A, B, *result, domain);
-    return result;
+    return std::auto_ptr<MultiTensorField2D<T,nDim> >(result);
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > add(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B)
+std::auto_ptr<MultiTensorField2D<T,nDim> > add(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B)
 {
     return add(A, B, A.getBoundingBox());
 }
@@ -3268,16 +3302,16 @@ void subtract(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B, Mult
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > subtract(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,nDim> > subtract(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,nDim> > result =
+    std::auto_ptr<MultiTensorField2D<T,nDim> > result =
         generateIntersectMultiTensorField<T,nDim>(A, B, domain);
     subtract(A, B, *result, domain);
     return result;
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > subtract(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B)
+std::auto_ptr<MultiTensorField2D<T,nDim> > subtract(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B)
 {
     return subtract(A, B, A.getBoundingBox());
 }
@@ -3295,16 +3329,16 @@ void multiply(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B, Mult
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > multiply(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,nDim> > multiply(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,nDim> > result =
+    std::auto_ptr<MultiTensorField2D<T,nDim> > result =
         generateIntersectMultiTensorField<T,nDim>(A, B, domain);
     multiply(A, B, *result, domain);
     return result;
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > multiply(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B)
+std::auto_ptr<MultiTensorField2D<T,nDim> > multiply(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B)
 {
     return multiply(A, B, A.getBoundingBox());
 }
@@ -3328,16 +3362,16 @@ void multiply(MultiTensorField2D<T,nDim>& field, T scalar, MultiTensorField2D<T,
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > multiply(MultiTensorField2D<T,nDim>& field, T scalar, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,nDim> > multiply(MultiTensorField2D<T,nDim>& field, T scalar, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,nDim> > result =
+    std::auto_ptr<MultiTensorField2D<T,nDim> > result =
         generateMultiTensorField<T,nDim>(field, domain);
     multiply(field, scalar, *result, domain);
     return result;
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > multiply(MultiTensorField2D<T,nDim>& field, T scalar)
+std::auto_ptr<MultiTensorField2D<T,nDim> > multiply(MultiTensorField2D<T,nDim>& field, T scalar)
 {
     return multiply(field, scalar, field.getBoundingBox());
 }
@@ -3351,31 +3385,31 @@ void multiply(T scalar, MultiTensorField2D<T,nDim>& field, MultiTensorField2D<T,
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > multiply(T scalar, MultiTensorField2D<T,nDim>& field, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,nDim> > multiply(T scalar, MultiTensorField2D<T,nDim>& field, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,nDim> > result =
+    std::auto_ptr<MultiTensorField2D<T,nDim> > result =
         generateMultiTensorField<T,nDim>(field, domain);
     multiply(scalar, field, *result, domain);
     return result;
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > multiply(T scalar, MultiTensorField2D<T,nDim>& field)
+std::auto_ptr<MultiTensorField2D<T,nDim> > multiply(T scalar, MultiTensorField2D<T,nDim>& field)
 {
     return multiply(scalar, field, field.getBoundingBox());
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > divide(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B, Box2D domain)
+std::auto_ptr<MultiTensorField2D<T,nDim> > divide(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B, Box2D domain)
 {
-    std::unique_ptr<MultiTensorField2D<T,nDim> > result =
+    std::auto_ptr<MultiTensorField2D<T,nDim> > result =
         generateIntersectMultiTensorField<T,nDim>(A, B, domain);
     divide(A, B, *result, domain);
     return result;
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField2D<T,nDim> > divide(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B)
+std::auto_ptr<MultiTensorField2D<T,nDim> > divide(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B)
 {
     return divide(A, B, A.getBoundingBox());
 }
@@ -3442,6 +3476,73 @@ template<typename T, int nDim>
 void divideInPlace(MultiTensorField2D<T,nDim>& A, MultiTensorField2D<T,nDim>& B) {
     divideInPlace(A, B, A.getBoundingBox());
 }
+
+
+
+
+/* *************** LBMsmoothen2D ******************************************* */
+
+template<typename T, template<typename U> class Descriptor>
+void lbmSmoothen(MultiScalarField2D<T>& data, MultiScalarField2D<T>& result, Box2D domain)
+{
+    applyProcessingFunctional(new LBMsmoothen2D<T,Descriptor>, domain, data, result);
+}
+
+template<typename T, template<typename U> class Descriptor>
+std::auto_ptr<MultiScalarField2D<T> > lbmSmoothen(MultiScalarField2D<T>& data, Box2D domain)
+{
+    std::auto_ptr<MultiScalarField2D<T> > result =
+        generateMultiScalarField<T>(data, domain);
+    lbmSmoothen<T,Descriptor>(data, *result, domain);
+    return result;
+}
+
+template<typename T, template<typename U> class Descriptor>
+std::auto_ptr<MultiScalarField2D<T> > lbmSmoothen(MultiScalarField2D<T>& data)
+{
+    return lbmSmoothen<T,Descriptor>(data, data.getBoundingBox());
+}
+
+
+
+/* *************** LBMsmoothenInPlace2D ******************************************* */
+
+template<typename T, template<typename U> class Descriptor>
+void lbmSmoothenInPlace(MultiScalarField2D<T>& data, Box2D domain)
+{
+    applyProcessingFunctional(new LBMsmoothenInPlace2D<T,Descriptor>, domain, data);
+}
+
+template<typename T, template<typename U> class Descriptor>
+void lbmSmoothenInPlace(MultiScalarField2D<T>& data)
+{
+    lbmSmoothenInPlace<T,Descriptor>(data, data.getBoundingBox());
+}
+
+
+/* *************** Smoothen2D ******************************************* */
+
+template<typename T>
+void smoothen(MultiScalarField2D<T>& data, MultiScalarField2D<T>& result, Box2D domain)
+{
+    applyProcessingFunctional(new Smoothen2D<T>, domain, data, result);
+}
+
+template<typename T>
+std::auto_ptr<MultiScalarField2D<T> > smoothen(MultiScalarField2D<T>& data, Box2D domain)
+{
+    std::auto_ptr<MultiScalarField2D<T> > result =
+        generateMultiScalarField<T>(data, domain);
+    smoothen<T>(data, *result, domain);
+    return result;
+}
+
+template<typename T>
+std::auto_ptr<MultiScalarField2D<T> > smoothen(MultiScalarField2D<T>& data)
+{
+    return smoothen<T>(data, data.getBoundingBox());
+}
+
 
 }  // namespace plb
 

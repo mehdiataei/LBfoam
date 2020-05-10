@@ -513,14 +513,13 @@ NTensorField3D<T>::~NTensorField3D() {
 template<typename T>
 NTensorField3D<T>::NTensorField3D(NTensorField3D<T> const& rhs) 
     : NTensorFieldBase3D<T>(rhs),
-      AtomicBlock3D(rhs),
-      ownsMemory(true)
+      AtomicBlock3D(rhs)
 {
     allocateMemory();
     for (plint iData=0; iData<this->getNx()*this->getNy()*this->getNz()*this->getNdim(); ++iData) {
         (*this)[iData] = rhs[iData];
     }
-    global::plbCounter("MEMORY_NTENSOR").increment(allocatedMemory());
+    global::plbCounter("MEMORY_NTENSOR").increment(-allocatedMemory());
 }
 
 template<typename T>

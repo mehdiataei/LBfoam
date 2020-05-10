@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,7 +30,8 @@
 #include <iosfwd>
 #include <iomanip>
 
-namespace plb {
+namespace plb
+{
 
 /// Take a Serializer, convert into Base64 format (ASCII based binary representation), and stream into output stream.
 /** Ahead of the data, an integer value is encoded which stands for the total size of
@@ -40,12 +41,12 @@ namespace plb {
  *  data exceeds 2 GB.
  */
 void serializerToBase64Stream (
-        DataSerializer const* serializer, std::ostream* ostr,
-        bool enforceUint=false, bool mainProcOnly=true );
+    DataSerializer const* serializer, std::ostream* ostr,
+    bool enforceUint=false, bool mainProcOnly=true );
 
 void serializerToRawBinaryStream (
-        DataSerializer const* serializer, std::ostream* ostr,
-        bool mainProcOnly=true );
+    DataSerializer const* serializer, std::ostream* ostr,
+    bool mainProcOnly=true );
 
 /// Take an input stream with Base64 encoded binary content, and stream into an unSerializer
 /** If the integer value which indicates the amount of data to be unSerialized is of type
@@ -60,45 +61,46 @@ void base64StreamToUnSerializer(std::istream* istr, DataUnSerializer* unSerializ
  */
 template<typename T>
 void serializerToAsciiStream (
-        DataSerializer const* serializer, std::ostream* ostr, plint numDigits=8,
-        bool mainProcOnly=true );
+    DataSerializer const* serializer, std::ostream* ostr, plint numDigits=8,
+    bool mainProcOnly=true );
 
 
 /// Take an UnSerializer and fill it with data from an ASCII-format input stream.
 template<typename T>
 void asciiStreamToUnSerializer (
-        std::istream* istr, DataUnSerializer* unSerializer,
-        bool mainProcOnly=true );
+    std::istream* istr, DataUnSerializer* unSerializer,
+    bool mainProcOnly=true );
 
 
 /* *************** Class AsciiWriter ******************************** */
 
 template<typename T>
-class AsciiWriter : public SerializedWriter {
+class AsciiWriter : public SerializedWriter
+{
 public:
-    AsciiWriter(std::ostream* ostr_, plint numDigits_);
-    virtual AsciiWriter<T>* clone() const;
-    virtual void writeHeader(pluint dataSize);
-    virtual void writeData(char const* dataBuffer, pluint bufferSize);
+	AsciiWriter(std::ostream* ostr_, plint numDigits_);
+	virtual AsciiWriter<T>* clone() const;
+	virtual void writeHeader(pluint dataSize);
+	virtual void writeData(char const* dataBuffer, pluint bufferSize);
 private:
-    std::ostream* ostr;
-    plint numDigits;
+	std::ostream* ostr;
+	plint numDigits;
 };
 
 /* *************** Class AsciiReader ******************************** */
 
 template<typename T>
-class AsciiReader : public SerializedReader {
+class AsciiReader : public SerializedReader
+{
 public:
-    AsciiReader(std::istream* istr_);
-    virtual AsciiReader<T>* clone() const;
-    virtual void readHeader(pluint dataSize) const;
-    virtual void readData(char* dataBuffer, pluint bufferSize) const;
+	AsciiReader(std::istream* istr_);
+	virtual AsciiReader<T>* clone() const;
+	virtual void readHeader(pluint dataSize) const;
+	virtual void readData(char* dataBuffer, pluint bufferSize) const;
 private:
-    std::istream* istr;
+	std::istream* istr;
 };
 
 } // namespace plb
 
 #endif  // SERIALIZER_IO_H
-

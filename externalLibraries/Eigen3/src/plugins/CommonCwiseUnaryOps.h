@@ -14,19 +14,19 @@
 
 /** \internal the return type of conjugate() */
 typedef typename internal::conditional<NumTraits<Scalar>::IsComplex,
-                    const CwiseUnaryOp<internal::scalar_conjugate_op<Scalar>, const Derived>,
-                    const Derived&
-                  >::type ConjugateReturnType;
+        const CwiseUnaryOp<internal::scalar_conjugate_op<Scalar>, const Derived>,
+        const Derived&
+        >::type ConjugateReturnType;
 /** \internal the return type of real() const */
 typedef typename internal::conditional<NumTraits<Scalar>::IsComplex,
-                    const CwiseUnaryOp<internal::scalar_real_op<Scalar>, const Derived>,
-                    const Derived&
-                  >::type RealReturnType;
+        const CwiseUnaryOp<internal::scalar_real_op<Scalar>, const Derived>,
+        const Derived&
+        >::type RealReturnType;
 /** \internal the return type of real() */
 typedef typename internal::conditional<NumTraits<Scalar>::IsComplex,
-                    CwiseUnaryView<internal::scalar_real_ref_op<Scalar>, Derived>,
-                    Derived&
-                  >::type NonConstRealReturnType;
+        CwiseUnaryView<internal::scalar_real_ref_op<Scalar>, Derived>,
+        Derived&
+        >::type NonConstRealReturnType;
 /** \internal the return type of imag() const */
 typedef CwiseUnaryOp<internal::scalar_imag_op<Scalar>, const Derived> ImagReturnType;
 /** \internal the return type of imag() */
@@ -42,10 +42,15 @@ EIGEN_DOC_UNARY_ADDONS(operator-,opposite)
 ///
 EIGEN_DEVICE_FUNC
 inline const NegativeReturnType
-operator-() const { return NegativeReturnType(derived()); }
+operator-() const
+{
+	return NegativeReturnType(derived());
+}
 
 
-template<class NewType> struct CastXpr { typedef typename internal::cast_return_type<Derived,const CwiseUnaryOp<internal::scalar_cast_op<Scalar, NewType>, const Derived> >::type Type; };
+template<class NewType> struct CastXpr {
+	typedef typename internal::cast_return_type<Derived,const CwiseUnaryOp<internal::scalar_cast_op<Scalar, NewType>, const Derived> >::type Type;
+};
 
 /// \returns an expression of \c *this with the \a Scalar type casted to
 /// \a NewScalar.
@@ -61,7 +66,7 @@ EIGEN_DEVICE_FUNC
 typename CastXpr<NewType>::Type
 cast() const
 {
-  return typename CastXpr<NewType>::Type(derived());
+	return typename CastXpr<NewType>::Type(derived());
 }
 
 /// \returns an expression of the complex conjugate of \c *this.
@@ -73,7 +78,7 @@ EIGEN_DEVICE_FUNC
 inline ConjugateReturnType
 conjugate() const
 {
-  return ConjugateReturnType(derived());
+	return ConjugateReturnType(derived());
 }
 
 /// \returns a read-only expression of the real part of \c *this.
@@ -83,7 +88,10 @@ EIGEN_DOC_UNARY_ADDONS(real,real part function)
 /// \sa imag()
 EIGEN_DEVICE_FUNC
 inline RealReturnType
-real() const { return RealReturnType(derived()); }
+real() const
+{
+	return RealReturnType(derived());
+}
 
 /// \returns an read-only expression of the imaginary part of \c *this.
 ///
@@ -92,7 +100,10 @@ EIGEN_DOC_UNARY_ADDONS(imag,imaginary part function)
 /// \sa real()
 EIGEN_DEVICE_FUNC
 inline const ImagReturnType
-imag() const { return ImagReturnType(derived()); }
+imag() const
+{
+	return ImagReturnType(derived());
+}
 
 /// \brief Apply a unary operator coefficient-wise
 /// \param[in]  func  Functor implementing the unary operator
@@ -120,7 +131,7 @@ EIGEN_DEVICE_FUNC
 inline const CwiseUnaryOp<CustomUnaryOp, const Derived>
 unaryExpr(const CustomUnaryOp& func = CustomUnaryOp()) const
 {
-  return CwiseUnaryOp<CustomUnaryOp, const Derived>(derived(), func);
+	return CwiseUnaryOp<CustomUnaryOp, const Derived>(derived(), func);
 }
 
 /// \returns an expression of a custom coefficient-wise unary operator \a func of *this
@@ -141,7 +152,7 @@ EIGEN_DEVICE_FUNC
 inline const CwiseUnaryView<CustomViewOp, const Derived>
 unaryViewExpr(const CustomViewOp& func = CustomViewOp()) const
 {
-  return CwiseUnaryView<CustomViewOp, const Derived>(derived(), func);
+	return CwiseUnaryView<CustomViewOp, const Derived>(derived(), func);
 }
 
 /// \returns a non const expression of the real part of \c *this.
@@ -151,7 +162,10 @@ EIGEN_DOC_UNARY_ADDONS(real,real part function)
 /// \sa imag()
 EIGEN_DEVICE_FUNC
 inline NonConstRealReturnType
-real() { return NonConstRealReturnType(derived()); }
+real()
+{
+	return NonConstRealReturnType(derived());
+}
 
 /// \returns a non const expression of the imaginary part of \c *this.
 ///
@@ -160,4 +174,7 @@ EIGEN_DOC_UNARY_ADDONS(imag,imaginary part function)
 /// \sa real()
 EIGEN_DEVICE_FUNC
 inline NonConstImagReturnType
-imag() { return NonConstImagReturnType(derived()); }
+imag()
+{
+	return NonConstImagReturnType(derived());
+}

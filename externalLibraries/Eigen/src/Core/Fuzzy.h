@@ -48,13 +48,13 @@
 template<typename Derived>
 template<typename OtherDerived>
 bool MatrixBase<Derived>::isApprox(
-  const MatrixBase<OtherDerived>& other,
-  typename NumTraits<Scalar>::Real prec
+    const MatrixBase<OtherDerived>& other,
+    typename NumTraits<Scalar>::Real prec
 ) const
 {
-  const typename ei_nested<Derived,2>::type nested(derived());
-  const typename ei_nested<OtherDerived,2>::type otherNested(other.derived());
-  return (nested - otherNested).cwise().abs2().sum() <= prec * prec * std::min(nested.cwise().abs2().sum(), otherNested.cwise().abs2().sum());
+	const typename ei_nested<Derived,2>::type nested(derived());
+	const typename ei_nested<OtherDerived,2>::type otherNested(other.derived());
+	return (nested - otherNested).cwise().abs2().sum() <= prec * prec * std::min(nested.cwise().abs2().sum(), otherNested.cwise().abs2().sum());
 }
 
 /** \returns \c true if the norm of \c *this is much smaller than \a other,
@@ -72,11 +72,11 @@ bool MatrixBase<Derived>::isApprox(
   */
 template<typename Derived>
 bool MatrixBase<Derived>::isMuchSmallerThan(
-  const typename NumTraits<Scalar>::Real& other,
-  typename NumTraits<Scalar>::Real prec
+    const typename NumTraits<Scalar>::Real& other,
+    typename NumTraits<Scalar>::Real prec
 ) const
 {
-  return cwise().abs2().sum() <= prec * prec * other * other;
+	return cwise().abs2().sum() <= prec * prec * other * other;
 }
 
 /** \returns \c true if the norm of \c *this is much smaller than the norm of \a other,
@@ -92,11 +92,11 @@ bool MatrixBase<Derived>::isMuchSmallerThan(
 template<typename Derived>
 template<typename OtherDerived>
 bool MatrixBase<Derived>::isMuchSmallerThan(
-  const MatrixBase<OtherDerived>& other,
-  typename NumTraits<Scalar>::Real prec
+    const MatrixBase<OtherDerived>& other,
+    typename NumTraits<Scalar>::Real prec
 ) const
 {
-  return this->cwise().abs2().sum() <= prec * prec * other.cwise().abs2().sum();
+	return this->cwise().abs2().sum() <= prec * prec * other.cwise().abs2().sum();
 }
 
 #else
@@ -123,11 +123,11 @@ struct ei_fuzzy_selector;
 template<typename Derived>
 template<typename OtherDerived>
 bool MatrixBase<Derived>::isApprox(
-  const MatrixBase<OtherDerived>& other,
-  typename NumTraits<Scalar>::Real prec
+    const MatrixBase<OtherDerived>& other,
+    typename NumTraits<Scalar>::Real prec
 ) const
 {
-  return ei_fuzzy_selector<Derived,OtherDerived>::isApprox(derived(), other.derived(), prec);
+	return ei_fuzzy_selector<Derived,OtherDerived>::isApprox(derived(), other.derived(), prec);
 }
 
 /** \returns \c true if the norm of \c *this is much smaller than \a other,
@@ -142,11 +142,11 @@ bool MatrixBase<Derived>::isApprox(
   */
 template<typename Derived>
 bool MatrixBase<Derived>::isMuchSmallerThan(
-  const typename NumTraits<Scalar>::Real& other,
-  typename NumTraits<Scalar>::Real prec
+    const typename NumTraits<Scalar>::Real& other,
+    typename NumTraits<Scalar>::Real prec
 ) const
 {
-  return ei_fuzzy_selector<Derived>::isMuchSmallerThan(derived(), other, prec);
+	return ei_fuzzy_selector<Derived>::isMuchSmallerThan(derived(), other, prec);
 }
 
 /** \returns \c true if the norm of \c *this is much smaller than the norm of \a other,
@@ -162,71 +162,69 @@ bool MatrixBase<Derived>::isMuchSmallerThan(
 template<typename Derived>
 template<typename OtherDerived>
 bool MatrixBase<Derived>::isMuchSmallerThan(
-  const MatrixBase<OtherDerived>& other,
-  typename NumTraits<Scalar>::Real prec
+    const MatrixBase<OtherDerived>& other,
+    typename NumTraits<Scalar>::Real prec
 ) const
 {
-  return ei_fuzzy_selector<Derived,OtherDerived>::isMuchSmallerThan(derived(), other.derived(), prec);
+	return ei_fuzzy_selector<Derived,OtherDerived>::isMuchSmallerThan(derived(), other.derived(), prec);
 }
 
 
 template<typename Derived, typename OtherDerived>
-struct ei_fuzzy_selector<Derived,OtherDerived,true>
-{
-  typedef typename Derived::RealScalar RealScalar;
-  static bool isApprox(const Derived& self, const OtherDerived& other, RealScalar prec)
-  {
-    EIGEN_STATIC_ASSERT_SAME_VECTOR_SIZE(Derived,OtherDerived)
-    ei_assert(self.size() == other.size());
-    return((self - other).squaredNorm() <= std::min(self.squaredNorm(), other.squaredNorm()) * prec * prec);
-  }
-  static bool isMuchSmallerThan(const Derived& self, const RealScalar& other, RealScalar prec)
-  {
-    return(self.squaredNorm() <= ei_abs2(other * prec));
-  }
-  static bool isMuchSmallerThan(const Derived& self, const OtherDerived& other, RealScalar prec)
-  {
-    EIGEN_STATIC_ASSERT_SAME_VECTOR_SIZE(Derived,OtherDerived)
-    ei_assert(self.size() == other.size());
-    return(self.squaredNorm() <= other.squaredNorm() * prec * prec);
-  }
+struct ei_fuzzy_selector<Derived,OtherDerived,true> {
+	typedef typename Derived::RealScalar RealScalar;
+	static bool isApprox(const Derived& self, const OtherDerived& other, RealScalar prec)
+	{
+		EIGEN_STATIC_ASSERT_SAME_VECTOR_SIZE(Derived,OtherDerived)
+		ei_assert(self.size() == other.size());
+		return((self - other).squaredNorm() <= std::min(self.squaredNorm(), other.squaredNorm()) * prec * prec);
+	}
+	static bool isMuchSmallerThan(const Derived& self, const RealScalar& other, RealScalar prec)
+	{
+		return(self.squaredNorm() <= ei_abs2(other * prec));
+	}
+	static bool isMuchSmallerThan(const Derived& self, const OtherDerived& other, RealScalar prec)
+	{
+		EIGEN_STATIC_ASSERT_SAME_VECTOR_SIZE(Derived,OtherDerived)
+		ei_assert(self.size() == other.size());
+		return(self.squaredNorm() <= other.squaredNorm() * prec * prec);
+	}
 };
 
 template<typename Derived, typename OtherDerived>
-struct ei_fuzzy_selector<Derived,OtherDerived,false>
-{
-  typedef typename Derived::RealScalar RealScalar;
-  static bool isApprox(const Derived& self, const OtherDerived& other, RealScalar prec)
-  {
-    EIGEN_STATIC_ASSERT_SAME_MATRIX_SIZE(Derived,OtherDerived)
-    ei_assert(self.rows() == other.rows() && self.cols() == other.cols());
-    typename Derived::Nested nested(self);
-    typename OtherDerived::Nested otherNested(other);
-    for(int i = 0; i < self.cols(); ++i)
-      if((nested.col(i) - otherNested.col(i)).squaredNorm()
-          > std::min(nested.col(i).squaredNorm(), otherNested.col(i).squaredNorm()) * prec * prec)
-        return false;
-    return true;
-  }
-  static bool isMuchSmallerThan(const Derived& self, const RealScalar& other, RealScalar prec)
-  {
-    typename Derived::Nested nested(self);
-    for(int i = 0; i < self.cols(); ++i)
-      if(nested.col(i).squaredNorm() > ei_abs2(other * prec))
-        return false;
-    return true;
-  }
-  static bool isMuchSmallerThan(const Derived& self, const OtherDerived& other, RealScalar prec)
-  {
-    EIGEN_STATIC_ASSERT_SAME_MATRIX_SIZE(Derived,OtherDerived)
-    ei_assert(self.rows() == other.rows() && self.cols() == other.cols());
-    typename Derived::Nested nested(self);
-    typename OtherDerived::Nested otherNested(other);
-    for(int i = 0; i < self.cols(); ++i)
-      if(nested.col(i).squaredNorm() > otherNested.col(i).squaredNorm() * prec * prec)
-        return false;
-    return true;
-  }
+struct ei_fuzzy_selector<Derived,OtherDerived,false> {
+	typedef typename Derived::RealScalar RealScalar;
+	static bool isApprox(const Derived& self, const OtherDerived& other, RealScalar prec)
+	{
+		EIGEN_STATIC_ASSERT_SAME_MATRIX_SIZE(Derived,OtherDerived)
+		ei_assert(self.rows() == other.rows() && self.cols() == other.cols());
+		typename Derived::Nested nested(self);
+		typename OtherDerived::Nested otherNested(other);
+		for(int i = 0; i < self.cols(); ++i)
+			if((nested.col(i) - otherNested.col(i)).squaredNorm()
+			   > std::min(nested.col(i).squaredNorm(), otherNested.col(i).squaredNorm()) * prec * prec)
+				return false;
+		return true;
+	}
+	static bool isMuchSmallerThan(const Derived& self, const RealScalar& other, RealScalar prec)
+	{
+		typename Derived::Nested nested(self);
+		for(int i = 0; i < self.cols(); ++i)
+			if(nested.col(i).squaredNorm() > ei_abs2(other * prec))
+				return false;
+		return true;
+	}
+	static bool isMuchSmallerThan(const Derived& self, const OtherDerived& other, RealScalar prec)
+	{
+		EIGEN_STATIC_ASSERT_SAME_MATRIX_SIZE(Derived,OtherDerived)
+		ei_assert(self.rows() == other.rows() && self.cols() == other.cols());
+		typename Derived::Nested nested(self);
+		typename OtherDerived::Nested otherNested(other);
+		for(int i = 0; i < self.cols(); ++i)
+			if(nested.col(i).squaredNorm() > otherNested.col(i).squaredNorm() * prec * prec)
+				return false;
+		return true;
+	}
 };
 
 #endif

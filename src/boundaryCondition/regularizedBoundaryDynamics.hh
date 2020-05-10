@@ -216,7 +216,6 @@ void RegularizedDensityBoundaryDynamics<T,Descriptor,direction,orientation>::
     this->getBaseDynamics().regularize(cell, rhoBar, j, jSqr, PiNeq);
 }
 
-
 }  // namespace plb
 
 #endif  // REGULARIZED_BOUNDARY_DYNAMICS_HH

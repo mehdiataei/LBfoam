@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,197 +29,227 @@
 #include "core/geometry3D.h"
 #include "core/array.h"
 #include "gridRefinement/octree.h"
-#include "gridRefinement/octreeGridGenerator.h"
+#include "octreeGridGenerator.h"
 #include <string>
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
-namespace boxLogic {
+namespace boxLogic
+{
 
 // A Plane is defined by a Box3D which has
 // two coordinates which are equal (either x0=x1, y0=y1, or z0=z1)
 struct Plane {
-    Plane(Box3D bb_) : bb(bb_) 
-    {
-        PLB_ASSERT(((bb.x0 == bb.x1) || (bb.y0 == bb.y1) || (bb.z0 == bb.z1)) && 
-            "The box must define a plane therefore two coordinates must be the same.");
-    }
+	Plane(Box3D bb_) : bb(bb_)
+	{
+		PLB_ASSERT(((bb.x0 == bb.x1) || (bb.y0 == bb.y1) || (bb.z0 == bb.z1)) &&
+		           "The box must define a plane therefore two coordinates must be the same.");
+	}
 
-    std::string toStr() const {
-        return "Plane = ("+util::val2str(bb.x0)+", "+util::val2str(bb.x1)
-            +", "+util::val2str(bb.y0)+", "+util::val2str(bb.y1)+", "
-            +util::val2str(bb.z0)+", "+util::val2str(bb.z1)+")";
-    }
+	std::string toStr() const
+	{
+		return "Plane = ("+util::val2str(bb.x0)+", "+util::val2str(bb.x1)
+		       +", "+util::val2str(bb.y0)+", "+util::val2str(bb.y1)+", "
+		       +util::val2str(bb.z0)+", "+util::val2str(bb.z1)+")";
+	}
 
-    plint nCells() const { return bb.nCells(); }
+	plint nCells() const
+	{
+		return bb.nCells();
+	}
 
-    bool operator==(Plane const& rhs) const {
-        return bb == rhs.bb;
-    }
+	bool operator==(Plane const& rhs) const
+	{
+		return bb == rhs.bb;
+	}
 
-    Box3D bb;
+	Box3D bb;
 };
 
 // A directed plane is defined by a Plane and its normal vector
-// (the nomral is along 
+// (the nomral is along
 // one of thed principal axes: x=0, y=1, z=2).
-struct DirectedPlane : public Plane
-{
-    DirectedPlane(Box3D bb_, int direction_, int orientation_) : 
-        Plane(bb_), direction(direction_), orientation(orientation_)
-    { 
-        PLB_ASSERT((direction == 0 || direction == 1 || direction == 2) && 
-            "Direction must be 0, 1, or 2 (x, y, z).");
+struct DirectedPlane : public Plane {
+	DirectedPlane(Box3D bb_, int direction_, int orientation_) :
+		Plane(bb_), direction(direction_), orientation(orientation_)
+	{
+		PLB_ASSERT((direction == 0 || direction == 1 || direction == 2) &&
+		           "Direction must be 0, 1, or 2 (x, y, z).");
 
-        PLB_ASSERT((orientation == -1 || orientation == +1) && 
-            "Orientation must be -1 or +1.");
-    }
+		PLB_ASSERT((orientation == -1 || orientation == +1) &&
+		           "Orientation must be -1 or +1.");
+	}
 
-    std::string toStr() const {
-        return Plane::toStr()+" , direction = "+util::val2str(direction)+" , orientation = "+util::val2str(orientation)+".";
-    }
+	std::string toStr() const
+	{
+		return Plane::toStr()+" , direction = "+util::val2str(direction)+" , orientation = "+util::val2str(orientation)+".";
+	}
 
-    plint nCells() const { return bb.nCells(); }
+	plint nCells() const
+	{
+		return bb.nCells();
+	}
 
-    bool operator==(DirectedPlane const& rhs) const {
-        return bb == rhs.bb && direction == rhs.direction && orientation == rhs.orientation;
-    }
+	bool operator==(DirectedPlane const& rhs) const
+	{
+		return bb == rhs.bb && direction == rhs.direction && orientation == rhs.orientation;
+	}
 
-    int direction, orientation;
+	int direction, orientation;
 };
 
 // An Edge is defined by a Box3D which has
-// four coordinates which are equal (either x0=x1 && y0=y1, 
+// four coordinates which are equal (either x0=x1 && y0=y1,
 // or x0=x1 && z0=z1, or y0=y1 && z0=z1)
-struct Edge
-{
-    Edge(Box3D bb_) : bb(bb_)
-    { 
-        PLB_ASSERT(((bb.x0 == bb.x1 && bb.y0 == bb.y1) ||
-                    (bb.x0 == bb.x1 && bb.z0 == bb.z1) ||
-                    (bb.y0 == bb.y1 && bb.z0 == bb.z1)) && 
-            "The box must define an edge therefore 4 coordinates must be the same.");
-    }
+struct Edge {
+	Edge(Box3D bb_) : bb(bb_)
+	{
+		PLB_ASSERT(((bb.x0 == bb.x1 && bb.y0 == bb.y1) ||
+		            (bb.x0 == bb.x1 && bb.z0 == bb.z1) ||
+		            (bb.y0 == bb.y1 && bb.z0 == bb.z1)) &&
+		           "The box must define an edge therefore 4 coordinates must be the same.");
+	}
 
-    std::string toStr() const {
-        return "Edge = ("+util::val2str(bb.x0)+", "+util::val2str(bb.x1)
-            +", "+util::val2str(bb.y0)+", "+util::val2str(bb.y1)+", "
-            +util::val2str(bb.z0)+", "+util::val2str(bb.z1)+")";
-    }
+	std::string toStr() const
+	{
+		return "Edge = ("+util::val2str(bb.x0)+", "+util::val2str(bb.x1)
+		       +", "+util::val2str(bb.y0)+", "+util::val2str(bb.y1)+", "
+		       +util::val2str(bb.z0)+", "+util::val2str(bb.z1)+")";
+	}
 
-    plint nCells() const { return bb.nCells(); }
+	plint nCells() const
+	{
+		return bb.nCells();
+	}
 
-    bool operator==(Edge const& rhs) const {
-        return bb == rhs.bb;
-    }
+	bool operator==(Edge const& rhs) const
+	{
+		return bb == rhs.bb;
+	}
 
-    Box3D bb;
+	Box3D bb;
 };
 
 // A directed Edge is an edge where one defines the plane it is adjacent to (planeDir).
 // Furthermore information is given about its "direction" which is the dir which
 // is null. Finally the non null dir is the orientation pointing on the "outside"
 // of the edge.
-struct DirectedEdge : public Edge
-{
-    DirectedEdge(Box3D bb_, int planeDir_, int dir1_, int dir2_) : 
-        Edge(bb_), planeDir(planeDir_), dir1(dir1_), dir2(dir2_)
-    {
-        PLB_ASSERT((planeDir == 0 || planeDir == 1 || planeDir == 2) && 
-            "The planeDir must be 0, 1, or 2."); 
-        PLB_ASSERT((dir1 == 0 || dir2 == 0)  && 
-            "The dir1 or dir2 must be 0."); 
-        PLB_ASSERT(((dir1 == -1 || dir1 == +1) || (dir2 == -1 || dir2 == +1)) && 
-            "The dir1 or dir2 must be -1 or +1."); 
-    }
+struct DirectedEdge : public Edge {
+	DirectedEdge(Box3D bb_, int planeDir_, int dir1_, int dir2_) :
+		Edge(bb_), planeDir(planeDir_), dir1(dir1_), dir2(dir2_)
+	{
+		PLB_ASSERT((planeDir == 0 || planeDir == 1 || planeDir == 2) &&
+		           "The planeDir must be 0, 1, or 2.");
+		PLB_ASSERT((dir1 == 0 || dir2 == 0)  &&
+		           "The dir1 or dir2 must be 0.");
+		PLB_ASSERT(((dir1 == -1 || dir1 == +1) || (dir2 == -1 || dir2 == +1)) &&
+		           "The dir1 or dir2 must be -1 or +1.");
+	}
 
-    plint getDirectionAlongEdge() {
-        if (planeDir == 0) {
-            if (dir1 == 0) {
-                return 1;
-            } else {
-                return 2;
-            }
-        } else if (planeDir == 1) {
-            if (dir1 == 0) {
-                return 2;
-            } else {
-                return 0;
-            }
+	plint getDirectionAlongEdge()
+	{
+		if (planeDir == 0) {
+			if (dir1 == 0) {
+				return 1;
+			} else {
+				return 2;
+			}
+		} else if (planeDir == 1) {
+			if (dir1 == 0) {
+				return 2;
+			} else {
+				return 0;
+			}
 
-        } else if (planeDir == 2) {
-            if (dir1 == 0) {
-                return 0;
-            } else {
-                return 1;
-            }
-        } else {
-            PLB_ASSERT(false && "Dir must enter the if statement otherwise edge misformed.")
-            return -1;
-        }
-    }
+		} else if (planeDir == 2) {
+			if (dir1 == 0) {
+				return 0;
+			} else {
+				return 1;
+			}
+		} else {
+			PLB_ASSERT(false && "Dir must enter the if statement otherwise edge misformed.")
+			return -1;
+		}
+	}
 
-    std::string toStr() const {
-        return Edge::toStr()+" , planeDir = "+util::val2str(planeDir)+" , dir1 = "+util::val2str(dir1)+" , dir2 = "+util::val2str(dir2);
-    }
+	std::string toStr() const
+	{
+		return Edge::toStr()+" , planeDir = "+util::val2str(planeDir)+" , dir1 = "+util::val2str(dir1)+" , dir2 = "+util::val2str(dir2);
+	}
 
-    plint nCells() const { return bb.nCells(); }
+	plint nCells() const
+	{
+		return bb.nCells();
+	}
 
-    bool operator==(DirectedEdge const& rhs) const {
-        return bb == rhs.bb && planeDir == rhs.planeDir && dir1 == rhs.dir1 && dir2 == rhs.dir2;
-    }
+	bool operator==(DirectedEdge const& rhs) const
+	{
+		return bb == rhs.bb && planeDir == rhs.planeDir && dir1 == rhs.dir1 && dir2 == rhs.dir2;
+	}
 
-    int planeDir, dir1, dir2;
+	int planeDir, dir1, dir2;
 };
 
 // A Corner is defined by a Box3D which has
 // six coordinates which are equal (or x0=x1 && y0=y1 && z0=z1)
 struct Corner  {
-    Corner(Box3D bb_) : 
-        bb(bb_)
-    { 
-        PLB_ASSERT((bb.x0 == bb.x1 && bb.y0 == bb.y1 && bb.z0 == bb.z1) && 
-            "The box must define a corner therefore all coordinates must be the same.");
-    }
+	Corner(Box3D bb_) :
+		bb(bb_)
+	{
+		PLB_ASSERT((bb.x0 == bb.x1 && bb.y0 == bb.y1 && bb.z0 == bb.z1) &&
+		           "The box must define a corner therefore all coordinates must be the same.");
+	}
 
-    std::string toStr() const {
-        return "Corner = ("+util::val2str(bb.x0)+", "+util::val2str(bb.x1)
-            +", "+util::val2str(bb.y0)+", "+util::val2str(bb.y1)+", "
-            +util::val2str(bb.z0)+", "+util::val2str(bb.z1)+")";
-    }
+	std::string toStr() const
+	{
+		return "Corner = ("+util::val2str(bb.x0)+", "+util::val2str(bb.x1)
+		       +", "+util::val2str(bb.y0)+", "+util::val2str(bb.y1)+", "
+		       +util::val2str(bb.z0)+", "+util::val2str(bb.z1)+")";
+	}
 
-    plint nCells() const { return bb.nCells(); }
+	plint nCells() const
+	{
+		return bb.nCells();
+	}
 
-    bool operator==(Corner const& rhs) const {
-        return bb == rhs.bb;
-    }
+	bool operator==(Corner const& rhs) const
+	{
+		return bb == rhs.bb;
+	}
 
-    Box3D bb;
+	Box3D bb;
 
 };
 
 // A DirectedCorner is a Corner where one defines the plane it is adjacent to (planeDir).
 // The directions are the orientations pointing on the "outside" of the corner.
 struct DirectedCorner : public Corner  {
-    DirectedCorner(Box3D bb_, int planeDir_, int dir1_, int dir2_) : 
-        Corner(bb_), planeDir(planeDir_), dir1(dir1_), dir2(dir2_)
-    { 
-        PLB_ASSERT((dir1 == -1 || dir1 == +1) && (dir2 == -1 || dir2 == +1) && 
-            "The dir1 and dir2 must be -1 or +1."); 
-    }
+	DirectedCorner(Box3D bb_, int planeDir_, int dir1_, int dir2_) :
+		Corner(bb_), planeDir(planeDir_), dir1(dir1_), dir2(dir2_)
+	{
+		PLB_ASSERT((dir1 == -1 || dir1 == +1) && (dir2 == -1 || dir2 == +1) &&
+		           "The dir1 and dir2 must be -1 or +1.");
+	}
 
-    std::string toStr() const {
-        return Corner::toStr()+" , planeDir = "+util::val2str(planeDir)+" , dir1 = "+util::val2str(dir1)+" , dir2 = "+util::val2str(dir2);
-    }
+	std::string toStr() const
+	{
+		return Corner::toStr()+" , planeDir = "+util::val2str(planeDir)+" , dir1 = "+util::val2str(dir1)+" , dir2 = "+util::val2str(dir2);
+	}
 
-    plint nCells() const { return bb.nCells(); }
+	plint nCells() const
+	{
+		return bb.nCells();
+	}
 
-    bool operator==(DirectedCorner const& rhs) const {
-        return bb == rhs.bb && planeDir == rhs.planeDir && dir1 == rhs.dir1 && dir2 == rhs.dir2;
-    }
+	bool operator==(DirectedCorner const& rhs) const
+	{
+		return bb == rhs.bb && planeDir == rhs.planeDir && dir1 == rhs.dir1 && dir2 == rhs.dir2;
+	}
 
-    int planeDir, dir1, dir2;
+	int planeDir, dir1, dir2;
 };
 
 // does a vector of boxes have two identical boxes?
@@ -248,11 +278,6 @@ bool merge(DirectedEdge& e1, DirectedEdge const& e2);
 /// If the two directed corners can be merged into one, do it, and write the result
 ///   into the first directed corner. Return value states if merging was successful.
 bool merge(DirectedCorner& c1, DirectedCorner const& c2);
-
-/// The global ordering on boxes has no specific interpretation, but
-///   is useful to hold boxes in ordered data structures like sets.
-bool operator<(std::pair<plint,Box3D> const& box1, std::pair<plint,Box3D> const& box2);
-
 // returns the corners of a box (excluding the corner points)
 std::vector<Corner> getCorners(const Box3D &box);
 // returns the edges of a box (excluding the corner points)
@@ -304,18 +329,18 @@ Array<bool,26> getAllocatedNeighbors(OctreeGridStructure const& ogs, plint block
 
 std::pair<plint,plint> getDirections(plint dir);
 
-std::pair<Array<plint,2>,Array<plint,2> > getEdgesIndices(plint dir, plint ori, 
-    const Array<bool,26> &neighbors, 
-    const Array<bool,26> &bcNeighbors, plint l1 = 1, plint l2 = 1) ;
+std::pair<Array<plint,2>,Array<plint,2> > getEdgesIndices(plint dir, plint ori,
+        const Array<bool,26> &neighbors,
+        const Array<bool,26> &bcNeighbors, plint l1 = 1, plint l2 = 1) ;
 
 void printBox(Box3D const& b, std::string name);
 
 void printBoxes(std::vector<Box3D> const& b, std::string name, plint level, double dx, Array<double,3> const &pos);
 
 
-void makeIntersectionsConsistent(const Box3D &box, 
-    const std::vector<Box3D> &boxes,
-    std::vector<Box3D> &intBoxes );
+void makeIntersectionsConsistent(const Box3D &box,
+                                 const std::vector<Box3D> &boxes,
+                                 std::vector<Box3D> &intBoxes );
 
 void getInterfaces (
     const Box3D &box,
@@ -334,7 +359,7 @@ void getInterfaces (
     std::vector<boxLogic::DirectedEdge> &coarseToFineBoundaryEdgesCoarseUnits,     // special inepolation for BC edge
     std::vector<boxLogic::DirectedCorner> &coarseToFineBoundaryCornersCoarseUnits, // special inepolation for BC corner
     std::vector<boxLogic::Edge> &fineToCoarseBoundaryEdgesCoarseUnits     // used for interpolation PF)
-    );
+);
 
 } // boxLogic namespace
 

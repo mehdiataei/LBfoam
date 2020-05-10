@@ -831,7 +831,7 @@ inline MultiBlockManagement3D scaleMultiBlockManagement (
 
 
 template<typename T>
-std::unique_ptr<MultiScalarField3D<T> > coarsen (
+std::auto_ptr<MultiScalarField3D<T> > coarsen (
         MultiScalarField3D<T>& fineField,
         plint dimDx, plint dimDt, plint dxScale, plint dtScale )
 {
@@ -848,11 +848,11 @@ std::unique_ptr<MultiScalarField3D<T> > coarsen (
             new ScalarCopyFineToCoarseZerothOrder3D<T>(dimDx,dimDt,dxScale,dtScale),
             fineField.getBoundingBox(), fineField, *result );
                             
-    return std::unique_ptr<MultiScalarField3D<T> >(result);
+    return std::auto_ptr<MultiScalarField3D<T> >(result);
 }
 
 template<typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > coarsen (
+std::auto_ptr<MultiTensorField3D<T,nDim> > coarsen (
         MultiTensorField3D<T,nDim>& fineField,
         plint dimDx, plint dimDt, plint dxScale, plint dtScale )
 {
@@ -869,11 +869,11 @@ std::unique_ptr<MultiTensorField3D<T,nDim> > coarsen (
             new TensorCopyFineToCoarseZerothOrder3D<T,nDim>(dimDx,dimDt,dxScale,dtScale),
             fineField.getBoundingBox(), fineField, *result );
                             
-    return std::unique_ptr<MultiTensorField3D<T,nDim> >(result);
+    return std::auto_ptr<MultiTensorField3D<T,nDim> >(result);
 }
 
 template <typename T>
-std::unique_ptr<MultiScalarField3D<T> > refine (
+std::auto_ptr<MultiScalarField3D<T> > refine (
         MultiScalarField3D<T>& coarseField,
         plint dimDx, plint dimDt, plint dxScale, plint dtScale )
 {
@@ -891,11 +891,11 @@ std::unique_ptr<MultiScalarField3D<T> > refine (
             new ScalarInterpolateCoarseToFine3D<T>(dimDx,dimDt,dxScale,dtScale),
             coarseField.getBoundingBox(), coarseField, *result );
                             
-    return std::unique_ptr<MultiScalarField3D<T> >(result);
+    return std::auto_ptr<MultiScalarField3D<T> >(result);
 }
 
 template <typename T, int nDim>
-std::unique_ptr<MultiTensorField3D<T,nDim> > refine (
+std::auto_ptr<MultiTensorField3D<T,nDim> > refine (
         MultiTensorField3D<T,nDim>& coarseField,
         plint dimDx, plint dimDt, plint dxScale, plint dtScale )
 {
@@ -913,11 +913,11 @@ std::unique_ptr<MultiTensorField3D<T,nDim> > refine (
             new TensorInterpolateCoarseToFine3D<T,nDim>(dimDx,dimDt,dxScale,dtScale),
             coarseField.getBoundingBox(), coarseField, *result );
                             
-    return std::unique_ptr<MultiTensorField3D<T,nDim> >(result);
+    return std::auto_ptr<MultiTensorField3D<T,nDim> >(result);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > coarsen (
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > coarsen (
         MultiBlockLattice3D<T,Descriptor>& fineLattice,
         plint dxScale, plint dtScale, Dynamics<T,Descriptor>* backgroundDynamics )
 {
@@ -937,11 +937,11 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > coarsen (
             new LatticeCopyFineToCoarseZerothOrder3D<T,Descriptor>(dxScale,dtScale),
             fineLattice.getBoundingBox(), fineLattice, *result );
                             
-    return std::unique_ptr<MultiBlockLattice3D<T,Descriptor> >(result);
+    return std::auto_ptr<MultiBlockLattice3D<T,Descriptor> >(result);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > coarsenNoScale (
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > coarsenNoScale (
         MultiBlockLattice3D<T,Descriptor>& fineLattice,
         plint dxScale, Dynamics<T,Descriptor>* backgroundDynamics )
 {
@@ -961,11 +961,11 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > coarsenNoScale (
             new LatticeCopyFineToCoarseNoScale3D<T,Descriptor>(dxScale),
             fineLattice.getBoundingBox(), fineLattice, *result );
                             
-    return std::unique_ptr<MultiBlockLattice3D<T,Descriptor> >(result);
+    return std::auto_ptr<MultiBlockLattice3D<T,Descriptor> >(result);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > refine (
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > refine (
         MultiBlockLattice3D<T,Descriptor>& coarseLattice,
         plint dxScale, plint dtScale, Dynamics<T,Descriptor>* backgroundDynamics )
 {
@@ -985,11 +985,11 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > refine (
             new LatticeInterpolateCoarseToFine3D<T,Descriptor>(dxScale,dtScale),
             coarseLattice.getBoundingBox(), coarseLattice, *result );
                             
-    return std::unique_ptr<MultiBlockLattice3D<T,Descriptor> >(result);
+    return std::auto_ptr<MultiBlockLattice3D<T,Descriptor> >(result);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > linearRefine (
+std::auto_ptr<MultiBlockLattice3D<T,Descriptor> > linearRefine (
         MultiBlockLattice3D<T,Descriptor>& coarseLattice,
         plint dxScale, plint dtScale, Dynamics<T,Descriptor>* backgroundDynamics )
 {
@@ -1009,12 +1009,12 @@ std::unique_ptr<MultiBlockLattice3D<T,Descriptor> > linearRefine (
             new LatticeLinearInterpolateCoarseToFine3D<T,Descriptor>(dxScale,dtScale),
             coarseLattice.getBoundingBox(), coarseLattice, *result );
                             
-    return std::unique_ptr<MultiBlockLattice3D<T,Descriptor> >(result);
+    return std::auto_ptr<MultiBlockLattice3D<T,Descriptor> >(result);
 }
 
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > refine (
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > refine (
         MultiParticleField3D<DenseParticleField3D<T,Descriptor> >& coarseField,
         plint dxScale, plint dtScale )
 {
@@ -1034,11 +1034,11 @@ std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > refi
             new CopyRescaleParticles3D<T,Descriptor>(dxScale,dtScale),
             coarseField.getBoundingBox(), args );
                             
-    return std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >(result);
+    return std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >(result);
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > coarsen (
+std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > coarsen (
         MultiParticleField3D<DenseParticleField3D<T,Descriptor> >& fineField,
         plint dxScale, plint dtScale )
 {
@@ -1059,7 +1059,7 @@ std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > > coar
             new CopyRescaleParticles3D<T,Descriptor>(dxScale,dtScale),
             fineField.getBoundingBox(), args );
                             
-    return std::unique_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >(result);
+    return std::auto_ptr<MultiParticleField3D<DenseParticleField3D<T,Descriptor> > >(result);
 }
 
 }  // namespace plb

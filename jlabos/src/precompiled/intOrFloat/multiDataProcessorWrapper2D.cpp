@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -25,248 +25,249 @@
 #include "multiBlock/multiDataProcessorWrapper2D.h"
 #include "multiBlock/multiDataProcessorWrapper2D.hh"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Boxed Data Processor functionals ****************** */
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        BoxProcessingFunctional2D_N<PRECOMP_T>* functional,
-        Box2D domain, MultiNTensorField2D<PRECOMP_T>& field );
+    BoxProcessingFunctional2D_N<PRECOMP_T>* functional,
+    Box2D domain, MultiNTensorField2D<PRECOMP_T>& field );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        BoxProcessingFunctional2D_N<PRECOMP_T>* functional,
-        Box2D domain, MultiNTensorField2D<PRECOMP_T>& field, plint level );
+    BoxProcessingFunctional2D_N<PRECOMP_T>* functional,
+    Box2D domain, MultiNTensorField2D<PRECOMP_T>& field, plint level );
 
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        BoxProcessingFunctional2D_S<PRECOMP_T>* functional,
-        Box2D domain, MultiScalarField2D<PRECOMP_T>& field );
+    BoxProcessingFunctional2D_S<PRECOMP_T>* functional,
+    Box2D domain, MultiScalarField2D<PRECOMP_T>& field );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        BoxProcessingFunctional2D_S<PRECOMP_T>* functional,
-        Box2D domain, MultiScalarField2D<PRECOMP_T>& field, plint level );
+    BoxProcessingFunctional2D_S<PRECOMP_T>* functional,
+    Box2D domain, MultiScalarField2D<PRECOMP_T>& field, plint level );
 
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        MaskedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field,
-        MultiNTensorField2D<int>& mask );
+    MaskedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field,
+    MultiNTensorField2D<int>& mask );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        MaskedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field,
-        MultiNTensorField2D<int>& mask,
-        plint level );
+    MaskedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field,
+    MultiNTensorField2D<int>& mask,
+    plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,int> (
-        BoxProcessingFunctional2D_NN<PRECOMP_T,int>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<int>& field2 );
+    BoxProcessingFunctional2D_NN<PRECOMP_T,int>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<int>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,int> (
-        BoxProcessingFunctional2D_NN<PRECOMP_T,int>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<int>& field2, plint level );
+    BoxProcessingFunctional2D_NN<PRECOMP_T,int>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<int>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,int> (
-        BoxProcessingFunctional2D_SS<PRECOMP_T,int>* functional,
-        Box2D domain,
-        MultiScalarField2D<PRECOMP_T>& field1,
-        MultiScalarField2D<int>& field2 );
+    BoxProcessingFunctional2D_SS<PRECOMP_T,int>* functional,
+    Box2D domain,
+    MultiScalarField2D<PRECOMP_T>& field1,
+    MultiScalarField2D<int>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,int> (
-        BoxProcessingFunctional2D_SS<PRECOMP_T,int>* functional,
-        Box2D domain,
-        MultiScalarField2D<PRECOMP_T>& field1,
-        MultiScalarField2D<int>& field2, plint level );
+    BoxProcessingFunctional2D_SS<PRECOMP_T,int>* functional,
+    Box2D domain,
+    MultiScalarField2D<PRECOMP_T>& field1,
+    MultiScalarField2D<int>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,float> (
-        BoxProcessingFunctional2D_NN<PRECOMP_T,float>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<float>& field2 );
+    BoxProcessingFunctional2D_NN<PRECOMP_T,float>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<float>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,float> (
-        BoxProcessingFunctional2D_NN<PRECOMP_T,float>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<float>& field2, plint level );
+    BoxProcessingFunctional2D_NN<PRECOMP_T,float>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<float>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,float> (
-        BoxProcessingFunctional2D_SS<PRECOMP_T,float>* functional,
-        Box2D domain,
-        MultiScalarField2D<PRECOMP_T>& field1,
-        MultiScalarField2D<float>& field2 );
+    BoxProcessingFunctional2D_SS<PRECOMP_T,float>* functional,
+    Box2D domain,
+    MultiScalarField2D<PRECOMP_T>& field1,
+    MultiScalarField2D<float>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,float> (
-        BoxProcessingFunctional2D_SS<PRECOMP_T,float>* functional,
-        Box2D domain,
-        MultiScalarField2D<PRECOMP_T>& field1,
-        MultiScalarField2D<float>& field2, plint level );
+    BoxProcessingFunctional2D_SS<PRECOMP_T,float>* functional,
+    Box2D domain,
+    MultiScalarField2D<PRECOMP_T>& field1,
+    MultiScalarField2D<float>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,double> (
-        BoxProcessingFunctional2D_NN<PRECOMP_T,double>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<double>& field2 );
+    BoxProcessingFunctional2D_NN<PRECOMP_T,double>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<double>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,double> (
-        BoxProcessingFunctional2D_NN<PRECOMP_T,double>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<double>& field2, plint level );
+    BoxProcessingFunctional2D_NN<PRECOMP_T,double>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<double>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,double> (
-        BoxProcessingFunctional2D_SS<PRECOMP_T,double>* functional,
-        Box2D domain,
-        MultiScalarField2D<PRECOMP_T>& field1,
-        MultiScalarField2D<double>& field2 );
+    BoxProcessingFunctional2D_SS<PRECOMP_T,double>* functional,
+    Box2D domain,
+    MultiScalarField2D<PRECOMP_T>& field1,
+    MultiScalarField2D<double>& field2 );
 template
 void integrateProcessingFunctional<PRECOMP_T,double> (
-        BoxProcessingFunctional2D_SS<PRECOMP_T,double>* functional,
-        Box2D domain,
-        MultiScalarField2D<PRECOMP_T>& field1,
-        MultiScalarField2D<double>& field2, plint level );
+    BoxProcessingFunctional2D_SS<PRECOMP_T,double>* functional,
+    Box2D domain,
+    MultiScalarField2D<PRECOMP_T>& field1,
+    MultiScalarField2D<double>& field2, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,float> (
-        MaskedBoxProcessingFunctional2D_NN<PRECOMP_T,float>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<float>& field2,
-        MultiNTensorField2D<int>& mask );
+    MaskedBoxProcessingFunctional2D_NN<PRECOMP_T,float>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<float>& field2,
+    MultiNTensorField2D<int>& mask );
 template
 void applyProcessingFunctional<PRECOMP_T,double> (
-        MaskedBoxProcessingFunctional2D_NN<PRECOMP_T,double>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<double>& field2,
-        MultiNTensorField2D<int>& mask );
+    MaskedBoxProcessingFunctional2D_NN<PRECOMP_T,double>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<double>& field2,
+    MultiNTensorField2D<int>& mask );
 template
 void applyProcessingFunctional<PRECOMP_T,int> (
-        MaskedBoxProcessingFunctional2D_NN<PRECOMP_T,int>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<int>& field2,
-        MultiNTensorField2D<int>& mask );
+    MaskedBoxProcessingFunctional2D_NN<PRECOMP_T,int>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<int>& field2,
+    MultiNTensorField2D<int>& mask );
 template
 void integrateProcessingFunctional<PRECOMP_T,PRECOMP_T> (
-        MaskedBoxProcessingFunctional2D_NN<PRECOMP_T,PRECOMP_T>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<PRECOMP_T>& field2,
-        MultiNTensorField2D<int>& mask,
-        plint level );
+    MaskedBoxProcessingFunctional2D_NN<PRECOMP_T,PRECOMP_T>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<PRECOMP_T>& field2,
+    MultiNTensorField2D<int>& mask,
+    plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        NTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
-        Box2D domain, std::vector<MultiNTensorField2D<PRECOMP_T>*> fields );
+    NTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
+    Box2D domain, std::vector<MultiNTensorField2D<PRECOMP_T>*> fields );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        NTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
-        Box2D domain, std::vector<MultiNTensorField2D<PRECOMP_T>*> fields, plint level );
+    NTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
+    Box2D domain, std::vector<MultiNTensorField2D<PRECOMP_T>*> fields, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        ScalarFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
-        Box2D domain, std::vector<MultiScalarField2D<PRECOMP_T>*> fields );
+    ScalarFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
+    Box2D domain, std::vector<MultiScalarField2D<PRECOMP_T>*> fields );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        ScalarFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
-        Box2D domain, std::vector<MultiScalarField2D<PRECOMP_T>*> fields, plint level );
+    ScalarFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
+    Box2D domain, std::vector<MultiScalarField2D<PRECOMP_T>*> fields, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        MaskedNTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
-        Box2D domain,
-        std::vector<MultiNTensorField2D<PRECOMP_T>*> fields,
-        MultiNTensorField2D<int>& mask);
+    MaskedNTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
+    Box2D domain,
+    std::vector<MultiNTensorField2D<PRECOMP_T>*> fields,
+    MultiNTensorField2D<int>& mask);
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        MaskedNTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
-        Box2D domain, std::vector<MultiNTensorField2D<PRECOMP_T>*> fields,
-        MultiNTensorField2D<int>& mask, plint level );
+    MaskedNTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
+    Box2D domain, std::vector<MultiNTensorField2D<PRECOMP_T>*> fields,
+    MultiNTensorField2D<int>& mask, plint level );
 
 
 /* *************** Bounded Boxed Data Processor functionals ****************** */
 
 template void applyProcessingFunctional<PRECOMP_T> (
-        BoundedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
-        Box2D domain, MultiNTensorField2D<PRECOMP_T>& field, plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
+    Box2D domain, MultiNTensorField2D<PRECOMP_T>& field, plint boundaryWidth );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        BoundedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field, plint boundaryWidth, plint level );
+    BoundedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field, plint boundaryWidth, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        BoundedMaskedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field,
-        MultiNTensorField2D<int>& mask,
-        plint boundaryWidth );
+    BoundedMaskedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field,
+    MultiNTensorField2D<int>& mask,
+    plint boundaryWidth );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        BoundedMaskedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field,
-        MultiNTensorField2D<int>& mask,
-        plint boundaryWidth, plint level );
+    BoundedMaskedBoxProcessingFunctional2D_N<PRECOMP_T>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field,
+    MultiNTensorField2D<int>& mask,
+    plint boundaryWidth, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,PRECOMP_T> (
-        BoundedBoxProcessingFunctional2D_NN<PRECOMP_T,PRECOMP_T>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<PRECOMP_T>& field2,
-        plint boundaryWidth );
+    BoundedBoxProcessingFunctional2D_NN<PRECOMP_T,PRECOMP_T>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<PRECOMP_T>& field2,
+    plint boundaryWidth );
 template
 void integrateProcessingFunctional<PRECOMP_T,PRECOMP_T> (
-        BoundedBoxProcessingFunctional2D_NN<PRECOMP_T,PRECOMP_T>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<PRECOMP_T>& field2,
-        plint boundaryWidth, plint level );
+    BoundedBoxProcessingFunctional2D_NN<PRECOMP_T,PRECOMP_T>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<PRECOMP_T>& field2,
+    plint boundaryWidth, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T,PRECOMP_T> (
-        BoundedMaskedBoxProcessingFunctional2D_NN<PRECOMP_T,PRECOMP_T>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<PRECOMP_T>& field2,
-        MultiNTensorField2D<int>& mask,
-        plint boundaryWidth );
+    BoundedMaskedBoxProcessingFunctional2D_NN<PRECOMP_T,PRECOMP_T>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<PRECOMP_T>& field2,
+    MultiNTensorField2D<int>& mask,
+    plint boundaryWidth );
 template
 void integrateProcessingFunctional<PRECOMP_T,PRECOMP_T> (
-        BoundedMaskedBoxProcessingFunctional2D_NN<PRECOMP_T,PRECOMP_T>* functional,
-        Box2D domain,
-        MultiNTensorField2D<PRECOMP_T>& field1,
-        MultiNTensorField2D<PRECOMP_T>& field2,
-        MultiNTensorField2D<int>& mask,
-        plint boundaryWidth, plint level );
+    BoundedMaskedBoxProcessingFunctional2D_NN<PRECOMP_T,PRECOMP_T>* functional,
+    Box2D domain,
+    MultiNTensorField2D<PRECOMP_T>& field1,
+    MultiNTensorField2D<PRECOMP_T>& field2,
+    MultiNTensorField2D<int>& mask,
+    plint boundaryWidth, plint level );
 
 template
 void applyProcessingFunctional<PRECOMP_T> (
-        BoundedNTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
-        Box2D domain, std::vector<MultiNTensorField2D<PRECOMP_T>*> fields, plint boundaryWidth );
+    BoundedNTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
+    Box2D domain, std::vector<MultiNTensorField2D<PRECOMP_T>*> fields, plint boundaryWidth );
 template
 void integrateProcessingFunctional<PRECOMP_T> (
-        BoundedNTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
-        Box2D domain, std::vector<MultiNTensorField2D<PRECOMP_T>*> fields, plint boundaryWidth, plint level );
+    BoundedNTensorFieldBoxProcessingFunctional2D<PRECOMP_T>* functional,
+    Box2D domain, std::vector<MultiNTensorField2D<PRECOMP_T>*> fields, plint boundaryWidth, plint level );
 
 }  // namespace plb

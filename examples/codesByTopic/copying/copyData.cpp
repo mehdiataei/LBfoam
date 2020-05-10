@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -46,11 +46,12 @@ Box2D domain1_2d(5,15,5,15);
 Box2D domain2_2d(20,30,20,30);
 
 
-void copyBlockLattice3D() {
+void copyBlockLattice3D()
+{
     MultiBlockLattice3D<double, D3Q19Descriptor> lattice3d_1 (
-            nx,ny,nz, new BGKdynamics<double,D3Q19Descriptor>(omega) );
+        nx,ny,nz, new BGKdynamics<double,D3Q19Descriptor>(omega) );
     MultiBlockLattice3D<double, D3Q19Descriptor> lattice3d_2 (
-            nx,ny,nz, new BGKdynamics<double,D3Q19Descriptor>(omega) );
+        nx,ny,nz, new BGKdynamics<double,D3Q19Descriptor>(omega) );
 
     lattice3d_1.collideAndStream();
 
@@ -74,15 +75,16 @@ void copyBlockLattice3D() {
 
     // 3. CREATING CLONES.
     // Create a reduced-size clone, correponding to a sub-domain of the original lattice.
-    std::unique_ptr<MultiBlockLattice3D<double,D3Q19Descriptor> >
-        lattice3d_3 = clone(lattice3d_1,domain1_3d);
+    std::auto_ptr<MultiBlockLattice3D<double,D3Q19Descriptor> >
+    lattice3d_3 = clone(lattice3d_1,domain1_3d);
 }
 
-void copyBlockLattice2D() {
+void copyBlockLattice2D()
+{
     MultiBlockLattice2D<double, D2Q9Descriptor> lattice2d_1 (
-            nx,ny, new BGKdynamics<double,D2Q9Descriptor>(omega) );
+        nx,ny, new BGKdynamics<double,D2Q9Descriptor>(omega) );
     MultiBlockLattice2D<double, D2Q9Descriptor> lattice2d_2 (
-            nx,ny, new BGKdynamics<double,D2Q9Descriptor>(omega) );
+        nx,ny, new BGKdynamics<double,D2Q9Descriptor>(omega) );
 
     lattice2d_1.collideAndStream();
 
@@ -106,11 +108,12 @@ void copyBlockLattice2D() {
 
     // 3. CREATING CLONES.
     // Create a reduced-size clone, correponding to a sub-domain of the original lattice.
-    std::unique_ptr<MultiBlockLattice2D<double,D2Q9Descriptor> >
-        lattice2d_3 = clone(lattice2d_1,domain1_2d);
+    std::auto_ptr<MultiBlockLattice2D<double,D2Q9Descriptor> >
+    lattice2d_3 = clone(lattice2d_1,domain1_2d);
 }
 
-void copyScalarField3D() {
+void copyScalarField3D()
+{
     MultiScalarField3D<double> scalar3d_1(nx,ny,nz);
     MultiScalarField3D<double> scalar3d_2(nx,ny,nz);
     MultiScalarField3D<int> scalar3d_3(nx,ny,nz);
@@ -125,11 +128,12 @@ void copyScalarField3D() {
     // 2. CROSS-POSITION COPIES.
     plb::copy(scalar3d_1, domain1_3d, scalar3d_2, domain2_3d);
     // 3. CREATING CLONES.
-    std::unique_ptr<MultiScalarField3D<double> >
-        scalar3d_4 = clone(scalar3d_2,domain1_3d);
+    std::auto_ptr<MultiScalarField3D<double> >
+    scalar3d_4 = clone(scalar3d_2,domain1_3d);
 }
 
-void copyScalarField2D() {
+void copyScalarField2D()
+{
     MultiScalarField2D<double> scalar2d_1(nx,ny);
     MultiScalarField2D<double> scalar2d_2(nx,ny);
     MultiScalarField2D<int> scalar2d_3(nx,ny);
@@ -144,12 +148,13 @@ void copyScalarField2D() {
     // 2. CROSS-POSITION COPIES.
     plb::copy(scalar2d_1, domain1_2d, scalar2d_2, domain2_2d);
     // 3. CREATING CLONES.
-    std::unique_ptr<MultiScalarField2D<int> >
-        scalar2d_4 = clone(scalar2d_3,domain1_2d);
+    std::auto_ptr<MultiScalarField2D<int> >
+    scalar2d_4 = clone(scalar2d_3,domain1_2d);
 }
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     plbInit(&argc, &argv);
 
     copyBlockLattice3D();

@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -44,131 +44,147 @@
 #include "multiBlock/multiBlockManagement3D.h"
 #include <cmath>
 
-namespace plb {
+namespace plb
+{
 
-class DefaultMultiBlockPolicy3D {
+class DefaultMultiBlockPolicy3D
+{
 public:
-    void toggleBlockingCommunication(bool useBlockingCommunication_) {
-        useBlockingCommunication = useBlockingCommunication_;
-    }
+	void toggleBlockingCommunication(bool useBlockingCommunication_)
+	{
+		useBlockingCommunication = useBlockingCommunication_;
+	}
 
-    BlockCommunicator3D* getBlockCommunicator() {
+	BlockCommunicator3D* getBlockCommunicator()
+	{
 #ifdef PLB_MPI_PARALLEL
-        if (useBlockingCommunication) {
-            return new BlockingCommunicator3D();
-        }
-        else {
-            return new ParallelBlockCommunicator3D();
-        }
+		if (useBlockingCommunication) {
+			return new BlockingCommunicator3D();
+		} else {
+			return new ParallelBlockCommunicator3D();
+		}
 #else
-        return new SerialBlockCommunicator3D();
+		return new SerialBlockCommunicator3D();
 #endif
-    }
+	}
 
-    CombinedStatistics* getCombinedStatistics() {
+	CombinedStatistics* getCombinedStatistics()
+	{
 #ifdef PLB_MPI_PARALLEL
-        return new ParallelCombinedStatistics();
+		return new ParallelCombinedStatistics();
 #else
-        return new SerialCombinedStatistics();
+		return new SerialCombinedStatistics();
 #endif
-    }
+	}
 
-    template<typename T, template<typename U> class Descriptor>
-    MultiCellAccess3D<T,Descriptor>* getMultiCellAccess() {
+	template<typename T, template<typename U> class Descriptor>
+	MultiCellAccess3D<T,Descriptor>* getMultiCellAccess()
+	{
 #ifdef PLB_MPI_PARALLEL
-        return new ParallelCellAccess3D<T,Descriptor>();
+		return new ParallelCellAccess3D<T,Descriptor>();
 #else
-        return new SerialCellAccess3D<T,Descriptor>();
+		return new SerialCellAccess3D<T,Descriptor>();
 #endif
-    }
+	}
 
-    template<typename T>
-    MultiScalarAccess3D<T>* getMultiScalarAccess() {
+	template<typename T>
+	MultiScalarAccess3D<T>* getMultiScalarAccess()
+	{
 #ifdef PLB_MPI_PARALLEL
-        return new ParallelScalarAccess3D<T>();
+		return new ParallelScalarAccess3D<T>();
 #else
-        return new SerialScalarAccess3D<T>();
+		return new SerialScalarAccess3D<T>();
 #endif
-    }
+	}
 
-    template<typename T, int nDim>
-    MultiTensorAccess3D<T,nDim>* getMultiTensorAccess() {
+	template<typename T, int nDim>
+	MultiTensorAccess3D<T,nDim>* getMultiTensorAccess()
+	{
 #ifdef PLB_MPI_PARALLEL
-        return new ParallelTensorAccess3D<T,nDim>();
+		return new ParallelTensorAccess3D<T,nDim>();
 #else
-        return new SerialTensorAccess3D<T,nDim>();
+		return new SerialTensorAccess3D<T,nDim>();
 #endif
-    }
+	}
 
-    template<typename T>
-    MultiNTensorAccess3D<T>* getMultiNTensorAccess() {
+	template<typename T>
+	MultiNTensorAccess3D<T>* getMultiNTensorAccess()
+	{
 #ifdef PLB_MPI_PARALLEL
-        return new ParallelNTensorAccess3D<T>();
+		return new ParallelNTensorAccess3D<T>();
 #else
-        return new SerialNTensorAccess3D<T>();
+		return new SerialNTensorAccess3D<T>();
 #endif
-    }
+	}
 
-    ThreadAttribution* getThreadAttribution() {
+	ThreadAttribution* getThreadAttribution()
+	{
 #ifdef PLB_MPI_PARALLEL
-        return new OneToOneThreadAttribution();
+		return new OneToOneThreadAttribution();
 #else
-        return new SerialThreadAttribution();
+		return new SerialThreadAttribution();
 #endif
-    }
+	}
 
-    MultiBlockManagement3D getMultiBlockManagement(Box3D const& domain, plint envelopeWidth) {
-        return MultiBlockManagement3D (
-                createRegularDistribution3D(domain, numProcesses),
-                getThreadAttribution(),
-                envelopeWidth );
-    }
+	MultiBlockManagement3D getMultiBlockManagement(Box3D const& domain, plint envelopeWidth)
+	{
+		return MultiBlockManagement3D (
+		           createRegularDistribution3D(domain, numProcesses),
+		           getThreadAttribution(),
+		           envelopeWidth );
+	}
 
-    MultiBlockManagement3D getMultiBlockManagement(plint nx, plint ny, plint nz, plint envelopeWidth) {
-        return MultiBlockManagement3D (
-                createRegularDistribution3D(nx,ny,nz, numProcesses),
-                getThreadAttribution(),
-                envelopeWidth );
-    }
+	MultiBlockManagement3D getMultiBlockManagement(plint nx, plint ny, plint nz, plint envelopeWidth)
+	{
+		return MultiBlockManagement3D (
+		           createRegularDistribution3D(nx,ny,nz, numProcesses),
+		           getThreadAttribution(),
+		           envelopeWidth );
+	}
 
-    void setNumGridPoints(plint numGridPoints_) {
-        numGridPoints = numGridPoints_;
-        numGridPointsSpecified = true;
-    }
+	void setNumGridPoints(plint numGridPoints_)
+	{
+		numGridPoints = numGridPoints_;
+		numGridPointsSpecified = true;
+	}
 
-    plint getNumGridPoints() const {
-        return numGridPoints;
-    }
+	plint getNumGridPoints() const
+	{
+		return numGridPoints;
+	}
 
-    void setNumProcesses(int numProcesses_) {
-        numProcesses = numProcesses_;
-        if (!numGridPointsSpecified) {
-            numGridPoints = numProcesses;
-        }
-    }
+	void setNumProcesses(int numProcesses_)
+	{
+		numProcesses = numProcesses_;
+		if (!numGridPointsSpecified) {
+			numGridPoints = numProcesses;
+		}
+	}
 
-    int getNumProcesses() const {
-        return numProcesses;
-    }
+	int getNumProcesses() const
+	{
+		return numProcesses;
+	}
 private:
-    DefaultMultiBlockPolicy3D()
-        : numProcesses(global::mpi().getSize()),
-          numGridPointsSpecified(false),
-          useBlockingCommunication(false)
-    {
-        numGridPoints = numProcesses;
-    }
-    friend DefaultMultiBlockPolicy3D& defaultMultiBlockPolicy3D();
+	DefaultMultiBlockPolicy3D()
+		: numProcesses(global::mpi().getSize()),
+		  numGridPointsSpecified(false),
+		  useBlockingCommunication(false)
+	{
+		numGridPoints = numProcesses;
+	}
+	friend DefaultMultiBlockPolicy3D& defaultMultiBlockPolicy3D();
 private:
-    int numProcesses;
-    plint numGridPoints;
-    bool numGridPointsSpecified;
-    bool useBlockingCommunication;
+	int numProcesses;
+	plint numGridPoints;
+	bool numGridPointsSpecified;
+	bool useBlockingCommunication;
 };
 
-inline DefaultMultiBlockPolicy3D& defaultMultiBlockPolicy3D() {
-    static DefaultMultiBlockPolicy3D singleton;
-    return singleton;
+inline DefaultMultiBlockPolicy3D& defaultMultiBlockPolicy3D()
+{
+	static DefaultMultiBlockPolicy3D singleton;
+	return singleton;
 }
 
 }  // namespace plb

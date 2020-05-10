@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -28,19 +28,22 @@
 #include "core/globalDefs.h"
 #include <vector>
 
-namespace plb {
+namespace plb
+{
 
-namespace util {
+namespace util
+{
 
-class Stats {
+class Stats
+{
 public:
-    Stats(std::vector<double> const& data);
-    double getMean() const;
-    double getStddev() const;
-    double getMin() const;
-    double getMax() const;
+	Stats(std::vector<double> const& data);
+	double getMean() const;
+	double getStddev() const;
+	double getMin() const;
+	double getMax() const;
 private:
-    double mean, stddev, min, max;
+	double mean, stddev, min, max;
 };
 
 } // namespace util

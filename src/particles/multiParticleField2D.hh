@@ -33,10 +33,10 @@
 namespace plb {
 
 template<class ParticleFieldT>
-std::unique_ptr<MultiParticleField2D<ParticleFieldT> >
+std::auto_ptr<MultiParticleField2D<ParticleFieldT> >
     defaultGenerateParticleField2D(MultiBlockManagement2D const& management, plint unnamedDummyArg)
 {
-    return std::unique_ptr<MultiParticleField2D<ParticleFieldT> > (
+    return std::auto_ptr<MultiParticleField2D<ParticleFieldT> > (
                new MultiParticleField2D<ParticleFieldT> (
                        management,
                        defaultMultiBlockPolicy2D().getCombinedStatistics() ) );

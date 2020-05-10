@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,7 +32,8 @@
 #include "atomicBlock/dataProcessingFunctional2D.h"
 #include "atomicBlock/reductiveDataProcessingFunctional2D.h"
 
-namespace plb {
+namespace plb
+{
 
 /* *************** Central finite-difference schemes ***************** */
 
@@ -40,23 +41,23 @@ template<typename T>
 class BoxLaplacianFunctional2D : public BoxProcessingFunctional2D_SS<T,T>
 {
 public:
-    virtual void process( Box2D domain, ScalarField2D<T>& value, ScalarField2D<T>& laplacian );
-    virtual BoxLaplacianFunctional2D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual void process( Box2D domain, ScalarField2D<T>& value, ScalarField2D<T>& laplacian );
+	virtual BoxLaplacianFunctional2D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
 };
 
 template<typename T>
 class BoxXderivativeFunctional2D : public BoundedBoxProcessingFunctional2D_SS<T,T>
 {
 public:
-    virtual void processBulk( Box2D domain, ScalarField2D<T>& value, ScalarField2D<T>& derivative );
-    virtual void processEdge( int direction, int orientation, Box2D domain,
-                              ScalarField2D<T>& value, ScalarField2D<T>& derivative );
-    virtual void processCorner( int normalX, int normalY, Box2D domain,
-                                ScalarField2D<T>& value, ScalarField2D<T>& derivative );
-    virtual BoxXderivativeFunctional2D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void processBulk( Box2D domain, ScalarField2D<T>& value, ScalarField2D<T>& derivative );
+	virtual void processEdge( int direction, int orientation, Box2D domain,
+	                          ScalarField2D<T>& value, ScalarField2D<T>& derivative );
+	virtual void processCorner( int normalX, int normalY, Box2D domain,
+	                            ScalarField2D<T>& value, ScalarField2D<T>& derivative );
+	virtual BoxXderivativeFunctional2D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 
@@ -64,28 +65,28 @@ template<typename T>
 class BoxYderivativeFunctional2D : public BoundedBoxProcessingFunctional2D_SS<T,T>
 {
 public:
-    virtual void processBulk( Box2D domain, ScalarField2D<T>& value, ScalarField2D<T>& derivative );
-    virtual void processEdge( int direction, int orientation, Box2D domain,
-                              ScalarField2D<T>& value, ScalarField2D<T>& derivative );
-    virtual void processCorner( int normalX, int normalY, Box2D domain,
-                                ScalarField2D<T>& value, ScalarField2D<T>& derivative );
-    virtual BoxYderivativeFunctional2D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void processBulk( Box2D domain, ScalarField2D<T>& value, ScalarField2D<T>& derivative );
+	virtual void processEdge( int direction, int orientation, Box2D domain,
+	                          ScalarField2D<T>& value, ScalarField2D<T>& derivative );
+	virtual void processCorner( int normalX, int normalY, Box2D domain,
+	                            ScalarField2D<T>& value, ScalarField2D<T>& derivative );
+	virtual BoxYderivativeFunctional2D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 template<typename T>
 class BoxGradientNormFunctional2D : public BoundedBoxProcessingFunctional2D_SS<T,T>
 {
 public:
-    virtual void processBulk( Box2D domain, ScalarField2D<T>& value, ScalarField2D<T>& grNorm );
-    virtual void processEdge( int direction, int orientation, Box2D domain,
-                              ScalarField2D<T>& value, ScalarField2D<T>& grNorm);
-    virtual void processCorner( int normalX, int normalY, Box2D domain,
-                                ScalarField2D<T>& value, ScalarField2D<T>& grNorm );
-    virtual BoxGradientNormFunctional2D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void processBulk( Box2D domain, ScalarField2D<T>& value, ScalarField2D<T>& grNorm );
+	virtual void processEdge( int direction, int orientation, Box2D domain,
+	                          ScalarField2D<T>& value, ScalarField2D<T>& grNorm);
+	virtual void processCorner( int normalX, int normalY, Box2D domain,
+	                            ScalarField2D<T>& value, ScalarField2D<T>& grNorm );
+	virtual BoxGradientNormFunctional2D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 
@@ -95,17 +96,17 @@ template<typename T>
 class BoxPoissonIteration2D : public BoundedScalarFieldBoxProcessingFunctional2D<T>
 {
 public:
-    BoxPoissonIteration2D(T beta_);
-    virtual void processBulk( Box2D domain, std::vector<ScalarField2D<T>*> scalarFields);
-    virtual void processEdge( int direction, int orientation, Box2D domain,
-                              std::vector<ScalarField2D<T>*> scalarFields );
-    virtual void processCorner( int normalX, int normalY, Box2D domain,
-                                std::vector<ScalarField2D<T>*> scalarFields ); 
-    virtual BoxPoissonIteration2D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	BoxPoissonIteration2D(T beta_);
+	virtual void processBulk( Box2D domain, std::vector<ScalarField2D<T>*> scalarFields);
+	virtual void processEdge( int direction, int orientation, Box2D domain,
+	                          std::vector<ScalarField2D<T>*> scalarFields );
+	virtual void processCorner( int normalX, int normalY, Box2D domain,
+	                            std::vector<ScalarField2D<T>*> scalarFields );
+	virtual BoxPoissonIteration2D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 private:
-    T beta; //< Relaxation parameter
+	T beta; //< Relaxation parameter
 };
 
 /* *************** One Jacobi iteration ************* */
@@ -113,14 +114,14 @@ template<typename T>
 class JacobiIteration2D : public BoundedScalarFieldBoxProcessingFunctional2D<T>
 {
 public:
-    virtual void processBulk( Box2D domain, std::vector<ScalarField2D<T>*> scalarFields);
-    virtual void processEdge( int direction, int orientation, Box2D domain,
-                              std::vector<ScalarField2D<T>*> scalarFields );
-    virtual void processCorner( int normalX, int normalY, Box2D domain,
-                                std::vector<ScalarField2D<T>*> scalarFields ); 
-    virtual JacobiIteration2D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void processBulk( Box2D domain, std::vector<ScalarField2D<T>*> scalarFields);
+	virtual void processEdge( int direction, int orientation, Box2D domain,
+	                          std::vector<ScalarField2D<T>*> scalarFields );
+	virtual void processCorner( int normalX, int normalY, Box2D domain,
+	                            std::vector<ScalarField2D<T>*> scalarFields );
+	virtual JacobiIteration2D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 /* *************** Gauss-Seidel iterative schema step  ****************** */
@@ -128,31 +129,31 @@ template<typename T>
 class GaussSeidelIteration2D : public BoundedScalarFieldBoxProcessingFunctional2D<T>
 {
 public:
-    virtual void processBulk( Box2D domain, std::vector<ScalarField2D<T>*> scalarFields);
-    virtual void processEdge( int direction, int orientation, Box2D domain,
-                              std::vector<ScalarField2D<T>*> scalarFields );
-    virtual void processCorner( int normalX, int normalY, Box2D domain,
-                                std::vector<ScalarField2D<T>*> scalarFields ); 
-    virtual GaussSeidelIteration2D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void processBulk( Box2D domain, std::vector<ScalarField2D<T>*> scalarFields);
+	virtual void processEdge( int direction, int orientation, Box2D domain,
+	                          std::vector<ScalarField2D<T>*> scalarFields );
+	virtual void processCorner( int normalX, int normalY, Box2D domain,
+	                            std::vector<ScalarField2D<T>*> scalarFields );
+	virtual GaussSeidelIteration2D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 /* *************** Gauss-Seidel defect (d_h)   ****************** */
-/// d_h = discrete_laplacien(u_h) - rhs 
+/// d_h = discrete_laplacien(u_h) - rhs
 /// this defect is important for the multigrid methods
 template<typename T>
 class GaussSeidelDefect2D : public BoundedScalarFieldBoxProcessingFunctional2D<T>
 {
 public:
-    virtual void processBulk( Box2D domain, std::vector<ScalarField2D<T>*> scalarFields);
-    virtual void processEdge( int direction, int orientation, Box2D domain,
-                              std::vector<ScalarField2D<T>*> scalarFields );
-    virtual void processCorner( int normalX, int normalY, Box2D domain,
-                                std::vector<ScalarField2D<T>*> scalarFields ); 
-    virtual GaussSeidelDefect2D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual BlockDomain::DomainT appliesTo() const;
+	virtual void processBulk( Box2D domain, std::vector<ScalarField2D<T>*> scalarFields);
+	virtual void processEdge( int direction, int orientation, Box2D domain,
+	                          std::vector<ScalarField2D<T>*> scalarFields );
+	virtual void processCorner( int normalX, int normalY, Box2D domain,
+	                            std::vector<ScalarField2D<T>*> scalarFields );
+	virtual GaussSeidelDefect2D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual BlockDomain::DomainT appliesTo() const;
 };
 
 /* *************** Max of Gauss-Seidel defect (max(d_h))   ****************** */
@@ -162,16 +163,17 @@ template<typename T>
 class GaussSeidelMaxDefectFunctional2D : public ReductiveBoxProcessingFunctional2D_SS<T,T>
 {
 public:
-    GaussSeidelMaxDefectFunctional2D();
-    virtual void process(Box2D domain, ScalarField2D<T>& u_h, ScalarField2D<T>& rhs);
-    virtual GaussSeidelMaxDefectFunctional2D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::nothing;
-    }
-    T getMaxResidual() const;
+	GaussSeidelMaxDefectFunctional2D();
+	virtual void process(Box2D domain, ScalarField2D<T>& u_h, ScalarField2D<T>& rhs);
+	virtual GaussSeidelMaxDefectFunctional2D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::nothing;
+	}
+	T getMaxResidual() const;
 private:
-    plint maxResidueId;
+	plint maxResidueId;
 };
 
 
@@ -180,16 +182,17 @@ template<typename T>
 class BoxPoissonResidueFunctional2D : public ReductiveBoxProcessingFunctional2D_SS<T,T>
 {
 public:
-    BoxPoissonResidueFunctional2D();
-    virtual void process(Box2D domain, ScalarField2D<T>& pressure, ScalarField2D<T>& rhs);
-    virtual BoxPoissonResidueFunctional2D<T>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::nothing;
-        modified[1] = modif::nothing;
-    }
-    T getMaxResidue() const;
+	BoxPoissonResidueFunctional2D();
+	virtual void process(Box2D domain, ScalarField2D<T>& pressure, ScalarField2D<T>& rhs);
+	virtual BoxPoissonResidueFunctional2D<T>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::nothing;
+		modified[1] = modif::nothing;
+	}
+	T getMaxResidue() const;
 private:
-    plint maxResidueId;
+	plint maxResidueId;
 };
 
 }  // namespace plb

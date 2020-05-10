@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,23 +32,25 @@
 #include "multiBlock/blockCommunicator3D.h"
 #include "multiBlock/multiBlockManagement3D.h"
 
-namespace plb {
+namespace plb
+{
 
 class MultiBlockManagement3D;
 
-class SerialBlockCommunicator3D : public BlockCommunicator3D {
+class SerialBlockCommunicator3D : public BlockCommunicator3D
+{
 public:
-    SerialBlockCommunicator3D();
-    virtual SerialBlockCommunicator3D* clone() const;
-    virtual void communicate( std::vector<Overlap3D> const& overlaps,
-                              MultiBlock3D const& originMultiBlock,
-                              MultiBlock3D& destinationMultiBlock, modif::ModifT whichData ) const;
-    virtual void duplicateOverlaps(MultiBlock3D& multiBlock, modif::ModifT whichData) const;
-    virtual void signalPeriodicity() const;
+	SerialBlockCommunicator3D();
+	virtual SerialBlockCommunicator3D* clone() const;
+	virtual void communicate( std::vector<Overlap3D> const& overlaps,
+	                          MultiBlock3D const& originMultiBlock,
+	                          MultiBlock3D& destinationMultiBlock, modif::ModifT whichData ) const;
+	virtual void duplicateOverlaps(MultiBlock3D& multiBlock, modif::ModifT whichData) const;
+	virtual void signalPeriodicity() const;
 private:
-    void copyOverlap( Overlap3D const& overlap,
-                      MultiBlock3D const& fromMultiBlock,
-                      MultiBlock3D& toMultiBlock, modif::ModifT whichData ) const;
+	void copyOverlap( Overlap3D const& overlap,
+	                  MultiBlock3D const& fromMultiBlock,
+	                  MultiBlock3D& toMultiBlock, modif::ModifT whichData ) const;
 };
 
 }  // namespace plb

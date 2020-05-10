@@ -38,7 +38,7 @@ template<typename ExpressionType> class SwapWrapper;
 template<typename MatrixType> class Minor;
 template<typename MatrixType, int BlockRows=Dynamic, int BlockCols=Dynamic, int PacketAccess=AsRequested,
          int _DirectAccessStatus = ei_traits<MatrixType>::Flags&DirectAccessBit ? DirectAccessBit
-                                 : ei_traits<MatrixType>::Flags&SparseBit> class Block;
+         : ei_traits<MatrixType>::Flags&SparseBit> class Block;
 template<typename MatrixType> class Transpose;
 template<typename MatrixType> class Conjugate;
 template<typename NullaryOp, typename MatrixType>         class CwiseNullaryOp;
@@ -91,10 +91,10 @@ struct IOFormat;
 
 template<typename Scalar>
 void ei_cache_friendly_product(
-  int _rows, int _cols, int depth,
-  bool _lhsRowMajor, const Scalar* _lhs, int _lhsStride,
-  bool _rhsRowMajor, const Scalar* _rhs, int _rhsStride,
-  bool resRowMajor, Scalar* res, int resStride);
+    int _rows, int _cols, int depth,
+    bool _lhsRowMajor, const Scalar* _lhs, int _lhsStride,
+    bool _rhsRowMajor, const Scalar* _rhs, int _rhsStride,
+    bool resRowMajor, Scalar* res, int resStride);
 
 // Array module
 template<typename ConditionMatrixType, typename ThenMatrixType, typename ElseMatrixType> class Select;

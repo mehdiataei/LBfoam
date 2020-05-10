@@ -88,9 +88,9 @@ void ComputeRefinementRvalueFunctional3D<T,Descriptor>::getTypeOfModification(st
 }
 
 template<typename T, template<typename U> class Descriptor>
-std::unique_ptr<MultiScalarField3D<T> > computeRvalues(MultiBlockLattice3D<T,Descriptor>& lattice, T knudsen, Box3D const& domain) 
+std::auto_ptr<MultiScalarField3D<T> > computeRvalues(MultiBlockLattice3D<T,Descriptor>& lattice, T knudsen, Box3D const& domain) 
 {
-    std::unique_ptr<MultiScalarField3D<T> > rValues = generateMultiScalarField<T>(lattice, domain);
+    std::auto_ptr<MultiScalarField3D<T> > rValues = generateMultiScalarField<T>(lattice, domain);
     applyProcessingFunctional(new ComputeRefinementRvalueFunctional3D<T,Descriptor>(knudsen), domain, lattice, *rValues);
 
     return rValues;    

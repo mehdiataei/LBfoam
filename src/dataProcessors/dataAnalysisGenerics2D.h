@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -30,119 +30,120 @@
 
 #include "core/cell.h"
 
-namespace plb {
+namespace plb
+{
 
 /* ******** CountLatticeElementsFunctional2D **************************** */
 
-template<typename T, template<typename U> class Descriptor, class BoolMask> 
+template<typename T, template<typename U> class Descriptor, class BoolMask>
 CountLatticeElementsFunctional2D<T,Descriptor,BoolMask>::CountLatticeElementsFunctional2D (
-        BoolMask boolMask_)
-  : countId(this->getStatistics().subscribeIntSum()),
-    boolMask(boolMask_)
+    BoolMask boolMask_)
+	: countId(this->getStatistics().subscribeIntSum()),
+	  boolMask(boolMask_)
 { }
 
-template<typename T, template<typename U> class Descriptor, class BoolMask> 
+template<typename T, template<typename U> class Descriptor, class BoolMask>
 void CountLatticeElementsFunctional2D<T,Descriptor,BoolMask>::process (
-        Box2D domain, BlockLattice2D<T,Descriptor>& lattice )
+    Box2D domain, BlockLattice2D<T,Descriptor>& lattice )
 {
-    BlockStatistics& statistics = this->getStatistics();
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            Cell<T,Descriptor> const& cell = lattice.get(iX,iY);
-            if (boolMask(cell)) {
-                statistics.gatherIntSum(countId, 1);
-            }
-        }
-    }
+	BlockStatistics& statistics = this->getStatistics();
+	for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
+		for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+			Cell<T,Descriptor> const& cell = lattice.get(iX,iY);
+			if (boolMask(cell)) {
+				statistics.gatherIntSum(countId, 1);
+			}
+		}
+	}
 }
 
-template<typename T, template<typename U> class Descriptor, class BoolMask> 
+template<typename T, template<typename U> class Descriptor, class BoolMask>
 CountLatticeElementsFunctional2D<T,Descriptor,BoolMask>*
-    CountLatticeElementsFunctional2D<T,Descriptor,BoolMask>::clone() const
+CountLatticeElementsFunctional2D<T,Descriptor,BoolMask>::clone() const
 {
-    return new CountLatticeElementsFunctional2D<T,Descriptor,BoolMask>(*this);
+	return new CountLatticeElementsFunctional2D<T,Descriptor,BoolMask>(*this);
 }
 
-template<typename T, template<typename U> class Descriptor, class BoolMask> 
+template<typename T, template<typename U> class Descriptor, class BoolMask>
 plint CountLatticeElementsFunctional2D<T,Descriptor,BoolMask>::getCount() const
 {
-    return this->getStatistics().getIntSum(countId);
+	return this->getStatistics().getIntSum(countId);
 }
 
 
 /* ******** CountScalarElementsFunctional2D **************************** */
 
-template<typename T, class BoolMask> 
+template<typename T, class BoolMask>
 CountScalarElementsFunctional2D<T,BoolMask>::CountScalarElementsFunctional2D (
-        BoolMask boolMask_)
-  : countId(this->getStatistics().subscribeIntSum()),
-    boolMask(boolMask_)
+    BoolMask boolMask_)
+	: countId(this->getStatistics().subscribeIntSum()),
+	  boolMask(boolMask_)
 { }
 
-template<typename T, class BoolMask> 
+template<typename T, class BoolMask>
 void CountScalarElementsFunctional2D<T,BoolMask>::process (
-        Box2D domain, ScalarField2D<T>& field )
+    Box2D domain, ScalarField2D<T>& field )
 {
-    BlockStatistics& statistics = this->getStatistics();
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            T value = field.get(iX,iY);
-            if (boolMask(value)) {
-                statistics.gatherIntSum(countId, 1);
-            }
-        }
-    }
+	BlockStatistics& statistics = this->getStatistics();
+	for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
+		for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+			T value = field.get(iX,iY);
+			if (boolMask(value)) {
+				statistics.gatherIntSum(countId, 1);
+			}
+		}
+	}
 }
 
-template<typename T, class BoolMask> 
+template<typename T, class BoolMask>
 CountScalarElementsFunctional2D<T,BoolMask>*
-    CountScalarElementsFunctional2D<T,BoolMask>::clone() const
+CountScalarElementsFunctional2D<T,BoolMask>::clone() const
 {
-    return new CountScalarElementsFunctional2D<T,BoolMask>(*this);
+	return new CountScalarElementsFunctional2D<T,BoolMask>(*this);
 }
 
-template<typename T, class BoolMask> 
+template<typename T, class BoolMask>
 plint CountScalarElementsFunctional2D<T,BoolMask>::getCount() const
 {
-    return this->getStatistics().getIntSum(countId);
+	return this->getStatistics().getIntSum(countId);
 }
 
 
 /* ******** CountTensorElementsFunctional2D **************************** */
 
-template<typename T, int nDim, class BoolMask> 
+template<typename T, int nDim, class BoolMask>
 CountTensorElementsFunctional2D<T,nDim,BoolMask>::CountTensorElementsFunctional2D (
-        BoolMask boolMask_)
-  : countId(this->getStatistics().subscribeIntSum()),
-    boolMask(boolMask_)
+    BoolMask boolMask_)
+	: countId(this->getStatistics().subscribeIntSum()),
+	  boolMask(boolMask_)
 { }
 
-template<typename T, int nDim, class BoolMask> 
+template<typename T, int nDim, class BoolMask>
 void CountTensorElementsFunctional2D<T,nDim,BoolMask>::process (
-        Box2D domain, TensorField2D<T,nDim>& field )
+    Box2D domain, TensorField2D<T,nDim>& field )
 {
-    BlockStatistics& statistics = this->getStatistics();
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            Array<T,nDim> const& value = field.get(iX,iY);
-            if (boolMask(value)) {
-                statistics.gatherIntSum(countId, 1);
-            }
-        }
-    }
+	BlockStatistics& statistics = this->getStatistics();
+	for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
+		for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+			Array<T,nDim> const& value = field.get(iX,iY);
+			if (boolMask(value)) {
+				statistics.gatherIntSum(countId, 1);
+			}
+		}
+	}
 }
 
-template<typename T, int nDim, class BoolMask> 
+template<typename T, int nDim, class BoolMask>
 CountTensorElementsFunctional2D<T,nDim,BoolMask>*
-    CountTensorElementsFunctional2D<T,nDim,BoolMask>::clone() const
+CountTensorElementsFunctional2D<T,nDim,BoolMask>::clone() const
 {
-    return new CountTensorElementsFunctional2D<T,nDim,BoolMask>(*this);
+	return new CountTensorElementsFunctional2D<T,nDim,BoolMask>(*this);
 }
 
-template<typename T, int nDim, class BoolMask> 
+template<typename T, int nDim, class BoolMask>
 plint CountTensorElementsFunctional2D<T,nDim,BoolMask>::getCount() const
 {
-    return this->getStatistics().getIntSum(countId);
+	return this->getStatistics().getIntSum(countId);
 }
 
 
@@ -150,33 +151,36 @@ plint CountTensorElementsFunctional2D<T,nDim,BoolMask>::getCount() const
 
 template<typename T, class Function>
 ApplyScalarFunctional2D<T,Function>::ApplyScalarFunctional2D(Function f_)
-    : f(f_)
+	: f(f_)
 { }
 
 template<typename T,class Function>
 void ApplyScalarFunctional2D<T,Function>::process (
-        Box2D domain, ScalarField2D<T>& field )
+    Box2D domain, ScalarField2D<T>& field )
 {
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            field.get(iX,iY) = f(field.get(iX,iY));
-        }
-    }
+	for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
+		for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+			field.get(iX,iY) = f(field.get(iX,iY));
+		}
+	}
 }
 
 template<typename T,class Function>
-ApplyScalarFunctional2D<T,Function>* ApplyScalarFunctional2D<T,Function>::clone() const {
-    return new ApplyScalarFunctional2D<T,Function>(*this);
+ApplyScalarFunctional2D<T,Function>* ApplyScalarFunctional2D<T,Function>::clone() const
+{
+	return new ApplyScalarFunctional2D<T,Function>(*this);
 }
 
 template<typename T,class Function>
-void ApplyScalarFunctional2D<T,Function>::getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-    modified[0] = modif::staticVariables;
+void ApplyScalarFunctional2D<T,Function>::getTypeOfModification(std::vector<modif::ModifT>& modified) const
+{
+	modified[0] = modif::staticVariables;
 }
 
 template<typename T,class Function>
-BlockDomain::DomainT ApplyScalarFunctional2D<T,Function>::appliesTo() const {
-    return BlockDomain::bulkAndEnvelope;
+BlockDomain::DomainT ApplyScalarFunctional2D<T,Function>::appliesTo() const
+{
+	return BlockDomain::bulkAndEnvelope;
 }
 
 
@@ -184,36 +188,38 @@ BlockDomain::DomainT ApplyScalarFunctional2D<T,Function>::appliesTo() const {
 
 template<typename T, class Function>
 EvaluateScalarFunctional2D<T,Function>::EvaluateScalarFunctional2D(Function f_)
-    : f(f_)
+	: f(f_)
 { }
 
 template<typename T, class Function>
 void EvaluateScalarFunctional2D<T,Function>::process (
-        Box2D domain, ScalarField2D<T>& field, ScalarField2D<T>& result )
+    Box2D domain, ScalarField2D<T>& field, ScalarField2D<T>& result )
 {
-    Dot2D offset = computeRelativeDisplacement(field, result);
-    for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
-        for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
-            result.get(iX+offset.x,iY+offset.y) = f(field.get(iX,iY));
-        }
-    }
+	Dot2D offset = computeRelativeDisplacement(field, result);
+	for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
+		for (plint iY=domain.y0; iY<=domain.y1; ++iY) {
+			result.get(iX+offset.x,iY+offset.y) = f(field.get(iX,iY));
+		}
+	}
 }
 
 template<typename T, class Function>
-EvaluateScalarFunctional2D<T,Function>* EvaluateScalarFunctional2D<T,Function>::clone() const {
-    return new EvaluateScalarFunctional2D<T,Function>(*this);
+EvaluateScalarFunctional2D<T,Function>* EvaluateScalarFunctional2D<T,Function>::clone() const
+{
+	return new EvaluateScalarFunctional2D<T,Function>(*this);
 }
 
 template<typename T, class Function>
 void EvaluateScalarFunctional2D<T,Function>::getTypeOfModification(std::vector<modif::ModifT>& modified) const
 {
-    modified[0] = modif::nothing;
-    modified[1] = modif::staticVariables;
+	modified[0] = modif::nothing;
+	modified[1] = modif::staticVariables;
 }
 
 template<typename T, class Function>
-BlockDomain::DomainT EvaluateScalarFunctional2D<T,Function>::appliesTo() const {
-    return BlockDomain::bulk;
+BlockDomain::DomainT EvaluateScalarFunctional2D<T,Function>::appliesTo() const
+{
+	return BlockDomain::bulk;
 }
 
 }  // namespace plb

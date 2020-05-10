@@ -47,14 +47,14 @@ static void massExchangeFluidCell1 (
     plint iX, plint iY, plint iZ )
 {
     typedef Descriptor<T> D;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     // Calculate mass at time t+1 --> eq 6 Thurey's paper.
-    for(plint iPop=1; iPop < D::q; ++iPop) {
+    for(plint iPop=0; iPop < D::q; ++iPop) {
         plint nextX = iX + D::c[iPop][0];
         plint nextY = iY + D::c[iPop][1];
         plint nextZ = iZ + D::c[iPop][2];
         int nextFlag = param.flag(nextX,nextY,nextZ);
-        if (isWet(nextFlag)) {
+        if (nextFlag==fluid || nextFlag==interface) {
             // In Thuerey's paper, the mass balance is computed locally on one cell, but
             // N. Thuerey uses outgoing populations. Palabos works with incoming populations
             // and uses the relation f_out_i(x,t) = f_in_opp(i)(x+c_i,t+1).
@@ -69,9 +69,9 @@ static void massExchangeFluidCell2 (
     plint iX, plint iY, plint iZ )
 {
     typedef Descriptor<T> D;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     // Calculate mass at time t+1 --> eq 6 Thurey's paper.
-    for(plint iPop=1; iPop < D::q; ++iPop) {
+    for(plint iPop=0; iPop < D::q; ++iPop) {
         plint nextX = iX + D::c[iPop][0];
         plint nextY = iY + D::c[iPop][1];
         plint nextZ = iZ + D::c[iPop][2];
@@ -117,7 +117,7 @@ template< typename T,template<typename U> class Descriptor>
 void TwoPhasePunchSphere3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
     typedef Descriptor<T> D;
 
@@ -205,7 +205,7 @@ template< typename T,template<typename U> class Descriptor>
 void TwoPhasePunchRectangle3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
     typedef Descriptor<T> D;
 
@@ -311,7 +311,7 @@ template< typename T,template<typename U> class Descriptor>
 void DefaultInitializeTwoPhase3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
     typedef Descriptor<T> D;
 
@@ -431,7 +431,7 @@ template< typename T,template<typename U> class Descriptor>
 void PartiallyDefaultInitializeTwoPhase3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
     typedef Descriptor<T> D;
 
@@ -545,7 +545,7 @@ template<typename T,template<typename U> class Descriptor, class Function>
 void ConstantIniVelocityTwoPhase3D<T,Descriptor,Function>::processGenericBlocks (
         Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks )
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     Dot3D absOfs = param.absOffset();
@@ -587,7 +587,7 @@ void TwoPhaseMassChange3D<T,Descriptor>::processGenericBlocks (
         Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks )
 {
     typedef Descriptor<T> D;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     // This loop updates the mass, summarizing  Eq. 6/7, and Eq.8, in
@@ -602,7 +602,7 @@ void TwoPhaseMassChange3D<T,Descriptor>::processGenericBlocks (
                     twoPhaseTemplates<T,Descriptor>::massExchangeFluidCell1(param, iX,iY,iZ);
                 }
                 else if(flag==interface) {
-                    for(plint iPop=1; iPop < D::q; ++iPop) {
+                    for(plint iPop=0; iPop < D::q; ++iPop) {
                         plint nextX = iX + D::c[iPop][0];
                         plint nextY = iY + D::c[iPop][1];
                         plint nextZ = iZ + D::c[iPop][2];
@@ -625,7 +625,7 @@ void TwoPhaseMassChange3D<T,Descriptor>::processGenericBlocks (
                         twoPhaseTemplates<T,Descriptor>::massExchangeFluidCell2(param, iX,iY,iZ);
                     }
                     else if(flag==interface) {
-                        for(plint iPop=1; iPop < D::q; ++iPop) {
+                        for(plint iPop=0; iPop < D::q; ++iPop) {
                             plint nextX = iX + D::c[iPop][0];
                             plint nextY = iY + D::c[iPop][1];
                             plint nextZ = iZ + D::c[iPop][2];
@@ -664,7 +664,7 @@ void TwoPhaseComputeInterfaceLists3D<T,Descriptor>::processGenericBlocks (
     typedef typename TwoPhaseInterfaceLists<T,Descriptor>::Node Node;
     typedef typename TwoPhaseInterfaceLists<T,Descriptor>::ExtrapolInfo ExtrapolInfo;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     param.massExcess().clear();
     param.massExcess2().clear();
@@ -928,7 +928,7 @@ void TwoPhaseEqualMassExcessReDistribution3D<T,Descriptor>
 {
     typedef Descriptor<T> D;
     typedef typename TwoPhaseInterfaceLists<T,Descriptor>::Node Node;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     Box3D originalDomain(domain);
@@ -1050,7 +1050,7 @@ void TwoPhaseCompletion3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
     typedef Descriptor<T> D;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     typedef typename TwoPhaseInterfaceLists<T,Descriptor>::Node Node;
 
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
@@ -1185,7 +1185,7 @@ void VerifyTwoPhase<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
     typedef Descriptor<T> D;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     // Save macroscopic fields in external scalars and update the mass-fraction.
@@ -1212,7 +1212,7 @@ void TwoPhaseMacroscopic3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
     typedef Descriptor<T> D;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     T lostMass = param.getSumLostMass();
@@ -1388,7 +1388,7 @@ template< typename T,template<typename U> class Descriptor>
 void TwoPhaseStabilize3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     for (plint iX=domain.x0; iX<=domain.x1; ++iX) {
@@ -1436,7 +1436,7 @@ template< typename T,template<typename U> class Descriptor>
 void TwoPhaseInterfaceFilter<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     std::vector< Array<plint,3> > interfaceNodes;
@@ -1523,7 +1523,7 @@ void TwoPhaseIniInterfaceToAnyNodes3D<T,Descriptor>
     typedef Descriptor<T> D;
     typedef typename TwoPhaseInterfaceLists<T,Descriptor>::Node Node;
     typedef typename TwoPhaseInterfaceLists<T,Descriptor>::ExtrapolInfo ExtrapolInfo;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
     
@@ -1641,7 +1641,7 @@ void TwoPhaseIniEmptyToInterfaceNodes3D<T,Descriptor>
 {
     typedef typename TwoPhaseInterfaceLists<T,Descriptor>::Node Node;
     typedef typename TwoPhaseInterfaceLists<T,Descriptor>::ExtrapolInfo ExtrapolInfo;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
             
@@ -1692,7 +1692,7 @@ void TwoPhaseRemoveFalseInterfaceCells3D<T,Descriptor>
 {
     typedef Descriptor<T> D;
     typedef typename TwoPhaseInterfaceLists<T,Descriptor>::Node Node;
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
 
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
@@ -1786,7 +1786,7 @@ template< typename T,template<typename U> class Descriptor>
 void TwoPhaseAddExternalForce3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain,std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
 
     if (Descriptor<T>::ExternalField::sizeOfForce == 0) {
@@ -1853,7 +1853,7 @@ template< typename T,template<typename U> class Descriptor>
 void TwoPhaseOutletMaximumVolumeFraction3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
     typedef Descriptor<T> D;
     
@@ -1949,7 +1949,7 @@ template< typename T,template<typename U> class Descriptor>
 void TwoPhaseComputePressure3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     ScalarField3D<T>* pressure =
         (model==freeSurface) ?
             dynamic_cast<ScalarField3D<T>*>(atomicBlocks[10]) :
@@ -1991,7 +1991,7 @@ template< typename T,template<typename U> class Descriptor>
 void TwoPhaseComputeVelocity3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TensorField3D<T,3>* velocity = 
         useFreeSurfaceLimit ?
             dynamic_cast<TensorField3D<T,3>*>(atomicBlocks[10]) :
@@ -2047,7 +2047,7 @@ template< typename T,template<typename U> class Descriptor>
 void TwoPhaseAverageVelocity3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
     BlockStatistics& statistics = this->getStatistics();
     
@@ -2117,7 +2117,7 @@ template< typename T,template<typename U> class Descriptor>
 void TwoPhaseAveragePressure3D<T,Descriptor>
         ::processGenericBlocks(Box3D domain, std::vector<AtomicBlock3D*> atomicBlocks)
 {
-    using namespace freeSurfaceFlag;
+    using namespace freeSurfaceFlag3D;
     TwoPhaseProcessorParam3D<T,Descriptor> param(atomicBlocks);
     BlockStatistics& statistics = this->getStatistics();
     

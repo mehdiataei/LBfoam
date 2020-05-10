@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,7 +29,8 @@
 #include "atomicBlock/dataProcessingFunctional3D.h"
 #include "atomicBlock/blockLattice3D.h"
 
-namespace plb {
+namespace plb
+{
 
 /**
 * This class computes the Skordos BC
@@ -40,20 +41,24 @@ template<typename T, template<typename U> class Descriptor, int direction, int o
 class PlaneFdBoundaryFunctional3D : public BoxProcessingFunctional3D_L<T,Descriptor>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
-    virtual PlaneFdBoundaryFunctional3D<T,Descriptor,direction,orientation>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-    }
-    virtual int getStaticId() const { return staticId; }
-    static const int staticId;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
+	virtual PlaneFdBoundaryFunctional3D<T,Descriptor,direction,orientation>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+	}
+	virtual int getStaticId() const
+	{
+		return staticId;
+	}
+	static const int staticId;
 public:
-    static void processCell(plint iX, plint iY, plint iZ, BlockLattice3D<T,Descriptor>& lattice);
+	static void processCell(plint iX, plint iY, plint iZ, BlockLattice3D<T,Descriptor>& lattice);
 private:
-    template<int deriveDirection>
-    static void interpolateGradients (
-            BlockLattice3D<T,Descriptor> const& block,
-            Array<T,Descriptor<T>::d>& velDeriv, plint iX, plint iY, plint iZ );
+	template<int deriveDirection>
+	static void interpolateGradients (
+	    BlockLattice3D<T,Descriptor> const& block,
+	    Array<T,Descriptor<T>::d>& velDeriv, plint iX, plint iY, plint iZ );
 };
 
 /**
@@ -63,26 +68,31 @@ private:
 */
 template<typename T, template<typename U> class Descriptor,
          int plane, int normal1, int normal2>
-class OuterVelocityEdgeFunctional3D : public BoxProcessingFunctional3D_L<T,Descriptor> {
+class OuterVelocityEdgeFunctional3D : public BoxProcessingFunctional3D_L<T,Descriptor>
+{
 public:
-    enum { direction1 = (plane+1)%3, direction2 = (plane+2)%3 };
+	enum { direction1 = (plane+1)%3, direction2 = (plane+2)%3 };
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
-    virtual OuterVelocityEdgeFunctional3D<T,Descriptor,plane,normal1,normal2>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-    }
-    virtual int getStaticId() const { return staticId; }
-    static const int staticId;
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
+	virtual OuterVelocityEdgeFunctional3D<T,Descriptor,plane,normal1,normal2>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+	}
+	virtual int getStaticId() const
+	{
+		return staticId;
+	}
+	static const int staticId;
 public:
-    static void processCell(plint iX, plint iY, plint iZ, BlockLattice3D<T,Descriptor>& lattice);
+	static void processCell(plint iX, plint iY, plint iZ, BlockLattice3D<T,Descriptor>& lattice);
 private:
-    static T getNeighborRho(plint x, plint y, plint z, plint step1, plint step2,
-                            BlockLattice3D<T,Descriptor> const& lattice);
-    template<int deriveDirection, int orientation>
-    static void interpolateGradients (
-            BlockLattice3D<T,Descriptor> const& lattice,
-            Array<T,Descriptor<T>::d>& velDeriv, plint iX, plint iY, plint iZ );
+	static T getNeighborRho(plint x, plint y, plint z, plint step1, plint step2,
+	                        BlockLattice3D<T,Descriptor> const& lattice);
+	template<int deriveDirection, int orientation>
+	static void interpolateGradients (
+	    BlockLattice3D<T,Descriptor> const& lattice,
+	    Array<T,Descriptor<T>::d>& velDeriv, plint iX, plint iY, plint iZ );
 };
 
 template<typename T, template<typename U> class Descriptor,
@@ -90,15 +100,19 @@ template<typename T, template<typename U> class Descriptor,
 class OuterVelocityCornerFunctional3D : public BoxProcessingFunctional3D_L<T,Descriptor>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
-    virtual OuterVelocityCornerFunctional3D<T,Descriptor,xNormal,yNormal,zNormal>* clone() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-    }
-    virtual int getStaticId() const { return staticId; }
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
+	virtual OuterVelocityCornerFunctional3D<T,Descriptor,xNormal,yNormal,zNormal>* clone() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+	}
+	virtual int getStaticId() const
+	{
+		return staticId;
+	}
 public:
-    static void processCell(plint iX, plint iY, plint iZ, BlockLattice3D<T,Descriptor>& lattice);
-    static const int staticId;
+	static void processCell(plint iX, plint iY, plint iZ, BlockLattice3D<T,Descriptor>& lattice);
+	static const int staticId;
 };
 
 }  // namespace plb

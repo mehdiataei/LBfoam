@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,71 +29,77 @@
 #include <set>
 #include <map>
 
-namespace plb {
+namespace plb
+{
 
 struct VectorIsLess {
-    bool operator()(std::vector<int> const& v1, std::vector<int> const& v2) const {
-        pluint bound = std::max(v1.size(), v2.size());
-        for (pluint i=0; i<bound; ++i) {
-            int val1 = i<v1.size() ? v1[i] : -1;
-            int val2 = i<v2.size() ? v2[i] : -1;
-            if (val1<val2) {
-                return true;
-            }
-            else if (val1>val2) {
-                return false;
-            }
-        }
-        return false;
-    }
+	bool operator()(std::vector<int> const& v1, std::vector<int> const& v2) const
+	{
+		pluint bound = std::max(v1.size(), v2.size());
+		for (pluint i=0; i<bound; ++i) {
+			int val1 = i<v1.size() ? v1[i] : -1;
+			int val2 = i<v2.size() ? v2[i] : -1;
+			if (val1<val2) {
+				return true;
+			} else if (val1>val2) {
+				return false;
+			}
+		}
+		return false;
+	}
 };
 
 inline bool vectorEquals(std::vector<int> const& v1, std::vector<int> const& v2)
 {
-    return !(VectorIsLess()(v1,v2) || VectorIsLess()(v2,v1));
+	return !(VectorIsLess()(v1,v2) || VectorIsLess()(v2,v1));
 }
 
 /// Container object for StoreDynamicsFunctionalXD
 class StoreDynamicsID : public ContainerBlockData
 {
 public:
-    typedef std::set<std::vector<int>, VectorIsLess> ChainCollection;
+	typedef std::set<std::vector<int>, VectorIsLess> ChainCollection;
 public:
-    virtual StoreDynamicsID* clone() const {
-        return new StoreDynamicsID(*this);
-    }
-    void addIdChain(std::vector<int> const& chain) {
-        idChains.insert(chain);
-    }
-    ChainCollection const& getIds() const {
-        return idChains;
-    }
-    void startIterations() {
-        pos = idChains.rbegin();
-    }
-    std::vector<int> iterate() {
-        ++pos;
-        if (empty()) {
-            std::vector<int> none;
-            none.push_back(-1);
-            return none;
-        }
-        else {
-            return *pos;
-        }
-    }
-    bool empty() const {
-        return pos == idChains.rend();
-    }
-    std::vector<int> const& getCurrent() const {
-        return *pos;
-    }
+	virtual StoreDynamicsID* clone() const
+	{
+		return new StoreDynamicsID(*this);
+	}
+	void addIdChain(std::vector<int> const& chain)
+	{
+		idChains.insert(chain);
+	}
+	ChainCollection const& getIds() const
+	{
+		return idChains;
+	}
+	void startIterations()
+	{
+		pos = idChains.rbegin();
+	}
+	std::vector<int> iterate()
+	{
+		++pos;
+		if (empty()) {
+			std::vector<int> none;
+			none.push_back(-1);
+			return none;
+		} else {
+			return *pos;
+		}
+	}
+	bool empty() const
+	{
+		return pos == idChains.rend();
+	}
+	std::vector<int> const& getCurrent() const
+	{
+		return *pos;
+	}
 private:
-    ChainCollection::const_reverse_iterator pos;
-    ChainCollection idChains;
+	ChainCollection::const_reverse_iterator pos;
+	ChainCollection idChains;
 };
 
 }  // namespace plb
 
 #endif  // META_STUFF_HELPER_H
-

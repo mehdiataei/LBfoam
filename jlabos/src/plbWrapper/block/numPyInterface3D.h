@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,30 +32,33 @@
 
 // http://blog.dhananjaynene.com/2009/03/constructor-method-overloading-in-python/
 
-namespace plb {
+namespace plb
+{
 
 template<typename T>
-class NTensorField2NumPy3D {
+class NTensorField2NumPy3D
+{
 public:
-    NTensorField2NumPy3D(MultiNTensorField3D<T>& field_);
-    NTensorField2NumPy3D(MultiNTensorField3D<T>& field_, Box3D const& domain_);
-    void execute(T* array, int size);
-    int getSize() const;
+	NTensorField2NumPy3D(MultiNTensorField3D<T>& field_);
+	NTensorField2NumPy3D(MultiNTensorField3D<T>& field_, Box3D const& domain_);
+	void execute(T* array, int size);
+	int getSize() const;
 private:
-    MultiNTensorField3D<T>& field;
-    Box3D domain;
+	MultiNTensorField3D<T>& field;
+	Box3D domain;
 };
 
 template<typename T>
-class NumPy2NTensorField3D {
+class NumPy2NTensorField3D
+{
 public:
-    NumPy2NTensorField3D(MultiNTensorField3D<T>& field_);
-    NumPy2NTensorField3D(MultiNTensorField3D<T>& field_, Box3D const& domain_);
-    void execute(T* array, int size);
-    int getSize() const;
+	NumPy2NTensorField3D(MultiNTensorField3D<T>& field_);
+	NumPy2NTensorField3D(MultiNTensorField3D<T>& field_, Box3D const& domain_);
+	void execute(T* array, int size);
+	int getSize() const;
 private:
-    MultiNTensorField3D<T>& field;
-    Box3D domain;
+	MultiNTensorField3D<T>& field;
+	Box3D domain;
 };
 
 }  // namespace plb

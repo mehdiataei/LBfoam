@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -29,32 +29,35 @@
 #include "core/globalDefs.h"
 #include "multiBlock/nonLocalTransfer3D.h"
 
-namespace plb {
+namespace plb
+{
 
 std::vector<Overlap3D> copyAllDataTransfer (
-                           SparseBlockStructure3D const& block1,
-                           SparseBlockStructure3D const& block2 )
+    SparseBlockStructure3D const& block1,
+    SparseBlockStructure3D const& block2 )
 {
     std::vector<Overlap3D> dataTransfer; // The return value.
     std::vector<plint> ids;  // Temporary value.
     std::vector<Box3D> intersections;  // Temporary value.
     std::map<plint,Box3D>::const_iterator it1 = block1.getBulks().begin();
-    for (; it1 != block1.getBulks().end(); ++it1) {
+    for (; it1 != block1.getBulks().end(); ++it1)
+    {
         ids.clear();
         intersections.clear();
         block2.intersect(it1->second, ids, intersections);
-        for (pluint iInters=0; iInters<intersections.size(); ++iInters) {
+        for (pluint iInters=0; iInters<intersections.size(); ++iInters)
+        {
             dataTransfer.push_back (
-                    Overlap3D(it1->first, ids[iInters],
-                              intersections[iInters]) );
+                Overlap3D(it1->first, ids[iInters],
+                          intersections[iInters]) );
         }
     }
     return dataTransfer;
 }
 
 std::vector<Overlap3D> copyDomainDataTransfer (
-                           SparseBlockStructure3D const& block1, Box3D block1Domain,
-                           SparseBlockStructure3D const& block2, Box3D block2Domain )
+    SparseBlockStructure3D const& block1, Box3D block1Domain,
+    SparseBlockStructure3D const& block2, Box3D block2Domain )
 {
     PLB_PRECONDITION(block1Domain.getNx() == block2Domain.getNx());
     PLB_PRECONDITION(block1Domain.getNy() == block2Domain.getNy());
@@ -67,18 +70,20 @@ std::vector<Overlap3D> copyDomainDataTransfer (
     std::vector<Overlap3D> dataTransfer; // The return value.
     block1.intersect(block1Domain, block1Ids, block1Components);
     PLB_ASSERT( block1Ids.size() == block1Components.size() );
-    for (pluint iComp1=0; iComp1<block1Ids.size(); ++iComp1) {
+    for (pluint iComp1=0; iComp1<block1Ids.size(); ++iComp1)
+    {
         block2Ids.clear();
         block2Inters.clear();
         block2.intersect(block1Components[iComp1].shift(-shiftX,-shiftY,-shiftZ),
                          block2Ids, block2Inters);
-        for (pluint iInters=0; iInters<block2Inters.size(); ++iInters) {
+        for (pluint iInters=0; iInters<block2Inters.size(); ++iInters)
+        {
             dataTransfer.push_back (
-                    Overlap3D(
-                        block1Ids[iComp1],
-                        block2Ids[iInters],
-                        block2Inters[iInters].shift(shiftX,shiftY,shiftZ),
-                        shiftX, shiftY, shiftZ) );
+                Overlap3D(
+                    block1Ids[iComp1],
+                    block2Ids[iInters],
+                    block2Inters[iInters].shift(shiftX,shiftY,shiftZ),
+                    shiftX, shiftY, shiftZ) );
         }
     }
 
@@ -86,31 +91,30 @@ std::vector<Overlap3D> copyDomainDataTransfer (
 }
 
 void copy_generic (
-        MultiBlock3D const& from, Box3D const& fromDomain,
-        MultiBlock3D& to, Box3D const& toDomain, modif::ModifT typeOfModif )
+    MultiBlock3D const& from, Box3D const& fromDomain,
+    MultiBlock3D& to, Box3D const& toDomain, modif::ModifT typeOfModif )
 {
     Box3D fromDomain_(fromDomain);
     Box3D toDomain_(toDomain);
     adjustEqualSize(fromDomain_, toDomain_);
     std::vector<Overlap3D> dataTransfer = copyDomainDataTransfer (
-                from.getMultiBlockManagement().getSparseBlockStructure(), fromDomain_,
-                to.getMultiBlockManagement().getSparseBlockStructure(), toDomain_ );
+            from.getMultiBlockManagement().getSparseBlockStructure(), fromDomain_,
+            to.getMultiBlockManagement().getSparseBlockStructure(), toDomain_ );
     to.getBlockCommunicator().communicate (
-            dataTransfer, from, to, typeOfModif );
+        dataTransfer, from, to, typeOfModif );
     to.getBlockCommunicator().duplicateOverlaps(to, typeOfModif);
 }
 
 void copyNonLocal_generic (
-        MultiBlock3D const& from, MultiBlock3D& to,
-        Box3D const& domain, modif::ModifT typeOfModif )
+    MultiBlock3D const& from, MultiBlock3D& to,
+    Box3D const& domain, modif::ModifT typeOfModif )
 {
     std::vector<Overlap3D> dataTransfer = copyAllDataTransfer (
-                from.getMultiBlockManagement().getSparseBlockStructure(),
-                to.getMultiBlockManagement().getSparseBlockStructure() );
+            from.getMultiBlockManagement().getSparseBlockStructure(),
+            to.getMultiBlockManagement().getSparseBlockStructure() );
     to.getBlockCommunicator().communicate (
-            dataTransfer, from, to, typeOfModif );
+        dataTransfer, from, to, typeOfModif );
     to.getBlockCommunicator().duplicateOverlaps(to, typeOfModif);
 }
 
 } // namespace plb
-

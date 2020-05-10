@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -32,28 +32,29 @@
 #include "complexDynamics/advectionDiffusionDynamics.h"
 #include "boundaryCondition/boundaryDynamics.h"
 
-namespace plb {
+namespace plb
+{
 
 /// Advection-diffusion dynamics on flat boundaries
 template<typename T, template<typename U> class Descriptor, int direction, int orientation>
 class AdvectionDiffusionBoundaryDynamics : public StoreDensityDynamics<T,Descriptor>
 {
 public:
-    /// Constructor
-    AdvectionDiffusionBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics,
-                                       bool automaticPrepareCollision_=true);
-    AdvectionDiffusionBoundaryDynamics(HierarchicUnserializer& unserializer);
+	/// Constructor
+	AdvectionDiffusionBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics,
+	                                   bool automaticPrepareCollision_=true);
+	AdvectionDiffusionBoundaryDynamics(HierarchicUnserializer& unserializer);
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Clone the object, based on its dynamic type
-    virtual AdvectionDiffusionBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
+	/// Clone the object, based on its dynamic type
+	virtual AdvectionDiffusionBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
 
-    /// Execute completion scheme before base collision
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	/// Execute completion scheme before base collision
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// Advection-diffusion dynamics on flat boundaries
@@ -61,21 +62,21 @@ template<typename T, template<typename U> class Descriptor, int direction, int o
 class RegularizedAdvectionDiffusionBoundaryDynamics : public StoreDensityDynamics<T,Descriptor>
 {
 public:
-    /// Constructor
-    RegularizedAdvectionDiffusionBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics,
-                                                  bool automaticPrepareCollision_=true);
-    RegularizedAdvectionDiffusionBoundaryDynamics(HierarchicUnserializer& unserializer);
+	/// Constructor
+	RegularizedAdvectionDiffusionBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics,
+	        bool automaticPrepareCollision_=true);
+	RegularizedAdvectionDiffusionBoundaryDynamics(HierarchicUnserializer& unserializer);
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Clone the object, based on its dynamic type
-    virtual RegularizedAdvectionDiffusionBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
+	/// Clone the object, based on its dynamic type
+	virtual RegularizedAdvectionDiffusionBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
 
-    /// Execute completion scheme before base collision
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	/// Execute completion scheme before base collision
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// Advection-diffusion dynamics on flat boundaries
@@ -83,21 +84,21 @@ template<typename T, template<typename U> class Descriptor, int direction, int o
 class CompleteRegularizedAdvectionDiffusionBoundaryDynamics : public StoreDensityDynamics<T,Descriptor>
 {
 public:
-    /// Constructor
-    CompleteRegularizedAdvectionDiffusionBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics,
-                                                  bool automaticPrepareCollision_=true);
-    CompleteRegularizedAdvectionDiffusionBoundaryDynamics(HierarchicUnserializer& unserializer);
+	/// Constructor
+	CompleteRegularizedAdvectionDiffusionBoundaryDynamics(Dynamics<T,Descriptor>* baseDynamics,
+	        bool automaticPrepareCollision_=true);
+	CompleteRegularizedAdvectionDiffusionBoundaryDynamics(HierarchicUnserializer& unserializer);
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Clone the object, based on its dynamic type
-    virtual CompleteRegularizedAdvectionDiffusionBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
+	/// Clone the object, based on its dynamic type
+	virtual CompleteRegularizedAdvectionDiffusionBoundaryDynamics<T,Descriptor,direction,orientation>* clone() const;
 
-    /// Execute completion scheme before base collision
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	/// Execute completion scheme before base collision
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
 private:
-    static int id;
+	static int id;
 };
 
 /// Advection-diffusion dynamics on 2D corners
@@ -105,20 +106,20 @@ template<typename T, template<typename U> class Descriptor, int xNormal, int yNo
 class AdvectionDiffusionCornerDynamics2D : public StoreDensityDynamics<T,Descriptor>
 {
 public:
-    /// Constructor
-    AdvectionDiffusionCornerDynamics2D(Dynamics<T,Descriptor>* baseDynamics,
-                                       bool automaticPrepareCollision_=true);
-    AdvectionDiffusionCornerDynamics2D(HierarchicUnserializer& unserializer);
+	/// Constructor
+	AdvectionDiffusionCornerDynamics2D(Dynamics<T,Descriptor>* baseDynamics,
+	                                   bool automaticPrepareCollision_=true);
+	AdvectionDiffusionCornerDynamics2D(HierarchicUnserializer& unserializer);
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
-    /// Clone the object on its dynamic type.
-    virtual AdvectionDiffusionCornerDynamics2D<T, Descriptor, xNormal, yNormal>* clone() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
+	/// Clone the object on its dynamic type.
+	virtual AdvectionDiffusionCornerDynamics2D<T, Descriptor, xNormal, yNormal>* clone() const;
 
-    /// Execute completion scheme before base collision
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	/// Execute completion scheme before base collision
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
 private:
-    static int id;
+	static int id;
 };
 
 
@@ -127,22 +128,22 @@ template<typename T, template<typename U> class Descriptor, int plane, int norma
 class AdvectionDiffusionEdgeDynamics3D : public StoreDensityDynamics<T,Descriptor>
 {
 public:
-    /// Constructor
-    AdvectionDiffusionEdgeDynamics3D(Dynamics<T,Descriptor>* baseDynamics,
-                                     bool automaticPrepareCollision_=true);
-    AdvectionDiffusionEdgeDynamics3D(HierarchicUnserializer& unserializer);
+	/// Constructor
+	AdvectionDiffusionEdgeDynamics3D(Dynamics<T,Descriptor>* baseDynamics,
+	                                 bool automaticPrepareCollision_=true);
+	AdvectionDiffusionEdgeDynamics3D(HierarchicUnserializer& unserializer);
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Clone the object, based on its dynamic type
-    virtual AdvectionDiffusionEdgeDynamics3D<T,Descriptor,plane,normal1,normal2>* clone() const;
+	/// Clone the object, based on its dynamic type
+	virtual AdvectionDiffusionEdgeDynamics3D<T,Descriptor,plane,normal1,normal2>* clone() const;
 
-    /// Execute completion scheme before base collision
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	/// Execute completion scheme before base collision
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
 
 private:
-    static int id;
+	static int id;
 };
 
 
@@ -151,21 +152,21 @@ template<typename T, template<typename U> class Descriptor, int xNormal, int yNo
 class AdvectionDiffusionCornerDynamics3D : public StoreDensityDynamics<T,Descriptor>
 {
 public:
-    /// Constructor
-    AdvectionDiffusionCornerDynamics3D(Dynamics<T,Descriptor>* baseDynamics,
-                                       bool automaticPrepareCollision_=true);
-    AdvectionDiffusionCornerDynamics3D(HierarchicUnserializer& unserializer);
+	/// Constructor
+	AdvectionDiffusionCornerDynamics3D(Dynamics<T,Descriptor>* baseDynamics,
+	                                   bool automaticPrepareCollision_=true);
+	AdvectionDiffusionCornerDynamics3D(HierarchicUnserializer& unserializer);
 
-    /// Return a unique ID for this class.
-    virtual int getId() const;
+	/// Return a unique ID for this class.
+	virtual int getId() const;
 
-    /// Clone the object on its dynamic type.
-    virtual AdvectionDiffusionCornerDynamics3D<T, Descriptor, xNormal, yNormal, zNormal>* clone() const;
+	/// Clone the object on its dynamic type.
+	virtual AdvectionDiffusionCornerDynamics3D<T, Descriptor, xNormal, yNormal, zNormal>* clone() const;
 
-    /// Execute completion scheme before base collision
-    virtual void completePopulations(Cell<T,Descriptor>& cell) const;
+	/// Execute completion scheme before base collision
+	virtual void completePopulations(Cell<T,Descriptor>& cell) const;
 private:
-    static int id;
+	static int id;
 };
 
 }  // namespace plb

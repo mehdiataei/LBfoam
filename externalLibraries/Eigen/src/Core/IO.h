@@ -47,29 +47,27 @@ enum { Raw, AlignCols };
   *
   * \sa MatrixBase::format(), class WithFormat
   */
-struct IOFormat
-{
-  /** Default contructor, see class IOFormat for the meaning of the parameters */
-  IOFormat(int _precision=4, int _flags=Raw,
-    const std::string& _coeffSeparator = " ",
-    const std::string& _rowSeparator = "\n", const std::string& _rowPrefix="", const std::string& _rowSuffix="",
-    const std::string& _matPrefix="", const std::string& _matSuffix="")
-  : matPrefix(_matPrefix), matSuffix(_matSuffix), rowPrefix(_rowPrefix), rowSuffix(_rowSuffix), rowSeparator(_rowSeparator),
-    coeffSeparator(_coeffSeparator), precision(_precision), flags(_flags)
-  {
-    rowSpacer = "";
-    int i = int(matSuffix.length())-1;
-    while (i>=0 && matSuffix[i]!='\n')
-    {
-      rowSpacer += ' ';
-      i--;
-    }
-  }
-  std::string matPrefix, matSuffix;
-  std::string rowPrefix, rowSuffix, rowSeparator, rowSpacer;
-  std::string coeffSeparator;
-  int precision;
-  int flags;
+struct IOFormat {
+	/** Default contructor, see class IOFormat for the meaning of the parameters */
+	IOFormat(int _precision=4, int _flags=Raw,
+	         const std::string& _coeffSeparator = " ",
+	         const std::string& _rowSeparator = "\n", const std::string& _rowPrefix="", const std::string& _rowSuffix="",
+	         const std::string& _matPrefix="", const std::string& _matSuffix="")
+		: matPrefix(_matPrefix), matSuffix(_matSuffix), rowPrefix(_rowPrefix), rowSuffix(_rowSuffix), rowSeparator(_rowSeparator),
+		  coeffSeparator(_coeffSeparator), precision(_precision), flags(_flags)
+	{
+		rowSpacer = "";
+		int i = int(matSuffix.length())-1;
+		while (i>=0 && matSuffix[i]!='\n') {
+			rowSpacer += ' ';
+			i--;
+		}
+	}
+	std::string matPrefix, matSuffix;
+	std::string rowPrefix, rowSuffix, rowSeparator, rowSpacer;
+	std::string coeffSeparator;
+	int precision;
+	int flags;
 };
 
 /** \class WithFormat
@@ -89,20 +87,20 @@ struct IOFormat
 template<typename ExpressionType>
 class WithFormat
 {
-  public:
+public:
 
-    WithFormat(const ExpressionType& matrix, const IOFormat& format)
-      : m_matrix(matrix), m_format(format)
-    {}
+	WithFormat(const ExpressionType& matrix, const IOFormat& format)
+		: m_matrix(matrix), m_format(format)
+	{}
 
-    friend std::ostream & operator << (std::ostream & s, const WithFormat& wf)
-    {
-      return ei_print_matrix(s, wf.m_matrix.eval(), wf.m_format);
-    }
+	friend std::ostream & operator << (std::ostream & s, const WithFormat& wf)
+	{
+		return ei_print_matrix(s, wf.m_matrix.eval(), wf.m_format);
+	}
 
-  protected:
-    const typename ExpressionType::Nested m_matrix;
-    IOFormat m_format;
+protected:
+	const typename ExpressionType::Nested m_matrix;
+	IOFormat m_format;
 };
 
 /** \returns a WithFormat proxy object allowing to print a matrix the with given
@@ -116,7 +114,7 @@ template<typename Derived>
 inline const WithFormat<Derived>
 MatrixBase<Derived>::format(const IOFormat& fmt) const
 {
-  return WithFormat<Derived>(derived(), fmt);
+	return WithFormat<Derived>(derived(), fmt);
 }
 
 /** \internal
@@ -124,42 +122,38 @@ MatrixBase<Derived>::format(const IOFormat& fmt) const
 template<typename Derived>
 std::ostream & ei_print_matrix(std::ostream & s, const Derived& _m, const IOFormat& fmt)
 {
-  const typename Derived::Nested m = _m;
+	const typename Derived::Nested m = _m;
 
-  int width = 0;
-  if (fmt.flags & AlignCols)
-  {
-    // compute the largest width
-    for(int j = 1; j < m.cols(); ++j)
-      for(int i = 0; i < m.rows(); ++i)
-      {
-        std::stringstream sstr;
-        sstr.precision(fmt.precision);
-        sstr << m.coeff(i,j);
-        width = std::max<int>(width, int(sstr.str().length()));
-      }
-  }
-  s.precision(fmt.precision);
-  s << fmt.matPrefix;
-  for(int i = 0; i < m.rows(); ++i)
-  {
-    if (i)
-      s << fmt.rowSpacer;
-    s << fmt.rowPrefix;
-    if(width) s.width(width);
-    s << m.coeff(i, 0);
-    for(int j = 1; j < m.cols(); ++j)
-    {
-      s << fmt.coeffSeparator;
-      if (width) s.width(width);
-      s << m.coeff(i, j);
-    }
-    s << fmt.rowSuffix;
-    if( i < m.rows() - 1)
-      s << fmt.rowSeparator;
-  }
-  s << fmt.matSuffix;
-  return s;
+	int width = 0;
+	if (fmt.flags & AlignCols) {
+		// compute the largest width
+		for(int j = 1; j < m.cols(); ++j)
+			for(int i = 0; i < m.rows(); ++i) {
+				std::stringstream sstr;
+				sstr.precision(fmt.precision);
+				sstr << m.coeff(i,j);
+				width = std::max<int>(width, int(sstr.str().length()));
+			}
+	}
+	s.precision(fmt.precision);
+	s << fmt.matPrefix;
+	for(int i = 0; i < m.rows(); ++i) {
+		if (i)
+			s << fmt.rowSpacer;
+		s << fmt.rowPrefix;
+		if(width) s.width(width);
+		s << m.coeff(i, 0);
+		for(int j = 1; j < m.cols(); ++j) {
+			s << fmt.coeffSeparator;
+			if (width) s.width(width);
+			s << m.coeff(i, j);
+		}
+		s << fmt.rowSuffix;
+		if( i < m.rows() - 1)
+			s << fmt.rowSeparator;
+	}
+	s << fmt.matSuffix;
+	return s;
 }
 
 /** \relates MatrixBase
@@ -178,7 +172,7 @@ std::ostream & operator <<
 (std::ostream & s,
  const MatrixBase<Derived> & m)
 {
-  return ei_print_matrix(s, m.eval(), EIGEN_DEFAULT_IO_FORMAT);
+	return ei_print_matrix(s, m.eval(), EIGEN_DEFAULT_IO_FORMAT);
 }
 
 #endif // EIGEN_IO_H

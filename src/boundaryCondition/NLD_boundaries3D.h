@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,7 +36,8 @@
 #include "multiBlock/multiBlockLattice3D.h"
 #include "multiBlock/coupling3D.h"
 
-namespace plb {
+namespace plb
+{
 
 /// A generic interface for non-local data processors that invoke the NLD dynamics objects.
 /** These data processors don't do anything sophisticated. They simply call the dynamics
@@ -47,14 +48,18 @@ template<typename T, template<typename U> class Descriptor>
 class ExecuteNonLocalDynamics3D : public BoxProcessingFunctional3D_L<T,Descriptor>
 {
 public:
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
-    virtual ExecuteNonLocalDynamics3D<T,Descriptor>* clone() const;
-    virtual int getStaticId() const { return staticId; }
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-    }
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
+	virtual ExecuteNonLocalDynamics3D<T,Descriptor>* clone() const;
+	virtual int getStaticId() const
+	{
+		return staticId;
+	}
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+	}
 private:
-    static const int staticId;
+	static const int staticId;
 };
 
 /// Invoke NLD dynamics objects on a plane surface.
@@ -62,19 +67,23 @@ template<typename T, template<typename U> class Descriptor>
 class ExecutePlaneNLD_3D : public BoxProcessingFunctional3D_L<T,Descriptor>
 {
 public:
-    ExecutePlaneNLD_3D();
-    ExecutePlaneNLD_3D(int direction_, int orientation_);
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
-    virtual ExecutePlaneNLD_3D<T,Descriptor>* clone() const;
-    virtual int getStaticId() const { return staticId; }
-    virtual void serialize(std::string& data) const;
-    virtual void unserialize(std::string& data);
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-    }
+	ExecutePlaneNLD_3D();
+	ExecutePlaneNLD_3D(int direction_, int orientation_);
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
+	virtual ExecutePlaneNLD_3D<T,Descriptor>* clone() const;
+	virtual int getStaticId() const
+	{
+		return staticId;
+	}
+	virtual void serialize(std::string& data) const;
+	virtual void unserialize(std::string& data);
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+	}
 private:
-    int direction, orientation;
-    static const int staticId;
+	int direction, orientation;
+	static const int staticId;
 };
 
 /// Invoke NLD dynamics objects on an edge.
@@ -82,19 +91,23 @@ template<typename T, template<typename U> class Descriptor>
 class ExecuteEdgeNLD_3D : public BoxProcessingFunctional3D_L<T,Descriptor>
 {
 public:
-    ExecuteEdgeNLD_3D();
-    ExecuteEdgeNLD_3D(int plane_, int normal1_, int normal2_);
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
-    virtual ExecuteEdgeNLD_3D<T,Descriptor>* clone() const;
-    virtual int getStaticId() const { return staticId; }
-    virtual void serialize(std::string& data) const;
-    virtual void unserialize(std::string& data);
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-    }
+	ExecuteEdgeNLD_3D();
+	ExecuteEdgeNLD_3D(int plane_, int normal1_, int normal2_);
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
+	virtual ExecuteEdgeNLD_3D<T,Descriptor>* clone() const;
+	virtual int getStaticId() const
+	{
+		return staticId;
+	}
+	virtual void serialize(std::string& data) const;
+	virtual void unserialize(std::string& data);
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+	}
 private:
-    int plane, normal1, normal2;
-    static const int staticId;
+	int plane, normal1, normal2;
+	static const int staticId;
 };
 
 /// Invoke NLD dynamics objects on a corner.
@@ -102,19 +115,23 @@ template<typename T, template<typename U> class Descriptor>
 class ExecuteCornerNLD_3D : public BoxProcessingFunctional3D_L<T,Descriptor>
 {
 public:
-    ExecuteCornerNLD_3D();
-    ExecuteCornerNLD_3D(int xNormal_, int yNormal_, int zNormal_);
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
-    virtual ExecuteCornerNLD_3D<T,Descriptor>* clone() const;
-    virtual int getStaticId() const { return staticId; }
-    virtual void serialize(std::string& data) const;
-    virtual void unserialize(std::string& data);
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const {
-        modified[0] = modif::staticVariables;
-    }
+	ExecuteCornerNLD_3D();
+	ExecuteCornerNLD_3D(int xNormal_, int yNormal_, int zNormal_);
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
+	virtual ExecuteCornerNLD_3D<T,Descriptor>* clone() const;
+	virtual int getStaticId() const
+	{
+		return staticId;
+	}
+	virtual void serialize(std::string& data) const;
+	virtual void unserialize(std::string& data);
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const
+	{
+		modified[0] = modif::staticVariables;
+	}
 private:
-    int xNormal, yNormal, zNormal;
-    static const int staticId;
+	int xNormal, yNormal, zNormal;
+	static const int staticId;
 };
 
 
@@ -136,13 +153,13 @@ void instantiateOuterNLDboundary(Actions3D& action, plint blockNum, Box3D bbox);
 /// of a given domain.
 template<typename T, template<typename U> class Descriptor>
 void setFluidNLDboundaryDynamics (
-        MultiBlockLattice3D<T,Descriptor>& lattice, Box3D bbox, Box3D domain, boundary::BcType bcType );
+    MultiBlockLattice3D<T,Descriptor>& lattice, Box3D bbox, Box3D domain, boundary::BcType bcType );
 
 /// Define the appropriate NLD dynamics, depending on whether it is
 /// dirichlet, neumann, outflow, etc., on the bounding-box of a given domain.
 template<typename T, template<typename U> class Descriptor>
 void setFluidNLDboundaryDynamics (
-        MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, boundary::BcType bcType );
+    MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, boundary::BcType bcType );
 
 
 /// Define the appropriate NLD dynamics, depending on whether it is
@@ -150,13 +167,13 @@ void setFluidNLDboundaryDynamics (
 /// of a given domain.
 template<typename T, template<typename U> class Descriptor>
 void setAD_NLDboundaryDynamics (
-        MultiBlockLattice3D<T,Descriptor>& lattice, Box3D bbox, Box3D domain, boundary::BcType bcType );
+    MultiBlockLattice3D<T,Descriptor>& lattice, Box3D bbox, Box3D domain, boundary::BcType bcType );
 
 /// Define the appropriate NLD dynamics, depending on whether it is
 /// dirichlet, neumann, outflow, etc., on the bounding-box of a given domain.
 template<typename T, template<typename U> class Descriptor>
 void setAD_NLDboundaryDynamics (
-        MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, boundary::BcType bcType );
+    MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain, boundary::BcType bcType );
 
 
 
@@ -168,23 +185,23 @@ void setNLDdynamics(MultiBlockLattice3D<T,Descriptor>& lattice, Box3D domain,
 /* *************** Class InstantiateNLDdynamicsFunctional3D ************* */
 
 template<typename T, template<typename U> class Descriptor>
-class InstantiateNLDdynamicsFunctional3D : public BoxProcessingFunctional3D_L<T,Descriptor> {
+class InstantiateNLDdynamicsFunctional3D : public BoxProcessingFunctional3D_L<T,Descriptor>
+{
 public:
-    InstantiateNLDdynamicsFunctional3D(NonLocalBoundaryDynamics3D<T,Descriptor>* dynamics_);
-    InstantiateNLDdynamicsFunctional3D(InstantiateNLDdynamicsFunctional3D<T,Descriptor> const& rhs);
-    InstantiateNLDdynamicsFunctional3D<T,Descriptor>& operator= (
-            InstantiateNLDdynamicsFunctional3D<T,Descriptor> const& rhs );
-    virtual ~InstantiateNLDdynamicsFunctional3D();
-    virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
-    virtual BlockDomain::DomainT appliesTo() const;
-    virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
-    virtual InstantiateNLDdynamicsFunctional3D<T,Descriptor>* clone() const ;
+	InstantiateNLDdynamicsFunctional3D(NonLocalBoundaryDynamics3D<T,Descriptor>* dynamics_);
+	InstantiateNLDdynamicsFunctional3D(InstantiateNLDdynamicsFunctional3D<T,Descriptor> const& rhs);
+	InstantiateNLDdynamicsFunctional3D<T,Descriptor>& operator= (
+	    InstantiateNLDdynamicsFunctional3D<T,Descriptor> const& rhs );
+	virtual ~InstantiateNLDdynamicsFunctional3D();
+	virtual void process(Box3D domain, BlockLattice3D<T,Descriptor>& lattice);
+	virtual BlockDomain::DomainT appliesTo() const;
+	virtual void getTypeOfModification(std::vector<modif::ModifT>& modified) const;
+	virtual InstantiateNLDdynamicsFunctional3D<T,Descriptor>* clone() const ;
 private:
-    NonLocalBoundaryDynamics3D<T,Descriptor>* dynamics;
+	NonLocalBoundaryDynamics3D<T,Descriptor>* dynamics;
 };
 
 
 }  // namespace plb
 
 #endif  // NLD_BOUNDARIES_3D_H
-

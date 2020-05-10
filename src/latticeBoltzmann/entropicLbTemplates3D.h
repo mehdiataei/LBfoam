@@ -5,7 +5,7 @@
  * 1010 Lausanne, Switzerland
  * E-mail contact: contact@flowkit.com
  *
- * The most recent release of Palabos can be downloaded at 
+ * The most recent release of Palabos can be downloaded at
  * <http://www.palabos.org/>
  *
  * The library Palabos is free software: you can redistribute it and/or
@@ -36,7 +36,8 @@
 #include "latticeBoltzmann/nearestNeighborLattices3D.h"
 #include <cmath>
 
-namespace plb {
+namespace plb
+{
 
 /// Whatever is commented out corresponds to an old version, but as of now
 /// nobody is able to say what it is doing.
@@ -57,58 +58,58 @@ namespace plb {
 //        T c_u5 = c_u4*c_u;
 //        T c_u6 = c_u5*c_u;
 //        T c_u7 = c_u6*c_u;
-        
+
 //        T uSqr = u[0]*u[0] + u[1]*u[1] + u[2]*u[2];
 //        T uSqr2 = uSqr*uSqr;
 //        T uSqr3 = uSqr2*uSqr;
-        
+
 //        T powUx = u[0]*u[0]*u[0]*u[0]*u[0]; // u_x^5
 //        T powUy = u[1]*u[1]*u[1]*u[1]*u[1]; // u_y^5
 //        T powUz = u[2]*u[2]*u[2]*u[2]*u[2]; // u_z^5
-        
+
 //        T C = L::c[iPop][0] * powUx + L::c[iPop][1] * powUy
 //                + L::c[iPop][2] * powUz;
-        
+
 //        powUx *= u[0]; // u_x^6
 //        powUy *= u[1]; // u_y^6
 //        powUz *= u[2]; // u_z^6
-        
+
 //        T E = powUx + powUy + powUz;
-        
+
 //        powUx *= u[0]; // u_x^7
 //        powUy *= u[1]; // u_y^7
 //        powUz *= u[2]; // u_z^7
-        
+
 //        T F = L::c[iPop][0] * powUx + L::c[iPop][1] * powUy + L::c[iPop][2] * powUz;
-        
+
 //        return L::t[iPop] * rho *
 //              ((T)1
 //                + c_u*(C*(T)81/(T)20 + uSqr2*(T)27/(T)8 - uSqr*(T)9/(T)2
 //                - E*(T)81/(T)24 - uSqr3*(T)81/(T)48 + (T)3)
-                
+
 //                + c_u2*(uSqr2*(T)81/(T)16 - uSqr*(T)27/(T)4
 //                + C*(T)243/(T)40 + (T)9/(T)2)
-                
+
 //                + c_u3*(uSqr2*(T)243/(T)48 - uSqr*(T)81/(T)12 + (T)27/(T)6)
-                
+
 //                - c_u4*uSqr*(T)243/(T)48
 //                + c_u4*(T)81/(T)24
-                
+
 //                - c_u5*uSqr*(T)729/(T)240
 //                + c_u5*(T)243/(T)120
-                
+
 //                + c_u6*(T)729/(T)720
-                
+
 //                + c_u7*(T)2187/(T)5040
-                
+
 //                - C*uSqr*(T)81/(T)40
-                
+
 //                + C*(T)27/(T)20 - uSqr3*(T)27/(T)48 - E*(T)27/(T)24
 //                - F*(T)81/(T)56 - uSqr*(T)3/(T)2 + uSqr2*(T)9/(T)8
 //                )
 //                - L::SkordosFactor()*L::t[iPop];
 //    }
-    
+
 //};
 
 //template<typename T>
@@ -232,22 +233,20 @@ namespace plb {
 
 // Ansumali, Karlin, Ottinger (2003) for D3Q19
 template<typename T>
-struct entropicLbTemplates<T, descriptors::D3Q19Descriptor>
-{
-    static T equilibrium( plint iPop, T rhoBar, Array<T,3> const& u)
-    {
-        typedef descriptors::D3Q19Descriptor<T> L;
+struct entropicLbTemplates<T, descriptors::D3Q19Descriptor> {
+	static T equilibrium( plint iPop, T rhoBar, Array<T,3> const& u)
+	{
+		typedef descriptors::D3Q19Descriptor<T> L;
 
-        T prod = (T)1;
-        for (int iD=0; iD < 3; ++iD)
-        {
-            T u2 = u[iD] * u[iD];
+		T prod = (T)1;
+		for (int iD=0; iD < 3; ++iD) {
+			T u2 = u[iD] * u[iD];
 
-            prod *= ((T)2 - sqrt(1.0+u2*3.)) *
-                    pow((2.*u[iD] + sqrt(1.0+u2*3.))/(1.0-u[iD]), L::c[iPop][iD]);
-        }
-        return ((rhoBar+L::SkordosFactor())*prod-L::SkordosFactor())*L::t[iPop];
-    }
+			prod *= ((T)2 - sqrt(1.0+u2*3.)) *
+			        pow((2.*u[iD] + sqrt(1.0+u2*3.))/(1.0-u[iD]), L::c[iPop][iD]);
+		}
+		return ((rhoBar+L::SkordosFactor())*prod-L::SkordosFactor())*L::t[iPop];
+	}
 
 };
 }

@@ -2,12 +2,9 @@
 "#############################################################################"
 "                                                                             "
 "  LBfoam: An open-source software package for the simulation of foaming      "
-"  using the Lattice Boltzmann Method               	                      "
-"  Copyright (C) 2020 Mohammadmehdi Ataei                                     "
-"  m.ataei@mail.utoronto.ca                                                  "
-"                                                                             "
-"  This file is part of LBfoam.                                               "
-"                                                                             "
+"  using the Lattice Boltzmann Method " "  Copyright (C) 2020 Mohammadmehdi
+Ataei                                     " "  m.ataei@mail.utoronto.ca " " " "
+This file is part of LBfoam.                                               " " "
 "  LBfoam is free software: you can redistribute it and/or modify it under    "
 "  the terms of the GNU Affero General Public License as published by the     "
 "  Free Software Foundation version 3.                                        "
@@ -90,9 +87,6 @@ struct SimulationParameters {
   T shift;
   T radius;
   T packingOffset;
-  T bdy;
-  T bdx;
-  T bdz;
   std::string distribution;
 
   T contactAngle;
@@ -175,6 +169,34 @@ void readUserDefinedSimulationParameters(std::string xmlInputFileName,
   document["output"]["outIter"].read(param.outIter);
 }
 
+template <typename T, template <typename U> class Descriptor>
+class SourceTerm : public BoxProcessingFunctional3D_L<T, Descriptor> {
+ public:
+  SourceTerm(T source_) : source(source_){};
+  virtual void process(Box3D domain, BlockLattice3D<T, Descriptor> &lattice) {
+    for (plint iX = domain.x0; iX <= domain.x1; ++iX) {
+      for (plint iY = domain.y0; iY <= domain.y1; ++iY) {
+        for (plint iZ = domain.z0; iZ <= domain.z1; ++iZ) {
+          lattice.get(iX, iY, iZ)
+              .setExternalField(Descriptor<T>::ExternalField::scalarBeginsAt,
+                                Descriptor<T>::ExternalField::sizeOfScalar,
+                                &source);
+        }
+      }
+    }
+  };
+  virtual SourceTerm<T, Descriptor> *clone() const {
+    return new SourceTerm<T, Descriptor>(*this);
+  };
+  virtual void getTypeOfModification(
+      std::vector<modif::ModifT> &modified) const {
+    modified[0] = modif::staticVariables;
+  };
+
+ private:
+  T source;
+};
+
 void calculateDerivedSimulationParameters(SimulationParameters &param) {
   // Derived quantities.
 
@@ -224,20 +246,11 @@ void calculateDerivedSimulationParameters(SimulationParameters &param) {
         break;
       }
 
-      // int yDist = std::abs(sample[1] - param.fluidPoolHeight_LB / 2);
-
-      // int s = rand() % (param.fluidPoolHeight_LB / 2);
-
-      // if (s > yDist * 1.5)
-
-      // {
-
       Array<T, 3> center(sample[0], sample[1], sample[2]);
 
       param.nucleiCenters.insert(std::pair<int, Array<T, 3>>(N, center));
 
       N++;
-      // }
     }
   }
 }
@@ -246,7 +259,7 @@ void printSimulationParameters(SimulationParameters const &param) {
   pcout << "fluidPoolHeight_LB = " << param.fluidPoolHeight_LB << std::endl;
 
   pcout << "g_LB = (" << param.gVector_LB[0] << ", " << param.gVector_LB[1]
-        << " )" << std::endl;
+        << ", " << param.gVector_LB[2] << " )" << std::endl;
   pcout << "rho_LB = " << param.rho_LB << std::endl;
   pcout << "sigma_LB = " << param.sigma_LB << std::endl;
   pcout << "omega = " << param.omega << std::endl;
@@ -261,6 +274,8 @@ void printSimulationParameters(SimulationParameters const &param) {
   pcout << "Kh_LB = " << param.kh_LB << std::endl;
   pcout << "maxIter = " << param.maxIter << std::endl;
   pcout << "cSmago = " << param.cSmago << std::endl;
+  pcout << "source = " << param.source_LB << std::endl;
+
   pcout << "freezeLargestBubble = "
         << (param.freezeLargestBubble ? "true" : "false") << std::endl;
   pcout << "bubbleVolumeRatio = " << param.bubbleVolumeRatio << std::endl;
@@ -417,7 +432,7 @@ int main(int argc, char **argv) {
       createRegularDistribution3D(param.nx, param.ny, param.nz));
 
   Dynamics<T, DESCRIPTOR> *dynamics =
-      new SmagorinskyBGKdynamics<T, DESCRIPTOR>(param.omega, param.cSmago);
+      new BGKdynamics<T, DESCRIPTOR>(param.omega);
   Dynamics<T, ADESCRIPTOR> *adynamics =
       new ADYNAMICS<T, ADESCRIPTOR>(param.adOmega);
   Dynamics<T, ADESCRIPTOR> *emptyDynamics = new NoDynamics<T, ADESCRIPTOR>();
@@ -472,6 +487,8 @@ int main(int argc, char **argv) {
   // MultiScalarField3D<T> newvof = fields.volumeFraction;
   MultiScalarField3D<T> oldvof = fields.volumeFraction;
 
+  integrateProcessingFunctional(new SourceTerm<T, ADESCRIPTOR>(param.source_LB),
+                                adLattice.getBoundingBox(), adLattice);
   // Main iteration loop.
   for (plint iT = iniIter; iT < param.maxIter; iT++) {
     if (iT % param.statIter == 0 || iT == param.maxIter - 1) {
@@ -488,11 +505,6 @@ int main(int argc, char **argv) {
       }
       pcout << std::endl;
     }
-
-    //        if (iT == 3500) {
-    //            pcout << "hello" << std::endl;
-    //            param.outIter=1;
-    //        }
 
     if (iT % param.outIter == 0 || iT == param.maxIter - 1) {
       pcout << "Writing results at iteration " << iT << std::endl;
@@ -542,7 +554,7 @@ int main(int argc, char **argv) {
     applyProcessingFunctional(
         new GrowthCoupling3D<T, ADESCRIPTOR, DESCRIPTOR>(
             adynamics->clone(), emptyDynamics->clone(), param.kh_LB,
-            bubbleGrowth.getBubbles(), param.surfaceDiffusion, param.source_LB),
+            bubbleGrowth.getBubbles(), param.surfaceDiffusion),
         adLattice.getBoundingBox(), couplingBlocks);
 
     adLattice.collideAndStream();

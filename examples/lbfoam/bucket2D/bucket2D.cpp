@@ -194,6 +194,31 @@ void readUserDefinedSimulationParameters(std::string xmlInputFileName,
   document["output"]["outDir"].read(outDir);
 }
 
+template <typename T, template <typename U> class Descriptor>
+class SourceTerm : public BoxProcessingFunctional2D_L<T, Descriptor> {
+ public:
+  SourceTerm(T source_) : source(source_){};
+  virtual void process(Box2D domain, BlockLattice2D<T, Descriptor> &lattice) {
+    for (plint iX = domain.x0; iX <= domain.x1; ++iX) {
+      for (plint iY = domain.y0; iY <= domain.y1; ++iY) {
+        lattice.get(iX, iY).setExternalField(
+            Descriptor<T>::ExternalField::scalarBeginsAt,
+            Descriptor<T>::ExternalField::sizeOfScalar, &source);
+      }
+    }
+  };
+  virtual SourceTerm<T, Descriptor> *clone() const {
+    return new SourceTerm<T, Descriptor>(*this);
+  };
+  virtual void getTypeOfModification(
+      std::vector<modif::ModifT> &modified) const {
+    modified[0] = modif::staticVariables;
+  };
+
+ private:
+  T source;
+};
+
 void calculateDerivedSimulationParameters(SimulationParameters &param) {
   // Derived quantities.
 
@@ -525,6 +550,9 @@ int main(int argc, char **argv) {
 
   // MultiScalarField2D<T> newvof = fields.volumeFraction;
   MultiScalarField2D<T> oldvof = fields.volumeFraction;
+
+  integrateProcessingFunctional(new SourceTerm<T, ADESCRIPTOR>(param.source_LB),
+                                adLattice.getBoundingBox(), adLattice);
 
   // Main iteration loop.
   for (plint iT = iniIter; iT < param.maxIter; iT++) {

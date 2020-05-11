@@ -1260,7 +1260,6 @@ void AdvectionDiffusionWithSourceBGKdynamics<T,Descriptor>::collide (
     advectionDiffusionMomentTemplates<T,Descriptor>::get_rhoBar_jEq(cell, rhoBar, jEq);
 
     T sourceTerm = *cell.getExternal(Descriptor<T>::ExternalField::scalarBeginsAt);
-    
     T uSqr = advectionDiffusionDynamicsTemplates<T,Descriptor>::
             no_corr_bgk_collision(cell, rhoBar, jEq, this->getOmega(), sourceTerm);
     

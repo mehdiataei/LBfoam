@@ -29,7 +29,7 @@
     <!-- Fluid density. -->
     <rho_LB> 1.0 </rho_LB>
 
-    <R_s> 50 </R_s>
+    <R_s> 1 </R_s>
 
     <p_ini> 0.33 </p_ini>
 
@@ -37,13 +37,13 @@
 
     <tau_LB> 0.95 </tau_LB>
 
-    <sigma_LB> 5e-3 </sigma_LB>
+    <sigma_LB> 5e-4 </sigma_LB>
 
     <contactAngle> -1.0 </contactAngle>
 
     <tauD_LB> 0.53 </tauD_LB>
 
-    <gasIni_LB> 0.018 </gasIni_LB>
+    <gasIni_LB> 0.0 </gasIni_LB>
 
     <kh_LB> 1.e-5 </kh_LB>
 
@@ -80,6 +80,6 @@
     <!-- Number of iterations for terminal output. -->
     <statIter> 10 </statIter>
     <!-- Number of iterations for disk output. -->
-    <outIter> 100 </outIter>
+    <outIter> 10 </outIter>
 </output>
 

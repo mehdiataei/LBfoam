@@ -2,9 +2,9 @@
 "#############################################################################"
 "                                                                             "
 "  LBfoam: An open-source software package for the simulation of foaming      "
-"  using the Lattice Boltzmann Method               	                      "
+"  using the Lattice Boltzmann Method                 	                      "
 "  Copyright (C) 2020 Mohammadmehdi Ataei                                     "
-"  m.ataei@mail.utoronto.ca                                                  "
+"  m.ataei@mail.utoronto.ca                                                   "
 "                                                                             "
 "  This file is part of LBfoam.                                               "
 "                                                                             "
@@ -719,15 +719,12 @@ template <typename T, template <typename U1> class AD_Descriptor,
 GrowthCoupling2D<T, AD_Descriptor, FS_Descriptor>::GrowthCoupling2D(
     Dynamics<T, AD_Descriptor> *advectionDiffusionDynamics_,
     Dynamics<T, AD_Descriptor> *emptyDynamics_, T Kh_,
-    std::map<plint, BubbleInfo2D> const &bubbles_, bool surfaceDiffusion_,
-    T source_)
+    std::map<plint, BubbleInfo2D> const &bubbles_, bool surfaceDiffusion_)
     : advectionDiffusionDynamics(advectionDiffusionDynamics_),
       emptyDynamics(emptyDynamics_),
       Kh(Kh_),
       bubbles(bubbles_),
-      surfaceDiffusion(surfaceDiffusion_),
-      source(source_)
-
+      surfaceDiffusion(surfaceDiffusion_)
 {}
 
 template <typename T, template <typename U1> class AD_Descriptor,
@@ -788,9 +785,7 @@ void GrowthCoupling2D<T, AD_Descriptor, FS_Descriptor>::processGenericBlocks(
       if (isFullWet(flag)) {
         gasLattice->attributeDynamics(iX, iY,
                                       advectionDiffusionDynamics->clone());
-        gasCell.setExternalField(
-            AD_Descriptor<T>::ExternalField::scalarBeginsAt,
-            AD_Descriptor<T>::ExternalField::sizeOfScalar, &source);
+
         Array<T, 2> velocity;
         fluidCell.computeVelocity(velocity);
         velocity.to_cArray(u);
@@ -942,9 +937,7 @@ GrowthCoupling2D<T, AD_Descriptor, FS_Descriptor>::GrowthCoupling2D(
       emptyDynamics(rhs.emptyDynamics->clone()),
       Kh(rhs.Kh),
       bubbles(rhs.bubbles),
-      surfaceDiffusion(rhs.surfaceDiffusion),
-      source(rhs.source)
-
+      surfaceDiffusion(rhs.surfaceDiffusion)
 {}
 
 template <typename T, template <typename U1> class AD_Descriptor,

@@ -4,7 +4,7 @@
 "  LBfoam: An open-source software package for the simulation of foaming      "
 "  using the Lattice Boltzmann Method               	                      "
 "  Copyright (C) 2020 Mohammadmehdi Ataei                                     "
-"  m.ataei@mail.utoronto.ca                                                  "
+"  m.ataei@mail.utoronto.ca                                                   "
 "                                                                             "
 "  This file is part of LBfoam.                                               "
 "                                                                             "

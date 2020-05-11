@@ -4,7 +4,7 @@
 "  LBfoam: An open-source software package for the simulation of foaming      "
 "  using the Lattice Boltzmann Method               	                      "
 "  Copyright (C) 2020 Mohammadmehdi Ataei                                     "
-"  m.ataei@mail.utoronto.ca                                                  "
+"  m.ataei@mail.utoronto.ca                                                   "
 "                                                                             "
 "  This file is part of LBfoam.                                               "
 "                                                                             "
@@ -221,7 +221,7 @@ class GrowthCoupling2D : public BoxProcessingFunctional2D {
   GrowthCoupling2D(Dynamics<T, AD_Descriptor> *advectionDiffusionDynamics_,
                    Dynamics<T, AD_Descriptor> *emptyDynamics_, T Kh_,
                    std::map<plint, BubbleInfo2D> const &bubbles_,
-                   bool surfaceDiffusion_, T source_);
+                   bool surfaceDiffusion_);
   ~GrowthCoupling2D();
   GrowthCoupling2D(
       GrowthCoupling2D<T, AD_Descriptor, FS_Descriptor> const &rhs);
@@ -240,7 +240,6 @@ class GrowthCoupling2D : public BoxProcessingFunctional2D {
   T Kh;
   std::map<plint, BubbleInfo2D> bubbles;
   bool surfaceDiffusion;
-  T source;
 };
 
 }  // namespace lbfoam

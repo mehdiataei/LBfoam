@@ -24,9 +24,9 @@
     <numRows> 10 </numRows>
     <shift> 30 </shift>
     <radius> 4 </radius>
-    <distribution> organized </distribution>
+    <distribution> random </distribution>
     <packingOffset> 1 </packingOffset>
-    <numberOfBubbles>  80  </numberOfBubbles>
+    <numberOfBubbles>  200  </numberOfBubbles>
 
 </Nucleation>
 

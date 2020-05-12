@@ -612,7 +612,7 @@ int main(int argc, char **argv) {
     applyProcessingFunctional(
         new GrowthCoupling2D<T, ADESCRIPTOR, DESCRIPTOR>(
             adynamics->clone(), emptyDynamics->clone(), param.kh_LB,
-            bubbleGrowth.getBubbles(), param.surfaceDiffusion, param.source_LB),
+            bubbleGrowth.getBubbles(), param.surfaceDiffusion),
         adLattice.getBoundingBox(), couplingBlocks);
 
     adLattice.collideAndStream();

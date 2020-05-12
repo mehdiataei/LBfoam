@@ -40,14 +40,12 @@ Run the example using the following command:
 
 ```
 $ ./bucket2D bucket2D.xml
-
 ```
 
 To run the example in parallel using 8 cores for example:
 
 ```
 $ ./mpirun -np 8 bucket2D bucket2D.xml
-
 ```
 
 # Getting help and bug report

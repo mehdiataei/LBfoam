@@ -552,7 +552,7 @@ void CalculateDisjoiningPressure2D<T, Descriptor>::processGenericBlocks(
             vertp.resize(no_of_rows, std::vector<T>(no_of_cols, initial_value));
 
             squareMesh(vertp);
-            enforv2dsz(c, dx, dx, iVF, vertp, outwardiNormal);
+            PLIC2D(c, dx, dx, iVF, vertp, outwardiNormal);
 
             iDelta = (outwardiNormal[0] + outwardiNormal[1]) * 0.5 + c;
 

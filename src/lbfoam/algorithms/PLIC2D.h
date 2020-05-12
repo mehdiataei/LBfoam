@@ -82,7 +82,7 @@ void squareMesh(std::vector<std::vector<T>> &vertp) {
 }
 
 template <typename T>
-void enforv2dsz(T &c, T &dx, T &dy, T &v, std::vector<std::vector<T>> &vertp,
+void PLIC2D(T &c, T &dx, T &dy, T &v, std::vector<std::vector<T>> &vertp,
                 plb::Array<T, 2> normal) {
   T cMin = 1.0e+14;
   T cMax = -1.0e+14;

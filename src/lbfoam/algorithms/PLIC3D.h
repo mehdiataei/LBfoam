@@ -101,7 +101,7 @@ void cubicmesh(std::vector<std::vector<T>> &vertp) {
 }
 
 template <typename T>
-void enforv3dsz(T &c, T &dx, T &dy, T &dz, T &v,
+void PLIC3D(T &c, T &dx, T &dy, T &dz, T &v,
                 std::vector<std::vector<T>> &vertp, Array<T, 3> normal) {
   T tol = 1.e-9;
   T cMin = 1.e+14;

@@ -609,7 +609,7 @@ void CalculateDisjoiningPressure3D<T, Descriptor>::processGenericBlocks(
                            std::vector<T>(no_of_cols, initial_value));
 
               cubicmesh(vertp);
-              enforv3dsz(c, dx, dx, dx, iVF, vertp, outwardiNormal);
+              PLIC3D(c, dx, dx, dx, iVF, vertp, outwardiNormal);
 
               iDelta =
                   (outwardiNormal[0] + outwardiNormal[1] + outwardiNormal[2]) *

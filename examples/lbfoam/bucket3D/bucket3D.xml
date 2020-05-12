@@ -78,8 +78,8 @@
 
 <output>
     <!-- Number of iterations for terminal output. -->
-    <statIter> 10 </statIter>
+    <statIter> 100 </statIter>
     <!-- Number of iterations for disk output. -->
-    <outIter> 10 </outIter>
+    <outIter> 500 </outIter>
 </output>
 

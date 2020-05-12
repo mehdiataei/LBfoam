@@ -4,14 +4,14 @@ LBfoam is an open-source CFD solver based on the lattice Boltzmann method for fo
 
 # Installation
 
-LBfoam installation is very similar to the Palabos library and it does not depend on any external dependencies.
+LBfoam installation is very similar to the Palabos library and it does not depend on any external dependencies. LBfoam uses [`Scons`](https://scons.org/) build tool.
 
-The mandatory packages are `gcc` (or `clang`), `make`, `python2`. For MPI parallel computations, `libopenmpi` library is required. To output results in `.gif` format, `imagemagick` library must be installed.
+The mandatory packages for installation are `gcc` (or `clang`), `make`, `python3`. For MPI parallel computations, `libopenmpi` library is required. To output results in `.gif` format, `imagemagick` library must be installed.
 
 For Debian based distributions, the following command can install the required libraries.
 
 ```
-$ sudo apt install gcc python python3 make imagemagick libopenmpi-dev
+$ sudo apt install gcc python3 make imagemagick libopenmpi-dev
 ```
 
 

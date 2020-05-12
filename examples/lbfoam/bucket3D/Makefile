@@ -15,7 +15,7 @@
 #                optimFlags   = -O -finline-functions
 
 # Leading directory of the Palabos source code
-palabosRoot  = ../../../
+palabosRoot  = ../../..
 # Name of source files in current directory to compile and link with Palabos
 projectFiles = bucket3D.cpp
 #projectFiles = fallingDroplet.cpp
@@ -88,7 +88,7 @@ SConsArgs = palabosRoot=$(palabosRoot) \
             libraries="$(libraries)"
 
 compile:
-	python2.7 $(SCons) $(SConsArgs)
+	python3 $(SCons) $(SConsArgs)
 
 clean:
 	python2.7 $(SCons) -c $(SConsArgs)

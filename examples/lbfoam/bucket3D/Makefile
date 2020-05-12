@@ -91,5 +91,5 @@ compile:
 	python3 $(SCons) $(SConsArgs)
 
 clean:
-	python2.7 $(SCons) -c $(SConsArgs)
+	python3 $(SCons) -c $(SConsArgs)
 	/bin/rm -vf `find $(palabosRoot) -name '*~'`

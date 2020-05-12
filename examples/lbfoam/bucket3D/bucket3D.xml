@@ -41,13 +41,13 @@
 
     <contactAngle> -1.0 </contactAngle>
 
-    <tauD_LB> 0.53 </tauD_LB>
+    <tauD_LB> 0.6 </tauD_LB>
 
     <gasIni_LB> 0.0 </gasIni_LB>
 
     <kh_LB> 1.e-5 </kh_LB>
 
-    <pi_LB> 8.0e-3 </pi_LB>
+    <pi_LB> 1.0e-2 </pi_LB>
 
     <source_LB> 5.0e-5 </source_LB>
 

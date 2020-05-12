@@ -34,8 +34,6 @@
     <!-- Fluid density. -->
     <rho_LB> 1.0 </rho_LB>
 
-    <densityRatio> 0.01 </densityRatio>
-
     <R_s> 1 </R_s>
 
     <p_ini> 0.33 </p_ini>

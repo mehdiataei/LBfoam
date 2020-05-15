@@ -68,6 +68,8 @@
 
 namespace plb {
 
+namespace lbfoam {
+
 // Implementation of the momentum correction algorithm for applying a constant
 // body force.
 template <typename T, template <typename U> class Descriptor>
@@ -229,6 +231,7 @@ void freeSurfaceComputeRotatingFrameForce(
     Array<T, 2> const& angularVelocity, Array<T, 2> const& origin,
     bool incompressibleModel, Box2D domain);
 
+}  // namespace lbfoam
 }  // namespace plb
 
 #endif  // BODY_FORCE_2D_H

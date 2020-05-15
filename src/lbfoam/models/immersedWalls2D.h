@@ -66,6 +66,8 @@
 
 namespace plb {
 
+namespace lbfoam {
+
 /* ******** FavierDeltaFunction ************************************ */
 
 template <typename T>
@@ -955,6 +957,7 @@ void twoPhaseConstVelInamuroIteration(
       rhoBar.getBoundingBox(), args);
 }
 
+}  // namespace lbfoam
 }  // namespace plb
 
 #endif  // IMMERSED_WALLS_2D_H

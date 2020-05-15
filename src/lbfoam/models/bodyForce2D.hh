@@ -60,6 +60,8 @@
 
 namespace plb {
 
+namespace lbfoam {
+
 /* ****************** AddConstForceToMomentum2D
  * *************************************************** */
 
@@ -555,8 +557,8 @@ void FreeSurfaceComputeRotatingFrameForce2D<
         newForce = constantForce;
 
         // Coriolis and centripetal forces.
-        Array<T, 3> r(x, y);
-        Array<T, 3> velocity(j->get(iX + ofsJ.x, iY + ofsJ.y));
+        Array<T, 2> r(x, y);
+        Array<T, 2> velocity(j->get(iX + ofsJ.x, iY + ofsJ.y));
         if (!incompressibleModel) {
           T rho = Descriptor<T>::fullRho(
               rhoBar->get(iX + ofsRhoBar.x, iY + ofsRhoBar.y));
@@ -616,6 +618,7 @@ void freeSurfaceComputeRotatingFrameForce(
       domain, args);
 }
 
+}  // namespace lbfoam
 }  // namespace plb
 
 #endif  // BODY_FORCE_2D_HH

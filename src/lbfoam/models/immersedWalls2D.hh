@@ -63,6 +63,8 @@
 
 namespace plb {
 
+namespace lbfoam {
+
 /* ******** ReduceAxialTorqueImmersed2D ************************************ */
 
 template <typename T>
@@ -1698,6 +1700,7 @@ BlockDomain::DomainT TwoPhaseConstVelInamuroIteration2D<T>::appliesTo() const {
   return BlockDomain::bulk;
 }
 
+}  // namespace lbfoam
 }  // namespace plb
 
 #endif  // IMMERSED_WALLS_2D_HH

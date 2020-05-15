@@ -61,3 +61,4 @@
 #include "lbfoam/models/freeSurfaceBoundaryCondition2D.hh"
 #include "lbfoam/models/freeSurfaceInitializer2D.hh"
 #include "lbfoam/models/freeSurfaceModel2D.hh"
+#include "lbfoam/models/immersedWalls2D.hh"

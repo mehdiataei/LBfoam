@@ -65,3 +65,6 @@
 #include "lbfoam/models/freeSurfaceBoundaryCondition2D.h"
 #include "lbfoam/models/freeSurfaceInitializer2D.h"
 #include "lbfoam/models/freeSurfaceModel2D.h"
+#include "lbfoam/models/freeSurfaceTemplates2D.h"
+#include "lbfoam/models/freeSurfaceUtil2D.h"
+#include "lbfoam/models/immersedWalls2D.h"

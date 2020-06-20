@@ -77,9 +77,6 @@ typedef double T;
 std::string outDir;
 
 struct SimulationParameters {
-  /*
-   * Parameters set by the user.
-   */
 
   // Geometric parameters.
   std::map<int, Array<T, 2>> nucleiCenters;
@@ -115,10 +112,6 @@ struct SimulationParameters {
 
   plint statIter;  // Output parameters.
   plint outIter;
-
-  /*
-   * Parameters NOT set by the user.
-   */
 
   plint nx, ny;
   Array<T, 2> gVector_LB;
@@ -260,11 +253,6 @@ void calculateDerivedSimulationParameters(SimulationParameters &param) {
       }
     }
   } else if (param.distribution == "random") {
-    //       std::random_device rd;  //Will be used to obtain a seed for the
-    //       random number engine
-
-    //       std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded
-    //       with rd()
 
     T lowX = totalOffset;
     T highX = param.nx - param.shift - param.bucketOffset_LB -
@@ -299,16 +287,11 @@ void calculateDerivedSimulationParameters(SimulationParameters &param) {
 
       int s = rand() % (param.fluidPoolHeight_LB / 2);
 
-      // if (s > yDist * 1.5)
-
-      // {
-
       Array<T, 2> center(sample[0], sample[1]);
 
       param.nucleiCenters.insert(std::pair<int, Array<T, 2>>(N, center));
 
       N++;
-      // }
     }
   }
 
@@ -460,7 +443,6 @@ void writeResults(FreeSurfaceFields2D<T, DESCRIPTOR> *fields,
 plint numRememberedVolumes = 1;
 
 int main(int argc, char **argv) {
-  // feenableexcept(FE_INVALID | FE_OVERFLOW);
 
   plbInit(&argc, &argv);
 

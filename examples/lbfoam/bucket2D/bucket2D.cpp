@@ -412,7 +412,6 @@ void writeResults(FreeSurfaceFields2D<T, DESCRIPTOR> *fields,
   std::vector<T> isoLevels;
   isoLevels.push_back(0.5);
 
-  // T coef = 1.0 / 3.0;
   VtkImageOutput2D<T> vtkOut(
       createFileName(outDir + "volumeData_", iT, PADDING));
   std::auto_ptr<MultiTensorField2D<T, 2>> v = computeVelocity(fields->lattice);

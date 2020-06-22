@@ -22,11 +22,11 @@
 <Nucleation>
     <numNuclei> 10 </numNuclei>
     <numRows> 10 </numRows>
-    <shift> 30 </shift>
+    <shift> 10 </shift>
     <radius> 4 </radius>
     <distribution> random </distribution>
     <packingOffset> 1 </packingOffset>
-    <numberOfBubbles>  200  </numberOfBubbles>
+    <numberOfBubbles>  250  </numberOfBubbles>
 
 </Nucleation>
 
@@ -61,14 +61,14 @@
 </fluid>
 
 <numerics>
-    <gravity> false </gravity>
+    <gravity> true </gravity>
 
     <entrapBubbles> true </entrapBubbles>
 
     <g_LB> 5.0e-5 </g_LB>
     <!-- Total number of lattice nodes in the unit length. -->
 
-    <maxIter> 6000000 </maxIter>
+    <maxIter> 10000 </maxIter>
     <!-- Smagorinsky LES model parameter. -->
     <cSmago> 0.0 </cSmago>
     <!-- Freeze the ambient space or not. If set to true, be careful so that

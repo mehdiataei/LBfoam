@@ -78,4 +78,4 @@ $ mpirun -np 8 bucket2D bucket2D.xml
 
 # Getting help and bug report
 
-Please submit an issue of contact m.ataei@mail.utoronto.ca if you found a bug in the program or needed help with the software.
+Please submit a Github issue, or contact m.ataei@mail.utoronto.ca if you found a bug in the program or needed help with the software.

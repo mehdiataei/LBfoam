@@ -13,6 +13,7 @@
 
 LBfoam is an open-source CFD solver based on the lattice Boltzmann method for foaming simulations. The solver is an extended version of the [Palabos](https://palabos.unige.ch/) library.
 
+The preprint is available [here](https://arxiv.org/abs/1908.04262), which is currently under review. 
 # Highlighted Features
 
 * 2D/3D Free Surface Lattice Boltzmann (FSLBM) solver

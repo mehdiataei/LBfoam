@@ -18,7 +18,7 @@ The preprint is available [here](https://arxiv.org/abs/1908.04262), which is cur
 
 * 2D/3D Free Surface Lattice Boltzmann (FSLBM) solver
 * Coupling of the Navier-Stokes equation and advection-dffisuion equation for the simulation bubble growth
-* Implementation of bubble interaction using a Piecewise Linear Interface Reconstruction (PLIC) and a Ray Tracing algorithms
+* Implementation of bubble interaction using Piecewise Linear Interface Reconstruction (PLIC) and Ray Tracing algorithms
 * Nucleating bubbles based on a nucleation probability field using the [Poisson-Disc Sampling](https://en.wikipedia.org/wiki/Poisson_sampling) algorithm
 * Fully-parallelized using the [Message Passing Interface (MPI)](https://www.open-mpi.org/) library
 

@@ -64,9 +64,12 @@
 using namespace plb;
 using namespace lbfoam;
 
+// Define type of lattice
 #define DESCRIPTOR descriptors::ForcedD2Q9Descriptor
 //#define ADESCRIPTOR descriptors::AdvectionDiffusionD2Q5Descriptor
 #define ADESCRIPTOR descriptors::AdvectionDiffusionWithSourceD2Q5Descriptor
+
+// Define dynamics model (BGK, RLB, etc.)
 
 #define ADYNAMICS AdvectionDiffusionBGKdynamics
 #define ADYNAMICSWS AdvectionDiffusionWithSourceRLBdynamics
@@ -77,7 +80,6 @@ typedef double T;
 std::string outDir;
 
 struct SimulationParameters {
-
   // Geometric parameters.
   std::map<int, Array<T, 2>> nucleiCenters;
   int numNuclei;
@@ -129,6 +131,7 @@ struct SimulationParameters {
 
 SimulationParameters param;
 
+// This function reads the simulation parameters from the XML file
 void readUserDefinedSimulationParameters(std::string xmlInputFileName,
                                          SimulationParameters &param) {
   XMLreader document(xmlInputFileName);
@@ -181,6 +184,7 @@ void readUserDefinedSimulationParameters(std::string xmlInputFileName,
   document["output"]["outDir"].read(outDir);
 }
 
+// This class is used to implement the gas source term
 template <typename T, template <typename U> class Descriptor>
 class SourceTerm : public BoxProcessingFunctional2D_L<T, Descriptor> {
  public:
@@ -219,6 +223,8 @@ void calculateDerivedSimulationParameters(SimulationParameters &param) {
   param.adOmega = 1.0 / param.tauD_LB;
   param.omega = 1.0 / param.tau_LB;
 
+  // Calculate the offsets for bubble nucleation
+
   plint totalOffset =
       param.shift + param.bucketThickness_LB + param.bucketOffset_LB;
   param.bdx = (param.nx - param.bucketThickness_LB - param.bucketOffset_LB -
@@ -226,6 +232,7 @@ void calculateDerivedSimulationParameters(SimulationParameters &param) {
               (totBubinTwoRows - 1);
   param.bdy = param.fluidPoolHeight_LB / (param.numRows + 1);
 
+  // Distribution of bubbles
   if (param.distribution == "organized") {
     int N = 0;
 
@@ -253,7 +260,6 @@ void calculateDerivedSimulationParameters(SimulationParameters &param) {
       }
     }
   } else if (param.distribution == "random") {
-
     T lowX = totalOffset;
     T highX = param.nx - param.shift - param.bucketOffset_LB -
               param.bucketThickness_LB;
@@ -283,11 +289,13 @@ void calculateDerivedSimulationParameters(SimulationParameters &param) {
         break;
       }
 
-      int yDist = std::abs(sample[1] - param.fluidPoolHeight_LB / 2);
+      // int yDist = std::abs(sample[1] - param.fluidPoolHeight_LB / 2);
 
-      int s = rand() % (param.fluidPoolHeight_LB / 2);
+      // int s = rand() % (param.fluidPoolHeight_LB / 2);
 
       Array<T, 2> center(sample[0], sample[1]);
+
+      // Store the location of each bubble
 
       param.nucleiCenters.insert(std::pair<int, Array<T, 2>>(N, center));
 
@@ -442,7 +450,6 @@ void writeResults(FreeSurfaceFields2D<T, DESCRIPTOR> *fields,
 plint numRememberedVolumes = 1;
 
 int main(int argc, char **argv) {
-
   plbInit(&argc, &argv);
 
   std::cout.precision(10);
@@ -496,15 +503,15 @@ int main(int argc, char **argv) {
   Box2D top(0, param.nx - 1, param.ny - 1, param.ny - 1);
   Box2D lateral1(0, 0, 0, param.ny - 1);
   Box2D lateral2(param.nx - 1, param.nx - 1, 0, param.ny - 1);
-
+  // Set the walls boundary conditions
   setToConstant(fields.flag, bottom, (int)freeSurfaceFlag2D::wall);
   setToConstant(fields.flag, top, (int)freeSurfaceFlag2D::wall);
   setToConstant(fields.flag, lateral1, (int)freeSurfaceFlag2D::wall);
   setToConstant(fields.flag, lateral2, (int)freeSurfaceFlag2D::wall);
-
+  // Flag the liquid cells
   setToFunction(fields.flag, fields.flag.getBoundingBox().enlarge(-1),
                 initialFluidFlags);
-
+  // Nucleate bubbles
   nucleateBubbles(fields, dynamics->clone());
   // analyticalIniVolumeFraction(fields.volumeFraction, fields.flag,
   // insideFluid, 							32);
@@ -525,7 +532,7 @@ int main(int argc, char **argv) {
 
   // MultiScalarField2D<T> newvof = fields.volumeFraction;
   MultiScalarField2D<T> oldvof = fields.volumeFraction;
-
+  // Integrate the source term
   integrateProcessingFunctional(new SourceTerm<T, ADESCRIPTOR>(param.source_LB),
                                 adLattice.getBoundingBox(), adLattice);
 
@@ -566,9 +573,12 @@ int main(int argc, char **argv) {
 
     oldvof = fields.volumeFraction;
 
+    // Calculate bubble transitions and the disjoining pressure
     bubbleGrowth.transition(bubbleTracking, iT, param.temperature, param.R_s,
                             param.p_ini, 1., param.rho_LB, bubbleVolumeRatio,
                             param.entrapBubbles, numRememberedVolumes);
+
+    // Update bubble gas content
     bubbleGrowth.updateBubbleGrowth(fields.outsideDensity, param.rho_LB,
                                     param.alpha, param.beta, (T)1.);
 
@@ -590,6 +600,7 @@ int main(int argc, char **argv) {
     couplingBlocks.push_back(&fields.outsideDensity);
     couplingBlocks.push_back(bubbleGrowth.getOldTagMatrix());
 
+    // Calculate the gas diffused into each bubble
     applyProcessingFunctional(
         new GrowthCoupling2D<T, ADESCRIPTOR, DESCRIPTOR>(
             adynamics->clone(), emptyDynamics->clone(), param.kh_LB,

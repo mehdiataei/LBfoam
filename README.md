@@ -47,7 +47,7 @@ The `algorithms` folder contains the PLIC, ray-tracing, Poisson disk-sampling al
 - `lbfoam::BubbleGrowth2D`: 2D implementation of `lbfoam::BubbleGrowth3D`.
 - `lbfoam::BubbleTracking3D`: This class implements methods to track bubble motion, coalescence, spliting, etc. as well as calculation of the disjoining pressure between bubbles.
 - `lbfoam::BubbleTracking2D`: 2D implementation of `lbfoam::BubbleTracking3D`.
-- `lbfoam::GrowthCoupling3D`: This class apply the Henry's law boundary condition on bubble interfaces and calculates the amount of gas diffused into each bubble that is used in `lbfoam::BubbleGrowth3D` to update bubble's gas content.
+- `lbfoam::GrowthCoupling3D`: This class apply the Henry's law boundary condition on bubble interfaces, and calculates the amount of gas diffused into each bubble that is used in `lbfoam::BubbleGrowth3D` to update bubble's gas content.
   
 # Installation
 

@@ -641,14 +641,14 @@ void CalculateDisjoiningPressure3D<T, Descriptor>::processGenericBlocks(
 
               distance = distance < maxLim ? distance : maxLim;
 
-              bubbleDisjoiningPressure[iBubbleTag] += pi * (maxLim - distance);
+              bubbleDisjoiningPressure[iBubbleTag] += pi * (1. - distance / maxLim);
 
               disjoiningPressureField.get(iX + disjoiningOffset.x,
                                           iY + disjoiningOffset.y,
                                           iZ + disjoiningOffset.z) =
-                  pi * (maxLim - distance) * D::invCs2;
+                  pi * (1. - distance / maxLim) * D::invCs2;
 
-              densityChange = pi * (maxLim - distance) * D::invCs2;
+              densityChange = pi * (1. - distance / maxLim) * D::invCs2;
 
               // densitiesMap.insert(std::pair<Node,T> (Node(iX, iY, iZ),
               // densityChange));

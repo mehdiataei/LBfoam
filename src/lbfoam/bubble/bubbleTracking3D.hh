@@ -546,7 +546,7 @@ void CalculateDisjoiningPressure3D<T, Descriptor>::processGenericBlocks(
           nextZ = iZ;
 
           // Traversal algorithm
-          rayTracer3D<T> rayTracer = rayTracer3D<T>(iX, iY, iZ, outwardiNormal);
+          RayTracer3D<T> rayTracer = RayTracer3D<T>(iX, iY, iZ, outwardiNormal);
 
           for (int d = 1; d <= maxLim; d++) {
             Array<T, 3> nextCell = rayTracer.findNextCell();

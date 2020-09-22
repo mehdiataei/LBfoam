@@ -515,7 +515,7 @@ void CalculateDisjoiningPressure2D<T, Descriptor>::processGenericBlocks(
         iNormal = normal.get(iX + normalOffset.x, iY + normalOffset.y);
         outwardiNormal = -1. * iNormal;
 
-        rayTracer2D<T> rayTracer = rayTracer2D<T>(iX, iY, outwardiNormal);
+        RayTracer2D<T> rayTracer = RayTracer2D<T>(iX, iY, outwardiNormal);
         for (int d = 1; d <= maxLim; d++) {
           Array<T, 2> nextCell = rayTracer.findNextCell();
           nextX = nextCell[0];

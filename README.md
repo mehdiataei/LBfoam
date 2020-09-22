@@ -2,12 +2,14 @@
 
 # Table of Contents
 
-* [LBfoam](#lbfoam)
-* [Installation](#installation)
-* [Highlighted Features](#highlighted-features)
-* [Directory and Code Structure](#directory-and-code-structure)
-  + [Run an example](#run-an-example)
-* [Getting help and bug report](#getting-help-and-bug-report)
+- [Table of Contents](#table-of-contents)
+- [About LBfoam](#about-lbfoam)
+- [Highlighted Features](#highlighted-features)
+- [Directory and Code Structure](#directory-and-code-structure)
+- [Important Classes](#important-classes)
+- [Installation](#installation)
+  - [Run an example](#run-an-example)
+- [Getting help and bug report](#getting-help-and-bug-report)
 
 # About LBfoam
 
@@ -32,6 +34,21 @@ The `algorithms` folder contains the PLIC, ray-tracing, Poisson disk-sampling al
 
 `lbfoam2D.h` and `lbfoam3D.h` header files provide access to LBfoam classes for 2D and 3D simulations, respectively. Each LBfoam function/class must be called using the namespace called `lbfoam` (e.g. `lbfoam::PLIC2D` ).
 
+# Important Classes
+
+
+
+- `lbfoam::PLIC3D`: Piecewise Linear Interface Construction method based on [Scardovelli and Zaleski](https://www.sciencedirect.com/science/article/pii/S0021999100965677) for reconsturcting liquid interfaces. This method is used in the calculation of the distance between two adjacent bubbles.
+
+- `lbfoam::PLIC2D`: 2D implementation of `lbfoam::PLIC3D`.
+- `lbfoam::RayTracer3D`: Ray tracing algorithm to search for adjacent bubbles. This method is used in the calculation of the disjoining pressure.
+- `lbfoam::RayTracer2D`: 2D implementation of `lbfoam::RayTracer3D`.
+-`lbfoam::BubbleGrowth3D`: This class implements functionalities to update bubble gas content, and calculate the gas content properly after bubble coalescence, splitting, and formation of new bubbles.
+- `lbfoam::BubbleGrowth2D`: 2D implementation of `lbfoam::BubbleGrowth3D`.
+- `lbfoam::BubbleTracking3D`: This class implements methods to track bubble motion, coalescence, spliting, etc. as well as calculation of the disjoining pressure between bubbles.
+- `lbfoam::BubbleTracking2D`: 2D implementation of `lbfoam::BubbleTracking3D`.
+- `lbfoam::GrowthCoupling3D`: This class calculates the amount of gas diffused into each bubble that is used in `lbfoam::BubbleGrowth3D` to update bubble's gas content.
+  
 # Installation
 
 LBfoam installation is very similar to the Palabos library and it does not depend on any external dependencies. LBfoam uses [ `Scons` ](https://scons.org/) build tool.
@@ -76,6 +93,7 @@ To run the example in parallel using 8 cores for example:
 $ mpirun -np 8 bucket2D bucket2D.xml
 ```
 
+results will be stored in `tmp` folder by default.
 # Getting help and bug report
 
 Please submit a Github issue, or contact m.ataei@mail.utoronto.ca if you found a bug in the program or needed help with the software.

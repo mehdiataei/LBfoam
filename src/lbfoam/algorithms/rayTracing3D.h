@@ -58,9 +58,9 @@ namespace plb {
 namespace lbfoam {
 
 template <typename T>
-class rayTracer3D {
+class RayTracer3D {
  public:
-  rayTracer3D(plint iX, plint iY, plint iZ, Array<T, 3> normal) {
+  RayTracer3D(plint iX, plint iY, plint iZ, Array<T, 3> normal) {
     tMaxX = std::abs(halfLength / normal[0]);
     tMaxY = std::abs(halfLength / normal[1]);
     tMaxZ = std::abs(halfLength / normal[2]);
@@ -76,7 +76,7 @@ class rayTracer3D {
     nextCell[1] = iY;
     nextCell[2] = iZ;
   }
-  ~rayTracer3D() {}
+  ~RayTracer3D() {}
 
   Array<T, 3> findNextCell() {
     if ((tMaxX < tMaxY || std::isinf(tMaxY)) &&

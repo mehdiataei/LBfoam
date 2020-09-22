@@ -58,9 +58,9 @@ namespace plb {
 namespace lbfoam {
 
 template <typename T>
-class rayTracer2D {
+class RayTracer2D {
  public:
-  rayTracer2D(plint iX, plint iY, Array<T, 2> normal) {
+  RayTracer2D(plint iX, plint iY, Array<T, 2> normal) {
     tMaxX = std::abs(halfLength / normal[0]);
     tMaxY = std::abs(halfLength / normal[1]);
     tDeltaX = std::abs(fullLength / normal[0]);
@@ -72,7 +72,7 @@ class rayTracer2D {
     stepX = normal[0] >= 0.0 ? 1 : -1;
     stepY = normal[1] >= 0.0 ? 1 : -1;
   }
-  ~rayTracer2D() {}
+  ~RayTracer2D() {}
 
   Array<T, 2> findNextCell() {
     if ((tMaxX < tMaxY || std::isinf(tMaxY)) &&

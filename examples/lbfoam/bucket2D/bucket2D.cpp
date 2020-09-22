@@ -600,6 +600,7 @@ int main(int argc, char **argv) {
     couplingBlocks.push_back(&fields.outsideDensity);
     couplingBlocks.push_back(bubbleGrowth.getOldTagMatrix());
 
+    adLattice.collideAndStream();
     // Calculate the gas diffused into each bubble
     applyProcessingFunctional(
         new GrowthCoupling2D<T, ADESCRIPTOR, DESCRIPTOR>(
@@ -607,7 +608,6 @@ int main(int argc, char **argv) {
             bubbleGrowth.getBubbles(), param.surfaceDiffusion),
         adLattice.getBoundingBox(), couplingBlocks);
 
-    adLattice.collideAndStream();
 
     global::timer("iteration").stop();
 

@@ -473,13 +473,14 @@ int main(int argc, char **argv) {
     couplingBlocks.push_back(&fields.outsideDensity);
     couplingBlocks.push_back(bubbleGrowth.getOldTagMatrix());
 
+    adLattice.collideAndStream();
+    
     applyProcessingFunctional(
         new GrowthCoupling2D<T, ADESCRIPTOR, DESCRIPTOR>(
             adynamics->clone(), emptyDynamics->clone(), param.kh_LB,
             bubbleGrowth.getBubbles(), param.surfaceDiffusion),
         adLattice.getBoundingBox(), couplingBlocks);
 
-    adLattice.collideAndStream();
 
     global::timer("iteration").stop();
 

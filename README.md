@@ -81,7 +81,7 @@ $ make
 
 (Note: To compile the software on MacOS, uncomment the ` -DPLB_MAC_OS_X` compilation flag in the Makefile).
 
-Run the example using the following command. The `bucket2D.xml` contains the simulation parameters.
+Create `tmp` folder to store the outputs (the output folder name must be the same as `outDir` variable in the `bucket2D.xml` file). Run the example using the following command. The `bucket2D.xml` contains the simulation parameters.
 
 ``` 
 $ ./bucket2D bucket2D.xml

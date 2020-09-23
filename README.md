@@ -43,7 +43,7 @@ The `algorithms` folder contains the PLIC, ray-tracing, Poisson disk-sampling al
 - `lbfoam::PLIC2D`: 2D implementation of `lbfoam::PLIC3D`.
 - `lbfoam::RayTracer3D`: Ray tracing algorithm to search for adjacent bubbles. This method is used in the calculation of the disjoining pressure.
 - `lbfoam::RayTracer2D`: 2D implementation of `lbfoam::RayTracer3D`.
--`lbfoam::BubbleGrowth3D`: This class implements functionalities to update bubble gas content, and calculate the gas content properly after bubble coalescence, splitting, and formation of new bubbles.
+- `lbfoam::BubbleGrowth3D`: This class implements functionalities to update bubble gas content, and calculate the gas content properly after bubble coalescence, splitting, and formation of new bubbles.
 - `lbfoam::BubbleGrowth2D`: 2D implementation of `lbfoam::BubbleGrowth3D`.
 - `lbfoam::BubbleTracking3D`: This class implements methods to track bubble motion, coalescence, spliting, etc. as well as calculation of the disjoining pressure between bubbles.
 - `lbfoam::BubbleTracking2D`: 2D implementation of `lbfoam::BubbleTracking3D`.

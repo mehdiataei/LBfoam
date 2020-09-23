@@ -55,7 +55,7 @@
 
     <kh_LB> 1.e-5 </kh_LB>
 
-    <pi_LB> 8.0e-3 </pi_LB>
+    <pi_LB> 0.032 </pi_LB>
 
     <source_LB> 5.0e-4 </source_LB>
 

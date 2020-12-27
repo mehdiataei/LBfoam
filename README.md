@@ -10,6 +10,7 @@
 - [Installation](#installation)
   - [Run an example](#run-an-example)
 - [Getting help and bug report](#getting-help-and-bug-report)
+- [Citing this work](#citing-this-work)
 
 # About LBfoam
 
@@ -98,3 +99,7 @@ results will be stored in `tmp` folder by default.
 # Getting help and bug report
 
 Please submit a Github issue, or contact m.ataei@mail.utoronto.ca if you found a bug in the program or needed help with the software.
+
+# Citing this work
+
+Please cite [the accompanied paper](https://www.sciencedirect.com/science/article/pii/S001046552030343X) if you intend to use this library in your work.

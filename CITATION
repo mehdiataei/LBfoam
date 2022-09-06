@@ -1,0 +1,9 @@
+@article{ataei2021lbfoam,
+  title={LBfoam: An open-source software package for the simulation of foaming using the Lattice Boltzmann Method},
+  author={Ataei, Mohammadmehdi and Shaayegan, Vahid and Costa, Franco and Han, Sejin and Park, Chul B and Bussmann, Markus},
+  journal={Computer Physics Communications},
+  volume={259},
+  pages={107698},
+  year={2021},
+  publisher={Elsevier}
+}
